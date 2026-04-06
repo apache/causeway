@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
+import org.jspecify.annotations.NonNull;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,8 +41,8 @@ import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
@@ -51,12 +52,11 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.mmtestsupport.InteractionService_forTesting;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
-import org.apache.causeway.core.security._testing.InteractionService_forTesting;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.AllArgsConstructor;
-import org.jspecify.annotations.NonNull;
 
 public class ConverterTester<T extends Serializable> {
 

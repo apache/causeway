@@ -89,19 +89,15 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * The unique identifier of this command (inherited from
      * {@link HasInteractionId})
      *
-     * <p>
-     *     In all cases this be the same as the {@link Interaction} that wraps the command, and can be used
-     *     to correlate also to any audit records
-     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s resulting from state
-     *     changes occurring as a consequence of the command.
-     * </p>
+     * <p>In all cases this be the same as the {@link Interaction} that wraps the command, and can be used
+     * to correlate also to any audit records
+     * ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s resulting from state
+     * changes occurring as a consequence of the command.
      *
-     * <p>
-     *     Note that this is immutable in almost all cases.  The one exception is if the Command is being executed
-     *     through the {@link CommandExecutorService}, for example when executing a async action that has been reified
-     *     into a {@link CommandDto}.  In such cases, the {@link CommandExecutorService#executeCommand(CommandDto)}
-     *     will <i>replace</i> the original Id with that of the DTO being executed.
-     * </p>
+     * <p>Note that this is immutable in almost all cases.  The one exception is if the Command is being executed
+     * through the {@link CommandExecutorService}, for example when executing an async action that has been reified
+     * into a {@link CommandDto}.  In such cases, the {@link CommandExecutorService#executeCommand(CommandDto)}
+     * will <i>replace</i> the original Id with that of the DTO being executed.
      */
     @Override
     public UUID getInteractionId() {
@@ -111,13 +107,10 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     /**
      * The user that created the command.
      *
-     * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getUsername()} ()}
-     * </p>
+     * <p>Derived from {@link #getCommandDto()}'s {@link CommandDto#getUsername()} ()}
      */
     @Override
     public String getUsername() {
-        // ...
         return commandDto != null
                 ? commandDto.getUsername()
                 : null;
@@ -126,12 +119,9 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     /**
      * The date/time at which this command was created.
      *
-     * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTimestamp()}.
-     * </p>
+     * <p>Derived from {@link #getCommandDto()}'s {@link CommandDto#getTimestamp()}.
      */
     public Timestamp getTimestamp() {
-        // ...
         return commandDto != null
                 ? JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp())
                 : null;
@@ -143,15 +133,13 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     /**
      * Serializable representation of the action invocation/property edit.
      *
-     * <p>
-     *     When the framework sets this (through an internal API), it is
-     *     expected that the {@link CommandDto#getUsername() username},
-     *     {@link CommandDto#getTimestamp() timestamp}, {@link CommandDto#getTargets() target(s)} and
-     *     {@link CommandDto#getMember() member} will be populated.
-     *     The {@link #getInteractionId()}, {@link #getUsername()},
-     *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
-     *     from the provided {@link CommandDto}.
-     * </p>
+     * <p>When the framework sets this (through an internal API), it is
+     * expected that the {@link CommandDto#getUsername() username},
+     * {@link CommandDto#getTimestamp() timestamp}, {@link CommandDto#getTargets() target(s)} and
+     * {@link CommandDto#getMember() member} will be populated.
+     * The {@link #getInteractionId()}, {@link #getUsername()},
+     * {@link #getTimestamp()} and {@link #getTarget()} are all derived
+     * from the provided {@link CommandDto}.
      */
     @Override
     public CommandDto getCommandDto() {
@@ -288,8 +276,8 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
-         * <p>
-         * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
+         * <p> Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
+         *
          * @param commandDto
          */
         public void setCommandDtoAndIdentifier(final CommandDto commandDto) {
@@ -341,9 +329,8 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         public void setPublishingPhase(final @NonNull CommandPublishingPhase publishingPhase) {
-            if(Command.this.publishingPhase.isCompleted()) {
+            if(Command.this.publishingPhase.isCompleted())
                 return; // don't ever change when phase is completed
-            }
             Command.this.publishingPhase = publishingPhase;
         }
     }

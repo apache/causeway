@@ -1,0 +1,46 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.execution;
+
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+class InteractionDefaultTest_next {
+
+    @Test
+    void test() {
+    	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null,
+    			null, null, null);
+    	
+    	var interaction = new InteractionCarrierDefault(context);
+
+        assertThat(interaction.nextExecutionSequence(), is(0));
+        assertThat(interaction.nextExecutionSequence(), is(1));
+        assertThat(interaction.nextTransactionSequence(), is(0));
+        assertThat(interaction.nextTransactionSequence(), is(1));
+        assertThat(interaction.nextExecutionSequence(), is(2));
+        assertThat(interaction.nextTransactionSequence(), is(2));
+        assertThat(interaction.nextTransactionSequence(), is(3));
+    }
+
+}

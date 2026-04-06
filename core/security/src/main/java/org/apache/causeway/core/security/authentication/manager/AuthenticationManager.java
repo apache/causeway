@@ -33,8 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;

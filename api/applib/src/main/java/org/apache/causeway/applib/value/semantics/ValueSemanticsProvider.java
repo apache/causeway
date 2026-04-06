@@ -24,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;

@@ -23,6 +23,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
@@ -31,11 +32,15 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
+import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
+
+    // needs to happen early, at least before other auto configuration gets to run
+    CausewayObservationAutoConfiguration.class,
 
     // @Component
     CausewayConfiguration.class,
@@ -64,15 +69,15 @@ public class CausewayModuleCoreConfig {
     public static final String NAMESPACE = "causeway.config";
 
     @Bean
-    public EmailConfiguration emailConfiguration(
-        CausewayConfiguration conf,
-        @Value("#{systemProperties['spring.mail.username']}") String senderEmailUsername,
-        @Value("#{systemProperties['spring.mail.password']}") String senderEmailPassword,
-        @Value("#{systemProperties['spring.mail.host']}") String senderEmailHostName,
-        @Value("#{systemProperties['spring.mail.port']}") Integer senderEmailPort,
-        @Value("#{systemProperties['spring.mail.javamail.properties.mail.smtp.starttls.enable']}") Boolean senderEmailTlsEnabled,
-        @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") Integer smtpTimeout,
-        @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") Integer smtpConnectionTimeout) {
+    EmailConfiguration emailConfiguration(
+        final CausewayConfiguration conf,
+        @Value("#{systemProperties['spring.mail.username']}") final String senderEmailUsername,
+        @Value("#{systemProperties['spring.mail.password']}") final String senderEmailPassword,
+        @Value("#{systemProperties['spring.mail.host']}") final String senderEmailHostName,
+        @Value("#{systemProperties['spring.mail.port']}") final Integer senderEmailPort,
+        @Value("#{systemProperties['spring.mail.javamail.properties.mail.smtp.starttls.enable']}") final Boolean senderEmailTlsEnabled,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") final Integer smtpTimeout,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") final Integer smtpConnectionTimeout) {
 
         var emailConfiguration = conf.core().runtimeServices().email();
 

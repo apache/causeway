@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -44,8 +45,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -53,15 +54,17 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -87,13 +90,15 @@ implements
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
     private final ConfigurableListableBeanFactory configurableListableBeanFactory;
+    private final ObservationProvider observationProvider;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final Provider<InteractionLayerTracker> interactionLayerTrackerProvider,
-            final ConfigurableListableBeanFactory configurableListableBeanFactory
+            final ConfigurableListableBeanFactory configurableListableBeanFactory,
+            final CausewayObservationIntegration observationIntegration
     ) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
@@ -105,6 +110,9 @@ implements
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTrackerProvider = interactionLayerTrackerProvider;
+
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
     // -- API
@@ -118,7 +126,7 @@ implements
 
         try {
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
-            registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
             result = Try.call(() -> {
 
@@ -146,8 +154,8 @@ implements
             // (so we don't shadow the original failure)
             // return the failure we just caught
             if (result != null && result.isFailure()) {
-                return result;
-            }
+				return result;
+			}
 
             // otherwise, we thought we had a success, but now we have an exception thrown by either ,
             // the call to rollback or commit above.  We don't need to do anything though; if either of
@@ -159,7 +167,7 @@ implements
         return result;
     }
 
-    private void registerTransactionSynchronizations(final TransactionStatus txStatus) {
+    private void registerTransactionSynchronizations() {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
                     .values()
@@ -185,8 +193,8 @@ implements
             var translatedEx = translateExceptionIfPossible(ex, txManager);
 
             if(translatedEx instanceof RuntimeException) {
-                throw ex;
-            }
+				throw ex;
+			}
 
             throw new RuntimeException(ex);
 
@@ -210,10 +218,10 @@ implements
         .map(txStatus->{
 
             if(txStatus.isCompleted()) {
-                return txStatus.isRollbackOnly()
+				return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
-            }
+			}
 
             return txStatus.isRollbackOnly()
                     ? TransactionState.MUST_ABORT
@@ -236,8 +244,8 @@ implements
         if(def instanceof TransactionTemplate) {
             var txManager = ((TransactionTemplate)def).getTransactionManager();
             if(txManager!=null) {
-                return txManager;
-            }
+				return txManager;
+			}
         }
         return platformTransactionManagers.getSingleton()
                 .orElseThrow(()->
@@ -265,8 +273,8 @@ implements
 
         // not strictly required, but to prevent stack-trace creation later on
         if(!TransactionSynchronizationManager.isActualTransactionActive()) {
-            return Optional.empty();
-        }
+			return Optional.empty();
+		}
 
         // get current transaction else throw an exception
         return Try.call(()->
@@ -279,8 +287,8 @@ implements
     private Throwable translateExceptionIfPossible(final Throwable ex, final PlatformTransactionManager txManager) {
 
         if(ex instanceof DataAccessException) {
-            return ex; // nothing to do, already translated
-        }
+			return ex; // nothing to do, already translated
+		}
 
         if(ex instanceof RuntimeException) {
 
@@ -292,8 +300,8 @@ implements
             .orElse(null);
 
             if(translatedEx!=null) {
-                return translatedEx;
-            }
+				return translatedEx;
+			}
 
         }
 
@@ -301,44 +309,53 @@ implements
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, sets up
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onOpen(final @NonNull CausewayInteraction interaction) {
+    public void onOpen(final @NonNull Interaction interaction) {
 
         txCounter.get().reset();
+        if (platformTransactionManagers.isEmpty()) {
+			return;
+		}
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        if (!platformTransactionManagers.isEmpty()) {
-            var onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+        var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ObservationClosure());
+        interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
 
-            interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
+        platformTransactionManagers.forEach(txManager -> {
 
-            platformTransactionManagers.forEach(txManager -> {
+            var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
+            txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-                var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
-                txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+            var obs = onCloseHandle.observationClosure().startAndOpenScope(observationProvider.get("Transaction"))
+                .observation()
+                .highCardinalityKeyValue("txManager", txManager.getClass().getName());
 
-                // either participate in existing or create new transaction
-                TransactionStatus txStatus = txManager.getTransaction(txDefn);
+            // either participate in existing or create new transaction
+            TransactionStatus txStatus = observationProvider.get("Transaction Creation")
+                    .observe(()->txManager.getTransaction(txDefn));
+            if(!txStatus.isNewTransaction()) {
+                // discard telemetry data when participating in existing transaction
+                onCloseHandle.observationClosure().discard();
+                // we are participating in an exiting transaction (or testing), nothing to do
+                return;
+            }
 
-                if(!txStatus.isNewTransaction()) {
-                    // we are participating in an exiting transaction (or testing), nothing to do
-                    return;
-                }
-                registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
-                // we have created a new transaction, so need to provide a CloseTask
-                onCloseTasks.add(
-                    new CloseTask(
-                        txStatus,
-                        txManager.getClass().getName(), // info to be used for display in case of errors
-                        () -> {
+            // we have created a new transaction, so need to provide a CloseTask
+            onCloseHandle.onCloseTasks().add(
+                new CloseTask(
+                    txStatus,
+                    txManager.getClass().getName(), // info to be used for display in case of errors
+                    ()->observationProvider.get("Transaction Completion")
+                        .observe(() -> {
                             _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
                             final TransactionCompletionStatus event;
                             if (txStatus.isRollbackOnly()) {
@@ -349,36 +366,35 @@ implements
                                 event = TransactionCompletionStatus.COMMITTED;
                             }
                             _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
-
                             txCounter.get().increment();
-                        }
-                    )
-                );
-            });
-        }
+                        })
+                )
+            );
+        });
+
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, if
-     * {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)}
-     * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, if
+     * {@link org.apache.causeway.applib.services.iactn.InteractionService#run(InteractionContext, ThrowingRunnable)}
+     * or {@link org.apache.causeway.applib.services.iactn.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void requestRollback(final @NonNull CausewayInteraction interaction) {
+    public void requestRollback(final @NonNull Interaction interaction) {
         Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, to close the
-     * transaction initially set up in {@link #onOpen(CausewayInteraction)} against all configured
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, to close the
+     * transaction initially set up in {@link #onOpen(Interaction)} against all configured
      * {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onClose(final @NonNull CausewayInteraction interaction) {
+    public void onClose(final @NonNull Interaction interaction) {
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
@@ -397,9 +413,10 @@ implements
             @NonNull ThrowingRunnable runnable) {
     }
 
-    @RequiredArgsConstructor
-    private static class OnCloseHandle {
-        private final @NonNull List<CloseTask> onCloseTasks;
+    private record OnCloseHandle(
+            List<CloseTask> onCloseTasks,
+            ObservationClosure observationClosure) {
+
         void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
                 onCloseTask.txStatus.setRollbackOnly();
@@ -407,7 +424,6 @@ implements
         }
         void runOnCloseTasks() {
             onCloseTasks.forEach(onCloseTask->{
-
                 try {
                     onCloseTask.runnable().run();
                 } catch(final Throwable ex) {
@@ -419,6 +435,7 @@ implements
                             ex);
                 }
             });
+            observationClosure.close();
         }
     }
 }

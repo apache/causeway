@@ -32,11 +32,11 @@ import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.mmtestsupport.InteractionService_forTesting;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
-import org.apache.causeway.core.security._testing.InteractionService_forTesting;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.Authenticator;

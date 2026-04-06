@@ -20,128 +20,80 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Objects;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService.MemberExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+/**
+ * Handles Domain Events EXECUTING and EXECUTED for Property Edits.
+ * EXECUTING has potential to change the new Property value. 
+ */
 @Slf4j
-public final class PropertyModifier
-implements
-    HasMetaModelContext,
-    InteractionInternal.MemberExecutor<PropertyEdit> {
+public record PropertyModifier(
+	    ExecutionContext executionContext,
+	    FacetHolder facetHolder,
+	    InteractionInitiatedBy interactionInitiatedBy,
+	    InteractionHead head,
+	    OneToOneAssociation owningProperty,
+	    ManagedObject newValue,
+	    PropertyOrCollectionAccessorFacet getterFacet,
+	    PropertySetterFacet setterFacet,
+	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract,
+	    ObservationProvider observationProvider) 
+implements MemberExecutor<PropertyEdit> {
 
     // -- FACTORIES
 
-    public static PropertyModifier forPropertyClear(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-        var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
-        return new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
-                ModificationVariant.CLEAR, interactionInitiatedBy, head,
-                owningProperty, emptyValueAdapter, getterFacet, null, clearFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
+	public static PropertyModifier forProperty(
+		    FacetHolder facetHolder,
+		    InteractionInitiatedBy interactionInitiatedBy,
+		    InteractionHead head,
+		    OneToOneAssociation owningProperty,
+		    ManagedObject newValue,
+		    PropertyOrCollectionAccessorFacet getterFacet,
+		    PropertySetterFacet setterFacet,
+		    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
+		var executionContext = facetHolder.lookupServiceElseFail(ExecutionContext.class);
+        return new PropertyModifier(executionContext, 
+        		facetHolder, interactionInitiatedBy, 
+        		head, owningProperty, newValue, getterFacet, setterFacet, 
+        		propertySetterOrClearFacetForDomainEventAbstract, 
+        		executionContext.observationProvider(PropertyModifier.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
-
-    public static PropertyModifier forPropertySet(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            final @NonNull ManagedObject newValueAdapter,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-        return new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
-                ModificationVariant.SET, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, setterFacet, null,
-                propertySetterOrClearFacetForDomainEventAbstract);
-    }
-
-    // -- ENUMS
-
-    public static enum ModificationVariant {
-        /** clearing a property */
-        CLEAR,
-        /** setting a property (to a new value) */
-        SET;
-        public boolean isClear() { return this == CLEAR; }
-        public boolean isSet() { return this == SET; }
-    }
-
-    // -- CONSTRUCTION
-
-    @Getter(onMethod_={@Override})
-    private final @NonNull MetaModelContext metaModelContext;
-
-    @Getter
-    private final @NonNull FacetHolder facetHolder;
-    private final @NonNull ModificationVariant executionVariant;
-    @Getter
-    private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
-
-    @Getter
-    private final @NonNull InteractionHead head;
-
-    @Getter
-    private final @NonNull OneToOneAssociation owningProperty;
-
-    @Getter
-    private final @NonNull ManagedObject newValue;
-
-    // -- REFACTOR ...
-    private final PropertyOrCollectionAccessorFacet getterFacet;
-    private final PropertySetterFacet setterFacet; // either this
-    private final PropertyClearFacet clearFacet; // or that
-    private final PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract;
-
-    @Getter(lazy=true)
-    private final InteractionDtoFactory interactionDtoServiceInternal =
-        getServiceRegistry().lookupServiceElseFail(InteractionDtoFactory.class);
-
-    @Getter(lazy=true)
-    private final DomainEventHelper domainEventHelper =
-        DomainEventHelper.ofServiceRegistry(getServiceRegistry());
-
-    private boolean isPostable() {
-        return propertySetterOrClearFacetForDomainEventAbstract.isPostable();
-    }
-
-    // --
-
-    @Override
-    public Object execute(final PropertyEdit currentExecution) {
-
+	
+	@Override
+	public Object executeWithExecutingEvents(
+			final int executionSequence, 
+			final PropertyEdit currentExecution) {
+		Object result = doExecuteWithExecutingEvents(executionSequence, currentExecution);
+		currentExecution.setReturned(result);
+        return result;
+	}
+	
+	private Object doExecuteWithExecutingEvents(
+			final int executionSequence,
+			final PropertyEdit currentExecution) {
+    	
         // update the current execution with the DTO (memento)
         //
         // but ... no point in attempting this if no bookmark is yet available.
@@ -152,9 +104,7 @@ implements
         var ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
         if (ownerHasBookmark) {
-            var propertyEditDto =
-                    getInteractionDtoServiceInternal().asPropertyEditDto(owningProperty, head, newValue);
-            currentExecution.setDto(propertyEditDto);
+            currentExecution.setDto(executionDto(executionSequence));
         }
 
         if(!isPostable()) {
@@ -167,14 +117,17 @@ implements
         var oldValuePojo = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         var newValuePojo = MmUnwrapUtils.single(newValue);
 
-        var propertyDomainEvent =
-                getDomainEventHelper().postEventForProperty(
-                        AbstractDomainEvent.Phase.EXECUTING,
-                        getEventType(), null,
-                        propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
-                        oldValuePojo, newValuePojo);
+        final var executingEvent = observationProvider.get("Domain Event EXECUTING") 
+    		.observe(()->
+        		executionContext.domainEventHelper()
+        		.postEventForProperty(
+                    AbstractDomainEvent.Phase.EXECUTING,
+                    getEventType(), null,
+                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
+                    oldValuePojo, newValuePojo)
+			);
 
-        var newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
+        var newValuePojoPossiblyUpdated = executingEvent.getNewValue();
         var isValueModifiedByEvent = !Objects.equals(newValuePojoPossiblyUpdated, newValuePojo);
 
         final ManagedObject newValueAfterEventPolling =
@@ -184,7 +137,7 @@ implements
                         : newValue;
 
         // set event onto the execution
-        currentExecution.setEvent(propertyDomainEvent);
+        currentExecution.setEvent(executingEvent);
 
         // invoke method
         executeClearOrSetWithoutEvents(newValueAfterEventPolling);
@@ -192,46 +145,56 @@ implements
         // reading the actual value from the target object, playing it safe...
         var actualNewValue = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         if (!Objects.equals(oldValuePojo, actualNewValue)) {
-
-            // ... post the executed event
-            getDomainEventHelper().postEventForProperty(
-                    AbstractDomainEvent.Phase.EXECUTED,
-                    getEventType(),
-                    uncheckedCast(propertyDomainEvent),
-                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
-                    oldValuePojo, actualNewValue);
+        	observationProvider.get("Domain Event EXECUTED")
+	        	.observe(()->
+		            // ... post the executed event
+		        	executionContext.domainEventHelper()
+		        		.postEventForProperty(
+		                    AbstractDomainEvent.Phase.EXECUTED,
+		                    getEventType(),
+		                    uncheckedCast(executingEvent),
+		                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
+		                    oldValuePojo, actualNewValue)
+        		);
         }
 
         // with action invocations, we inject services in the returned pojo at this point.
         // for property sets, though, there's no need, as we're just returning the targetPojo itself
         return head.target().getPojo();
-
-        //
-        // REVIEW: the corresponding action has a whole bunch of error handling here.
-        // we probably should do something similar...
-        //
     }
 
     /**
      * Executes the change using underlying setter or getter facets, without triggering any events.
-     * <p>
+     * 
      * @implNote Reassesses whether this is a clear or a set operation, based on actual {@code newValue},
      * which might have been modified during EXECUTING phase (event polling).
      */
     public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
-            clearFacet.clearProperty(
-                    owningProperty, head.target(), interactionInitiatedBy);
-        } else {
-            setterFacet.setProperty(
-                    owningProperty, head.target(), newValue, interactionInitiatedBy);
-        }
+    	observationProvider.get("Invoke Property Setter")
+	    	.observe(()->{
+		        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
+		        	setterFacet.clearProperty(
+		                    owningProperty, head.target(), interactionInitiatedBy);
+		        } else {
+		            setterFacet.setProperty(
+		                    owningProperty, head.target(), newValue, interactionInitiatedBy);
+		        }
+	    	});
     }
 
     // -- HELPER
 
+    private boolean isPostable() {
+    	return propertySetterOrClearFacetForDomainEventAbstract.isPostable();
+    }
+    
     private final <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
         return uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType());
+    }
+    
+    private PropertyEditDto executionDto(int executionSequence) {
+    	return executionContext.interactionDtoFactory()
+        		.asPropertyEditDto(executionSequence, owningProperty, head, newValue);
     }
 
 }

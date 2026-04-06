@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.value;
 import java.util.Locale;
 
 import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.commons.io.TextUtils;

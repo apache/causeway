@@ -23,9 +23,9 @@ import java.awt.Color;
 
 import jakarta.inject.Provider;
 
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.security.util.XrayUtil;
@@ -34,7 +34,7 @@ final class _Xray {
 
     public static void publish(
             final EntityChangeTrackerDefault entityChangeTrackerDefault,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;
@@ -67,25 +67,25 @@ final class _Xray {
 
     public static void enlistCreated(
             final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
         addSequence("enlistCreated", entity, interactionProviderProvider);
     }
 
     public static void enlistDeleting(
             final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
         addSequence("enlistDeleting", entity, interactionProviderProvider);
     }
 
     public static void enlistUpdating(
             final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
         addSequence("enlistUpdating", entity, interactionProviderProvider);
     }
 
     public static void recognizeLoaded(
             final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
         addSequence("recognizeLoaded", entity, interactionProviderProvider);
     }
 
@@ -94,7 +94,7 @@ final class _Xray {
     private static void addSequence(
             final String what,
             final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
+            final Provider<InteractionLayerTracker> interactionProviderProvider) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;

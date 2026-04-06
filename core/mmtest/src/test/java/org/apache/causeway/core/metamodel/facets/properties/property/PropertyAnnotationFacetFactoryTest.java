@@ -66,12 +66,10 @@ import org.apache.causeway.core.metamodel.facets.properties.property.entitychang
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -173,18 +171,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             });
         }
 
-        private void addClearFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
-                @Override
-                public ManagedObject clearProperty(
-                        final OneToOneAssociation owningProperty,
-                        final ManagedObject targetAdapter,
-                        final InteractionInitiatedBy interactionInitiatedBy) {
-                    return targetAdapter;
-                }
-            });
-        }
-
         private void assertHasPropertyDomainEventFacet(
                 final FacetedMethod facetedMethod,
                 final EventTypeOrigin eventTypeOrigin,
@@ -193,24 +179,17 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
-            if(facetedMethod.methodFacade().getName().equals("prop"))
-                return; // skip further checks, when in a mixed-in scenario
+            if(facetedMethod.methodFacade().getName().equals("prop")) {
+				return; // skip further checks, when in a mixed-in scenario
+			}
 
             // then
             var setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertyModifyFacetAbstract, "unexpected facet: " + setterFacet);
-            final PropertyModifyFacetAbstract setterFacetImpl = (PropertyModifyFacetAbstract) setterFacet;
+            assertTrue(setterFacet instanceof PropertyModifyFacet, "unexpected facet: " + setterFacet);
+            final PropertyModifyFacet setterFacetImpl = (PropertyModifyFacet) setterFacet;
             assertEquals(eventTypeOrigin, setterFacetImpl.getEventTypeOrigin());
             assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
-
-            // then
-            var clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-            assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyModifyFacetAbstract);
-            final PropertyModifyFacetAbstract clearFacetImpl = (PropertyModifyFacetAbstract) clearFacet;
-            assertEquals(eventTypeOrigin, setterFacetImpl.getEventTypeOrigin());
-            assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
         }
 
         @Test
@@ -224,7 +203,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
 
                 // when
                 processDomainEvent(facetFactory, processMethodContext);
@@ -248,7 +226,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
 
                 // when
                 processDomainEvent(facetFactory, processMethodContext);
@@ -273,7 +250,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
 
                 // when
                 processDomainEvent(facetFactory, processMethodContext);
@@ -299,7 +275,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
 
                 // when
                 processDomainEvent(facetFactory, processMethodContext);

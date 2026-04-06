@@ -77,7 +77,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.homepage;
     exports org.apache.causeway.applib.services.i18n;
     exports org.apache.causeway.applib.services.iactn;
-    exports org.apache.causeway.applib.services.iactnlayer;
     exports org.apache.causeway.applib.services.inject;
     exports org.apache.causeway.applib.services.jaxb;
     exports org.apache.causeway.applib.services.keyvaluestore;
@@ -146,6 +145,7 @@ module org.apache.causeway.applib {
     requires transitive spring.web;
     requires spring.tx;
     requires org.slf4j;
+	requires micrometer.observation;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;

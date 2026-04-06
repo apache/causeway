@@ -50,6 +50,7 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.html;
     exports org.apache.causeway.commons.internal.image;
     exports org.apache.causeway.commons.internal.ioc;
+    exports org.apache.causeway.commons.internal.observation;
     exports org.apache.causeway.commons.internal.os;
     exports org.apache.causeway.commons.internal.primitives;
     exports org.apache.causeway.commons.internal.proxy;
@@ -67,6 +68,8 @@ module org.apache.causeway.commons {
     requires transitive tools.jackson.core;
     requires transitive tools.jackson.databind;
     requires transitive tools.jackson.module.jakarta.xmlbind;
+    requires transitive micrometer.commons;
+    requires transitive micrometer.observation;
     requires transitive org.jdom2;
     requires transitive org.jspecify;
     requires transitive org.jsoup;

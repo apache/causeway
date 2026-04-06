@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -91,7 +91,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final SudoService sudoService;
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
-    @Inject final InteractionLayerTracker interactionLayerTracker;
+    @Inject final InteractionProvider interactionProvider;
     @Inject final SchemaValueMarshaller valueMarshaller;
     @Inject final MetaModelService metaModelService;
     @Inject Provider<CommandPublisher> commandPublisherProvider;
@@ -127,7 +127,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto) {
 
-        var interaction = interactionLayerTracker.currentInteractionElseFail();
+        var interaction = interactionProvider.currentInteractionElseFail();
         var command = interaction.getCommand();
 
         // replace the command with that of the DTO to be executed, and also the command's identifier
@@ -149,10 +149,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         Try<Bookmark> result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> {
-                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH) {
+                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH)
                     // short-circuit
                     return doExecuteCommand(dto);
-                }
                 return sudoService.call(
                         context -> interactionContextPolicy.mapper.apply(context, dto),
                         () -> doExecuteCommand(dto));
@@ -213,10 +212,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // Object unused = priorExecution.getReturned();
             //
 
-            if(resultAdapter != null) {
+            if(resultAdapter != null)
                 return ManagedObjects.bookmark(resultAdapter)
                         .orElse(null);
-            }
         } else {
 
             var propertyDto = (PropertyDto) memberDto;
@@ -226,10 +224,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             var targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter))
                 throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
                         Bookmark.forOidDto(targetOidDto));
-            }
 
             var property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
             var newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
@@ -249,12 +246,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private String argStrFor(final CommandDto dto) {
         var memberDto = dto.getMember();
-        if(memberDto instanceof ActionDto) {
-            var actionDto = (ActionDto) memberDto;
+        if(memberDto instanceof ActionDto actionDto)
             return paramNameArgValuesFor(actionDto);
-        }
-        if(memberDto instanceof PropertyDto) {
-            var propertyDto = (PropertyDto) memberDto;
+        if(memberDto instanceof PropertyDto propertyDto) {
             var proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
             return proposedValue.getTitle();
         }
@@ -274,9 +268,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         var localActionId = localPartOf(logicalMemberIdentifier);
 
         var objectAction = findActionElseNull(objectSpecification, localActionId);
-        if(objectAction == null) {
+        if(objectAction == null)
             throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
-        }
         return objectAction;
     }
 
@@ -292,9 +285,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         var objectSpecification = targetAdapter.objSpec();
 
         var property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
-        if(property == null) {
+        if(property == null)
             throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
-        }
         return property;
     }
 

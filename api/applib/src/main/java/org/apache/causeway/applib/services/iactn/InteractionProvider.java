@@ -21,7 +21,6 @@ package org.apache.causeway.applib.services.iactn;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -53,7 +52,7 @@ public interface InteractionProvider {
     Optional<Interaction> currentInteraction();
 
     /**
-     * Optionally, the currently active {@link org.apache.causeway.applib.services.iactnlayer.InteractionContext} for the calling thread.
+     * Optionally, the currently active {@link org.apache.causeway.applib.services.iactn.InteractionContext} for the calling thread.
      */
     Optional<InteractionContext> currentInteractionContext();
 

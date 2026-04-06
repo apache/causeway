@@ -47,6 +47,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
 import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectMenu;
@@ -65,6 +66,7 @@ import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.core.metamodel.services.init.MetamodelInitializer;
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
@@ -116,7 +118,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUti
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleApplib.class,
@@ -182,6 +184,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
+        ExecutionContext.class,
         GridMarshallerXml.class,
         GridServiceDefault.class,
         IdStringifierLookupService.class,
@@ -200,9 +203,12 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
         // standalone validators
         LogicalTypeMalformedValidator.class,
-        
+
         // menubar contributions
-        MetamodelInspectMenu.class
+        MetamodelInspectMenu.class,
+
+        //last
+        MetamodelInitializer.class
 })
 public class CausewayModuleCoreMetamodel {
 

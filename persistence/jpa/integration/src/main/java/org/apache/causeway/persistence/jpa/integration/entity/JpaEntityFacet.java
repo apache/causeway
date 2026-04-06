@@ -19,7 +19,9 @@
 package org.apache.causeway.persistence.jpa.integration.entity;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.Optional;
+import java.util.function.Function;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -40,6 +42,9 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationWithTimeThreshold;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
@@ -47,6 +52,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
+import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -60,9 +66,11 @@ class JpaEntityFacet
     @Inject private JpaContext jpaContext;
     @Inject private IdStringifierLookupService idStringifierLookupService;
     @Inject private OrmMetadataProvider ormMetadataProvider;
+    @Inject private CausewayObservationIntegration observationIntegration;
 
     private final Class<?> entityClass;
-    private PrimaryKeyType<?> primaryKeyType;
+    private final PrimaryKeyType<?> primaryKeyType;
+    private final ObservationProvider observationProvider;
 
     protected JpaEntityFacet(
             final FacetHolder holder,
@@ -73,6 +81,10 @@ class JpaEntityFacet
         this.entityClass = entityClass;
         this.primaryKeyType = idStringifierLookupService
                 .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
+        var timeThreshold = Duration.ofMillis(2);
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
+                .andThen(obs->new ObservationWithTimeThreshold(obs, timeThreshold)));
     }
 
     // -- ENTITY FACET
@@ -85,9 +97,8 @@ class JpaEntityFacet
     @Override
     public Optional<String> identifierFor(final @Nullable Object pojo) {
 
-        if (!getEntityState(pojo).hasOid()) {
+        if (!getEntityState(pojo).hasOid())
             return Optional.empty();
-        }
 
         var entityManager = getEntityManager();
         var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
@@ -106,14 +117,12 @@ class JpaEntityFacet
 
     @Override
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
-
         log.debug("fetchEntity; bookmark={}", bookmark);
-
-        var primaryKey = primaryKeyType.destring(bookmark.identifier());
-
-        var entityManager = getEntityManager();
-        var entityPojo = entityManager.find(entityClass, primaryKey);
-        return Optional.ofNullable(entityPojo);
+        return observationProvider.get("Fetch by Bookmark (%s)".formatted(bookmark))
+            .observe(()->{
+                var primaryKey = primaryKeyType.destring(bookmark.identifier());
+                return Optional.ofNullable(getEntityManager().find(entityClass, primaryKey));
+            });
     }
 
     private Class<?> getPrimaryKeyType() {
@@ -125,8 +134,10 @@ class JpaEntityFacet
 
         var range = query.getRange();
 
-        if (query instanceof AllInstancesQuery) {
+        var entitySpec = getEntitySpecification();
+        final Function<Object, ManagedObject> adapter = entity -> ManagedObject.adaptSingular(entitySpec, entity);
 
+        if (query instanceof AllInstancesQuery) {
             var queryFindAllInstances = (AllInstancesQuery<?>) query;
             var queryEntityType = queryFindAllInstances.getResultType();
 
@@ -141,13 +152,13 @@ class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
-            var entitySpec = getEntitySpecification();
-            return Can.ofStream(
-                    typedQuery.getResultStream()
-                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
+            var obs = observationProvider.get("Fetch all Instances (%s)"
+                    .formatted(queryFindAllInstances.getDescription()));
+
+            return obs.observe(()->
+                    Can.ofStream(typedQuery.getResultStream().map(adapter)));
 
         } else if (query instanceof NamedQuery) {
-
             var applibNamedQuery = (NamedQuery<?>) query;
             var queryResultType = applibNamedQuery.getResultType();
 
@@ -168,11 +179,10 @@ class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
-            var entitySpec = getEntitySpecification();
-            return Can.ofStream(
-                    namedQuery.getResultStream()
-                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
-
+            var obs = observationProvider.get("Fetch all Instances (%s)"
+                    .formatted(applibNamedQuery.getDescription()));
+            return obs.observe(()->
+                    Can.ofStream(namedQuery.getResultStream().map(adapter)));
         }
 
         throw _Exceptions.unsupportedOperation(
@@ -181,9 +191,8 @@ class JpaEntityFacet
 
     @Override
     public void persist(final Object pojo) {
-        if (pojo == null) {
+        if (pojo == null)
             return; // nothing to do
-        }
 
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
@@ -192,7 +201,8 @@ class JpaEntityFacet
 
         log.debug("about to persist entity {}", pojo);
 
-        entityManager.persist(pojo);
+        observationProvider.get("Persist (type=%s)".formatted(entityClass.getName()))
+            .observe(()->entityManager.persist(pojo));
     }
 
     @Override @Nullable
@@ -203,30 +213,33 @@ class JpaEntityFacet
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         var entityManager = getEntityManager();
-        entityManager.refresh(pojo);
+
+        observationProvider.get("Refresh (type=%s)".formatted(entityClass.getName()))
+            .observe(()->entityManager.refresh(pojo));
+
         return pojo;
     }
 
     @Override
     public void delete(final Object pojo) {
-        if (pojo == null) {
+        if (pojo == null)
             return; // nothing to do
-        }
 
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         var entityManager = getEntityManager();
-        entityManager.remove(pojo);
+
+        observationProvider.get("Remove (type=%s)".formatted(entityClass.getName()))
+            .observe(()->entityManager.remove(pojo));
     }
 
     @Override
     public EntityState getEntityState(final Object pojo) {
 
         if (pojo == null
-                || !entityClass.isAssignableFrom(pojo.getClass())) {
+                || !entityClass.isAssignableFrom(pojo.getClass()))
             return EntityState.NOT_PERSISTABLE;
-        }
 
         var entityManager = getEntityManager();
         var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
@@ -237,9 +250,8 @@ class JpaEntityFacet
     @Override
     public Object versionOf(final Object pojo) {
         if (getEntityState(pojo).isAttached()) {
-            if (pojo instanceof HasVersion) {
+            if (pojo instanceof HasVersion)
                 return ((HasVersion<?>)pojo).getVersion();
-            }
         }
         return null;
     }
@@ -251,7 +263,17 @@ class JpaEntityFacet
 
     @Override
     public <T> T detach(final T pojo) {
-        getEntityManager().detach(pojo);
+        if (pojo == null)
+            return null;
+
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
+
+        var entityManager = getEntityManager();
+
+        observationProvider.get("Detach (type=%s)".formatted(entityClass.getName()))
+            .observe(()->entityManager.detach(pojo));
+
         return pojo;
     }
 
@@ -271,10 +293,10 @@ class JpaEntityFacet
     protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {
         return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
     }
-    
+
     // -- HELPER
 
-    private <T> TypedQuery<T> selectFrom(Class<T> entityClass) {
+    private <T> TypedQuery<T> selectFrom(final Class<T> entityClass) {
         var entityManager = getEntityManager();
         var q = entityManager.getCriteriaBuilder().createQuery(entityClass);
         q.select(q.from(entityClass));

@@ -28,29 +28,23 @@ import org.apache.causeway.commons.having.HasTypeSpecificAttributes;
  * Represents an action invocation or property modification, resulting in some
  * state change of the system.  It captures not only the target object and
  * arguments passed, but also builds up the call-graph, and captures metrics,
- * eg for profiling.
+ * e.g. for profiling.
  *
- * <p>
- *     The `Interaction` can be used to obtain the  {@link Command} object
- *     representing the top-level invocation action/property edit.
- * </p>
+ * <p>The `Interaction` can be used to obtain the  {@link Command} object
+ * representing the top-level invocation action/property edit.
  *
- * <p>
- *     The distinction between {@link Command} and this object is perhaps
- *     subtle: the former represents the intention to invoke an action/edit a
- *     property, whereas this represents the actual invocation/edit itself.
- * </p>
+ * <p>The distinction between {@link Command} and this object is perhaps
+ * subtle: the former represents the intention to invoke an action/edit a
+ * property, whereas this represents the actual invocation/edit itself.
  *
- * <p>
- *     To confuse matters slightly, historically the {@link Command} interface
- *     defines members (specifically: {@link Command#getStartedAt()},
- *     {@link Command#getCompletedAt()}, {@link Command#getResult()},
- *     {@link Command#getException()}) which logically belong to this class
- *     instead; they remain in {@link Command} for backward compatibility only
- *     (and have been deprecated).
- * </p>
+ * <p> To confuse matters slightly, historically the {@link Command} interface
+ * defines members (specifically: {@link Command#getStartedAt()},
+ * {@link Command#getCompletedAt()}, {@link Command#getResult()},
+ * {@link Command#getException()}) which logically belong to this class
+ * instead; they remain in {@link Command} for backward compatibility only
+ * (and have been deprecated).
  *
- * @since 1.x revised for 2.0 {@index}
+ * @since 1.x revised for 2.0, 4.0 {@index}
  */
 public interface Interaction
 extends
@@ -61,14 +55,14 @@ extends
      * The unique identifier of this interaction (inherited from
      * {@link HasInteractionId})
      *
-     * <p>
-     *     This can be used to correlate to the {@link Command} that triggers the interaction, and to audit records
-     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s that are created as a
-     *     consequence of the interaction.
-     * </p>
+     * <p>This can be used to correlate to the {@link Command} that triggers the interaction, and to audit records
+     * ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s that are created as a
+     * consequence of the interaction.
      */
     @Override
-    UUID getInteractionId();
+    default UUID getInteractionId() {
+        return getCommand().getInteractionId();
+    }
 
     /**
      * Represents the <i>intention</i> to perform this interaction.

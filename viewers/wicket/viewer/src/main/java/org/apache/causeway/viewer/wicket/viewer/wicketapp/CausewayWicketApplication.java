@@ -41,7 +41,6 @@ import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
@@ -50,10 +49,12 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
@@ -68,6 +69,10 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
+import org.apache.causeway.viewer.wicket.viewer.integration.RehydrationHandler;
+import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
+import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStartHandler;
+import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStopHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
@@ -111,6 +116,8 @@ implements
     @Inject private List<WicketApplicationInitializer> applicationInitializers;
     @Inject private CausewaySystemEnvironment systemEnvironment;
     @Inject private CausewayConfiguration configuration;
+    @Inject private MetricsService metricService;
+    @Inject private CausewayObservationIntegration observationIntegration;
 
     @Getter(onMethod = @__(@Override))
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
@@ -136,11 +143,7 @@ implements
         // in which search for i18n properties, to search for the application-specific
         // settings before any other.
         setResourceSettings(new CausewayResourceSettings(this));
-
         super.internalInit();
-
-        // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
@@ -202,10 +205,14 @@ implements
                 .submit(_ConcurrentContext.sequential())
                 .await();
 
+            setRequestCycleProvider(RequestCycle2::new);
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            getRequestCycleListeners().add(createWebRequestCycleListenerForCauseway());
+            getRequestCycleListeners().add(new TelemetryStartHandler(observationIntegration));
+            getRequestCycleListeners().add(new WebRequestCycleForCauseway(metaModelContext, getPageClassRegistry()));
+            getRequestCycleListeners().add(new TelemetryStopHandler(metricService));
+            getRequestCycleListeners().add(new RehydrationHandler());
             getRequestCycleListeners().add(new PageRequestHandlerTracker());
 
             //XXX CAUSEWAY-2530, don't recreate expired pages
@@ -275,15 +282,6 @@ implements
 
     // //////////////////////////////////////
 
-    /**
-     * Factored out for easy (informal) pluggability.
-     */
-    protected IRequestCycleListener createWebRequestCycleListenerForCauseway() {
-        var webRequestCycleForCauseway = new WebRequestCycleForCauseway();
-        webRequestCycleForCauseway.setPageClassRegistry(getPageClassRegistry());
-        return webRequestCycleForCauseway;
-    }
-
     protected static final Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
             (final ComponentFactory input) -> {
                 final CssResourceReference cssResourceReference = input.getCssResourceReference();
@@ -328,9 +326,8 @@ implements
     @Override
     public final RuntimeConfigurationType getConfigurationType() {
 
-        if(systemEnvironment==null) {
+        if(systemEnvironment==null)
             return RuntimeConfigurationType.DEPLOYMENT;
-        }
 
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT

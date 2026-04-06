@@ -27,7 +27,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.homepage;
     exports org.apache.causeway.core.runtimeservices.i18n.po;
     exports org.apache.causeway.core.runtimeservices.icons;
-    exports org.apache.causeway.core.runtimeservices.interaction;
+    exports org.apache.causeway.core.runtimeservices.ia.dto;
     exports org.apache.causeway.core.runtimeservices.jaxb;
     exports org.apache.causeway.core.runtimeservices.locale;
     exports org.apache.causeway.core.runtimeservices.menubars.bootstrap;
@@ -37,7 +37,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.recognizer;
     exports org.apache.causeway.core.runtimeservices.recognizer.dae;
     exports org.apache.causeway.core.runtimeservices.scratchpad;
-    exports org.apache.causeway.core.runtimeservices.session;
+    exports org.apache.causeway.core.runtimeservices.ia;
     exports org.apache.causeway.core.runtimeservices.sitemap;
     exports org.apache.causeway.core.runtimeservices.spring;
     exports org.apache.causeway.core.runtimeservices.transaction;

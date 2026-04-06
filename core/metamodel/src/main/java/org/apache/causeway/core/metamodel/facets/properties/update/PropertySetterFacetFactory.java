@@ -27,7 +27,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Retur
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
@@ -71,7 +70,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             .forEach(setterMethod->{
                 addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
                 addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
-                addFacet(new PropertyClearFacetViaSetterMethod(setterMethod, property));
             });
 
         } else {

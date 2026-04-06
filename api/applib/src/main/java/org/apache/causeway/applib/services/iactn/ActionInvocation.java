@@ -44,5 +44,5 @@ extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
         super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
         this.args = args;
     }
-    // ...
+ 
 }

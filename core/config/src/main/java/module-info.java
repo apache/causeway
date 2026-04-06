@@ -27,6 +27,7 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.metamodel.facets;
     exports org.apache.causeway.core.config.metamodel.services;
     exports org.apache.causeway.core.config.metamodel.specloader;
+    exports org.apache.causeway.core.config.observation;
     exports org.apache.causeway.core.config.presets;
     exports org.apache.causeway.core.config.progmodel;
     exports org.apache.causeway.core.config.util;
@@ -44,12 +45,16 @@ module org.apache.causeway.core.config {
     requires jakarta.validation;
     requires jakarta.inject;
     requires org.hibernate.validator;
+    requires transitive micrometer.commons;
+    requires transitive micrometer.observation;
+    requires transitive micrometer.tracing;
+    requires transitive spring.boot;
     requires spring.aop;
     requires spring.beans;
-    requires transitive spring.boot;
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires spring.boot.autoconfigure;
     requires org.slf4j;
 
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;

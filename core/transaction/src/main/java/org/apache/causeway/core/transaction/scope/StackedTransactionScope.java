@@ -21,42 +21,27 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
-import org.jspecify.annotations.Nullable;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import org.apache.causeway.commons.internal.base._Refs;
 
 public class StackedTransactionScope implements Scope {
 
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
-        var transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
-
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevelForThisThread());
+        var scopedObjects = currentScopedObjectsHolder();
         if (scopedObjects == null) {
-            scopedObjects = new ScopedObjectsHolder(transactionNestingLevelForThisThread);
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                // this happen when TransactionSynchronization#afterCompletion is called.
-                // it's a catch-22 : we use TransactionSynchronization as a resource to hold the scoped objects,
-                // but those scoped objects can only be interacted with during the transaction, not after it.
-                //
-                // see the 'else' clause below for the handling if we encounter the ScopedObjectsHolder after the
-                // transaction was completed.
-                registerWithTransitionSynchronizationManager(scopedObjects);
-            } else {
-                scopedObjects.registered = false;
-            }
-            TransactionSynchronizationManager.bindResource(transactionNestingLevelForThisThread, scopedObjects);
+            scopedObjects = createAndBindScopedObjectsHolder();
         } else {
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                // it's possible that this already-existing scopedObject was added when a synchronization wasn't active
-                // (see the 'if' block above) and so wouldn't be registered to TSM.  If that's the case, we register it now.
-                if (!scopedObjects.registered) {
-                    registerWithTransitionSynchronizationManager(scopedObjects);
-                }
-            }
+            // it's possible that this already-existing scopedObject was added when a synchronization wasn't active
+            // (see the 'if' block above) and so wouldn't be registered to TSM.  If that's the case, we register it now.
+            registerWithTransactionSynchronizationManagerIfNotAlready(scopedObjects);
         }
         // NOTE: Do NOT modify the following to use Map::computeIfAbsent. For details,
         // see https://github.com/spring-projects/spring-framework/issues/25801.
@@ -68,30 +53,50 @@ public class StackedTransactionScope implements Scope {
         return scopedObject;
     }
 
-    private void registerWithTransitionSynchronizationManager(final ScopedObjectsHolder scopedObjects) {
-        TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(scopedObjects));
-        scopedObjects.registered = true;
+    private void registerWithTransactionSynchronizationManagerIfNotAlready(final ScopedObjectsHolder scopedObjects) {
+        if (scopedObjects.registered.isTrue()
+                || !TransactionSynchronizationManager.isSynchronizationActive()) return;
+        TransactionSynchronizationManager.registerSynchronization(new CleanupSynchronization(this, scopedObjects));
+        scopedObjects.registered.setValue(true);
     }
 
     @Override
     @Nullable
     public Object remove(final String name) {
-        var currentTransactionNestingLevel = currentTransactionNestingLevelForThisThread();
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevel);
+        var scopedObjects = currentScopedObjectsHolder();
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.remove(name);
             return scopedObjects.scopedInstances.remove(name);
-        } else {
+        } else
             return null;
-        }
     }
 
     @Override
     public void registerDestructionCallback(final String name, final Runnable callback) {
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevelForThisThread());
+        var scopedObjects = currentScopedObjectsHolder();
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.put(name, callback);
         }
+    }
+
+    @Nullable
+    private ScopedObjectsHolder currentScopedObjectsHolder() {
+        return (ScopedObjectsHolder) TransactionSynchronizationManager
+                .getResource(currentTransactionNestingLevelForThisThread());
+    }
+
+    private ScopedObjectsHolder createAndBindScopedObjectsHolder() {
+        final UUID transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
+        var scopedObjects = new ScopedObjectsHolder(transactionNestingLevelForThisThread);
+        // this happen when TransactionSynchronization#afterCompletion is called.
+        // it's a catch-22 : we use TransactionSynchronization as a resource to hold the scoped objects,
+        // but those scoped objects can only be interacted with during the transaction, not after it.
+        //
+        // see the 'else' clause below for the handling if we encounter the ScopedObjectsHolder after the
+        // transaction was completed.
+        registerWithTransactionSynchronizationManagerIfNotAlready(scopedObjects);
+        TransactionSynchronizationManager.bindResource(transactionNestingLevelForThisThread, scopedObjects);
+        return scopedObjects;
     }
 
     /**
@@ -103,8 +108,8 @@ public class StackedTransactionScope implements Scope {
      * using an anonymous <code>new Object()</code>.
      * </p>
      */
-    private static final ThreadLocal<Stack<UUID>> transactionNestingLevelThreadLocal = ThreadLocal.withInitial(() -> {
-        Stack<UUID> stack = new Stack<>();
+    private static final ThreadLocal<Stack<UUID>> UUID_STACK = ThreadLocal.withInitial(() -> {
+        var stack = new Stack<UUID>();
         stack.push(UUID.randomUUID());
         return stack;
     });
@@ -113,29 +118,26 @@ public class StackedTransactionScope implements Scope {
      * Maintains a stack of keys representing nested transactions, where the top-most is the key managed by
      * {@link TransactionSynchronizationManager} holding the {@link ScopedObjectsHolder} for the current transaction.
      *
-     * <p>
-     * The keys themselves are {@link UUID}s, having no meaning in themselves other than their identity as the key
+     * <p>The keys are {@link UUID}s, having no meaning in themselves other than their identity as the key
      * into a hashmap.
      *
-     * <p>
-     * If a transaction is suspended, then the {@link CleanupSynchronization#suspend() suspend} callback is used
+     * <p>If a transaction is suspended, then the {@link CleanupSynchronization#suspend() suspend} callback is used
      * to pop a new key onto the stack, unbinding the previous key's resources (in other words, the
      * {@link org.apache.causeway.applib.annotation.TransactionScope transaction-scope}d beans of the suspended
-     * transaction) from {@link TransactionSynchronizationManager}.  As transaction-scoped beans are then resolved,
+     * transaction) from {@link TransactionSynchronizationManager}. As transaction-scoped beans are then resolved,
      * they will be associated with the new key.
      *
-     * <p>
-     * Conversely, when a transaction is resumed, then the process is reversed; the old key is popped, and the previous
+     * <p>Conversely, when a transaction is resumed, then the process is reversed; the old key is popped, and the previous
      * key is rebound to the {@link TransactionSynchronizationManager}, meaning that the previous transaction's
      * {@link org.apache.causeway.applib.annotation.TransactionScope transaction-scope}d beans are brought back.
      *
      * @see #currentTransactionNestingLevelForThisThread()
      * @see #pushToNewTransactionNestingLevelForThisThread()
      * @see #popToPreviousTransactionNestingLevelForThisThread()
-     * @see #transactionNestingLevelThreadLocal
+     * @see #UUID_STACK
      */
     private static Stack<UUID> transactionNestingLevelForThread() {
-        return transactionNestingLevelThreadLocal.get();
+        return UUID_STACK.get();
     }
 
     /**
@@ -174,48 +176,41 @@ public class StackedTransactionScope implements Scope {
     /**
      * Holder for scoped objects.
      */
-    static class ScopedObjectsHolder {
+    record ScopedObjectsHolder(
+            UUID transactionUuid,
+            Map<String, Object> scopedInstances,
+            Map<String, Runnable> destructionCallbacks,
+            /**
+             * Keeps track of whether these objects have been registered with {@link TransactionSynchronizationManager}.
+             *
+             * <p>This can only be done if
+             * {@link TransactionSynchronizationManager#isSynchronizationActive() synchronization is active}, which
+             * isn't the case for {@link ScopedObjectsHolder scoped objects} that are obtained as a result of the
+             * {@link TransactionSynchronization#afterCompletion(int)} callback.
+             * We use this flag to keep track in case they are reused in a subsequent transaction.
+             */
+            _Refs.BooleanReference registered) {
 
-        private final UUID transactionUuid;
-
-        ScopedObjectsHolder(UUID transactionUuid) {
-            this.transactionUuid = transactionUuid;
-        }
-
-        final Map<String, Object> scopedInstances = new HashMap<>();
-        final Map<String, Runnable> destructionCallbacks = new LinkedHashMap<>();
-
-        /**
-         * Keeps track of whether these objects have been registered with {@link TransactionSynchronizationManager}.
-         *
-         * <p>
-         * This can only be done if
-         * {@link TransactionSynchronizationManager#isSynchronizationActive() synchronization is active}, which
-         * isn't the case for {@link ScopedObjectsHolder scoped objects} that are obtained as a result of the
-         * {@link TransactionSynchronization#afterCompletion(int)} callback.  We use this flag to keep track in
-         * case they are reused in a subsequent transaction.
-         * </p>
-         */
-        private boolean registered = false;
-
-        public String toString() {
-            return String.format(
-                    "uuid: %s, registered: %s, scopedInstances.size(): %d, destructionCallbacks.size(): %d",
-                    transactionUuid, registered, scopedInstances.size(), destructionCallbacks.size());
-        }
-    }
-
-    private class CleanupSynchronization implements TransactionSynchronization {
-
-        private final ScopedObjectsHolder scopedObjects;
-
-        public CleanupSynchronization(final ScopedObjectsHolder scopedObjects) {
-            this.scopedObjects = scopedObjects;
+        ScopedObjectsHolder(
+                final UUID transactionUuid) {
+            this(transactionUuid, new HashMap<>(), new LinkedHashMap<>(), new _Refs.BooleanReference(false));
         }
 
         @Override
+        public String toString() {
+            return String.format(
+                    "uuid: %s, registered: %b, scopedInstances.size(): %d, destructionCallbacks.size(): %d",
+                    transactionUuid, registered.isTrue(), scopedInstances.size(), destructionCallbacks.size());
+        }
+    }
+
+    private record CleanupSynchronization(
+            StackedTransactionScope scope,
+            ScopedObjectsHolder scopedObjects) implements TransactionSynchronization {
+
+        @Override
         public void suspend() {
-            var transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
+            var transactionNestingLevelForThisThread = scope.currentTransactionNestingLevelForThisThread();
             TransactionSynchronizationManager.unbindResource(transactionNestingLevelForThisThread);
             pushToNewTransactionNestingLevelForThisThread();  // subsequent calls to obtain a @TransactionScope'd bean will be against this key
         }
@@ -223,17 +218,17 @@ public class StackedTransactionScope implements Scope {
         @Override
         public void resume() {
             popToPreviousTransactionNestingLevelForThisThread(); // the now-completed transaction's @TransactionScope'd beans are no longer required, and will be GC'd.
-            TransactionSynchronizationManager.bindResource(currentTransactionNestingLevelForThisThread(), this.scopedObjects);
+            TransactionSynchronizationManager.bindResource(scope.currentTransactionNestingLevelForThisThread(), scopedObjects);
         }
 
         @Override
         public void afterCompletion(final int status) {
-            TransactionSynchronizationManager.unbindResourceIfPossible(StackedTransactionScope.this.currentTransactionNestingLevelForThisThread());
-            for (Runnable callback : this.scopedObjects.destructionCallbacks.values()) {
+            TransactionSynchronizationManager.unbindResourceIfPossible(scope.currentTransactionNestingLevelForThisThread());
+            for (Runnable callback : scopedObjects.destructionCallbacks.values()) {
                 callback.run();
             }
-            this.scopedObjects.destructionCallbacks.clear();
-            this.scopedObjects.scopedInstances.clear();
+            scopedObjects.destructionCallbacks.clear();
+            scopedObjects.scopedInstances.clear();
         }
     }
 

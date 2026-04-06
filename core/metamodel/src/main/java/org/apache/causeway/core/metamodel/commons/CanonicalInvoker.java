@@ -23,6 +23,7 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
@@ -31,7 +32,6 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -62,7 +62,7 @@ public class CanonicalInvoker {
     public Object invoke(
             final MethodFacade methodFacade, 
             final Object targetPojo, 
-            final Object[] executionParameters) {
+            final Object ... executionParameters) {
         var method = methodFacade.asMethodForIntrospection().method();
         var args = methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT);
         return invokeWithConvertedArgs(method, targetPojo, args);

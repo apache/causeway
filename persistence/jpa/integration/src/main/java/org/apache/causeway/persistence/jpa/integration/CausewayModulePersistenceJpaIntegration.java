@@ -84,14 +84,15 @@ import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJp
         JavaUtilUuidConverter.class,
         OffsetTimeConverterForJpa.class,
         OffsetDateTimeConverterForJpa.class,
-        ZonedDateTimeConverterForJpa.class
-
+        ZonedDateTimeConverterForJpa.class,
 })
 public class CausewayModulePersistenceJpaIntegration {
 
+    public static final String NAMESPACE = "causeway.persistence.jpa.integration";
+
     //TODO close issue https://issues.apache.org/jira/browse/CAUSEWAY-3895 once this can be removed
     @Bean @Primary
-    public JpaContext defaultJpaContextWorkaround(final Set<EntityManager> entityManagers) {
+    JpaContext defaultJpaContextWorkaround(final Set<EntityManager> entityManagers) {
         var setOfOne = Set.of(entityManagers.iterator().next());
         return new DefaultJpaContext(setOfOne);
     }

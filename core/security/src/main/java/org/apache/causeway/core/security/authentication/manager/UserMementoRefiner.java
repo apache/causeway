@@ -20,7 +20,7 @@ package org.apache.causeway.core.security.authentication.manager;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 import org.jspecify.annotations.NonNull;

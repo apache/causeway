@@ -27,8 +27,8 @@ import graphql.execution.FieldValueInfo;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
 @Service

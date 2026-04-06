@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -220,7 +219,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var propertyClearFacet = getFacet(PropertyClearFacet.class);
+        var propertyClearFacet = getFacet(PropertySetterFacet.class);
 
         if (propertyClearFacet == null) {
             throw _Exceptions.unexpectedCodeReach();

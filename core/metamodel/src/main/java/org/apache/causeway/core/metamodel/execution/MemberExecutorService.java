@@ -18,107 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.execution;
 
-import java.util.Optional;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.iactn.Execution;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+
 /**
- * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
- * <p>
- * That is, invoke a domain action or edit a domain property.
+ * Used by ActionInvocationFacets and PropertyModifyFacets to submit their executions.
+ *
+ * <p>That is, invoke a domain action or edit a domain property.
  *
  * @since 2.0
  */
 public interface MemberExecutorService {
-
-    /**
-     * Optionally, the currently active {@link InteractionInternal} for the calling thread.
-     */
-    Optional<InteractionInternal> getInteraction();
+	
+	sealed interface MemberExecutor<E extends Execution<?, ?>> 
+	permits ActionExecutor, PropertyModifier{
+		/**
+		 * Handles Domain Events EXECUTING and EXECUTED,
+		 * which have potential to change action arguments and return results. 
+		 */
+		Object executeWithExecutingEvents(int executionSequence, E execution);
+	}
 
     ManagedObject invokeAction(
             @NonNull ActionExecutor actionExecutor);
 
     ManagedObject setOrClearProperty(
             @NonNull PropertyModifier propertyExecutor);
-
-    // -- SHORTCUTS
-
-    default InteractionInternal getInteractionIfAny() {
-        return getInteraction().orElse(null);
-    }
-
-    default InteractionInternal getInteractionElseFail() {
-        return getInteraction().orElseThrow(()->_Exceptions
-                .unrecoverable("needs an InteractionSession on current thread"));
-    }
-
-    default ManagedObject invokeAction(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // action specifics
-            final @NonNull Can<ManagedObject> argumentAdapters,
-            final @NonNull ObjectAction owningAction,
-            final @NonNull ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
-        var actionExecutor = ActionExecutor.forAction(
-                facetHolder,
-                interactionInitiatedBy,
-                head,
-                argumentAdapters,
-                owningAction,
-                actionInvocationFacetAbstract);
-        return invokeAction(actionExecutor);
-    }
-
-    default ManagedObject clearProperty(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-
-        var propertyExecutor = PropertyModifier.forPropertyClear(
-                facetHolder, interactionInitiatedBy, head,
-                owningProperty, getterFacet, clearFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
-        return setOrClearProperty(propertyExecutor);
-    }
-
-    default ManagedObject setProperty(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull ManagedObject newValueAdapter,
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-
-        var propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
-                interactionInitiatedBy, head, newValueAdapter,
-                owningProperty, getterFacet, setterFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
-
-        return setOrClearProperty(propertyExecutor);
-    }
 
 }

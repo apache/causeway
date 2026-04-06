@@ -17,7 +17,6 @@
  * under the License.
  *
  */
-
 package org.apache.causeway.testing.integtestsupport.applib;
 
 import org.junit.jupiter.api.extension.BeforeEachCallback;

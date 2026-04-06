@@ -20,9 +20,9 @@ package org.apache.causeway.viewer.wicket.model.causeway;
 
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-
 import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 /**
  * Introduced, to allow for authenticated sessions to be amended with time-zone information

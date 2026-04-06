@@ -30,7 +30,7 @@ import org.springframework.boot.health.contributor.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.health.HealthCheckService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 @Component

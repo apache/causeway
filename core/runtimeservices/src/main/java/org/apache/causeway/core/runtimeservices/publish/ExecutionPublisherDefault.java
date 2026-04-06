@@ -22,26 +22,26 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * Default implementation of {@link ExecutionPublisher}.
@@ -53,23 +53,28 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 
-    private final List<ExecutionSubscriber> subscribers;
+    private final Can<ExecutionSubscriber> enabledSubscribers;
     private final InteractionLayerTracker iaTracker;
+    private final ObservationProvider observationProvider;
 
-    private Can<ExecutionSubscriber> enabledSubscribers = Can.empty();
     /**
      * this is the reason that this service is @InteractionScope'd
      */
     private final LongAdder suppressionRequestCounter = new LongAdder();
 
-    @PostConstruct
-    public void init() {
-        enabledSubscribers = Can.ofCollection(subscribers)
+    @Inject
+    public ExecutionPublisherDefault(
+            final InteractionLayerTracker iaTracker,
+            final List<ExecutionSubscriber> subscribers,
+            final CausewayObservationIntegration observationIntegration) {
+        this.iaTracker = iaTracker;
+        this.enabledSubscribers = Can.ofCollection(subscribers)
                 .filter(HasEnabling::isEnabled);
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
 
     @Override
@@ -108,9 +113,13 @@ implements ExecutionPublisher {
                 this::getCannotPublishReason);
 
         if(canPublish()) {
-            for (var subscriber : enabledSubscribers) {
-                subscriber.onExecution(execution);
-            }
+            observationProvider.get("Execution Publishing (subscribers=%d)"
+                    .formatted(enabledSubscribers.size()))
+                .observe(()->{
+                    for (var subscriber : enabledSubscribers) {
+                        subscriber.onExecution(execution);
+                    }
+                });
         }
 
         _Xray.exitPublishing(handle);
