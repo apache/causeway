@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
+import java.util.Optional;
+
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -26,9 +28,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -72,6 +77,8 @@ import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationService
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
@@ -132,6 +139,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
 
 })
 @ComponentScan(basePackages = "org.apache.causeway.core.runtimeservices.icons")
+@Slf4j
 public class CausewayModuleCoreRuntimeServices {
 
     public static final String NAMESPACE = "causeway.runtimeservices";
@@ -147,7 +155,19 @@ public class CausewayModuleCoreRuntimeServices {
         @Bean(NAMESPACE + ".fallbackHmacAuthority")
         @ConditionalOnMissingBean(HmacAuthority.class)
         public HmacAuthority fallbackHmacAuthority() {
-            return HmacAuthority.HmacSHA256.randomInstance();
+
+            var secretFromEnv = Optional.ofNullable(System.getenv("causeway_hmac_sha256"))
+                .filter(StringUtils::hasText)
+                .map(_Bytes::parse)
+                .filter(secret->{
+                    Assert.isTrue(secret.length>16, ()->"Illegal Argument: "
+                            + "env. var. 'causeway_hmac_sha256' underflows required byte count of 16");
+                    log.info("using secret from env. var. 'causeway_hmac_sha256' having length {} bytes", secret.length);
+                    return true;
+                });
+
+            return secretFromEnv.map(HmacAuthority.HmacSHA256::new)
+                    .orElseGet(HmacAuthority.HmacSHA256::randomInstance);
         }
     }
 

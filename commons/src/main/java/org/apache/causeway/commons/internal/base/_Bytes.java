@@ -25,12 +25,12 @@ import java.util.Base64;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import org.jspecify.annotations.Nullable;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -59,9 +59,8 @@ public final class _Bytes {
      * @throws IOException
      */
     public static byte[] of(final @Nullable InputStream input) throws IOException {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
@@ -84,9 +83,8 @@ public final class _Bytes {
      * @throws IOException
      */
     public static byte[] ofKeepOpen(final @Nullable InputStream input) throws IOException {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
 
         try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
             final byte[] buffer = new byte[BUFFER_SIZE];
@@ -110,9 +108,8 @@ public final class _Bytes {
      */
     public static IntStream streamAsInts(final @Nullable byte[] bytes) {
         if(bytes==null
-                || bytes.length==0) {
+                || bytes.length==0)
             return IntStream.empty();
-        }
         return IntStream.range(0, bytes.length)
                 .map(index->(bytes[index] & 0xff));
     }
@@ -126,9 +123,8 @@ public final class _Bytes {
      * @see #streamAsInts(byte[])
      */
     private static byte[] ofIntStream(final @Nullable IntStream intStream) {
-        if(intStream==null) {
+        if(intStream==null)
             return new byte[0];
-        }
         var listOfInts = intStream
                 .boxed()
                 .collect(Collectors.toList());
@@ -148,9 +144,8 @@ public final class _Bytes {
      * @see #ofHexDump(String, String)
      */
     public static String hexDump(final @Nullable byte[] bytes, final @Nullable String delimiter) {
-        if(bytes==null) {
+        if(bytes==null)
             return "";
-        }
         return _Bytes.streamAsInts(bytes)
                 .mapToObj(Integer::toHexString)
                 .map(s->s.length()==1
@@ -172,9 +167,8 @@ public final class _Bytes {
      * @see #hexDump(byte[], String)
      */
     public static byte[] ofHexDump(final @Nullable String hexDump, final @Nullable String delimiter) {
-        if(hexDump==null) {
+        if(hexDump==null)
             return new byte[0];
-        }
         final int delimLen = _NullSafe.size(delimiter);
         final int stride = 2 + delimLen;
 
@@ -211,14 +205,12 @@ public final class _Bytes {
      */
     public static final byte[] prepend(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
-            if(bytes==null) {
+            if(bytes==null)
                 return null;
-            }
             return bytes.clone();
         }
-        if(bytes==null) {
+        if(bytes==null)
             return target.clone();
-        }
         final byte[] result = new byte[target.length + bytes.length];
         System.arraycopy(bytes, 0, result, 0, bytes.length);
         System.arraycopy(target, 0, result, bytes.length, target.length);
@@ -233,14 +225,12 @@ public final class _Bytes {
      */
     public static final byte[] append(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
-            if(bytes==null) {
+            if(bytes==null)
                 return null;
-            }
             return bytes.clone();
         }
-        if(bytes==null) {
+        if(bytes==null)
             return target.clone();
-        }
         final byte[] result = new byte[target.length + bytes.length];
         System.arraycopy(target, 0, result, 0, target.length);
         System.arraycopy(bytes, 0, result, target.length, bytes.length);
@@ -281,12 +271,10 @@ public final class _Bytes {
      * @return null if {@code input} is null
      */
     public static final byte[] compress(final @Nullable byte[] input) {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
-        if(input.length==0) {
+        if(input.length==0)
             return input;
-        }
         try {
             return _Bytes_GZipCompressorSmart.compress(input);
         } catch (IOException e) {
@@ -302,12 +290,10 @@ public final class _Bytes {
      * @return null if {@code compressed} is null
      */
     public static final byte[] decompress(final @Nullable byte[] compressed) {
-        if(compressed==null) {
+        if(compressed==null)
             return null;
-        }
-        if(compressed.length==0) {
+        if(compressed.length==0)
             return compressed;
-        }
         try {
             return _Bytes_GZipCompressorSmart.decompress(compressed);
         } catch (IOException e) {
@@ -323,12 +309,10 @@ public final class _Bytes {
      * @return null if {@code input} is null
      */
     public static final byte[] compressZlib(final @Nullable byte[] input) {
-        if(input==null) {
+        if(input==null)
             return null;
-        }
-        if(input.length==0) {
+        if(input.length==0)
             return input;
-        }
         try {
             return _Bytes_ZLibCompressor.compress(input);
         } catch (IOException e) {
@@ -344,12 +328,10 @@ public final class _Bytes {
      * @return null if {@code compressed} is null
      */
     public static final byte[] decompressZlib(final @Nullable byte[] compressed) {
-        if(compressed==null) {
+        if(compressed==null)
             return null;
-        }
-        if(compressed.length==0) {
+        if(compressed.length==0)
             return compressed;
-        }
         try {
             return _Bytes_ZLibCompressor.decompress(compressed);
         } catch (IOException e) {
@@ -427,6 +409,30 @@ public final class _Bytes {
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
 
-    // --
+
+    // -- EXTERNAL FORMAT
+
+    public static byte[] fromInts(final int[] ints) {
+        var bytes = new byte[ints.length];
+        IntStream.range(0, bytes.length)
+            .forEach(i->bytes[i] = (byte)ints[i]);
+        return bytes;
+    }
+
+    public static byte[] parse(final String asString) {
+        var ints = Stream.of(asString.split("\\,"))
+            .map(String::trim)
+            .mapToInt(Integer::parseInt)
+            .toArray();
+        return fromInts(ints);
+    }
+
+    public static String stringify(final byte[] bytes) {
+        var asString = IntStream.range(0, bytes.length)
+                .map(i->(int)bytes[i])
+                .mapToObj(i->""+i)
+                .collect(Collectors.joining(","));
+        return asString;
+    }
 
 }
