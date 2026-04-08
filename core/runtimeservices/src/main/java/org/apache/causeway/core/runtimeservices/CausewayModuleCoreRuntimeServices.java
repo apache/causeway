@@ -160,7 +160,7 @@ public class CausewayModuleCoreRuntimeServices {
                 .filter(StringUtils::hasText)
                 .map(_Bytes::parse)
                 .filter(secret->{
-                    Assert.isTrue(secret.length>16, ()->"Illegal Argument: "
+                    Assert.isTrue(secret.length>=16, ()->"Illegal Argument: "
                             + "env. var. 'causeway_hmac_sha256' underflows required byte count of 16");
                     log.info("using secret from env. var. 'causeway_hmac_sha256' having length {} bytes", secret.length);
                     return true;
