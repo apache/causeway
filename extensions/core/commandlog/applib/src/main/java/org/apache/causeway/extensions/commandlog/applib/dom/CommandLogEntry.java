@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -191,8 +192,11 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         // the hierarchy of commands calling other commands is only available on the primary system.
         setParentInteractionId(null);
 
-        setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getStartedAt()));
-        setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getCompletedAt()));
+        Optional.ofNullable(commandDto.getTimings())
+            .ifPresent(timings->{
+                setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timings.getStartedAt()));
+                setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timings.getCompletedAt()));
+            });
 
         copyOver(commandDto, UserDataKeys.RESULT, value -> this.setResult(Bookmark.parse(value).orElse(null)));
         copyOver(commandDto, UserDataKeys.EXCEPTION, this::setException);
@@ -203,14 +207,17 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     static void copyOver(
             final CommandDto commandDto,
             final String key, final Consumer<String> consume) {
-        commandDto.getUserData().getEntry()
-                .stream()
-                .filter(x -> Objects.equals(x.getKey(), key))
-                .map(MapDto.Entry::getValue)
-                .filter(Objects::nonNull)
-                .filter(x -> x.length() > 0)
-                .findFirst()
-                .ifPresent(consume);
+        Optional.ofNullable(commandDto.getUserData())
+            .ifPresent(userdata->{
+                userdata.getEntry()
+                    .stream()
+                    .filter(x -> Objects.equals(x.getKey(), key))
+                    .map(MapDto.Entry::getValue)
+                    .filter(Objects::nonNull)
+                    .filter(x -> x.length() > 0)
+                    .findFirst()
+                    .ifPresent(consume);
+            });
     }
 
     static final DateTimeFormatter DATETIME_FORMATTER =

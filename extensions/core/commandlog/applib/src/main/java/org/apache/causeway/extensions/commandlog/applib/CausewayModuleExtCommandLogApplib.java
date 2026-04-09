@@ -31,6 +31,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
@@ -41,6 +42,9 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
 @Import({
         // @DomainService's
         CommandLogMenu.class,
+
+        // viewmodels
+        CommandReplayManager.class,
 
         // mixins
         HasInteractionId_commandLogEntry.class,

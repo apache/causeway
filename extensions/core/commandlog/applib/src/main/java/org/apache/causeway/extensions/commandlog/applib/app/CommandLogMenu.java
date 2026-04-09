@@ -40,6 +40,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -140,6 +141,23 @@ public class CommandLogMenu {
             return commandLogEntryRepository.findAll();
         }
     }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = replayManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(cssClassFa = "solid circle-play", sequence="50")
+    public class replayManager {
+        public class DomainEvent extends ActionDomainEvent<replayManager> { }
+
+        @MemberSupport public CommandReplayManager act() {
+            return new CommandReplayManager(null, commandLogEntryRepository);
+        }
+    }
+
 
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());

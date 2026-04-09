@@ -51,36 +51,41 @@ public interface CommandLogEntryRepository {
     }
 
     CommandLogEntry createEntryAndPersist(
-            final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
+            Command command, UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
 
-    Optional<CommandLogEntry> findByInteractionId(final UUID interactionId);
+    CommandLogEntry createAsPending(CommandDto commandToReplay, int targetIndex);
 
-    List<CommandLogEntry> findByParent(final CommandLogEntry parent);
+    Optional<CommandLogEntry> findByInteractionId(UUID interactionId);
 
-    List<CommandLogEntry> findByParentInteractionId(final UUID parentInteractionId);
+    List<CommandLogEntry> findByParent(CommandLogEntry parent);
+
+    List<CommandLogEntry> findByParentInteractionId(UUID parentInteractionId);
 
     List<CommandLogEntry> findByFromAndTo(
-            final @Nullable LocalDate from,
-            final @Nullable LocalDate to);
+            @Nullable LocalDate from,
+            @Nullable LocalDate to);
 
+    /**
+     * Still running, not completed yet.
+     */
     List<CommandLogEntry> findCurrent();
 
     List<CommandLogEntry> findCompleted();
 
     List<CommandLogEntry> findByTargetAndFromAndTo(
-            final Bookmark target,
-            final @Nullable LocalDate from,
-            final @Nullable LocalDate to);
+            Bookmark target,
+            @Nullable LocalDate from,
+            @Nullable LocalDate to);
 
     List<CommandLogEntry> findMostRecent();
 
-    List<CommandLogEntry> findMostRecent(final int limit);
+    List<CommandLogEntry> findMostRecent(int limit);
 
-    List<CommandLogEntry> findRecentByUsername(final String username);
+    List<CommandLogEntry> findRecentByUsername(String username);
 
-    List<CommandLogEntry> findRecentByTarget(final Bookmark target);
+    List<CommandLogEntry> findRecentByTarget(Bookmark target);
 
-    List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult);
+    List<CommandLogEntry> findRecentByTargetOrResult(Bookmark targetOrResult);
 
     /**
      * Intended to support the replay of commands on a secondary instance of
@@ -112,7 +117,7 @@ public interface CommandLogEntryRepository {
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
      */
-    List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
+    List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize);
 
     /**
      * Returns any persisted commands that have not yet started.
@@ -126,7 +131,7 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findBackgroundAndNotYetStarted();
 
-    List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target);
+    List<CommandLogEntry> findRecentBackgroundByTarget(Bookmark target);
 
     /**
      * The most recent replayed command previously replicated from primary to
@@ -154,19 +159,19 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findNotYetReplayed();
 
-    CommandLogEntry saveForReplay(final CommandDto dto);
+    CommandLogEntry saveForReplay(CommandDto dto);
 
-    List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto);
+    List<CommandLogEntry> saveForReplay(CommandsDto commandsDto);
 
-    void persist(final CommandLogEntry commandLogEntry);
+    void persist(CommandLogEntry commandLogEntry);
 
     void truncateLog();
 
     // --
 
     List<CommandLogEntry> findCommandsOnPrimaryElseFail(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException;
+            @Nullable UUID interactionId,
+            @Nullable Integer batchSize) throws NotFoundException;
 
     /**
      * intended for testing purposes only

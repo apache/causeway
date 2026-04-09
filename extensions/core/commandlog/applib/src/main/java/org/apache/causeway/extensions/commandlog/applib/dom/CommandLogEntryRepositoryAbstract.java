@@ -81,6 +81,16 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
     @Override
+    public C createAsPending(final CommandDto commandToReplay, final int targetIndex) {
+        C c = factoryService.detachedEntity(commandLogEntryClass);
+        c.init(commandToReplay, ReplayState.PENDING, targetIndex);
+        c.setParentInteractionId(null); // n/a for replay
+        c.setExecuteIn(null); // to be specified later depending on user action
+        persist(c);
+        return c;
+    }
+
+    @Override
     public Optional<CommandLogEntry> findByInteractionId(final UUID interactionId) {
         return _Casts.uncheckedCast(
                 repositoryService().firstMatch(
@@ -257,13 +267,11 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
-        if(interactionId == null) {
+        if(interactionId == null)
             return findFirst();
-        }
         final C from = findByInteractionIdElseNull(interactionId);
-        if(from == null) {
+        if(from == null)
             return Collections.emptyList();
-        }
         return findSince(from.getTimestamp(), batchSize);
     }
 
@@ -355,11 +363,10 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
         if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
             final MapDto userData = dto.getUserData();
-            if (userData == null ) {
+            if (userData == null )
                 throw new IllegalStateException(String.format(
                         "Can only persist action DTOs with additional userData; got: \n%s",
                         CommandDtoUtils.dtoMapper().toString(dto)));
-            }
         }
 
         final C commandJdo = factoryService.detachedEntity(commandLogEntryClass);
@@ -408,9 +415,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
             final @Nullable Integer batchSize) throws NotFoundException {
 
         final List<CommandLogEntry> commands = findSince(interactionId, batchSize);
-        if(commands == null) {
+        if(commands == null)
             throw new NotFoundException(interactionId);
-        }
         return commands;
     }
 
@@ -460,9 +466,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public List<CommandLogEntry> findAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction())
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
         return _Casts.uncheckedCast(repositoryService().allInstances(commandLogEntryClass));
     }
 
@@ -471,9 +476,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction())
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
         repositoryService().removeAll(commandLogEntryClass);
     }
 
