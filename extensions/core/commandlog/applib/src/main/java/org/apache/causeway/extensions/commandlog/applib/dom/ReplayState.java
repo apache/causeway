@@ -29,9 +29,13 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
  */
 public enum ReplayState {
     /**
-     * As used on primary system.
+     * As used on primary system, indicating an initial state.
      */
     UNDEFINED,
+    /**
+     * Marks a {@link CommandLogEntry} as exported, such that consecutive export actions will skip those.
+     */
+    EXPORTED,
     /**
      * For use on secondary system, indicates that the command has not yet been replayed.
      */

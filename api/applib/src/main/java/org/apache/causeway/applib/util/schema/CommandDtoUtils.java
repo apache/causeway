@@ -18,19 +18,35 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.DtoMapper;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
+import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 
 import lombok.experimental.UtilityClass;
+
+import tools.jackson.databind.cfg.MapperBuilder;
+import tools.jackson.databind.jsontype.NamedType;
 
 /**
  * @since 1.x {@index}
@@ -77,34 +93,30 @@ public final class CommandDtoUtils {
     }
 
     public String getUserData(final CommandDto dto, final String key) {
-        if(dto == null || key == null) {
+        if(dto == null || key == null)
             return null;
-        }
         return CommonDtoUtils.getMapValue(dto.getUserData(), key);
     }
 
     public void setUserData(
             final CommandDto dto, final String key, final String value) {
-        if(dto == null || key == null || _Strings.isNullOrEmpty(value)) {
+        if(dto == null || key == null || _Strings.isNullOrEmpty(value))
             return;
-        }
         final MapDto userData = userDataFor(dto);
         CommonDtoUtils.putMapKeyValue(userData, key, value);
     }
 
     public void setUserData(
             final CommandDto dto, final String key, final Bookmark bookmark) {
-        if(dto == null || key == null || bookmark == null) {
+        if(dto == null || key == null || bookmark == null)
             return;
-        }
         setUserData(dto, key, bookmark.toString());
     }
 
     public void clearUserData(
             final CommandDto dto, final String key) {
-        if(dto == null || key == null) {
+        if(dto == null || key == null)
             return;
-        }
         userDataFor(dto).getEntry().removeIf(x -> x.getKey().equals(key));
     }
 
@@ -115,6 +127,43 @@ public final class CommandDtoUtils {
             commandDto.setUserData(userData);
         }
         return userData;
+    }
+
+    // -- YAML SUPPORT
+
+    public String toYaml(final Iterable<CommandDto> commandDtos) {
+        return YamlUtils.toStringUtf8(
+            _NullSafe.stream(commandDtos)
+                .collect(Collectors.toList()),
+            ((JacksonCustomizer) JsonUtils::jaxbAnnotationSupport)
+                .andThen((JacksonCustomizer) CommandDtoUtils::memberDtoSupport)
+                .andThen((JacksonCustomizer) JsonUtils::onlyIncludeNonNull)
+                ::accept);
+    }
+
+    public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
+        return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml,
+                ((JacksonCustomizer) JsonUtils::jaxbAnnotationSupport)
+                .andThen((JacksonCustomizer) CommandDtoUtils::memberDtoSupport)
+                ::accept)
+            .ifFailureFail()
+            .getValue()
+            .orElseGet(Collections::emptyList);
+    }
+
+    // Mix-in to add type metadata to MemberDto
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "type")
+    private abstract class AbstractDtoMixIn {}
+
+    private void memberDtoSupport(final MapperBuilder<?, ?> mb) {
+        // add mix-in so MemberDto carries @JsonTypeInfo without modifying source
+        mb.addMixIn(MemberDto.class, AbstractDtoMixIn.class);
+        // register concrete sub-types with logical names
+        mb.registerSubtypes(new NamedType(ActionDto.class, "ACT"));
+        mb.registerSubtypes(new NamedType(PropertyDto.class, "PROP"));
     }
 
 }

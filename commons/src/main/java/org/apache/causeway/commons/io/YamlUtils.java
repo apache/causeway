@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -74,10 +75,23 @@ public class YamlUtils {
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonReader(Optional.empty(), customizers)
-                    .readValue(is, mappedType));
-        });
+        return source.tryReadAll((final InputStream is) -> Try.call(()->createJacksonReader(Optional.empty(), customizers)
+                .readValue(is, mappedType)));
+    }
+
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
+     * with given {@code elementType}.
+     */
+    public <T> Try<List<T>> tryReadAsList(
+            final @NonNull Class<T> elementType,
+            final @NonNull DataSource source,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll((final InputStream is) -> Try.call(()->{
+            var mapper = createJacksonReader(Optional.empty(), customizers);
+            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+            return mapper.readValue(is, collectionType);
+        }));
     }
 
     /**
@@ -101,10 +115,24 @@ public class YamlUtils {
             final @NonNull DataSource source,
             final @NonNull YamlLoadCustomizer loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createJacksonReader(Optional.of(loadCustomizer), customizers)
-                    .readValue(is, mappedType));
-        });
+        return source.tryReadAll((final InputStream is) -> Try.call(()->createJacksonReader(Optional.of(loadCustomizer), customizers)
+                .readValue(is, mappedType)));
+    }
+
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
+     * with given {@code elementType}.
+     */
+    public <T> Try<List<T>> tryReadAsListCustomized(
+            final @NonNull Class<T> elementType,
+            final @NonNull DataSource source,
+            final @NonNull YamlLoadCustomizer loadCustomizer,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll((final InputStream is) -> Try.call(()->{
+            var mapper = createJacksonReader(Optional.of(loadCustomizer), customizers);
+            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+            return mapper.readValue(is, collectionType);
+        }));
     }
 
     // -- WRITING
@@ -188,7 +216,7 @@ public class YamlUtils {
                         .map(YamlUtils::createLoadSettings)
                         .orElseGet(YamlUtils::createLoadSettings))
                 .build();
-        
+
         var builder = YAMLMapper.builder(yamlFactory);
         JsonUtils.readingJavaTimeSupport(builder);
         JsonUtils.readingCanSupport(builder);
@@ -210,7 +238,7 @@ public class YamlUtils {
                         .map(YamlUtils::createDumpSettings)
                         .orElseGet(YamlUtils::createDumpSettings))
                 .build();
-        
+
         var builder = YAMLMapper.builder(yamlFactory);
         JsonUtils.writingJavaTimeSupport(builder);
         JsonUtils.writingCanSupport(builder);
