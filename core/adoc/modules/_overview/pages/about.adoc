@@ -2256,7 +2256,6 @@ org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
 org.apache.tomcat.embed:tomcat-embed-el:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.jpa:jar:<managed> +
-org.ow2.asm:asm:jar:<managed> +
 org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 ****
 
@@ -5325,7 +5324,7 @@ Directory: /retired/shiro/extensions/secman/delegated-shiro
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:3.6.0-SNAPSHOT +
+org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:3.6.0 +
 org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
 ****
 
