@@ -34,6 +34,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -66,8 +67,8 @@ class CommandDtoYamlRoundtripTest {
 
         var action = new ActionDto();
         commandDto.setMember(action);
-        action.setInteractionType(null);
-        action.setLogicalMemberIdentifier(null);
+        action.setInteractionType(InteractionType.ACTION_INVOCATION);
+        action.setLogicalMemberIdentifier("demo.ActionCommandPublishingPage#changeNamePublished");
 
         var params = new ParamsDto();
         action.setParameters(params);
