@@ -33,7 +33,6 @@ import jakarta.inject.Provider;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -76,16 +75,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         c.sync(command);
         c.setParentInteractionId(parentInteractionIdIfAny);
         c.setExecuteIn(executeIn);
-        persist(c);
-        return c;
-    }
-
-    @Override
-    public C createAsPending(final CommandDto commandToReplay, final int targetIndex) {
-        C c = factoryService.detachedEntity(commandLogEntryClass);
-        c.init(commandToReplay, ReplayState.PENDING, targetIndex);
-        c.setParentInteractionId(null); // n/a for replay
-        c.setExecuteIn(null); // to be specified later depending on user action
         persist(c);
         return c;
     }
@@ -359,32 +348,23 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
     @Override
-    public C saveForReplay(final CommandDto dto) {
+    public C saveForReplay(final CommandDto commandToReplay) {
 
-        if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
-            final MapDto userData = dto.getUserData();
+        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
+            final MapDto userData = commandToReplay.getUserData();
             if (userData == null )
                 throw new IllegalStateException(String.format(
                         "Can only persist action DTOs with additional userData; got: \n%s",
-                        CommandDtoUtils.dtoMapper().toString(dto)));
+                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
         }
 
-        final C commandJdo = factoryService.detachedEntity(commandLogEntryClass);
+        final C entity = factoryService.detachedEntity(commandLogEntryClass);
+        entity.init(commandToReplay, ReplayState.PENDING, 0);
+        entity.setParentInteractionId(null); // n/a for replay
+        entity.setExecuteIn(null); // to be specified later depending on user action
+        persist(entity);
 
-        commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
-        commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
-        commandJdo.setUsername(dto.getUsername());
-
-        commandJdo.setReplayState(ReplayState.PENDING);
-
-        var firstTargetOidDto = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
-        commandJdo.setCommandDto(dto);
-        commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
-
-        persist(commandJdo);
-
-        return commandJdo;
+        return entity;
     }
 
     @Override

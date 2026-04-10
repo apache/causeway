@@ -19,15 +19,18 @@
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
@@ -52,8 +55,6 @@ public interface CommandLogEntryRepository {
 
     CommandLogEntry createEntryAndPersist(
             Command command, UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
-
-    CommandLogEntry createAsPending(CommandDto commandToReplay, int targetIndex);
 
     Optional<CommandLogEntry> findByInteractionId(UUID interactionId);
 
@@ -161,7 +162,18 @@ public interface CommandLogEntryRepository {
 
     CommandLogEntry saveForReplay(CommandDto dto);
 
-    List<CommandLogEntry> saveForReplay(CommandsDto commandsDto);
+    default List<CommandLogEntry> saveForReplay(@Nullable final List<CommandDto> commandDtoList) {
+        return _NullSafe.stream(commandDtoList)
+            .map(this::saveForReplay)
+            .collect(Collectors.toList());
+    }
+
+    default List<CommandLogEntry> saveForReplay(@Nullable final CommandsDto commandsDto) {
+        var commandDtoList = Optional.ofNullable(commandsDto)
+            .map(CommandsDto::getCommandDto)
+            .orElseGet(Collections::emptyList);
+        return saveForReplay(commandDtoList);
+    }
 
     void persist(CommandLogEntry commandLogEntry);
 

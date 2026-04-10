@@ -62,7 +62,7 @@ public class CommandReplayManager implements ViewModel {
         var yamlDs = zippedCommandsYaml.unZip(CommonMimeType.YAML).asDataSource();
 
         final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-        commandDtos.forEach(commandDto->commandLogEntryRepository.createAsPending(commandDto, 0));
+        commandDtos.forEach(commandLogEntryRepository::saveForReplay);
 
         var yaml = YamlUtils.toStringUtf8(commandDtos,
                 JsonUtils::onlyIncludeNonNull);
