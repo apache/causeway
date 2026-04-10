@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,7 +34,9 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -216,6 +219,10 @@ implements
         var mmc = getMetaModelContext();
 
         for (final ResolvedMethod accessorMethod : accessorMethods) {
+            if(!satisfiesIntrospectionPolicy(accessorMethod, Collection.class)) {
+                continue;
+            }
+
             if (log.isDebugEnabled()) {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
@@ -240,7 +247,9 @@ implements
                     .orElse(Object.class);
 
             // skip if class substitutor says so
-            if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) continue;
+            if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) {
+                continue;
+            }
 
             onNewFacetMethod.accept(facetedMethod.withElementType(elementType));
         }
@@ -251,12 +260,18 @@ implements
             final Consumer<FacetedMethod> onNewFacetedMethod) throws MetaModelException {
 
         for (final ResolvedMethod accessorMethod : accessorMethods) {
+            if(!satisfiesIntrospectionPolicy(accessorMethod, Property.class)) {
+                continue;
+            }
+
             log.debug("  identified accessor method representing property: {}", accessorMethod);
 
             final Class<?> returnType = accessorMethod.returnType();
 
             // skip if class strategy says so.
-            if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) continue;
+            if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) {
+                continue;
+            }
 
             // create a 1:1 association peer
             var facetedMethod = FacetedMethod
@@ -369,6 +384,21 @@ implements
         return true;
     }
 
+    /**
+     * At time of writing only filtering for Java Records, 
+     * because those have not type-hierarchy 
+     * (except potentially interfaces), 
+     * where the check for explicit annotations is simple.
+     */
+    private <A extends Annotation> boolean satisfiesIntrospectionPolicy(
+            final ResolvedMethod accessorMethod,
+            final Class<A> requiredAnnotationType) {
+        return inspectedTypeSpec.getCorrespondingClass().isRecord()
+                && introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+            ? _Annotations.isPresent(accessorMethod.method(), requiredAnnotationType)
+            : true;
+    }
+
     private boolean representsAction(final ResolvedMethod actionMethod) {
 
         //[CAUSEWAY-3556] if this throws, we have a framework bug (synthetic methods should no longer appear here)
@@ -376,11 +406,10 @@ implements
 
         // ensure we can load returned element type; otherwise ignore method
         var anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
-        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY))
-        .anyMatch(Objects::isNull);
-        if (anyLoadedAsNull) {
+            .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY))
+            .anyMatch(Objects::isNull);
+        if (anyLoadedAsNull)
             return false;
-        }
 
         if(isMixinMain(actionMethod)) {
             // we are introspecting a mixin type and its main method,
@@ -431,10 +460,9 @@ implements
                 .orElse(null);
         if(mixinFacet==null) return false;
 
-        if(!inspectedTypeSpec.isFullyIntrospected()) {
+        if(!inspectedTypeSpec.isFullyIntrospected())
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
-        }
 
         return inspectedTypeSpec
                 .lookupMixedInAction(inspectedTypeSpec)

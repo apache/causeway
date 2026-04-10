@@ -452,6 +452,8 @@ public final class _ClassCache implements AutoCloseable {
 
     public static boolean methodExcludeFilter(final Method method) {
         return isByteCodeEnhanced(method)
+                || (method.isSynthetic() // exclude private synthetic
+                        && Modifier.isPrivate(method.getModifiers()))
         		|| method.isBridge()
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)

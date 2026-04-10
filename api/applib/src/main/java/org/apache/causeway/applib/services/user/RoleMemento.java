@@ -31,6 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -44,7 +45,8 @@ import lombok.Builder;
  */
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         titleUiEvent = RoleMemento.TitleUiEvent.class
 )
@@ -91,7 +93,7 @@ public record RoleMemento(
     // -- OBJECT CONTRACT
 
     @Override
-    public final boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
         return (obj instanceof RoleMemento other)
             ? name.equals(other.name)
             : false;
