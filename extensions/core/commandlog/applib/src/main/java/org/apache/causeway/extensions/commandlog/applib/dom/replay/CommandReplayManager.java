@@ -20,33 +20,43 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.util.List;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid circle-play")
 @Named(CommandReplayManager.LOGICAL_TYPE_NAME)
-public class CommandReplayManager implements ViewModel {
+public record CommandReplayManager(
+        BookmarkService bookmarkService,
+        CommandLogEntryRepository commandLogEntryRepository) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
-    private final CommandLogEntryRepository commandLogEntryRepository;
-
-    public CommandReplayManager(final String memento, final CommandLogEntryRepository commandLogEntryRepository) {
-        this.commandLogEntryRepository = commandLogEntryRepository;
+    @Inject
+    public CommandReplayManager(final String memento,
+            final BookmarkService bookmarkService,
+            final CommandLogEntryRepository commandLogEntryRepository) {
+        this(bookmarkService, commandLogEntryRepository);
     }
 
     @ObjectSupport public String title() {
@@ -70,6 +80,17 @@ public class CommandReplayManager implements ViewModel {
         return yaml;
     }
 
+    @Collection
+    public List<CommandLogEntry> getNotYetReplayedRaw() {
+        return commandLogEntryRepository.findNotYetReplayed();
+    }
+
+    @Collection
+    public List<ReplayableCommand> getNotYetReplayed() {
+        return commandLogEntryRepository.findNotYetReplayed().stream()
+                .map(entry->new ReplayableCommand(bookmarkService.bookmarkFor(entry).get().identifier(), bookmarkService, commandLogEntryRepository))
+                .toList();
+    }
 
     @Override
     public String viewModelMemento() {

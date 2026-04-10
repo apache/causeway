@@ -39,13 +39,10 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
-import org.apache.causeway.schema.cmd.v2.MapDto;
-import org.apache.causeway.schema.common.v2.InteractionType;
 
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
@@ -350,18 +347,20 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     @Override
     public C saveForReplay(final CommandDto commandToReplay) {
 
-        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
-            final MapDto userData = commandToReplay.getUserData();
-            if (userData == null )
-                throw new IllegalStateException(String.format(
-                        "Can only persist action DTOs with additional userData; got: \n%s",
-                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
-        }
+//TODO why?
+//        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
+//            final MapDto userData = commandToReplay.getUserData();
+//            if (userData == null )
+//                throw new IllegalStateException(String.format(
+//                        "Can only persist action DTOs with additional userData; got: \n%s",
+//                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
+//        }
 
         final C entity = factoryService.detachedEntity(commandLogEntryClass);
         entity.init(commandToReplay, ReplayState.PENDING, 0);
         entity.setParentInteractionId(null); // n/a for replay
         entity.setExecuteIn(null); // to be specified later depending on user action
+
         persist(entity);
 
         return entity;
