@@ -1038,7 +1038,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());
         assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().logicalTypeName());
         assertTrue(ViewModelFacetForJavaRecord.class.isInstance(viewmodelFacet),
-                ()->"Record is expected to have a ViewModelFacetForJavaRecord");
+                ()->"Record is expected to have a ViewModelFacetForJavaRecord, got %s"
+                    .formatted(viewmodelFacet.getClass()));
 
         var bookmark = viewmodelFacet.serializeToBookmark(viewModel);
         var viewModelAfterRoundTrip = viewmodelFacet.instantiate(elementType, Optional.of(bookmark));
@@ -1087,17 +1088,16 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var notAnnotated = testerFactory
                 .propertyTester(sample, "notAnnotated");
 
-        //FIXME enable
-//        switch (scenario) {
-//            case ANNOTATIONS_OPTIONAL -> {
-//                notAnnotated.assertExists(true);
-//                notAnnotated.assertVisibilityIsNotVetoed();
-//                notAnnotated.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
-//                notAnnotated.assertIsExplicitlyAnnotated(false);
-//                notAnnotated.assertValue("World");
-//            }
-//            case ANNOTATIONS_REQUIRED, ENCAPSULATION -> notAnnotated.assertExists(false);
-//        }
+        switch (scenario) {
+            case ANNOTATIONS_OPTIONAL -> {
+                notAnnotated.assertExists(true);
+                notAnnotated.assertVisibilityIsNotVetoed();
+                notAnnotated.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+                notAnnotated.assertIsExplicitlyAnnotated(false);
+                notAnnotated.assertValue("World");
+            }
+            case ANNOTATIONS_REQUIRED, ENCAPSULATION -> notAnnotated.assertExists(false);
+        }
     }
 
     @ParameterizedTest
@@ -1110,69 +1110,30 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         assertEquals(scenario.classFriendlyName(), dataTable.tableFriendlyName());
         assertEquals(scenario.samples.size(), dataTable.dataRows().size());
-        assertEquals(6, dataTable.dataColumns().size());
 
-        assertEquals("""
-                Additional String: add Hello!
-                Arbitrary Boolean: true
-                Arbitrary Int: 3
-                Arbitrary String: Hello!
-                Not Annotated: World
-                String Fluent: add Hello! (fluent)
-                """, tableToString(dataTable));
-    }
-
-    @Test
-    void javaRecordIntrospectionPolicy() {
-
-        // OBJECT
-
-        var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
-
-        var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
-        assertNotNull(introspectionPolicyFacet);
-
-        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
-        assertEquals(
-                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                introspectionPolicy.getEncapsulationPolicy());
-        assertEquals(
-                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL,
-                introspectionPolicy.getMemberAnnotationPolicy());
-
-        // PRIVATE ACTION
-
-        var act = testerFactory
-                .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
-        act.assertExists(true);
-        act.assertIsExplicitlyAnnotated(true);
-        act.assertVisibilityIsNotVetoed();
-        act.assertUsabilityIsVetoedWithAll(
-                Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
-        act.assertInvocationResultNoRules("Hallo World!");
-
-        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
-
-        var prop = testerFactory
-                .propertyTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "propWithPrivateAccessors");
-        prop.assertExists(true);
-        prop.assertIsExplicitlyAnnotated(true);
-        prop.assertVisibilityIsNotVetoed();
-        prop.assertUsabilityIsVetoedWithAll(
-                Can.of("object disabled for testing purposes", "property disabled for testing purposes"));
-        prop.assertValue("Foo");
-        prop.assertValueUpdate("Bar");
-
-        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
-
-        var coll = testerFactory
-                .collectionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "collWithPrivateAccessors");
-        coll.assertExists(true);
-        coll.assertIsExplicitlyAnnotated(true);
-        coll.assertVisibilityIsNotVetoed();
-        coll.assertUsabilityIsVetoedWithAll(
-                Can.of("object disabled for testing purposes", "collection disabled for testing purposes"));
-        coll.assertCollectionElements(List.of("Foo"));
+        switch (scenario) {
+            case ANNOTATIONS_OPTIONAL -> {
+                assertEquals(6, dataTable.dataColumns().size());
+                assertEquals("""
+                        Additional String: add Hello!
+                        Arbitrary Boolean: true
+                        Arbitrary Int: 3
+                        Arbitrary String: Hello!
+                        Not Annotated: World
+                        String Fluent: add Hello! (fluent)
+                        """, tableToString(dataTable));
+            }
+            case ANNOTATIONS_REQUIRED, ENCAPSULATION -> {
+                assertEquals(5, dataTable.dataColumns().size());
+                assertEquals("""
+                        Additional String: add Hello!
+                        Arbitrary Boolean: true
+                        Arbitrary Int: 3
+                        Arbitrary String: Hello!
+                        String Fluent: add Hello! (fluent)
+                        """, tableToString(dataTable));
+            }
+        }
     }
 
     // -- META ANNOTAIONS

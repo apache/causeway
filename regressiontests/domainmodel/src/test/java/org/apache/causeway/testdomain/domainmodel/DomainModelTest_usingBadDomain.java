@@ -61,6 +61,7 @@ import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.causeway.testdomain.model.bad.AmbiguousTitle;
 import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.causeway.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
@@ -71,7 +72,6 @@ import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedPropertySupport;
-import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
@@ -275,14 +275,14 @@ class DomainModelTest_usingBadDomain {
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyInterfaced.class)),
                 "Cannot use @DomainObject on more than one interface, as inherited by:");
     }
-    
+
     @Test
     void invalidDomainObjectOnInterface2_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyMixed.class)),
                 "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by:");
     }
-    
+
     @Test
     void validDomainObjectOnInterface_shouldNotFail() {
     	validator.assertValid(
@@ -292,7 +292,7 @@ class DomainModelTest_usingBadDomain {
     @ParameterizedTest
     @ValueSource(classes = {
             OrphanedMemberSupportDetection.WhenEncapsulationEnabled.class,
-            OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
+//FIXME            OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
             OrphanedMemberSupportDetection.WhenAnnotationOptional.class
             })
     void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,9 +33,7 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -219,10 +216,6 @@ implements
         var mmc = getMetaModelContext();
 
         for (final ResolvedMethod accessorMethod : accessorMethods) {
-            if(!satisfiesIntrospectionPolicy(accessorMethod, Collection.class)) {
-                continue;
-            }
-
             if (log.isDebugEnabled()) {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
@@ -260,10 +253,6 @@ implements
             final Consumer<FacetedMethod> onNewFacetedMethod) throws MetaModelException {
 
         for (final ResolvedMethod accessorMethod : accessorMethods) {
-            if(!satisfiesIntrospectionPolicy(accessorMethod, Property.class)) {
-                continue;
-            }
-
             log.debug("  identified accessor method representing property: {}", accessorMethod);
 
             final Class<?> returnType = accessorMethod.returnType();
@@ -382,22 +371,6 @@ implements
             if (paramSpec == null) return false;
         }
         return true;
-    }
-
-    /**
-     * At time of writing only filtering for Java Records,
-     * because those have not type-hierarchy
-     * (except potentially interfaces),
-     * where the check for explicit annotations is simple.
-     */
-    private <A extends Annotation> boolean satisfiesIntrospectionPolicy(
-            final ResolvedMethod accessorMethod,
-            final Class<A> requiredAnnotationType) {
-        return true;
-//                inspectedTypeSpec.getCorrespondingClass().isRecord()
-//                && introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-//            ? _Annotations.isPresent(accessorMethod.method(), requiredAnnotationType)
-//            : true;
     }
 
     private boolean representsAction(final ResolvedMethod actionMethod) {
