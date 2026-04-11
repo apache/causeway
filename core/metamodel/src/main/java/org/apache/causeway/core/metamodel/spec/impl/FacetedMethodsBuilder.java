@@ -385,18 +385,19 @@ implements
     }
 
     /**
-     * At time of writing only filtering for Java Records, 
-     * because those have not type-hierarchy 
-     * (except potentially interfaces), 
+     * At time of writing only filtering for Java Records,
+     * because those have not type-hierarchy
+     * (except potentially interfaces),
      * where the check for explicit annotations is simple.
      */
     private <A extends Annotation> boolean satisfiesIntrospectionPolicy(
             final ResolvedMethod accessorMethod,
             final Class<A> requiredAnnotationType) {
-        return inspectedTypeSpec.getCorrespondingClass().isRecord()
-                && introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-            ? _Annotations.isPresent(accessorMethod.method(), requiredAnnotationType)
-            : true;
+        return true;
+//                inspectedTypeSpec.getCorrespondingClass().isRecord()
+//                && introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+//            ? _Annotations.isPresent(accessorMethod.method(), requiredAnnotationType)
+//            : true;
     }
 
     private boolean representsAction(final ResolvedMethod actionMethod) {
