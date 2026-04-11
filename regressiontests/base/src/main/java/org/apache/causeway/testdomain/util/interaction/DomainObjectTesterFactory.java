@@ -64,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
@@ -94,7 +95,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
     public <T> ObjectTester<T> objectTester(
             final T domainObject) {
         var tester = getServiceInjector().injectServicesInto(
-                new ObjectTester<T>(domainObject));
+                new ObjectTester<>(domainObject));
         return tester;
     }
 
@@ -103,7 +104,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String actionName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new ActionTester<T>(domainObject, actionName, where));
+                new ActionTester<>(domainObject, actionName, where));
         tester.init();
         return tester;
     }
@@ -125,7 +126,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String propertyName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new PropertyTester<T>(domainObject, propertyName, where));
+                new PropertyTester<>(domainObject, propertyName, where));
         tester.init();
         return tester;
     }
@@ -135,7 +136,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String collectionName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new CollectionTester<T>(domainObject, collectionName, where));
+                new CollectionTester<>(domainObject, collectionName, where));
         tester.init();
         return tester;
     }
@@ -1034,16 +1035,16 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         public <F extends Facet> F getFacetOnMemberElseFail(final Class<F> facetType) {
             return getMetaModel()
-            .map(m->m.getFacet(facetType))
-            .orElseThrow(()->_Exceptions.noSuchElement(
+                .flatMap(m->m.lookupFacet(facetType))
+                .orElseThrow(()->_Exceptions.noSuchElement(
                     String.format("%s has no %s", memberName, facetType.getSimpleName())
                     ));
         }
 
         public <F extends Facet> F getFacetOnElementTypeElseFail(final Class<F> facetType) {
             return getElementType()
-            .map(m->m.getFacet(facetType))
-            .orElseThrow(()->_Exceptions.noSuchElement(
+                .flatMap(m->m.lookupFacet(facetType))
+                .orElseThrow(()->_Exceptions.noSuchElement(
                     String.format("'%s: %s' has no %s on its element type",
                             memberName,
                             getObjectSpecification().getCorrespondingClass().getSimpleName(),
@@ -1110,7 +1111,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                     final String actualVetoResaon = managedCollection
                         .checkVisibility()
-                        .flatMap(veto->veto.getReasonAsString())
+                        .flatMap(InteractionVeto::getReasonAsString)
                         .orElse(null);
 
                     assertEquals(expectedVetoReason, actualVetoResaon);
@@ -1131,7 +1132,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 interactionService.runAnonymous(()->{
                     final String actualVetoReason = managedMember
                             .checkUsability()
-                            .flatMap(veto->veto.getReasonAsString())
+                            .flatMap(InteractionVeto::getReasonAsString)
                             .orElse(null);
 
                     if(!expectedVetoReasons.isEmpty()
@@ -1162,7 +1163,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 interactionService.runAnonymous(()->{
                     final String actualVetoReason = managedMember
                             .checkUsability()
-                            .flatMap(veto->veto.getReasonAsString())
+                            .flatMap(InteractionVeto::getReasonAsString)
                             .orElse(null);
 
                         assertEquals(expectedVetoReason, actualVetoReason);

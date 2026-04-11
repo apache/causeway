@@ -43,12 +43,7 @@ public class OrphanedMemberSupportDetection {
             introspection = Introspection.ANNOTATION_REQUIRED)
     public static class WhenAnnotationRequired
     extends MemberDetection.PublicBase {
-
-        // expected to produce orphans for ...
-
-        // void placeOrder(final String x, final String y) {}
-        // @Getter @Setter String email;
-        // @Getter @Setter java.util.Collection<String> orders;
+        // no orphans expected - non annotated methods are simply ignored (removed from the pool of candidates)
     }
 
     @DomainObject(

@@ -19,12 +19,14 @@
 package org.apache.causeway.commons.semantics;
 
 import java.beans.Introspector;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.function.Predicate;
 
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.Getter;
@@ -38,10 +40,13 @@ public enum AccessorSemantics {
     SET("set");
     private final String prefix;
 
-    public static String associationIdentifierFor(final ResolvedMethod method) {
+    public static <A extends Annotation> String associationIdentifierFor(
+            final ResolvedMethod method,
+            final Class<A> requiredAnnotationType) {
         return AccessorSemantics.isRecordComponentAccessor(method)
-                ? method.name()
-                : Introspector.decapitalize(_Strings.baseName(method.name()));
+                || isFluentGetter(method, requiredAnnotationType)
+            ? method.name()
+            : Introspector.decapitalize(_Strings.baseName(method.name()));
     }
 
     public String prefix(final @Nullable String input) {
@@ -53,21 +58,28 @@ public enum AccessorSemantics {
     public boolean isPrefixOf(final @Nullable String input) {
         return input!=null
                 ? input.startsWith(prefix)
+                    && input.length()>prefix.length()
                 : false;
     }
 
     // -- HIGH LEVEL PREDICATES
 
-    public static boolean isPropertyAccessor(final ResolvedMethod method) {
+    public static <A extends Annotation> boolean isPropertyAccessor(
+            final ResolvedMethod method,
+            final Class<A> requiredAnnotationType) {
         return isRecordComponentAccessor(method)
                 || isGetter(method)
+                || isFluentGetter(method, requiredAnnotationType)
             ? !hasCollectionSemantics(method.returnType())
             : false;
     }
 
-    public static boolean isCollectionAccessor(final ResolvedMethod method) {
+    public static <A extends Annotation> boolean isCollectionAccessor(
+            final ResolvedMethod method,
+            final Class<A> requiredAnnotationType) {
         return isRecordComponentAccessor(method)
                 || isNonBooleanGetter(method)
+                || isFluentGetter(method, requiredAnnotationType)
             ? hasCollectionSemantics(method.returnType())
             : false;
     }
@@ -81,6 +93,17 @@ public enum AccessorSemantics {
             if(method.name().equals(recordComponent.getName())) return true;
         }
         return false;
+    }
+
+    public static <A extends Annotation> boolean isFluentGetter(
+            final ResolvedMethod accessorMethod,
+            final Class<A> requiredAnnotationType) {
+        { // restricted to Java Records (but could be enabled for all classes)
+            var recordClass = accessorMethod.implementationClass();
+            if(!recordClass.isRecord()) return false;
+        }
+        return !isGetter(accessorMethod)
+                && _Annotations.isPresent(accessorMethod.method(), requiredAnnotationType);
     }
 
     public static boolean isCandidateGetterName(final @Nullable String name) {

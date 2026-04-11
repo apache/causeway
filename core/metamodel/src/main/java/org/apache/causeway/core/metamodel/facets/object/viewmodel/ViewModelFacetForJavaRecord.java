@@ -21,18 +21,17 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.springframework.util.Assert;
+
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.util.hmac.Memento;
 import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 
@@ -75,14 +74,9 @@ extends SecureViewModelFacet {
         // throws on de-marshalling failure
         var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
-        var recordComponentPojos = streamRecordComponents(viewmodelSpec)
-        .map(association->{
-            var associationPojo = association.isProperty()
-                ? memento.get(association.getId(), association.getElementType().getCorrespondingClass())
-                //TODO collection values not yet supported by memento (as workaround use Serializable record)
-                : null;
-            return associationPojo;
-        }).toArray();
+        var recordComponentPojos = streamRecordComponents(viewmodelSpec.getCorrespondingClass())
+            .map(recComp->memento.get(recComp.getName(), recComp.getType()))
+            .toArray();
 
         return canonicalConstructor.newInstance(recordComponentPojos);
     }
@@ -92,50 +86,44 @@ extends SecureViewModelFacet {
 
         final Memento memento = mementoContext.newMemento();
 
-        var viewmodelSpec = viewModel.objSpec();
-
-        streamRecordComponents(viewmodelSpec)
-        .forEach(association->{
-
-            final ManagedObject associationValue =
-                    association.get(viewModel, InteractionInitiatedBy.PASS_THROUGH);
-
-            if(association != null
-                    //TODO collection values not yet supported by memento (as workaround use Serializable record)
-                    && association.isProperty()
-                    && associationValue.getPojo()!=null) {
-                memento.put(association.getId(), associationValue.getPojo());
-            }
-        });
+        Arrays.stream(snapshotRecordComponents(viewModel.getPojo()))
+            .forEach(arg->memento.put(arg.name(), arg.pojo()));
 
         return memento.stateAsBytes();
     }
 
     // -- HELPER
 
-    private Can<ObjectAssociation> recordComponentsAsAssociations;
-    private Stream<ObjectAssociation> streamRecordComponents(
-            final @NonNull ObjectSpecification viewmodelSpec) {
-        if(recordComponentsAsAssociations==null) {
-            this.recordComponentsAsAssociations = recordComponentsAsAssociations(viewmodelSpec);
-        }
-        return recordComponentsAsAssociations.stream();
-    }
-
-    private static Can<ObjectAssociation> recordComponentsAsAssociations(
-            final @NonNull ObjectSpecification viewmodelSpec) {
-        return Arrays.stream(viewmodelSpec.getCorrespondingClass().getRecordComponents())
-                .map(RecordComponent::getName)
-                .map(memberId->viewmodelSpec.getAssociationElseFail(memberId, MixedIn.EXCLUDED))
-                .collect(Can.toCan());
+    @SneakyThrows
+    private static Stream<RecordComponent> streamRecordComponents(final @NonNull Class<?> recordClass) {
+        Assert.isTrue(recordClass.isRecord(), ()->"Illegal Argument: not a Java record");
+        return Arrays.stream(recordClass.getRecordComponents());
     }
 
     @SneakyThrows
     private static <T> Constructor<T> canonicalConstructor(final @NonNull Class<T> recordClass) {
-        var constructorParamTypes = Arrays.stream(recordClass.getRecordComponents())
+        var constructorParamTypes = streamRecordComponents(recordClass)
                 .map(RecordComponent::getType)
                 .toArray(Class[]::new);
         return recordClass.getDeclaredConstructor(constructorParamTypes);
+    }
+
+    private record NamedArg(String name, Object pojo) {
+    }
+
+    @SneakyThrows
+    private static NamedArg[] snapshotRecordComponents(final Object recordInstance) {
+        final @NonNull Class<?> recordClass = Objects.requireNonNull(recordInstance).getClass();
+        Assert.isTrue(recordClass.isRecord(), ()->"Illegal Argument: not a Java record");
+
+        RecordComponent[] components = recordClass.getRecordComponents();
+        NamedArg[] result = new NamedArg[components.length];
+        for (int i = 0; i < components.length; i++) {
+            result[i] = new NamedArg(
+                    components[i].getName(),
+                    components[i].getAccessor().invoke(recordInstance));
+        }
+        return result;
     }
 
 }

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
@@ -42,12 +43,14 @@ extends AccessorFacetFactoryAbstract {
 
     @Override
     public boolean isAssociationAccessor(final ResolvedMethod method) {
-        return AccessorSemantics.isCollectionAccessor(method);
+        return AccessorSemantics.isCollectionAccessor(method, Collection.class);
     }
 
     @Override
     protected PropertyOrCollectionAccessorFacet createFacet(
-        final ObjectSpecification typeSpec, final ResolvedMethod accessorMethod, final FacetedMethod facetHolder) {
+            final ObjectSpecification typeSpec,
+            final ResolvedMethod accessorMethod,
+            final FacetedMethod facetHolder) {
         return new CollectionAccessorFacetViaAccessor(typeSpec, accessorMethod, facetHolder);
     }
 

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.accessor;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
@@ -42,12 +43,14 @@ extends AccessorFacetFactoryAbstract {
 
     @Override
     public boolean isAssociationAccessor(final ResolvedMethod method) {
-        return AccessorSemantics.isPropertyAccessor(method);
+        return AccessorSemantics.isPropertyAccessor(method, Property.class);
     }
 
     @Override
     protected PropertyOrCollectionAccessorFacet createFacet(
-        final ObjectSpecification typeSpec, final ResolvedMethod accessorMethod, final FacetedMethod facetHolder) {
+            final ObjectSpecification typeSpec,
+            final ResolvedMethod accessorMethod,
+            final FacetedMethod facetHolder) {
         return new PropertyAccessorFacetViaAccessor(typeSpec, accessorMethod, facetHolder);
     }
 

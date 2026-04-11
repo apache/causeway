@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import jakarta.inject.Inject;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._ClassCache.Attribute;
@@ -30,8 +33,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.jspecify.annotations.NonNull;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {
@@ -43,48 +44,56 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-
-        var policy = getMetaModelContext().getConfiguration().core().metaModel().introspector().policy();
-        switch (policy) {
-            case ENCAPSULATION_ENABLED:
-                getClassCache()
-                        .streamResolvedMethods(processClassContext.getCls())
-                        /* honor exclude markers (always) */
-                        .filter(method->{
-                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                                return false; // stop processing
-                            }
-                            return true; // continue processing
-                        })
-                        /* don't throw away mixin main methods,
-                         * those we keep irrespective of IntrospectionPolicy */
-                        .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
-                        .forEach(method -> {
-                            if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                            }
-                        });
-                break;
-
-            case ANNOTATION_REQUIRED:
-                // TODO: this could probably be more precise and insist on @Domain.Include for members.
-
-            case ANNOTATION_OPTIONAL:
-
-                getClassCache()
-                        .streamPublicMethods(processClassContext.getCls())
-                        .forEach(method->{
-                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
-                                processClassContext.removeMethod(method);
-                            }
-                        });
-
-                break;
-        }
+        switch (processClassContext.getIntrospectionPolicy()) {
+            case ENCAPSULATION_ENABLED -> getClassCache()
+                .streamResolvedMethods(processClassContext.getCls())
+                /* honor exclude markers (always) */
+                .filter(filterAndRemoveExclusions(processClassContext))
+                /* don't throw away mixin main methods,
+                 * those we keep irrespective of IntrospectionPolicy */
+                .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
+                .forEach(removeNonInclusions(processClassContext));
+            case ANNOTATION_REQUIRED -> getClassCache()
+                .streamPublicMethods(processClassContext.getCls())
+                /* honor exclude markers (always) */
+                .filter(filterAndRemoveExclusions(processClassContext))
+                /* don't throw away mixin main methods,
+                 * those we keep irrespective of IntrospectionPolicy */
+                .filter(_Predicates.not(isMixinMainMethod(processClassContext)))
+                .forEach(removeNonInclusions(processClassContext));
+            case ANNOTATION_OPTIONAL -> getClassCache()
+                .streamPublicMethods(processClassContext.getCls())
+                .forEach(removeExclusions(processClassContext));
+            }
     }
 
     // -- HELPER
+
+    private Predicate<? super ResolvedMethod> filterAndRemoveExclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+                return false; // stop processing
+            }
+            return true; // continue processing
+        };
+    }
+
+    private Consumer<? super ResolvedMethod> removeExclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+            }
+        };
+    }
+
+    private Consumer<? super ResolvedMethod> removeNonInclusions(final ProcessClassContext processClassContext) {
+        return method->{
+            if(!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
+                processClassContext.removeMethod(method);
+            }
+        };
+    }
 
     /**
      * We have no MixinFacet yet, so we need to revert to low level introspection tactics.
@@ -94,9 +103,8 @@ extends FacetFactoryAbstract {
         // shortcut, when we already know the class is not a mixin
         if(processClassContext.getFacetHolder() instanceof ObjectSpecification) {
             var spec = (ObjectSpecification) processClassContext.getFacetHolder();
-            if(!spec.getBeanSort().isMixin()) {
+            if(!spec.getBeanSort().isMixin())
                 return method->false;
-            }
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier
         var cls = processClassContext.getCls();
