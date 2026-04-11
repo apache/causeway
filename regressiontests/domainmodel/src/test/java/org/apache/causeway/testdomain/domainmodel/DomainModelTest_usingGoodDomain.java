@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -79,6 +80,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -110,7 +112,9 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
-import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelUsingAnnotations;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsOptional;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsRequired;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithEncapsulation;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.causeway.testdomain.model.good.ProperViewModelInferredFromNotBeingAnEntity;
@@ -181,7 +185,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             fail(String.format("%d problems found:\n%s",
                     validationFailures.size(),
                     validationFailures.stream()
-                    .map(validationFailure->validationFailure.message())
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n"))));
         }
     }
@@ -285,10 +289,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         var spec = specificationLoader.specForTypeElseFail(type);
 
-        var titleFacet = spec.getFacet(TitleFacet.class);
+        var titleFacet = spec.lookupFacet(TitleFacet.class).orElse(null);
         assertNotNull(titleFacet);
 
-        var iconFacet = spec.getFacet(IconFacet.class);
+        var iconFacet = spec.lookupFacet(IconFacet.class).orElse(null);
         assertNotNull(iconFacet);
 
         if(!spec.isAbstract()) {
@@ -337,9 +341,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     void metamodelContributingActions_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
-                && type.getSuperclass()==null) {
+                && type.getSuperclass()==null)
             return; // not implemented for interface that don't extend from others
-        }
 
         var holderSpec = specificationLoader.specForTypeElseFail(type);
 
@@ -360,9 +363,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     void metamodelContributingProperties_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
-                && type.getSuperclass()==null) {
+                && type.getSuperclass()==null)
             return; // not implemented for interface that don't extend from others
-        }
 
         var holderSpec = specificationLoader.specForTypeElseFail(type);
 
@@ -496,7 +498,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var vmSpec = specificationLoader.specForTypeElseFail(ProperViewModelInferredFromNotBeingAnEntity.class);
 
         assertEquals(BeanSort.VIEW_MODEL, vmSpec.getBeanSort());
-        assertNotNull(vmSpec.getFacet(ViewModelFacet.class));
+        assertNotNull(vmSpec.lookupFacet(ViewModelFacet.class).orElse(null));
     }
 
     @Test
@@ -612,7 +614,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                        "param %d is expected to belong to a mixed-in action",
                        param.getParameterIndex()));
 
-               var choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
+               var choicesFacet = param.lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
 
                assertNotNull(choicesFacet, ()->String.format(
                        "param %d is expected to have an ActionParameterChoicesFacet",
@@ -664,7 +666,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
                     //System.out.println("act: " + act);
-                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.lookupFacet(MemberNamedFacet.class).orElse(null);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })
@@ -719,7 +721,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
 
-        var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
         assertNotNull(introspectionPolicyFacet);
 
         var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
@@ -769,7 +771,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
 
-        var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
         assertNotNull(introspectionPolicyFacet);
 
         var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
@@ -865,8 +867,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         // hide1PlaceOrder(y): boolean = false
         act.assertParameterVisibility(
                 false, // skip rule checking
-                arg0Visible->assertFalse(arg0Visible),
-                arg1Visible->assertTrue(arg1Visible));
+                Assertions::assertFalse,
+                Assertions::assertTrue);
 
         // disable0PlaceOrder(x): String = "my disable reason-0"
         // disable1PlaceOrder(z): String = "my disable reason-1"
@@ -1008,13 +1010,15 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @RequiredArgsConstructor
     enum RecordScenario {
-        /*
-         * PLAIN(ProperRecordAsViewModel.class, Can.of( new
-         * ProperRecordAsViewModel("Hello!", 3, true) )),
-         */
-        ANNOTATED(ProperRecordAsViewModelUsingAnnotations.class, Can.of(
-                    new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true)
-                ));
+        ANNOTATIONS_OPTIONAL(ProperRecordAsViewModelWithAnnotationsOptional.class, Can.of(
+                    new ProperRecordAsViewModelWithAnnotationsOptional("Hello!", 3, true, "World")
+                )),
+        ANNOTATIONS_REQUIRED(ProperRecordAsViewModelWithAnnotationsRequired.class, Can.of(
+                new ProperRecordAsViewModelWithAnnotationsRequired("Hello!", 3, true, "World")
+            )),
+        ENCAPSULATION(ProperRecordAsViewModelWithEncapsulation.class, Can.of(
+                new ProperRecordAsViewModelWithEncapsulation("Hello!", 3, true, "World")
+            ));
         final Class<?> recordClass;
         final Can<?> samples;
         final String classFriendlyName() {
@@ -1029,7 +1033,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         final Object sample = scenario.samples.getFirstElseFail();
         var viewModel = MetaModelContext.instanceElseFail().getObjectManager().adapt(sample);
         var elementType = viewModel.objSpec();
-        var viewmodelFacet = elementType.getFacet(ViewModelFacet.class);
+        var viewmodelFacet = elementType.lookupFacet(ViewModelFacet.class).orElse(null);
 
         assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());
         assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().logicalTypeName());
@@ -1040,22 +1044,28 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var viewModelAfterRoundTrip = viewmodelFacet.instantiate(elementType, Optional.of(bookmark));
         assertEquals(viewModel.getPojo(), viewModelAfterRoundTrip.getPojo());
 
-        var isExpectedExplicitlyAnnotated = scenario == RecordScenario.ANNOTATED;
-
         var additionalString = testerFactory
                 .propertyTester(sample, "additionalString");
         additionalString.assertExists(true);
         additionalString.assertVisibilityIsNotVetoed();
         additionalString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
-        additionalString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertIsExplicitlyAnnotated(true);
         additionalString.assertValue("add Hello!");
+
+        var stringFluent = testerFactory
+                .propertyTester(sample, "stringFluent");
+        stringFluent.assertExists(true);
+        stringFluent.assertVisibilityIsNotVetoed();
+        stringFluent.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        additionalString.assertIsExplicitlyAnnotated(true);
+        stringFluent.assertValue("add Hello! (fluent)");
 
         var arbitraryString = testerFactory
                 .propertyTester(sample, "arbitraryString");
         arbitraryString.assertExists(true);
         arbitraryString.assertVisibilityIsNotVetoed();
         arbitraryString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
-        arbitraryString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertIsExplicitlyAnnotated(true);
         arbitraryString.assertValue("Hello!");
 
         var arbitraryInt = testerFactory
@@ -1063,7 +1073,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         arbitraryInt.assertExists(true);
         arbitraryInt.assertVisibilityIsNotVetoed();
         arbitraryInt.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
-        arbitraryInt.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertIsExplicitlyAnnotated(true);
         arbitraryInt.assertValue(3);
 
         var arbitraryBoolean = testerFactory
@@ -1071,8 +1081,23 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         arbitraryBoolean.assertExists(true);
         arbitraryBoolean.assertVisibilityIsNotVetoed();
         arbitraryBoolean.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
-        arbitraryBoolean.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertIsExplicitlyAnnotated(true);
         arbitraryBoolean.assertValue(true);
+
+        var notAnnotated = testerFactory
+                .propertyTester(sample, "notAnnotated");
+
+        //FIXME enable
+//        switch (scenario) {
+//            case ANNOTATIONS_OPTIONAL -> {
+//                notAnnotated.assertExists(true);
+//                notAnnotated.assertVisibilityIsNotVetoed();
+//                notAnnotated.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+//                notAnnotated.assertIsExplicitlyAnnotated(false);
+//                notAnnotated.assertValue("World");
+//            }
+//            case ANNOTATIONS_REQUIRED, ENCAPSULATION -> notAnnotated.assertExists(false);
+//        }
     }
 
     @ParameterizedTest
@@ -1085,14 +1110,69 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         assertEquals(scenario.classFriendlyName(), dataTable.tableFriendlyName());
         assertEquals(scenario.samples.size(), dataTable.dataRows().size());
-        assertEquals(4, dataTable.dataColumns().size());
+        assertEquals(6, dataTable.dataColumns().size());
 
         assertEquals("""
                 Additional String: add Hello!
                 Arbitrary Boolean: true
                 Arbitrary Int: 3
                 Arbitrary String: Hello!
+                Not Annotated: World
+                String Fluent: add Hello! (fluent)
                 """, tableToString(dataTable));
+    }
+
+    @Test
+    void javaRecordIntrospectionPolicy() {
+
+        // OBJECT
+
+        var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
+
+        var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
+        assertNotNull(introspectionPolicyFacet);
+
+        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
+        assertEquals(
+                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                introspectionPolicy.getEncapsulationPolicy());
+        assertEquals(
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL,
+                introspectionPolicy.getMemberAnnotationPolicy());
+
+        // PRIVATE ACTION
+
+        var act = testerFactory
+                .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
+        act.assertExists(true);
+        act.assertIsExplicitlyAnnotated(true);
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
+        act.assertInvocationResultNoRules("Hallo World!");
+
+        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
+
+        var prop = testerFactory
+                .propertyTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "propWithPrivateAccessors");
+        prop.assertExists(true);
+        prop.assertIsExplicitlyAnnotated(true);
+        prop.assertVisibilityIsNotVetoed();
+        prop.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "property disabled for testing purposes"));
+        prop.assertValue("Foo");
+        prop.assertValueUpdate("Bar");
+
+        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+        var coll = testerFactory
+                .collectionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "collWithPrivateAccessors");
+        coll.assertExists(true);
+        coll.assertIsExplicitlyAnnotated(true);
+        coll.assertVisibilityIsNotVetoed();
+        coll.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "collection disabled for testing purposes"));
+        coll.assertCollectionElements(List.of("Foo"));
     }
 
     // -- META ANNOTAIONS
@@ -1141,7 +1221,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     }
 
     private void assertHasPublishedActionFacet(final FacetHolder facetHolder) {
-        var facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        var facet = facetHolder.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
         assertNotNull(facet);
     }
 
