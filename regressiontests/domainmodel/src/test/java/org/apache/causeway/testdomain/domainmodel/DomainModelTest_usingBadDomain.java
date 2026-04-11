@@ -292,12 +292,19 @@ class DomainModelTest_usingBadDomain {
     @ParameterizedTest
     @ValueSource(classes = {
             OrphanedMemberSupportDetection.WhenEncapsulationEnabled.class,
-//FIXME            OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
+            OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
             OrphanedMemberSupportDetection.WhenAnnotationOptional.class
             })
     void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {
 
         var clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
+
+        if(classUnderTest == OrphanedMemberSupportDetection.WhenAnnotationRequired.class) {
+            // no orphans expected - non annotated methods are simply ignored (removed from the pool of candidates)
+            validator.assertValid(
+                    Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.Good.class)));
+            return;
+        }
 
         // namedPlaceOrder(): String = "my name"
         validator.assertAnyFailuresContaining(clsIdUnderTest, "namedPlaceOrder");
