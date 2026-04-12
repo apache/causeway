@@ -33,6 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -49,7 +50,8 @@ import lombok.Setter;
 
 @Named("libExcelFixture.ExcelUploadRowHandler4ToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @XmlRootElement(name = "BulkUpdateLineItemForDemoToDoItem")
 @XmlType(
         propOrder = {

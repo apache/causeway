@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -63,7 +64,8 @@ import lombok.Setter;
 
 @Named("libExcelFixture.BulkUpdateManagerForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         named ="Import/export manager",
         bookmarking = BookmarkPolicy.AS_ROOT

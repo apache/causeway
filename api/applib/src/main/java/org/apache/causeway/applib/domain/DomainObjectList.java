@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -70,8 +71,9 @@ import lombok.Getter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named(DomainObjectList.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED,
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_REQUIRED,
+        editing = Editing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = DomainObjectList.TitleUiEvent.class,
         iconUiEvent = DomainObjectList.IconUiEvent.class,

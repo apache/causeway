@@ -35,6 +35,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -53,7 +54,8 @@ import lombok.Setter;
 
 @Named("libExcelFixture.BulkUpdateLineItemForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @DomainObjectLayout(
         named = "Bulk update line item",
         bookmarking = BookmarkPolicy.AS_ROOT
@@ -82,9 +84,8 @@ public class BulkUpdateLineItemForDemoToDoItem
 
     @ObjectSupport public String title() {
         final ExcelDemoToDoItem existingItem = getToDoItem();
-        if(existingItem != null) {
+        if(existingItem != null)
             return "EXISTING: " + titleService.titleOf(existingItem);
-        }
         return "NEW: " + getDescription();
     }
 

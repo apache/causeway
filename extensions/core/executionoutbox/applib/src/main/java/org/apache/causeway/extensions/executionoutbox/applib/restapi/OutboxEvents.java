@@ -34,6 +34,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
@@ -63,7 +64,9 @@ import lombok.Setter;
         }
 )
 @Named(OutboxEvents.LOGICAL_TYPE_NAME)
-@DomainObject(nature = Nature.VIEW_MODEL)
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        introspection = Introspection.ANNOTATION_OPTIONAL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class OutboxEvents  {
