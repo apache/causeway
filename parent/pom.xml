@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway</groupId>
         <artifactId>causeway-bom</artifactId>
-        <version>4.0.0-M2</version>
+        <version>4.0.0-M3-SNAPSHOT</version>
         <relativePath>../bom/pom.xml</relativePath>
     </parent>
 
@@ -57,7 +57,7 @@
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2026-04-12T11:40:27Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2026-04-12T12:12:30Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
