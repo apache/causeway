@@ -11,50 +11,7 @@ It is rendered as a <div class="row ...">
 .BSRow.java
 ----
 class BSRow {
-  String getId()     // <.>
-  void setId(String id)
-  List<BSRowContent> getCols()
-  void setCols(List<BSRowContent> cols)
-  String getMetadataError()     // <.>
-  void setMetadataError(String metadataError)
-  BSRowOwner getOwner()     // <.>
-  void setOwner(BSRowOwner owner)
-  BSGrid getGrid()
   String toString()
 }
 ----
 
-<.> xref:#getId_[getId()]
-+
---
-As per <div id="...">...</div> : must be unique across entire page.
---
-<.> xref:#getMetadataError_[getMetadataError()]
-+
---
-For diagnostics; populated by the framework if and only if a metadata error.
---
-<.> xref:#getOwner_[getOwner()]
-+
---
-Owner.
---
-
-== Members
-
-[#getId_]
-=== getId()
-
-As per <div id="...">...</div> : must be unique across entire page.
-
-[#getMetadataError_]
-=== getMetadataError()
-
-For diagnostics; populated by the framework if and only if a metadata error.
-
-[#getOwner_]
-=== getOwner()
-
-Owner.
-
-Set programmatically by framework after reading in from XML.

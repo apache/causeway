@@ -10,10 +10,6 @@ Corresponds to a domain service that contributes its serviceActions under a part
 ----
 class BSMenuSection {
   BSMenuSection()
-  String getNamed()
-  void setNamed(String named)
-  List<ServiceActionLayoutData> getServiceActions()
-  void setServiceActions(List<ServiceActionLayoutData> actionLayoutDatas)
 }
 ----
 

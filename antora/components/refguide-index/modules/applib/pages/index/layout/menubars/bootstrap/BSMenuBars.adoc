@@ -10,28 +10,8 @@ Describes the collection of domain services into menubars, broadly corresponding
 ----
 class BSMenuBars {
   BSMenuBars()
-  BSMenuBar getPrimary()
-  void setPrimary(BSMenuBar primary)
-  BSMenuBar getSecondary()
-  void setSecondary(BSMenuBar secondary)
-  BSMenuBar getTertiary()
-  void setTertiary(BSMenuBar tertiary)
   BSMenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar)
   void visit(Consumer<ServiceActionLayoutData> visitor)
-  String getMetadataError()     // <.>
-  void setMetadataError(String metadataError)
 }
 ----
 
-<.> xref:#getMetadataError_[getMetadataError()]
-+
---
-For diagnostics; populated by the framework if and only if a metadata error.
---
-
-== Members
-
-[#getMetadataError_]
-=== getMetadataError()
-
-For diagnostics; populated by the framework if and only if a metadata error.

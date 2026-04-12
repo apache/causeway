@@ -8,17 +8,37 @@ A persistent representation of an xref:refguide:applib:index/services/iactn/Exec
 [source,java]
 .ExecutionLogEntry.java
 ----
-class ExecutionLogEntry {
+interface ExecutionLogEntry {
   public final static String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
-  ExecutionLogEntry(Execution<? extends MemberExecutionDto, ?> execution)
+  static final DateTimeFormatter DATETIME_FORMATTER;
+  static final ToString<ExecutionLogEntry> TOSTRING;
   void init(Execution<? extends MemberExecutionDto, ?> execution)
   String title()
   ChangeType getType()
+  UUID getInteractionId()
+  void setInteractionId(UUID interactionId)
+  int getSequence()
+  void setSequence(int sequence)
+  ExecutionLogEntryType getExecutionType()
+  void setExecutionType(ExecutionLogEntryType executionType)
+  String getUsername()
+  void setUsername(String userName)
+  java.sql.Timestamp getTimestamp()
+  void setTimestamp(java.sql.Timestamp timestamp)
+  Bookmark getTarget()
+  void setTarget(Bookmark target)
+  String getLogicalMemberIdentifier()
+  void setLogicalMemberIdentifier(String logicalMemberIdentifier)
+  InteractionDto getInteractionDto()
+  void setInteractionDto(InteractionDto commandDto)
+  java.sql.Timestamp getStartedAt()
+  void setStartedAt(java.sql.Timestamp startedAt)
+  java.sql.Timestamp getCompletedAt()
+  void setCompletedAt(java.sql.Timestamp completedAt)
   BigDecimal getDuration()     // <.>
   int compareTo(ExecutionLogEntry other)
-  String toString()
 }
 ----
 

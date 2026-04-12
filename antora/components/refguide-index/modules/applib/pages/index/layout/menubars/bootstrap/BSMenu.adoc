@@ -11,27 +11,7 @@ Describes the collection of domain services into menubars, broadly corresponding
 class BSMenu {
   BSMenu()
   BSMenu(String named)
-  String getNamed()
-  void setNamed(String named)
-  String getCssClassFa()
-  void setCssClassFa(String cssClassFa)
-  List<BSMenuSection> getSections()
-  Boolean isUnreferencedActions()     // <.>
-  void setUnreferencedActions(Boolean unreferencedActions)
+  boolean isUnreferencedActions()
 }
 ----
 
-<.> xref:#isUnreferencedActions_[isUnreferencedActions()]
-+
---
-Whether this menu should be used to hold any unreferenced actions.
---
-
-== Members
-
-[#isUnreferencedActions_]
-=== isUnreferencedActions()
-
-Whether this menu should be used to hold any unreferenced actions.
-
-Any menubars layout must have precisely one menu that has this attribute set.

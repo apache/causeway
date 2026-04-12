@@ -11,8 +11,10 @@ Utilities to convert from and to YAML format.
 class YamlUtils {
   Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryReadCustomized(Class<T> mappedType, String stringUtf8, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryReadCustomized(Class<T> mappedType, DataSource source, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<List<T>> tryReadAsListCustomized(Class<T> elementType, DataSource source, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
   void write(Object pojo, DataSink sink, JsonUtils.JacksonCustomizer... customizers)     // <.>
   String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
   void writeCustomized(Object pojo, DataSink sink, YamlDumpCustomizer dumpCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
@@ -31,6 +33,11 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 --
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 --
+<.> xref:#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer[tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+--
 <.> xref:#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
 +
 --
@@ -40,6 +47,11 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 +
 --
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+--
+<.> xref:#tryReadAsListCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadAsListCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
 --
 <.> xref:#write_Object_DataSink_JsonUtils_JacksonCustomizer[write(Object, DataSink, JsonUtils_JacksonCustomizer)]
 +
@@ -79,6 +91,11 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 
+[#tryReadAsList_Class_DataSource_JsonUtils_JacksonCustomizer]
+=== tryReadAsList(Class, DataSource, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
+
 [#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
 === tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
 
@@ -88,6 +105,11 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 === tryReadCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
 
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+
+[#tryReadAsListCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadAsListCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into a _List_ with given _elementType_ .
 
 [#write_Object_DataSink_JsonUtils_JacksonCustomizer]
 === write(Object, DataSink, JsonUtils_JacksonCustomizer)

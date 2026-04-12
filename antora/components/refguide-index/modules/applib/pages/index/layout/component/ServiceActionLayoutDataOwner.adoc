@@ -8,7 +8,6 @@
 ----
 interface ServiceActionLayoutDataOwner {
   List<ServiceActionLayoutData> getServiceActions()
-  void setServiceActions(List<ServiceActionLayoutData> actions)
 }
 ----
 

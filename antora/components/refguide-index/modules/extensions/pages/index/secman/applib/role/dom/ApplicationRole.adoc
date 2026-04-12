@@ -6,16 +6,23 @@
 [source,java]
 .ApplicationRole.java
 ----
-class ApplicationRole {
+interface ApplicationRole {
   public static final String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
+  static final Comparator<ApplicationRole> COMPARATOR;
+  static final Equality<ApplicationRole> EQUALITY;
+  static final Hashing<ApplicationRole> HASHING;
+  static final ToString<ApplicationRole> TOSTRING;
+  org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository applicationPermissionRepository()
   String title()
+  String getName()
+  void setName(String name)
+  String getDescription()
+  void setDescription(String description)
+  Set<ApplicationUser> getUsers()
   List<org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions()
   int compareTo(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other)
-  boolean equals(Object obj)
-  int hashCode()
-  String toString()
 }
 ----
 

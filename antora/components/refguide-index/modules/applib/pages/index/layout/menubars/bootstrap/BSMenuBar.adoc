@@ -10,8 +10,6 @@ Describes the collection of domain services into menubars, broadly corresponding
 ----
 class BSMenuBar {
   BSMenuBar()
-  List<BSMenu> getMenus()
-  void setMenus(List<BSMenu> menus)
 }
 ----
 

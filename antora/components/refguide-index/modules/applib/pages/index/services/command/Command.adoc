@@ -73,7 +73,7 @@ The unique identifier of this command (inherited from xref:refguide:applib:index
 
 In all cases this be the same as the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] that wraps the command, and can be used to correlate also to any audit records ( _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange_ s resulting from state changes occurring as a consequence of the command.
 
-Note that this is immutable in almost all cases. The one exception is if the Command is being executed through the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService] , for example when executing a async action that has been reified into a _CommandDto_ . In such cases, the _CommandExecutorService#executeCommand(CommandDto)_ will _replace_ the original Id with that of the DTO being executed.
+Note that this is immutable in almost all cases. The one exception is if the Command is being executed through the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService] , for example when executing an async action that has been reified into a _CommandDto_ . In such cases, the _CommandExecutorService#executeCommand(CommandDto)_ will _replace_ the original Id with that of the DTO being executed.
 
 [#getUsername_]
 === getUsername()

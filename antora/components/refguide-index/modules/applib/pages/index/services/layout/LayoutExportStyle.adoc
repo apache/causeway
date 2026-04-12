@@ -20,7 +20,7 @@ enum LayoutExportStyle {
 <.> xref:#COMPLETE[COMPLETE]
 +
 --
-Format that yields a full representation for the `layout.xml` , such that any layout metadata annotations could be removed from the code, without affecting the resulting xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] , when loaded from `layout.xml` .
+Format that yields a full representation for the `layout.xml` , such that any layout metadata annotations could be removed from code, without affecting the resulting xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] , when loaded from `layout.xml` . The resulting xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] has all the metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] .
 --
 <.> xref:#MINIMAL[MINIMAL]
 +
@@ -33,11 +33,13 @@ Format that yields a minimal representation for the `layout.xml` , such that lay
 [#COMPLETE]
 === COMPLETE
 
-Format that yields a full representation for the `layout.xml` , such that any layout metadata annotations could be removed from the code, without affecting the resulting xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] , when loaded from `layout.xml` .
+Format that yields a full representation for the `layout.xml` , such that any layout metadata annotations could be removed from code, without affecting the resulting xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] , when loaded from `layout.xml` . The resulting xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid] has all the metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] .
+
+In other words: if a 'complete' grid is persisted as the `layout.xml` , then there should be no need for any of the layout annotations, to be required in the domain class itself.
 
 [#MINIMAL]
 === MINIMAL
 
 Format that yields a minimal representation for the `layout.xml` , such that layout annotations are required in code to at least 'bind' the properties/collections/actions to their regions (groups and tabs).
 
-In other words: the `layout.xml` is used only to specify the positioning of the groups and tabs.
+In other words: the `layout.xml` is used only to specify the positioning of the groups and tabs, but has no additional meta data. The expectation is that most of the layout annotations ( xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] , xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] will still be retained in the domain class code.

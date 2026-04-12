@@ -10,45 +10,111 @@ Use cases requiring persistence including auditing, and for replay of commands f
 [source,java]
 .CommandLogEntry.java
 ----
-class CommandLogEntry {
+interface CommandLogEntry {
   public final static String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
-  CommandLogEntry(CommandDto commandDto, org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState, int targetIndex)     // <.>
+  static final DateTimeFormatter DATETIME_FORMATTER;
+  static final ToString<CommandLogEntry> TOSTRING;
   void sync(Command command)
+  void init(CommandDto commandDto, org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState, int targetIndex)     // <.>
   void copyOver(CommandDto commandDto, String key, Consumer<String> consume)
   String title()
   ChangeType getType()
+  UUID getInteractionId()
+  void setInteractionId(UUID interactionId)
+  String getUsername()
+  void setUsername(String userName)
+  java.sql.Timestamp getTimestamp()
+  void setTimestamp(java.sql.Timestamp timestamp)
+  Bookmark getTarget()
+  void setTarget(Bookmark target)
+  org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn getExecuteIn()     // <.>
+  void setExecuteIn(org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn replayState)
+  UUID getParentInteractionId()     // <.>
+  void setParentInteractionId(UUID parentInteractionId)
   C getParent()
+  String getLogicalMemberIdentifier()
+  void setLogicalMemberIdentifier(String logicalMemberIdentifier)
+  CommandDto getCommandDto()
+  void setCommandDto(CommandDto commandDto)
+  java.sql.Timestamp getStartedAt()
+  void setStartedAt(java.sql.Timestamp startedAt)
+  java.sql.Timestamp getCompletedAt()
+  void setCompletedAt(java.sql.Timestamp completedAt)
   BigDecimal getDuration()     // <.>
   boolean isComplete()
+  Bookmark getResult()
+  void setResult(Bookmark result)
+  String getException()     // <.>
+  void setException(String exception)
   void setException(Throwable exception)
   String getResultSummary()
   boolean isCausedException()
+  org.apache.causeway.extensions.commandlog.applib.dom.ReplayState getReplayState()     // <.>
+  void setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState)
+  String getReplayStateFailureReason()     // <.>
+  void setReplayStateFailureReason(String replayStateFailureReason)
   boolean hideReplayStateFailureReason()
   void saveAnalysis(String analysis)
   int compareTo(CommandLogEntry other)
-  String toString()
 }
 ----
 
-<.> xref:#CommandLogEntry_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int[CommandLogEntry(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)]
+<.> xref:#init_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int[init(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)]
 +
 --
 Intended for use on secondary (replay) system.
+--
+<.> xref:#getExecuteIn_[getExecuteIn()]
++
+--
+Whether the command was executed immediately in the current thread of execution, or scheduled to be executed at some time later in a "background" thread of execution.
+--
+<.> xref:#getParentInteractionId_[getParentInteractionId()]
++
+--
+The interactionId of the parent command, if any.
 --
 <.> xref:#getDuration_[getDuration()]
 +
 --
 The number of seconds (to 3 decimal places) that this command lasted, derived from * _#getStartedAt()_ and _#getCompletedAt()_ .
 --
+<.> xref:#getException_[getException()]
++
+--
+Stack trace of any exception that might have occurred if this interaction/transaction aborted.
+--
+<.> xref:#getReplayState_[getReplayState()]
++
+--
+For a replayed command, what the outcome was.
+--
+<.> xref:#getReplayStateFailureReason_[getReplayStateFailureReason()]
++
+--
+For a _org.apache.causeway.extensions.commandlog.applib.dom.ReplayState#FAILED failed_ replayed command, what the reason was for the failure.
+--
 
 == Members
 
-[#CommandLogEntry_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int]
-=== CommandLogEntry(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)
+[#init_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int]
+=== init(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)
 
 Intended for use on secondary (replay) system.
+
+[#getExecuteIn_]
+=== getExecuteIn()
+
+Whether the command was executed immediately in the current thread of execution, or scheduled to be executed at some time later in a "background" thread of execution.
+
+[#getParentInteractionId_]
+=== getParentInteractionId()
+
+The interactionId of the parent command, if any.
+
+We store only the id rather than a reference to the parent, because the _org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog_ 's callback is only called at the end of the transaction, meaning that the xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] of the "parent" will be persisted only after any of its child background xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s are to be persisted (within the body of the underlying action).
 
 [#getDuration_]
 === getDuration()
@@ -56,3 +122,20 @@ Intended for use on secondary (replay) system.
 The number of seconds (to 3 decimal places) that this command lasted, derived from * _#getStartedAt()_ and _#getCompletedAt()_ .
 
 Populated only if it has _#getCompletedAt() completed_ .
+
+[#getException_]
+=== getException()
+
+Stack trace of any exception that might have occurred if this interaction/transaction aborted.
+
+Not part of the applib API, because the default implementation is not persistent and so there's no object that can be accessed to be annotated.
+
+[#getReplayState_]
+=== getReplayState()
+
+For a replayed command, what the outcome was.
+
+[#getReplayStateFailureReason_]
+=== getReplayStateFailureReason()
+
+For a _org.apache.causeway.extensions.commandlog.applib.dom.ReplayState#FAILED failed_ replayed command, what the reason was for the failure.

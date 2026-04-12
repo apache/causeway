@@ -193,6 +193,33 @@ prototyping-mode-enabled
 
 
 |
+[[causeway.viewer.wicket.file-upload.disabled-preview-mime-types]]
+causeway.viewer.wicket.file-upload. +
+disabled-preview-mime-types
+
+|  text/csv
+| null
+
+
+|
+[[causeway.viewer.wicket.file-upload.disabled-preview-types]]
+causeway.viewer.wicket.file-upload. +
+disabled-preview-types
+
+|  object
+| null
+
+
+|
+[[causeway.viewer.wicket.file-upload.show-preview]]
+causeway.viewer.wicket.file-upload. +
+show-preview
+
+|  true
+| null
+
+
+|
 [[causeway.viewer.wicket.js]]
 causeway.viewer.wicket.js
 

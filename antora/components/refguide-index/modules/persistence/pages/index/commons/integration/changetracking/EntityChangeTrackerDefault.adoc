@@ -11,14 +11,13 @@ The service is xref:refguide:applib:index/annotation/TransactionScope.adoc[Trans
 .EntityChangeTrackerDefault.java
 ----
 class EntityChangeTrackerDefault {
-  EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, Provider<InteractionProvider> interactionProviderProvider, PreAndPostValueEvaluatorService preAndPostValueEvaluatorService)
+  EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, Provider<InteractionLayerTracker> interactionProviderProvider, PreAndPostValueEvaluatorService preAndPostValueEvaluatorService)
   int getOrder()
   void destroy()
   void beforeCommit(boolean readOnly)
   void afterCompletion(int status)
   Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName)
   Can<EntityPropertyChange> getPropertyChanges(java.sql.Timestamp timestamp, String userName, TransactionId txId)
-  Interaction currentInteraction()
   long countPotentialPropertyChangeRecords()
   void enlistCreated(ManagedObject entity)
   void enlistUpdating(ManagedObject entity, Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier)

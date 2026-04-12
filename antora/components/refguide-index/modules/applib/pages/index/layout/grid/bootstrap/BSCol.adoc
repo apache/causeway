@@ -13,88 +13,34 @@ It is rendered as a (eg) <div class="col-md-4 ...">
 .BSCol.java
 ----
 class BSCol {
-  String getId()     // <.>
-  void setId(String id)
   int getSpan()
   void setSpan(int span)
-  Boolean isUnreferencedActions()     // <.>
-  void setUnreferencedActions(Boolean unreferencedActions)
-  Boolean isUnreferencedCollections()     // <.>
-  void setUnreferencedCollections(Boolean unreferencedCollections)
-  DomainObjectLayoutData getDomainObject()     // <.>
-  void setDomainObject(DomainObjectLayoutData domainObjectLayoutData)
-  List<SizeSpan> getSizeSpans()
-  void setSizeSpans(List<SizeSpan> sizeSpans)
-  List<ActionLayoutData> getActions()
-  void setActions(List<ActionLayoutData> actions)
-  List<BSRow> getRows()
-  void setRows(List<BSRow> rows)
-  List<BSTabGroup> getTabGroups()
-  void setTabGroups(List<BSTabGroup> tabGroups)
-  List<FieldSet> getFieldSets()
-  void setFieldSets(List<FieldSet> fieldSets)
-  List<CollectionLayoutData> getCollections()
-  void setCollections(List<CollectionLayoutData> collections)
-  String getMetadataError()     // <.>
-  void setMetadataError(String metadataError)
+  boolean isUnreferencedActions()     // <.>
+  boolean isUnreferencedCollections()     // <.>
   String toCssClass()
   String toString()
 }
 ----
 
-<.> xref:#getId_[getId()]
-+
---
-As per <div id="...">...</div> : must be unique across entire page.
---
 <.> xref:#isUnreferencedActions_[isUnreferencedActions()]
 +
 --
-Whether this column should be used to hold any unreferenced actions (contributed or "native").
+unwraps nullable Boolean
 --
 <.> xref:#isUnreferencedCollections_[isUnreferencedCollections()]
 +
 --
-Whether this column should be used to hold any unreferenced collections (contributed or "native").
---
-<.> xref:#getDomainObject_[getDomainObject()]
-+
---
-Whether to show the object's icon and title.
---
-<.> xref:#getMetadataError_[getMetadataError()]
-+
---
-For diagnostics; populated by the framework if and only if a metadata error.
+unwraps nullable Boolean
 --
 
 == Members
 
-[#getId_]
-=== getId()
-
-As per <div id="...">...</div> : must be unique across entire page.
-
 [#isUnreferencedActions_]
 === isUnreferencedActions()
 
-Whether this column should be used to hold any unreferenced actions (contributed or "native").
-
-Any layout must have precisely one column or xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
+unwraps nullable Boolean
 
 [#isUnreferencedCollections_]
 === isUnreferencedCollections()
 
-Whether this column should be used to hold any unreferenced collections (contributed or "native").
-
-Any layout must have precisely one column or xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup] that has this attribute set.
-
-[#getDomainObject_]
-=== getDomainObject()
-
-Whether to show the object's icon and title.
-
-[#getMetadataError_]
-=== getMetadataError()
-
-For diagnostics; populated by the framework if and only if a metadata error.
+unwraps nullable Boolean

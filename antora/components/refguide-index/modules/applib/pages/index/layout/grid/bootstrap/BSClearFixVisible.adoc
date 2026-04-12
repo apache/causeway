@@ -11,8 +11,6 @@ It is rendered as a (eg) <div class="clearfix visible-xs-block ...">
 .BSClearFixVisible.java
 ----
 class BSClearFixVisible {
-  CssDisplay getCssDisplay()
-  void setCssDisplay(CssDisplay cssDisplay)
   String toCssClass()
 }
 ----

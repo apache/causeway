@@ -12,6 +12,7 @@ This enum to support the (incubating) _Command Replay_ extension.
 ----
 enum ReplayState {
   UNDEFINED     // <.>
+  EXPORTED     // <.>
   PENDING     // <.>
   OK     // <.>
   FAILED     // <.>
@@ -23,7 +24,12 @@ enum ReplayState {
 <.> xref:#UNDEFINED[UNDEFINED]
 +
 --
-As used on primary system.
+As used on primary system, indicating an initial state.
+--
+<.> xref:#EXPORTED[EXPORTED]
++
+--
+Marks a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] as exported, such that consecutive export actions will skip those.
 --
 <.> xref:#PENDING[PENDING]
 +
@@ -51,7 +57,12 @@ For use on secondary system, indicates that the command should not be replayed.
 [#UNDEFINED]
 === UNDEFINED
 
-As used on primary system.
+As used on primary system, indicating an initial state.
+
+[#EXPORTED]
+=== EXPORTED
+
+Marks a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] as exported, such that consecutive export actions will skip those.
 
 [#PENDING]
 === PENDING

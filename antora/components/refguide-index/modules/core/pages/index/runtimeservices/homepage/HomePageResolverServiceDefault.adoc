@@ -12,7 +12,6 @@ If there is more than one such view model so annotated, then the one chosen is n
 ----
 class HomePageResolverServiceDefault {
   HomePageResolverServiceDefault(FactoryService factoryService, CausewayBeanTypeRegistry causewayBeanTypeRegistry)
-  void init()
   Object getHomePage()
 }
 ----

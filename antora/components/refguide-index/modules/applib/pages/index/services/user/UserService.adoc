@@ -5,7 +5,7 @@ Allows the domain object to obtain the identity of the user interacting with sai
 
 If xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] has been used to temporarily override the user and/or roles, then this service will report the overridden values instead. This is within the context of a thread.
 
-In addition, if impersonation has been invoked through the xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu] , then this service will report the impersonated user, with the companion xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore] taking responsibilty for remembering the impersonated user over multiple (http) requests, eg using an http session. It's important to note that under these circumstances the user reported by this service (the "effective" user) will _not_ be the same as the user held in the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , as obtained by _InteractionLayerTracker#currentInteractionContext() InteractionLayerTracker_ (the "real" user).
+In addition, if impersonation has been invoked through the xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu] , then this service will report the impersonated user, with the companion xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore] taking responsibilty for remembering the impersonated user over multiple (http) requests, eg using an http session. It's important to note that under these circumstances the user reported by this service (the "effective" user) will _not_ be the same as the user held in the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] , as obtained by _InteractionProvider#currentInteractionContext() InteractionLayerTracker_ (the "real" user).
 
 == API
 
@@ -36,12 +36,12 @@ Default returned from _#currentUserNameElseNobody()_ .
 <.> xref:#currentUser_[currentUser()]
 +
 --
-Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] of the current thread).
 --
 <.> xref:#isCurrentUserWithSudoAccessAllRole_[isCurrentUserWithSudoAccessAllRole()]
 +
 --
-Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] of the current thread).
 --
 <.> xref:#getUser_[getUser()]
 +
@@ -99,12 +99,12 @@ Default returned from _#currentUserNameElseNobody()_ .
 [#currentUser_]
 === currentUser()
 
-Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] of the current thread).
 
 [#isCurrentUserWithSudoAccessAllRole_]
 === isCurrentUserWithSudoAccessAllRole()
 
-Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] of the current thread).
 
 [#getUser_]
 === getUser()

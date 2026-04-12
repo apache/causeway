@@ -8,14 +8,27 @@ Represents the session of an end-user, in other words the span of time from them
 [source,java]
 .SessionLogEntry.java
 ----
-class SessionLogEntry {
+interface SessionLogEntry {
   public static final String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
+  static final ObjectContracts.ObjectContract<SessionLogEntry> CONTRACT;
+  void init(UUID sessionGuid, String httpSessionId, String username, SessionSubscriber.CausedBy causedBy, Timestamp loginTimestamp)
   String title()
   String cssClass()
   String iconName()
-  String toString()
+  UUID getSessionGuid()
+  void setSessionGuid(UUID sessionGuid)
+  String getHttpSessionId()
+  void setHttpSessionId(String httpSessionId)
+  String getUsername()
+  void setUsername(String username)
+  Timestamp getLoginTimestamp()
+  void setLoginTimestamp(Timestamp loginTimestamp)
+  Timestamp getLogoutTimestamp()
+  void setLogoutTimestamp(Timestamp logoutTimestamp)
+  SessionSubscriber.CausedBy getCausedBy()
+  void setCausedBy(SessionSubscriber.CausedBy causedBy)
   int compareTo(SessionLogEntry other)
 }
 ----

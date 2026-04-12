@@ -11,28 +11,7 @@ They simply contain one or more xref:refguide:applib:index/layout/grid/bootstrap
 .BSTab.java
 ----
 class BSTab {
-  String getName()
-  void setName(String name)
-  List<BSRow> getRows()
-  void setRows(List<BSRow> rows)
-  BSTabOwner getOwner()     // <.>
-  void setOwner(BSTabOwner owner)
-  BSGrid getGrid()
   String toString()
 }
 ----
 
-<.> xref:#getOwner_[getOwner()]
-+
---
-Owner.
---
-
-== Members
-
-[#getOwner_]
-=== getOwner()
-
-Owner.
-
-Set programmatically by framework after reading in from XML.

@@ -9,12 +9,6 @@ Default implementation of xref:refguide:applib:index/services/menu/MenuBarsServi
 .MenuBarsServiceBootstrap.java
 ----
 class MenuBarsServiceBootstrap {
-  public static final String MB3_TNS;
-  public static final String MB3_SCHEMA_LOCATION;
-  public static final String COMPONENT_TNS;
-  public static final String COMPONENT_SCHEMA_LOCATION;
-  public static final String LINKS_TNS;
-  public static final String LINKS_SCHEMA_LOCATION;
   BSMenuBars menuBars(Type type)
 }
 ----

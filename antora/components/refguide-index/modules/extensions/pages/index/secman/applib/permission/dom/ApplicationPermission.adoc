@@ -15,18 +15,43 @@ For a given permission, there is an interaction between the xref:refguide:extens
 [source,java]
 .ApplicationPermission.java
 ----
-class ApplicationPermission {
+interface ApplicationPermission {
   public static final String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
+  static final ObjectContracts.ObjectContract<ApplicationPermission> CONTRACT;
+  ApplicationFeatureRepository featureRepository()
   String title()
+  ApplicationRole getRole()
+  void setRole(ApplicationRole applicationRole)
+  ApplicationPermissionRule getRule()
+  void setRule(ApplicationPermissionRule rule)
+  ApplicationPermissionMode getMode()
+  void setMode(ApplicationPermissionMode mode)
   String getSort()
+  ApplicationFeatureSort getFeatureSort()     // <.>
+  void setFeatureSort(ApplicationFeatureSort featureSort)
+  String getFeatureFqn()
+  void setFeatureFqn(String featureFqn)
   ApplicationFeature findFeature(ApplicationFeatureId featureId)
+  Optional<ApplicationMemberSort> getMemberSort()
+  Optional<ApplicationFeature> getFeature()
   Optional<ApplicationFeatureId> asFeatureId()
   int compareTo(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission other)
-  boolean equals(Object other)
-  int hashCode()
-  String toString()
 }
 ----
 
+<.> xref:#getFeatureSort_[getFeatureSort()]
++
+--
+Which _ApplicationFeatureId#getSort() sort_ of feature this is.
+--
+
+== Members
+
+[#getFeatureSort_]
+=== getFeatureSort()
+
+Which _ApplicationFeatureId#getSort() sort_ of feature this is.
+
+The combination of the feature type and the _#getFeatureFqn() fully qualified name_ is used to build the corresponding _#getFeature() feature_ (view model).

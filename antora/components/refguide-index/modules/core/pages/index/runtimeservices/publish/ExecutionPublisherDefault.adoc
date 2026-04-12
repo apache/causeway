@@ -9,7 +9,7 @@ Default implementation of xref:refguide:core:index/metamodel/services/publishing
 .ExecutionPublisherDefault.java
 ----
 class ExecutionPublisherDefault {
-  void init()
+  ExecutionPublisherDefault(InteractionLayerTracker iaTracker, List<ExecutionSubscriber> subscribers, CausewayObservationIntegration observationIntegration)
   void destroy()
   void publishActionInvocation(Execution<?, ?> execution)
   void publishPropertyEdit(Execution<?, ?> execution)

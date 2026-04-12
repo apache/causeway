@@ -8,17 +8,37 @@ A persistent representation of an xref:refguide:applib:index/services/iactn/Exec
 [source,java]
 .ExecutionOutboxEntry.java
 ----
-class ExecutionOutboxEntry {
+interface ExecutionOutboxEntry {
   public final static String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
-  ExecutionOutboxEntry(Execution<? extends MemberExecutionDto, ?> execution)
+  static final DateTimeFormatter DATATIME_FORMATTER;
+  static final ToString<ExecutionOutboxEntry> TOSTRING;
   void init(Execution<? extends MemberExecutionDto, ?> execution)
   String title()
   ChangeType getType()
+  UUID getInteractionId()
+  void setInteractionId(UUID interactionId)
+  int getSequence()
+  void setSequence(int sequence)
+  ExecutionOutboxEntryType getExecutionType()
+  void setExecutionType(ExecutionOutboxEntryType executionType)
+  String getUsername()
+  void setUsername(String userName)
+  java.sql.Timestamp getTimestamp()
+  void setTimestamp(java.sql.Timestamp timestamp)
+  Bookmark getTarget()
+  void setTarget(Bookmark target)
+  String getLogicalMemberIdentifier()
+  void setLogicalMemberIdentifier(String logicalMemberIdentifier)
+  InteractionDto getInteractionDto()
+  void setInteractionDto(InteractionDto commandDto)
+  java.sql.Timestamp getStartedAt()
+  void setStartedAt(java.sql.Timestamp startedAt)
+  java.sql.Timestamp getCompletedAt()
+  void setCompletedAt(java.sql.Timestamp completedAt)
   BigDecimal getDuration()     // <.>
   int compareTo(ExecutionOutboxEntry other)
-  String toString()
 }
 ----
 

@@ -34,7 +34,7 @@ Optionally, the currently active xref:refguide:applib:index/services/iactn/Inter
 <.> xref:#currentInteractionContext_[currentInteractionContext()]
 +
 --
-Optionally, the currently active xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] for the calling thread.
+Optionally, the currently active xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] for the calling thread.
 --
 <.> xref:#getInteractionId_[getInteractionId()]
 +
@@ -62,7 +62,7 @@ Optionally, the currently active xref:refguide:applib:index/services/iactn/Inter
 [#currentInteractionContext_]
 === currentInteractionContext()
 
-Optionally, the currently active xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] for the calling thread.
+Optionally, the currently active xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] for the calling thread.
 
 [#getInteractionId_]
 === getInteractionId()

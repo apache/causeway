@@ -27,6 +27,7 @@ enum Where {
   boolean isAlways()
   boolean inParentedTable()
   boolean inStandaloneTable()
+  boolean isObjectForms()
   boolean includes(Where context)     // <.>
 }
 ----

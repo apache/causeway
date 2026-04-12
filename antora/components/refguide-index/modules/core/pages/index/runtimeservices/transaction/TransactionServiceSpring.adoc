@@ -9,46 +9,46 @@ Default implementation of xref:refguide:applib:index/services/xactn/TransactionS
 .TransactionServiceSpring.java
 ----
 class TransactionServiceSpring {
-  TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, Provider<InteractionLayerTracker> interactionLayerTrackerProvider, ConfigurableListableBeanFactory configurableListableBeanFactory)
+  TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, Provider<InteractionLayerTracker> interactionLayerTrackerProvider, ConfigurableListableBeanFactory configurableListableBeanFactory, CausewayObservationIntegration observationIntegration)
   Try<T> callTransactional(TransactionDefinition def, Callable<T> callable)
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()
-  void onOpen(CausewayInteraction interaction)     // <.>
-  void requestRollback(CausewayInteraction interaction)     // <.>
-  void onClose(CausewayInteraction interaction)     // <.>
+  void onOpen(Interaction interaction)     // <.>
+  void requestRollback(Interaction interaction)     // <.>
+  void onClose(Interaction interaction)     // <.>
 }
 ----
 
-<.> xref:#onOpen_CausewayInteraction[onOpen(CausewayInteraction)]
+<.> xref:#onOpen_Interaction[onOpen(Interaction)]
 +
 --
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
 --
-<.> xref:#requestRollback_CausewayInteraction[requestRollback(CausewayInteraction)]
+<.> xref:#requestRollback_Interaction[requestRollback(Interaction)]
 +
 --
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactn.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactn.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
 --
-<.> xref:#onClose_CausewayInteraction[onClose(CausewayInteraction)]
+<.> xref:#onClose_Interaction[onClose(Interaction)]
 +
 --
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(CausewayInteraction)_ against all configured _PlatformTransactionManager_ s.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(Interaction)_ against all configured _PlatformTransactionManager_ s.
 --
 
 == Members
 
-[#onOpen_CausewayInteraction]
-=== onOpen(CausewayInteraction)
+[#onOpen_Interaction]
+=== onOpen(Interaction)
 
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , sets up the initial transaction automatically against all available _PlatformTransactionManager_ s.
 
-[#requestRollback_CausewayInteraction]
-=== requestRollback(CausewayInteraction)
+[#requestRollback_Interaction]
+=== requestRollback(Interaction)
 
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , if _org.apache.causeway.applib.services.iactn.InteractionService#run(InteractionContext, ThrowingRunnable)_ or _org.apache.causeway.applib.services.iactn.InteractionService#call(InteractionContext, Callable)_ (or their various overloads) result in an exception.
 
-[#onClose_CausewayInteraction]
-=== onClose(CausewayInteraction)
+[#onClose_Interaction]
+=== onClose(Interaction)
 
-For use only by _org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(CausewayInteraction)_ against all configured _PlatformTransactionManager_ s.
+For use only by _org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault_ , to close the transaction initially set up in _#onOpen(Interaction)_ against all configured _PlatformTransactionManager_ s.

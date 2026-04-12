@@ -7,7 +7,7 @@ The framework takes care, that an async invocation is scoped within both an inte
 
 Terminology:
 
-* interaction-context: who/how/when xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext]
+* interaction-context: who/how/when xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]
 * unwrapped: plain object, not proxied _WrapperFactory#unwrap_
 * detached: object not attached to a persistence session (applicable to entities only) _RepositoryService#detach(Object)_
 

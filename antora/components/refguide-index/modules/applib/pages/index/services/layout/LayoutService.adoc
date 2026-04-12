@@ -9,20 +9,22 @@ Provides the ability to obtain the serialized layout (eg. XML) for a single doma
 .LayoutService.java
 ----
 interface LayoutService {
+  Optional<LayoutKey> layoutKey(Object domainObject)     // <.>
   EnumSet<CommonMimeType> supportedObjectLayoutFormats()     // <.>
-  String objectLayout(Class<?> domainClass, LayoutExportStyle style, CommonMimeType format)     // <.>
+  String objectLayout(LayoutKey layoutKey, LayoutExportStyle style, CommonMimeType format)     // <.>
   byte[] toZip(LayoutExportStyle style, CommonMimeType format)     // <.>
   EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats()     // <.>
   String menuBarsLayout(MenuBarsService.Type type, CommonMimeType format)     // <.>
 }
 ----
 
+<.> xref:#layoutKey_Object[layoutKey(Object)]
 <.> xref:#supportedObjectLayoutFormats_[supportedObjectLayoutFormats()]
 +
 --
 Supported format(s) for _#objectLayout(Class, LayoutExportStyle, CommonMimeType)_ and _#toZip(LayoutExportStyle, CommonMimeType)_ .
 --
-<.> xref:#objectLayout_Class_LayoutExportStyle_CommonMimeType[objectLayout(Class, LayoutExportStyle, CommonMimeType)]
+<.> xref:#objectLayout_LayoutKey_LayoutExportStyle_CommonMimeType[objectLayout(LayoutKey, LayoutExportStyle, CommonMimeType)]
 +
 --
 Obtains the serialized form of the object layout (grid) for the specified domain class.
@@ -45,13 +47,16 @@ Obtains the serialized form of the menu bars layout ( xref:refguide:applib:index
 
 == Members
 
+[#layoutKey_Object]
+=== layoutKey(Object)
+
 [#supportedObjectLayoutFormats_]
 === supportedObjectLayoutFormats()
 
 Supported format(s) for _#objectLayout(Class, LayoutExportStyle, CommonMimeType)_ and _#toZip(LayoutExportStyle, CommonMimeType)_ .
 
-[#objectLayout_Class_LayoutExportStyle_CommonMimeType]
-=== objectLayout(Class, LayoutExportStyle, CommonMimeType)
+[#objectLayout_LayoutKey_LayoutExportStyle_CommonMimeType]
+=== objectLayout(LayoutKey, LayoutExportStyle, CommonMimeType)
 
 Obtains the serialized form of the object layout (grid) for the specified domain class.
 

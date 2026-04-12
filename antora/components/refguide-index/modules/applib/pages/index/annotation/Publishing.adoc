@@ -24,6 +24,7 @@ The available policies as to whether data should be published to corresponding s
 enum Publishing {
   AS_CONFIGURED     // <.>
   ENABLED     // <.>
+  ENABLED_FOR_UPDATES_ONLY     // <.>
   DISABLED     // <.>
   NOT_SPECIFIED     // <.>
 }
@@ -38,6 +39,11 @@ Publishing of data triggered by interaction with this object should be handled a
 +
 --
 Do publish data triggered by interaction with this object.
+--
+<.> xref:#ENABLED_FOR_UPDATES_ONLY[ENABLED_FOR_UPDATES_ONLY]
++
+--
+Applies only to xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] , whereby events are published for modifications to the object, but no events are published for the initial creation of an object.
 --
 <.> xref:#DISABLED[DISABLED]
 +
@@ -63,6 +69,17 @@ If no publishing policy is configured, then publishing is disabled.
 === ENABLED
 
 Do publish data triggered by interaction with this object.
+
+[#ENABLED_FOR_UPDATES_ONLY]
+=== ENABLED_FOR_UPDATES_ONLY
+
+Applies only to xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] , whereby events are published for modifications to the object, but no events are published for the initial creation of an object.
+
+In the case of audit trail extension, this effectively suppresses all of the "[NEW] -> value" entries that are created for every property of the entity when it is being created, and also all of the "value -> [DELETED]" entries that are created for every property of the entity when it is being deleted.
+
+This variant is intended only where the application code has enough traceability built into the domain (perhaps to provide visibility to the end-users) that the technical auditing is overkill. It will also of course reduce the volume of auditing, so improves performance (likely both response times and throughput).
+
+For other subscribers, behaviour is the same as _#ENABLED_ .
 
 [#DISABLED]
 === DISABLED

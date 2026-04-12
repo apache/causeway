@@ -12,6 +12,16 @@ include::../section-hooks/Other~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.persistence.weaving.safeguard-mode]]
+causeway.persistence.weaving. +
+safeguard-mode
+
+|  REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEA +
+VED
+| null
+
+
+|
 [[causeway.schema.command.param-identifier-strategy]]
 causeway.schema.command. +
 param-identifier-strategy

@@ -6,14 +6,32 @@
 [source,java]
 .AuditTrailEntry.java
 ----
-class AuditTrailEntry {
+interface AuditTrailEntry {
   public static final String LOGICAL_TYPE_NAME;
   public static final String SCHEMA;
   public static final String TABLE;
+  static final ObjectContracts.ObjectContract<AuditTrailEntry> CONTRACT;
   void init(EntityPropertyChange change)
   String title()
   ChangeType getType()
-  String toString()
+  UUID getInteractionId()
+  void setInteractionId(UUID interactionId)
+  String getUsername()
+  void setUsername(String userName)
+  java.sql.Timestamp getTimestamp()
+  void setTimestamp(java.sql.Timestamp timestamp)
+  Bookmark getTarget()
+  void setTarget(Bookmark target)
+  int getSequence()
+  void setSequence(int sequence)
+  String getLogicalMemberIdentifier()
+  void setLogicalMemberIdentifier(String logicalMemberIdentifier)
+  String getPropertyId()
+  void setPropertyId(String propertyId)
+  String getPreValue()
+  void setPreValue(String preValue)
+  String getPostValue()
+  void setPostValue(String postValue)
   int compareTo(AuditTrailEntry other)
 }
 ----

@@ -5,9 +5,9 @@ A low-level service to programmatically create a short-lived interaction or sess
 
 You could think of this as analogous to an _java.net.http.HttpRequest_ or a JPA _jakarta.persistence.EntityManager_ or a Hibernate Session.
 
-This service is used internally by the framework itself, for example when a viewer receives a request a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] is created for the duration of the users's interaction. It is also used by integration tests, to be able to connect to the database.
+This service is used internally by the framework itself, for example when a viewer receives a request a new _InteractionLayer_ is created for the duration of the users's interaction. It is also used by integration tests, to be able to connect to the database.
 
-There are two main APIs exposed. One is to _#openInteraction(InteractionContext) open_ a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , to be _#closeInteractionLayers() closed later_ . The other is to execute a _Callable_ or xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] within the duration of an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , wrapping up automatically. This is what is used by _org.apache.causeway.applib.services.sudo.SudoService_ , for example.
+There are two main APIs exposed. One is to _#openInteraction(InteractionContext) open_ a new _InteractionLayer_ , to be _#closeInteractionLayers() closed later_ . The other is to execute a _Callable_ or xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] within the duration of an _InteractionLayer_ , wrapping up automatically. This is what is used by _org.apache.causeway.applib.services.sudo.SudoService_ , for example.
 
 == API
 
@@ -15,8 +15,8 @@ There are two main APIs exposed. One is to _#openInteraction(InteractionContext)
 .InteractionService.java
 ----
 interface InteractionService {
-  InteractionLayer openInteraction()     // <.>
-  InteractionLayer openInteraction(InteractionContext interactionContext)     // <.>
+  Interaction openInteraction()     // <.>
+  Interaction openInteraction(InteractionContext interactionContext)     // <.>
   void closeInteractionLayers()     // <.>
   boolean isInInteraction()     // <.>
   R call(InteractionContext interactionContext, Callable<R> callable)     // <.>
@@ -27,31 +27,31 @@ interface InteractionService {
   Try<Void> runAndCatch(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
   Try<R> callAnonymousAndCatch(Callable<R> callable)     // <.>
   Try<Void> runAnonymousAndCatch(ThrowingRunnable runnable)     // <.>
-  InteractionLayer nextInteraction()     // <.>
-  InteractionLayer nextInteraction(InteractionContext interactionContext)     // <.>
+  Interaction nextInteraction()     // <.>
+  Interaction nextInteraction(InteractionContext interactionContext)     // <.>
 }
 ----
 
 <.> xref:#openInteraction_[openInteraction()]
 +
 --
-If present, reuses the current top level xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , otherwise creates a new anonymous one.
+If present, reuses the current top level _InteractionLayer_ , otherwise creates a new anonymous one.
 --
 <.> xref:#openInteraction_InteractionContext[openInteraction(InteractionContext)]
 +
 --
-Returns a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that is a holder of the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
+Returns a new or reused _InteractionLayer_ that is a holder of the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
 --
 <.> xref:#closeInteractionLayers_[closeInteractionLayers()]
 +
 --
-closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+closes all open _InteractionLayer_ (s) as stacked on the current thread
 --
 <.> xref:#isInInteraction_[isInInteraction()]
 <.> xref:#call_InteractionContext_Callable[call(InteractionContext, Callable)]
 +
 --
-Executes a block of code with a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] using a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] .
+Executes a block of code with a new or reused xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] using a new or reused _InteractionLayer_ .
 --
 <.> xref:#run_InteractionContext_ThrowingRunnable[run(InteractionContext, ThrowingRunnable)]
 +
@@ -61,12 +61,12 @@ Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 <.> xref:#callAnonymous_Callable[callAnonymous(Callable)]
 +
 --
-As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .
 --
 <.> xref:#runAnonymous_ThrowingRunnable[runAnonymous(ThrowingRunnable)]
 +
 --
-As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .
 --
 <.> xref:#callAndCatch_InteractionContext_Callable[callAndCatch(InteractionContext, Callable)]
 +
@@ -96,7 +96,7 @@ Primarily for testing, closes the current interaction and opens a new one.
 <.> xref:#nextInteraction_InteractionContext[nextInteraction(InteractionContext)]
 +
 --
-Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .
 --
 
 == Members
@@ -104,21 +104,21 @@ Primarily for testing, closes the current interaction and opens a new one with t
 [#openInteraction_]
 === openInteraction()
 
-If present, reuses the current top level xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , otherwise creates a new anonymous one.
+If present, reuses the current top level _InteractionLayer_ , otherwise creates a new anonymous one.
 
 [#openInteraction_InteractionContext]
 === openInteraction(InteractionContext)
 
-Returns a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that is a holder of the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
+Returns a new or reused _InteractionLayer_ that is a holder of the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
 
-If available reuses an existing xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , otherwise creates a new one.
+If available reuses an existing xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] , otherwise creates a new one.
 
-The xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] represents a user's span of activities interacting with the application. These can be stacked (usually temporarily), for example for a sudo session or to mock the clock. The stack is later closed using _#closeInteractionLayers()_ .
+The _InteractionLayer_ represents a user's span of activities interacting with the application. These can be stacked (usually temporarily), for example for a sudo session or to mock the clock. The stack is later closed using _#closeInteractionLayers()_ .
 
 [#closeInteractionLayers_]
 === closeInteractionLayers()
 
-closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+closes all open _InteractionLayer_ (s) as stacked on the current thread
 
 [#isInInteraction_]
 === isInInteraction()
@@ -126,11 +126,11 @@ closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.
 [#call_InteractionContext_Callable]
 === call(InteractionContext, Callable)
 
-Executes a block of code with a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] using a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] .
+Executes a block of code with a new or reused xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] using a new or reused _InteractionLayer_ .
 
-If there is currently no xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] a new one is created.
+If there is currently no _InteractionLayer_ a new one is created.
 
-If there is currently an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that has an equal xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to the given one, it is reused, otherwise a new one is created.
+If there is currently an _InteractionLayer_ that has an equal xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] to the given one, it is reused, otherwise a new one is created.
 
 [#run_InteractionContext_ThrowingRunnable]
 === run(InteractionContext, ThrowingRunnable)
@@ -140,16 +140,16 @@ Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 [#callAnonymous_Callable]
 === callAnonymous(Callable)
 
-As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#call(InteractionContext, Callable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .
 
-However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] ), then this is used instead.
+However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] ), then this is used instead.
 
 [#runAnonymous_ThrowingRunnable]
 === runAnonymous(ThrowingRunnable)
 
-As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+As per _#run(InteractionContext, ThrowingRunnable)_ , but (normally) using an anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .
 
-However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] ), then this is used instead.
+However, if an _#isInInteraction() interaction (session)_ already exists (with possibly some other non-anonymous xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] ), then this is used instead.
 
 [#callAndCatch_InteractionContext_Callable]
 === callAndCatch(InteractionContext, Callable)
@@ -181,6 +181,4 @@ In tests, this is a good way to simulate multiple interactions within a scenario
 [#nextInteraction_InteractionContext]
 === nextInteraction(InteractionContext)
 
-Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
-
-include::hooks/InteractionService_010-implementation.adoc[]
+Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] .

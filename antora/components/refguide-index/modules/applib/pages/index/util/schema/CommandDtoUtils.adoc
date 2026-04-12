@@ -16,6 +16,8 @@ class CommandDtoUtils {
   void setUserData(CommandDto dto, String key, String value)
   void setUserData(CommandDto dto, String key, Bookmark bookmark)
   void clearUserData(CommandDto dto, String key)
+  String toYaml(Iterable<CommandDto> commandDtos)
+  List<CommandDto> fromYaml(DataSource commandDtosYaml)
 }
 ----
 

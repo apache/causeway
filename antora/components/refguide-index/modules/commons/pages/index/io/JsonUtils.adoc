@@ -15,14 +15,13 @@ class JsonUtils {
   Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
   void write(Object pojo, DataSink sink, JsonUtils.JacksonCustomizer... customizers)     // <.>
   String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
-  ObjectMapper indentedOutput(ObjectMapper mapper)     // <.>
-  ObjectMapper onlyIncludeNonNull(ObjectMapper mapper)     // <.>
-  ObjectMapper jdk8Support(ObjectMapper mapper)     // <.>
-  ObjectMapper jaxbAnnotationSupport(ObjectMapper mapper)     // <.>
-  ObjectMapper readingJavaTimeSupport(ObjectMapper mapper)     // <.>
-  ObjectMapper writingJavaTimeSupport(ObjectMapper mapper)     // <.>
-  ObjectMapper readingCanSupport(ObjectMapper mapper)     // <.>
-  ObjectMapper writingCanSupport(ObjectMapper mapper)     // <.>
+  MapperBuilder<M, B> indentedOutput(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> onlyIncludeNonNull(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> jaxbAnnotationSupport(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> readingJavaTimeSupport(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> writingJavaTimeSupport(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> readingCanSupport(MapperBuilder<M, B> builder)     // <.>
+  MapperBuilder<M, B> writingCanSupport(MapperBuilder<M, B> builder)     // <.>
 }
 ----
 
@@ -56,42 +55,37 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
 --
-<.> xref:#indentedOutput_ObjectMapper[indentedOutput(ObjectMapper)]
+<.> xref:#indentedOutput_MapperBuilder[indentedOutput(MapperBuilder)]
 +
 --
 enable indentation for the underlying generator
 --
-<.> xref:#onlyIncludeNonNull_ObjectMapper[onlyIncludeNonNull(ObjectMapper)]
+<.> xref:#onlyIncludeNonNull_MapperBuilder[onlyIncludeNonNull(MapperBuilder)]
 +
 --
 only properties with non-null values are to be included
 --
-<.> xref:#jdk8Support_ObjectMapper[jdk8Support(ObjectMapper)]
-+
---
-add support for JDK 8, e.g. _Optional_
---
-<.> xref:#jaxbAnnotationSupport_ObjectMapper[jaxbAnnotationSupport(ObjectMapper)]
+<.> xref:#jaxbAnnotationSupport_MapperBuilder[jaxbAnnotationSupport(MapperBuilder)]
 +
 --
 add support for JAXB annotations
 --
-<.> xref:#readingJavaTimeSupport_ObjectMapper[readingJavaTimeSupport(ObjectMapper)]
+<.> xref:#readingJavaTimeSupport_MapperBuilder[readingJavaTimeSupport(MapperBuilder)]
 +
 --
 add support for reading java.time (ISO)
 --
-<.> xref:#writingJavaTimeSupport_ObjectMapper[writingJavaTimeSupport(ObjectMapper)]
+<.> xref:#writingJavaTimeSupport_MapperBuilder[writingJavaTimeSupport(MapperBuilder)]
 +
 --
 add support for writing java.time (ISO)
 --
-<.> xref:#readingCanSupport_ObjectMapper[readingCanSupport(ObjectMapper)]
+<.> xref:#readingCanSupport_MapperBuilder[readingCanSupport(MapperBuilder)]
 +
 --
 add support for reading Can
 --
-<.> xref:#writingCanSupport_ObjectMapper[writingCanSupport(ObjectMapper)]
+<.> xref:#writingCanSupport_MapperBuilder[writingCanSupport(MapperBuilder)]
 +
 --
 add support for writing Can
@@ -129,42 +123,37 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
 
-[#indentedOutput_ObjectMapper]
-=== indentedOutput(ObjectMapper)
+[#indentedOutput_MapperBuilder]
+=== indentedOutput(MapperBuilder)
 
 enable indentation for the underlying generator
 
-[#onlyIncludeNonNull_ObjectMapper]
-=== onlyIncludeNonNull(ObjectMapper)
+[#onlyIncludeNonNull_MapperBuilder]
+=== onlyIncludeNonNull(MapperBuilder)
 
 only properties with non-null values are to be included
 
-[#jdk8Support_ObjectMapper]
-=== jdk8Support(ObjectMapper)
-
-add support for JDK 8, e.g. _Optional_
-
-[#jaxbAnnotationSupport_ObjectMapper]
-=== jaxbAnnotationSupport(ObjectMapper)
+[#jaxbAnnotationSupport_MapperBuilder]
+=== jaxbAnnotationSupport(MapperBuilder)
 
 add support for JAXB annotations
 
-[#readingJavaTimeSupport_ObjectMapper]
-=== readingJavaTimeSupport(ObjectMapper)
+[#readingJavaTimeSupport_MapperBuilder]
+=== readingJavaTimeSupport(MapperBuilder)
 
 add support for reading java.time (ISO)
 
-[#writingJavaTimeSupport_ObjectMapper]
-=== writingJavaTimeSupport(ObjectMapper)
+[#writingJavaTimeSupport_MapperBuilder]
+=== writingJavaTimeSupport(MapperBuilder)
 
 add support for writing java.time (ISO)
 
-[#readingCanSupport_ObjectMapper]
-=== readingCanSupport(ObjectMapper)
+[#readingCanSupport_MapperBuilder]
+=== readingCanSupport(MapperBuilder)
 
 add support for reading Can
 
-[#writingCanSupport_ObjectMapper]
-=== writingCanSupport(ObjectMapper)
+[#writingCanSupport_MapperBuilder]
+=== writingCanSupport(MapperBuilder)
 
 add support for writing Can

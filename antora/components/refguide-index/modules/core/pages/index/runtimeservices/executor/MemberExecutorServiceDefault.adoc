@@ -9,7 +9,7 @@ Default implementation of _MemberExecutorService_ .
 .MemberExecutorServiceDefault.java
 ----
 class MemberExecutorServiceDefault {
-  Optional<InteractionInternal> getInteraction()
+  MemberExecutorServiceDefault(InteractionLayerTracker interactionLayerTracker, CausewayConfiguration configuration, ObjectManager objectManager, InteractionDtoFactory interactionDtoFactory, Provider<ExecutionPublisher> executionPublisherProvider, TransactionService transactionService, Provider<CommandPublisher> commandPublisherProvider, CausewayObservationIntegration observationIntegration)
   ManagedObject invokeAction(ActionExecutor actionExecutor)
   ManagedObject setOrClearProperty(PropertyModifier propertyExecutor)
   void prepareCommandForPublishing(Command command, InteractionHead interactionHead, ObjectMember objectMember, FacetHolder facetHolder)     // <.>
