@@ -19,7 +19,7 @@ additional
     <parent>
         <groupId>org.apache.causeway.core</groupId>
         <artifactId>causeway-core</artifactId>
-        <version>4.0.0-M2</version>
+        <version>4.0.0-M3-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-core-mmtestsupport</artifactId>

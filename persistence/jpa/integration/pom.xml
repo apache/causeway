@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway.persistence</groupId>
         <artifactId>causeway-persistence-jpa</artifactId>
-        <version>4.0.0-M2</version>
+        <version>4.0.0-M3-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-persistence-jpa-integration</artifactId>
