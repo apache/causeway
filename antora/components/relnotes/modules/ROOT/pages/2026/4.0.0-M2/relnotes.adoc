@@ -39,6 +39,11 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3958]
 - [Wicket Viewer] Actions in Tables have wrong Result Routing https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961]
 
+🔨 Dependency Upgrades
+
+- Upgrade to Spring Boot 4.0.5
+- Upgrade to EclipseLink 5.0.0
+
 == Appendix 
 
 === Open Telemetry Minimal Setup (for Applications)
