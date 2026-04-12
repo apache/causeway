@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0-M2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
