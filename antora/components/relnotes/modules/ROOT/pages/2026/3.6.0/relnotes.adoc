@@ -1,0 +1,42 @@
+[[r3.6.0]]
+= 3.6.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This is primarily a bugfix release, with one new feature, one small improvement and 7 bug fixes.
+
+This release also includes the usual dependency upgrades, and is based on:
+
+* Spring Boot 3.5.13
+* JPA EclipseLink 4.0.9
+* JDO DataNucleus 6.0.5
+* Apache Wicket 10.8.0
+* RestEasy 7.0.1.Final
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3982[CAUSEWAY-3982] - extend auditing to only log on updates, not create or delete.
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948] - Pickup Webjar Version Strings automatically from Classpath
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972] - [Commons] Internal OneShot Util may deadlock
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3966[CAUSEWAY-3966] - ApplicationFeatureViewModel may fail to properly instantiate
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961] - [Wicket Viewer] Actions in Tables have wrong Result Routing
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3960] - [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958] - [Wicket Viewer] Downloadlink may fail with Network Error
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950] - [Wicket Viewer] Upload Button may trigger Download of same File
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3946[CAUSEWAY-3946] - NPE in EntityChangeTrackerDefault when Logging with DEBUG level
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3986[CAUSEWAY-3986] - 3.6.0 release tasks
