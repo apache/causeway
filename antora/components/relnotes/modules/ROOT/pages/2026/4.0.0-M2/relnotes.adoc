@@ -4,4 +4,104 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-T.B.A.
+Apache Causeway v4 is based on Spring Boot v4.
+This milestone release mitigates a security vulnerability, provides bug fixes and some new features.  
+
+Notable changes in this release:
+
+⚠️ Attention Required
+
+- Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408] 
+- By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs). 
+The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes). 
+A minimum of 16 bytes is required, we recommend 32. (eg. `-13,4,0, ...`) 
+https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
+- [Programming Model] Support for Property Clear Methods was removed https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
+
+⭐ New Features
+
+- _Open Telemetry_ integration, activates when dependencies are found on the class path and _Spring Profile_ `observation` is active. (see Appendix below) 
+https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
+- Pickup Webjar Version Strings automatically from Classpath https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948]
+- [Wicket Viewer] Select2 with Object Icons https://issues.apache.org/jira/browse/CAUSEWAY-3904[CAUSEWAY-3904]
+
+🐞 Bug Fixes
+
+- ApplicationFeatureViewModel may fail to properly instantiate https://issues.apache.org/jira/browse/CAUSEWAY-3966[CAUSEWAY-3966]
+- NPE in EntityChangeTrackerDefault when Logging with DEBUG level https://issues.apache.org/jira/browse/CAUSEWAY-3946[CAUSEWAY-3946]
+- Metamodel Introspection Policy not honored for Java Records as Viewmodels https://issues.apache.org/jira/browse/CAUSEWAY-3991[CAUSEWAY-3991]
+- Switching between Layout Variants may result in _Members_ staying hidden https://issues.apache.org/jira/browse/CAUSEWAY-3971[CAUSEWAY-3971]
+- [Commons] Internal OneShot Util may deadlock (potentially preventing App from startup) https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972]
+- [Wicket Viewer] Hide Tabs when content is permanently hidden https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983] 
+- [Wicket Viewer] Table Row Actions Redirect might fail if behind Reverse Proxy https://issues.apache.org/jira/browse/CAUSEWAY-3976[CAUSEWAY-3976]
+- [Wicket Viewer] Upload Button may trigger Download of same File https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950]
+- [Wicket Viewer] Downloadlink may fail with Network Error https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958]
+- [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3958]
+- [Wicket Viewer] Actions in Tables have wrong Result Routing https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961]
+
+== Appendix 
+
+=== Open Telemetry Minimal Setup (for Applications)
+
+[source,xml]
+.Maven
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-opentelemetry</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-otlp</artifactId>
+</dependency>
+----
+
+[source,yml]
+.Configuration
+----
+spring:
+  application:
+    name: <name of service>
+  
+management:
+  tracing:
+    sampling:
+      probability: 1  
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://<my-endpoint>:4318/v1/traces
+----
+
+[source,java]
+.Spring - disables 'metric' export (we are currently only using 'traces')
+----
+@Bean
+OtlpConfig otlpConfig() {
+    return new OtlpConfig() {
+        @Override public @Nullable String get(final String key) { return null;}
+        @Override public boolean enabled() { return false; }
+    };
+}
+----
+
+[source,bash]
+.Docker - one of many options is to use Jaeger as telemetry collector
+----
+docker run -d --name jaeger \
+-p 16686:16686 \
+-p 4317:4317 \
+-p 4318:4318 \
+-p 5778:5778 \
+-p 9411:9411 \
+cr.jaegertracing.io/jaegertracing/jaeger
+----
+
+Exposing Jaeger's UI at http://<my-endpoint>:16686
+
+=== Open Telemetry Usage
+
+- See blog: https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot
+- See also: https://www.jaegertracing.io/docs/2.16/getting-started/
+
