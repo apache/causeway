@@ -15,6 +15,20 @@
 
     <supplement>
         <project>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>1.0</version>
+            <licenses>
+                <license>
+                    <name>Public Domain</name>
+                    <url>https://aopalliance.sourceforge.net/</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
             <version>1.0</version>
@@ -29,9 +43,24 @@
 
     <supplement>
         <project>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>1.14.2</version>
+            <name>JQuery UI</name>
+            <licenses>
+                <license>
+                    <name>OpenJS Foundation</name>
+                    <url>https://openjsf.org/</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
             <groupId>org.webjars.npm</groupId>
             <artifactId>pdfjs-dist</artifactId>
-            <version>5.4.149</version>
+            <version>5.4.624</version>
             <name>PDF.js</name>
             <licenses>
                 <license>
@@ -61,7 +90,7 @@
         <project>
             <groupId>org.webjars.npm</groupId>
             <artifactId>bootstrap-italia</artifactId>
-            <version>2.16.0</version>
+            <version>2.17.0</version>
             <name>bootstrap-italia</name>
             <licenses>
                 <license>
@@ -316,7 +345,7 @@
         <project>
             <groupId>org.webjars</groupId>
             <artifactId>datatables</artifactId>
-            <version>2.3.2</version>
+            <version>2.3.7</version>
             <name>Datatables</name>
             <licenses>
                 <license>
