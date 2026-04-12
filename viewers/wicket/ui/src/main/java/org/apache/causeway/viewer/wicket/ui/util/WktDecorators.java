@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.util.Optional;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -275,6 +276,8 @@ public class WktDecorators {
         if(decorationModel.isMenuItem()) {
             missingIcon().decorate(actionLink, faLayers);
         }
+        // dragging
+        actionLink.add(new AttributeModifier("draggable", "false"));
     }
 
 }

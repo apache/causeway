@@ -38,6 +38,7 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - [Wicket Viewer] Downloadlink may fail with Network Error https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958]
 - [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3958]
 - [Wicket Viewer] Actions in Tables have wrong Result Routing https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961]
+- [Wicket Viewer] Dropdown Menu Clicks sometimes ignored https://issues.apache.org/jira/browse/CAUSEWAY-3992[CAUSEWAY-3992]
 
 🔨 Dependency Upgrades
 
