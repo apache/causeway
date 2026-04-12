@@ -325,7 +325,7 @@ In the top-level directory:
 ----
 rm -rf ~/.m2/repository/org/apache/causeway
 mvnd clean install -o -T1C -Dgithub
-git clean -dfx ..
+git clean -dfx .
 ----
 
 
@@ -532,7 +532,7 @@ mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o
 popd
 
-git add ..
+git add .
 git commit -m "$CAUSEWAYJIRA: resetting version"
 ----
 

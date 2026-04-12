@@ -157,6 +157,17 @@
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>dev.pcms</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
                         <version>1.18.42.1</version>
