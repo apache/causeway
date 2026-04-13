@@ -36,11 +36,9 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.io.JsonUtils;
-import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
@@ -65,7 +63,7 @@ public record CommandReplayManager(
 
     @Action
     @ActionLayout(describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING.")
-    public String importCommands(
+    public CommandReplayManager importCommands(
             @Parameter(fileAccept = ".zip")
             final Blob zippedCommandsYaml) {
 
@@ -74,27 +72,40 @@ public record CommandReplayManager(
         final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
         commandDtos.forEach(commandLogEntryRepository::saveForReplay);
 
-        var yaml = YamlUtils.toStringUtf8(commandDtos,
-                JsonUtils::onlyIncludeNonNull);
-
-        return yaml;
-    }
-
-    @Collection
-    public List<CommandLogEntry> getNotYetReplayedRaw() {
-        return commandLogEntryRepository.findNotYetReplayed();
+        return this;
     }
 
     @Collection
     public List<ReplayableCommand> getNotYetReplayed() {
         return commandLogEntryRepository.findNotYetReplayed().stream()
-                .map(entry->new ReplayableCommand(bookmarkService.bookmarkFor(entry).get().identifier(), bookmarkService, commandLogEntryRepository))
-                .toList();
+            .map(entry->new ReplayableCommand(
+                    bookmarkService.bookmarkFor(entry).get().identifier(),
+                    bookmarkService, commandLogEntryRepository))
+            .toList();
+    }
+
+    @Action(choicesFrom = "notYetReplayed")
+    @ActionLayout(associateWith = "notYetReplayed")
+    public CommandReplayManager replaySelected(final List<ReplayableCommand> selected) {
+        selected.stream()
+            .filter(c->c.getReplayState() == ReplayState.PENDING)
+            .forEach(ReplayableCommand::replay);
+        return this;
+    }
+
+    @Action(choicesFrom = "notYetReplayed")
+    @ActionLayout(associateWith = "notYetReplayed",
+            describedAs = "Marks selected Commands to be EXCLUDED from replay.")
+    public CommandReplayManager excludeSelectedFromReplay(final List<ReplayableCommand> selected) {
+        selected.stream()
+            .filter(c->c.getReplayState() == ReplayState.PENDING)
+            .forEach(ReplayableCommand::excludeFromReplay);
+        return this;
     }
 
     @Override
     public String viewModelMemento() {
-        // TODO Auto-generated method stub
+        // TODO could use to store filter state
         return null;
     }
 
