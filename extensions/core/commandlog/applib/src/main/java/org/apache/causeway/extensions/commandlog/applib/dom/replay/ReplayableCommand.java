@@ -148,7 +148,7 @@ public record ReplayableCommand(
             describedAs = "Replay State of the original (replayabel) Command. "
                     + "When imported initially is PENDING. "
                     + "Then after replay its either OK or FAILED. "
-                    + "Can be set to manually set to EXCLUDED, which marks it to be ignored for replay.")
+                    + "Can be manually set to EXCLUDED, which marks it to be ignored for replay.")
     public ReplayState getReplayState() {
         return commandRecord()
             .map(CommandRecord::replayState)
