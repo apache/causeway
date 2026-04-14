@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -46,15 +47,17 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 @Named(CommandReplayManager.LOGICAL_TYPE_NAME)
 public record CommandReplayManager(
         BookmarkService bookmarkService,
-        CommandLogEntryRepository commandLogEntryRepository) implements ViewModel {
+        CommandLogEntryRepository commandLogEntryRepository,
+        CommandExecutorService commandExecutorService) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
     @Inject
     public CommandReplayManager(final String memento,
             final BookmarkService bookmarkService,
-            final CommandLogEntryRepository commandLogEntryRepository) {
-        this(bookmarkService, commandLogEntryRepository);
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService) {
+        this(bookmarkService, commandLogEntryRepository, commandExecutorService);
     }
 
     @ObjectSupport public String title() {
@@ -80,7 +83,7 @@ public record CommandReplayManager(
         return commandLogEntryRepository.findNotYetReplayed().stream()
             .map(entry->new ReplayableCommand(
                     bookmarkService.bookmarkFor(entry).get().identifier(),
-                    bookmarkService, commandLogEntryRepository))
+                    bookmarkService, commandLogEntryRepository, commandExecutorService))
             .toList();
     }
 

@@ -37,6 +37,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -46,6 +47,7 @@ import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
@@ -64,6 +66,7 @@ public record ReplayableCommand(
         String commandLogEntryId,
         BookmarkService bookmarkService,
         CommandLogEntryRepository commandLogEntryRepository,
+        CommandExecutorService commandExecutorService,
         _StableValue<CommandRecord> recordRef) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
@@ -78,8 +81,11 @@ public record ReplayableCommand(
     public ReplayableCommand(
             final String memento,
             final BookmarkService bookmarkService,
-            final CommandLogEntryRepository commandLogEntryRepository) {
-        this(memento, bookmarkService, commandLogEntryRepository, new _StableValue<>());
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService) {
+        this(memento,
+                bookmarkService, commandLogEntryRepository, commandExecutorService,
+                new _StableValue<>());
     }
 
     @ObjectSupport public String title() {
@@ -175,16 +181,23 @@ public record ReplayableCommand(
 
     // -- ACTIONS
 
+    @Action
+    public CommandLogEntry openCommandLogEntry() {
+        return commandLogEntry()
+                .orElse(null);
+    }
+
     //TODO hide if not PENDING
     @Action
     @ActionLayout()
             //hidden = Where.NOWHERE) // show in tables //TODO NPE bug
     public ReplayableCommand replay() {
         commandLogEntry()
-            .filter(entry->entry.getReplayState() == ReplayState.PENDING)
-            .ifPresent(entry->{
-                //TODO actually replay
-                entry.setReplayState(ReplayState.OK);
+            .filter(commandLogEntry->commandLogEntry.getReplayState() == ReplayState.PENDING)
+            .ifPresent(commandLogEntry->{
+                commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
+                commandExecutorService.executeCommand(commandLogEntry.getCommandDto());
+                commandLogEntry.setReplayState(ReplayState.OK);
             });
         return this;
     }
@@ -196,8 +209,8 @@ public record ReplayableCommand(
             describedAs = "Marks selected Commands to be EXCLUDED from replay.")
     public ReplayableCommand excludeFromReplay() {
         commandLogEntry()
-            .filter(entry->entry.getReplayState() == ReplayState.PENDING)
-            .ifPresent(entry->entry.setReplayState(ReplayState.EXCLUDED));
+            .filter(commandLogEntry->commandLogEntry.getReplayState() == ReplayState.PENDING)
+            .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
         return this;
     }
 

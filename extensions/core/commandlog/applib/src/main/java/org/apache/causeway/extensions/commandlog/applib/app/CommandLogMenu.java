@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -69,6 +70,7 @@ public class CommandLogMenu {
 
     final BookmarkService bookmarkService;
     final CommandLogEntryRepository commandLogEntryRepository;
+    final CommandExecutorService commandExecutorService;
     final ClockService clockService;
 
     @Action(
@@ -156,7 +158,7 @@ public class CommandLogMenu {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(null, commandLogEntryRepository);
+            return new CommandReplayManager(null, commandLogEntryRepository, commandExecutorService);
         }
     }
 
