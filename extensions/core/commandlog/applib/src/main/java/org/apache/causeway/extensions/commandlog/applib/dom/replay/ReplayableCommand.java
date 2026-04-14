@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -59,22 +60,24 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 /**
  * Viewmodel that wraps a {@link CommandLogEntry}.
  */
-@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
+@DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
 @DomainObjectLayout(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 public record ReplayableCommand(
         String commandLogEntryId,
-        BookmarkService bookmarkService,
-        CommandLogEntryRepository commandLogEntryRepository,
-        CommandExecutorService commandExecutorService,
+        ReplayContext replayContext,
         _StableValue<CommandRecord> recordRef) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
-    // decouple from the underlying entity
+    // decoupled from the underlying entity
     record CommandRecord(
             CommandDto commandDto,
             ReplayState replayState) {
+        boolean canReplayOrRetryOrMarkForExclusion() {
+            return replayState == ReplayState.PENDING
+                    || replayState == ReplayState.FAILED;
+        }
     }
 
     @Inject
@@ -84,8 +87,14 @@ public record ReplayableCommand(
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService) {
         this(memento,
-                bookmarkService, commandLogEntryRepository, commandExecutorService,
+                new ReplayContext(bookmarkService, commandLogEntryRepository, commandExecutorService),
                 new _StableValue<>());
+    }
+
+    ReplayableCommand(
+            final String memento,
+            final ReplayContext replayContext) {
+        this(memento, replayContext, new _StableValue<>());
     }
 
     @ObjectSupport public String title() {
@@ -187,31 +196,46 @@ public record ReplayableCommand(
                 .orElse(null);
     }
 
-    //TODO hide if not PENDING
     @Action
     @ActionLayout()
             //hidden = Where.NOWHERE) // show in tables //TODO NPE bug
     public ReplayableCommand replay() {
+        if(disableReplay()!=null)
+            return this; // safe guard when called programmatically
         commandLogEntry()
-            .filter(commandLogEntry->commandLogEntry.getReplayState() == ReplayState.PENDING)
             .ifPresent(commandLogEntry->{
                 commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
-                commandExecutorService.executeCommand(commandLogEntry.getCommandDto());
+                replayContext.commandExecutorService().executeCommand(commandLogEntry.getCommandDto());
                 commandLogEntry.setReplayState(ReplayState.OK);
             });
         return this;
     }
+    @MemberSupport private String disableReplay() {
+        return commandRecord()
+            .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+            .orElse(false)
+                ? null
+                : "Cannot replay, if not PENDING nor FAILED";
+    }
 
-    //TODO hide if not PENDING
     @Action
     @ActionLayout(
             //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-            describedAs = "Marks selected Commands to be EXCLUDED from replay.")
+            describedAs = "Marks Command to be EXCLUDED from replay.")
     public ReplayableCommand excludeFromReplay() {
+        if(disableExcludeFromReplay()!=null)
+            return this; // safe guard when called programmatically
         commandLogEntry()
             .filter(commandLogEntry->commandLogEntry.getReplayState() == ReplayState.PENDING)
             .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
         return this;
+    }
+    @MemberSupport private String disableExcludeFromReplay() {
+        return commandRecord()
+            .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+            .orElse(false)
+                ? null
+                : "Cannot mark for exclusion, if not PENDING nor FAILED";
     }
 
     // -- VM STATE
@@ -233,14 +257,15 @@ public record ReplayableCommand(
     }
 
     Optional<CommandLogEntry> commandLogEntry() {
-        return bookmarkService.lookup(commandLogEntryBookmark(), CommandLogEntry.class);
+        return replayContext.bookmarkService().lookup(commandLogEntryBookmark(), CommandLogEntry.class);
     }
 
     private Bookmark commandLogEntryBookmark() {
-        return bookmarkService.bookmarkFor(CommandLogEntry.class, commandLogEntryId)
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "framework error: cannot create bookmark for CommandLogEntry using id '%s'",
-                        commandLogEntryId));
+        return replayContext.bookmarkService()
+            .bookmarkFor(CommandLogEntry.class, commandLogEntryId)
+            .orElseThrow(()->_Exceptions.unrecoverable(
+                    "framework error: cannot create bookmark for CommandLogEntry using id '%s'",
+                    commandLogEntryId));
     }
 
 }

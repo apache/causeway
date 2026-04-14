@@ -46,9 +46,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 @DomainObjectLayout(cssClassFa = "solid circle-play")
 @Named(CommandReplayManager.LOGICAL_TYPE_NAME)
 public record CommandReplayManager(
-        BookmarkService bookmarkService,
-        CommandLogEntryRepository commandLogEntryRepository,
-        CommandExecutorService commandExecutorService) implements ViewModel {
+        ReplayContext replayContext) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
@@ -57,7 +55,7 @@ public record CommandReplayManager(
             final BookmarkService bookmarkService,
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService) {
-        this(bookmarkService, commandLogEntryRepository, commandExecutorService);
+        this(new ReplayContext(bookmarkService, commandLogEntryRepository, commandExecutorService));
     }
 
     @ObjectSupport public String title() {
@@ -73,17 +71,19 @@ public record CommandReplayManager(
         var yamlDs = zippedCommandsYaml.unZip(CommonMimeType.YAML).asDataSource();
 
         final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-        commandDtos.forEach(commandLogEntryRepository::saveForReplay);
+        commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
 
         return this;
     }
 
+    // -- NOT YET REPLAYED
+
     @Collection
     public List<ReplayableCommand> getNotYetReplayed() {
-        return commandLogEntryRepository.findNotYetReplayed().stream()
+        return commandLogEntryRepository().findNotYetReplayed().stream()
             .map(entry->new ReplayableCommand(
-                    bookmarkService.bookmarkFor(entry).get().identifier(),
-                    bookmarkService, commandLogEntryRepository, commandExecutorService))
+                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    replayContext))
             .toList();
     }
 
@@ -106,10 +106,22 @@ public record CommandReplayManager(
         return this;
     }
 
+    // -- FAILED //TODO
+
+    // -- OK //TODO
+
+    // -- VM STATE
+
     @Override
     public String viewModelMemento() {
         // TODO could use to store filter state
         return null;
+    }
+
+    // -- HELPER
+
+    private CommandLogEntryRepository commandLogEntryRepository() {
+        return replayContext.commandLogEntryRepository();
     }
 
 }

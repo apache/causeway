@@ -158,7 +158,8 @@ public class CommandLogMenu {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(null, commandLogEntryRepository, commandExecutorService);
+            return new CommandReplayManager(null,
+                    bookmarkService, commandLogEntryRepository, commandExecutorService);
         }
     }
 
