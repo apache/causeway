@@ -32,8 +32,6 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -50,11 +48,10 @@ public record CommandReplayManager(
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
     @Inject
-    public CommandReplayManager(final String memento,
-            final BookmarkService bookmarkService,
-            final CommandLogEntryRepository commandLogEntryRepository,
-            final CommandExecutorService commandExecutorService) {
-        this(new ReplayContext(bookmarkService, commandLogEntryRepository, commandExecutorService));
+    public CommandReplayManager(
+            final String memento,
+            final ReplayContext replayContext) {
+        this(replayContext);
     }
 
     @ObjectSupport public String title() {

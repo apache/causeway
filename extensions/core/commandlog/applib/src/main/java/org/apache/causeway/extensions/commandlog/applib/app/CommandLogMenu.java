@@ -36,13 +36,12 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,10 +67,9 @@ public class CommandLogMenu {
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-    final BookmarkService bookmarkService;
-    final CommandLogEntryRepository commandLogEntryRepository;
-    final CommandExecutorService commandExecutorService;
-    final ClockService clockService;
+    private final CommandLogEntryRepository commandLogEntryRepository;
+    private final ClockService clockService;
+    private final ReplayContext replayContext;
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -158,8 +156,7 @@ public class CommandLogMenu {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(null,
-                    bookmarkService, commandLogEntryRepository, commandExecutorService);
+            return new CommandReplayManager(null, replayContext);
         }
     }
 

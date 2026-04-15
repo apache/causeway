@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import org.jspecify.annotations.Nullable;
+
 /**
- * Curently unused.
- *
- * <p>
- *     This enum to support the (incubating) <i>Command Replay</i> extension.
- * </p>
+ * Introduced in support of the Command Replay Feature.
  *
  * @since 2.x {@index}
  */
@@ -51,8 +49,19 @@ public enum ReplayState {
     /**
      * For use on secondary system, indicates that the command should not be replayed.
      */
-    EXCLUDED,
-    ;
+    EXCLUDED;
 
-    public boolean isFailed() { return this == FAILED;}
+    public boolean isFailed() { return this == FAILED; }
+
+    public boolean canReplayOrRetryOrMarkForExclusion() {
+        return this == ReplayState.PENDING
+                || this == ReplayState.FAILED;
+    }
+
+    public static boolean canReplayOrRetryOrMarkForExclusion(final @Nullable ReplayState replayState) {
+        return replayState!=null
+            ? replayState.canReplayOrRetryOrMarkForExclusion()
+            : false;
+    }
+
 }

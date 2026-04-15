@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,9 +38,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.commons.internal.base._StableValue;
+import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JsonUtils;
@@ -47,7 +46,6 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -66,7 +64,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 public record ReplayableCommand(
         String commandLogEntryId,
         ReplayContext replayContext,
-        _StableValue<CommandRecord> recordRef) implements ViewModel {
+        ObjectReference<CommandRecord> recordRef) implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
@@ -74,27 +72,20 @@ public record ReplayableCommand(
     record CommandRecord(
             CommandDto commandDto,
             ReplayState replayState) {
+        CommandRecord {
+            Objects.requireNonNull(commandDto);
+            Objects.requireNonNull(replayState);
+        }
         boolean canReplayOrRetryOrMarkForExclusion() {
-            return replayState == ReplayState.PENDING
-                    || replayState == ReplayState.FAILED;
+            return replayState.canReplayOrRetryOrMarkForExclusion();
         }
     }
 
     @Inject
     public ReplayableCommand(
             final String memento,
-            final BookmarkService bookmarkService,
-            final CommandLogEntryRepository commandLogEntryRepository,
-            final CommandExecutorService commandExecutorService) {
-        this(memento,
-                new ReplayContext(bookmarkService, commandLogEntryRepository, commandExecutorService),
-                new _StableValue<>());
-    }
-
-    ReplayableCommand(
-            final String memento,
             final ReplayContext replayContext) {
-        this(memento, replayContext, new _StableValue<>());
+        this(memento, replayContext, new ObjectReference<>(null));
     }
 
     @ObjectSupport public String title() {
@@ -208,6 +199,7 @@ public record ReplayableCommand(
                 commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
                 replayContext.commandExecutorService().executeCommand(commandLogEntry.getCommandDto());
                 commandLogEntry.setReplayState(ReplayState.OK);
+                invalidateCachedRecord();
             });
         return this;
     }
@@ -228,7 +220,10 @@ public record ReplayableCommand(
             return this; // safe guard when called programmatically
         commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
+            .ifPresent(commandLogEntry->{
+                commandLogEntry.setReplayState(ReplayState.EXCLUDED);
+                invalidateCachedRecord();
+            });
         return this;
     }
     @MemberSupport private String disableExcludeFromReplay() {
@@ -243,10 +238,12 @@ public record ReplayableCommand(
     @ActionLayout(
             //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
             describedAs = "Marks Command to be EXCLUDED from replay.")
-    public ReplayableCommand delete() {
+    public void delete() {
         commandLogEntry()
-            .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
-        return this;
+            .ifPresent(commandLogEntry->{
+                replayContext.repositoryService().remove(commandLogEntry);
+                invalidateCachedRecord();
+            });
     }
 
     // -- VM STATE
@@ -258,9 +255,15 @@ public record ReplayableCommand(
 
     // -- HELPER
 
+    private void invalidateCachedRecord() {
+        recordRef.update(__->null); // invalidate cache
+    }
+
     private Optional<CommandRecord> commandRecord() {
-        return Optional.ofNullable(recordRef.orElseSet(()->
+        return Optional.ofNullable(recordRef.computeIfAbsent(()->
             commandLogEntry()
+                .filter(commandLogEntry->commandLogEntry.getCommandDto()!=null)
+                .filter(commandLogEntry->commandLogEntry.getReplayState()!=null)
                 .map(commandLogEntry->new CommandRecord(
                         commandLogEntry.getCommandDto(),
                         commandLogEntry.getReplayState()))
@@ -280,8 +283,7 @@ public record ReplayableCommand(
     }
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
-        return commandLogEntry.getReplayState() == ReplayState.PENDING
-                || commandLogEntry.getReplayState() == ReplayState.FAILED;
+        return ReplayState.canReplayOrRetryOrMarkForExclusion(commandLogEntry.getReplayState());
     }
 
 }

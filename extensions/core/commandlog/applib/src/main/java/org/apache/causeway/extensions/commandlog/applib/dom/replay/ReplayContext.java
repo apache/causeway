@@ -20,24 +20,15 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 /**
  * Bundles dependencies for the replay logic.
  */
-record ReplayContext(
+public record ReplayContext(
         BookmarkService bookmarkService,
+        RepositoryService repositoryService,
         CommandLogEntryRepository commandLogEntryRepository,
         CommandExecutorService commandExecutorService) {
-
-//    public static Predicate<CommandLogEntry> canReplayOrRetry() {
-//        return replayableCommand ->
-//            replayableCommand.getReplayState() == ReplayState.PENDING
-//                || replayableCommand.getReplayState() == ReplayState.FAILED;
-//    }
-//
-//    public static Predicate<CommandLogEntry> havingReplayState(final ReplayState replayState) {
-//        return replayableCommand -> replayableCommand.getReplayState() == replayState;
-//    }
-
 }
