@@ -65,7 +65,7 @@ public record CommandExportManager(
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             sequence = "0.1",
-            describedAs = "Deletes all commands, regardless of state.")
+            describedAs = "Deletes all commands, regardless of state (cannot be undone)")
     public CommandExportManager deleteAll() {
         commandLogEntryRepository().removeAll();
         return this;
@@ -85,11 +85,13 @@ public record CommandExportManager(
             .toList();
     }
 
-    @Action(choicesFrom = "notYetExported")
+    @Action(choicesFrom = "notYetExported", semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(associateWith = "notYetExported",
         sequence = "1.1",
         cssClassFa = "solid share-from-square",
-        cssClass = "btn-primary")
+        cssClass = "btn-primary",
+        describedAs = "Exports selected Commands as zipped DTOs for import later. "
+                + "(You need to refresh the page to see changed states.)")
     public Blob exportSelected(
             final List<ReplayableCommand> selected) {
 
@@ -105,19 +107,19 @@ public record CommandExportManager(
                 .map(CommandLogEntry::getCommandDto)
                 .toList());
 
-        var clob = Clob.of("commands.yaml", CommonMimeType.YAML, yaml)
+        var blob = Clob.of("commands.yaml", CommonMimeType.YAML, yaml)
                 .toBlobUtf8()
                 .zip();
 
         // do this last once we have successfully created the Clob
         selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
 
-        return clob;
+        return blob;
     }
 
     @Action(choicesFrom = "notYetExported")
     @ActionLayout(associateWith = "notYetExported", sequence = "1.2",
-            describedAs = "Deletes selected Commands.")
+            describedAs = "Deletes selected Commands (cannot be undone)")
     public CommandExportManager deleteSelected(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility
@@ -150,7 +152,7 @@ public record CommandExportManager(
     @Action(choicesFrom = "exported")
     @ActionLayout(associateWith = "exported", sequence = "2.2",
             named = "Delete Selected",
-            describedAs = "Deletes selected Commands.")
+            describedAs = "Deletes selected Commands (cannot be undone)")
     public CommandExportManager deleteSelected2(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility

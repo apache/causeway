@@ -80,7 +80,7 @@ public record CommandReplayManager(
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             sequence = "0.2",
-            describedAs = "Deletes all commands, regardless of state.")
+            describedAs = "Deletes all commands, regardless of state (cannot be undone)")
     public CommandReplayManager deleteAll() {
         commandLogEntryRepository().removeAll();
         return this;
@@ -112,7 +112,7 @@ public record CommandReplayManager(
 
     @Action(choicesFrom = "pendingOrFailed")
     @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.2",
-            describedAs = "Marks selected Commands to be EXCLUDED from replay.")
+            describedAs = "Marks selected Commands to be EXCLUDED from replay")
     public CommandReplayManager excludeSelectedFromReplay(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
@@ -121,7 +121,7 @@ public record CommandReplayManager(
 
     @Action(choicesFrom = "pendingOrFailed")
     @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.3",
-            describedAs = "Deletes selected Commands.")
+            describedAs = "Deletes selected Commands (cannot be undone)")
     public CommandReplayManager deleteSelected(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility
@@ -145,7 +145,7 @@ public record CommandReplayManager(
     @Action(choicesFrom = "succeededOrExcluded")
     @ActionLayout(associateWith = "succeededOrExcluded",
             named = "Delete Selected",
-            describedAs = "Deletes selected Commands.")
+            describedAs = "Deletes selected Commands (cannot be undone)")
     public CommandReplayManager deleteSelected2(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility

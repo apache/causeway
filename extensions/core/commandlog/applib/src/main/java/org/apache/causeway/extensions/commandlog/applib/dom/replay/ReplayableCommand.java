@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -51,6 +53,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.common.v2.OidDto;
+import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
@@ -94,7 +97,7 @@ public record ReplayableCommand(
 
     @Property
     @PropertyLayout(
-            sequence = "1",
+            sequence = "1.1",
             fieldSetId = "details",
             describedAs = "UUID of the original (replayabel) Command")
     public UUID getInteractionId() {
@@ -102,6 +105,19 @@ public record ReplayableCommand(
             .map(CommandRecord::commandDto)
             .map(CommandDto::getInteractionId)
             .map(UUID::fromString)
+            .orElse(null);
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "1.2",
+            fieldSetId = "details",
+            describedAs = "Timestamp of the original (replayabel) Command")
+    public XMLGregorianCalendar getStartedAt() {
+        return commandRecord()
+            .map(CommandRecord::commandDto)
+            .map(CommandDto::getTimings)
+            .map(PeriodDto::getStartedAt)
             .orElse(null);
     }
 
