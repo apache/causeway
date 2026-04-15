@@ -40,6 +40,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 
@@ -146,12 +147,28 @@ public class CommandLogMenu {
 
     @Action(
             commandPublishing = Publishing.DISABLED,
+            domainEvent = exportManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(cssClassFa = "solid share-from-square", sequence="50")
+    public class exportManager {
+        public class DomainEvent extends ActionDomainEvent<exportManager> { }
+
+        @MemberSupport public CommandExportManager act() {
+            return new CommandExportManager(null, replayContext);
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = replayManager.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE
     )
-    @ActionLayout(cssClassFa = "solid circle-play", sequence="50")
+    @ActionLayout(cssClassFa = "solid circle-play", sequence="51")
     public class replayManager {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 

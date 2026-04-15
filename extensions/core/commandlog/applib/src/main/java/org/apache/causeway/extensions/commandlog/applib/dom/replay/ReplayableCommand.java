@@ -182,16 +182,22 @@ public record ReplayableCommand(
     // -- ACTIONS
 
     @Action
+    @ActionLayout(
+            sequence = "0.2",
+            describedAs = "Opens the associated Command Log Entry")
     public CommandLogEntry openCommandLogEntry() {
         return commandLogEntry()
                 .orElse(null);
     }
 
     @Action
-    @ActionLayout()
+    @ActionLayout(
+            sequence = "0.1",
+            cssClassFa = "solid circle-play",
+            cssClass = "btn-primary")
             //hidden = Where.NOWHERE) // show in tables //TODO NPE bug
-    public ReplayableCommand replay() {
-        if(disableReplay()!=null)
+    public ReplayableCommand replayOrRetry() {
+        if(disableReplayOrRetry()!=null)
             return this; // safe guard when called programmatically
         commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
@@ -203,17 +209,44 @@ public record ReplayableCommand(
             });
         return this;
     }
-    @MemberSupport private String disableReplay() {
+    @MemberSupport private String disableReplayOrRetry() {
         return commandRecord()
             .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
             .orElse(false)
                 ? null
-                : "Cannot replay, if not PENDING nor FAILED";
+                : "Cannot replay, if neither PENDING nor FAILED";
     }
 
     @Action
     @ActionLayout(
             //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
+            sequence = "2.1",
+            associateWith = "replayState",
+            describedAs = "Makes Command exportable (again)")
+    public ReplayableCommand makeExportable() {
+        if(disableMakeExportable()!=null)
+            return this; // safe guard when called programmatically
+        commandLogEntry()
+            .filter(commandLogEntry->ReplayState.isExported(commandLogEntry.getReplayState()))
+            .ifPresent(commandLogEntry->{
+                commandLogEntry.setReplayState(ReplayState.UNDEFINED);
+                invalidateCachedRecord();
+            });
+        return this;
+    }
+    @MemberSupport private String disableMakeExportable() {
+        return commandRecord()
+            .map(rec->ReplayState.isExported(rec.replayState()))
+            .orElse(false)
+                ? null
+                : "Cannot make exportable, if not EXPORTED";
+    }
+
+    @Action
+    @ActionLayout(
+            //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
+            sequence = "2.2",
+            associateWith = "replayState",
             describedAs = "Marks Command to be EXCLUDED from replay.")
     public ReplayableCommand excludeFromReplay() {
         if(disableExcludeFromReplay()!=null)
@@ -231,13 +264,14 @@ public record ReplayableCommand(
             .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
             .orElse(false)
                 ? null
-                : "Cannot mark for exclusion, if not PENDING nor FAILED";
+                : "Cannot mark for exclusion, if neither PENDING nor FAILED";
     }
 
     @Action
     @ActionLayout(
+            sequence = "0.3",
             //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-            describedAs = "Marks Command to be EXCLUDED from replay.")
+            describedAs = "Deletes the associated Command Log Entry (cannot be undone)")
     public void delete() {
         commandLogEntry()
             .ifPresent(commandLogEntry->{

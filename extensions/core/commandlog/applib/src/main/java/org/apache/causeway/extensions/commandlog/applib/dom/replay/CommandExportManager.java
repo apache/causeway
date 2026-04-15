@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -32,121 +33,125 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
-@DomainObjectLayout(cssClassFa = "solid circle-play")
-@Named(CommandReplayManager.LOGICAL_TYPE_NAME)
-public record CommandReplayManager(
+@DomainObjectLayout(cssClassFa = "solid share-from-square")
+@Named(CommandExportManager.LOGICAL_TYPE_NAME)
+public record CommandExportManager(
         ReplayContext replayContext) implements ViewModel {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
 
     @Inject
-    public CommandReplayManager(
+    public CommandExportManager(
             final String memento,
             final ReplayContext replayContext) {
         this(replayContext);
     }
 
     @ObjectSupport public String title() {
-        return "Command Replay Manager";
-    }
-
-    @Action
-    @ActionLayout(
-            sequence = "0.1",
-            cssClass = "btn-primary",
-            describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING.")
-    public CommandReplayManager importCommands(
-            @Parameter(fileAccept = ".zip")
-            final Blob zippedCommandsYaml) {
-
-        var yamlDs = zippedCommandsYaml.unZip(CommonMimeType.YAML).asDataSource();
-
-        final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-        commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
-
-        return this;
+        return "Command Export Manager";
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
-            sequence = "0.2",
+            sequence = "0.1",
             describedAs = "Deletes all commands, regardless of state.")
-    public CommandReplayManager deleteAll() {
+    public CommandExportManager deleteAll() {
         commandLogEntryRepository().removeAll();
         return this;
     }
 
-    // -- PENDING OR FAILED
+    // -- NOT YET EXPORTED
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)")
-    public List<ReplayableCommand> getPendingOrFailed() {
-        return commandLogEntryRepository().findReplayPendingOrFailed().stream()
+            describedAs = "Commands that can be exported")
+    public List<ReplayableCommand> getNotYetExported() {
+        return commandLogEntryRepository().findAll().stream()
+            .filter(entry->ReplayState.canExport(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
                     replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
                     replayContext))
             .toList();
     }
 
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed",
+    @Action(choicesFrom = "notYetExported")
+    @ActionLayout(associateWith = "notYetExported",
         sequence = "1.1",
-        cssClassFa = "solid circle-play",
+        cssClassFa = "solid share-from-square",
         cssClass = "btn-primary")
-    public CommandReplayManager replayOrRetrySelected(final List<ReplayableCommand> selected) {
-        selected.stream()
-            .forEach(ReplayableCommand::replayOrRetry); // filtered on its own responsibility
-        return this;
+    public Blob exportSelected(
+            final List<ReplayableCommand> selected) {
+
+        var selectedCommandLogEntries = selected.stream()
+            .map(ReplayableCommand::commandLogEntry)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+
+        var yaml = CommandDtoUtils.toYaml(
+            selectedCommandLogEntries.stream()
+                .filter(entry->ReplayState.isExported(entry.getReplayState()))
+                .map(CommandLogEntry::getCommandDto)
+                .toList());
+
+        var clob = Clob.of("commands.yaml", CommonMimeType.YAML, yaml)
+                .toBlobUtf8()
+                .zip();
+
+        // do this last once we have successfully created the Clob
+        selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
+
+        return clob;
     }
 
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.2",
-            describedAs = "Marks selected Commands to be EXCLUDED from replay.")
-    public CommandReplayManager excludeSelectedFromReplay(final List<ReplayableCommand> selected) {
-        selected.stream()
-            .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
-        return this;
-    }
-
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.3",
+    @Action(choicesFrom = "notYetExported")
+    @ActionLayout(associateWith = "notYetExported", sequence = "1.2",
             describedAs = "Deletes selected Commands.")
-    public CommandReplayManager deleteSelected(final List<ReplayableCommand> selected) {
+    public CommandExportManager deleteSelected(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility
         return this;
     }
 
-    // -- OK OR EXCLUDE
+    // -- EXPORTED
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
-                    + "or marked to be excluded from replay (replayState=EXCLUDE)")
-    public List<ReplayableCommand> getSucceededOrExcluded() {
-        return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
+            describedAs = "Commands that were exported")
+    public List<ReplayableCommand> getExported() {
+        return commandLogEntryRepository().findAll().stream()
+            .filter(entry->ReplayState.isExported(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
                     replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
                     replayContext))
             .toList();
     }
 
-    @Action(choicesFrom = "succeededOrExcluded")
-    @ActionLayout(associateWith = "succeededOrExcluded",
+    @Action(choicesFrom = "exported")
+    @ActionLayout(associateWith = "exported", sequence = "2.1",
+            describedAs = "Makes selected Commands exportable (again)")
+    public CommandExportManager makeSelectedExportable(final List<ReplayableCommand> selected) {
+        selected.stream()
+            .forEach(ReplayableCommand::makeExportable); // filtered on its own responsibility
+        return this;
+    }
+
+    @Action(choicesFrom = "exported")
+    @ActionLayout(associateWith = "exported", sequence = "2.2",
             named = "Delete Selected",
             describedAs = "Deletes selected Commands.")
-    public CommandReplayManager deleteSelected2(final List<ReplayableCommand> selected) {
+    public CommandExportManager deleteSelected2(final List<ReplayableCommand> selected) {
         selected.stream()
             .forEach(ReplayableCommand::delete); // filtered on its own responsibility
         return this;

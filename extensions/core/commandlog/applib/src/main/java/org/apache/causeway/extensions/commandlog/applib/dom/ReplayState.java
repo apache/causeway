@@ -51,17 +51,36 @@ public enum ReplayState {
      */
     EXCLUDED;
 
+    public boolean isExported() { return this == EXPORTED; }
     public boolean isFailed() { return this == FAILED; }
+
+    public boolean canExport() {
+        return this == ReplayState.UNDEFINED;
+    }
 
     public boolean canReplayOrRetryOrMarkForExclusion() {
         return this == ReplayState.PENDING
                 || this == ReplayState.FAILED;
     }
 
+    // -- NULL SAFE
+
+    public static boolean canExport(final @Nullable ReplayState replayState) {
+        return replayState!=null
+            ? replayState.canExport()
+            : true;
+    }
+
     public static boolean canReplayOrRetryOrMarkForExclusion(final @Nullable ReplayState replayState) {
         return replayState!=null
             ? replayState.canReplayOrRetryOrMarkForExclusion()
             : false;
+    }
+
+    public static boolean isExported(final ReplayState replayState) {
+        return replayState!=null
+                ? replayState.isExported()
+                : false;
     }
 
 }
