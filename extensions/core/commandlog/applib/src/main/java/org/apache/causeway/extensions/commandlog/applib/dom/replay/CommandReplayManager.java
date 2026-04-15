@@ -27,11 +27,13 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -59,7 +61,10 @@ public record CommandReplayManager(
     }
 
     @Action
-    @ActionLayout(describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING.")
+    @ActionLayout(
+            sequence = "0.1",
+            cssClass = "btn-primary",
+            describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING.")
     public CommandReplayManager importCommands(
             @Parameter(fileAccept = ".zip")
             final Blob zippedCommandsYaml) {
@@ -72,9 +77,20 @@ public record CommandReplayManager(
         return this;
     }
 
+    @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    @ActionLayout(
+            sequence = "0.2",
+            describedAs = "Deletes all commands ever imported, regardless of state.")
+    public CommandReplayManager deleteAll() {
+        commandLogEntryRepository().removeAll();
+        return this;
+    }
+
     // -- PENDING OR FAILED
 
     @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)")
     public List<ReplayableCommand> getPendingOrFailed() {
         return commandLogEntryRepository().findReplayPendingOrFailed().stream()
             .map(entry->new ReplayableCommand(
@@ -115,6 +131,9 @@ public record CommandReplayManager(
     // -- OK OR EXCLUDE
 
     @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
+                    + "or marked to be excluded from replay (replayState=EXCLUDE)")
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
             .map(entry->new ReplayableCommand(
