@@ -39,7 +39,6 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
@@ -76,39 +75,66 @@ public record CommandReplayManager(
         return this;
     }
 
-    // -- NOT YET REPLAYED
+    // -- PENDING OR FAILED
 
     @Collection
-    public List<ReplayableCommand> getNotYetReplayed() {
-        return commandLogEntryRepository().findNotYetReplayed().stream()
+    public List<ReplayableCommand> getPendingOrFailed() {
+        return commandLogEntryRepository().findReplayPendingOrFailed().stream()
             .map(entry->new ReplayableCommand(
                     replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
                     replayContext))
             .toList();
     }
 
-    @Action(choicesFrom = "notYetReplayed")
-    @ActionLayout(associateWith = "notYetReplayed")
-    public CommandReplayManager replaySelected(final List<ReplayableCommand> selected) {
+    @Action(choicesFrom = "pendingOrFailed")
+    @ActionLayout(associateWith = "pendingOrFailed",
+        sequence = "1.1",
+        cssClassFa = "solid circle-play",
+        cssClass = "btn-primary")
+    public CommandReplayManager replayOrRetrySelected(final List<ReplayableCommand> selected) {
         selected.stream()
-            .filter(c->c.getReplayState() == ReplayState.PENDING)
-            .forEach(ReplayableCommand::replay);
+            .forEach(ReplayableCommand::replay); // filtered on its own responsibility
         return this;
     }
 
-    @Action(choicesFrom = "notYetReplayed")
-    @ActionLayout(associateWith = "notYetReplayed",
+    @Action(choicesFrom = "pendingOrFailed")
+    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.2",
             describedAs = "Marks selected Commands to be EXCLUDED from replay.")
     public CommandReplayManager excludeSelectedFromReplay(final List<ReplayableCommand> selected) {
         selected.stream()
-            .filter(c->c.getReplayState() == ReplayState.PENDING)
-            .forEach(ReplayableCommand::excludeFromReplay);
+            .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
         return this;
     }
 
-    // -- FAILED //TODO
+    @Action(choicesFrom = "pendingOrFailed")
+    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.3",
+            describedAs = "Deletes selected Commands.")
+    public CommandReplayManager deleteSelected(final List<ReplayableCommand> selected) {
+        selected.stream()
+            .forEach(ReplayableCommand::delete); // filtered on its own responsibility
+        return this;
+    }
 
-    // -- OK //TODO
+    // -- OK OR EXCLUDE
+
+    @Collection
+    public List<ReplayableCommand> getSucceededOrExcluded() {
+        return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
+            .map(entry->new ReplayableCommand(
+                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    replayContext))
+            .toList();
+    }
+
+    @Action(choicesFrom = "succeededOrExcluded")
+    @ActionLayout(associateWith = "succeededOrExcluded",
+            named = "Delete Selected",
+            describedAs = "Deletes selected Commands.")
+    public CommandReplayManager deleteSelected2(final List<ReplayableCommand> selected) {
+        selected.stream()
+            .forEach(ReplayableCommand::delete); // filtered on its own responsibility
+        return this;
+    }
 
     // -- VM STATE
 

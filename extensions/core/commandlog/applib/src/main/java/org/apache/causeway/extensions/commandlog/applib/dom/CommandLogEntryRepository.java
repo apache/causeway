@@ -158,7 +158,14 @@ public interface CommandLogEntryRepository {
      */
     Optional<CommandLogEntry> findMostRecentCompleted();
 
-    List<CommandLogEntry> findNotYetReplayed();
+    /**
+     * Command Replay feature: Can replay or retry.
+     */
+    List<CommandLogEntry> findReplayPendingOrFailed();
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    List<CommandLogEntry> findReplaySucceededOrExcluded();
 
     CommandLogEntry saveForReplay(CommandDto dto);
 

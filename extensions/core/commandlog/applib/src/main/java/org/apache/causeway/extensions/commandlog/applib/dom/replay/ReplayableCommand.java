@@ -203,6 +203,7 @@ public record ReplayableCommand(
         if(disableReplay()!=null)
             return this; // safe guard when called programmatically
         commandLogEntry()
+            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
             .ifPresent(commandLogEntry->{
                 commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
                 replayContext.commandExecutorService().executeCommand(commandLogEntry.getCommandDto());
@@ -226,7 +227,7 @@ public record ReplayableCommand(
         if(disableExcludeFromReplay()!=null)
             return this; // safe guard when called programmatically
         commandLogEntry()
-            .filter(commandLogEntry->commandLogEntry.getReplayState() == ReplayState.PENDING)
+            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
             .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
         return this;
     }
@@ -236,6 +237,16 @@ public record ReplayableCommand(
             .orElse(false)
                 ? null
                 : "Cannot mark for exclusion, if not PENDING nor FAILED";
+    }
+
+    @Action
+    @ActionLayout(
+            //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
+            describedAs = "Marks Command to be EXCLUDED from replay.")
+    public ReplayableCommand delete() {
+        commandLogEntry()
+            .ifPresent(commandLogEntry->commandLogEntry.setReplayState(ReplayState.EXCLUDED));
+        return this;
     }
 
     // -- VM STATE
@@ -266,6 +277,11 @@ public record ReplayableCommand(
             .orElseThrow(()->_Exceptions.unrecoverable(
                     "framework error: cannot create bookmark for CommandLogEntry using id '%s'",
                     commandLogEntryId));
+    }
+
+    private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
+        return commandLogEntry.getReplayState() == ReplayState.PENDING
+                || commandLogEntry.getReplayState() == ReplayState.FAILED;
     }
 
 }

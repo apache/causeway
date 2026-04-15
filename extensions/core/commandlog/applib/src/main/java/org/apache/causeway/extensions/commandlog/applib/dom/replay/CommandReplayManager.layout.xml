@@ -33,7 +33,12 @@
         <bs:col span="12">
             <bs:row>
                 <bs:col span="12" size="MD">
-                    <cpt:collection defaultView="table" paged="15" id="notYetReplayed"/>
+                    <cpt:collection defaultView="table" paged="15" id="pendingOrFailed"/>
+                </bs:col>
+            </bs:row>
+            <bs:row>
+                <bs:col span="12" size="MD">
+                    <cpt:collection defaultView="table" paged="15" id="succeededOrExcluded"/>
                 </bs:col>
             </bs:row>
         </bs:col>

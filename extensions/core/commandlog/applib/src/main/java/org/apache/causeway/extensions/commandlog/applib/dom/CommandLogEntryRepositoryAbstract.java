@@ -333,14 +333,25 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED))
         );
     }
-
     @Override
-    public List<CommandLogEntry> findNotYetReplayed() {
+    public List<CommandLogEntry> findReplayPendingOrFailed() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
-                        .withParameter("replayState", ReplayState.PENDING)
-                        .withLimit(10))
+                        .withParameter("replayState1", ReplayState.PENDING)
+                        .withParameter("replayState2", ReplayState.FAILED))
+        );
+    }
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    @Override
+    public List<CommandLogEntry> findReplaySucceededOrExcluded() {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
+                        .withParameter("replayState1", ReplayState.OK)
+                        .withParameter("replayState2", ReplayState.EXCLUDED))
         );
     }
 
