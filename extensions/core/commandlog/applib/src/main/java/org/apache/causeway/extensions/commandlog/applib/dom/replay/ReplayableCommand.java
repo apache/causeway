@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -40,6 +39,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -54,7 +54,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.common.v2.OidDto;
-import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
@@ -83,9 +82,6 @@ public record ReplayableCommand(
         boolean canReplayOrRetryOrMarkForExclusion() {
             return replayState.canReplayOrRetryOrMarkForExclusion();
         }
-//        CANCELLED("regular circle-xmark .job-cancelled-color"),
-//        RUNNING("solid spinner .job-running-color"),
-//        DONE("regular circle-check .job-done-color");
         public String faQuickIcon() {
             return switch(replayState) {
                 case UNDEFINED -> "solid terminal .col-indigo";
@@ -135,11 +131,11 @@ public record ReplayableCommand(
             sequence = "1.2",
             fieldSetId = "details",
             describedAs = "Timestamp of the original (replayabel) Command")
-    public XMLGregorianCalendar getStartedAt() {
+    public ZonedDateTime getTimestamp() {
         return commandRecord()
             .map(CommandRecord::commandDto)
-            .map(CommandDto::getTimings)
-            .map(PeriodDto::getStartedAt)
+            .map(CommandDto::getTimestamp)
+            .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime)
             .orElse(null);
     }
 
