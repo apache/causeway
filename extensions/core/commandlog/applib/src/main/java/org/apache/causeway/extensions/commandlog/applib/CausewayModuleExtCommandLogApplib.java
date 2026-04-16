@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
@@ -30,18 +29,30 @@ import org.apache.causeway.extensions.commandlog.applib.contributions.HasUsernam
 import org.apache.causeway.extensions.commandlog.applib.contributions.Object_recentCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // @DomainService's
         CommandLogMenu.class,
+
+        // viewmodels
+        CommandExportManager.class,
+        CommandReplayManager.class,
 
         // mixins
         HasInteractionId_commandLogEntry.class,
@@ -106,6 +117,16 @@ public class CausewayModuleExtCommandLogApplib {
             SpringProfileUtil.removeActiveProfile("commandreplay-primary"); // just in case
             SpringProfileUtil.addActiveProfile("commandreplay-secondary");
         }
+    }
+
+    @Bean ReplayContext replayContext(
+            final BookmarkService bookmarkService,
+            final RepositoryService repositoryService,
+            final InteractionService interactionService,
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService) {
+        return new ReplayContext(bookmarkService, repositoryService, interactionService,
+                commandLogEntryRepository, commandExecutorService);
     }
 
 }

@@ -22,7 +22,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,24 +30,16 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.apache.causeway.schema.cmd.v2.CommandsDto;
-import org.apache.causeway.schema.cmd.v2.MapDto;
-import org.apache.causeway.schema.common.v2.InteractionType;
-
-import lombok.val;
+import org.springframework.lang.Nullable;
 
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
@@ -63,7 +54,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     private final Class<C> commandLogEntryClass;
 
-
     protected CommandLogEntryRepositoryAbstract(final Class<C> commandLogEntryClass) {
         this.commandLogEntryClass = commandLogEntryClass;
     }
@@ -72,10 +62,12 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return commandLogEntryClass;
     }
 
+    @Override
     public C createEntryAndPersist(
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
         c.sync(command);
+        c.setReplayState(ReplayState.UNDEFINED);
         c.setParentInteractionId(parentInteractionIdIfAny);
         c.setExecuteIn(executeIn);
         persist(c);
@@ -148,14 +140,14 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
+    @Override
     public List<CommandLogEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
 
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<C> query;
         if(from != null) {
@@ -182,7 +174,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(repositoryService().allMatches(query));
     }
 
-
     @Override
     public List<CommandLogEntry> findMostRecent() {
         return findMostRecent(100);
@@ -196,7 +187,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
     @Override
     public List<CommandLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
@@ -207,8 +197,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
-
+    @Override
     public List<CommandLogEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -219,6 +208,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -228,7 +218,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     )
         );
     }
-
 
     /**
      * Intended to support the replay of commands on a secondary instance of
@@ -298,6 +287,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED)));
     }
 
+    @Override
     public List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -307,7 +297,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                 )
         );
     }
-
 
     /**
      * The most recent replayed command previously replicated from primary to
@@ -344,57 +333,49 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED))
         );
     }
-
     @Override
-    public List<CommandLogEntry> findNotYetReplayed() {
+    public List<CommandLogEntry> findReplayPendingOrFailed() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
-                        .withParameter("replayState", ReplayState.PENDING)
-                        .withLimit(10))
+                        .withParameter("replayState1", ReplayState.PENDING)
+                        .withParameter("replayState2", ReplayState.FAILED))
+        );
+    }
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    @Override
+    public List<CommandLogEntry> findReplaySucceededOrExcluded() {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
+                        .withParameter("replayState1", ReplayState.OK)
+                        .withParameter("replayState2", ReplayState.EXCLUDED))
         );
     }
 
+    @Override
+    public C saveForReplay(final CommandDto commandToReplay) {
 
-    public C saveForReplay(final CommandDto dto) {
+//TODO why?
+//        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
+//            final MapDto userData = commandToReplay.getUserData();
+//            if (userData == null )
+//                throw new IllegalStateException(String.format(
+//                        "Can only persist action DTOs with additional userData; got: \n%s",
+//                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
+//        }
 
-        if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
-            final MapDto userData = dto.getUserData();
-            if (userData == null ) {
-                throw new IllegalStateException(String.format(
-                        "Can only persist action DTOs with additional userData; got: \n%s",
-                        CommandDtoUtils.dtoMapper().toString(dto)));
-            }
-        }
+        final C entity = factoryService.detachedEntity(commandLogEntryClass);
+        entity.init(commandToReplay, ReplayState.PENDING, 0);
+        entity.setParentInteractionId(null); // n/a for replay
+        entity.setExecuteIn(null); // to be specified later depending on user action
 
-        final C commandJdo = factoryService.detachedEntity(commandLogEntryClass);
+        persist(entity);
 
-        commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
-        commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
-        commandJdo.setUsername(dto.getUsername());
-
-        commandJdo.setReplayState(ReplayState.PENDING);
-
-        val firstTargetOidDto = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
-        commandJdo.setCommandDto(dto);
-        commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
-
-        persist(commandJdo);
-
-        return commandJdo;
+        return entity;
     }
-
-
-    public List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto) {
-        val commandDtos = commandsDto.getCommandDto();
-        val commands = new ArrayList<CommandLogEntry>();
-        for (val dto : commandDtos) {
-            commands.add(saveForReplay(dto));
-        }
-        return commands;
-    }
-
 
     @Override
     public void persist(final CommandLogEntry commandLogEntry) {
@@ -408,7 +389,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     // --
 
-
     @Override
     public List<CommandLogEntry> findCommandsOnPrimaryElseFail(
             final @Nullable UUID interactionId,
@@ -421,10 +401,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return commands;
     }
 
-
-
     private C findByInteractionIdElseNull(final UUID interactionId) {
-        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
                 .withParameter("interactionId", interactionId);
         return repositoryService().uniqueMatch(q).orElse(null);
     }
@@ -435,9 +413,9 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
         // XXX that's a historic workaround, should rather be fixed upstream
-        val needsTrimFix = batchSize != null && batchSize == 1;
+        var needsTrimFix = batchSize != null && batchSize == 1;
 
-        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
+        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
                 .withParameter("timestamp", timestamp)
                 .withRange(QueryRange.limit(
                         needsTrimFix ? 2L : batchSize
@@ -448,10 +426,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                 ? commandJdos.subList(0,1)
                 : commandJdos;
     }
-
-
-
-
 
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
@@ -479,7 +453,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(repositoryService().allInstances(commandLogEntryClass));
     }
 
-
     /**
      * intended for testing purposes only
      */
@@ -490,6 +463,5 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         }
         repositoryService().removeAll(commandLogEntryClass);
     }
-
 
 }

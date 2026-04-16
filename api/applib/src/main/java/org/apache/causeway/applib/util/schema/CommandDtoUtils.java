@@ -18,17 +18,32 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.DtoMapper;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
+import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 
 import lombok.experimental.UtilityClass;
 
@@ -117,4 +132,52 @@ public final class CommandDtoUtils {
         return userData;
     }
 
+    // -- YAML SUPPORT
+
+    public String toYaml(final Iterable<CommandDto> commandDtos) {
+    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+			@Override
+			public ObjectMapper apply(ObjectMapper mapper) {
+				JsonUtils.jaxbAnnotationSupport(mapper);
+				CommandDtoUtils.memberDtoSupport(mapper);
+				JsonUtils.onlyIncludeNonNull(mapper);
+				return mapper;
+			}
+		}; 
+        return YamlUtils.toStringUtf8(
+            _NullSafe.stream(commandDtos)
+                .collect(Collectors.toList()),
+            customizer);
+    }
+
+    public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
+    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+			@Override
+			public ObjectMapper apply(ObjectMapper mapper) {
+				JsonUtils.jaxbAnnotationSupport(mapper);
+				CommandDtoUtils.memberDtoSupport(mapper);
+				return mapper;
+			}
+		};
+        return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer)
+            .ifFailureFail()
+            .getValue()
+            .orElseGet(Collections::emptyList);
+    }
+
+    // Mix-in to add type metadata to MemberDto
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "type")
+    private abstract class AbstractDtoMixIn {}
+
+    private void memberDtoSupport(final ObjectMapper mb) {
+        // add mix-in so MemberDto carries @JsonTypeInfo without modifying source
+        mb.addMixIn(MemberDto.class, AbstractDtoMixIn.class);
+        // register concrete sub-types with logical names
+        mb.registerSubtypes(new NamedType(ActionDto.class, "ACT"));
+        mb.registerSubtypes(new NamedType(PropertyDto.class, "PROP"));
+    }
+    
 }

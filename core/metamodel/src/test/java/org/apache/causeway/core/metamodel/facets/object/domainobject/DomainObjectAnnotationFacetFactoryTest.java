@@ -18,17 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
-import java.util.UUID;
-
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.Publishing;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,16 +26,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.UUID;
+
+import javax.inject.Named;
+
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
@@ -65,6 +58,10 @@ import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class DomainObjectAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {

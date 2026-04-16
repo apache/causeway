@@ -19,17 +19,16 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
+
+import org.apache.causeway.commons.functional.Try;
+import org.springframework.lang.Nullable;
+import org.yaml.snakeyaml.DumperOptions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-
-import org.yaml.snakeyaml.DumperOptions;
-
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -68,6 +67,21 @@ public class YamlUtils {
             return Try.call(()->createJacksonReader(customizers)
                     .readValue(is, mappedType));
         });
+    }
+    
+    /**
+     * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
+     * with given {@code elementType}.
+     */
+    public <T> Try<List<T>> tryReadAsList(
+            final @NonNull Class<T> elementType,
+            final @NonNull DataSource source,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll((final InputStream is) -> Try.call(()->{
+            var mapper = createJacksonReader(customizers);
+            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+            return mapper.readValue(is, collectionType);
+        }));
     }
 
     // -- WRITING

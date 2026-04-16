@@ -76,6 +76,16 @@
             <artifactId>causeway-core-runtimeservices</artifactId>
         </dependency>
 
+        <!-- uses Ascii-Doc in support of pretty CommandDTO rendering -->
+		<dependency>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
+		</dependency>
+		
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>

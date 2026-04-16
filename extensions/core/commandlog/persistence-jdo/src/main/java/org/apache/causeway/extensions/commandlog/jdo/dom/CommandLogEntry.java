@@ -237,7 +237,7 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
-        super(commandDto, replayState, targetIndex);
+        init(commandDto, replayState, targetIndex);
     }
 
     @PrimaryKey
