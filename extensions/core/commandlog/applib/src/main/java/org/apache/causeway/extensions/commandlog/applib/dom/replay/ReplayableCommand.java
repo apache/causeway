@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -43,6 +44,7 @@ import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -233,18 +235,7 @@ public record ReplayableCommand(
             cssClass = "btn-primary")
             //hidden = Where.NOWHERE) // show in tables //TODO NPE bug
     public ReplayableCommand replayOrRetry() {
-        if(disableReplayOrRetry()!=null)
-            return this; // safe guard when called programmatically
-        commandLogEntry()
-            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .ifPresent(commandLogEntry->{
-                commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
-                replayContext.commandExecutorService().executeCommand(
-                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
-                        commandLogEntry.getCommandDto());
-                commandLogEntry.setReplayState(ReplayState.OK);
-                invalidateCachedRecord();
-            });
+        tryReplayOrRetry();
         return this;
     }
     @MemberSupport private String disableReplayOrRetry() {
@@ -335,6 +326,32 @@ public record ReplayableCommand(
         return commandLogEntryId;
     }
 
+    // -- UTIL
+
+    Try<ReplayableCommand> tryReplayOrRetry() {
+        if(disableReplayOrRetry()!=null)
+            return Try.success(null); // guard against disallowed invocation
+        return commandLogEntry()
+            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
+            .map(commandLogEntry->{
+                commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
+                var tryResultBookmark = replayContext.commandExecutorService().executeCommand(
+                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
+                        commandLogEntry.getCommandDto());
+
+                // handle the replay outcome
+                tryResultBookmark.accept(
+                        ex->onReplayError(commandLogEntry.getInteractionId(), ex),
+                        bookmarkOpt->commandLogEntry.setReplayState(ReplayState.OK));
+
+                invalidateCachedRecord();
+
+                return tryResultBookmark
+                        .mapSuccessAsNullable(__->this);
+            })
+            .orElseGet(()->Try.success(null));
+    }
+
     // -- HELPER
 
     private void invalidateCachedRecord() {
@@ -366,6 +383,13 @@ public record ReplayableCommand(
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
         return ReplayState.canReplayOrRetryOrMarkForExclusion(commandLogEntry.getReplayState());
+    }
+
+    private void onReplayError(final UUID interactionId, final Throwable ex) {
+        Executors.newSingleThreadExecutor()
+            .submit(()->replayContext.interactionService().runAnonymous(()->
+                replayContext.commandLogEntryRepository().findByInteractionId(interactionId)
+                    .ifPresent(entry->entry.saveAnalysis(ex.toString()))));
     }
 
 }

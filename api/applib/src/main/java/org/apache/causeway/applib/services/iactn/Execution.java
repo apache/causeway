@@ -284,9 +284,8 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
 
                 execution.completedAt = timestamp;
 
-                if(execution.dto==null) {
+                if(execution.dto==null)
                     return;
-                }
                 final MetricsDto metricsDto = metricsFor(execution);
 
                 final PeriodDto periodDto = timingsFor(metricsDto);

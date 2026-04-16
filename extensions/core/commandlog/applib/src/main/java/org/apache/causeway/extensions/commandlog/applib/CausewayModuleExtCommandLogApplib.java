@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
@@ -119,9 +120,11 @@ public class CausewayModuleExtCommandLogApplib {
     @Bean ReplayContext replayContext(
             final BookmarkService bookmarkService,
             final RepositoryService repositoryService,
+            final InteractionService interactionService,
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService) {
-        return new ReplayContext(bookmarkService, repositoryService, commandLogEntryRepository, commandExecutorService);
+        return new ReplayContext(bookmarkService, repositoryService, interactionService,
+                commandLogEntryRepository, commandExecutorService);
     }
 
 }

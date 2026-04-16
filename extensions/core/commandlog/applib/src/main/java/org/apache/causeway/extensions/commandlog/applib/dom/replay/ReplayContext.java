@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
@@ -29,6 +30,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 public record ReplayContext(
         BookmarkService bookmarkService,
         RepositoryService repositoryService,
+        InteractionService interactionService,
         CommandLogEntryRepository commandLogEntryRepository,
         CommandExecutorService commandExecutorService) {
 }

@@ -104,11 +104,19 @@ public record CommandReplayManager(
         sequence = "1.1",
         cssClassFa = "solid circle-play",
         cssClass = "btn-primary",
-        describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp.")
+        describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
+                + "If any of the given commands fails, "
+                + "the surrounding transaction is rolled back and any successful commands are undone). "
+                + "The command, that caused the failure, gets marked as FAILED.")
     public CommandReplayManager replayOrRetrySelected(final List<ReplayableCommand> selected) {
-        selected.stream()
+        var replayables = selected.stream()
             .sorted()
-            .forEach(ReplayableCommand::replayOrRetry); // filtered on its own responsibility
+            .toList();
+        for(var replayableCommand : replayables) {
+            var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
+            if(tryReplayOrRetry.isFailure())
+                return this; // stop further execution
+        }
         return this;
     }
 

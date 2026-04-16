@@ -174,6 +174,7 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * @param replayState - controls whether this is to be replayed
      * @param targetIndex - if the command represents a bulk action, then it is flattened out when replayed; this indicates which target to execute against.
      */
+    @Programmatic
     default void init(
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
