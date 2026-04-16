@@ -103,9 +103,11 @@ public record CommandReplayManager(
     @ActionLayout(associateWith = "pendingOrFailed",
         sequence = "1.1",
         cssClassFa = "solid circle-play",
-        cssClass = "btn-primary")
+        cssClass = "btn-primary",
+        describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp.")
     public CommandReplayManager replayOrRetrySelected(final List<ReplayableCommand> selected) {
         selected.stream()
+            .sorted()
             .forEach(ReplayableCommand::replayOrRetry); // filtered on its own responsibility
         return this;
     }

@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,7 +68,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 public record ReplayableCommand(
         String commandLogEntryId,
         ReplayContext replayContext,
-        ObjectReference<CommandRecord> recordRef) implements ViewModel {
+        ObjectReference<CommandRecord> recordRef) implements ViewModel, Comparable<ReplayableCommand> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
@@ -312,6 +313,16 @@ public record ReplayableCommand(
                 replayContext.repositoryService().remove(commandLogEntry);
                 invalidateCachedRecord();
             });
+    }
+
+    // -- EXECUTION ORDER GOVERNED BY TIMESTAMP
+
+    private static final Comparator<ReplayableCommand> TIMESTAMP_COMPARATOR =
+            Comparator.nullsLast(Comparator.comparing(ReplayableCommand::getTimestamp));
+
+    @Override
+    public int compareTo(final ReplayableCommand other) {
+        return TIMESTAMP_COMPARATOR.compare(this, other);
     }
 
     // -- VM STATE
