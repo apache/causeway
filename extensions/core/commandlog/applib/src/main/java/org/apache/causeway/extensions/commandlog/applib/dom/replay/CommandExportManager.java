@@ -99,6 +99,7 @@ public record CommandExportManager(
             .map(ReplayableCommand::commandLogEntry)
             .filter(Optional::isPresent)
             .map(Optional::get)
+            .sorted()
             .toList();
 
         var yaml = CommandDtoUtils.toYaml(
