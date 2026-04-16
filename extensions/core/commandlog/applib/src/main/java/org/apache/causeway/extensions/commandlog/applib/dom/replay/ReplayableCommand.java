@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -82,6 +83,19 @@ public record ReplayableCommand(
         boolean canReplayOrRetryOrMarkForExclusion() {
             return replayState.canReplayOrRetryOrMarkForExclusion();
         }
+//        CANCELLED("regular circle-xmark .job-cancelled-color"),
+//        RUNNING("solid spinner .job-running-color"),
+//        DONE("regular circle-check .job-done-color");
+        public String faQuickIcon() {
+            return switch(replayState) {
+                case UNDEFINED -> "solid terminal .col-indigo";
+                case EXPORTED  -> "solid terminal .col-indigo, solid circle-arrow-right .ov-size-80 .ov-right-45 .ov-bottom-45 .col-dodgerblue";
+                case PENDING   -> "solid terminal .col-indigo, solid circle-pause       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-gold";
+                case OK        -> "solid terminal .col-indigo, solid circle-check       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-green";
+                case FAILED    -> "solid terminal .col-indigo, solid circle-exclamation .ov-size-80 .ov-right-45 .ov-bottom-45 .col-red";
+                case EXCLUDED  -> "solid terminal .col-indigo, solid circle-xmark       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-grey";
+            };
+        }
     }
 
     @Inject
@@ -93,6 +107,14 @@ public record ReplayableCommand(
 
     @ObjectSupport public String title() {
         return "Replayable Command";
+    }
+
+    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
+        return commandRecord()
+                .map(CommandRecord::faQuickIcon)
+                .map(FontAwesomeLayers::fromQuickNotation)
+                .map(ObjectSupport.FontAwesomeIconResource::new)
+                .orElse(null);
     }
 
     @Property

@@ -33,6 +33,7 @@ import org.apache.causeway.viewer.wicket.viewer.services.IconResourceReferenceFa
 import org.apache.causeway.viewer.wicket.viewer.services.ObjectRenderServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.CausewaySupplementalCssInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DatatablesNetInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.JQueryInitWkt;
@@ -57,6 +58,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         DatatablesNetInitWkt.class,
         DebugInitWkt.class,
         ComponentFactoryConfigWkt.class,
+        CausewaySupplementalCssInitWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,
