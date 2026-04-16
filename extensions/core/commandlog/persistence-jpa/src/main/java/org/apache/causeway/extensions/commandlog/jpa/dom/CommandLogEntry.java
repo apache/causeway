@@ -198,7 +198,8 @@ import lombok.Setter;
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE (cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK OR cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED) "
+                  + " WHERE (cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK"
+                  + " OR cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED) "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,
@@ -210,9 +211,9 @@ import lombok.Setter;
     @NamedQuery(
             name  = Nq.FIND_BY_REPLAY_STATE,
             query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.replayState = :replayState "
-                  + " ORDER BY cl.timestamp ASC"), // programmatic LIMIT 10
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE (cl.replayState = :replayState1 OR cl.replayState = :replayState2) "
+                  + " ORDER BY cl.timestamp ASC"),
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

@@ -70,9 +70,8 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onReady(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled())
             return;
-        }
 
         var existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
@@ -113,9 +112,8 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onStarted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled())
             return;
-        }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
             .ifPresent(commandLogEntry -> {
@@ -126,9 +124,8 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled())
             return;
-        }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
             .ifPresent(commandLogEntry -> {

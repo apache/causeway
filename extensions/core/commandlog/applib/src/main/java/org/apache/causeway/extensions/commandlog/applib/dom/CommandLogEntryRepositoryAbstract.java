@@ -33,20 +33,16 @@ import jakarta.inject.Provider;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
-import org.apache.causeway.schema.cmd.v2.MapDto;
-import org.apache.causeway.schema.common.v2.InteractionType;
 
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
@@ -74,6 +70,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
         c.sync(command);
+        c.setReplayState(ReplayState.UNDEFINED);
         c.setParentInteractionId(parentInteractionIdIfAny);
         c.setExecuteIn(executeIn);
         persist(c);
@@ -257,13 +254,11 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
-        if(interactionId == null) {
+        if(interactionId == null)
             return findFirst();
-        }
         final C from = findByInteractionIdElseNull(interactionId);
-        if(from == null) {
+        if(from == null)
             return Collections.emptyList();
-        }
         return findSince(from.getTimestamp(), batchSize);
     }
 
@@ -339,45 +334,48 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED))
         );
     }
-
     @Override
-    public List<CommandLogEntry> findNotYetReplayed() {
+    public List<CommandLogEntry> findReplayPendingOrFailed() {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
-                        .withParameter("replayState", ReplayState.PENDING)
-                        .withLimit(10))
+                        .withParameter("replayState1", ReplayState.PENDING)
+                        .withParameter("replayState2", ReplayState.FAILED))
+        );
+    }
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    @Override
+    public List<CommandLogEntry> findReplaySucceededOrExcluded() {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
+                        .withParameter("replayState1", ReplayState.OK)
+                        .withParameter("replayState2", ReplayState.EXCLUDED))
         );
     }
 
     @Override
-    public C saveForReplay(final CommandDto dto) {
+    public C saveForReplay(final CommandDto commandToReplay) {
 
-        if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
-            final MapDto userData = dto.getUserData();
-            if (userData == null ) {
-                throw new IllegalStateException(String.format(
-                        "Can only persist action DTOs with additional userData; got: \n%s",
-                        CommandDtoUtils.dtoMapper().toString(dto)));
-            }
-        }
+//TODO why?
+//        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
+//            final MapDto userData = commandToReplay.getUserData();
+//            if (userData == null )
+//                throw new IllegalStateException(String.format(
+//                        "Can only persist action DTOs with additional userData; got: \n%s",
+//                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
+//        }
 
-        final C commandJdo = factoryService.detachedEntity(commandLogEntryClass);
+        final C entity = factoryService.detachedEntity(commandLogEntryClass);
+        entity.init(commandToReplay, ReplayState.PENDING, 0);
+        entity.setParentInteractionId(null); // n/a for replay
+        entity.setExecuteIn(null); // to be specified later depending on user action
 
-        commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
-        commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
-        commandJdo.setUsername(dto.getUsername());
+        persist(entity);
 
-        commandJdo.setReplayState(ReplayState.PENDING);
-
-        var firstTargetOidDto = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
-        commandJdo.setCommandDto(dto);
-        commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
-
-        persist(commandJdo);
-
-        return commandJdo;
+        return entity;
     }
 
     @Override
@@ -408,9 +406,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
             final @Nullable Integer batchSize) throws NotFoundException {
 
         final List<CommandLogEntry> commands = findSince(interactionId, batchSize);
-        if(commands == null) {
+        if(commands == null)
             throw new NotFoundException(interactionId);
-        }
         return commands;
     }
 
@@ -460,9 +457,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public List<CommandLogEntry> findAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction())
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
         return _Casts.uncheckedCast(repositoryService().allInstances(commandLogEntryClass));
     }
 
@@ -471,9 +467,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction())
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
         repositoryService().removeAll(commandLogEntryClass);
     }
 
