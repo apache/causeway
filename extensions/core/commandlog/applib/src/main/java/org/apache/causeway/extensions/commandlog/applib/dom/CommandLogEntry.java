@@ -165,8 +165,6 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
         setResult(command.getResult());
         setException(command.getException());
-
-        setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.UNDEFINED);
     }
 
     /**

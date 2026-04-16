@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -238,7 +239,9 @@ public record ReplayableCommand(
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
             .ifPresent(commandLogEntry->{
                 commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
-                replayContext.commandExecutorService().executeCommand(commandLogEntry.getCommandDto());
+                replayContext.commandExecutorService().executeCommand(
+                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
+                        commandLogEntry.getCommandDto());
                 commandLogEntry.setReplayState(ReplayState.OK);
                 invalidateCachedRecord();
             });

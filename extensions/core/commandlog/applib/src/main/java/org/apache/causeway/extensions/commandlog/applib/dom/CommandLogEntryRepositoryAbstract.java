@@ -70,6 +70,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
         c.sync(command);
+        c.setReplayState(ReplayState.UNDEFINED);
         c.setParentInteractionId(parentInteractionIdIfAny);
         c.setExecuteIn(executeIn);
         persist(c);
