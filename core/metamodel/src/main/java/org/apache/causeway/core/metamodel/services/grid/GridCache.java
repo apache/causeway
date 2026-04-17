@@ -61,5 +61,9 @@ final class GridCache {
     public Try<BSGrid> computeIfAbsent(final LayoutKey layoutKey, final Function<LayoutKey, Try<BSGrid>> factory) {
         return gridsByKey.computeIfAbsent(layoutKey, factory);
     }
+    
+    public void clear() {
+    	gridsByKey.map().clear();
+    }
 
 }

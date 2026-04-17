@@ -35,4 +35,6 @@ public interface GridFacet extends Facet {
 
     BSGrid getGrid(@Nullable ManagedObject mo);
 
+	void clearCache();
+
 }

@@ -36,14 +36,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -68,6 +65,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.Preloadabl
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
@@ -84,6 +82,9 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -322,6 +323,9 @@ implements
 
         log.info(" - running remaining validators");
         _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
+        
+        log.info(" - clearing layout caches");
+        clearLayoutCaches();
 
         stopWatch.stop();
         log.info("Metamodel created in " + stopWatch.getMillis() + " ms.");
@@ -331,7 +335,7 @@ implements
         }
     }
 
-    @Override
+	@Override
     public Optional<ValidationFailures> getValidationResult() {
         return validationResult.getMemoized();
     }
@@ -344,6 +348,7 @@ implements
     @Override
     public void disposeMetaModel() {
         waitForValidationToFinish();
+        clearLayoutCaches();
         logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
@@ -688,5 +693,14 @@ implements
             spec = spec.superclass();
         }
     }
+    
+    private void clearLayoutCaches() {
+    	cache.forEachConcurrent(spec->{
+    		spec.lookupFacet(GridFacet.class)
+    			.ifPresent(GridFacet::clearCache);
+    	});
+    	serviceRegistry.lookupService(GridService.class)
+			.ifPresent(GridService::clearCache);
+	}
 
 }

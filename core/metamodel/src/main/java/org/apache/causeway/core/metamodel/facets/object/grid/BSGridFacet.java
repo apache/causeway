@@ -77,6 +77,11 @@ final class BSGridFacet implements GridFacet {
         visitor.accept("precedence", precedence().name());
     }
 
+    @Override
+    public void clearCache() {
+    	normalizedGridByLayoutPrefix.clear();
+    }
+    
     // -- HELPER
 
     /**
@@ -139,6 +144,7 @@ final class BSGridFacet implements GridFacet {
         @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
             return null;
         }
+        @Override public void clearCache() {}
     }
 
 }

@@ -93,4 +93,6 @@ public interface GridService {
     EnumSet<CommonMimeType> supportedFormats();
     Optional<GridMarshaller> marshaller(CommonMimeType format);
 
+	void clearCache();
+
 }

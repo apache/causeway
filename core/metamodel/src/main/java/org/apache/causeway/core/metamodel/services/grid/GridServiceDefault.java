@@ -98,6 +98,11 @@ implements GridService {
             cache.remove(domainClass);
         }
     }
+    
+    @Override
+    public void clearCache() {
+        cache.clear();
+    }
 
     @Override
     public BSGrid load(final LayoutKey layoutKey) {
