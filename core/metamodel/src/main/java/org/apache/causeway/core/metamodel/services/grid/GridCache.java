@@ -52,4 +52,8 @@ record GridCache(
         return gridsByKey.computeIfAbsent(layoutKey, factory);
     }
 
+    public void clear() {
+        gridsByKey.map().clear();
+    }
+
 }

@@ -35,4 +35,14 @@ public interface GridFacet extends Facet {
 
     BSGrid getGrid(@Nullable ManagedObject mo);
 
+    /**
+     * Clears any pre-calculated BSGrid instances from the Facet's cache. Useful to start with a clean slate,
+     * after the MM was initialized.
+     *
+     * <p> The MM needs to be aware of all mixins, in order to reliably produce valid BSGrid instances.
+     * During MM initialization incomplete BSGrid instances might be created and cached,
+     * which are missing e.g. mixed-in Actions.
+     */
+    void clearCache();
+
 }

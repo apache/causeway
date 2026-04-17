@@ -52,8 +52,8 @@ implements GridFacet {
             final FacetHolder facetHolder,
             final GridService gridService) {
         return new BSGridFacet(gridService, new ConcurrentHashMap<>(),
-            _Lazy.threadSafe(()->facetHolder.getFacet(LayoutPrefixFacet.class)),
-            facetHolder, Precedence.DEFAULT);
+            _Lazy.threadSafe(()->facetHolder.lookupFacet(LayoutPrefixFacet.class).orElse(null)),
+                facetHolder, Precedence.DEFAULT);
     }
 
     // -- METHODS
@@ -64,6 +64,11 @@ implements GridFacet {
     public BSGrid getGrid(final @Nullable ManagedObject mo) {
         guardAgainstObjectOfDifferentType(mo);
         return normalized(mo);
+    }
+
+    @Override
+    public void clearCache() {
+        normalizedGridByLayoutPrefix.clear();
     }
 
     @Override
@@ -129,6 +134,7 @@ implements GridFacet {
         @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
             return null;
         }
+        @Override public void clearCache() {}
     }
 
 }

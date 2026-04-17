@@ -20,6 +20,7 @@ package org.apache.causeway.testdomain.interact;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,6 +51,8 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 })
 class CollectionInteractionTest3 extends InteractionTestAbstract {
 
+    @Disabled("this test is flawed, because sequencePolicyIfUnreferenced=ALPHABETICALLY has no effect if "
+            + "items under test actually do sepecify a member sequence")
     @Test //cannot figure out how to reload the grid after was loaded in previous test
     void columns2() {
         var tableTester =

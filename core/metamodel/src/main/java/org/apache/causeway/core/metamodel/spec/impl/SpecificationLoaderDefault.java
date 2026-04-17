@@ -51,12 +51,12 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
@@ -74,6 +74,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.Preloadabl
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
@@ -287,7 +288,10 @@ implements
         }
 
         log.info(" - running remaining validators");
-        _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
+        getOrAssessValidationResult(); // as a side effect memoizes the validation result
+
+        log.info(" - clearing layout caches");
+        clearLayoutCaches();
 
         stopWatch.stop();
         log.info("Metamodel created in {}ms. ({} introspection)", stopWatch.getMillis(), parallel ? "parallel" : "sequential");
@@ -310,6 +314,7 @@ implements
     @Override
     public void disposeMetaModel() {
         waitForValidationToFinish();
+        clearLayoutCaches();
         logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
@@ -363,9 +368,8 @@ implements
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
                 .map(classSubstitutorRegistry::getSubstitution)
-                .anyMatch(Substitution::isNeverIntrospect)) {
+                .anyMatch(Substitution::isNeverIntrospect))
             return false;
-        }
         Arrays.stream(domainTypes).forEach(this::loadSpecification);
         return true;
     }
@@ -389,15 +393,13 @@ implements
     public void validateLater(
             final ObjectSpecification objectSpec,
             final Supplier<String> introspectionContextProvider) {
-        if(!isMetamodelFullyIntrospected()) {
+        if(!isMetamodelFullyIntrospected())
             // don't trigger validation during bootstrapping
             // getValidationResult() is lazily populated later on first request anyway
             return;
-        }
-        if(!causewayConfiguration.core().metaModel().introspector().validateIncrementally()) {
+        if(!causewayConfiguration.core().metaModel().introspector().validateIncrementally())
             // re-validation after the initial one can be turned off by means of above config option
             return;
-        }
 
         if(log.isInfoEnabled()) {
             log.info("re-validation triggered by {}", introspectionContextProvider.get());
@@ -423,9 +425,8 @@ implements
         // only after things have settled we offer feedback to the user (interface)
 
         final ValidationFailures validationFailures = getOrAssessValidationResult();
-        if(validationFailures.hasFailures()) {
+        if(validationFailures.hasFailures())
             throw _Exceptions.illegalState(String.join("\n", validationFailures.getMessages("[%d] %s")));
-        }
 
     }
 
@@ -506,9 +507,8 @@ implements
 
     @Override
     public Optional<SemanticsOf> getActionSemanticsOf(final Identifier identifier) {
-        if(!identifier.type().isAction()) {
+        if(!identifier.type().isAction())
             return Optional.empty();
-        }
         return specForLogicalType(identifier.logicalType())
             .flatMap(objSpec->objSpec.getAction(identifier.memberLogicalName()))
             .map(ObjectAction::getSemantics);
@@ -662,6 +662,15 @@ implements
             cache.remove(type);
             objSpec = objSpec.superclass();
         }
+    }
+
+    private void clearLayoutCaches() {
+        cache.values().parallelStream().forEach(spec->{
+            spec.lookupFacet(GridFacet.class)
+                .ifPresent(GridFacet::clearCache);
+        });
+        serviceRegistry.lookupService(GridService.class)
+            .ifPresent(GridService::clearCache);
     }
 
 }

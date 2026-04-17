@@ -91,6 +91,11 @@ public record GridServiceDefault(
     }
 
     @Override
+    public void clearCache() {
+        cache.clear();
+    }
+
+    @Override
     public BSGrid load(final LayoutKey layoutKey) {
         var grid = cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
             .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
