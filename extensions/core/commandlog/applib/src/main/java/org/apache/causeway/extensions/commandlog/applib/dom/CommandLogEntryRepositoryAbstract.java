@@ -22,7 +22,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +41,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
@@ -376,16 +374,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         persist(entity);
 
         return entity;
-    }
-
-    @Override
-    public List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto) {
-        var commandDtos = commandsDto.getCommandDto();
-        var commands = new ArrayList<CommandLogEntry>();
-        for (var dto : commandDtos) {
-            commands.add(saveForReplay(dto));
-        }
-        return commands;
     }
 
     @Override
