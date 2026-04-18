@@ -94,7 +94,7 @@ public record CommandReplayManager(
     public List<ReplayableCommand> getPendingOrFailed() {
         return commandLogEntryRepository().findReplayPendingOrFailed().stream()
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .toList();
     }
@@ -147,7 +147,7 @@ public record CommandReplayManager(
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .toList();
     }

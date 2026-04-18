@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -28,7 +27,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
  * Bundles dependencies for the replay logic.
  */
 public record ReplayContext(
-        BookmarkService bookmarkService,
         RepositoryService repositoryService,
         InteractionService interactionService,
         CommandLogEntryRepository commandLogEntryRepository,

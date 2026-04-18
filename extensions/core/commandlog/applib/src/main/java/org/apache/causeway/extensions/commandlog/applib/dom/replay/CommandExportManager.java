@@ -80,7 +80,7 @@ public record CommandExportManager(
         return commandLogEntryRepository().findAll().stream()
             .filter(entry->ReplayState.canExport(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .toList();
     }
@@ -136,7 +136,7 @@ public record CommandExportManager(
         return commandLogEntryRepository().findAll().stream()
             .filter(entry->ReplayState.isExported(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().identifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .toList();
     }
