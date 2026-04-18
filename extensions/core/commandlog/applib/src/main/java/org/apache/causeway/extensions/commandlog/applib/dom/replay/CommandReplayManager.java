@@ -102,7 +102,7 @@ public final class CommandReplayManager implements ViewModel {
     public List<ReplayableCommand> getPendingOrFailed() {
         return commandLogEntryRepository().findReplayPendingOrFailed().stream()
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().getIdentifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .collect(Collectors.toList());
     }
@@ -155,7 +155,7 @@ public final class CommandReplayManager implements ViewModel {
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().getIdentifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .collect(Collectors.toList());
     }

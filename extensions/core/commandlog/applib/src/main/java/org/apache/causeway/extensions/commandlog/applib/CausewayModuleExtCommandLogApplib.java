@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -120,12 +119,11 @@ public class CausewayModuleExtCommandLogApplib {
     }
 
     @Bean ReplayContext replayContext(
-            final BookmarkService bookmarkService,
             final RepositoryService repositoryService,
             final InteractionService interactionService,
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService) {
-        return new ReplayContext(bookmarkService, repositoryService, interactionService,
+        return new ReplayContext(repositoryService, interactionService,
                 commandLogEntryRepository, commandExecutorService);
     }
 

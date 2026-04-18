@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -32,7 +31,6 @@ import lombok.experimental.Accessors;
  */
 @Value @Accessors(fluent = true)
 public final class ReplayContext {
-        BookmarkService bookmarkService;
         RepositoryService repositoryService;
         InteractionService interactionService;
         CommandLogEntryRepository commandLogEntryRepository;

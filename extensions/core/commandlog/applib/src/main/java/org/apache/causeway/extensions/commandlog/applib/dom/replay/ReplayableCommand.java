@@ -40,12 +40,10 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.YamlUtils;
@@ -75,7 +73,7 @@ import lombok.experimental.Accessors;
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
 	
 	@Getter @Accessors(fluent = true)
-	private final String commandLogEntryId;
+	private final UUID interactionId;
 	
 	@Getter @Accessors(fluent = true)
 	private final ReplayContext replayContext;
@@ -112,7 +110,13 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     public ReplayableCommand(
             final String memento,
             final ReplayContext replayContext) {
-        this(memento, replayContext, new ObjectReference<>(null));
+        this(UUID.fromString(memento), replayContext);
+    }
+
+    ReplayableCommand(
+            final UUID interactionId,
+            final ReplayContext replayContext) {
+        this(interactionId, replayContext, new ObjectReference<>(null));
     }
 
     @ObjectSupport public String title() {
@@ -134,11 +138,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             fieldSetId = "details",
             describedAs = "UUID of the original (replayabel) Command")
     public UUID getInteractionId() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(CommandDto::getInteractionId)
-            .map(UUID::fromString)
-            .orElse(null);
+        return interactionId;
     }
 
     @Property
@@ -334,7 +334,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     @Override
     public String viewModelMemento() {
-        return commandLogEntryId;
+        return interactionId.toString();
     }
 
     // -- UTIL
@@ -381,15 +381,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     Optional<CommandLogEntry> commandLogEntry() {
-        return replayContext.bookmarkService().lookup(commandLogEntryBookmark(), CommandLogEntry.class);
-    }
-
-    private Bookmark commandLogEntryBookmark() {
-        return replayContext.bookmarkService()
-            .bookmarkFor(CommandLogEntry.class, commandLogEntryId)
-            .orElseThrow(()->_Exceptions.unrecoverable(
-                    "framework error: cannot create bookmark for CommandLogEntry using id '%s'",
-                    commandLogEntryId));
+        return replayContext.commandLogEntryRepository().findByInteractionId(interactionId());
     }
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {

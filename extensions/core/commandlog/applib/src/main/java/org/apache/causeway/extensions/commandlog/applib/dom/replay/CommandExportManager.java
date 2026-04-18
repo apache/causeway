@@ -88,7 +88,7 @@ public final class CommandExportManager implements ViewModel {
         return commandLogEntryRepository().findAll().stream()
             .filter(entry->ReplayState.canExport(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().getIdentifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .collect(Collectors.toList());
     }
@@ -144,7 +144,7 @@ public final class CommandExportManager implements ViewModel {
         return commandLogEntryRepository().findAll().stream()
             .filter(entry->ReplayState.isExported(entry.getReplayState()))
             .map(entry->new ReplayableCommand(
-                    replayContext.bookmarkService().bookmarkFor(entry).get().getIdentifier(),
+                    entry.getInteractionId(),
                     replayContext))
             .collect(Collectors.toList());
     }
