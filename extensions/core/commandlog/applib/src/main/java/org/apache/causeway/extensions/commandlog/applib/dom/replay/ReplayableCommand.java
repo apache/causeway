@@ -68,7 +68,7 @@ import lombok.experimental.Accessors;
 /**
  * Viewmodel that wraps a {@link CommandLogEntry}.
  */
-@DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 @AllArgsConstructor
@@ -249,7 +249,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         tryReplayOrRetry();
         return this;
     }
-    @MemberSupport private String disableReplayOrRetry() {
+    @MemberSupport public String disableReplayOrRetry() {
         return commandRecord()
             .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
             .orElse(false)
@@ -274,7 +274,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             });
         return this;
     }
-    @MemberSupport private String disableMakeExportable() {
+    @MemberSupport public String disableMakeExportable() {
         return commandRecord()
             .map(rec->ReplayState.isExported(rec.replayState()))
             .orElse(false)

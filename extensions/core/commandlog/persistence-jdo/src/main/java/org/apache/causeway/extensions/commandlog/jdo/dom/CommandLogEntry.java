@@ -209,9 +209,8 @@ import lombok.Setter;
             name  = Nq.FIND_BY_REPLAY_STATE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE replayState == :replayState "
-                  + " ORDER BY timestamp ASC "
-                  + " RANGE 0,10"),    // same as batch size
+                  + " WHERE replayState == :replayState1 || replayState == :replayState2 "
+                  + " ORDER BY timestamp ASC"),
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
