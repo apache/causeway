@@ -1,4 +1,4 @@
-name: Build, Test (3.6.0-SNAPSHOT)
+name: Build, Test (3.7.0-SNAPSHOT)
 
 on:
   push:
@@ -50,18 +50,18 @@ jobs:
       run: |
         echo BRANCH_NAME      \: $BRANCH_NAME
 
-    - name: Set up JDK (zulu 25)
+    - name: Set up JDK (zulu 26)
       if: matrix.language == 'java'
       uses: actions/setup-java@v5
       with:
         distribution: 'zulu'
-        java-version: 25
+        java-version: 26
 
-    - name: Set up Maven (3.9.12)
+    - name: Set up Maven (3.9.15)
       if: matrix.language == 'java' && env.BRANCH_NAME == 'v3'
       uses: stCarolas/setup-maven@v5
       with:
-        maven-version: 3.9.12
+        maven-version: 3.9.15
 
     - name: Print Maven Version
       if: matrix.language == 'java'
@@ -99,21 +99,16 @@ jobs:
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
         # -Dmodule-all ... build all modules (default if all is well)
-        # -Dmodule-all-except-incubator ... build all modules except 'incubator'
-        # -Dmodule-all-except-kroviz ... build all modules except 'kroviz' (eg. when kroviz build fails)
         # -Dmaven.compiler.proc=full ... required to enable annotation processing for javac since JDK23
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
-        # -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z see https://maven.apache.org/guides/mini/guide-reproducible-builds.html
         # -T 1C ... 1 build thread per core
-        # -DsonatypeOssDistMgmtStagingUrl ... workaround Eclipse Persistence Parent POM (Version 4.0.7) issue
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
           -Dmaven.compiler.proc=full
           -Denforcer.failFast=true
           -Dmaven.source.skip=true
-          -Dproject.build.outputTimestamp=2025-01-01T00:00:00Z
-          -DsonatypeOssDistMgmtStagingUrl=https://jakarta.oss.sonatype.org/content/repositories/staging/
+          -Dproject.build.outputTimestamp=2026-01-01T00:00:00Z
           -e
 
 # FOR DEBUG USE
