@@ -104,7 +104,7 @@ public record CommandExportManager(
 
         var yaml = CommandDtoUtils.toYaml(
             selectedCommandLogEntries.stream()
-                .filter(entry->ReplayState.isExported(entry.getReplayState()))
+                .filter(entry->!ReplayState.isExported(entry.getReplayState()))
                 .map(CommandLogEntry::getCommandDto)
                 .toList());
 
