@@ -67,7 +67,7 @@ import lombok.experimental.Accessors;
  * Viewmodel that wraps a {@link CommandLogEntry}.
  */
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
-@DomainObjectLayout(cssClassFa = "terminal")
+@DomainObjectLayout//(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 @AllArgsConstructor
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
@@ -104,6 +104,18 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             };
 			return null;
         }
+        //v2 backport, using png screenshots from v4
+        public String iconSuffix() {
+            switch(replayState) {
+                case UNDEFINED: return "";
+                case EXPORTED:  return "exported";
+                case PENDING:   return "pending";
+                case OK:        return "ok";
+                case FAILED:    return "failed";
+                case EXCLUDED:  return "excluded";
+            };
+			return null;
+        }
     }
 
     @Inject
@@ -131,6 +143,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 //                .map(ObjectSupport.FontAwesomeIconResource::new)
 //                .orElse(null);
 //    }
+    @ObjectSupport public String iconName() {
+    	return commandRecord()
+    			.map(CommandRecord::iconSuffix)
+    			.orElse(null);
+    }
 
     @Property
     @PropertyLayout(
