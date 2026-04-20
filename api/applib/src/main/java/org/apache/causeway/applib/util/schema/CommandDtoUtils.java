@@ -40,7 +40,9 @@ import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
+import org.apache.causeway.schema.common.v2.ValueDto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
@@ -140,10 +142,11 @@ public final class CommandDtoUtils {
 			public ObjectMapper apply(ObjectMapper mapper) {
 				JsonUtils.jaxbAnnotationSupport(mapper);
 				CommandDtoUtils.memberDtoSupport(mapper);
+				CommandDtoUtils.valueDtoSupport(mapper);
 				JsonUtils.onlyIncludeNonNull(mapper);
 				return mapper;
 			}
-		}; 
+		};
         return YamlUtils.toStringUtf8(
             _NullSafe.stream(commandDtos)
                 .collect(Collectors.toList()),
@@ -156,6 +159,7 @@ public final class CommandDtoUtils {
 			public ObjectMapper apply(ObjectMapper mapper) {
 				JsonUtils.jaxbAnnotationSupport(mapper);
 				CommandDtoUtils.memberDtoSupport(mapper);
+				CommandDtoUtils.valueDtoSupport(mapper);
 				return mapper;
 			}
 		};
@@ -172,6 +176,14 @@ public final class CommandDtoUtils {
             property = "type")
     private abstract class AbstractDtoMixIn {}
 
+    // Mix-in to ignore unknown properties for ValueDto
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private abstract class AbstractValueDtoMixIn {}
+
+    private void valueDtoSupport(final ObjectMapper mb) {
+        mb.addMixIn(ValueDto.class, AbstractValueDtoMixIn.class);
+    }
+
     private void memberDtoSupport(final ObjectMapper mb) {
         // add mix-in so MemberDto carries @JsonTypeInfo without modifying source
         mb.addMixIn(MemberDto.class, AbstractDtoMixIn.class);
@@ -179,5 +191,5 @@ public final class CommandDtoUtils {
         mb.registerSubtypes(new NamedType(ActionDto.class, "ACT"));
         mb.registerSubtypes(new NamedType(PropertyDto.class, "PROP"));
     }
-    
+
 }

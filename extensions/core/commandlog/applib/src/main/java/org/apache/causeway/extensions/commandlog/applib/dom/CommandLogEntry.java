@@ -149,7 +149,10 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
          * primary before the production database was restored to the secondary.
          */
         public static final String FIND_MOST_RECENT_COMPLETED           = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
-        public static final String FIND_BY_REPLAY_STATE                 = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE
+                                                                        = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayState";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES
+                                                                        = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayStates";
         public static final String FIND_BACKGROUND_AND_NOT_YET_STARTED  = LOGICAL_TYPE_NAME + ".findBackgroundAndNotYetStarted";
         public static final String FIND_RECENT_BACKGROUND_BY_TARGET     = LOGICAL_TYPE_NAME + ".findRecentBackgroundByTarget";
     }

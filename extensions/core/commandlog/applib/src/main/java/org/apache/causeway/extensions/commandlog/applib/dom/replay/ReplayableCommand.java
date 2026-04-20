@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +38,12 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
@@ -49,7 +55,6 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
@@ -59,7 +64,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
@@ -71,27 +75,34 @@ import lombok.experimental.Accessors;
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 @AllArgsConstructor
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
-	
-	@Getter @Accessors(fluent = true)
-	private final UUID interactionId;
-	
-	@Getter @Accessors(fluent = true)
+
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
+    private final UUID interactionId;
+    @Programmatic
+    public UUID interactionId() { return interactionId; }
+
 	private final ReplayContext replayContext;
-	
-	@Getter @Accessors(fluent = true)
+    @Programmatic
+    public ReplayContext replayContext() { return replayContext; }
+
+
 	private final ObjectReference<CommandRecord> recordRef;
+    @Programmatic
+    public ObjectReference<CommandRecord> recordRef() { return recordRef; }
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
     // decoupled from the underlying entity
     @Value @Accessors(fluent = true)
     final static class CommandRecord {
-    	
+
 	    final CommandDto commandDto;
 	    final ReplayState replayState;
-        
+
         boolean canReplayOrRetryOrMarkForExclusion() {
-            return replayState.canReplayOrRetryOrMarkForExclusion();
+            return replayState.isPendingOrFailed();
         }
         public String faQuickIcon() {
             switch(replayState) {
@@ -132,10 +143,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     @ObjectSupport public String title() {
-        return "Replayable Command";
+        final var timestamp = getTimestampIfAny().map(ChronoZonedDateTime::toInstant).map(Instant::toString).map(x -> " @ " + x).orElse("");
+        return getTargetType() + ":" + getTargetId() + " #" + getMember() + timestamp;
     }
 
-//requires v4    
+//requires v4
 //    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
 //        return commandRecord()
 //                .map(CommandRecord::faQuickIcon)
@@ -153,7 +165,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "1.1",
             fieldSetId = "details",
-            describedAs = "UUID of the original (replayabel) Command")
+            describedAs = "UUID of the original (replayable) Command")
     public UUID getInteractionId() {
         return interactionId;
     }
@@ -162,20 +174,25 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "1.2",
             fieldSetId = "details",
-            describedAs = "Timestamp of the original (replayabel) Command")
+            describedAs = "Timestamp of the original (replayable) Command")
     public ZonedDateTime getTimestamp() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(CommandDto::getTimestamp)
-            .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime)
+        return getTimestampIfAny()
             .orElse(null);
+    }
+
+    @Programmatic
+    public Optional<ZonedDateTime> getTimestampIfAny() {
+        return commandRecord()
+                .map(CommandRecord::commandDto)
+                .map(CommandDto::getTimestamp)
+                .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime);
     }
 
     @Property
     @PropertyLayout(
             sequence = "2.1",
             fieldSetId = "details",
-            describedAs = "Target Type of the original (replayabel) Command")
+            describedAs = "Target Type of the original (replayable) Command")
     public String getTargetType() {
         return commandRecord()
             .map(CommandRecord::commandDto)
@@ -188,7 +205,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "2.2",
             fieldSetId = "details",
-            describedAs = "Target ID of the original (replayabel) Command")
+            describedAs = "Target ID of the original (replayable) Command")
     public String getTargetId() {
         return commandRecord()
             .map(CommandRecord::commandDto)
@@ -202,7 +219,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "3.1",
             fieldSetId = "details",
-            describedAs = "Replayabel Action or Property, that was executed as captured by the original Command")
+            describedAs = "Replayable Action or Property, that was executed as captured by the original Command")
     public String getMember() {
         return commandRecord()
             .map(CommandRecord::commandDto)
@@ -217,7 +234,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "4",
             fieldSetId = "details",
-            describedAs = "Replay State of the original (replayabel) Command. "
+            describedAs = "Replay State of the original (replayable) Command. "
                     + "When imported initially is PENDING. "
                     + "Then after replay its either OK or FAILED. "
                     + "Can be manually set to EXCLUDED, which marks it to be ignored for replay.")
@@ -233,7 +250,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             fieldSetId = "dto",
             hidden = Where.ALL_TABLES,
             labelPosition = LabelPosition.NONE,
-            describedAs = "DTO of the original (replayabel) Command")
+            describedAs = "DTO of the original (replayable) Command")
     public AsciiDoc getDto() {
         return commandRecord()
             .map(CommandRecord::commandDto)
@@ -247,95 +264,58 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     // -- ACTIONS
 
-    @Action
-    @ActionLayout(
-            sequence = "0.2",
-            describedAs = "Opens the associated Command Log Entry")
-    public CommandLogEntry openCommandLogEntry() {
-        return commandLogEntry()
-                .orElse(null);
-    }
 
-    @Action
-    @ActionLayout(
-            sequence = "0.1",
-            cssClassFa = "solid circle-play",
-            cssClass = "btn-primary")
-            //hidden = Where.NOWHERE) // show in tables //TODO NPE bug
-    public ReplayableCommand replayOrRetry() {
-        tryReplayOrRetry();
-        return this;
-    }
-    @MemberSupport public String disableReplayOrRetry() {
-        return commandRecord()
-            .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
-            .orElse(false)
-                ? null
-                : "Cannot replay, if neither PENDING nor FAILED";
-    }
-
-    @Action
-    @ActionLayout(
-            //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-            sequence = "2.1",
-            associateWith = "replayState",
-            describedAs = "Makes Command exportable (again)")
-    public ReplayableCommand makeExportable() {
-        if(disableMakeExportable()!=null)
-            return this; // safe guard when called programmatically
+    ReplayableCommand makeExportable() {
+        if(disableMakeExportable()!=null) {
+            return this; // safeguard when called programmatically
+        }
         commandLogEntry()
-            .filter(commandLogEntry->ReplayState.isExported(commandLogEntry.getReplayState()))
-            .ifPresent(commandLogEntry->{
-                commandLogEntry.setReplayState(ReplayState.UNDEFINED);
-                invalidateCachedRecord();
-            });
+                .filter(commandLogEntry->ReplayState.isExported(commandLogEntry.getReplayState()))
+                .ifPresent(commandLogEntry->{
+                    commandLogEntry.setReplayState(ReplayState.UNDEFINED);
+                    invalidateCachedRecord();
+                });
         return this;
     }
-    @MemberSupport public String disableMakeExportable() {
+    String disableMakeExportable() {
         return commandRecord()
-            .map(rec->ReplayState.isExported(rec.replayState()))
-            .orElse(false)
+                .map(rec->ReplayState.isExported(rec.replayState()))
+                .orElse(false)
                 ? null
                 : "Cannot make exportable, if not EXPORTED";
     }
 
-    @Action
-    @ActionLayout(
-            //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-            sequence = "2.2",
-            associateWith = "replayState",
-            describedAs = "Marks Command to be EXCLUDED from replay.")
-    public ReplayableCommand excludeFromReplay() {
-        if(disableExcludeFromReplay()!=null)
-            return this; // safe guard when called programmatically
+
+    ReplayableCommand excludeFromReplay() {
+        if(disableExcludeFromReplay()!=null) {
+            return ReplayableCommand.this; // safeguard when called programmatically
+        }
         commandLogEntry()
-            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .ifPresent(commandLogEntry->{
-                commandLogEntry.setReplayState(ReplayState.EXCLUDED);
-                invalidateCachedRecord();
-            });
-        return this;
+                .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
+                .ifPresent(commandLogEntry->{
+                    commandLogEntry.setReplayState(ReplayState.EXCLUDED);
+                    invalidateCachedRecord();
+                });
+        return ReplayableCommand.this;
     }
-    @MemberSupport private String disableExcludeFromReplay() {
+    String disableExcludeFromReplay() {
         return commandRecord()
-            .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
-            .orElse(false)
+                .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+                .orElse(false)
                 ? null
                 : "Cannot mark for exclusion, if neither PENDING nor FAILED";
     }
 
-    @Action
-    @ActionLayout(
-            sequence = "0.3",
-            //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-            describedAs = "Deletes the associated Command Log Entry (cannot be undone)")
-    public void delete() {
+
+    @Programmatic
+    void deleteObj() {
         commandLogEntry()
-            .ifPresent(commandLogEntry->{
-                replayContext.repositoryService().remove(commandLogEntry);
-                invalidateCachedRecord();
-            });
+                .ifPresent(commandLogEntry->{
+                    replayContext.repositoryService().remove(commandLogEntry);
+                    invalidateCachedRecord();
+                });
     }
+
 
     // -- EXECUTION ORDER GOVERNED BY TIMESTAMP
 
@@ -357,12 +337,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     // -- UTIL
 
     Try<ReplayableCommand> tryReplayOrRetry() {
-        if(disableReplayOrRetry()!=null)
+        if(disableReplayOrRetry()!=null) {
             return Try.success(null); // guard against disallowed invocation
+        }
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
             .map(commandLogEntry->{
-                commandLogEntry.setExecuteIn(ExecuteIn.FOREGROUND);
                 var tryResultBookmark = replayContext.commandExecutorService().executeCommand(
                         InteractionContextPolicy.SWITCH_USER_AND_TIME,
                         commandLogEntry.getCommandDto());
@@ -378,6 +358,13 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                         .mapSuccessAsNullable(__->this);
             })
             .orElseGet(()->Try.success(null));
+    }
+    String disableReplayOrRetry() {
+        return commandRecord()
+                .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+                .orElse(false)
+                ? null
+                : "Cannot replay, if neither PENDING nor FAILED";
     }
 
     // -- HELPER
@@ -402,7 +389,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
-        return ReplayState.canReplayOrRetryOrMarkForExclusion(commandLogEntry.getReplayState());
+        return ReplayState.isPendingOrFailed(commandLogEntry.getReplayState());
     }
 
     private void onReplayError(final UUID interactionId, final Throwable ex) {
@@ -411,5 +398,4 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 replayContext.commandLogEntryRepository().findByInteractionId(interactionId)
                     .ifPresent(entry->entry.saveAnalysis(ex.toString()))));
     }
-
 }

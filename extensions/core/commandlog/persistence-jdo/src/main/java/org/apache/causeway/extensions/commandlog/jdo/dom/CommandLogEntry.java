@@ -206,10 +206,20 @@ import lombok.Setter;
                   + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
     @Query(
-            name  = Nq.FIND_BY_REPLAY_STATE,
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE replayState == :replayState1 || replayState == :replayState2 "
+                  + " WHERE executeIn == 'FOREGROUND' "
+                  + "    && timestamp >= :from "
+                  + "    && replayState == :replayState "
+                  + " ORDER BY timestamp ASC"),
+    @Query(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES,
+            value = "SELECT "
+                  + "  FROM " + CommandLogEntry.FQCN + " "
+                  + " WHERE executeIn == 'FOREGROUND' "
+                  + "    && timestamp >= :from "
+                  + "    && (replayState == :replayState1 || replayState == :replayState2) "
                   + " ORDER BY timestamp ASC"),
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)

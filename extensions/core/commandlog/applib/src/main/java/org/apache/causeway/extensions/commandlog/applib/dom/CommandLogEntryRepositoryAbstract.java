@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -333,27 +334,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED))
         );
     }
-    @Override
-    public List<CommandLogEntry> findReplayPendingOrFailed() {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
-                        .withParameter("replayState1", ReplayState.PENDING)
-                        .withParameter("replayState2", ReplayState.FAILED))
-        );
-    }
-    /**
-     * Command Replay feature: Cannot replay or retry.
-     */
-    @Override
-    public List<CommandLogEntry> findReplaySucceededOrExcluded() {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
-                        .withParameter("replayState1", ReplayState.OK)
-                        .withParameter("replayState2", ReplayState.EXCLUDED))
-        );
-    }
 
     @Override
     public C saveForReplay(final CommandDto commandToReplay) {
@@ -370,7 +350,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         final C entity = factoryService.detachedEntity(commandLogEntryClass);
         entity.init(commandToReplay, ReplayState.PENDING, 0);
         entity.setParentInteractionId(null); // n/a for replay
-        entity.setExecuteIn(null); // to be specified later depending on user action
+        entity.setExecuteIn(ExecuteIn.FOREGROUND);  // only ever replay foreground commands.
 
         persist(entity);
 
@@ -425,6 +405,46 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return needsTrimFix && commandJdos.size() > 1
                 ? commandJdos.subList(0,1)
                 : commandJdos;
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.EXPORTED);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(final Timestamp since) {
+        return findForegroundSinceTimestampWithStates(since, ReplayState.PENDING, ReplayState.FAILED);
+    }
+
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    @Override
+    public List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(final Timestamp since) {
+        return findForegroundSinceTimestampWithStates(since, ReplayState.OK, ReplayState.EXCLUDED);
+    }
+
+    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState) {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
+                                .withParameter("from", from)
+                                .withParameter("replayState", replayState)));
+    }
+
+    private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES)
+                                .withParameter("from", from)
+                                .withParameter("replayState1", replayState1)
+                                .withParameter("replayState2", replayState2)));
     }
 
     private RepositoryService repositoryService() {

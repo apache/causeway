@@ -369,7 +369,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         val to = from.plusDays(1);
 
         // when
-        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findReplayPendingOrFailed();
+        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline);
 
         // then
         Assertions.assertThat(notYetReplayed).isEmpty();
@@ -382,7 +382,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
             commandTarget1User1.setReplayState(ReplayState.PENDING);
 
             // when
-            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findReplayPendingOrFailed();
+            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline);
 
             // then
             Assertions.assertThat(notYetReplayed2).hasSize(1);

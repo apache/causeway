@@ -54,33 +54,31 @@ public enum ReplayState {
     public boolean isExported() { return this == EXPORTED; }
     public boolean isFailed() { return this == FAILED; }
 
-    public boolean canExport() {
+    public boolean isExportable() {
         return this == ReplayState.UNDEFINED;
     }
 
-    public boolean canReplayOrRetryOrMarkForExclusion() {
+    public boolean isPendingOrFailed() {
         return this == ReplayState.PENDING
                 || this == ReplayState.FAILED;
     }
 
     // -- NULL SAFE
 
-    public static boolean canExport(final @Nullable ReplayState replayState) {
-        return replayState!=null
-            ? replayState.canExport()
-            : true;
+    public static boolean isExportable(final @Nullable ReplayState replayState) {
+        return replayState == null || replayState.isExportable();
     }
 
-    public static boolean canReplayOrRetryOrMarkForExclusion(final @Nullable ReplayState replayState) {
-        return replayState!=null
-            ? replayState.canReplayOrRetryOrMarkForExclusion()
-            : false;
+    public static boolean isPendingOrFailed(final @Nullable ReplayState replayState) {
+        return replayState != null && replayState.isPendingOrFailed();
+    }
+
+    public static boolean isOkOrExcluded(ReplayState replayState) {
+        return replayState == ReplayState.OK || replayState == ReplayState.EXCLUDED;
     }
 
     public static boolean isExported(final ReplayState replayState) {
-        return replayState!=null
-                ? replayState.isExported()
-                : false;
+        return replayState != null && replayState.isExported();
     }
 
 }

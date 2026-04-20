@@ -1,0 +1,32 @@
+- majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "08c210e1-55c0-4c45-83db-491f6581e621"
+  timestamp: "2026-04-21T09:43:58.169+00:00"
+  username: "estatio-admin"
+  targets:
+    oid:
+      - type: "outgoing.invoiceforlease.InvoiceForLease"
+        id: "419264"
+  member: !<ACT>
+    logicalMemberIdentifier: "outgoing.invoiceforlease.InvoiceForLease#approve"
+    interactionType: "action_invocation"
+- majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "0e2ad15e-c1d8-48c5-8b63-b8cdde673715"
+  timestamp: "2026-04-21T09:45:07.409+00:00"
+  username: "estatio-admin"
+  targets:
+    oid:
+      - type: "outgoing.invoiceforlease.InvoiceForLease"
+        id: "419264"
+  member: !<ACT>
+    parameters:
+      parameter:
+        - localDate: "2026-04-20T22:00:00.000+00:00"
+          type: "localDate"
+          name: "Invoice Date"
+        - boolean: false
+          type: "boolean"
+          name: "Allow Invoice Date In Future"
+    logicalMemberIdentifier: "outgoing.invoiceforlease.InvoiceForLease#invoice"
+    interactionType: "action_invocation"

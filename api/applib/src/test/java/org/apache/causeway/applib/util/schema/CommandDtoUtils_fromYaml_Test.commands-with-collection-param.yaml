@@ -1,0 +1,92 @@
+- majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "87ded048-530d-41b4-a431-59df0a77899d"
+  timestamp: "2026-04-21T09:09:06.882+00:00"
+  username: "estatio-admin"
+  targets:
+    oid:
+      - type: "outgoing.lease.Lease"
+        id: "32846"
+  member: !<ACT>
+    parameters:
+      parameter:
+        - enum:
+            enumType: "org.estatio.module.invoice.dom.InvoiceRunType"
+            enumName: "NORMAL_RUN"
+          type: "enum"
+          name: "Run Type"
+        - collection:
+            value:
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "RENT"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "RENT_FIXED"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "RENT_DISCOUNT"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "RENT_DISCOUNT_FIXED"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "SERVICE_CHARGE"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "SERVICE_CHARGE_INDEXABLE"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "SERVICE_CHARGE_DISCOUNT_FIXED"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "DEPOSIT"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "TAX"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "MARKETING"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "PROPERTY_TAX"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "OFFICE_TAX"
+                type: "enum"
+              - enum:
+                  enumType: "org.estatio.module.lease.dom.LeaseItemType"
+                  enumName: "RETAIL_TAX"
+                type: "enum"
+            type: "enum"
+          type: "collection"
+          "null": false
+          name: "Lease Item Types"
+        - localDate: "2026-06-30T22:00:00.000+00:00"
+          type: "localDate"
+          name: "Invoice Due Date"
+        - localDate: "2026-06-30T22:00:00.000+00:00"
+          type: "localDate"
+          name: "Start Due Date"
+        - localDate: "2026-07-01T22:00:00.000+00:00"
+          type: "localDate"
+          name: "Next Due Date"
+        - type: "string"
+          "null": true
+          name: "Tag Name"
+        - string: "JDOJPA-T1"
+          type: "string"
+          name: "New Tag Name"
+    logicalMemberIdentifier: "outgoing.lease.Lease#calculate"
+    interactionType: "action_invocation"
