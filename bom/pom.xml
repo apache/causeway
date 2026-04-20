@@ -98,7 +98,7 @@ identified
         <htmlparser.version>2.1</htmlparser.version>
 
         <javafaker.version>1.0.2</javafaker.version>
-        <javassist.version>3.30.2-GA</javassist.version>
+        <javassist.version>3.31.0-GA</javassist.version>
 
         <jakartaee.version>11.0.0</jakartaee.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
