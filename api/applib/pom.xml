@@ -107,6 +107,18 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- required by com.approvaltests:test (version managed by spring boot) -->
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

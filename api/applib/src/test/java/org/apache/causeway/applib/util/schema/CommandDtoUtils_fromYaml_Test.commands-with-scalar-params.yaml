@@ -22,7 +22,7 @@
   member: !<ACT>
     parameters:
       parameter:
-        - localDate: "2026-04-20T22:00:00.000+00:00"
+        - localDate: "2026-04-20"
           type: "localDate"
           name: "Invoice Date"
         - boolean: false

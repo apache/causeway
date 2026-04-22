@@ -277,6 +277,9 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void test_all_the_repository_methods() {
 
         // given
+        final var baseline = clockService.getClock().nowAsJavaSqlTimestamp();
+
+
         sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });

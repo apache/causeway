@@ -68,6 +68,7 @@ public class CommandDtoUtils_fromYaml_Test {
         Assertions.assertThat(invoiceDate.getName()).isEqualTo("Invoice Date");
         Assertions.assertThat(invoiceDate.getType()).isEqualTo(ValueType.LOCAL_DATE);
         Assertions.assertThat(invoiceDate.getLocalDate()).isNotNull();
+        Assertions.assertThat(invoiceDate.getLocalDate().toXMLFormat()).isEqualTo("2026-04-20");
 
         ParamDto allowFuture = scalarParams.get(1);
         Assertions.assertThat(allowFuture.getName()).isEqualTo("Allow Invoice Date In Future");
@@ -112,6 +113,21 @@ public class CommandDtoUtils_fromYaml_Test {
         Assertions.assertThat(nullableTagName.getName()).isEqualTo("Tag Name");
         Assertions.assertThat(nullableTagName.getType()).isEqualTo(ValueType.STRING);
         Assertions.assertThat(nullableTagName.isNull()).isTrue();
+
+        ParamDto invoiceDueDate = params.get(2);
+        Assertions.assertThat(invoiceDueDate.getName()).isEqualTo("Invoice Due Date");
+        Assertions.assertThat(invoiceDueDate.getType()).isEqualTo(ValueType.LOCAL_DATE);
+        Assertions.assertThat(invoiceDueDate.getLocalDate().toXMLFormat()).isEqualTo("2026-06-30");
+
+        ParamDto startDueDate = params.get(3);
+        Assertions.assertThat(startDueDate.getName()).isEqualTo("Start Due Date");
+        Assertions.assertThat(startDueDate.getType()).isEqualTo(ValueType.LOCAL_DATE);
+        Assertions.assertThat(startDueDate.getLocalDate().toXMLFormat()).isEqualTo("2026-06-30");
+
+        ParamDto nextDueDate = params.get(4);
+        Assertions.assertThat(nextDueDate.getName()).isEqualTo("Next Due Date");
+        Assertions.assertThat(nextDueDate.getType()).isEqualTo(ValueType.LOCAL_DATE);
+        Assertions.assertThat(nextDueDate.getLocalDate().toXMLFormat()).isEqualTo("2026-07-01");
 
         ParamDto newTagName = params.get(6);
         Assertions.assertThat(newTagName.getName()).isEqualTo("New Tag Name");
