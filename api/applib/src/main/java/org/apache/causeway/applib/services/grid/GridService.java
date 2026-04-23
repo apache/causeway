@@ -59,6 +59,18 @@ public interface GridService {
 
         public boolean isDefault() { return layoutIfAny==null; }
         public boolean isVariant() { return layoutIfAny!=null; }
+        
+        /**
+         * Suggested resource name e.g. for export. (not strictly binding)
+         */
+        public String resourceName(CommonMimeType commonMimeType) {
+        	return "%s%s.%s".formatted(
+        			domainClass.getSimpleName(),
+    				isVariant()
+    					? "-" + layoutIfAny()
+    					: "",
+					commonMimeType.proposedFileExtensions().getFirst().orElse("unknown"));
+        }
     }
 
     /**
