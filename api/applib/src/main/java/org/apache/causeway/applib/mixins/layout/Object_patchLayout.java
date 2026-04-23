@@ -58,7 +58,7 @@ import lombok.RequiredArgsConstructor;
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.1.1")
-// framework provided domain objects and mixins should explicitly specify introspection policy
+// framework provided domain objects and mixins should explicitly specify their introspection policy
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "act", introspection = Introspection.ANNOTATION_REQUIRED)
 @RequiredArgsConstructor
 public class Object_patchLayout {
