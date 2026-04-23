@@ -88,7 +88,7 @@ public interface GridService {
     void invalidate(Class<?> domainClass);
     
     /**
-     * Allows to replace or prime layout caches with a custom layout (as provided by given DataSource). 
+     * Allows to replace or prime layout caches with a custom layout (as provided by given {@link LayoutResource}). 
      * Useful for prototyping.
      *  
      * <p>This patching is potentially in conflict with layout reloading. 
