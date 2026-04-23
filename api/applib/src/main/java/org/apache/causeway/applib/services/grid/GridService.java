@@ -29,6 +29,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 
 /**
  * Loads the layout (grid) for any domain class.
@@ -73,6 +74,18 @@ public interface GridService {
      * <p> Acts as a no-op if not {@link #supportsReloading()}.
      */
     void invalidate(Class<?> domainClass);
+    
+    /**
+     * Allows to replace or prime layout caches with a custom layout (as provided by given DataSource). 
+     * Useful for prototyping.
+     *  
+     * <p>However, this is overruled by layout reloading, which goes all the way to retrieve layouts 
+     * from their original sources. 
+     */
+    default void patch(LayoutKey layoutKey, CommonMimeType format, DataSource dataSource) {
+    	//TODO replace this stub by a proper implementation 
+    }
+    
 
     /**
      * Returns a {@link BSGrid} for given {@link LayoutKey}.
