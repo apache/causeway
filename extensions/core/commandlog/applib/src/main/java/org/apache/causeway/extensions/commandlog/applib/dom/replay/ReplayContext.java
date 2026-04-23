@@ -22,6 +22,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.Value;
@@ -34,6 +35,7 @@ import lombok.experimental.Accessors;
 public final class ReplayContext {
         RepositoryService repositoryService;
         InteractionService interactionService;
+        TransactionService transactionService;
         CommandLogEntryRepository commandLogEntryRepository;
         CommandExecutorService commandExecutorService;
         ClockService clockService;

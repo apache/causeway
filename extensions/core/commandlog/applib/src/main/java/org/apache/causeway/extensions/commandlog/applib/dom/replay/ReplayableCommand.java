@@ -24,6 +24,7 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
@@ -46,6 +47,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -62,6 +64,8 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+
+import org.springframework.transaction.annotation.Propagation;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -343,9 +347,14 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
             .map(commandLogEntry->{
-                var tryResultBookmark = replayContext.commandExecutorService().executeCommand(
-                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
-                        commandLogEntry.getCommandDto());
+                final var commandDto = commandLogEntry.getCommandDto();
+                final var tryResultBookmark = replayContext.transactionService().callTransactional(Propagation.REQUIRES_NEW,
+                        () -> {
+                            final var bookmarkTry = replayContext.commandExecutorService().executeCommand(
+                                    InteractionContextPolicy.SWITCH_USER_AND_TIME,
+                                    commandDto);
+                            return bookmarkTry.valueAsNullableElseFail();
+                        });
 
                 // handle the replay outcome
                 tryResultBookmark.accept(
@@ -355,7 +364,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 invalidateCachedRecord();
 
                 return tryResultBookmark
-                        .mapSuccessAsNullable(__->this);
+                        .mapSuccessAsNullable(__ -> this);
             })
             .orElseGet(()->Try.success(null));
     }
