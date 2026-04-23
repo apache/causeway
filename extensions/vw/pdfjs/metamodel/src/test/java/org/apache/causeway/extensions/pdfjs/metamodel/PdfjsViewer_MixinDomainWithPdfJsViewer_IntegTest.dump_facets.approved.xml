@@ -1076,9 +1076,9 @@
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_patchLayout#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
-            <mml:attr name="originalText" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
+            <mml:attr name="originalText" value="Uploads layout XML, to be stored in memory for this object type and current layout name. It overrules the default layout resource lookup. On application restart this information is lost."/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="translated" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
+            <mml:attr name="translated" value="Uploads layout XML, to be stored in memory for this object type and current layout name. It overrules the default layout resource lookup. On application restart this information is lost."/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_patchLayout#act()]"/>
@@ -1100,7 +1100,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
-            <mml:attr name="classes" value="file-alt"/>
+            <mml:attr name="classes" value="file-arrow-up solid"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
             <mml:attr name="precedence" value="DEFAULT"/>
