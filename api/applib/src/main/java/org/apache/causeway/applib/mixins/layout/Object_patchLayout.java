@@ -53,8 +53,10 @@ import lombok.RequiredArgsConstructor;
         executionPublishing = Publishing.DISABLED,
 		restrictTo = RestrictTo.PROTOTYPING)
 @ActionLayout(
-        cssClassFa = "fa-file-alt",
-		describedAs = "Downloads the Xxx.layout... layout file effective/inferred for this object",
+        cssClassFa = "solid file-arrow-up",
+		describedAs = "Uploads layout XML, to be stored in memory for this object type and current layout name. "
+				+ "It overrules the default layout resource lookup. "
+				+ "On application restart this information is lost.",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.1.1")
