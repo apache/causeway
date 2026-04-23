@@ -25,6 +25,7 @@ import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXml;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.causeway.applib.mixins.layout.Object_downloadLayout;
+import org.apache.causeway.applib.mixins.layout.Object_patchLayout;
 import org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
@@ -111,6 +112,7 @@ import org.apache.causeway.schema.CausewayModuleSchema;
     Dto_downloadXsd.class,
     Object_downloadColumnOrderTxtFilesAsZip.class,
     Object_downloadLayout.class,
+    Object_patchLayout.class,
     Object_downloadMetamodelXml.class,
     Object_openRestApi.class,
     Object_rebuildMetamodel.class,

@@ -26,6 +26,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -58,6 +59,18 @@ public interface GridService {
 
         public boolean isDefault() { return layoutIfAny==null; }
         public boolean isVariant() { return layoutIfAny!=null; }
+        
+        /**
+         * Suggested resource name e.g. for export. (not strictly binding)
+         */
+        public String resourceName(CommonMimeType commonMimeType) {
+        	return "%s%s.%s".formatted(
+        			domainClass.getSimpleName(),
+    				isVariant()
+    					? "-" + layoutIfAny()
+    					: "",
+					commonMimeType.proposedFileExtensions().getFirst().orElse("unknown"));
+        }
     }
 
     /**
@@ -73,6 +86,17 @@ public interface GridService {
      * <p> Acts as a no-op if not {@link #supportsReloading()}.
      */
     void invalidate(Class<?> domainClass);
+    
+    /**
+     * Allows to replace or prime layout caches with a custom layout (as provided by given {@link LayoutResource}). 
+     * Useful for prototyping.
+     *  
+     * <p>This patching is potentially in conflict with layout reloading. 
+     * Patched layouts must stick around even when a layout reload attempt is made.
+     * 
+     * @since 4.0
+     */
+    void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource);
 
     /**
      * Returns a {@link BSGrid} for given {@link LayoutKey}.
