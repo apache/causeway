@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -169,10 +170,9 @@ public final class CommandReplayManager implements ViewModel {
     public class importCommands {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
         public CommandReplayManager act(
-                @Parameter(fileAccept = ".zip")
-                final Blob zippedCommandsYaml) {
-
-            var yamlDs = zippedCommandsYaml.unZip(CommonMimeType.YAML).asDataSource();
+                @Parameter(fileAccept = ".yml")
+                final Blob commandsYaml) {
+            var yamlDs = commandsYaml.asDataSource();
 
             final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
             commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
