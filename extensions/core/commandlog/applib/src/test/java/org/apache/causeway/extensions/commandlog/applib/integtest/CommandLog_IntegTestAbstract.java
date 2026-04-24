@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -367,9 +368,10 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         val username1 = commandTarget1User1.getUsername();
         val from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
         val to = from.plusDays(1);
+        final var timestamp = commandTarget1User1.getTimestamp();
 
         // when
-        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline);
+        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(timestamp);
 
         // then
         Assertions.assertThat(notYetReplayed).isEmpty();
@@ -382,7 +384,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
             commandTarget1User1.setReplayState(ReplayState.PENDING);
 
             // when
-            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline);
+            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(timestamp);
 
             // then
             Assertions.assertThat(notYetReplayed2).hasSize(1);
