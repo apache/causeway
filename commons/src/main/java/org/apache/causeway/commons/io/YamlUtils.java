@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,11 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class YamlUtils {
+
+    public enum Marshalling {
+        YAML_LIST,
+        MULTI_DOC
+    }
 
     // -- READING
 
@@ -110,6 +116,40 @@ public class YamlUtils {
         return pojo!=null
                 ? createJacksonWriter(customizers).writeValueAsString(pojo)
                 : null;
+    }
+
+    /**
+     * Converts given list to UTF8 encoded YAML using the requested marshalling mode.
+     * @return <code>null</code> if list is <code>null</code>
+     */
+    @SneakyThrows
+    @Nullable
+    public static String toStringUtf8ForList(
+            final @Nullable List<?> list,
+            final @NonNull Marshalling marshalling,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        if (list == null) {
+            return null;
+        }
+        if (marshalling == Marshalling.YAML_LIST) {
+            return toStringUtf8(list, customizers);
+        }
+        return toStringUtf8AsMultiDocument(list, customizers);
+    }
+
+    @SneakyThrows
+    private static String toStringUtf8AsMultiDocument(
+            final List<?> list,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        if (list.isEmpty()) {
+            return "";
+        }
+        final var mapper = createJacksonWriter(customizers);
+        final List<String> serializedDocuments = new ArrayList<>();
+        for (Object element : list) {
+            serializedDocuments.add(mapper.writeValueAsString(element));
+        }
+        return String.join("---\n", serializedDocuments);
     }
     // -- CUSTOMIZERS
 

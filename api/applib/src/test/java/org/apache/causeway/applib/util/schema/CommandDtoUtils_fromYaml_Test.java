@@ -41,6 +41,25 @@ public class CommandDtoUtils_fromYaml_Test {
     public void scalarValues() throws IOException {
         var commandDtos = loadCommands("commands-with-scalar-params.yaml");
 
+        assertScalarCommands(commandDtos);
+    }
+
+    @Test
+    public void scalarValuesAsMultiDocument() throws IOException {
+        var commandDtos = loadCommands("commands-with-scalar-params-multi-document.yaml");
+
+        assertScalarCommands(commandDtos);
+    }
+
+    @Test
+    public void scalarValuesAsMultiDocumentWithTrailingEmptyDocument() throws IOException {
+        var commandDtos = loadCommands("commands-with-scalar-params-multi-document-trailing-empty.yaml");
+
+        assertScalarCommands(commandDtos);
+    }
+
+    private static void assertScalarCommands(final List<CommandDto> commandDtos) {
+
         Assertions.assertThat(commandDtos).hasSize(2);
 
         ActionDto firstAction = (ActionDto) commandDtos.get(0).getMember();

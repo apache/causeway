@@ -19,8 +19,10 @@
 package org.apache.causeway.applib.util.schema;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConstants;
@@ -37,6 +39,7 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
 import org.apache.causeway.commons.io.YamlUtils;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
@@ -54,11 +57,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import lombok.experimental.UtilityClass;
 
@@ -150,7 +155,7 @@ public final class CommandDtoUtils {
     // -- YAML SUPPORT
 
     public String toYaml(final Iterable<CommandDto> commandDtos) {
-    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+    	final var customizer = new JacksonCustomizer() {
 			@Override
 			public ObjectMapper apply(ObjectMapper mapper) {
 				JsonUtils.jaxbAnnotationSupport(mapper);
@@ -160,26 +165,68 @@ public final class CommandDtoUtils {
 				return mapper;
 			}
 		};
-        return YamlUtils.toStringUtf8(
-            _NullSafe.stream(commandDtos)
-                .collect(Collectors.toList()),
-            customizer);
+        final var commandDtoList = _NullSafe.stream(commandDtos)
+                .collect(Collectors.toList());
+        return YamlUtils.toStringUtf8ForList(
+                commandDtoList, YamlUtils.Marshalling.MULTI_DOC,
+                customizer);
     }
 
     public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
-    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
-			@Override
-			public ObjectMapper apply(ObjectMapper mapper) {
-				JsonUtils.jaxbAnnotationSupport(mapper);
-				CommandDtoUtils.memberDtoSupport(mapper);
-				CommandDtoUtils.valueDtoSupport(mapper);
-				return mapper;
-			}
-		};
-        return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer)
-            .ifFailureFail()
-            .getValue()
-            .orElseGet(Collections::emptyList);
+	    final var customizer = yamlCommandDtoCustomizer();
+
+        final Try<List<CommandDto>> asList = YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer);
+        if (asList.isSuccess()) {
+            return asList.getValue().orElseGet(Collections::emptyList);
+        }
+
+        final Try<List<CommandDto>> asMultiDocument = tryReadAsMultiDocument(CommandDto.class, commandDtosYaml, customizer);
+        asMultiDocument.getFailure().ifPresent(multiDocFailure ->
+            asList.getFailure().ifPresent(multiDocFailure::addSuppressed));
+
+        return asMultiDocument
+                .ifFailureFail()
+                .getValue()
+                .orElseGet(Collections::emptyList);
+    }
+
+    private JsonUtils.JacksonCustomizer yamlCommandDtoCustomizer() {
+        return mapper -> {
+            JsonUtils.jaxbAnnotationSupport(mapper);
+            CommandDtoUtils.memberDtoSupport(mapper);
+            CommandDtoUtils.valueDtoSupport(mapper);
+            return mapper;
+        };
+    }
+
+    private <T> Try<List<T>> tryReadAsMultiDocument(
+            final Class<T> elementType,
+            final DataSource source,
+            final JsonUtils.JacksonCustomizer ... customizers) {
+        return source.tryReadAll(is -> Try.call(() -> {
+            final var mapper = createYamlReader(customizers);
+            final MappingIterator<T> documentReader = mapper.readerFor(elementType).readValues(is);
+            final List<T> elements = new ArrayList<>();
+            while (documentReader.hasNextValue()) {
+                final T next = documentReader.nextValue();
+                if (next != null) {
+                    elements.add(next);
+                }
+            }
+            return elements;
+        }));
+    }
+
+    private ObjectMapper createYamlReader(final JsonUtils.JacksonCustomizer ... customizers) {
+        var mapper = new ObjectMapper(new YAMLFactory());
+        mapper = JsonUtils.jdk8Support(mapper);
+        mapper = JsonUtils.readingJavaTimeSupport(mapper);
+        mapper = JsonUtils.readingCanSupport(mapper);
+        for (final var customizer : customizers) {
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
+        }
+        return mapper;
     }
 
     // Mix-in to add type metadata to MemberDto

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.util.List;
+
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,28 @@ class YamlUtilsTest {
     @Test
     void toStringUtf8() {
         val yaml = YamlUtils.toStringUtf8(person);
+        Approvals.verify(yaml);
+    }
+
+    @Test
+    void toStringUtf8ForList_yamlList() {
+        val person2 = _TestDomain.samplePerson();
+        person2.setName("fred");
+
+        val yaml = YamlUtils.toStringUtf8ForList(
+                List.of(person, person2),
+                YamlUtils.Marshalling.YAML_LIST);
+        Approvals.verify(yaml);
+    }
+
+    @Test
+    void toStringUtf8ForList_multiDoc() {
+        val person2 = _TestDomain.samplePerson();
+        person2.setName("fred");
+
+        val yaml = YamlUtils.toStringUtf8ForList(
+                List.of(person, person2),
+                YamlUtils.Marshalling.MULTI_DOC);
         Approvals.verify(yaml);
     }
 

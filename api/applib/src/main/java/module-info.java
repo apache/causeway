@@ -124,8 +124,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.value;
     exports org.apache.causeway.applib.value.semantics;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
     requires transitive jakarta.activation;
     requires transitive java.annotation;
     requires transitive java.desktop;
@@ -146,7 +144,7 @@ module org.apache.causeway.applib {
     requires transitive spring.core;
     requires spring.tx;
     requires org.apache.logging.log4j.core;
-	requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.dataformat.yaml;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;
