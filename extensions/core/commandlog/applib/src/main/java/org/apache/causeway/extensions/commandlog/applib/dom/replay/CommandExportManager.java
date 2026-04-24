@@ -220,8 +220,7 @@ public final class CommandExportManager implements ViewModel {
             final var filename = filenamePrefix + timestamp;
 
             var blob = Clob.of(filename, CommonMimeType.YAML, yaml)
-                    .toBlobUtf8()
-                    .zip();
+                    .toBlobUtf8();
 
             // do this last once we have successfully created the Clob
             selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
