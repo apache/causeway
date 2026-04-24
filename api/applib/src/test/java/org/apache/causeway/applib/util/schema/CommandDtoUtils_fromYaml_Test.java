@@ -51,6 +51,13 @@ public class CommandDtoUtils_fromYaml_Test {
         assertScalarCommands(commandDtos);
     }
 
+    @Test
+    public void scalarValuesAsMultiDocumentWithTrailingEmptyDocument() throws IOException {
+        var commandDtos = loadCommands("commands-with-scalar-params-multi-document-trailing-empty.yaml");
+
+        assertScalarCommands(commandDtos);
+    }
+
     private static void assertScalarCommands(final List<CommandDto> commandDtos) {
 
         Assertions.assertThat(commandDtos).hasSize(2);
