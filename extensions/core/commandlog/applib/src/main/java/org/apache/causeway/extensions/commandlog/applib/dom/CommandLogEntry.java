@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -148,7 +149,10 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
          * primary before the production database was restored to the secondary.
          */
         public static final String FIND_MOST_RECENT_COMPLETED           = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
-        public static final String FIND_BY_REPLAY_STATE                 = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE
+                                                                        = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayState";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES
+                                                                        = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayStates";
         public static final String FIND_BACKGROUND_AND_NOT_YET_STARTED  = LOGICAL_TYPE_NAME + ".findBackgroundAndNotYetStarted";
         public static final String FIND_RECENT_BACKGROUND_BY_TARGET     = LOGICAL_TYPE_NAME + ".findRecentBackgroundByTarget";
     }
@@ -170,8 +174,6 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
         setResult(command.getResult());
         setException(command.getException());
-
-        setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.UNDEFINED);
     }
 
 
@@ -182,7 +184,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * @param replayState - controls whether this is to be replayed
      * @param targetIndex - if the command represents a bulk action, then it is flattened out when replayed; this indicates which target to execute against.
      */
-    public CommandLogEntry(
+    @Programmatic
+    protected void init(
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
@@ -198,8 +201,11 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         // the hierarchy of commands calling other commands is only available on the primary system.
         setParentInteractionId(null);
 
-        setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getStartedAt()));
-        setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getCompletedAt()));
+        Optional.ofNullable(commandDto.getTimings())
+            .ifPresent(timings->{
+                setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timings.getStartedAt()));
+                setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timings.getCompletedAt()));
+            });
 
         copyOver(commandDto, UserDataKeys.RESULT, value -> this.setResult(Bookmark.parse(value).orElse(null)));
         copyOver(commandDto, UserDataKeys.EXCEPTION, this::setException);
@@ -210,23 +216,25 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     static void copyOver(
             final CommandDto commandDto,
             final String key, final Consumer<String> consume) {
-        commandDto.getUserData().getEntry()
-                .stream()
-                .filter(x -> Objects.equals(x.getKey(), key))
-                .map(MapDto.Entry::getValue)
-                .filter(Objects::nonNull)
-                .filter(x -> x.length() > 0)
-                .findFirst()
-                .ifPresent(consume);
+        Optional.ofNullable(commandDto.getUserData())
+            .ifPresent(userdata->{
+                userdata.getEntry()
+                    .stream()
+                    .filter(x -> Objects.equals(x.getKey(), key))
+                    .map(MapDto.Entry::getValue)
+                    .filter(Objects::nonNull)
+                    .filter(x -> x.length() > 0)
+                    .findFirst()
+                    .ifPresent(consume);
+            });
     }
 
-
-    private static final DateTimeFormatter formatter =
+    static final DateTimeFormatter DATETIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @ObjectSupport public String title() {
         return new TitleBuffer()
-                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(DATETIME_FORMATTER.format(getTimestamp().toLocalDateTime()))
                 .append(" ")
                 .append(getLogicalMemberIdentifier())
                 .toString();

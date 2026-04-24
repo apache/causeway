@@ -18,17 +18,47 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.DtoMapper;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
+import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
+import org.apache.causeway.schema.common.v2.ValueDto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 
 import lombok.experimental.UtilityClass;
 
@@ -115,6 +145,232 @@ public final class CommandDtoUtils {
             commandDto.setUserData(userData);
         }
         return userData;
+    }
+
+    // -- YAML SUPPORT
+
+    public String toYaml(final Iterable<CommandDto> commandDtos) {
+    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+			@Override
+			public ObjectMapper apply(ObjectMapper mapper) {
+				JsonUtils.jaxbAnnotationSupport(mapper);
+				CommandDtoUtils.memberDtoSupport(mapper);
+				CommandDtoUtils.valueDtoSupport(mapper);
+				JsonUtils.onlyIncludeNonNull(mapper);
+				return mapper;
+			}
+		};
+        return YamlUtils.toStringUtf8(
+            _NullSafe.stream(commandDtos)
+                .collect(Collectors.toList()),
+            customizer);
+    }
+
+    public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
+    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+			@Override
+			public ObjectMapper apply(ObjectMapper mapper) {
+				JsonUtils.jaxbAnnotationSupport(mapper);
+				CommandDtoUtils.memberDtoSupport(mapper);
+				CommandDtoUtils.valueDtoSupport(mapper);
+				return mapper;
+			}
+		};
+        return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer)
+            .ifFailureFail()
+            .getValue()
+            .orElseGet(Collections::emptyList);
+    }
+
+    // Mix-in to add type metadata to MemberDto
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "type")
+    private abstract class AbstractDtoMixIn {}
+
+    // Mix-in to ignore unknown properties for ValueDto
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private abstract class AbstractValueDtoMixIn {
+        @JsonSerialize(using = LocalDateXmlGregorianCalendarSerializer.class)
+        abstract XMLGregorianCalendar getLocalDate();
+
+        @JsonDeserialize(using = LocalDateXmlGregorianCalendarDeserializer.class)
+        abstract void setLocalDate(XMLGregorianCalendar localDate);
+
+        @JsonSerialize(using = LocalDateTimeXmlGregorianCalendarSerializer.class)
+        abstract XMLGregorianCalendar getLocalDateTime();
+
+        @JsonDeserialize(using = LocalDateTimeXmlGregorianCalendarDeserializer.class)
+        abstract void setLocalDateTime(XMLGregorianCalendar localDateTime);
+
+        @JsonSerialize(using = LocalTimeXmlGregorianCalendarSerializer.class)
+        abstract XMLGregorianCalendar getLocalTime();
+
+        @JsonDeserialize(using = LocalTimeXmlGregorianCalendarDeserializer.class)
+        abstract void setLocalTime(XMLGregorianCalendar localTime);
+    }
+
+    private void valueDtoSupport(final ObjectMapper mb) {
+        mb.addMixIn(ValueDto.class, AbstractValueDtoMixIn.class);
+    }
+
+    private static final DatatypeFactory DATATYPE_FACTORY = datatypeFactory();
+
+    private static DatatypeFactory datatypeFactory() {
+        try {
+            return DatatypeFactory.newInstance();
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to initialize DatatypeFactory", ex);
+        }
+    }
+
+    private static final class LocalDateXmlGregorianCalendarSerializer
+            extends JsonSerializer<XMLGregorianCalendar> {
+
+        @Override
+        public void serialize(
+                final XMLGregorianCalendar value,
+                final JsonGenerator gen,
+                final SerializerProvider serializers) throws IOException {
+            if (value == null) {
+                gen.writeNull();
+                return;
+            }
+            final XMLGregorianCalendar dateOnly = DATATYPE_FACTORY.newXMLGregorianCalendarDate(
+                    value.getYear(),
+                    value.getMonth(),
+                    value.getDay(),
+                    DatatypeConstants.FIELD_UNDEFINED);
+            gen.writeString(dateOnly.toXMLFormat());
+        }
+    }
+
+    private static final class LocalDateXmlGregorianCalendarDeserializer
+            extends JsonDeserializer<XMLGregorianCalendar> {
+
+        @Override
+        public XMLGregorianCalendar deserialize(
+                final JsonParser p,
+                final DeserializationContext ctxt) throws IOException {
+            final String text = p.getValueAsString();
+            if (_Strings.isNullOrEmpty(text)) {
+                return null;
+            }
+            final XMLGregorianCalendar parsed = DATATYPE_FACTORY.newXMLGregorianCalendar(text);
+            return DATATYPE_FACTORY.newXMLGregorianCalendarDate(
+                    parsed.getYear(),
+                    parsed.getMonth(),
+                    parsed.getDay(),
+                    DatatypeConstants.FIELD_UNDEFINED);
+        }
+    }
+
+    private static final class LocalDateTimeXmlGregorianCalendarSerializer
+            extends JsonSerializer<XMLGregorianCalendar> {
+
+        @Override
+        public void serialize(
+                final XMLGregorianCalendar value,
+                final JsonGenerator gen,
+                final SerializerProvider serializers) throws IOException {
+            if (value == null) {
+                gen.writeNull();
+                return;
+            }
+            final XMLGregorianCalendar localDateTime = DATATYPE_FACTORY.newXMLGregorianCalendar(
+                    value.getYear(),
+                    value.getMonth(),
+                    value.getDay(),
+                    value.getHour(),
+                    value.getMinute(),
+                    value.getSecond(),
+                    millisecondsOf(value),
+                    DatatypeConstants.FIELD_UNDEFINED);
+            gen.writeString(localDateTime.toXMLFormat());
+        }
+    }
+
+    private static final class LocalDateTimeXmlGregorianCalendarDeserializer
+            extends JsonDeserializer<XMLGregorianCalendar> {
+
+        @Override
+        public XMLGregorianCalendar deserialize(
+                final JsonParser p,
+                final DeserializationContext ctxt) throws IOException {
+            final String text = p.getValueAsString();
+            if (_Strings.isNullOrEmpty(text)) {
+                return null;
+            }
+            final XMLGregorianCalendar parsed = DATATYPE_FACTORY.newXMLGregorianCalendar(text);
+            return DATATYPE_FACTORY.newXMLGregorianCalendar(
+                    parsed.getYear(),
+                    parsed.getMonth(),
+                    parsed.getDay(),
+                    parsed.getHour(),
+                    parsed.getMinute(),
+                    parsed.getSecond(),
+                    millisecondsOf(parsed),
+                    DatatypeConstants.FIELD_UNDEFINED);
+        }
+    }
+
+    private static final class LocalTimeXmlGregorianCalendarSerializer
+            extends JsonSerializer<XMLGregorianCalendar> {
+
+        @Override
+        public void serialize(
+                final XMLGregorianCalendar value,
+                final JsonGenerator gen,
+                final SerializerProvider serializers) throws IOException {
+            if (value == null) {
+                gen.writeNull();
+                return;
+            }
+            final XMLGregorianCalendar localTime = DATATYPE_FACTORY.newXMLGregorianCalendarTime(
+                    value.getHour(),
+                    value.getMinute(),
+                    value.getSecond(),
+                    millisecondsOf(value),
+                    DatatypeConstants.FIELD_UNDEFINED);
+            gen.writeString(localTime.toXMLFormat());
+        }
+    }
+
+    private static final class LocalTimeXmlGregorianCalendarDeserializer
+            extends JsonDeserializer<XMLGregorianCalendar> {
+
+        @Override
+        public XMLGregorianCalendar deserialize(
+                final JsonParser p,
+                final DeserializationContext ctxt) throws IOException {
+            final String text = p.getValueAsString();
+            if (_Strings.isNullOrEmpty(text)) {
+                return null;
+            }
+            final XMLGregorianCalendar parsed = DATATYPE_FACTORY.newXMLGregorianCalendar(text);
+            return DATATYPE_FACTORY.newXMLGregorianCalendarTime(
+                    parsed.getHour(),
+                    parsed.getMinute(),
+                    parsed.getSecond(),
+                    millisecondsOf(parsed),
+                    DatatypeConstants.FIELD_UNDEFINED);
+        }
+    }
+
+    private static int millisecondsOf(final XMLGregorianCalendar value) {
+        final int millis = value.getMillisecond();
+        return millis == DatatypeConstants.FIELD_UNDEFINED
+                ? DatatypeConstants.FIELD_UNDEFINED
+                : millis;
+    }
+
+    private void memberDtoSupport(final ObjectMapper mb) {
+        // add mix-in so MemberDto carries @JsonTypeInfo without modifying source
+        mb.addMixIn(MemberDto.class, AbstractDtoMixIn.class);
+        // register concrete sub-types with logical names
+        mb.registerSubtypes(new NamedType(ActionDto.class, "ACT"));
+        mb.registerSubtypes(new NamedType(PropertyDto.class, "PROP"));
     }
 
 }

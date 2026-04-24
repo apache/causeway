@@ -18,18 +18,21 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.lang.Nullable;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
+import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 
@@ -119,6 +122,22 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
 
+    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since);
+
+    /**
+     * Command Replay feature: Can replay or retry.
+     */
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
+
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since);
+
+
+
     /**
      * Returns any persisted commands that have not yet started.
      *
@@ -158,13 +177,21 @@ public interface CommandLogEntryRepository {
      */
     Optional<CommandLogEntry> findMostRecentCompleted();
 
-    List<CommandLogEntry> findNotYetReplayed();
-
 
     CommandLogEntry saveForReplay(final CommandDto dto);
 
+    default List<CommandLogEntry> saveForReplay(@Nullable final List<CommandDto> commandDtoList) {
+        return _NullSafe.stream(commandDtoList)
+            .map(this::saveForReplay)
+            .collect(Collectors.toList());
+    }
 
-    List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto);
+    default List<CommandLogEntry> saveForReplay(@Nullable final CommandsDto commandsDto) {
+        var commandDtoList = Optional.ofNullable(commandsDto)
+            .map(CommandsDto::getCommandDto)
+            .orElseGet(Collections::emptyList);
+        return saveForReplay(commandDtoList);
+    }
 
 
     void persist(final CommandLogEntry commandLogEntry);
@@ -189,6 +216,5 @@ public interface CommandLogEntryRepository {
      * intended for testing purposes only
      */
     void removeAll();
-
 
 }

@@ -45,7 +45,7 @@ public class CommandLogEntry_replayQueue {
     final CommandLogEntry commandLogEntry;
 
     public List<? extends CommandLogEntry> coll() {
-        return commandLogEntryRepository.findNotYetReplayed();
+        return commandLogEntryRepository.findReplayPendingOrFailed();
     }
     public boolean hideColl() {
         return !secondaryConfig.isConfigured();

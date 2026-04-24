@@ -18,21 +18,26 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.app;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -40,6 +45,13 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.lang.Nullable;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,7 +80,7 @@ public class CommandLogMenu {
 
     final CommandLogEntryRepository commandLogEntryRepository;
     final ClockService clockService;
-
+    final ReplayContext replayContext;
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -147,8 +159,57 @@ public class CommandLogMenu {
         }
     }
 
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = exportManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(cssClassFa = "solid share-from-square", sequence="50")
+    public class exportManager {
+        public class DomainEvent extends ActionDomainEvent<exportManager> { }
 
+        @MemberSupport public CommandExportManager act(
+                @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
+                final java.sql.Timestamp since
+        ) {
+            return new CommandExportManager(since, replayContext);
+        }
 
+        @MemberSupport public java.sql.Timestamp defaultSince() {
+            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
+            return truncatedTo(now, ChronoUnit.HOURS);
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = replayManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(cssClassFa = "solid circle-play", sequence="51")
+    public class replayManager {
+        public class DomainEvent extends ActionDomainEvent<replayManager> { }
+
+        @MemberSupport public CommandReplayManager act(
+                @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for replay.  Set to a time immediately before the commands to be replayed.")
+                final java.sql.Timestamp since
+        ) {
+            return new CommandReplayManager(since, replayContext);
+        }
+
+        @MemberSupport public java.sql.Timestamp defaultSince() {
+            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
+            return truncatedTo(now, ChronoUnit.HOURS);
+        }
+    }
+
+    private static @NonNull Timestamp truncatedTo(Timestamp now, ChronoUnit chronoUnit) {
+        return Timestamp.from(now.toInstant().truncatedTo(chronoUnit));
+    }
 
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());

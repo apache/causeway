@@ -85,7 +85,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
             // is there a pending command already?
             // (we fetch several at a time, so we may not have processed them all yet)
-            commandsToReplay = commandLogEntryRepository.findNotYetReplayed();
+            commandsToReplay = commandLogEntryRepository.findReplayPendingOrFailed();
 
             if(commandsToReplay.isEmpty()) {
 
