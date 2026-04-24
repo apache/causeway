@@ -19,14 +19,12 @@
 package org.apache.causeway.commons.io;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.commons.io._TestDomain.Person;
 
@@ -55,13 +53,7 @@ class YamlUtilsTest {
         val yaml = YamlUtils.toStringUtf8ForList(
                 List.of(person, person2),
                 YamlUtils.Marshalling.YAML_LIST);
-        assertNotNull(yaml);
-
-        val roundTrip = YamlUtils.tryReadAsList(Person.class, DataSource.ofStringUtf8(yaml))
-                .valueAsNonNullElseFail();
-
-        assertEquals(List.of("sven", "fred"),
-                roundTrip.stream().map(Person::getName).collect(Collectors.toList()));
+        Approvals.verify(yaml);
     }
 
     @Test
@@ -72,17 +64,7 @@ class YamlUtilsTest {
         val yaml = YamlUtils.toStringUtf8ForList(
                 List.of(person, person2),
                 YamlUtils.Marshalling.MULTI_DOC);
-        assertNotNull(yaml);
-
-        val docs = yaml.split("(?m)^---\\s*$");
-
-        val first = YamlUtils.tryRead(Person.class, docs[0])
-                .valueAsNonNullElseFail();
-        val second = YamlUtils.tryRead(Person.class, docs[1])
-                .valueAsNonNullElseFail();
-
-        assertEquals("sven", first.getName());
-        assertEquals("fred", second.getName());
+        Approvals.verify(yaml);
     }
 
     @Test
