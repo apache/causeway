@@ -57,6 +57,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -154,7 +155,7 @@ public final class CommandDtoUtils {
     // -- YAML SUPPORT
 
     public String toYaml(final Iterable<CommandDto> commandDtos) {
-    	final JsonUtils.JacksonCustomizer customizer = new JacksonCustomizer() {
+    	final var customizer = new JacksonCustomizer() {
 			@Override
 			public ObjectMapper apply(ObjectMapper mapper) {
 				JsonUtils.jaxbAnnotationSupport(mapper);
@@ -164,14 +165,15 @@ public final class CommandDtoUtils {
 				return mapper;
 			}
 		};
-        return YamlUtils.toStringUtf8(
-            _NullSafe.stream(commandDtos)
-                .collect(Collectors.toList()),
-            customizer);
+        final var commandDtoList = _NullSafe.stream(commandDtos)
+                .collect(Collectors.toList());
+        return YamlUtils.toStringUtf8ForList(
+                commandDtoList, YamlUtils.Marshalling.MULTI_DOC,
+                customizer);
     }
 
     public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
-	    final JsonUtils.JacksonCustomizer customizer = yamlCommandDtoCustomizer();
+	    final var customizer = yamlCommandDtoCustomizer();
 
         final Try<List<CommandDto>> asList = YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer);
         if (asList.isSuccess()) {
@@ -202,8 +204,8 @@ public final class CommandDtoUtils {
             final DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll(is -> Try.call(() -> {
-            final ObjectMapper mapper = createYamlReader(customizers);
-            final var documentReader = mapper.readerFor(elementType).readValues(is);
+            final var mapper = createYamlReader(customizers);
+            final MappingIterator<T> documentReader = mapper.readerFor(elementType).readValues(is);
             final List<T> elements = new ArrayList<>();
             while (documentReader.hasNextValue()) {
                 final T next = documentReader.nextValue();
@@ -220,7 +222,7 @@ public final class CommandDtoUtils {
         mapper = JsonUtils.jdk8Support(mapper);
         mapper = JsonUtils.readingJavaTimeSupport(mapper);
         mapper = JsonUtils.readingCanSupport(mapper);
-        for (JsonUtils.JacksonCustomizer customizer : customizers) {
+        for (final var customizer : customizers) {
             mapper = Optional.ofNullable(customizer.apply(mapper))
                     .orElse(mapper);
         }
