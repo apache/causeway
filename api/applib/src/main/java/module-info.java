@@ -153,6 +153,7 @@ module org.apache.causeway.applib {
     opens org.apache.causeway.applib.layout.links;
     opens org.apache.causeway.applib.layout.menubars.bootstrap;
     opens org.apache.causeway.applib.layout.menubars;
+    opens org.apache.causeway.applib.util.schema to com.fasterxml.jackson.databind;
     exports org.apache.causeway.applib.services.ascii;
 
 }
