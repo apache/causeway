@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -33,6 +34,7 @@ import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
 import org.yaml.snakeyaml.DumperOptions;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
@@ -139,7 +141,33 @@ public class YamlUtils {
             return mapper.readValue(is, collectionType);
         }));
     }
-
+    
+    /**
+     * Returns a {@link Stream} of (arbitrary) YAML Document junks from provided {@link DataSource},
+     * where each junk typically needs further parsing individually.
+     */
+    public Try<Stream<String>> tryReadMultiDoc(final @Nullable DataSource source) {
+    	return source == null
+			? Try.success(Stream.empty())
+			: source.tryReadAsStringUtf8()
+	    		.mapSuccessAsNullable(TextUtils::readLines)
+	    		.mapSuccessAsNullable(YamlUtils::linesToDocs);
+    }
+    private static Stream<String> linesToDocs(final Can<String> lineStream) {
+    	var buffer = new ArrayList<StringBuilder>();
+    	buffer.add(new StringBuilder());
+    	for(var line : lineStream) {
+    		if(line.equals("---")) {
+    			buffer.add(new StringBuilder());
+    			continue;
+			}
+    		buffer.get(buffer.size()-1).append(line).append("\n");
+    	}
+		return buffer.stream()
+				.map(StringBuilder::toString)
+				.filter(str->!str.isEmpty());
+    }
+    
     // -- WRITING
 
     /**

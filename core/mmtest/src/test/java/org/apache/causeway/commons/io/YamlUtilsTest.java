@@ -98,4 +98,18 @@ class YamlUtilsTest {
     	Approvals.verify(yaml, ApprovalsOptions.defaultOptions());
     }
     
+    @Test
+    void multiDocRoundtrip() {
+    	var multiDocYaml = YamlUtils.writeMultiDoc(
+    			persons.stream()
+        			.map(YamlUtils::toStringUtf8));
+    	var personsAfterRoundtrip = YamlUtils.tryReadMultiDoc(DataSource.ofStringUtf8(multiDocYaml))
+    			.valueAsNonNullElseFail()
+    			.map(yaml->YamlUtils.tryRead(Person.class, yaml)
+    					.valueAsNonNullElseFail())
+    			.toList();
+    	
+        assertEquals(this.persons, personsAfterRoundtrip);
+    }
+    
 }
