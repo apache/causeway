@@ -52,7 +52,7 @@ class CommandDtoUtils_toYaml_Approval_Test {
     @Test
     void marshals_all_date_time_datatypes() {
         withDefaultTimeZone("UTC", () -> {
-            String yaml = CommandDtoUtils.toYaml(List.of(commandWithAllDateTimeParams()));
+            String yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandWithAllDateTimeParams()));
             Approvals.verify(yaml, ApprovalsOptions.defaultOptions());
         });
     }
@@ -60,7 +60,7 @@ class CommandDtoUtils_toYaml_Approval_Test {
     @Test
     void marshals_all_date_time_datatypes_when_default_timezone_is_cest() {
         withDefaultTimeZone("Europe/Paris", () -> {
-            String yaml = CommandDtoUtils.toYaml(List.of(commandWithAllDateTimeParams()));
+            String yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandWithAllDateTimeParams()));
             try {
                 Assertions.assertThat(yaml).isEqualTo(readApprovalSnapshot());
             } catch (IOException ex) {

@@ -114,8 +114,9 @@ public record CommandReplayManager(
             .toList();
         for(var replayableCommand : replayables) {
             var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
-            if(tryReplayOrRetry.isFailure())
-                return this; // stop further execution
+            if(tryReplayOrRetry.isFailure()) {
+				return this; // stop further execution
+			}
         }
         return this;
     }

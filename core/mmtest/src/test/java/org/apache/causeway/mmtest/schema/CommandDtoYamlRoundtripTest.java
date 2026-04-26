@@ -43,9 +43,9 @@ class CommandDtoYamlRoundtripTest {
 
     @Test
     void test() {
-        var yaml = CommandDtoUtils.toYaml(List.of(commandDtoSample(), commandDtoSample()));
+        var yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandDtoSample(), commandDtoSample()));
         var afterRoundtrip = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
-        assertEquals(yaml, CommandDtoUtils.toYaml(afterRoundtrip));
+        assertEquals(yaml, CommandDtoUtils.toMultiDocYaml(afterRoundtrip));
     }
 
     private CommandDto commandDtoSample() {

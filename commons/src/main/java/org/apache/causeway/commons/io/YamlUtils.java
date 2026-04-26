@@ -41,6 +41,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
+import tools.jackson.databind.MappingIterator;
 import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
 import tools.jackson.dataformat.yaml.YAMLMapper;
@@ -89,16 +90,14 @@ public class YamlUtils {
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
      * with given {@code elementType}.
+     * 
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsList(
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is) -> Try.call(()->{
-            var mapper = createJacksonReader(Optional.empty(), customizers);
-            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-            return mapper.readValue(is, collectionType);
-        }));
+    	return tryReadAsListCustomized(elementType, source, null, customizers);
     }
 
     /**
@@ -128,17 +127,29 @@ public class YamlUtils {
 
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
-     * with given {@code elementType}.
+     * with given {@code elementType}. 
+     * 
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsListCustomized(
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
-            final @NonNull YamlLoadCustomizer loadCustomizer,
+            final @Nullable YamlLoadCustomizer loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is) -> Try.call(()->{
-            var mapper = createJacksonReader(Optional.of(loadCustomizer), customizers);
-            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-            return mapper.readValue(is, collectionType);
+            var mapper = createJacksonReader(Optional.ofNullable(loadCustomizer), customizers);
+            final MappingIterator<T> documentReader = mapper.readerFor(elementType).readValues(is);
+            final List<T> elements = new ArrayList<>();
+            while (documentReader.hasNextValue()) {
+                final T next = documentReader.nextValue();
+                if (next != null) {
+                    elements.add(next);
+                }
+            }
+            return elements; // no need wrap unmodifiable, as callers can do what ever they want with the list
+//former code without support for multi-doc format...
+//            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+//            return mapper.readValue(is, collectionType);
         }));
     }
     

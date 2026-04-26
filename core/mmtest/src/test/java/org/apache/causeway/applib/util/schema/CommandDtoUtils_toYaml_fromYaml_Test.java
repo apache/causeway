@@ -26,7 +26,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.io.DataSource;
@@ -39,7 +38,6 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-@Disabled //FIXME
 class CommandDtoUtils_toYaml_fromYaml_Test {
 
 	@Test
@@ -94,7 +92,7 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
 			action.setParameters(params);
 			command.setMember(action);
 
-			String yaml = CommandDtoUtils.toYaml(List.of(command));
+			String yaml = CommandDtoUtils.toMultiDocYaml(List.of(command));
 			List<CommandDto> roundtripped = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
 
 			XMLGregorianCalendar roundtrippedDate = ((ActionDto) roundtripped.get(0).getMember())

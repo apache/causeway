@@ -102,7 +102,7 @@ public record CommandExportManager(
             .sorted()
             .toList();
 
-        var yaml = CommandDtoUtils.toYaml(
+        var yaml = CommandDtoUtils.toMultiDocYaml(
             selectedCommandLogEntries.stream()
                 .filter(entry->!ReplayState.isExported(entry.getReplayState()))
                 .map(CommandLogEntry::getCommandDto)

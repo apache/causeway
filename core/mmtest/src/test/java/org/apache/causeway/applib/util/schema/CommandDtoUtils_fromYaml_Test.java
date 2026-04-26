@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.util.StreamUtils;
@@ -36,7 +35,6 @@ import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-@Disabled //FIXME
 class CommandDtoUtils_fromYaml_Test {
 
     @Test

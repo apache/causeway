@@ -146,30 +146,14 @@ public final class CommandDtoUtils {
     }
 
     /**
-     * Parses from (regular) YAML-list format that represent a collection of {@link CommandDto} entries.
+     * Either parses from (regular) YAML-list format or from multi-doc YAML format,
+     * any representing a collection of {@link CommandDto} entries.
      */
     public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
     	var yamlReadCustomizer = CommandDtoJacksonSupport.yamlReadCustomizer();
-        return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, yamlReadCustomizer)
-            .ifFailureFail()
-            .getValue()
-            .orElseGet(Collections::emptyList);
-    }
-    
-    /**
-     * Parses from multi-doc YAML format that represent a collection of {@link CommandDto} entries.
-     */
-    public List<CommandDto> fromMultiDocYaml(final DataSource commandDtosYaml) {
-    	var yamlReadCustomizer = CommandDtoJacksonSupport.yamlReadCustomizer();
-    	return YamlUtils.tryReadMultiDoc(commandDtosYaml)
-			.mapSuccessWhenPresent(stream->stream
-				.map(yaml->YamlUtils
-					.tryRead(CommandDto.class, yaml, yamlReadCustomizer)
-					.valueAsNonNullElseFail())
-				.toList())
-	    	.ifFailureFail()
-	        .getValue()
-	        .orElseGet(Collections::emptyList);
+    	return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, yamlReadCustomizer)
+			.getValue()
+			.orElseGet(Collections::emptyList);
     }
  
 }
