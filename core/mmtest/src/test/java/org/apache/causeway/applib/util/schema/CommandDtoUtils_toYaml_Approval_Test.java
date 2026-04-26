@@ -29,7 +29,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.approvaltests.Approvals;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.util.StreamUtils;
@@ -44,7 +43,11 @@ import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 
-@Disabled //FIXME
+/**
+ * @implNote potential issues with ISO-8601 format equivalence of 
+ * 		{@code 2026-07-01T08:15:30.000+00:00 == 2026-07-01T08:15:30.000Z}, 
+ * 		tests might fail, because tests expect one or the other in a hardcoded way
+ */
 class CommandDtoUtils_toYaml_Approval_Test {
 
     private static final DatatypeFactory DATATYPE_FACTORY = datatypeFactory();
