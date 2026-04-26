@@ -18,7 +18,13 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.util.List;
+
 import org.approvaltests.Approvals;
+import org.approvaltests.core.Options;
+import org.approvaltests.reporters.DiffReporter;
+import org.approvaltests.reporters.UseReporter;
+import org.approvaltests.reporters.linux.ReportWithMeldMergeLinux;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,10 +35,14 @@ import org.apache.causeway.commons.io._TestDomain.Person;
 class YamlUtilsTest {
 
     private Person person;
+    private List<Person> persons;
 
     @BeforeEach
     void setup() {
         this.person = _TestDomain.samplePerson();
+        this.persons = List.of(
+        		person,
+        		_TestDomain.samplePerson("fred"));
     }
 
     @Test
@@ -72,5 +82,31 @@ class YamlUtilsTest {
                 .valueAsNonNullElseFail();
         assertEquals(this.person, person);
     }
+    
+    @Test
+    @UseReporter(DiffReporter.class)
+    void toStringUtf8ForList_yamlList() {
+        var yaml = YamlUtils.toStringUtf8(persons);
+        Approvals.verify(yaml, defaultOptions());
+    }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void toStringUtf8ForList_multiDoc() {
+    	var yaml = YamlUtils.writeMultiDoc(
+    			persons.stream()
+        			.map(YamlUtils::toStringUtf8));
+    	Approvals.verify(yaml, defaultOptions());
+    }
+
+    //TODO de-duplicate (from internaltestsupport)
+	static Options defaultOptions() {
+		var opts = new Options();
+		// on Linux, at time of writing, the default reporter find mechanism throws an exception while evaluating Windows Diff Reporters;
+		// this is a workaround, provided you are on Linux and have Meld installed
+		return ReportWithMeldMergeLinux.INSTANCE.checkFileExists()
+			? opts.withReporter(ReportWithMeldMergeLinux.INSTANCE)
+			: opts;
+	}
+    
 }

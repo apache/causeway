@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -32,6 +34,7 @@ import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
 import org.yaml.snakeyaml.DumperOptions;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -49,6 +52,8 @@ import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 @UtilityClass
 public class YamlUtils {
 
+	public static final String MULTI_DOC_DELIMITER = "---\n";
+	
     @FunctionalInterface
     public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
     @FunctionalInterface
@@ -144,7 +149,9 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null) {
+			return;
+		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.empty(), customizers).writeValue(os, pojo)));
     }
@@ -171,7 +178,9 @@ public class YamlUtils {
             final @NonNull DataSink sink,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null) {
+			return;
+		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValue(os, pojo)));
     }
@@ -182,13 +191,28 @@ public class YamlUtils {
      */
     @SneakyThrows
     @Nullable
-    public static String toStringUtf8Customized(
+    public String toStringUtf8Customized(
             final @Nullable Object pojo,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
                 ? createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValueAsString(pojo)
                 : null;
+    }
+
+    /**
+     * Concatenates given {@link Iterable<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable Iterable<String> yamlDocuments) {
+    	return _NullSafe.stream(yamlDocuments)
+    		.collect(Collectors.joining(YamlUtils.MULTI_DOC_DELIMITER));
+    }
+    /**
+     * Concatenates given {@link Stream<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable Stream<String> yamlDocumentStream) {
+    	return _NullSafe.stream(yamlDocumentStream)
+    		.collect(Collectors.joining(YamlUtils.MULTI_DOC_DELIMITER));
     }
 
     // -- CUSTOMIZERS
