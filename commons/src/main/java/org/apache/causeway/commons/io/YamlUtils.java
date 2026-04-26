@@ -54,7 +54,7 @@ import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 @UtilityClass
 public class YamlUtils {
 
-	public static final String MULTI_DOC_DELIMITER = "---\n";
+	private static final String MULTI_DOC_DELIMITER = "---";
 	
     @FunctionalInterface
     public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
@@ -157,7 +157,7 @@ public class YamlUtils {
     	var buffer = new ArrayList<StringBuilder>();
     	buffer.add(new StringBuilder());
     	for(var line : lineStream) {
-    		if(line.equals("---")) {
+    		if(line.equals(MULTI_DOC_DELIMITER)) {
     			buffer.add(new StringBuilder());
     			continue;
 			}
@@ -233,14 +233,14 @@ public class YamlUtils {
      */
     public String writeMultiDoc(@Nullable Iterable<String> yamlDocuments) {
     	return _NullSafe.stream(yamlDocuments)
-    		.collect(Collectors.joining(YamlUtils.MULTI_DOC_DELIMITER));
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
     /**
      * Concatenates given {@link Stream<String>} into a multi-doc YAML.
      */
     public String writeMultiDoc(@Nullable Stream<String> yamlDocumentStream) {
     	return _NullSafe.stream(yamlDocumentStream)
-    		.collect(Collectors.joining(YamlUtils.MULTI_DOC_DELIMITER));
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
 
     // -- CUSTOMIZERS
