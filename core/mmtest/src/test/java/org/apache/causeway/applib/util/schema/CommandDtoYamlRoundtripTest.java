@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.mmtest.schema;
+package org.apache.causeway.applib.util.schema;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -42,7 +42,14 @@ import org.apache.causeway.schema.common.v2.ValueType;
 class CommandDtoYamlRoundtripTest {
 
     @Test
-    void test() {
+    void list() {
+        var yaml = CommandDtoUtils.toYaml(List.of(commandDtoSample(), commandDtoSample()));
+        var afterRoundtrip = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
+        assertEquals(yaml, CommandDtoUtils.toYaml(afterRoundtrip));
+    }
+    
+    @Test
+    void multiDoc() {
         var yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandDtoSample(), commandDtoSample()));
         var afterRoundtrip = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
         assertEquals(yaml, CommandDtoUtils.toMultiDocYaml(afterRoundtrip));
