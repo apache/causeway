@@ -18,21 +18,30 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.util.List;
+
 import org.approvaltests.Approvals;
+import org.approvaltests.reporters.DiffReporter;
+import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.io._TestDomain.Person;
+import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 
 class YamlUtilsTest {
 
     private Person person;
+    private List<Person> persons;
 
     @BeforeEach
     void setup() {
         this.person = _TestDomain.samplePerson();
+        this.persons = List.of(
+        		person,
+        		_TestDomain.samplePerson("fred"));
     }
 
     @Test
@@ -72,5 +81,35 @@ class YamlUtilsTest {
                 .valueAsNonNullElseFail();
         assertEquals(this.person, person);
     }
+    
+    @Test
+    @UseReporter(DiffReporter.class)
+    void toStringUtf8ForList_yamlList() {
+        var yaml = YamlUtils.toStringUtf8(persons);
+        Approvals.verify(yaml, ApprovalsOptions.defaultOptions());
+    }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void toStringUtf8ForList_multiDoc() {
+    	var yaml = YamlUtils.writeMultiDoc(
+    			persons.stream()
+        			.map(YamlUtils::toStringUtf8));
+    	Approvals.verify(yaml, ApprovalsOptions.defaultOptions());
+    }
+    
+    @Test
+    void multiDocRoundtrip() {
+    	var multiDocYaml = YamlUtils.writeMultiDoc(
+    			persons.stream()
+        			.map(YamlUtils::toStringUtf8));
+    	var personsAfterRoundtrip = YamlUtils.tryReadMultiDoc(DataSource.ofStringUtf8(multiDocYaml))
+    			.valueAsNonNullElseFail()
+    			.map(yaml->YamlUtils.tryRead(Person.class, yaml)
+    					.valueAsNonNullElseFail())
+    			.toList();
+    	
+        assertEquals(this.persons, personsAfterRoundtrip);
+    }
+    
 }

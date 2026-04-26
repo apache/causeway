@@ -96,7 +96,11 @@ class _TestDomain {
     }
 
     Person samplePerson() {
-        return new Person("sven", new Address(1234, "backerstreet"),
+    	return samplePerson("sven");
+    }
+    
+    Person samplePerson(String name) {
+        return new Person(name, new Address(1234, "backerstreet"),
                 Can.of(new Address(23, "brownstreet"),
                         new Address(34, "bluestreet")),
                 new Java8Time(

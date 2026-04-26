@@ -113,6 +113,18 @@ additional
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        
+		<!-- APPROVAL TESTING -->        
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+        </dependency>
+        <dependency>
+            <!-- required by com.approvaltests:test
+				(version managed by spring boot) -->
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

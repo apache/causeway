@@ -19,9 +19,12 @@
 package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -31,11 +34,14 @@ import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
 import org.yaml.snakeyaml.DumperOptions;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
+import tools.jackson.databind.MappingIterator;
 import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
 import tools.jackson.dataformat.yaml.YAMLMapper;
@@ -49,6 +55,8 @@ import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 @UtilityClass
 public class YamlUtils {
 
+	private static final String MULTI_DOC_DELIMITER = "---";
+	
     @FunctionalInterface
     public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
     @FunctionalInterface
@@ -82,16 +90,14 @@ public class YamlUtils {
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
      * with given {@code elementType}.
+     * 
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsList(
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        return source.tryReadAll((final InputStream is) -> Try.call(()->{
-            var mapper = createJacksonReader(Optional.empty(), customizers);
-            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-            return mapper.readValue(is, collectionType);
-        }));
+    	return tryReadAsListCustomized(elementType, source, null, customizers);
     }
 
     /**
@@ -121,20 +127,58 @@ public class YamlUtils {
 
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
-     * with given {@code elementType}.
+     * with given {@code elementType}. 
+     * 
+     * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsListCustomized(
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
-            final @NonNull YamlLoadCustomizer loadCustomizer,
+            final @Nullable YamlLoadCustomizer loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is) -> Try.call(()->{
-            var mapper = createJacksonReader(Optional.of(loadCustomizer), customizers);
-            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
-            return mapper.readValue(is, collectionType);
+            var mapper = createJacksonReader(Optional.ofNullable(loadCustomizer), customizers);
+            final MappingIterator<T> documentReader = mapper.readerFor(elementType).readValues(is);
+            final List<T> elements = new ArrayList<>();
+            while (documentReader.hasNextValue()) {
+                final T next = documentReader.nextValue();
+                if (next != null) {
+                    elements.add(next);
+                }
+            }
+            return elements; // no need wrap unmodifiable, as callers can do what ever they want with the list
+//former code without support for multi-doc format...
+//            var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+//            return mapper.readValue(is, collectionType);
         }));
     }
-
+    
+    /**
+     * Returns a {@link Stream} of (arbitrary) YAML Document junks from provided {@link DataSource},
+     * where each junk typically needs further parsing individually.
+     */
+    public Try<Stream<String>> tryReadMultiDoc(final @Nullable DataSource source) {
+    	return source == null
+			? Try.success(Stream.empty())
+			: source.tryReadAsStringUtf8()
+	    		.mapSuccessAsNullable(TextUtils::readLines)
+	    		.mapSuccessAsNullable(YamlUtils::linesToDocs);
+    }
+    private static Stream<String> linesToDocs(final Can<String> lineStream) {
+    	var buffer = new ArrayList<StringBuilder>();
+    	buffer.add(new StringBuilder());
+    	for(var line : lineStream) {
+    		if(line.equals(MULTI_DOC_DELIMITER)) {
+    			buffer.add(new StringBuilder());
+    			continue;
+			}
+    		buffer.get(buffer.size()-1).append(line).append("\n");
+    	}
+		return buffer.stream()
+				.map(StringBuilder::toString)
+				.filter(str->!str.isEmpty());
+    }
+    
     // -- WRITING
 
     /**
@@ -144,7 +188,9 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null) {
+			return;
+		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.empty(), customizers).writeValue(os, pojo)));
     }
@@ -171,7 +217,9 @@ public class YamlUtils {
             final @NonNull DataSink sink,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) return;
+        if(pojo==null) {
+			return;
+		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValue(os, pojo)));
     }
@@ -182,13 +230,28 @@ public class YamlUtils {
      */
     @SneakyThrows
     @Nullable
-    public static String toStringUtf8Customized(
+    public String toStringUtf8Customized(
             final @Nullable Object pojo,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         return pojo!=null
                 ? createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValueAsString(pojo)
                 : null;
+    }
+
+    /**
+     * Concatenates given {@link Iterable<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable Iterable<String> yamlDocuments) {
+    	return _NullSafe.stream(yamlDocuments)
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
+    }
+    /**
+     * Concatenates given {@link Stream<String>} into a multi-doc YAML.
+     */
+    public String writeMultiDoc(@Nullable Stream<String> yamlDocumentStream) {
+    	return _NullSafe.stream(yamlDocumentStream)
+    		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
 
     // -- CUSTOMIZERS

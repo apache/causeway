@@ -1,0 +1,31 @@
+majorVersion: "2"
+minorVersion: "0"
+interactionId: "approval-datetime-marshalling"
+username: "approval-user"
+targets:
+  oid:
+  - id: "123"
+    type: "demo.Customer"
+member: !<ACT>
+  parameters:
+    parameter:
+    - localDate: "2026-07-01"
+      name: "Local Date"
+      type: "localDate"
+    - localDateTime: "2026-07-01T10:15:30"
+      name: "Local Date Time"
+      type: "localDateTime"
+    - localTime: "10:15:30"
+      name: "Local Time"
+      type: "localTime"
+    - name: "Offset Date Time"
+      offsetDateTime: "2026-07-01T08:15:30.000Z"
+      type: "offsetDateTime"
+    - name: "Offset Time"
+      offsetTime: "1970-01-01T08:15:30.000Z"
+      type: "offsetTime"
+    - name: "Zoned Date Time"
+      type: "zonedDateTime"
+      zonedDateTime: "2026-07-01T08:15:30.000Z"
+  interactionType: "action_invocation"
+  logicalMemberIdentifier: "demo.Customer#allDateTimeTypes"

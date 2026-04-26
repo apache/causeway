@@ -146,6 +146,7 @@ module org.apache.causeway.applib {
     requires spring.tx;
     requires org.slf4j;
 	requires micrometer.observation;
+	requires com.fasterxml.jackson.annotation;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;

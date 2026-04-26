@@ -166,18 +166,6 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.approvaltests</groupId>
-            <artifactId>approvaltests</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- required by com.approvaltests:test
-				(version manged by spring boot) -->
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
