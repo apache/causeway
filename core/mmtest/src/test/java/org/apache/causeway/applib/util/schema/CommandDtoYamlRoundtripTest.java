@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -47,7 +46,7 @@ class CommandDtoYamlRoundtripTest {
         var afterRoundtrip = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
         assertEquals(yaml, CommandDtoUtils.toYaml(afterRoundtrip));
     }
-    
+
     @Test
     void multiDoc() {
         var yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandDtoSample(), commandDtoSample()));
