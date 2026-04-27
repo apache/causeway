@@ -18,21 +18,32 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import lombok.RequiredArgsConstructor;
 
-/**
- * Bundles dependencies for the replay logic.
- */
-public record ReplayContext(
-        RepositoryService repositoryService,
-        InteractionService interactionService,
-        TransactionService transactionService,
-        CommandLogEntryRepository commandLogEntryRepository,
-        CommandExecutorService commandExecutorService,
-        ClockService clockService) {
+import org.apache.causeway.applib.annotation.*;
+
+@Action(
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.NON_IDEMPOTENT,
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = ReplayableCommand_delete.DomainEvent.class,
+        executionPublishing = Publishing.DISABLED
+)
+@ActionLayout(
+        sequence = "0.3",
+        //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
+        describedAs = "Deletes the associated Command Log Entry (cannot be undone)"
+)
+@RequiredArgsConstructor
+public class ReplayableCommand_delete {
+
+    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_delete> {
+    }
+
+    private final ReplayableCommand replayableCommand;
+
+    @MemberSupport
+    public void act() {
+        replayableCommand.deleteObj();
+    }
 }

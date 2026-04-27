@@ -359,9 +359,10 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         var username1 = commandTarget1User1.getUsername();
         var from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
         var to = from.plusDays(1);
+        final var timestamp = commandTarget1User1.getTimestamp();
 
         // when
-        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findReplayPendingOrFailed();
+        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(timestamp);
 
         // then
         Assertions.assertThat(notYetReplayed).isEmpty();
@@ -374,7 +375,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
             commandTarget1User1.setReplayState(ReplayState.PENDING);
 
             // when
-            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findReplayPendingOrFailed();
+            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(timestamp);
 
             // then
             Assertions.assertThat(notYetReplayed2).hasSize(1);

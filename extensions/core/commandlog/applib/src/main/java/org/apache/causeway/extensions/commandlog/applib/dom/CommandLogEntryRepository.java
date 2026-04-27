@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -120,6 +121,20 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findSince(UUID interactionId, Integer batchSize);
 
+    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(Timestamp since);
+
+    /**
+     * Command Replay feature: Can replay or retry.
+     */
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
+
+    /**
+     * Command Replay feature: Cannot replay or retry.
+     */
+    List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since);
+
     /**
      * Returns any persisted commands that have not yet started.
      *
@@ -157,15 +172,6 @@ public interface CommandLogEntryRepository {
      * </p>
      */
     Optional<CommandLogEntry> findMostRecentCompleted();
-
-    /**
-     * Command Replay feature: Can replay or retry.
-     */
-    List<CommandLogEntry> findReplayPendingOrFailed();
-    /**
-     * Command Replay feature: Cannot replay or retry.
-     */
-    List<CommandLogEntry> findReplaySucceededOrExcluded();
 
     CommandLogEntry saveForReplay(CommandDto dto);
 

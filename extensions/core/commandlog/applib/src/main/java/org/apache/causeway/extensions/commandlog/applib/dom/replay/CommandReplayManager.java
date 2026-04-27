@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -31,144 +33,360 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
+
+import lombok.Getter;
+
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid circle-play")
 @Named(CommandReplayManager.LOGICAL_TYPE_NAME)
-public record CommandReplayManager(
-        ReplayContext replayContext) implements ViewModel {
+public final class CommandReplayManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
+
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
+    private ReplayContext replayContext;
 
     @Inject
     public CommandReplayManager(
             final String memento,
             final ReplayContext replayContext) {
-        this(replayContext);
+        this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
+    }
+
+    public CommandReplayManager(
+            final java.sql.Timestamp since,
+            final ReplayContext replayContext) {
+        this.since = since;
+        this.replayContext = replayContext;
     }
 
     @ObjectSupport public String title() {
         return "Command Replay Manager";
     }
 
-    @Action
+
+    @Property
+    @PropertyLayout(describedAs = "Only commands since this timestamp are available for export")
+    @Getter
+    private java.sql.Timestamp since;
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = previousHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "since", sequence = "1",
+            named = "Previous",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move back one hour"
+    )
+    public class previousHour {
+        public class DomainEvent extends ActionDomainEvent<previousHour> { }
+
+        @MemberSupport public CommandReplayManager act() {
+            return new CommandReplayManager(addSeconds(since, -3600), replayContext);
+        }
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = nextHour.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "since", sequence = "3",
+            named = "Next",
+            position = ActionLayout.Position.PANEL,
+            describedAs = "Move forward one hour"
+    )
+    public class nextHour {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandReplayManager act() {
+            return new CommandReplayManager(addSeconds(since, +3600), replayContext);
+        }
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = changeSince.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "since", sequence = "2",
+            named = "Change",
+            position = ActionLayout.Position.PANEL
+    )
+    public class changeSince {
+        public class DomainEvent extends ActionDomainEvent<nextHour> { }
+        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp since) {
+            return new CommandReplayManager(since, replayContext);
+        }
+        @MemberSupport public java.sql.Timestamp defaultSince() {
+            return CommandReplayManager.this.since;
+        }
+    }
+
+    private static Timestamp addSeconds(final Timestamp since, final int secondsToAdd) {
+        return Timestamp.from(since.toInstant().plusSeconds(secondsToAdd));
+    }
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = importCommands.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
     @ActionLayout(
             sequence = "0.1",
+            associateWith = "pendingOrFailed",
             cssClass = "btn-primary",
-            describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING.")
-    public CommandReplayManager importCommands(
-            @Parameter(fileAccept = ".zip")
-            final Blob zippedCommandsYaml) {
+            describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING."
+    )
+    public class importCommands {
+        public class DomainEvent extends ActionDomainEvent<importCommands> { }
+        public CommandReplayManager act(
+                @Parameter(fileAccept = ".yml")
+                final Blob commandsYaml) {
+            var yamlDs = commandsYaml.asDataSource();
 
-        var yamlDs = zippedCommandsYaml.unZip(CommonMimeType.YAML).asDataSource();
+            final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
+            commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
 
-        final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-        commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
-
-        return this;
+            return CommandReplayManager.this;
+        }
     }
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
-    @ActionLayout(
-            sequence = "0.2",
-            describedAs = "Deletes all commands, regardless of state (cannot be undone)")
-    public CommandReplayManager deleteAll() {
-        commandLogEntryRepository().removeAll();
-        return this;
-    }
 
     // -- PENDING OR FAILED
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)")
+            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)"
+    )
     public List<ReplayableCommand> getPendingOrFailed() {
-        return commandLogEntryRepository().findReplayPendingOrFailed().stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(since).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
-            .toList();
+            .collect(Collectors.toList());
     }
 
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed",
-        sequence = "1.1",
-        cssClassFa = "solid circle-play",
-        cssClass = "btn-primary",
-        describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
-                + "If any of the given commands fails, "
-                + "the surrounding transaction is rolled back and any successful commands are undone). "
-                + "The command, that caused the failure, gets marked as FAILED.")
-    public CommandReplayManager replayOrRetrySelected(final List<ReplayableCommand> selected) {
-        var replayables = selected.stream()
-            .sorted()
-            .toList();
-        for(var replayableCommand : replayables) {
-            var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
-            if(tryReplayOrRetry.isFailure()) {
-				return this; // stop further execution
-			}
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = replayOrRetrySelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.1",
+            cssClassFa = "solid circle-play",
+            cssClass = "btn-primary",
+            describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
+                    + "If any of the given commands fails, "
+                    + "the surrounding transaction is rolled back and any successful commands are undone). "
+                    + "The command, that caused the failure, gets marked as FAILED."
+    )
+    public class replayOrRetrySelected {
+        public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
+        @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            var replayables = selected.stream()
+                .sorted()
+                .collect(Collectors.toList());
+            for(var replayableCommand : replayables) {
+                var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
+                if(tryReplayOrRetry.isFailure())
+                    return CommandReplayManager.this; // stop further execution
+            }
+            return CommandReplayManager.this;
         }
-        return this;
+
+
+        @MemberSupport
+        public String disableAct() {
+            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        }
+
+        @MemberSupport
+        public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null && selected.isEmpty() ? "Select at least one command" : null;
+        }
+
+        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
+        @MemberSupport
+        public List<ReplayableCommand> choicesSelected() {
+            return getPendingOrFailed();
+        }
     }
 
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.2",
-            describedAs = "Marks selected Commands to be EXCLUDED from replay")
-    public CommandReplayManager excludeSelectedFromReplay(final List<ReplayableCommand> selected) {
-        selected.stream()
-            .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
-        return this;
+
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = excludeSelectedFromReplay.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.2",
+            describedAs = "Marks selected Commands to be EXCLUDED from replay"
+    )
+    public class excludeSelectedFromReplay {
+        public class DomainEvent extends ActionDomainEvent<excludeSelectedFromReplay> { }
+        @MemberSupport
+        public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        }
+
+        @MemberSupport
+        public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null && selected.isEmpty() ? "Select at least one command" : null;
+        }
+
+        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
+        @MemberSupport
+        public List<ReplayableCommand> choicesSelected() {
+            return getPendingOrFailed();
+        }
+
     }
 
-    @Action(choicesFrom = "pendingOrFailed")
-    @ActionLayout(associateWith = "pendingOrFailed", sequence = "1.3",
-            describedAs = "Deletes selected Commands (cannot be undone)")
-    public CommandReplayManager deleteSelected(final List<ReplayableCommand> selected) {
-        selected.stream()
-            .forEach(ReplayableCommand::delete); // filtered on its own responsibility
-        return this;
+
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = deleteSelectedPendingOrFailed.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.3",
+            describedAs = "Deletes selected Commands (cannot be undone)"
+    )
+    public class deleteSelectedPendingOrFailed {
+        public class DomainEvent extends ActionDomainEvent<deleteSelectedPendingOrFailed> { }
+        public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::deleteObj); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        }
+
+        @MemberSupport
+        public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null && selected.isEmpty() ? "Select at least one command" : null;
+        }
+
+        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
+        @MemberSupport
+        public List<ReplayableCommand> choicesSelected() {
+            return getPendingOrFailed();
+        }
+
     }
+
+
 
     // -- OK OR EXCLUDE
 
     @Collection
     @CollectionLayout(
             describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
-                    + "or marked to be excluded from replay (replayState=EXCLUDE)")
+                    + "or marked to be excluded from replay (replayState=EXCLUDE)"
+    )
     public List<ReplayableCommand> getSucceededOrExcluded() {
-        return commandLogEntryRepository().findReplaySucceededOrExcluded().stream()
+        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(since).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
-            .toList();
+            .collect(Collectors.toList());
     }
 
-    @Action(choicesFrom = "succeededOrExcluded")
-    @ActionLayout(associateWith = "succeededOrExcluded",
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "succeededOrExcluded",
+            semantics = SemanticsOf.IDEMPOTENT,
+            domainEvent = deleteSelectedSucceededOrExcluded.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "succeededOrExcluded",
             named = "Delete Selected",
-            describedAs = "Deletes selected Commands (cannot be undone)")
-    public CommandReplayManager deleteSelected2(final List<ReplayableCommand> selected) {
-        selected.stream()
-            .forEach(ReplayableCommand::delete); // filtered on its own responsibility
-        return this;
+            describedAs = "Deletes selected Commands (cannot be undone)"
+    )
+    public class deleteSelectedSucceededOrExcluded {
+        public class DomainEvent extends ActionDomainEvent<deleteSelectedSucceededOrExcluded> { }
+        public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            selected.stream()
+                .forEach(ReplayableCommand::deleteObj); // filtered on its own responsibility
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            return getSucceededOrExcluded().isEmpty() ? "No commands in collection" : null;
+        }
+
+        @MemberSupport
+        public String validateSelected(final List<ReplayableCommand> selected) {
+            return selected != null && selected.isEmpty() ? "Select at least one command" : null;
+        }
+
+        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
+        @MemberSupport
+        public List<ReplayableCommand> choicesSelected() {
+            return getSucceededOrExcluded();
+        }
     }
+
+
 
     // -- VM STATE
 
     @Override
     public String viewModelMemento() {
-        // TODO could use to store filter state
-        return null;
+        return TimestampMarshallUtil.toString(this.since);
     }
 
     // -- HELPER
@@ -176,5 +394,4 @@ public record CommandReplayManager(
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }
-
 }
