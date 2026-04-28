@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.NonNull;
@@ -64,6 +65,18 @@ public interface GridService {
 
             public boolean isDefault() { return layoutIfAny==null; }
             public boolean isVariant() { return layoutIfAny!=null; }
+            
+            /**
+             * Suggested resource name e.g. for export. (not strictly binding)
+             */
+            public String resourceName(CommonMimeType commonMimeType) {
+            	return String.format("%s%s.%s",
+            			domainClass.getSimpleName(),
+        				isVariant()
+        					? "-" + layoutIfAny()
+        					: "",
+    					commonMimeType.getProposedFileExtensions().getFirst().orElse("unknown"));
+            }
 	}
 
     /**
@@ -79,6 +92,17 @@ public interface GridService {
      * <p> Acts as a no-op if not {@link #supportsReloading()}.
      */
     void invalidate(Class<?> domainClass);
+    
+    /**
+     * Allows to replace or prime layout caches with a custom layout (as provided by given {@link LayoutResource}). 
+     * Useful for prototyping.
+     *  
+     * <p>This patching is potentially in conflict with layout reloading. 
+     * Patched layouts must stick around even when a layout reload attempt is made.
+     * 
+     * @since 4.0
+     */
+    void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource);
 
     /**
      * Returns a {@link BSGrid} for given {@link LayoutKey}.
@@ -93,6 +117,14 @@ public interface GridService {
     EnumSet<CommonMimeType> supportedFormats();
     Optional<GridMarshaller> marshaller(CommonMimeType format);
 
+    /**
+     * Clears any pre-calculated BSGrid instances from the cache. Useful to start with a clean slate,
+     * after the MM was initialized.
+     *
+     * <p> The MM needs to be aware of all mixins, in order to reliably produce valid BSGrid instances.
+     * During MM initialization incomplete BSGrid instances might be created and cached,
+     * which are missing e.g. mixed-in Actions.
+     */
 	void clearCache();
 
 }

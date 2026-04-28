@@ -22,18 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.xml.datatype.DatatypeConstants;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import org.springframework.util.StreamUtils;
-
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.ValueType;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.util.StreamUtils;
 
 class CommandDtoUtils_fromYaml_Approval_Test {
 

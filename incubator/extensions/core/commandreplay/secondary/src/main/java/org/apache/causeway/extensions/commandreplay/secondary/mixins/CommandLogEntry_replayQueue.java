@@ -45,7 +45,7 @@ public class CommandLogEntry_replayQueue {
     final CommandLogEntry commandLogEntry;
 
     public List<? extends CommandLogEntry> coll() {
-        return commandLogEntryRepository.findReplayPendingOrFailed();
+        return commandLogEntryRepository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(null);
     }
     public boolean hideColl() {
         return !secondaryConfig.isConfigured();
