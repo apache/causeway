@@ -38,13 +38,13 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -162,42 +162,49 @@ public record CommandExportManager(
                         + "Refresh the page to see changed states.")
     public class exportSelected {
         public class DomainEvent extends ActionDomainEvent<exportSelected> { }
-        @MemberSupport public Blob act(
+        @MemberSupport public Clob act(
                 final List<ReplayableCommand> selected,
+                @ParameterLayout(describedAs = "File name for the exported file." )
                 final String filenamePrefix,
-                final boolean filenameTimestamp
-                ) {
+                @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name." )
+                final boolean filenameTimestamp,
+                @ParameterLayout(describedAs = "Whether to use the multi-doc YAML format to represent a collection of "
+                        + "CommandDto entries. "
+                        + "If unchecked uses the YAML list format. "
+                        + "(Command Replay Manager's import understands both formats.)" )
+                final boolean multiDocFormat) {
 
             var selectedCommandLogEntries = selected.stream()
                 .map(ReplayableCommand::commandLogEntry)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(entry->!ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
+            var selectedCommandDtos = selectedCommandLogEntries.stream()
+                .map(CommandLogEntry::getCommandDto)
+                .toList();
 
-            var yaml = CommandDtoUtils.toYaml(
-                selectedCommandLogEntries.stream()
-                    .filter(entry->!ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
-                    .map(CommandLogEntry::getCommandDto)
-                    .collect(Collectors.toList()));
+            var yaml = multiDocFormat
+                    ? CommandDtoUtils.toMultiDocYaml(selectedCommandDtos)
+                    : CommandDtoUtils.toYaml(selectedCommandDtos);
 
-            final var replayableCommand = selected.get(0);  // validate ensures there is at least one command
-            final var timestamp = filenameTimestamp
+            var replayableCommand = selected.get(0);  // validate ensures there is at least one command
+            var timestamp = filenameTimestamp
                     ? replayableCommand.getTimestampIfAny()
                         .map(ChronoZonedDateTime::toInstant)
                         .map(Instant::toString)
                         .map(x -> "." + x.replaceAll("[^A-Za-z0-9._-]", "_"))   // make safe within filename
                         .orElse("")
                     : "";
-            final var filename = filenamePrefix + timestamp;
+            var filename = filenamePrefix + timestamp;
 
-            var blob = Clob.of(filename, CommonMimeType.YAML, yaml)
-                    .toBlobUtf8();
+            var clob = Clob.of(filename, CommonMimeType.YAML, yaml);
 
             // do this last once we have successfully created the Clob
             selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
 
-            return blob;
+            return clob;
         }
         @MemberSupport public String disableAct() {
             return getNotYetExported().isEmpty() ? "No commands in collection" : null;
@@ -206,6 +213,9 @@ public record CommandExportManager(
             return "commands";
         }
         @MemberSupport public boolean defaultFilenameTimestamp() {
+            return true;
+        }
+        @MemberSupport public boolean defaultMultiDocFormat() {
             return true;
         }
         @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
