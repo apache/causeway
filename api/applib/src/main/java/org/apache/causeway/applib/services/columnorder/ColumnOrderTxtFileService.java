@@ -18,34 +18,40 @@
  */
 package org.apache.causeway.applib.services.columnorder;
 
+import java.util.List;
+
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 
 /**
  * This is a utility service to support the usage of {@link TableColumnOrderService}, providing the ability to obtain
  * a zip of each of the <code>Xxx.columnOrder.txt</code> files for the specified domain object.
  *
- * <p>
- * The zip contains:
+ * <p> The zip contains:
  * <ul>
  *     <li>DomainClass.columnOrder.txt</li> - as used for standalone collections of <code>DomainClass</code> itself
  *     <li>DomainClass#collection1.columnOrder.txt</li> - for <code>DomainClass</code>' collection with id <code>collection1</code>.
  *     <li>...</li>
  *     <li>DomainClass#collectionN.columnOrder.txt</li> - for <code>DomainClass</code>' collection with id <code>collectionN</code>.
  * </ul>
- * </p>
  *
- * <p>
- * These should be unzipped and copied in the domain class' package, and then their contents updated to specify the
+ * <p> These should be un-zipped and copied in the domain class' package, and then their contents updated to specify the
  * order in which the respective object's properties will be shown in the standalone or parented collections.
- * </p>
  *
  * @see Object_downloadColumnOrderTxtFilesAsZip
+ * @see Object_patchColumnOrder
  * @see TableColumnOrderService
  *
  * @since 2.0 {@index}
  */
 public interface ColumnOrderTxtFileService {
 
-    byte[] toZip(final Object domainObject);
+    byte[] toZip(Object domainObject);
+
+    /**
+     * List of memberIds for given domainObject, that represent a {@link Collection}, including mixed-in ones.
+     * @since 4.0
+     */
+    List<String> collectionIds(Object domainObject);
 
 }

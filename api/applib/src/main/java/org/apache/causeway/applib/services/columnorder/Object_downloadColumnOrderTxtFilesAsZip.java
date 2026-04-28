@@ -74,6 +74,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Object_downloadColumnOrderTxtFilesAsZip {
 
+    @Inject ColumnOrderTxtFileService columnOrderTxtFileService;
+
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
@@ -87,7 +89,5 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
     @MemberSupport public String default0Act() {
         return String.format("%s.columnOrder.zip", domainObject.getClass().getSimpleName());
     }
-
-    @Inject ColumnOrderTxtFileService columnOrderTxtFileService;
 
 }

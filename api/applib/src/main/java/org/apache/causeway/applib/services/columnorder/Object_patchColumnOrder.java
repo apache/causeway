@@ -28,6 +28,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
@@ -62,7 +63,7 @@ import lombok.RequiredArgsConstructor;
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "act", introspection = Introspection.ANNOTATION_REQUIRED)
 @RequiredArgsConstructor
 public class Object_patchColumnOrder {
-	
+
 	public static class ActionDomainEvent
 	extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_patchColumnOrder> {}
 
@@ -71,17 +72,25 @@ public class Object_patchColumnOrder {
     private final Object mixee;
 
     @MemberSupport public Object act(
-    		final String memberId,
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(describedAs = "The Collection, for which the patch is to be applied (in-memory). "
+                    + "If 'none', patches all standalone tables, "
+                    + "where this domain object type is the element type.")
+    		final String collectionId,
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
             @ParameterLayout(multiLine = 20)
             final String columnDefinition) {
     	// TODO flesh out
         return mixee;
     }
-    
-    @MemberSupport public List<String> choicesMemberId() {
-    	// TODO flesh out
-    	return List.of();
+
+    @MemberSupport public List<String> choicesCollectionId() {
+        return columnOrderTxtFileService.collectionIds(mixee);
+    }
+
+    @MemberSupport public String defaultColumnDefinition() {
+        // TODO flesh out - fill from current, or should we bring in listing-support from causeway-stuff?
+        return "";
     }
 
 }
