@@ -80,18 +80,6 @@
 		</profile>
 
 		<profile>
-			<id>module-incubator-commandreplay</id>
-			<activation>
-				<property>
-					<name>module-incubator-commandreplay</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/extensions/core/commandreplay</module>
-			</modules>
-		</profile>
-
-		<profile>
 			<id>module-regressiontests</id>
 			<activation>
 				<property>

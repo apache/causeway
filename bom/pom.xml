@@ -1587,38 +1587,6 @@ identified
                 <scope>compile</scope>
             </dependency>
 
-
-            <!-- org.apache.causeway.incubator.viewer -->
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-viewer</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-applib</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-model</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-viewer</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-
-
             <!-- other dependencies -->
 
             <dependency>
