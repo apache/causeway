@@ -209,12 +209,10 @@ public record CommandExportManager(
             return true;
         }
         @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
-            return selected != null && selected.isEmpty() ? "Select at least one command to export" : null;
-        }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport
-        public List<ReplayableCommand> choicesSelected() {
-            return getNotYetExported();
+            return selected != null
+                    && selected.isEmpty()
+                ? "Select at least one command to export"
+                : null;
         }
     }
 
@@ -247,18 +245,15 @@ public record CommandExportManager(
             return CommandExportManager.this;
         }
         @MemberSupport public String disableAct() {
-            return getExported().isEmpty() ? "No commands in collection" : null;
+            return getExported().isEmpty()
+                ? "No commands in collection"
+                : null;
         }
         @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
             return selected != null
                     && selected.isEmpty()
                 ? "Select at least one command"
                 : null;
-        }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport
-        public List<ReplayableCommand> choicesSelected() {
-            return getExported();
         }
     }
 

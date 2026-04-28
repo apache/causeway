@@ -206,10 +206,6 @@ public record CommandReplayManager(
         @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
             return selected != null && selected.isEmpty() ? "Select at least one command" : null;
         }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport public List<ReplayableCommand> choicesSelected() {
-            return getPendingOrFailed();
-        }
     }
 
     @Action(
@@ -238,10 +234,6 @@ public record CommandReplayManager(
                 ? "Select at least one command"
                 : null;
         }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport public List<ReplayableCommand> choicesSelected() {
-            return getPendingOrFailed();
-        }
     }
 
     @Action(
@@ -253,6 +245,7 @@ public record CommandReplayManager(
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
             associateWith = "pendingOrFailed", sequence = "1.3",
+            named = "Delete Selected",
             describedAs = "Deletes selected Commands (cannot be undone)")
     public class deleteSelectedPendingOrFailed {
         public class DomainEvent extends ActionDomainEvent<deleteSelectedPendingOrFailed> {}
@@ -269,11 +262,6 @@ public record CommandReplayManager(
                     && selected.isEmpty()
                 ? "Select at least one command"
                 : null;
-        }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport
-        public List<ReplayableCommand> choicesSelected() {
-            return getPendingOrFailed();
         }
     }
 
@@ -316,10 +304,6 @@ public record CommandReplayManager(
                     && selected.isEmpty()
                 ? "Select at least one command"
                 : null;
-        }
-        // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-        @MemberSupport public List<ReplayableCommand> choicesSelected() {
-            return getSucceededOrExcluded();
         }
     }
 
