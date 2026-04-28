@@ -18,24 +18,14 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType;
-
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
-
-import org.springframework.util.StreamUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CommandDtoUtils_Test {
 

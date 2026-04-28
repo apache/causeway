@@ -34,6 +34,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Java17Ex;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -109,6 +110,17 @@ implements GridService {
         var grid = cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
             .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
         return grid;
+    }
+    
+    @Override
+    public void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource) {
+    	layoutLookup.addPatchedLayout(layoutKey, layoutResource);
+    	// from 2nd level cache removes the grid that is associated with given layoutKey
+    	cache.gridsByKey().map().remove(layoutKey); 
+    	// purge 1st level cache as well
+    	context.specLoaderProvider().get().specForType(layoutKey.domainClass())
+    		.ifPresent(spec->spec.lookupFacet(GridFacet.class)
+                .ifPresent(GridFacet::clearCache));
     }
 
     // -- HELPER

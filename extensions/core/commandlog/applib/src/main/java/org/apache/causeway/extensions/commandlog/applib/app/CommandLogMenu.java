@@ -19,12 +19,9 @@
 package org.apache.causeway.extensions.commandlog.applib.app;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +34,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -48,9 +44,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
-
 import org.jspecify.annotations.NonNull;
-
 import org.springframework.lang.Nullable;
 
 import lombok.RequiredArgsConstructor;

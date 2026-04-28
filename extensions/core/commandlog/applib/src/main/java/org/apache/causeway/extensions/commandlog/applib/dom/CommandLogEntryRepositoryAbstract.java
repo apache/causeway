@@ -26,11 +26,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
+	
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

@@ -55,25 +55,35 @@ import lombok.extern.log4j.Log4j2;
 final class LayoutResourceLookup {
 
 	private final Can<LayoutResourceLoader> layoutResourceLoaders;
-        /**
-         * In effect is used as a Set<LayoutKey>. (there is no concurrent hash set)
-         */
+    /**
+     * In effect is used as a Set<LayoutKey>. (there is no concurrent hash set)
+     */
 	private final Map<LayoutKey, LayoutKey> knownInvalidKeys; 
+	/**
+     * Patched layouts can be uploaded via UI, for prototyping or troubleshooting.
+     * Those are meant to overrule the default lookup.
+     */
+	private final LayoutPatchesMap layoutPatchesMap;
 
     public LayoutResourceLookup(
             final Can<LayoutResourceLoader> layoutResourceLoaders) {
-        this(layoutResourceLoaders, new ConcurrentHashMap<>());
+        this(layoutResourceLoaders, new ConcurrentHashMap<>(), new LayoutPatchesMap());
     }
 
     /**
      * if known invalid returns {@link Optional#empty()}
      */
-    public Optional<LayoutResource> lookupLayoutResource(
+    Optional<LayoutResource> lookupLayoutResource(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
 
         if(isKnownInvalid(layoutKey))
             return Optional.empty();
+        
+        var patchedLayoutResourceOpt = layoutPatchesMap.lookupPatchedLayoutResource(layoutKey);
+        if(patchedLayoutResourceOpt.isPresent()) {
+			return patchedLayoutResourceOpt;
+		}
 
         var layoutResourceOpt = MetaModelContext.instance()
             .flatMap(mmc->mmc.specForType(layoutKey.domainClass()))
@@ -97,19 +107,28 @@ final class LayoutResourceLookup {
 
         return Optional.empty();
     }
+    
+    /**
+     * Adds given {@link LayoutResource} to the map of patched layouts. 
+     * Patched layouts overrule the default lookup process.
+     */
+    void addPatchedLayout(LayoutKey layoutKey, LayoutResource layoutResource) {
+    	layoutPatchesMap.putPatchedLayoutResource(layoutKey, layoutResource);
+    	unmarkInvalid(layoutKey.domainClass()); // re-evalute validity later on next load
+    }
 
     boolean isKnownInvalid(final LayoutKey layoutKey) {
         return knownInvalidKeys.get(layoutKey)!=null;
     }
 
-    public void markInvalid(final LayoutKey layoutKey) {
+    void markInvalid(final LayoutKey layoutKey) {
         knownInvalidKeys.put(layoutKey, layoutKey);
     }
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
-    public void unmarkInvalid(final Class<?> domainClass) {
+    void unmarkInvalid(final Class<?> domainClass) {
         knownInvalidKeys.entrySet().removeIf(entry->entry.getKey().domainClass().equals(domainClass));
     }
 
