@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import lombok.Getter;
+import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -40,13 +40,13 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -54,7 +54,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
+import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
@@ -190,22 +190,23 @@ public final class CommandExportManager implements ViewModel {
     public class exportSelected {
         public class DomainEvent extends ActionDomainEvent<exportSelected> { }
 
-        @MemberSupport public Blob act(
+        @MemberSupport public Clob act(
                 final List<ReplayableCommand> selected,
+                @ParameterLayout(describedAs = "File name for the exported file." )
                 final String filenamePrefix,
-                final boolean filenameTimestamp
-                ) {
+                @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name." )
+                final boolean filenameTimestamp) {
 
             var selectedCommandLogEntries = selected.stream()
                 .map(ReplayableCommand::commandLogEntry)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(entry->!ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
                 .sorted()
                 .collect(Collectors.toList());
 
             var yaml = CommandDtoUtils.toYaml(
                 selectedCommandLogEntries.stream()
-                    .filter(entry->!ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
                     .map(CommandLogEntry::getCommandDto)
                     .collect(Collectors.toList()));
 
@@ -219,13 +220,12 @@ public final class CommandExportManager implements ViewModel {
                     : "";
             final var filename = filenamePrefix + timestamp;
 
-            var blob = Clob.of(filename, CommonMimeType.YAML, yaml)
-                    .toBlobUtf8();
+            var clob = Clob.of(filename, CommonMimeType.YAML, yaml);
 
             // do this last once we have successfully created the Clob
             selectedCommandLogEntries.forEach(c->c.setReplayState(ReplayState.EXPORTED));
 
-            return blob;
+            return clob;
         }
 
         @MemberSupport public String disableAct() {

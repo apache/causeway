@@ -163,12 +163,12 @@ public final class CommandReplayManager implements ViewModel {
             sequence = "0.1",
             associateWith = "pendingOrFailed",
             cssClass = "btn-primary",
-            describedAs = "Imports commands from a zipped yaml, then persists them with replayState=PENDING."
+            describedAs = "Imports commands from yaml format, then persists them with replayState=PENDING."
     )
     public class importCommands {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
         public CommandReplayManager act(
-                @Parameter(fileAccept = ".yml")
+                @Parameter(fileAccept = ".yml,.yaml")
                 final Blob commandsYaml) {
             var yamlDs = commandsYaml.asDataSource();
 
