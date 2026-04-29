@@ -42,10 +42,10 @@ import org.apache.causeway.commons.io.TextUtils;
  *
  * <p> Each non-comment line can be mapped to a Java class of type {@code T}.
  *
- * <p> Typically not used a domain value, as we provide no {@link ValueSemantics},
+ * <p> Typically not used as domain value, as we provide no {@link ValueSemantics},
  * but rather as a (multi-line) {@link String} support class.
  *
- * @param <T> type each non-comment line can be mapped to
+ * @param <T> type each non-comment line can be mapped to (successful parsing)
  * @since 4.0
  */
 @Programmatic
@@ -88,8 +88,8 @@ public record Listing<T>(
 
         /**
          * Parses the whole line as is, including comments.
-         * <p>
-         * If a line is not a comment, but can also not be mapped to {@code T},
+         *
+         * <p>If a line is not a comment, but can also not be mapped to {@code T},
          * then it is commented out.
          */
         public Line parseLine(final String wholeLine) {
