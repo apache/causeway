@@ -44,10 +44,10 @@ public interface ApplicationFeature {
 
     default SortedSet<ApplicationFeatureId> getMembersOfSort(final ApplicationMemberSort memberSort) {
         return switch (memberSort) {
-        case PROPERTY -> getProperties();
-        case COLLECTION -> getCollections();
-        case ACTION -> getActions();
-        default -> Collections.emptySortedSet();
+            case PROPERTY -> getProperties();
+            case COLLECTION -> getCollections();
+            case ACTION -> getActions();
+            default -> Collections.emptySortedSet();
         };
     }
 

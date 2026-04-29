@@ -18,12 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -31,8 +35,6 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
@@ -47,7 +49,6 @@ import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -79,7 +80,7 @@ class _MembersAsColumns implements HasMetaModelContext {
 
         var parentSpecIfAny = parentObject.objSpec();
 
-        var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
+        var assocById = new LinkedHashMap<String, ObjectAssociation>();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
             .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
@@ -87,7 +88,7 @@ class _MembersAsColumns implements HasMetaModelContext {
             .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
             .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
-        var assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
+        var assocIdsInOrder = new ArrayList<String>(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
@@ -156,9 +157,8 @@ class _MembersAsColumns implements HasMetaModelContext {
             final Class<?> elementType) {
 
         var tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
-        if(tableColumnOrderServices.isEmpty()) {
+        if(tableColumnOrderServices.isEmpty())
             return;
-        }
 
         var whereContext = whereContextFor(memberIdentifier);
 
