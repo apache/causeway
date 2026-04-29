@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -317,28 +318,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .map(commandLogEntry->{
-                final var commandDto = commandLogEntry.getCommandDto();
-                final var tryResultBookmark = replayContext.transactionService().callTransactional(Propagation.REQUIRES_NEW,
-                        () -> {
-                            final var bookmarkTry = replayContext.commandExecutorService().executeCommand(
-                                    InteractionContextPolicy.SWITCH_USER_AND_TIME,
-                                    commandDto);
-                            return bookmarkTry.valueAsNullableElseFail();
-                        });
-
-                // handle the replay outcome
-                tryResultBookmark.accept(
-                        ex->onReplayError(commandLogEntry.getInteractionId(), ex),
-                        bookmarkOpt->commandLogEntry.setReplayState(ReplayState.OK));
-
-                invalidateCachedRecord();
-
-                return tryResultBookmark
-                        .mapSuccessAsNullable(__ -> this);
-            })
+            .map(commandLogEntry->tryReplay(commandLogEntry)
+                .mapSuccessAsNullable(__ -> this))
+            // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
     }
+
     String disableReplayOrRetry() {
         return commandRecord()
                 .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
@@ -348,6 +333,31 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     // -- HELPER
+
+    /**
+     * Replays given command in its own transaction and handles {@link ReplayState} transition to
+     * either {@link ReplayState#OK} or {@link ReplayState#FAILED}.
+     */
+    private Try<Bookmark> tryReplay(final CommandLogEntry commandLogEntry) {
+        return replayContext.transactionService()
+            .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                var tryResultBookmark = replayContext.commandExecutorService()
+                    .executeCommand(
+                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
+                        commandLogEntry.getCommandDto());
+
+                // handle the replay outcome
+                tryResultBookmark.accept(
+                        ex->onReplayError(commandLogEntry.getInteractionId(), ex),
+                        bookmarkOpt->commandLogEntry.setReplayState(ReplayState.OK));
+
+                // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
+                invalidateCachedRecord();
+
+                // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                return tryResultBookmark.valueAsNullableElseFail();
+            });
+    }
 
     private void invalidateCachedRecord() {
         recordRef.update(__->null); // invalidate cache
@@ -372,6 +382,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return ReplayState.isPendingOrFailed(commandLogEntry.getReplayState());
     }
 
+    /**
+     * Handles the error case in its own scheduled thread, as the current transaction will roll back.
+     */
     private void onReplayError(final UUID interactionId, final Throwable ex) {
         Executors.newSingleThreadExecutor()
             .submit(()->replayContext.interactionService().runAnonymous(()->
