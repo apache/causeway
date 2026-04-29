@@ -18,12 +18,17 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.springframework.lang.Nullable;
 
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -39,4 +44,11 @@ public final class ReplayContext {
         CommandLogEntryRepository commandLogEntryRepository;
         CommandExecutorService commandExecutorService;
         ClockService clockService;
+        
+    public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
+    	return interactionId!=null
+			? commandLogEntryRepository().findByInteractionId(interactionId)
+			: Optional.empty();
+    }
+        
 }
