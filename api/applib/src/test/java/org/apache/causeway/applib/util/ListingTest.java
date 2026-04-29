@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.value;
+package org.apache.causeway.applib.util;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.util.StringUtils;
 
-import org.apache.causeway.applib.value.Listing.ListingHandler;
-import org.apache.causeway.applib.value.Listing.MergePolicy;
+import org.apache.causeway.applib.util.Listing.ListingHandler;
+import org.apache.causeway.applib.util.Listing.MergePolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
 

@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
@@ -36,6 +37,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -56,6 +58,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -172,23 +175,19 @@ public record MetaModelServiceDefault(
     @Override
     public BeanSort sortOf(
             final @Nullable Class<?> domainType, final Mode mode) {
-        if(domainType == null) {
+        if(domainType == null)
             return null;
-        }
         final ObjectSpecification objectSpec = specificationLoader().specForType(domainType).orElse(null);
-        if(objectSpec == null) {
+        if(objectSpec == null)
             return BeanSort.UNKNOWN;
-        }
 
         if(objectSpec.getBeanSort().isUnknown()
-                && !(mode == Mode.RELAXED)) {
-
+                && !(mode == Mode.RELAXED))
             throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
                     objectSpec.getFullIdentifier(),
                     domainType.getName()
                     ));
-        }
 
         return objectSpec.getBeanSort();
 
@@ -196,28 +195,24 @@ public record MetaModelServiceDefault(
 
     @Override
     public BeanSort sortOf(final Bookmark bookmark, final Mode mode) {
-        if(bookmark == null) {
+        if(bookmark == null)
             return null;
-        }
 
-        final Class<?> domainType;
-        switch (mode) {
-        case RELAXED:
-            domainType = specificationLoader().specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElse(null);
-            break;
-
-        case STRICT:
-            // fall through to...
-        default:
-            domainType = specificationLoader().specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("Cannot resolve logical type name %s to a java class",
-                                bookmark.logicalTypeName()));
-            break;
-        }
+        final Class<?> domainType = switch (mode) {
+        case RELAXED -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElse(null);
+        case STRICT -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        default -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        };
         return sortOf(domainType, mode);
     }
 
@@ -227,22 +222,18 @@ public record MetaModelServiceDefault(
                 .newFeature(ApplicationFeatureSort.MEMBER, memberIdentifier);
 
         final String logicalTypeName = featureId.getLogicalTypeName();
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
+        if(_Strings.isNullOrEmpty(logicalTypeName))
             return null;
-        }
 
         final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
-        if(spec == null) {
+        if(spec == null)
             return null;
-        }
         final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
-        if (objectMemberIfAny == null) {
+        if (objectMemberIfAny == null)
             return null;
-        }
         final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.getFacet(CommandPublishingFacet.class);
-        if(commandPublishingFacet == null) {
+        if(commandPublishingFacet == null)
             return null;
-        }
         return commandPublishingFacet.getProcessor();
     }
 
@@ -272,6 +263,33 @@ public record MetaModelServiceDefault(
                 .collect(Collectors.toList());
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs));
+    }
+
+    @Override
+    public Stream<Identifier> streamActions(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED))
+            .map(ObjectAction::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamProperties(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamProperties(MixedIn.INCLUDED))
+            .map(OneToOneAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamCollections(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamCollections(MixedIn.INCLUDED))
+            .map(OneToManyAssociation::getFeatureIdentifier);
     }
 
 }

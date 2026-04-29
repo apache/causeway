@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.columnorder;
 
-import java.util.List;
-
-import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 
 /**
@@ -47,11 +44,4 @@ import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 public interface ColumnOrderTxtFileService {
 
     byte[] toZip(Object domainObject);
-
-    /**
-     * List of memberIds for given domainObject, that represent a {@link Collection}, including mixed-in ones.
-     * @since 4.0
-     */
-    List<String> collectionIds(Object domainObject);
-
 }

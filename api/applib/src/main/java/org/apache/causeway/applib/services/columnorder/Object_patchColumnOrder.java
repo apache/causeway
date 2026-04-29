@@ -36,6 +36,8 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -67,7 +69,7 @@ public class Object_patchColumnOrder {
 	public static class ActionDomainEvent
 	extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_patchColumnOrder> {}
 
-	@Inject ColumnOrderTxtFileService columnOrderTxtFileService;
+	@Inject MetaModelService metaModelService;
 
     private final Object mixee;
 
@@ -76,7 +78,7 @@ public class Object_patchColumnOrder {
             @ParameterLayout(describedAs = "The Collection, for which the patch is to be applied (in-memory). "
                     + "If 'none', patches all standalone tables, "
                     + "where this domain object type is the element type.")
-    		final String collectionId,
+    		final ApplicationFeatureId collectionId,
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
             @ParameterLayout(multiLine = 20)
             final String columnDefinition) {
@@ -84,12 +86,14 @@ public class Object_patchColumnOrder {
         return mixee;
     }
 
-    @MemberSupport public List<String> choicesCollectionId() {
-        return columnOrderTxtFileService.collectionIds(mixee);
+    @MemberSupport public List<ApplicationFeatureId> choicesCollectionId() {
+        return metaModelService.streamCollections(mixee.getClass())
+                .map(ApplicationFeatureId::fromIdentifier)
+                .toList();
     }
 
     @MemberSupport public String defaultColumnDefinition() {
-        // TODO flesh out - fill from current, or should we bring in listing-support from causeway-stuff?
+        // TODO flesh out - using Listing
         return "";
     }
 
