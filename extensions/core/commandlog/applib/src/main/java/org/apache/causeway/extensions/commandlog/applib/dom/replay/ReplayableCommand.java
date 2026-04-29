@@ -402,14 +402,14 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     /**
-     * Handles the error case in its own scheduled thread, as the current transaction will roll back.
+     * Handles the replay error case.
      */
     private void onReplayError(final Throwable ex) {
         commandLogEntry() // refetch from persistence
             .ifPresent(entry->entry.saveAnalysis(ex.toString()));
     }
     /**
-     * Handles the happy case.
+     * Handles the happy replay case.
      */
     private void onReplaySuccess() {
         commandLogEntry() // refetch from persistence
