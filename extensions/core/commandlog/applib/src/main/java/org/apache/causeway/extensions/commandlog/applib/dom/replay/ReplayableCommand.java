@@ -24,7 +24,6 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Executors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -318,7 +317,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .map(commandLogEntry->tryReplay(commandLogEntry)
+            .map(commandLogEntry->tryReplay(commandLogEntry.getCommandDto())
                 .mapSuccessAsNullable(__ -> this))
             // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
@@ -338,25 +337,25 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
      * Replays given command in its own transaction and handles {@link ReplayState} transition to
      * either {@link ReplayState#OK} or {@link ReplayState#FAILED}.
      */
-    private Try<Bookmark> tryReplay(final CommandLogEntry commandLogEntry) {
-        return replayContext.transactionService()
-            .callTransactional(Propagation.REQUIRES_NEW, () -> {
-                var tryResultBookmark = replayContext.commandExecutorService()
-                    .executeCommand(
-                        InteractionContextPolicy.SWITCH_USER_AND_TIME,
-                        commandLogEntry.getCommandDto());
+    private Try<Bookmark> tryReplay(final CommandDto commandDto) {
+        var tryResultBookmark = replayContext.transactionService()
+            .callTransactional(Propagation.REQUIRES_NEW, () -> replayContext.commandExecutorService()
+                .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
+                // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                .valueAsNullableElseFail());
 
+        replayContext.transactionService()
+            .runTransactional(Propagation.REQUIRES_NEW, () -> {
                 // handle the replay outcome
                 tryResultBookmark.accept(
-                        ex->onReplayError(commandLogEntry.getInteractionId(), ex),
-                        bookmarkOpt->commandLogEntry.setReplayState(ReplayState.OK));
-
-                // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
-                invalidateCachedRecord();
-
-                // if we have a replay failure, this throws, which will roll back the surrounding transaction
-                return tryResultBookmark.valueAsNullableElseFail();
+                        this::onReplayError,
+                        bookmarkOpt->onReplaySuccess());
             });
+
+        // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
+        invalidateCachedRecord();
+
+        return tryResultBookmark;
     }
 
     private void invalidateCachedRecord() {
@@ -375,7 +374,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     Optional<CommandLogEntry> commandLogEntry() {
-        return replayContext.commandLogEntryRepository().findByInteractionId(interactionId());
+        return replayContext.lookupCommandLogEntry(interactionId());
     }
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
@@ -385,10 +384,16 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     /**
      * Handles the error case in its own scheduled thread, as the current transaction will roll back.
      */
-    private void onReplayError(final UUID interactionId, final Throwable ex) {
-        Executors.newSingleThreadExecutor()
-            .submit(()->replayContext.interactionService().runAnonymous(()->
-                replayContext.commandLogEntryRepository().findByInteractionId(interactionId)
-                    .ifPresent(entry->entry.saveAnalysis(ex.toString()))));
+    private void onReplayError(final Throwable ex) {
+        commandLogEntry() // refetch from persistence
+            .ifPresent(entry->entry.saveAnalysis(ex.toString()));
     }
+    /**
+     * Handles the happy case.
+     */
+    private void onReplaySuccess() {
+        commandLogEntry() // refetch from persistence
+            .ifPresent(entry->entry.saveAnalysis(null));
+    }
+
 }

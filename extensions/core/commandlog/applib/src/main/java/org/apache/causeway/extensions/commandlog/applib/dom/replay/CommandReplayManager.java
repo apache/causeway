@@ -185,8 +185,8 @@ public record CommandReplayManager(
             cssClass = "btn-primary",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
-                    + "the surrounding transaction is rolled back and any successful commands are undone). "
-                    + "The command, that caused the failure, gets marked as FAILED.")
+                    + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
+                    + "The command, that caused the failure, gets marked FAILED.")
     public class replayOrRetrySelected {
         public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
         @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
