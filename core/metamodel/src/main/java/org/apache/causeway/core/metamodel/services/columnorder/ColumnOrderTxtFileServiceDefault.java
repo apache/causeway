@@ -82,7 +82,7 @@ public record ColumnOrderTxtFileServiceDefault(
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
         var fileContents = buf.toString();
-        var fileName = String.format("%s.columnOrder.txt", objSpec.getShortIdentifier());
+        var fileName = "%s.columnOrder.txt".formatted(objSpec.getShortIdentifier());
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
@@ -107,7 +107,7 @@ public record ColumnOrderTxtFileServiceDefault(
             .map(ObjectFeature::getId)
             .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        var fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
+        var fileName = "%s#%s.columnOrder.txt".formatted(parentSpec.getShortIdentifier(), collection.getId());
         var fileContents = buf.toString();
 
         zipBuilder.addAsUtf8(fileName, fileContents);
