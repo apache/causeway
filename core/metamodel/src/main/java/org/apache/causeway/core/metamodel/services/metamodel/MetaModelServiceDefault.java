@@ -231,7 +231,8 @@ public record MetaModelServiceDefault(
         final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
         if (objectMemberIfAny == null)
             return null;
-        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.getFacet(CommandPublishingFacet.class);
+        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.lookupFacet(CommandPublishingFacet.class)
+                .orElse(null);
         if(commandPublishingFacet == null)
             return null;
         return commandPublishingFacet.getProcessor();

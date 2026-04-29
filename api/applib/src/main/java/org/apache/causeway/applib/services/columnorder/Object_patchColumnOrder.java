@@ -82,18 +82,20 @@ public class Object_patchColumnOrder {
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
             @ParameterLayout(multiLine = 20)
             final String columnDefinition) {
-    	// TODO flesh out
+    	// TODO flesh out: we need some holder of column order overrides (patches)
         return mixee;
     }
 
     @MemberSupport public List<ApplicationFeatureId> choicesCollectionId() {
         return metaModelService.streamCollections(mixee.getClass())
-                .map(ApplicationFeatureId::fromIdentifier)
-                .toList();
+            .map(ApplicationFeatureId::fromIdentifier)
+            .toList();
     }
 
     @MemberSupport public String defaultColumnDefinition() {
-        // TODO flesh out - using Listing
+        // TODO flesh out using Listing; we need 2 sources
+        // 1) all column candidates
+        // 2) all columns currently configured
         return "";
     }
 
