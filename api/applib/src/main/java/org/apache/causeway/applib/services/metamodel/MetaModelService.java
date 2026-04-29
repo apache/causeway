@@ -20,11 +20,14 @@ package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
+import java.util.stream.Stream;
 
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -35,8 +38,6 @@ import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProces
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * This service provides a formal API into the framework's metamodel.
@@ -56,7 +57,7 @@ public interface MetaModelService {
      * such non-abstract class registered.
      * (interfaces and abstract types are never added to the lookup table).
      */
-    Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName);
+    Optional<LogicalType> lookupLogicalTypeByName(String logicalTypeName);
 
     /**
      * Assuming that the {@link LogicalType} passed in actually represents a domain type, then
@@ -69,7 +70,7 @@ public interface MetaModelService {
      *
      * @param logicalType
      */
-    Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType);
+    Can<LogicalType> logicalTypeAndAliasesFor(LogicalType logicalType);
 
     /**
      * Returns the {@link LogicalType} of a domain class' object type, corresponding to {@link Named#value()},
@@ -80,20 +81,20 @@ public interface MetaModelService {
      *     If there is no such domain type, then an empty {@link Can} will be returned.
      * </p>
      */
-    Can<LogicalType> logicalTypeAndAliasesFor(final String logicalTypeName);
+    Can<LogicalType> logicalTypeAndAliasesFor(String logicalTypeName);
 
     /**
      * Provides a lookup by class of a domain class' object type,corresponding to
      * {@link Named#value()} or {@link DomainService#aliased()} or
      * {@link DomainObject#aliased()}.
      */
-    Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType);
+    Optional<LogicalType> lookupLogicalTypeByClass(Class<?> domainType);
 
     /**
      * Invalidates and rebuilds the internal metadata for the specified domain
      * type.
      */
-    void rebuild(final Class<?> domainType);
+    void rebuild(Class<?> domainType);
 
     /**
      * Returns a list of representations of each of member of each domain class.
@@ -137,8 +138,7 @@ public interface MetaModelService {
      *     {@link org.apache.causeway.applib.services.conmap.ContentMappingService}.
      * </p>
      */
-    CommandDtoProcessor commandDtoProcessorFor(
-                            String logicalMemberIdentifier);
+    CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier);
 
     /**
      * How {@link MetaModelService#sortOf(Class, Mode)} should act if an object
@@ -166,13 +166,32 @@ public interface MetaModelService {
      *
      * @param config - restricts/filters to a subsets of the metamodel.
      */
-    MetamodelDto exportMetaModel(final Config config);
+    MetamodelDto exportMetaModel(Config config);
 
     /**
      * Can be used to create object relation diagrams (e.g. Plantuml).
      *
      * @param filter by {@link BeanSort} and {@link LogicalType} what to include in the resulting graph
      */
-    ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter);
+    ObjectGraph exportObjectGraph(@NonNull BiPredicate<BeanSort, LogicalType> filter);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Actions</i> of given domainType, including mixed-in ones,
+     * but excluding <i>Actions</i>, that are only available for PROTOTYPING.
+     * @since 4.0
+     */
+    Stream<Identifier> streamActions(@Nullable Class<?> domainType);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Properties</i> of given domainType, including mixed-in ones.
+     * @since 4.0
+     */
+    Stream<Identifier> streamProperties(@Nullable Class<?> domainType);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Collections</i> of given domainType, including mixed-in ones.
+     * @since 4.0
+     */
+    Stream<Identifier> streamCollections(@Nullable Class<?> domainType);
 
 }

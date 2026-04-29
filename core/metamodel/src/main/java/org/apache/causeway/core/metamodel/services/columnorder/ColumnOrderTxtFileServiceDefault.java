@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.columnorder;
 
-import java.util.List;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
@@ -61,15 +59,6 @@ public record ColumnOrderTxtFileServiceDefault(
         addCollectionEntries(objSpec, zipBuilder);
 
         return zipBuilder.toBytes();
-    }
-
-    @Override
-    @Programmatic
-    public List<String> collectionIds(final Object domainObject) {
-        var objSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        return objSpec.streamCollections(MixedIn.INCLUDED)
-            .map(ObjectFeature::getId)
-            .toList();
     }
 
     // -- HELPER

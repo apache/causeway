@@ -1029,7 +1029,7 @@
             <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
-            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.act(java.lang.String,java.lang.String)"/>
+            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.act(org.apache.causeway.applib.services.appfeat.ApplicationFeatureId,java.lang.String)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="returnType" value="java.lang.Object"/>
           </mml:facet>
@@ -1169,7 +1169,7 @@
                 <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
-            <mml:type>java.lang.String</mml:type>
+            <mml:type>org.apache.causeway.applib.services.appfeat.ApplicationFeatureId</mml:type>
           </mml:param>
           <mml:param id="columnDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>

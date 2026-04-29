@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.value;
+package org.apache.causeway.applib.util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,7 +29,8 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -40,10 +41,14 @@ import org.apache.causeway.commons.io.TextUtils;
  * where each {@link Line} has semantics, such as being able to be commented out.
  *
  * <p> Each non-comment line can be mapped to a Java class of type {@code T}.
+ *
+ * <p> Typically not used a domain value, as we provide no {@link ValueSemantics},
+ * but rather as a (multi-line) {@link String} support class.
+ *
  * @param <T> type each non-comment line can be mapped to
  * @since 4.0
  */
-@Value
+@Programmatic
 public record Listing<T>(
         @NonNull ListingHandler<T> handler,
         @NonNull Can<Line> lines) {
