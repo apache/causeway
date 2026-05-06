@@ -44,6 +44,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -63,6 +64,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 import org.springframework.transaction.annotation.Propagation;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
@@ -216,14 +218,21 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            associateWith = "targetType", sequence = "1",
             cssClassFa = "fa-bullseye"
     )
-    public Object openTarget() {
-        return commandLogEntry().map(CommandLogEntry::getTarget).orElse(null);
-    }
-    @MemberSupport public String disableOpenTarget() {
-        return commandLogEntry().isPresent() ? null : "Unknown target";
+    public class openTarget {
+
+        @MemberSupport public Object act() {
+            return commandLogEntry()
+                    .map(CommandLogEntry::getTarget)
+                    .flatMap(bookmark -> bookmarkService.lookup(bookmark))
+                    .orElse(null);
+        }
+        @MemberSupport public String disableAct() {
+            return commandLogEntry().isPresent() ? null : "Unknown target";
+        }
+
+        @Inject BookmarkService bookmarkService;
     }
 
 
