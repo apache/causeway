@@ -76,9 +76,9 @@ public final class CommandExportManager implements ViewModel {
     }
 
     public CommandExportManager(
-            final java.sql.Timestamp since,
+            final java.sql.Timestamp baseline,
             final ReplayContext replayContext) {
-        this.since = since;
+        this.baseline = baseline;
         this.replayContext = replayContext;
     }
 
@@ -88,9 +88,9 @@ public final class CommandExportManager implements ViewModel {
 
 
     @Property
-    @PropertyLayout(describedAs = "Only commands since this timestamp are available for export")
+    @PropertyLayout(describedAs = "Only commands after this timestamp are available for export")
     @Getter
-    private java.sql.Timestamp since;
+    private java.sql.Timestamp baseline;
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -99,7 +99,7 @@ public final class CommandExportManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "1",
+            associateWith = "baseline", sequence = "1",
             named = "Previous",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move back one hour"
@@ -108,7 +108,7 @@ public final class CommandExportManager implements ViewModel {
         public class DomainEvent extends ActionDomainEvent<previousHour> { }
 
         @MemberSupport public CommandExportManager act() {
-            return new CommandExportManager(addSeconds(since, -3600), replayContext);
+            return new CommandExportManager(addSeconds(baseline, -3600), replayContext);
         }
     }
 
@@ -119,7 +119,7 @@ public final class CommandExportManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "3",
+            associateWith = "baseline", sequence = "3",
             named = "Next",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move forward one hour"
@@ -127,7 +127,7 @@ public final class CommandExportManager implements ViewModel {
     public class nextHour {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
         @MemberSupport public CommandExportManager act() {
-            return new CommandExportManager(addSeconds(since, +3600), replayContext);
+            return new CommandExportManager(addSeconds(baseline, +3600), replayContext);
         }
     }
 
@@ -135,26 +135,26 @@ public final class CommandExportManager implements ViewModel {
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             commandPublishing = Publishing.DISABLED,
-            domainEvent = changeSince.DomainEvent.class,
+            domainEvent = changeBaseline.DomainEvent.class,
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "2",
+            associateWith = "baseline", sequence = "2",
             named = "Change",
             position = ActionLayout.Position.PANEL
     )
-    public class changeSince {
+    public class changeBaseline {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
-        @MemberSupport public CommandExportManager act(final java.sql.Timestamp since) {
-            return new CommandExportManager(since, replayContext);
+        @MemberSupport public CommandExportManager act(final java.sql.Timestamp baseline) {
+            return new CommandExportManager(baseline, replayContext);
         }
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            return CommandExportManager.this.since;
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandExportManager.this.baseline;
         }
     }
 
-    private static Timestamp addSeconds(Timestamp since, int secondsToAdd) {
-        return Timestamp.from(since.toInstant().plusSeconds(secondsToAdd));
+    private static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
     }
 
 
@@ -165,7 +165,7 @@ public final class CommandExportManager implements ViewModel {
             describedAs = "Commands that can be exported"
     )
     public List<ReplayableCommand> getNotYetExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(since).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -257,7 +257,7 @@ public final class CommandExportManager implements ViewModel {
     @Collection
     @CollectionLayout(describedAs = "Commands that have been exported")
     public List<ReplayableCommand> getExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(since).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -308,7 +308,7 @@ public final class CommandExportManager implements ViewModel {
 
     @Override
     public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.since);
+        return TimestampMarshallUtil.toString(this.baseline);
     }
 
     // -- HELPER

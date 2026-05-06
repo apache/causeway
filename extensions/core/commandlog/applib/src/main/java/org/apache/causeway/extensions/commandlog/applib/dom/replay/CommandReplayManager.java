@@ -64,7 +64,6 @@ import lombok.Getter;
 public final class CommandReplayManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
-    private TimestampService timestampService;
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
@@ -74,9 +73,8 @@ public final class CommandReplayManager implements ViewModel {
     @Inject
     public CommandReplayManager(
             final String memento,
-            final ReplayContext replayContext, TimestampService timestampService) {
+            final ReplayContext replayContext) {
         this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
-        this.timestampService = timestampService;
     }
 
     public CommandReplayManager(
@@ -157,8 +155,8 @@ public final class CommandReplayManager implements ViewModel {
         }
     }
 
-    private static Timestamp addSeconds(Timestamp t0, int secondsToAdd) {
-        return Timestamp.from(t0.toInstant().plusSeconds(secondsToAdd));
+    private static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
     }
 
     @Action(
@@ -213,7 +211,7 @@ public final class CommandReplayManager implements ViewModel {
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)"
+            describedAs = "Imported Commands that can be either replayed (if PENDING) or retried (if FAILED)"
     )
     public List<ReplayableCommand> getPendingOrFailed() {
         return streamPendingOrFailed()
@@ -450,7 +448,6 @@ public final class CommandReplayManager implements ViewModel {
     }
 
 
-
     // -- VM STATE
 
     @Override
@@ -459,7 +456,6 @@ public final class CommandReplayManager implements ViewModel {
     }
 
     // -- HELPER
-
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }

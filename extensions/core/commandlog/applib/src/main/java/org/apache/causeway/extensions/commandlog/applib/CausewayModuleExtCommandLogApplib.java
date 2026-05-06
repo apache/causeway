@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Import;
         ReplayableCommand_replayOrRetry.class,
         ReplayableCommand_excludeFromReplay.class,
         ReplayableCommand_delete.class,
-        CommandExportManager.changeSince.class,
+        CommandExportManager.changeBaseline.class,
         CommandExportManager.previousHour.class,
         CommandExportManager.nextHour.class,
         CommandExportManager.exportSelected.class,
