@@ -77,7 +77,7 @@ import org.springframework.context.annotation.Import;
         CommandExportManager.nextHour.class,
         CommandExportManager.exportSelected.class,
         CommandExportManager.makeSelectedExportable.class,
-        CommandReplayManager.changeSince.class,
+        CommandReplayManager.changeBaseline.class,
         CommandExportManager.previousHour.class,
         CommandReplayManager.nextHour.class,
         CommandReplayManager.importCommands.class,

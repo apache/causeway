@@ -21,12 +21,14 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
@@ -39,6 +41,7 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -46,6 +49,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.core.transaction.changetracking.events.TimestampService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -60,6 +64,7 @@ import lombok.Getter;
 public final class CommandReplayManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
+    private TimestampService timestampService;
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
@@ -69,14 +74,15 @@ public final class CommandReplayManager implements ViewModel {
     @Inject
     public CommandReplayManager(
             final String memento,
-            final ReplayContext replayContext) {
+            final ReplayContext replayContext, TimestampService timestampService) {
         this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
+        this.timestampService = timestampService;
     }
 
     public CommandReplayManager(
-            final java.sql.Timestamp since,
+            final java.sql.Timestamp baseline,
             final ReplayContext replayContext) {
-        this.since = since;
+        this.baseline = baseline;
         this.replayContext = replayContext;
     }
 
@@ -86,9 +92,9 @@ public final class CommandReplayManager implements ViewModel {
 
 
     @Property
-    @PropertyLayout(describedAs = "Only commands since this timestamp are available for export")
+    @PropertyLayout(describedAs = "Only commands after this baseline are listed for replay")
     @Getter
-    private java.sql.Timestamp since;
+    private java.sql.Timestamp baseline;
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -97,7 +103,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "1",
+            associateWith = "baseline", sequence = "1",
             named = "Previous",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move back one hour"
@@ -106,7 +112,7 @@ public final class CommandReplayManager implements ViewModel {
         public class DomainEvent extends ActionDomainEvent<previousHour> { }
 
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(addSeconds(since, -3600), replayContext);
+            return new CommandReplayManager(addSeconds(baseline, -3600), replayContext);
         }
     }
 
@@ -117,7 +123,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "3",
+            associateWith = "baseline", sequence = "3",
             named = "Next",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move forward one hour"
@@ -125,7 +131,7 @@ public final class CommandReplayManager implements ViewModel {
     public class nextHour {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(addSeconds(since, +3600), replayContext);
+            return new CommandReplayManager(addSeconds(baseline, +3600), replayContext);
         }
     }
 
@@ -133,26 +139,26 @@ public final class CommandReplayManager implements ViewModel {
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             commandPublishing = Publishing.DISABLED,
-            domainEvent = changeSince.DomainEvent.class,
+            domainEvent = changeBaseline.DomainEvent.class,
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "2",
+            associateWith = "baseline", sequence = "2",
             named = "Change",
             position = ActionLayout.Position.PANEL
     )
-    public class changeSince {
+    public class changeBaseline {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
-        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp since) {
-            return new CommandReplayManager(since, replayContext);
+        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp baseline) {
+            return new CommandReplayManager(baseline, replayContext);
         }
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            return CommandReplayManager.this.since;
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandReplayManager.this.baseline;
         }
     }
 
-    private static Timestamp addSeconds(Timestamp since, int secondsToAdd) {
-        return Timestamp.from(since.toInstant().plusSeconds(secondsToAdd));
+    private static Timestamp addSeconds(Timestamp t0, int secondsToAdd) {
+        return Timestamp.from(t0.toInstant().plusSeconds(secondsToAdd));
     }
 
     @Action(
@@ -172,14 +178,34 @@ public final class CommandReplayManager implements ViewModel {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
         public CommandReplayManager act(
                 @Parameter(fileAccept = ".yml,.yaml")
-                final Blob commandsYaml) {
+                final Blob commandsYaml,
+                @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top")
+                final boolean moveBaselineToOldest) {
             var yamlDs = commandsYaml.asDataSource();
 
             final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
             commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
 
-            return CommandReplayManager.this;
+            return commandDtos.stream()
+                    .filter(x -> moveBaselineToOldest)
+                    .map(CommandDto::getTimestamp)
+                    .map(CommandReplayManager::toJavaSqlTimestamp)
+                    .sorted()
+                    .findFirst()
+                    .map(timestamp -> new CommandReplayManager(timestamp, replayContext))
+                    .orElse(CommandReplayManager.this);
         }
+
+        @MemberSupport public boolean defaultMoveBaselineToOldest() {
+            return true;
+        }
+
+    }
+
+    private static Timestamp toJavaSqlTimestamp(XMLGregorianCalendar xgc) {
+        if (xgc == null) return null;
+        Instant instant = xgc.toGregorianCalendar().toZonedDateTime().toInstant();
+        return Timestamp.from(instant);
     }
 
 
@@ -195,7 +221,7 @@ public final class CommandReplayManager implements ViewModel {
     }
 
     private @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(since).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext));
@@ -378,7 +404,7 @@ public final class CommandReplayManager implements ViewModel {
                     + "or marked to be excluded from replay (replayState=EXCLUDE)"
     )
     public List<ReplayableCommand> getSucceededOrExcluded() {
-        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(since).stream()
+        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -429,7 +455,7 @@ public final class CommandReplayManager implements ViewModel {
 
     @Override
     public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.since);
+        return TimestampMarshallUtil.toString(this.baseline);
     }
 
     // -- HELPER
