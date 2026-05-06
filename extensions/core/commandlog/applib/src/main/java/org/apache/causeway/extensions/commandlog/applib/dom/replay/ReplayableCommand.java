@@ -29,14 +29,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -210,6 +214,19 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             .orElse(null);
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+            associateWith = "targetType", sequence = "1",
+            cssClassFa = "fa-bullseye"
+    )
+    public Object openTarget() {
+        return commandLogEntry().map(CommandLogEntry::getTarget).orElse(null);
+    }
+    @MemberSupport public String disableOpenTarget() {
+        return commandLogEntry().isPresent() ? null : "Unknown target";
+    }
+
+
     @Property
     @PropertyLayout(
             sequence = "3.1",
@@ -341,7 +358,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
     }
-    
+
     String disableReplayOrRetry() {
         return commandRecord()
                 .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
@@ -351,7 +368,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     // -- HELPER
-    
+
 
     /**
      * Replays given command in its own transaction and handles {@link ReplayState} transition to
