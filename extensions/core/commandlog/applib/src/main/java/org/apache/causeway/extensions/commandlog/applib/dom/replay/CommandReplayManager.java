@@ -23,6 +23,7 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Timest
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,6 +49,8 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 
@@ -160,9 +163,9 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            sequence = "0.1",
+            sequence = "1.1",
             associateWith = "pendingOrFailed",
-            cssClass = "btn-primary",
+            cssClass = "btn-secondary",
             describedAs = "Imports commands from yaml format, then persists them with replayState=PENDING."
     )
     public class importCommands {
@@ -187,11 +190,19 @@ public final class CommandReplayManager implements ViewModel {
             describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)"
     )
     public List<ReplayableCommand> getPendingOrFailed() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(since).stream()
-            .map(entry->new ReplayableCommand(
-                    entry.getInteractionId(),
-                    replayContext))
+        return streamPendingOrFailed()
             .collect(Collectors.toList());
+    }
+
+    private @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(since).stream()
+                .map(entry -> new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext));
+    }
+
+    private long sizePendingOrFailed() {
+        return streamPendingOrFailed().count();
     }
 
 
@@ -204,9 +215,9 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.1",
-            cssClassFa = "solid circle-play",
+            associateWith = "pendingOrFailed", sequence = "1.2",
             cssClass = "btn-primary",
+            cssClassFa = "solid circle-play",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
                     + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
@@ -251,11 +262,42 @@ public final class CommandReplayManager implements ViewModel {
             choicesFrom = "pendingOrFailed",
             semantics = SemanticsOf.NON_IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
+            domainEvent = replayOrRetrySelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.3",
+            cssClassFa = "solid circle-play",
+            cssClass = "btn-primary",
+            describedAs = "Executes the oldest command.")
+    public class replayOrRetryNext {
+        public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
+        @MemberSupport public CommandReplayManager act() {
+            var nextIfAny = streamPendingOrFailed().findFirst();
+            // should always be present, due to our guard
+            nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
+        }
+    }
+
+
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
             domainEvent = excludeSelectedFromReplay.DomainEvent.class,
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.2",
+            associateWith = "pendingOrFailed", sequence = "1.4",
+            cssClass = "btn-secondary",
             describedAs = "Marks selected Commands to be EXCLUDED from replay"
     )
     public class excludeSelectedFromReplay {
@@ -269,7 +311,7 @@ public final class CommandReplayManager implements ViewModel {
 
         @MemberSupport
         public String disableAct() {
-            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+            return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
         }
 
         @MemberSupport
@@ -296,7 +338,8 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
+            associateWith = "pendingOrFailed", sequence = "1.4",
+            cssClass = "btn-danger",
             describedAs = "Deletes selected Commands (cannot be undone)"
     )
     public class deleteSelectedPendingOrFailed {
