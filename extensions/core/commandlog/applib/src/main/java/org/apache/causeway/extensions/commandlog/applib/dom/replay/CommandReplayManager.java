@@ -21,11 +21,14 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
@@ -38,6 +41,7 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -45,9 +49,12 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.core.transaction.changetracking.events.TimestampService;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 
@@ -71,9 +78,9 @@ public final class CommandReplayManager implements ViewModel {
     }
 
     public CommandReplayManager(
-            final java.sql.Timestamp since,
+            final java.sql.Timestamp baseline,
             final ReplayContext replayContext) {
-        this.since = since;
+        this.baseline = baseline;
         this.replayContext = replayContext;
     }
 
@@ -83,9 +90,9 @@ public final class CommandReplayManager implements ViewModel {
 
 
     @Property
-    @PropertyLayout(describedAs = "Only commands since this timestamp are available for export")
+    @PropertyLayout(describedAs = "Only commands after this baseline are listed for replay")
     @Getter
-    private java.sql.Timestamp since;
+    private java.sql.Timestamp baseline;
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -94,7 +101,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "1",
+            associateWith = "baseline", sequence = "1",
             named = "Previous",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move back one hour"
@@ -103,7 +110,7 @@ public final class CommandReplayManager implements ViewModel {
         public class DomainEvent extends ActionDomainEvent<previousHour> { }
 
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(addSeconds(since, -3600), replayContext);
+            return new CommandReplayManager(addSeconds(baseline, -3600), replayContext);
         }
     }
 
@@ -114,7 +121,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "3",
+            associateWith = "baseline", sequence = "3",
             named = "Next",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move forward one hour"
@@ -122,7 +129,7 @@ public final class CommandReplayManager implements ViewModel {
     public class nextHour {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
         @MemberSupport public CommandReplayManager act() {
-            return new CommandReplayManager(addSeconds(since, +3600), replayContext);
+            return new CommandReplayManager(addSeconds(baseline, +3600), replayContext);
         }
     }
 
@@ -130,26 +137,26 @@ public final class CommandReplayManager implements ViewModel {
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             commandPublishing = Publishing.DISABLED,
-            domainEvent = changeSince.DomainEvent.class,
+            domainEvent = changeBaseline.DomainEvent.class,
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "since", sequence = "2",
+            associateWith = "baseline", sequence = "2",
             named = "Change",
             position = ActionLayout.Position.PANEL
     )
-    public class changeSince {
+    public class changeBaseline {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
-        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp since) {
-            return new CommandReplayManager(since, replayContext);
+        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp baseline) {
+            return new CommandReplayManager(baseline, replayContext);
         }
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            return CommandReplayManager.this.since;
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandReplayManager.this.baseline;
         }
     }
 
-    private static Timestamp addSeconds(Timestamp since, int secondsToAdd) {
-        return Timestamp.from(since.toInstant().plusSeconds(secondsToAdd));
+    private static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
     }
 
     @Action(
@@ -160,23 +167,43 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            sequence = "0.1",
+            sequence = "1.1",
             associateWith = "pendingOrFailed",
-            cssClass = "btn-primary",
+            cssClass = "btn-secondary",
             describedAs = "Imports commands from yaml format, then persists them with replayState=PENDING."
     )
     public class importCommands {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
         public CommandReplayManager act(
                 @Parameter(fileAccept = ".yml,.yaml")
-                final Blob commandsYaml) {
+                final Blob commandsYaml,
+                @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top")
+                final boolean moveBaselineToOldest) {
             var yamlDs = commandsYaml.asDataSource();
 
             final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
             commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
 
-            return CommandReplayManager.this;
+            return commandDtos.stream()
+                    .filter(x -> moveBaselineToOldest)
+                    .map(CommandDto::getTimestamp)
+                    .map(CommandReplayManager::toJavaSqlTimestamp)
+                    .sorted()
+                    .findFirst()
+                    .map(timestamp -> new CommandReplayManager(timestamp, replayContext))
+                    .orElse(CommandReplayManager.this);
         }
+
+        @MemberSupport public boolean defaultMoveBaselineToOldest() {
+            return true;
+        }
+
+    }
+
+    private static Timestamp toJavaSqlTimestamp(XMLGregorianCalendar xgc) {
+        if (xgc == null) return null;
+        Instant instant = xgc.toGregorianCalendar().toZonedDateTime().toInstant();
+        return Timestamp.from(instant);
     }
 
 
@@ -184,14 +211,22 @@ public final class CommandReplayManager implements ViewModel {
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that can be either replayed (replayState=PENDING) or retried (when replayState=FAILED)"
+            describedAs = "Imported Commands that can be either replayed (if PENDING) or retried (if FAILED)"
     )
     public List<ReplayableCommand> getPendingOrFailed() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(since).stream()
-            .map(entry->new ReplayableCommand(
-                    entry.getInteractionId(),
-                    replayContext))
+        return streamPendingOrFailed()
             .collect(Collectors.toList());
+    }
+
+    private @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
+                .map(entry -> new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext));
+    }
+
+    private long sizePendingOrFailed() {
+        return streamPendingOrFailed().count();
     }
 
 
@@ -204,9 +239,9 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.1",
-            cssClassFa = "solid circle-play",
+            associateWith = "pendingOrFailed", sequence = "1.2",
             cssClass = "btn-primary",
+            cssClassFa = "solid circle-play",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
                     + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
@@ -251,11 +286,42 @@ public final class CommandReplayManager implements ViewModel {
             choicesFrom = "pendingOrFailed",
             semantics = SemanticsOf.NON_IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
+            domainEvent = replayOrRetrySelected.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED
+    )
+    @ActionLayout(
+            associateWith = "pendingOrFailed", sequence = "1.3",
+            cssClassFa = "solid circle-play",
+            cssClass = "btn-primary",
+            describedAs = "Executes the oldest command.")
+    public class replayOrRetryNext {
+        public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
+        @MemberSupport public CommandReplayManager act() {
+            var nextIfAny = streamPendingOrFailed().findFirst();
+            // should always be present, due to our guard
+            nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
+            return CommandReplayManager.this;
+        }
+
+        @MemberSupport
+        public String disableAct() {
+            return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
+        }
+    }
+
+
+
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            choicesFrom = "pendingOrFailed",
+            semantics = SemanticsOf.NON_IDEMPOTENT,
+            commandPublishing = Publishing.DISABLED,
             domainEvent = excludeSelectedFromReplay.DomainEvent.class,
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.2",
+            associateWith = "pendingOrFailed", sequence = "1.4",
+            cssClass = "btn-secondary",
             describedAs = "Marks selected Commands to be EXCLUDED from replay"
     )
     public class excludeSelectedFromReplay {
@@ -269,7 +335,7 @@ public final class CommandReplayManager implements ViewModel {
 
         @MemberSupport
         public String disableAct() {
-            return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+            return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
         }
 
         @MemberSupport
@@ -296,7 +362,8 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
+            associateWith = "pendingOrFailed", sequence = "1.4",
+            cssClass = "btn-danger",
             describedAs = "Deletes selected Commands (cannot be undone)"
     )
     public class deleteSelectedPendingOrFailed {
@@ -335,7 +402,7 @@ public final class CommandReplayManager implements ViewModel {
                     + "or marked to be excluded from replay (replayState=EXCLUDE)"
     )
     public List<ReplayableCommand> getSucceededOrExcluded() {
-        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(since).stream()
+        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -381,16 +448,14 @@ public final class CommandReplayManager implements ViewModel {
     }
 
 
-
     // -- VM STATE
 
     @Override
     public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.since);
+        return TimestampMarshallUtil.toString(this.baseline);
     }
 
     // -- HELPER
-
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }
