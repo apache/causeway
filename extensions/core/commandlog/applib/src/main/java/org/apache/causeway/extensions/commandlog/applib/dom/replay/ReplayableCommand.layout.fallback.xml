@@ -37,7 +37,7 @@
                 </bs:tab>
             </bs:tabGroup>
             <cpt:fieldSet name="Target" id="target">
-                <cpt:action id="target" position="PANEL"/>
+                <cpt:action id="openTarget" position="PANEL"/>
                 <cpt:property id="targetType"/>
                 <cpt:property id="targetId"/>
                 <cpt:property id="member"/>
