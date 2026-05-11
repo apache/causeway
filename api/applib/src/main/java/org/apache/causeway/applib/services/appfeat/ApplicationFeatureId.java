@@ -50,16 +50,16 @@ import lombok.Synchronized;
 
 /**
  * Value type representing a namespace, type or member.
- * <p>
- * This value is {@link Comparable}, the implementation of which considers
+ *
+ * <p> This value is {@link Comparable}, the implementation of which considers
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
  * {@link #getTypeSimpleName() type simple name} and {@link #getLogicalMemberName() member-logical-name}.
- * <p>
- * If the represented member is an <i>action</i>, then {@link #getLogicalMemberName() member-logical-name}
+ *
+ * <p> If the represented member is an <i>action</i>, then {@link #getLogicalMemberName() member-logical-name}
  * must <b>not</b> include any parameter list or parentheses.
  * Consequently method overloading is not supported.
- * <p>
- * If there is a member name clash involving an <i>action</i> and an <i>association</i>,
+ *
+ * <p> If there is a member name clash involving an <i>action</i> and an <i>association</i>,
  * then consequently any permissions defined automatically apply to both and one cannot separate
  * these.
  *
@@ -79,6 +79,10 @@ implements
 
     // -- FACTORY METHODS
 
+    /**
+     * @apiNote the inverse conversion is available via
+     *  {@link ApplicationFeatureRepository#asIdentifier(ApplicationFeatureId)}
+     */
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
         var logicalTypeName = identifier.logicalTypeName();

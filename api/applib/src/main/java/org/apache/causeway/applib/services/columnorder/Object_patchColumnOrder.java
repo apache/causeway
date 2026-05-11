@@ -19,9 +19,11 @@
 package org.apache.causeway.applib.services.columnorder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -37,6 +39,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
@@ -70,6 +73,7 @@ public class Object_patchColumnOrder {
 	extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_patchColumnOrder> {}
 
 	@Inject MetaModelService metaModelService;
+	@Inject ApplicationFeatureRepository applicationFeatureRepository;
 
     private final Object mixee;
 
@@ -79,10 +83,13 @@ public class Object_patchColumnOrder {
                     + "If 'none', patches all standalone tables, "
                     + "where this domain object type is the element type.")
     		final ApplicationFeatureId collectionId,
-    		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.PRESERVE_CHANGES)
+    		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
             @ParameterLayout(multiLine = 20)
             final String columnDefinition) {
     	// TODO flesh out: we need some holder of column order overrides (patches)
+        // make sure,
+        // org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.streamAssociationsForColumnRendering(Identifier, ManagedObject)
+        // honors any patches. Also patching must override any SPI?
         return mixee;
     }
 
@@ -92,11 +99,25 @@ public class Object_patchColumnOrder {
             .toList();
     }
 
-    @MemberSupport public String defaultColumnDefinition() {
-        // TODO flesh out using Listing; we need 2 sources
-        // 1) all column candidates
-        // 2) all columns currently configured
-        return "";
+    @MemberSupport public String defaultColumnDefinition(final ApplicationFeatureId collectionId) {
+        var memberId = applicationFeatureRepository.asIdentifier(collectionId)
+                .orElse(null); // not found or none selected (yet)
+
+        // all column candidates
+        var available = metaModelService.streamAvailableAssociationsForColumnRendering(mixee.getClass(), memberId)
+                .map(Identifier::memberLogicalName)
+                .collect(Collectors.joining("\n"));
+
+        // all columns currently configured
+        var enabled = metaModelService.streamEnabledAssociationsForColumnRendering(mixee.getClass(), memberId, mixee)
+                .map(Identifier::memberLogicalName)
+                .collect(Collectors.joining("\n"));
+
+        // TODO flesh out using Listing
+        return "# available\n"
+            + available
+            + "\n\n# enabled\n"
+            + enabled;
     }
 
 }

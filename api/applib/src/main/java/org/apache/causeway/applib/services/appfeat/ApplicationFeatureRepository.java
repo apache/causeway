@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 
@@ -55,5 +57,5 @@ public interface ApplicationFeatureRepository  {
 
     SortedSet<ApplicationFeatureId> propertyIdsFor(LogicalType logicalType);
 
-    Optional<Identifier> asIdentifier(ApplicationFeatureId applicationFeatureId);
+    Optional<Identifier> asIdentifier(@Nullable ApplicationFeatureId applicationFeatureId);
 }

@@ -1212,13 +1212,13 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
                 <mml:attr name="intent.defaultColumnDefinition" value="DEFAULTS"/>
-                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.defaultColumnDefinition()"/>
+                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.defaultColumnDefinition(org.apache.causeway.applib.services.appfeat.ApplicationFeatureId)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
                 <mml:attr name="facet" value="PrecedingParametersPolicyFacetForParameterAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="PRESERVE_CHANGES"/>
+                <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
             <mml:type>java.lang.String</mml:type>

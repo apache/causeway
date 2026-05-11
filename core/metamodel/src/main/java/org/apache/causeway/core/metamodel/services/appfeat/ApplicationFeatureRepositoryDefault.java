@@ -461,7 +461,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     @Override
-    public Optional<Identifier> asIdentifier(final ApplicationFeatureId applicationFeatureId) {
+    public Optional<Identifier> asIdentifier(final @Nullable ApplicationFeatureId applicationFeatureId) {
         return applicationFeatureId!=null
             ? specificationLoader.specForLogicalTypeName(applicationFeatureId.getLogicalTypeName())
                 .map(ObjectSpecification::logicalType)

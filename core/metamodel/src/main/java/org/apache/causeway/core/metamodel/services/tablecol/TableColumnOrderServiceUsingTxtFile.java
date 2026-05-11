@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -38,7 +40,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,8 +47,7 @@ import lombok.extern.slf4j.Slf4j;
  * file containing the list of the associations (usually properties, but collections are also supported), in the
  * desired order, one associationId per line.
  *
- * <p>
- * The files are located relative to the class itself.  A number of conventions are supported:
+ * <p> The files are located relative to the class itself. A number of conventions are supported:
  *
  * <ul>
  *     <li>
@@ -74,19 +74,15 @@ import lombok.extern.slf4j.Slf4j;
  *     </li>
  * </ul>
  *
- * <p>
- * Any associations omitted from the file will not be shown as columns of the table.  The associationId must also
+ * <p>Any associations omitted from the file will not be shown as columns of the table.  The associationId must also
  * be an exact match, so can be ignored by commenting out, eg with &quot;#&quot;.
- * </p>
  *
- * <p>
- *     Also note that association that have been explicitly hidden from tables using
- *     {@link PropertyLayout#hidden() @PropertyLayout#hidden} or {@link CollectionLayout#hidden()} are never shown,
- *     irrespective of whether they are listed in the files.  You may therefore prefer to <i>not</i> hide properties
- *     with annotations, and then rely solely on these external <i>columnOrder.txt</i> files.  This has the further
- *     benefit that files can be modified at runtime and will be automatically picked up without requiring a restart
- *     of the application.
- * </p>
+ * <p> Also note that association that have been explicitly hidden from tables using
+ * {@link PropertyLayout#hidden() @PropertyLayout#hidden} or {@link CollectionLayout#hidden()} are never shown,
+ * irrespective of whether they are listed in the files.  You may therefore prefer to <i>not</i> hide properties
+ * with annotations, and then rely solely on these external <i>columnOrder.txt</i> files.  This has the further
+ * benefit that files can be modified at runtime and will be automatically picked up without requiring a restart
+ * of the application.
  *
  * @see TableColumnOrderServiceDefault
  *
@@ -102,8 +98,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     /**
      * Reads association Ids of the parented collection from a file.
      *
-     * <p>
-     * The search algorithm is:
+     * <p> The search algorithm is:
      * <ul>
      *     <li> <code>ParentClassName#collectionId.columnOrder.txt</code> </li>
      *     <li> <code>ParentClassName#collectionId.columnOrder.fallback.txt</code> </li>
@@ -116,11 +111,8 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      *     <li> <code>ElementTypeClassName.columnOrder.txt</code></li>
      *     <li> <code>ElementTypeClassName.columnOrder.fallback.txt</code></li>
      * </ul>
-     * </p>
      *
-     * <p>
-     * Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
-     * </p>
+     * <p> Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
      *
      * @Returns {@code null}, if no matching resource was found
      */
@@ -135,9 +127,9 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
         var domainClass = domainObject.getClass();
         var resourceNames = buildResourceNames(domainClass, collectionId, elementType);
         addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
-        var contents = tryLoad(domainClass, resourceNames)
+        var content = tryLoad(domainClass, resourceNames)
                 .orElse(null);
-        return contentsMatching(contents, associationIds);
+        return contentMatching(content, associationIds);
     }
 
     private List<String> buildResourceNames(
@@ -152,9 +144,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     /**
      * Builds the list of file names to be read from.
      *
-     * <p>
-     * The default implementation provides only a single file name, <i>ClassName#collectionId.columnOrder.txt</i>.
-     * </p>
+     * <p>The default implementation provides only a single file name, <i>ClassName#collectionId.columnOrder.txt</i>.
      *
      * @param domainClass  - the class with the parent collection
      * @param collectionId - the id of the collection
@@ -175,9 +165,8 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
         for (String resourceName : resourceNames) {
             try {
                 final String contents = _Resources.loadAsStringUtf8(domainClass, resourceName);
-                if (contents != null) {
+                if (contents != null)
                     return Optional.of(contents);
-                }
             } catch (Exception ignore) {
                 // in most cases there won't be a file to load, so we just continue.
                 // not an error condition, but we'll log it at lowest (trace) level.
@@ -192,17 +181,13 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     /**
      * Reads associationIds of a standalone collection from a file.
      *
-     * <p>
-     * The search algorithm is:
+     * <p> The search algorithm is:
      * <ul>
      *     <li> <code>DomainTypeClassName.columnOrder.txt</code></li>
      *     <li> <code>DomainTypeClassName.columnOrder.fallback.txt</code></li>
      * </ul>
-     * </p>
      *
-     * <p>
-     * Additional files can be provided by overriding {@link #addResourceNames(Class, List)}.
-     * </p>
+     * <p> Additional files can be provided by overriding {@link #addResourceNames(Class, List)}.
      *
      * @Returns {@code null}, if no matching resource was found
      */
@@ -212,9 +197,9 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainType,
             final List<String> associationIds) {
         var resourceNames = buildResourceNames(domainType);
-        var contents = tryLoad(domainType, resourceNames)
+        var content = tryLoad(domainType, resourceNames)
                 .orElse(null);
-        return contentsMatching(contents, associationIds);
+        return contentMatching(content, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass) {
@@ -226,9 +211,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     /**
      * Builds the list of file names to be read from.
      *
-     * <p>
-     * The default implementation provides only a single file name, <i>ClassName#collectionId.columnOrder.txt</i>.
-     * </p>
+     * <p> The default implementation provides only a single file name, <i>ClassName#collectionId.columnOrder.txt</i>.
      *
      * @param domainClass - the class in the standalone collection
      * @param addTo       - to be added to
@@ -241,15 +224,15 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     }
 
     /**
-     * if contents is {@code null} returns {@code null}
+     * if content is {@code null} returns {@code null}
      */
     @Nullable
-    private static List<String> contentsMatching(
-            final @Nullable String contents,
+    private static List<String> contentMatching(
+            final @Nullable String content,
             final @NonNull List<String> associationIds) {
-        return contents==null
+        return content==null
                 ? null
-                : TextUtils.readLines(contents).stream()
+                : TextUtils.readLines(content).stream()
                     .map(String::trim) // ignore any leading or trailing whitespace
                     .filter(line->!line.startsWith("#")) // speed up (not strictly required)
                     .filter(associationIds::contains)

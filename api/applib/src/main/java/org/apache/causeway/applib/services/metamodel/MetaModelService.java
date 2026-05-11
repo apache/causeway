@@ -194,4 +194,33 @@ public interface MetaModelService {
      */
     Stream<Identifier> streamCollections(@Nullable Class<?> domainType);
 
+    /**
+     * Stream of {@link Identifier} representing the <i>Columns</i> of given domainType and <i>Member</i> of interest.
+     *
+     * <p> Where columns returned are those that are in principle available. Also those are returned in no particular order.
+     *
+     * <p> If domainType is null returns an empty {@link Stream}.
+     *
+     * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> streamAvailableAssociationsForColumnRendering(@Nullable Class<?> domainType, @Nullable Identifier memberIdentifier);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Columns</i> of given domainType and <i>Member</i> of interest.
+     *
+     * <p> Where columns returned are those that are currently visible. Also those are returned in same order as rendered.
+     *
+     * <p> If domainType is null returns an empty {@link Stream}.
+     *
+     * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> streamEnabledAssociationsForColumnRendering(
+            @Nullable Class<?> domainType,
+            @Nullable Identifier memberIdentifier,
+            @Nullable Object domainObject);
+
 }

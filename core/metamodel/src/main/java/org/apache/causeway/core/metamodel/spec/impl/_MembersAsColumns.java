@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -45,9 +46,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.util.WhereContexts;
 
-import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
-import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -63,7 +61,7 @@ class _MembersAsColumns implements HasMetaModelContext {
         if(elementType.isValue()) return Stream.empty();
 
         return elementType.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(Where.STANDALONE_TABLES))
             .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
     }
 
@@ -71,31 +69,39 @@ class _MembersAsColumns implements HasMetaModelContext {
      * @param parentObject not used for standalone tables and allowed to be empty for parented ones
      */
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
+            // the type that has the properties and collections that make up this table's columns
             final ObjectSpecification elementType,
-            final Identifier memberIdentifier,
+            // if null corresponds to a standalone table
+            final @Nullable Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
-        // the type that has the properties and collections that make up this table's columns
-        var elementClass = elementType.getCorrespondingClass();
-
-        var parentSpecIfAny = parentObject.objSpec();
-
         var assocById = new LinkedHashMap<String, ObjectAssociation>();
+        final Where whereContext;
 
-        elementType.streamAssociations(MixedIn.INCLUDED)
-            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
-            .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
-            .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
-            .forEach(assoc->assocById.put(assoc.getId(), assoc));
+        if(memberIdentifier==null) { // handle the standalone case
+            whereContext = Where.STANDALONE_TABLES;
+            elementType.streamAssociations(MixedIn.INCLUDED)
+                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(whereContext))
+                .filter(assoc->filterColumnsUsingSpi(assoc, elementType.getCorrespondingClass())) // optional SPI to filter columns;
+                .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
-        var assocIdsInOrder = new ArrayList<String>(assocById.keySet());
+        } else {
+            whereContext = WhereContexts.collectionVariant(memberIdentifier);
+            elementType.streamAssociations(MixedIn.INCLUDED)
+                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(whereContext))
+                .filter(ObjectAssociation.Predicates.referencesParent(parentObject.objSpec()).negate())
+                .filter(assoc->filterColumnsUsingSpi(assoc, elementType.getCorrespondingClass())) // optional SPI to filter columns;
+                .forEach(assoc->assocById.put(assoc.getId(), assoc));
+        }
+
+        var assocIdsInOrder = new ArrayList<>(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
             .ifPresent(assocIdsInOrder::sort);
 
         // optional SPI to reorder columns
-        sortColumnsUsingSpi(memberIdentifier, parentObject, assocIdsInOrder, elementClass);
+        sortColumnsUsingSpi(whereContext, memberIdentifier, parentObject, assocIdsInOrder, elementType.getCorrespondingClass());
 
         // add all ordered columns to the table
         return assocIdsInOrder.stream()
@@ -121,7 +127,7 @@ class _MembersAsColumns implements HasMetaModelContext {
         // same code also appears in DomainObjectPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via DomainObjectPage.
-        var elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
+        var elementTypeGridFacet = elementTypeSpec.lookupFacet(GridFacet.class).orElse(null);
 
         if(elementTypeGridFacet == null) return Optional.empty();
 
@@ -150,43 +156,36 @@ class _MembersAsColumns implements HasMetaModelContext {
     }
 
     private void sortColumnsUsingSpi(
-            final Identifier memberIdentifier,
+            final Where whereContext,
+            final @Nullable Identifier memberIdentifier,
             // not used for standalone tables, and allowed to be empty in parented ones
             final ManagedObject parentObject,
-            final List<String> propertyIdsInOrder,
+            final List<String> assocIdsInOrder,
             final Class<?> elementType) {
 
         var tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
         if(tableColumnOrderServices.isEmpty())
             return;
 
-        var whereContext = whereContextFor(memberIdentifier);
-
         tableColumnOrderServices.stream()
-        .map(tableColumnOrderService->
-            whereContext.inStandaloneTable()
-            ? tableColumnOrderService.orderStandalone(
-                    elementType,
-                    propertyIdsInOrder)
-            : tableColumnOrderService.orderParented(
-                    parentObject.getPojo(),
-                    memberIdentifier.memberLogicalName(),
-                    elementType,
-                    propertyIdsInOrder))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .filter(propertyReorderedIds->propertyReorderedIds!=propertyIdsInOrder) // skip if its the same object
-        .ifPresent(propertyReorderedIds->{
-            propertyIdsInOrder.clear();
-            propertyIdsInOrder.addAll(propertyReorderedIds);
-        });
+            .map(tableColumnOrderService->
+                whereContext.inStandaloneTable()
+                ? tableColumnOrderService.orderStandalone(
+                        elementType,
+                        assocIdsInOrder)
+                : tableColumnOrderService.orderParented(
+                        parentObject.getPojo(),
+                        memberIdentifier.memberLogicalName(),
+                        elementType,
+                        assocIdsInOrder))
+            .filter(_NullSafe::isPresent)
+            .findFirst()
+            .filter(assocReorderedIds->assocReorderedIds!=assocIdsInOrder) // skip if its the same object
+            .ifPresent(assocReorderedIds->{
+                assocIdsInOrder.clear();
+                assocIdsInOrder.addAll(assocReorderedIds);
+            });
 
-    }
-
-    static Where whereContextFor(final Identifier memberIdentifier) {
-        return memberIdentifier.type().isAction()
-                ? STANDALONE_TABLES
-                : PARENTED_TABLES;
     }
 
 }
