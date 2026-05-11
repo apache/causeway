@@ -78,7 +78,7 @@ identified
 
         <!-- PLUGINS -->
 
-        <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
+        <datanucleus-maven-plugin.version>6.0.1</datanucleus-maven-plugin.version>
         <datanucleus-maven-plugin.log4jConfiguration>
             ${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
         <datanucleus-maven-plugin.verbose>false</datanucleus-maven-plugin.verbose>
