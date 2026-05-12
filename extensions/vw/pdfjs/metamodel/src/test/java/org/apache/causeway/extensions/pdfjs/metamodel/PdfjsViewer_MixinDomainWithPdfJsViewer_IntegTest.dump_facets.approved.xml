@@ -1141,9 +1141,9 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
                 <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
-                <mml:attr name="originalText" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (a STANDALONE Collection). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). Wildcard patches have least priority."/>
+                <mml:attr name="originalText" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (applies to all STANDALONE Collections of that element-type). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. The Apache Causeway Programming Model also supports {parent-type, element-type} scoped column order definitions, which are not covered by patching yet."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="translated" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (a STANDALONE Collection). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). Wildcard patches have least priority."/>
+                <mml:attr name="translated" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (applies to all STANDALONE Collections of that element-type). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. The Apache Causeway Programming Model also supports {parent-type, element-type} scoped column order definitions, which are not covered by patching yet."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                 <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
@@ -1157,11 +1157,11 @@
                 <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
                 <mml:attr name="precedence" value="LOW"/>
               </mml:facet>
-              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation.Optional">
-                <mml:attr name="facet" value="MandatoryFacetForParameterAnnotation.Optional"/>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                <mml:attr name="facet" value="MandatoryFacetDefault"/>
                 <mml:attr name="interactionAdvisors" value="Validating"/>
-                <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="semantics" value="OPTIONAL"/>
+                <mml:attr name="precedence" value="FALLBACK"/>
+                <mml:attr name="semantics" value="REQUIRED"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.MaxLengthFacetUnlimited">
                 <mml:attr name="facet" value="MaxLengthFacetUnlimited"/>

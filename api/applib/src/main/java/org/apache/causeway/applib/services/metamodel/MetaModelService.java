@@ -209,36 +209,39 @@ public interface MetaModelService {
     Stream<Identifier> streamTypeHierarchy(@Nullable Class<?> domainType);
 
     /**
-     * Stream of {@link Identifier} representing the <i>Columns</i> of given domainType and <i>Member</i> of interest.
+     * Parameter to lookup associations for column rendering.
      *
-     * <p> Where columns returned are those that are in principle available. Also those are returned in no particular order.
-     *
-     * <p> If domainType is null returns an empty {@link Stream}.
-     *
-     * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
-     *
-     * <p>FIXME distinction between PARENTED and STANDALONE could be more explicit (separate methods)
-     * <p>FIXME column-order-txt feature supports identifier wildcards, which could be reflected by leaving the memberId empty here
      * @since 4.0
      */
-    Stream<Identifier> streamAvailableAssociationsForColumnRendering(@Nullable Class<?> domainType, @Nullable Identifier memberIdentifier);
+    public enum AssociationsLookup {
+        AVAILABLE,
+        ENABLED
+    }
 
     /**
-     * Stream of {@link Identifier} representing the <i>Columns</i> of given domainType and <i>Member</i> of interest.
+     * Stream of {@link Identifier} representing the <i>Columns</i> for specified PARENTED collection.
      *
-     * <p> Where columns returned are those that are currently visible. Also those are returned in same order as rendered.
+     * <p> Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given {@link AssociationsLookup}.
      *
-     * <p> If domainType is null returns an empty {@link Stream}.
+     * <p> The availability lookup returns {@link Identifier}(s) in no particular order,
+     * whereas the enablement lookup returns them in same order as rendered.
      *
-     * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
+     * <p> If parentDomainObject is null returns an empty {@link Stream}.
      *
-     * <p>FIXME distinction between PARENTED and STANDALONE could be more explicit (separate methods)
-     * <p>FIXME column-order-txt feature supports identifier wildcards, which could be reflected by leaving the memberId empty here
      * @since 4.0
      */
-    Stream<Identifier> streamEnabledAssociationsForColumnRendering(
-            @Nullable Class<?> domainType,
-            @Nullable Identifier memberIdentifier,
-            @Nullable Object domainObject);
+    Stream<Identifier> parentedAssociationsForColumnRendering(Object parentDomainObject, Identifier collectionId, AssociationsLookup lookup);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Columns</i> for specified STANDALONE collection.
+     *
+     * <p> Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given {@link AssociationsLookup}.
+     *
+     * <p> The availability lookup returns {@link Identifier}(s) in no particular order,
+     * whereas the enablement lookup returns them in same order as rendered.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> standaloneAssociationsForColumnRendering(LogicalType logicalType, AssociationsLookup lookup);
 
 }

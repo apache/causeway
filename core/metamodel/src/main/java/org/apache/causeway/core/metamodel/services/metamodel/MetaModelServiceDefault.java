@@ -24,7 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiPredicate;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,13 +52,13 @@ import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -303,65 +302,61 @@ public record MetaModelServiceDefault(
             .specForType(domainType)
             .stream()
             .flatMap(ObjectSpecification::streamTypeHierarchyAndInterfaces)
-            .filter(spec->spec.getCorrespondingClass().equals(Object.class))
+            .filter(spec->!spec.getCorrespondingClass().equals(Object.class))
             .map(ObjectSpecification::getFeatureIdentifier);
     }
 
     @Override
-    public Stream<Identifier> streamAvailableAssociationsForColumnRendering(
-            @Nullable final Class<?> domainType,
-            @Nullable final Identifier memberIdentifier) {
+    public Stream<Identifier> parentedAssociationsForColumnRendering(
+            final Object parentDomainObject,
+            final Identifier collectionId,
+            final AssociationsLookup lookup) {
 
-        var elementType = lookupColumnHolder(domainType, memberIdentifier)
-                .map(either->either.fold(OneToManyAssociation::getElementType, UnaryOperator.identity()))
-                .orElse(null);
+        if(parentDomainObject==null
+                || collectionId==null)
+            return Stream.empty();
 
+        var parentMo = ManagedObject.adaptSingular(specificationLoader(), parentDomainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(parentMo))
+            return Stream.empty();
+
+        var elementType = parentMo.objSpec().getCollection(collectionId.memberLogicalName())
+            .map(OneToManyAssociation::getElementType)
+            .orElse(null);
         if(elementType==null)
             return Stream.empty();
 
-        return elementType.streamAssociations(MixedIn.INCLUDED)
-            .map(ObjectAssociation::getFeatureIdentifier);
+        return switch (lookup) {
+            case AVAILABLE -> elementType
+                .streamAssociations(MixedIn.INCLUDED)
+                .map(ObjectAssociation::getFeatureIdentifier);
+            case ENABLED -> parentMo.objSpec()
+                .streamAssociationsForColumnRendering(collectionId, parentMo)
+                .map(ObjectAssociation::getFeatureIdentifier);
+        };
     }
 
     @Override
-    public Stream<Identifier> streamEnabledAssociationsForColumnRendering(
-            @Nullable final Class<?> domainType,
-            @Nullable final Identifier memberIdentifier,
-            @Nullable final Object domainObject) {
+    public Stream<Identifier> standaloneAssociationsForColumnRendering(
+            final LogicalType logicalType,
+            final AssociationsLookup lookup) {
 
-        var elementType = lookupColumnHolder(domainType, memberIdentifier)
-                .map(either->either.fold(OneToManyAssociation::getElementType, UnaryOperator.identity()))
+        var elementType = specificationLoader()
+                .specForLogicalType(logicalType)
                 .orElse(null);
 
-        if(elementType==null)
+        if(elementType == null)
             return Stream.empty();
 
-        var mo = MetaModelContext.instanceElseFail()
-            .getObjectManager()
-            .adapt(domainObject);
-
-        return elementType.streamAssociationsForColumnRendering(memberIdentifier, mo)
-            .map(ObjectAssociation::getFeatureIdentifier);
-    }
-
-    // -- HELPER
-
-    private Optional<Either<OneToManyAssociation, ObjectSpecification>> lookupColumnHolder(
-            @Nullable final Class<?> domainType,
-            @Nullable final Identifier memberIdentifier) {
-
-        var domObjSpec = specificationLoader()
-                .specForType(domainType)
-                .orElse(null);
-
-        if(domObjSpec == null)
-            return Optional.empty();
-
-        if(memberIdentifier == null)
-            return Optional.of(Either.right(domObjSpec));
-
-        return domObjSpec.getCollection(memberIdentifier.memberLogicalName())
-            .map(Either::left);
+        return switch (lookup) {
+            case AVAILABLE -> elementType
+                .streamAssociations(MixedIn.INCLUDED)
+                .map(ObjectAssociation::getFeatureIdentifier);
+            case ENABLED -> elementType
+                //TODO room  for API improvement
+                .streamAssociationsForColumnRendering(null, null)
+                .map(ObjectAssociation::getFeatureIdentifier);
+        };
     }
 
 }

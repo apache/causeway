@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -31,7 +33,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
@@ -42,6 +43,8 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 
@@ -80,15 +83,15 @@ public class Object_patchColumnOrder {
 
     @MemberSupport public Object act(
 
-            @Parameter(optionality = Optionality.OPTIONAL)
+            @Parameter
             @ParameterLayout(describedAs = "The 'Feature', for which the patch is to be applied (in-memory), "
                     + "that is, "
                     + "either for a one-to-many relation (a PARENTED Collection), "
-                    + "or a domain-type (a STANDALONE Collection). "
+                    + "or a domain-type (applies to all STANDALONE Collections of that element-type). "
                     + "The Feature either represents a particular one-to-many relation of this domain-type or "
                     + "represents the domain-type itself or one of the domain-type's super types. "
-                    + "If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). "
-                    + "Wildcard patches have least priority.")
+                    + "The Apache Causeway Programming Model also supports {parent-type, element-type} scoped "
+                    + "column order definitions, which are not covered by patching yet.")
     		final ApplicationFeatureId featureId,
 
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
@@ -110,21 +113,40 @@ public class Object_patchColumnOrder {
             .toList();
     }
 
-    @MemberSupport public String defaultColumnDefinition(final ApplicationFeatureId collectionId) {
-        var memberId = applicationFeatureRepository.asIdentifier(collectionId)
-                .orElse(null); // not found or none selected (yet)
+    @MemberSupport public String defaultColumnDefinition(final @Nullable ApplicationFeatureId appFeatureId) {
+        if(appFeatureId==null)
+            return "# no feature selected";
 
+        var featureId = applicationFeatureRepository.asIdentifier(appFeatureId)
+                .orElseThrow(); // not found -> unexpected
+
+        if(featureId.type().isCollection())
+            return listing(
+                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.AVAILABLE),
+                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.ENABLED));
+
+        if(featureId.type().isClass())
+            return listing(
+                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.AVAILABLE),
+                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.ENABLED));
+
+        throw _Exceptions.illegalArgument("unsupported feature type %s", featureId.type());
+    }
+
+    // -- HELPER
+
+    private String listing(final Stream<Identifier> availableIds, final Stream<Identifier> enabledIds) {
         // all column candidates
-        var available = metaModelService.streamAvailableAssociationsForColumnRendering(mixee.getClass(), memberId)
+        var available = availableIds
                 .map(Identifier::memberLogicalName)
                 .collect(Collectors.joining("\n"));
 
-        // all columns currently configured
-        var enabled = metaModelService.streamEnabledAssociationsForColumnRendering(mixee.getClass(), memberId, mixee)
+        // all columns currently rendered
+        var enabled = enabledIds
                 .map(Identifier::memberLogicalName)
                 .collect(Collectors.joining("\n"));
 
-        // TODO flesh out using Listing
+        // TODO flesh out using Listing?
         return "# available\n"
             + available
             + "\n\n# enabled\n"
