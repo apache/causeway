@@ -31,18 +31,23 @@ import jakarta.inject.Named;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -191,6 +196,26 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             .map(OidDto::getId)
             .map(id->_Strings.ellipsifyAtEnd(id, 10, "..."))
             .orElse(null);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+            cssClassFa = "fa-bullseye"
+    )
+    public class openTarget {
+        @Inject BookmarkService bookmarkService;
+
+        @MemberSupport public Object act() {
+            return commandLogEntry()
+                .map(CommandLogEntry::getTarget)
+                .flatMap(bookmark -> bookmarkService.lookup(bookmark))
+                .orElse(null);
+        }
+        @MemberSupport public String disableAct() {
+            return commandLogEntry().isPresent()
+                ? null
+                : "Unknown target";
+        }
     }
 
     @Property

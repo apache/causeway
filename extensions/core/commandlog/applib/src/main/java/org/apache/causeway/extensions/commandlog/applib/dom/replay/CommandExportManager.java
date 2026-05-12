@@ -59,8 +59,8 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Timest
 @Named(CommandExportManager.LOGICAL_TYPE_NAME)
 public record CommandExportManager(
         @Property
-        @PropertyLayout(describedAs = "Only commands since this timestamp are available for export")
-        java.sql.Timestamp since,
+        @PropertyLayout(describedAs = "Only commands after this timestamp are available for export")
+        java.sql.Timestamp baseline,
         ReplayContext replayContext) implements ViewModel {
 
 	public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
@@ -86,14 +86,14 @@ public record CommandExportManager(
             domainEvent = previousHour.DomainEvent.class,
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
-            associateWith = "since", sequence = "1",
+            associateWith = "baseline", sequence = "1",
             named = "Previous",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move back one hour")
     public class previousHour {
         public class DomainEvent extends ActionDomainEvent<previousHour> { }
         @MemberSupport public CommandExportManager act() {
-            return new CommandExportManager(addSeconds(since, -3600), replayContext);
+            return new CommandExportManager(addSeconds(baseline, -3600), replayContext);
         }
     }
 
@@ -103,14 +103,14 @@ public record CommandExportManager(
             domainEvent = nextHour.DomainEvent.class,
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
-            associateWith = "since", sequence = "3",
+            associateWith = "baseline", sequence = "3",
             named = "Next",
             position = ActionLayout.Position.PANEL,
             describedAs = "Move forward one hour")
     public class nextHour {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
         @MemberSupport public CommandExportManager act() {
-            return new CommandExportManager(addSeconds(since, +3600), replayContext);
+            return new CommandExportManager(addSeconds(baseline, +3600), replayContext);
         }
     }
 
@@ -118,19 +118,19 @@ public record CommandExportManager(
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             commandPublishing = Publishing.DISABLED,
-            domainEvent = changeSince.DomainEvent.class,
+            domainEvent = changeBaseline.DomainEvent.class,
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
-            associateWith = "since", sequence = "2",
+            associateWith = "baseline", sequence = "2",
             named = "Change",
             position = ActionLayout.Position.PANEL)
-    public class changeSince {
+    public class changeBaseline {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
-        @MemberSupport public CommandExportManager act(final java.sql.Timestamp since) {
-            return new CommandExportManager(since, replayContext);
+        @MemberSupport public CommandExportManager act(final java.sql.Timestamp baseline) {
+            return new CommandExportManager(baseline, replayContext);
         }
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            return CommandExportManager.this.since;
+        @MemberSupport public java.sql.Timestamp defaultBaseline() {
+            return CommandExportManager.this.baseline;
         }
     }
 
@@ -140,7 +140,7 @@ public record CommandExportManager(
     @CollectionLayout(
             describedAs = "Commands that can be exported")
     public List<ReplayableCommand> getNotYetExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(since).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -231,7 +231,7 @@ public record CommandExportManager(
     @Collection
     @CollectionLayout(describedAs = "Commands that have been exported")
     public List<ReplayableCommand> getExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(since).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -271,7 +271,7 @@ public record CommandExportManager(
 
     @Override
     public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.since);
+        return TimestampMarshallUtil.toString(this.baseline);
     }
 
     // -- HELPER
@@ -280,7 +280,7 @@ public record CommandExportManager(
         return replayContext.commandLogEntryRepository();
     }
 
-    private static Timestamp addSeconds(final Timestamp since, final int secondsToAdd) {
-        return Timestamp.from(since.toInstant().plusSeconds(secondsToAdd));
+    private static Timestamp addSeconds(final Timestamp ts, final int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
     }
 }
