@@ -298,6 +298,16 @@ public record MetaModelServiceDefault(
     }
 
     @Override
+    public Stream<Identifier> streamTypeHierarchy(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(ObjectSpecification::streamTypeHierarchyAndInterfaces)
+            .filter(spec->spec.getCorrespondingClass().equals(Object.class))
+            .map(ObjectSpecification::getFeatureIdentifier);
+    }
+
+    @Override
     public Stream<Identifier> streamAvailableAssociationsForColumnRendering(
             @Nullable final Class<?> domainType,
             @Nullable final Identifier memberIdentifier) {

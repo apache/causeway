@@ -195,6 +195,20 @@ public interface MetaModelService {
     Stream<Identifier> streamCollections(@Nullable Class<?> domainType);
 
     /**
+     * Stream of {@link Identifier} representing the type hierarchy of given domainType, starting at given domainType,
+     * going 'up' in the hierarchy, but excluding {@link Object}.
+     *
+     * <p> Included are all types in the hierarchy, that are recognized by the Metamodel, recognized Interfaces last.
+     *
+     * @apiNote Since 4.0, the Metamodel supports Interfaces acting as element-types for Collections.
+     * This requires explicit {@link DomainObject} annotations on those Interfaces along with the constraint, that within
+     * a type hierarchy, every type can have at most one super-type.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> streamTypeHierarchy(@Nullable Class<?> domainType);
+
+    /**
      * Stream of {@link Identifier} representing the <i>Columns</i> of given domainType and <i>Member</i> of interest.
      *
      * <p> Where columns returned are those that are in principle available. Also those are returned in no particular order.
@@ -203,6 +217,8 @@ public interface MetaModelService {
      *
      * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
      *
+     * <p>FIXME distinction between PARENTED and STANDALONE could be more explicit (separate methods)
+     * <p>FIXME column-order-txt feature supports identifier wildcards, which could be reflected by leaving the memberId empty here
      * @since 4.0
      */
     Stream<Identifier> streamAvailableAssociationsForColumnRendering(@Nullable Class<?> domainType, @Nullable Identifier memberIdentifier);
@@ -216,6 +232,8 @@ public interface MetaModelService {
      *
      * <p> Otherwise, if memberIdentifier is null returns <i>Columns</i> for the standalone table of element-type == domainType.
      *
+     * <p>FIXME distinction between PARENTED and STANDALONE could be more explicit (separate methods)
+     * <p>FIXME column-order-txt feature supports identifier wildcards, which could be reflected by leaving the memberId empty here
      * @since 4.0
      */
     Stream<Identifier> streamEnabledAssociationsForColumnRendering(

@@ -20,6 +20,7 @@ package org.apache.causeway.applib.services.columnorder;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
@@ -58,7 +59,7 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "solid file-arrow-up",
 		describedAs = "Uploads table column order, to be stored in memory for this object type. "
-				+ "It overrules the default lookup. "
+				+ "It overrules the default column order definition lookup. "
 				+ "On application restart this information is lost.",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
@@ -78,24 +79,34 @@ public class Object_patchColumnOrder {
     private final Object mixee;
 
     @MemberSupport public Object act(
+
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(describedAs = "The Collection, for which the patch is to be applied (in-memory). "
-                    + "If 'none', patches all standalone tables, "
-                    + "where this domain object type is the element type.")
-    		final ApplicationFeatureId collectionId,
+            @ParameterLayout(describedAs = "The 'Feature', for which the patch is to be applied (in-memory), "
+                    + "that is, "
+                    + "either for a one-to-many relation (a PARENTED Collection), "
+                    + "or a domain-type (a STANDALONE Collection). "
+                    + "The Feature either represents a particular one-to-many relation of this domain-type or "
+                    + "represents the domain-type itself or one of the domain-type's super types. "
+                    + "If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). "
+                    + "Wildcard patches have least priority.")
+    		final ApplicationFeatureId featureId,
+
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
             @ParameterLayout(multiLine = 20)
             final String columnDefinition) {
     	// TODO flesh out: we need some holder of column order overrides (patches)
         // make sure,
         // org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.streamAssociationsForColumnRendering(Identifier, ManagedObject)
-        // honors any patches. Also patching must override any SPI?
+        // honors any patches. Also patching must override any SPI, because that also is a use-case for patching.
         return mixee;
     }
 
-    @MemberSupport public List<ApplicationFeatureId> choicesCollectionId() {
-        return metaModelService.streamCollections(mixee.getClass())
-            .map(ApplicationFeatureId::fromIdentifier)
+    @MemberSupport public List<ApplicationFeatureId> choicesFeatureId() {
+        return Stream.concat(
+                metaModelService.streamTypeHierarchy(mixee.getClass())
+                    .map(ApplicationFeatureId::fromIdentifier),
+                metaModelService.streamCollections(mixee.getClass())
+                    .map(ApplicationFeatureId::fromIdentifier))
             .toList();
     }
 

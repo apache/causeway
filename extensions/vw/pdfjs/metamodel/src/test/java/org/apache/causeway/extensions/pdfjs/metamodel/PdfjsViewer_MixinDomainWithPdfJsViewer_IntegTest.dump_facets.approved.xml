@@ -1076,9 +1076,9 @@
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
-            <mml:attr name="originalText" value="Uploads table column order, to be stored in memory for this object type. It overrules the default lookup. On application restart this information is lost."/>
+            <mml:attr name="originalText" value="Uploads table column order, to be stored in memory for this object type. It overrules the default column order definition lookup. On application restart this information is lost."/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="translated" value="Uploads table column order, to be stored in memory for this object type. It overrules the default lookup. On application restart this information is lost."/>
+            <mml:attr name="translated" value="Uploads table column order, to be stored in memory for this object type. It overrules the default column order definition lookup. On application restart this information is lost."/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
@@ -1136,21 +1136,21 @@
         </mml:facets>
         <mml:returnType>java.lang.Object</mml:returnType>
         <mml:params>
-          <mml:param id="collectionId" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
+          <mml:param id="featureId" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
                 <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
-                <mml:attr name="originalText" value="The Collection, for which the patch is to be applied (in-memory). If 'none', patches all standalone tables, where this domain object type is the element type."/>
+                <mml:attr name="originalText" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (a STANDALONE Collection). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). Wildcard patches have least priority."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="translated" value="The Collection, for which the patch is to be applied (in-memory). If 'none', patches all standalone tables, where this domain object type is the element type."/>
+                <mml:attr name="translated" value="The 'Feature', for which the patch is to be applied (in-memory), that is, either for a one-to-many relation (a PARENTED Collection), or a domain-type (a STANDALONE Collection). The Feature either represents a particular one-to-many relation of this domain-type or represents the domain-type itself or one of the domain-type's super types. If 'none', patches all one-to-many relations of this domain-type (acting as a wildcard). Wildcard patches have least priority."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                 <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
-                <mml:attr name="originalText" value="Collection Id"/>
+                <mml:attr name="originalText" value="Feature Id"/>
                 <mml:attr name="precedence" value="LOW"/>
-                <mml:attr name="translated" value="Collection Id"/>
+                <mml:attr name="translated" value="Feature Id"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                 <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
@@ -1177,8 +1177,8 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
                 <mml:attr name="choicesType" value="LIST"/>
                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
-                <mml:attr name="intent.choicesCollectionId" value="CHOICES_OR_AUTOCOMPLETE"/>
-                <mml:attr name="methods" value="public java.util.List org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.choicesCollectionId()"/>
+                <mml:attr name="intent.choicesFeatureId" value="CHOICES_OR_AUTOCOMPLETE"/>
+                <mml:attr name="methods" value="public java.util.List org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.choicesFeatureId()"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">
