@@ -55,12 +55,19 @@ implements CollectionContentsAsFactory {
                 && objectSpec.getCorrespondingClass().equals(BigDecimal.class);
     };
 
+	private final boolean disabled;
+
     public CollectionContentsAsSummaryFactory() {
         super(UiComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
+        this.disabled = System.getenv("causeway.viewer.wicket.summary-view-disabled")!=null; 
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
+    	if(disabled) {
+    		return ApplicationAdvice.DOES_NOT_APPLY;
+    	}
+    	
         final boolean hasAnyBigDecProperty =
             _Casts.castTo(EntityCollectionModel.class, model)
                 .map(EntityCollectionModel::getElementType)
