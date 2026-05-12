@@ -26,7 +26,7 @@ Apache Causeway automatically generates the UI from the domain classes.
 === Sign-in
 
 Apache Causeway integrates with link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak] for authentication concerns, typically in combination with OAuth2.
-These are usually combined with the __SecMan__ module, which provides a set of domain entities that model an authenticaiton model: users, roles and permissions against features derived from the Apache Causeway metamodel.
+These are usually combined with the __SecMan__ module, which provides a set of domain entities that model an authentication model: users, roles and permissions against features derived from the Apache Causeway metamodel.
 The SecMan user is mapped to the authentical principle provided by Spring or Keycloak.
 Alternatively, SecMan can perform its own local authentication.
 
@@ -259,5 +259,4 @@ The Apache Causeway https://causeway.apache.org[website] has lots of useful info
 Or, you can just start coding using the https://github.com/apache/causeway-app-simpleapp[SimpleApp] starter app.
 
 And if you need help or support, join our https://cwiki.apache.org/confluence/display/CAUSEWAY/Signing+up+to+Slack[ASF Slack channel] or our https://causeway.apache.org/support.html[mailing list].
-
 
