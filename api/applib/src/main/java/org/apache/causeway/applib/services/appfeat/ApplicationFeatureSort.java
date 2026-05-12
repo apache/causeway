@@ -65,4 +65,12 @@ public enum ApplicationFeatureSort {
         return name();
     }
 
+    public String quickIcon() {
+        return switch (this) {
+            case NAMESPACE -> "solid sitemap";
+            case MEMBER -> "solid circle-plus .col-indigo";
+            case TYPE -> "solid circle .col-indigo";
+        };
+    }
+
 }
