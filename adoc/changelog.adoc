@@ -1,3 +1,8 @@
+= May 2016
+
+- [Wicket Viewer] disable _Collection Content Summary View_ via env. var.
+`causeway.viewer.wicket.summary-view-disabled=true`
+
 = April 2016
 
 🐞 Bug Fixes

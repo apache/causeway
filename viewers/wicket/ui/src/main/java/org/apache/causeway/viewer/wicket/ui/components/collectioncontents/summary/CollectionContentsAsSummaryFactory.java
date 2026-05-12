@@ -59,7 +59,8 @@ implements CollectionContentsAsFactory {
 
     public CollectionContentsAsSummaryFactory() {
         super(UiComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
-        this.disabled = System.getenv("causeway.viewer.wicket.summary-view-disabled")!=null; 
+        var value = System.getenv("causeway.viewer.wicket.summary-view-disabled");
+        this.disabled = value!=null && value.toLowerCase().equals("true"); 
     }
 
     @Override
