@@ -64,7 +64,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 import org.springframework.transaction.annotation.Propagation;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
