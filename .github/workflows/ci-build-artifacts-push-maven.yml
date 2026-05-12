@@ -6,6 +6,10 @@ on:
     # daily 02:00 (UTC) on Sunday morning
     - cron: '0 2 * * 0'
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     name: build-local-push
@@ -107,4 +111,3 @@ jobs:
 #     env:
 #       MATRIX_CONTEXT: ${{ toJson(matrix) }}
 #     run: echo "$MATRIX_CONTEXT"
-
