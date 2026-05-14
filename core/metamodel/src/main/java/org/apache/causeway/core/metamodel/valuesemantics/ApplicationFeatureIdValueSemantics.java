@@ -81,8 +81,8 @@ implements
     private String iconify(final ApplicationFeatureId featureId) {
         var fa = switch (featureId.getSort()) {
             case NAMESPACE -> "fa-solid fa-sitemap";
-            case MEMBER -> "fa-solid fa-circle-plus .col-indigo";
-            case TYPE -> "fa-solid fa-circle .col-indigo";
+            case MEMBER -> "fa-solid fa-circle-plus col-indigo";
+            case TYPE -> "fa-solid fa-circle col-indigo";
         };
 
         return faIconAndTitle(fa, toMonospace(featureId.stringify()));
