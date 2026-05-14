@@ -127,8 +127,8 @@ public record CommandReplayManager(
     )
     public class changeBaseline {
         public class DomainEvent extends ActionDomainEvent<nextHour> { }
-        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp since) {
-            return new CommandReplayManager(since, replayContext);
+        @MemberSupport public CommandReplayManager act(final java.sql.Timestamp baseline) {
+            return new CommandReplayManager(baseline, replayContext);
         }
         @MemberSupport public java.sql.Timestamp defaultBaseline() {
             return CommandReplayManager.this.baseline;
