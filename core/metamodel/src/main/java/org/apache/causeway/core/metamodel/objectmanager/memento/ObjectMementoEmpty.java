@@ -20,10 +20,11 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 
 record ObjectMementoEmpty(
-        LogicalType logicalType,
-        String title)
+        LogicalType logicalType)
 implements ObjectMemento {
 
     @Override
@@ -32,7 +33,15 @@ implements ObjectMemento {
     }
 
     public ObjectDisplayDto toDto() {
-        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark().stringify(), title, null);
+        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark().stringify(), title(), html());
     }
 
+    @Override
+    public String title() {
+        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
+    }
+
+    private String html() {
+        return PlaceholderRenderService.fallback().asHtml(PlaceholderLiteral.NULL_REPRESENTATION);
+    }
 }

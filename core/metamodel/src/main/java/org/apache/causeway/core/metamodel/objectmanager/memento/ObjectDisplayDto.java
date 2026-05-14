@@ -19,30 +19,31 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
 
 /**
  * Provides a summary of the domain object for rendering,
- * having (translated) title and icon.
+ * having (translated) pre-rendered HTML (typically icon and title).
  *
  * @implSpec works hand in hand with select2 (third-party) java-script
  *  and org.apache.causeway.viewer.wicket.ui.components.widgets.select2.Select2 template configuration.
+ *
+ * @apiNote SECURITY ADVICE: when using this DTO make sure its content is populated from a trusted source
  */
 public record ObjectDisplayDto(
     Class<?> correspondingClass,
     String bookmark,
     String title,
-    @Nullable String iconHtml) implements Serializable {
+    String html) implements Serializable {
 
-    public static ObjectDisplayDto fromJson(String json) {
+    public static ObjectDisplayDto fromJson(final String json) {
         return JsonUtils.tryRead(ObjectDisplayDto.class, json)
             .valueAsNonNullElseFail();
     }
 
-    public static ObjectDisplayDto fromJsonBase64(String base64EncodedJson) {
+    public static ObjectDisplayDto fromJsonBase64(final String base64EncodedJson) {
         return fromJson(_Strings.base64UrlDecode(base64EncodedJson));
     }
 

@@ -24,6 +24,8 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -36,8 +38,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
-
-import org.jspecify.annotations.NonNull;
 
 @Component
 @Named("causeway.metamodel.value.BigIntegerValueSemantics")
@@ -87,7 +87,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final BigInteger value) {
-        return renderHtml(value, getNumberFormat(context)::format);
+        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
     }
 
     // -- ID STRINGIFIER

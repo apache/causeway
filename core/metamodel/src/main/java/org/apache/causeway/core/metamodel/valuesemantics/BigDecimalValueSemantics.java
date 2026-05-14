@@ -28,6 +28,8 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -45,9 +47,9 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import org.jspecify.annotations.NonNull;
-import lombok.Setter;
 import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
+
+import lombok.Setter;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
@@ -112,7 +114,7 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderHtml(value, getNumberFormat(context)::format);
+        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
     }
 
     // -- PARSER
