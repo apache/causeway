@@ -31,8 +31,6 @@ import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.render.PlaceholderRenderService;
-import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -53,7 +51,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     Bookmark bookmark();
 
     /**
-     * The object's title for rendering (before translation).
+     * The object's title for rendering.
      * Corresponds to {@link ManagedObject#getTitle()}.
      *
      * <p>Directly support choice rendering, without the need to (re-)fetch entire object graphs.
@@ -64,9 +62,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     // -- FACTORIES
 
     static ObjectMemento empty(final LogicalType logicalType) {
-        return new ObjectMementoEmpty(
-            logicalType,
-            PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION));
+        return new ObjectMementoEmpty(logicalType);
     }
 
     static Optional<ObjectMemento> singular(
@@ -86,11 +82,16 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
+        var title = adapter.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(adapter));
+        var prerenderedHtml = "<span>%s %s</span>".formatted(
+                adapter.getObjectRenderService().iconToHtml(adapter.getIcon(IconSize.SMALL), IconSize.SMALL),
+                title);
+
         return Optional.ofNullable(new ObjectMementoSingular(
                 adapter.logicalType(),
                 MmHintUtils.bookmarkElseFail(adapter),
-                adapter.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(adapter)),
-                adapter.getObjectRenderService().iconToHtml(adapter.getIcon(IconSize.SMALL), IconSize.SMALL)));
+                title,
+                prerenderedHtml));
     }
     /**
      * returns null for null
@@ -125,8 +126,8 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
         var bookmark = Bookmark.parse(dto.bookmark()).orElseThrow();
         var logicalType = new LogicalType(bookmark.logicalTypeName(), dto.correspondingClass());
         return bookmark.isEmpty()
-            ? new ObjectMementoEmpty(logicalType, dto.title())
-            : new ObjectMementoSingular(logicalType, bookmark, dto.title(), dto.iconHtml());
+            ? new ObjectMementoEmpty(logicalType)
+            : new ObjectMementoSingular(logicalType, bookmark, dto.title(), dto.html());
     }
 
     static String enstringToBase64(final ObjectMemento memento) {

@@ -64,10 +64,8 @@ permits SingleChoice, MultiChoice {
                 var dto = decodeBase64ToJson(opt.id);
                 if(!dto) return "undefined";
                 if(!dto.title) return "undefined";
-                if(dto.iconHtml) {
-                    return $('<span>' + dto.iconHtml + ' ' + dto.title + '</span>');
-                }
-                return dto.title;
+                if(!dto.html) return "undefined";
+                return $(dto.html);
             }""";
 
         settings.setTemplateResult(template);

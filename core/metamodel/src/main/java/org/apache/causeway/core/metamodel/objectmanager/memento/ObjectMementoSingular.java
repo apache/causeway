@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
@@ -27,11 +25,11 @@ record ObjectMementoSingular(
         LogicalType logicalType,
         Bookmark bookmark,
         String title,
-        @Nullable String iconHtml)
+        String prerenderedHtml)
 implements ObjectMemento {
 
     public ObjectDisplayDto toDto() {
-        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark.stringify(), title, iconHtml);
+        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark.stringify(), title, prerenderedHtml);
     }
 
     @Override public int hashCode() { return bookmark.hashCode(); }
