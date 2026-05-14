@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmHintUtils;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
 
 /**
  * @since 2.0
@@ -66,11 +67,11 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     }
 
     static Optional<ObjectMemento> singular(
-            final @Nullable ManagedObject adapter) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter))
+            final @Nullable ManagedObject mo) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
             return Optional.empty();
 
-        var spec = adapter.objSpec();
+        var spec = mo.objSpec();
 
         _Assert.assertTrue(spec.isIdentifiable()
                 || spec.isParented()
@@ -82,14 +83,18 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
-        var title = adapter.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(adapter));
-        var prerenderedHtml = "<span>%s %s</span>".formatted(
-                adapter.getObjectRenderService().iconToHtml(adapter.getIcon(IconSize.SMALL), IconSize.SMALL),
-                title);
+        var title = mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
+
+        var prerenderedHtml = spec.isValue()
+            ? "<span>%s</span>".formatted(
+                    MmValueUtils.htmlStringForValueType(null, mo)) // currently only the default value semantics is supported
+            : "<span>%s %s</span>".formatted(
+                    mo.getObjectRenderService().iconToHtml(mo.getIcon(IconSize.SMALL), IconSize.SMALL),
+                    title);
 
         return Optional.ofNullable(new ObjectMementoSingular(
-                adapter.logicalType(),
-                MmHintUtils.bookmarkElseFail(adapter),
+                mo.logicalType(),
+                MmHintUtils.bookmarkElseFail(mo),
                 title,
                 prerenderedHtml));
     }
