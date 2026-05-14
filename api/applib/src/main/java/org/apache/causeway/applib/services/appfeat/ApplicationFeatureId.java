@@ -33,7 +33,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
@@ -217,13 +216,6 @@ implements
         var buf = new TitleBuffer();
         buf.append(getFullyQualifiedName());
         return buf.toString();
-    }
-
-    // -- ICON
-
-    //FIXME not supported yet - perhaps use value semantics instead?
-    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
-        return new ObjectSupport.FontAwesomeIconResource(FontAwesomeLayers.fromQuickNotation(sort.quickIcon()));
     }
 
     // -- PROPERTIES
