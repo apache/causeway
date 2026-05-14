@@ -24,6 +24,8 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -38,8 +40,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -104,7 +104,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Short value) {
-        return renderHtml(value, getNumberFormat(context)::format);
+        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
     }
 
     // -- PARSER
@@ -120,9 +120,8 @@ implements
     @Override
     public Short parseTextRepresentation(final Context context, final String text) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
+        if(input==null)
             return null;
-        }
         try {
             return super.parseInteger(context, input)
                     .map(BigInteger::shortValueExact)

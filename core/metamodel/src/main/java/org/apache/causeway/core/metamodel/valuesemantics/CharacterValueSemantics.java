@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -40,8 +42,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueDto;
 import org.apache.causeway.schema.common.v2.ValueType;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -103,20 +103,17 @@ implements
 
     @Override
     public String enstring(final @NonNull Character id) {
-        if(NON_SAFE_URL_CHARS.stream().anyMatch(x -> Objects.equals(x, id))) {
+        if(NON_SAFE_URL_CHARS.stream().anyMatch(x -> Objects.equals(x, id)))
             return BASE64_PREFIX + _Strings.base64UrlEncode(""+id);
-        }
         return REGULAR_PREFIX + id;
     }
 
     @Override
     public Character destring(final @NonNull String stringified) {
-        if(stringified.startsWith(REGULAR_PREFIX)) {
+        if(stringified.startsWith(REGULAR_PREFIX))
             return stringified.substring(REGULAR_PREFIX.length()).charAt(0);
-        }
-        if(stringified.startsWith(BASE64_PREFIX)) {
+        if(stringified.startsWith(BASE64_PREFIX))
             return _Strings.base64UrlDecode(stringified.substring(BASE64_PREFIX.length())).charAt(0);
-        }
         throw new IllegalArgumentException("Could not parse '" + stringified + "'");
     }
 
@@ -129,7 +126,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Character value) {
-        return renderHtml(value, c->""+c);
+        return renderHtml(value, c->""+c, super::toMonospace);
     }
 
     // -- PARSER
@@ -142,14 +139,12 @@ implements
     @Override
     public Character parseTextRepresentation(final Context context, final String text) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
+        if(input==null)
             return null;
-        }
-        if (input.length() > 1) {
+        if (input.length() > 1)
             throw new InvalidEntryException("Only a single character is required");
-        } else {
+        else
             return Character.valueOf(input.charAt(0));
-        }
     }
 
     @Override

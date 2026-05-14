@@ -91,13 +91,7 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final UUID value) {
-        return renderHtml(value, this::toMonospace);
-    }
-
-    // uses bootstrap CSS
-    private String toMonospace(final UUID uuid) {
-        return """
-                <span class="font-monospace fw-light">%s</span>""".formatted(uuid.toString());
+        return renderHtml(value, UUID::toString, super::toMonospace);
     }
 
     // -- PARSER

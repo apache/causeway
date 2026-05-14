@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import jakarta.inject.Provider;
 
@@ -39,6 +40,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.locale.UserLocale;
@@ -130,6 +132,14 @@ ValueSemanticsProvider<T> {
                 .orElseGet(()->getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
     }
 
+    protected String renderHtml(final T value, final Function<T, String> toString, final UnaryOperator<String> htmlPostprocessor) {
+        return Optional.ofNullable(value)
+                .map(toString)
+                .map(htmlPostprocessor)
+                .orElseGet(()->getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
+    }
+
+
     // -- COMPOSITION UTILS
 
     protected ValueDecomposition decomposeAsString(
@@ -198,7 +208,6 @@ ValueSemanticsProvider<T> {
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
-    @SuppressWarnings("javadoc")
     protected DecimalFormat getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context) {
         return getNumberFormat(context, FormatUsageFor.RENDERING);
@@ -218,9 +227,8 @@ ValueSemanticsProvider<T> {
             final ValueSemanticsProvider.@Nullable Context context,
             final @Nullable String text) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
+        if(input==null)
             return Optional.empty();
-        }
         try {
             return parseDecimal(context, input, GroupingSeparatorPolicy.ALLOW)
                     .map(BigDecimal::toBigIntegerExact);
@@ -240,17 +248,15 @@ ValueSemanticsProvider<T> {
             final @Nullable String text,
             final GroupingSeparatorPolicy groupingSeparatorPolicy) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
+        if(input==null)
             return Optional.empty();
-        }
 
         if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
             var userLocale = getUserLocale(context);
             var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
             var groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
-            if (input.contains(""+groupingSeparatorChar)) {
+            if (input.contains(""+groupingSeparatorChar))
                 throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
-            }
         }
 
         var format = getNumberFormat(context, FormatUsageFor.PARSING);
@@ -259,19 +265,17 @@ ValueSemanticsProvider<T> {
         var position = new ParsePosition(0);
         try {
             var number = (BigDecimal)format.parse(input, position);
-            if (position.getErrorIndex() != -1) {
+            if (position.getErrorIndex() != -1)
                 throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
-            } else if (position.getIndex() < input.length()) {
+            else if (position.getIndex() < input.length())
                 throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
-            }
             // check for maxFractionDigits if required ...
             final int maxFractionDigits = format.getMaximumFractionDigits();
             if(maxFractionDigits>-1
-                    && number.scale()>format.getMaximumFractionDigits()) {
+                    && number.scale()>format.getMaximumFractionDigits())
                 throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
                                 + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
-            }
             return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
@@ -304,27 +308,17 @@ ValueSemanticsProvider<T> {
             final @Nullable String datePattern,
             final @Nullable String dateTimePattern) {
 
-        final DateTimeFormatter noZoneOutputFormat;
+        final DateTimeFormatter noZoneOutputFormat = switch (temporalCharacteristic) {
+        case DATE_TIME -> dateTimePattern != null
+                            ? DateTimeFormatter.ofPattern(dateTimePattern)
+                            : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
+        case DATE_ONLY -> datePattern != null
+                            ? DateTimeFormatter.ofPattern(datePattern)
+                            : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
+        case TIME_ONLY -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
+        default -> throw _Exceptions.unmatchedCase(temporalCharacteristic);
+        };
 
-        switch (temporalCharacteristic) {
-        case DATE_TIME:
-            noZoneOutputFormat =
-                    dateTimePattern != null
-                    ? DateTimeFormatter.ofPattern(dateTimePattern)
-                    : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
-            break;
-        case DATE_ONLY:
-            noZoneOutputFormat =
-                    datePattern != null
-                    ? DateTimeFormatter.ofPattern(datePattern)
-                    : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
-            break;
-        case TIME_ONLY:
-            noZoneOutputFormat = DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(temporalCharacteristic);
-        }
         return noZoneOutputFormat
                 .withLocale(getUserLocale(context).timeFormatLocale());
     }
@@ -334,16 +328,12 @@ ValueSemanticsProvider<T> {
             final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
             final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
-        switch (offsetCharacteristic) {
-        case LOCAL:
-            return Optional.empty();
-        case OFFSET:
-            return Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
-        case ZONED:
-            return Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
-        default:
-            throw _Exceptions.unmatchedCase(offsetCharacteristic);
-        }
+        return switch (offsetCharacteristic) {
+        case LOCAL -> Optional.empty();
+        case OFFSET -> Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
+        case ZONED -> Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
+        default -> throw _Exceptions.unmatchedCase(offsetCharacteristic);
+        };
     }
 
     // -- TEMPORAL FORMATTING/PARSING
@@ -367,22 +357,18 @@ ValueSemanticsProvider<T> {
             final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
             final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
-        switch (temporalCharacteristic) {
-        case DATE_TIME:
-            return offsetCharacteristic.isLocal()
-                    ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                    : DateTimeFormatter.ISO_DATE_TIME;
-        case DATE_ONLY:
-            return offsetCharacteristic.isLocal()
-                    ? DateTimeFormatter.ISO_LOCAL_DATE
-                    : DateTimeFormatter.ISO_DATE;
-        case TIME_ONLY:
-            return offsetCharacteristic.isLocal()
-                    ? DateTimeFormatter.ISO_LOCAL_TIME
-                    : DateTimeFormatter.ISO_TIME;
-        default:
-            throw _Exceptions.unmatchedCase(temporalCharacteristic);
-        }
+        return switch (temporalCharacteristic) {
+        case DATE_TIME -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                            : DateTimeFormatter.ISO_DATE_TIME;
+        case DATE_ONLY -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_DATE
+                            : DateTimeFormatter.ISO_DATE;
+        case TIME_ONLY -> offsetCharacteristic.isLocal()
+                            ? DateTimeFormatter.ISO_LOCAL_TIME
+                            : DateTimeFormatter.ISO_TIME;
+        default -> throw _Exceptions.unmatchedCase(temporalCharacteristic);
+        };
     }
 
     // -- TRANSLATION SUPPORT
@@ -401,6 +387,24 @@ ValueSemanticsProvider<T> {
     private Optional<Provider<PlaceholderRenderService>> placeholderRenderService = Optional.empty();
     protected PlaceholderRenderService getPlaceholderRenderService() {
         return placeholderRenderService.map(Provider::get).orElseGet(PlaceholderRenderService::fallback);
+    }
+
+    // -- UTILS
+
+    /**
+     * Uses bootstrap CSS.
+     */
+    protected final String toMonospace(final String html) {
+        return """
+            <span class="font-monospace fw-light">%s</span>""".formatted(html);
+    }
+
+    /**
+     * Uses Fontawesome.
+     */
+    protected final String faIconAndTitle(final String faClasses, final String titleHtml) {
+        return """
+            <span><i class="%s"></i>%s</span>""".formatted(faClasses, titleHtml);
     }
 
 }

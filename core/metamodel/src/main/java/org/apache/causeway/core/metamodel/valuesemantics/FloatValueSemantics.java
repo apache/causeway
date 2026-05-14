@@ -86,7 +86,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Float value) {
-        return renderHtml(value, getNumberFormat(context)::format);
+        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
     }
 
     // -- PARSER
