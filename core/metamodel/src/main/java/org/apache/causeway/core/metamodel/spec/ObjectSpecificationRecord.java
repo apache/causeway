@@ -30,7 +30,6 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
@@ -107,8 +106,8 @@ implements
     @Override public Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
         return associationContainer.streamAssociations(mixedIn);
     }
-    @Override public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final Identifier memberIdentifier, final ManagedObject parentObject) {
-        return associationContainer.streamAssociationsForColumnRendering(memberIdentifier, parentObject);
+    @Override public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final ColumnQuery columnQuery) {
+    	return associationContainer.streamAssociationsForColumnRendering(columnQuery);
     }
     @Override public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         return associationContainer.streamDeclaredAssociations(mixedIn);

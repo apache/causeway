@@ -21,8 +21,13 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationException;
 
@@ -130,13 +135,41 @@ public interface ObjectAssociationContainer {
                 .map(OneToManyAssociation.class::cast);
     }
 
+
     /**
      * Properties and Collections visible as columns, honoring order and visibility.
      * @param parentObject not used for standalone tables and allowed to be empty for parented ones
      */
-    Stream<ObjectAssociation> streamAssociationsForColumnRendering(
-            Identifier memberIdentifier,
-            ManagedObject parentObject);
+    record ColumnQuery(
+    		@Nullable Identifier memberIdentifier,
+    		@Nullable ManagedObject parentObject,
+            AssociationsLookup mode) {
+    	public static ColumnQuery forStandaloneTable(final AssociationsLookup mode) {
+    		return new ColumnQuery(null, null, mode);
+    	}
+    	public ColumnQuery(final ManagedMember managedMember, final AssociationsLookup enabled) {
+			this(managedMember.getIdentifier(), managedMember.getOwner(), enabled);
+		}
+    	/**
+    	 * The collection variant (standalone or parented).
+    	 */
+    	public Where where() {
+	        return isStandalone()
+	            ? Where.STANDALONE_TABLES
+	            : Where.PARENTED_TABLES;
+    	}
+    	public boolean isStandalone() {
+    		return memberIdentifier==null
+    				|| memberIdentifier.type().isClass()
+    				|| memberIdentifier.type().isAction();
+    	}
+    }
+
+    /**
+     * Properties and Collections visible as columns, honoring order and visibility.
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     */
+    Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery);
 
     // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
 

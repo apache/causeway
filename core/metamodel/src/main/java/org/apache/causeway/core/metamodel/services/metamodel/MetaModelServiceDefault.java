@@ -65,6 +65,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -179,14 +180,14 @@ public record MetaModelServiceDefault(
     public BeanSort sortOf(
             final @Nullable Class<?> domainType, final Mode mode) {
         if(domainType == null)
-            return null;
+			return null;
         final ObjectSpecification objectSpec = specificationLoader().specForType(domainType).orElse(null);
         if(objectSpec == null)
-            return BeanSort.UNKNOWN;
+			return BeanSort.UNKNOWN;
 
         if(objectSpec.getBeanSort().isUnknown()
                 && !(mode == Mode.RELAXED))
-            throw new IllegalArgumentException(String.format(
+			throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
                     objectSpec.getFullIdentifier(),
                     domainType.getName()
@@ -199,7 +200,7 @@ public record MetaModelServiceDefault(
     @Override
     public BeanSort sortOf(final Bookmark bookmark, final Mode mode) {
         if(bookmark == null)
-            return null;
+			return null;
 
         final Class<?> domainType = switch (mode) {
         case RELAXED -> specificationLoader().specForBookmark(bookmark)
@@ -226,18 +227,18 @@ public record MetaModelServiceDefault(
 
         final String logicalTypeName = featureId.getLogicalTypeName();
         if(_Strings.isNullOrEmpty(logicalTypeName))
-            return null;
+			return null;
 
         final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
         if(spec == null)
-            return null;
+			return null;
         final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
         if (objectMemberIfAny == null)
-            return null;
+			return null;
         final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.lookupFacet(CommandPublishingFacet.class)
                 .orElse(null);
         if(commandPublishingFacet == null)
-            return null;
+			return null;
         return commandPublishingFacet.getProcessor();
     }
 
@@ -310,53 +311,42 @@ public record MetaModelServiceDefault(
     public Stream<Identifier> parentedAssociationsForColumnRendering(
             final Object parentDomainObject,
             final Identifier collectionId,
-            final AssociationsLookup lookup) {
+            final AssociationsLookup columnQueryMode) {
 
         if(parentDomainObject==null
                 || collectionId==null)
-            return Stream.empty();
+			return Stream.empty();
 
         var parentMo = ManagedObject.adaptSingular(specificationLoader(), parentDomainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(parentMo))
-            return Stream.empty();
+			return Stream.empty();
 
         var elementType = parentMo.objSpec().getCollection(collectionId.memberLogicalName())
             .map(OneToManyAssociation::getElementType)
             .orElse(null);
         if(elementType==null)
-            return Stream.empty();
+			return Stream.empty();
 
-        return switch (lookup) {
-            case AVAILABLE -> elementType
-                .streamAssociations(MixedIn.INCLUDED)
-                .map(ObjectAssociation::getFeatureIdentifier);
-            case ENABLED -> parentMo.objSpec()
-                .streamAssociationsForColumnRendering(collectionId, parentMo)
-                .map(ObjectAssociation::getFeatureIdentifier);
-        };
+        return elementType
+            .streamAssociationsForColumnRendering(new ColumnQuery(collectionId, parentMo, columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
     }
 
     @Override
     public Stream<Identifier> standaloneAssociationsForColumnRendering(
             final LogicalType logicalType,
-            final AssociationsLookup lookup) {
+            final AssociationsLookup columnQueryMode) {
 
         var elementType = specificationLoader()
-                .specForLogicalType(logicalType)
-                .orElse(null);
+            .specForLogicalType(logicalType)
+            .orElse(null);
 
         if(elementType == null)
-            return Stream.empty();
+			return Stream.empty();
 
-        return switch (lookup) {
-            case AVAILABLE -> elementType
-                .streamAssociations(MixedIn.INCLUDED)
-                .map(ObjectAssociation::getFeatureIdentifier);
-            case ENABLED -> elementType
-                //TODO room  for API improvement
-                .streamAssociationsForColumnRendering(null, null)
-                .map(ObjectAssociation::getFeatureIdentifier);
-        };
+        return elementType
+            .streamAssociationsForColumnRendering(ColumnQuery.forStandaloneTable(columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
     }
 
 }

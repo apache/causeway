@@ -90,7 +90,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
-@Priority(PriorityPrecedence.LATE - 100) // before Default
+@Priority(PriorityPrecedence.LATE - 100)
 @Qualifier("UsingFiles")
 @Slf4j
 public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderService {

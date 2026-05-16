@@ -27,6 +27,7 @@ import jakarta.inject.Provider;
 import org.jspecify.annotations.NonNull;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
@@ -71,7 +72,6 @@ import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
-import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
@@ -194,8 +194,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         MetaModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        TableColumnOrderServiceDefault.class,
-        TableColumnOrderServiceUsingTxtFile.class,
+        // TableColumnOrderServiceUsingTxtFile.class, NOT here ... use @ComponentScan instead, see below
         TitleServiceDefault.class,
 
         // @Repository's
@@ -210,6 +209,8 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         //last
         MetamodelInitializer.class
 })
+// in order for Spring to honor service precedence, services need to be autodetected
+@ComponentScan(basePackageClasses = { TableColumnOrderServiceUsingTxtFile.class })
 public class CausewayModuleCoreMetamodel {
 
     public static final String NAMESPACE = "causeway.metamodel";

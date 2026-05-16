@@ -24,41 +24,45 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.util.WhereContexts;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+record _MembersAsColumns(
+		boolean isColumnOrderPatchingEnabled,
+		Can<TableColumnVisibilityService> tableColumnVisibilityServices,
+		Can<TableColumnOrderService> tableColumnOrderServices) {
 
-@RequiredArgsConstructor
-class _MembersAsColumns implements HasMetaModelContext {
+	_MembersAsColumns(final MetaModelContext mmc) {
+		this(
+				mmc.getSystemEnvironment().isPrototyping(),
+				mmc.getServiceRegistry().select(TableColumnVisibilityService.class),
+				mmc.getServiceRegistry().select(TableColumnOrderService.class));
+	}
 
-    @Getter(onMethod_ = {@Override})
-    private final MetaModelContext metaModelContext;
-
-    public final Stream<ObjectAction> streamActionsForColumnRendering(
+    public Stream<ObjectAction> streamActionsForColumnRendering(
             final ObjectSpecification elementType,
             final Identifier memberIdentifier) {
-        if(elementType.isValue()) return Stream.empty();
+        if(elementType.isValue())
+			return Stream.empty();
 
         return elementType.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(Where.STANDALONE_TABLES))
@@ -68,56 +72,58 @@ class _MembersAsColumns implements HasMetaModelContext {
     /**
      * @param parentObject not used for standalone tables and allowed to be empty for parented ones
      */
-    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
-            // the type that has the properties and collections that make up this table's columns
-            final ObjectSpecification elementType,
-            // if null corresponds to a standalone table
-            final @Nullable Identifier memberIdentifier,
-            final ManagedObject parentObject) {
+	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(
+			// the type that has the properties and collections that make up this table's columns
+			final ObjectSpecification elementType,
+			final ColumnQuery columnQuery) {
 
-        var assocById = new LinkedHashMap<String, ObjectAssociation>();
-        final Where whereContext;
-
-        if(memberIdentifier==null) { // handle the standalone case
-            whereContext = Where.STANDALONE_TABLES;
-            elementType.streamAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(whereContext))
-                .filter(assoc->filterColumnsUsingSpi(assoc, elementType.getCorrespondingClass())) // optional SPI to filter columns;
-                .forEach(assoc->assocById.put(assoc.getId(), assoc));
-
-        } else {
-            whereContext = WhereContexts.collectionVariant(memberIdentifier);
-            elementType.streamAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(whereContext))
-                .filter(ObjectAssociation.Predicates.referencesParent(parentObject.objSpec()).negate())
-                .filter(assoc->filterColumnsUsingSpi(assoc, elementType.getCorrespondingClass())) // optional SPI to filter columns;
-                .forEach(assoc->assocById.put(assoc.getId(), assoc));
-        }
-
+        var assocById = assembleAvailableColumns(elementType, columnQuery);
         var assocIdsInOrder = new ArrayList<>(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
             .ifPresent(assocIdsInOrder::sort);
 
-        // optional SPI to reorder columns
-        sortColumnsUsingSpi(whereContext, memberIdentifier, parentObject, assocIdsInOrder, elementType.getCorrespondingClass());
+        // when querying for AVAILABLE columns, we skip the column sorting SPI and also the column-patching (PROTOTYPING feature)
+        if(columnQuery.mode().isEnabled()) {
+        	if(!sortColumnsUsingPatch(columnQuery, assocIdsInOrder, elementType)) {
+				// SPI to reorder columns, where TableColumnOrderServiceUsingTxtFile is a built-in one
+        		// apply only, if not patched
+		        sortColumnsUsingSpi(columnQuery, assocIdsInOrder, elementType);
+			}
+        }
 
-        // add all ordered columns to the table
+        // stream columns in final order
         return assocIdsInOrder.stream()
             .map(assocById::get)
-            .filter(_NullSafe::isPresent);
+            .filter(Objects::nonNull);
     }
 
     // -- HELPER
 
-    private boolean filterColumnsUsingSpi(
+	private Map<String, ObjectAssociation> assembleAvailableColumns(
+			final ObjectSpecification elementType,
+			final ColumnQuery columnQuery) {
+
+        final var assocById = new LinkedHashMap<String, ObjectAssociation>();
+
+		elementType.streamAssociations(MixedIn.INCLUDED)
+            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(columnQuery.where()))
+            .filter(columnQuery.isStandalone()
+				? _Predicates.alwaysTrue()
+				: ObjectAssociation.Predicates.referencesParent(columnQuery.parentObject().objSpec()).negate())
+            .filter(assoc->hideColumnUsingSpi(assoc, elementType.getCorrespondingClass()))
+            .forEach(assoc->assocById.put(assoc.getId(), assoc));
+
+		return assocById;
+	}
+
+    private boolean hideColumnUsingSpi(
             final ObjectAssociation assoc,
             final Class<?> elementType) {
-        return getServiceRegistry()
-            .select(TableColumnVisibilityService.class)
+        return tableColumnVisibilityServices
             .stream()
-            .noneMatch(x -> x.hides(elementType, assoc.getId()));
+            .noneMatch(it -> it.hides(elementType, assoc.getId()));
     }
 
     // comparator based on grid facet, that is by order of occurrence within associated layout
@@ -129,14 +135,16 @@ class _MembersAsColumns implements HasMetaModelContext {
         // one object of that type has been rendered via DomainObjectPage.
         var elementTypeGridFacet = elementTypeSpec.lookupFacet(GridFacet.class).orElse(null);
 
-        if(elementTypeGridFacet == null) return Optional.empty();
+        if(elementTypeGridFacet == null)
+			return Optional.empty();
 
         // the facet should always exist, in fact
         // just enough to ask for the metadata.
 
         // don't pass in any object, just need the meta-data
         var elementTypeGrid = elementTypeGridFacet.getGrid(null);
-        if(elementTypeGrid ==null) return Optional.empty();
+        if(elementTypeGrid ==null)
+			return Optional.empty();
 
         final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
         elementTypeGrid.streamPropertyLayoutData()
@@ -155,30 +163,53 @@ class _MembersAsColumns implements HasMetaModelContext {
                 .thenComparing(Comparator.naturalOrder()));
     }
 
-    private void sortColumnsUsingSpi(
-            final Where whereContext,
-            final @Nullable Identifier memberIdentifier,
-            // not used for standalone tables, and allowed to be empty in parented ones
-            final ManagedObject parentObject,
-            final List<String> assocIdsInOrder,
-            final Class<?> elementType) {
 
-        var tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
+    /**
+     * @return whether a column-order patch was found and applied
+     */
+    private boolean sortColumnsUsingPatch(
+    		final ColumnQuery columnQuery,
+            final List<String> assocIdsInOrder,
+            final ObjectSpecification elementType) {
+
+    	if(!isColumnOrderPatchingEnabled)
+    		return false;
+
+    	var identifier = columnQuery.isStandalone()
+    			? elementType.getFeatureIdentifier()
+    			: columnQuery.memberIdentifier();
+    	Objects.requireNonNull(identifier, ()->"framework bug");
+
+    	var patchedColumnOrder = elementType
+			.lookupFacet(ColumnOrderPatchingFacet.class)
+			.flatMap(it->it.lookupColumnOrder(columnQuery.memberIdentifier()))
+			.orElse(null);
+    	if(patchedColumnOrder==null)
+    		return false;
+
+		return true;
+    }
+
+    private void sortColumnsUsingSpi(
+            final ColumnQuery columnQuery,
+            final List<String> assocIdsInOrder,
+            final ObjectSpecification elementType) {
+
         if(tableColumnOrderServices.isEmpty())
-            return;
+			return;
 
         tableColumnOrderServices.stream()
             .map(tableColumnOrderService->
-                whereContext.inStandaloneTable()
+                columnQuery.isStandalone()
                 ? tableColumnOrderService.orderStandalone(
-                        elementType,
+                        elementType.getCorrespondingClass(),
                         assocIdsInOrder)
                 : tableColumnOrderService.orderParented(
-                        parentObject.getPojo(),
-                        memberIdentifier.memberLogicalName(),
-                        elementType,
+                		columnQuery.parentObject().getPojo(),
+                        columnQuery.memberIdentifier().memberLogicalName(),
+                        elementType.getCorrespondingClass(),
                         assocIdsInOrder))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .findFirst()
             .filter(assocReorderedIds->assocReorderedIds!=assocIdsInOrder) // skip if its the same object
             .ifPresent(assocReorderedIds->{

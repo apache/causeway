@@ -214,8 +214,18 @@ public interface MetaModelService {
      * @since 4.0
      */
     public enum AssociationsLookup {
-        AVAILABLE,
-        ENABLED
+		/**
+		 * The Column Order SPI and Column Order Patching have potential to hide otherwise visible columns.
+		 * This query mode shows all columns, that are not permanently hidden while ignoring hiding from above mechanisms.
+		 */
+		AVAILABLE,
+		/**
+		 * This query mode shows all currently visible columns.
+		 */
+		ENABLED;
+
+    	public boolean isAvailable() { return this==AVAILABLE; }
+		public boolean isEnabled() { return this==ENABLED; }
     }
 
     /**

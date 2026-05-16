@@ -29,10 +29,11 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
@@ -193,13 +194,15 @@ implements CollectionCountProvider {
 
         var collectionModel = getModel();
         var elementType = collectionModel.getElementType();
-        if(elementType == null) return;
-
-        final ManagedObject parentObject = collectionModel.getParentObject();
-        var memberIdentifier = collectionModel.getIdentifier();
+        if(elementType == null)
+        	return;
 
         // add all ordered columns to the table
-        elementType.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
+        elementType
+        	.streamAssociationsForColumnRendering(new ColumnQuery(
+					collectionModel.getIdentifier(),
+					collectionModel.getParentObject(),
+					AssociationsLookup.ENABLED))
             .map(ObjectAssociation::getSpecialization)
             .map(spez->spez.fold(
                     this::createSingularColumn,

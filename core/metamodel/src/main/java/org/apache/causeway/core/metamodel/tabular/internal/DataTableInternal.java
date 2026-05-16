@@ -33,6 +33,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
@@ -50,6 +51,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
@@ -87,9 +89,8 @@ implements DataTableInteractive {
         if(actionResult==null) {
             new DataTableInternal(managedAction, managedAction.getWhere(), Can.empty());
         }
-        if(!(actionResult instanceof PackedManagedObject)) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        if(!(actionResult instanceof PackedManagedObject))
+			throw _Exceptions.unexpectedCodeReach();
 
         var elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
@@ -179,7 +180,7 @@ implements DataTableInteractive {
 
         this.dataColumnsObservable = _Observables.lazy(()->
             managedMember.getElementType()
-                .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
+                .streamAssociationsForColumnRendering(new ColumnQuery(managedMember, AssociationsLookup.ENABLED))
                 .map(assoc->new DataColumnInternal(this, assoc))
                 .collect(Can.toCan()));
 
@@ -359,18 +360,16 @@ implements DataTableInteractive {
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
 
         if(managedMember.getOwner().specialization().isEmpty()
-            || managedMember.getOwner().getEntityState().isTransientOrRemoved()) {
-            throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
-        }
+            || managedMember.getOwner().getEntityState().isTransientOrRemoved())
+			throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
 
         var featureId = managedMember.getIdentifier();
-        if(!featureId.type().isPropertyOrCollection()) {
-            return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
+        if(!featureId.type().isPropertyOrCollection())
+			return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
                     + "(while searching for an associated action %s)]",
                     featureId,
                     featureId.type(),
                     actionId));
-        }
         return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
     }
 
@@ -385,7 +384,7 @@ implements DataTableInteractive {
                     .map(DataColumn::associationMetaModel),
                 dataRowsFilteredAndSortedObservable().getValue()
                     .stream()
-                    .map(dr->dr.rowElement())
+                    .map(DataRow::rowElement)
                     .collect(Can.toCan()));
     }
 
@@ -484,7 +483,7 @@ implements DataTableInteractive {
                 this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
             });
         }
-        
+
         @Override
         public String toString() {
         	return "Memento[featureId=%s,dataTable.rowCount=%d]".formatted(
