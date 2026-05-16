@@ -137,8 +137,12 @@ public interface ObjectAssociationContainer {
 
 
     /**
-     * Properties and Collections visible as columns, honoring order and visibility.
+     * Bundles parameters to query for Properties and Collections visible as columns.
+     *
+     * @param memberIdentifier not used for standalone tables
      * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     *
+     * @since 4.0
      */
     record ColumnQuery(
     		@Nullable Identifier memberIdentifier,

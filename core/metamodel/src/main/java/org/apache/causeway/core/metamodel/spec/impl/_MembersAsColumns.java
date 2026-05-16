@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,7 +170,7 @@ record _MembersAsColumns(
      */
     private boolean sortColumnsUsingPatch(
     		final ColumnQuery columnQuery,
-            final List<String> assocIdsInOrder,
+            final List<String> assocIdsInOrder, //mutable
             final ObjectSpecification elementType) {
 
     	if(!isColumnOrderPatchingEnabled)
@@ -187,12 +188,19 @@ record _MembersAsColumns(
     	if(patchedColumnOrder==null)
     		return false;
 
+    	// intersect 'assocIdsInOrder' with 'patchedColumnOrder' while preserving order as given by the latter
+    	var available = new HashSet<>(assocIdsInOrder);
+    	assocIdsInOrder.clear();
+    	patchedColumnOrder.stream()
+			.filter(available::contains)
+			.forEach(assocIdsInOrder::add);
+
 		return true;
     }
 
     private void sortColumnsUsingSpi(
             final ColumnQuery columnQuery,
-            final List<String> assocIdsInOrder,
+            final List<String> assocIdsInOrder, //mutable
             final ObjectSpecification elementType) {
 
         if(tableColumnOrderServices.isEmpty())

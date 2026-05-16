@@ -69,6 +69,8 @@ public record ColumnOrderPatchingFacet(
 	 * @param columnListing if null, clears the map entry
 	 */
 	public void putColumnOrder(final @Nullable Identifier identifier, @Nullable final Iterable<String> columnListing) {
+		if(identifier==null)
+			return;
 		if(columnListing==null) {
 			clearColumnOrder(identifier);
 			return;
