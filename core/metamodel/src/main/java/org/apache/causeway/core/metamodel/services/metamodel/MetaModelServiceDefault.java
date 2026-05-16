@@ -27,7 +27,6 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
@@ -38,7 +37,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
@@ -56,6 +54,8 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -79,7 +79,6 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public record MetaModelServiceDefault(
     Provider<SpecificationLoader> specificationLoaderProvider,
@@ -348,5 +347,26 @@ public record MetaModelServiceDefault(
             .streamAssociationsForColumnRendering(ColumnQuery.forStandaloneTable(columnQueryMode))
             .map(ObjectAssociation::getFeatureIdentifier);
     }
+
+	@Override
+	public void patchColumnOrder(final Identifier identifier, final Can<String> columnsInOrder) {
+		final ObjectSpecification elementType = switch (identifier.type()) {
+			case CLASS -> specificationLoader()
+				.specForLogicalType(identifier.logicalType())
+				.orElseThrow();
+			case COLLECTION -> specificationLoader()
+				.specForLogicalType(identifier.logicalType())
+				.map(parentType->parentType.getCollectionElseFail(identifier.memberLogicalName()))
+				.map(OneToManyAssociation::getElementType)
+				.orElseThrow();
+			case ACTION, ACTION_PARAMETER, PROPERTY ->
+				throw new UnsupportedOperationException("Unimplemented case: " + identifier.type());
+		};
+
+		var columnOrderPatchingFacet = elementType.lookupFacet(ColumnOrderPatchingFacet.class)
+			.orElseGet(()->FacetUtil.addFacet(new ColumnOrderPatchingFacet(elementType)));
+
+		columnOrderPatchingFacet.putColumnOrder(identifier, columnsInOrder);
+	}
 
 }

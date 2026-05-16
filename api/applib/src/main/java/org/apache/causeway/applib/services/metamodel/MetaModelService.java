@@ -254,4 +254,12 @@ public interface MetaModelService {
      */
     Stream<Identifier> standaloneAssociationsForColumnRendering(LogicalType logicalType, AssociationsLookup lookup);
 
+    /**
+     * @param identifier either for a TYPE or a COLLECTION
+     * @param columnsInOrder to be used instead of the default order
+     *
+     * @since 4.0
+     */
+	void patchColumnOrder(Identifier identifier, Can<String> columnsInOrder);
+
 }

@@ -68,14 +68,14 @@ public record ColumnOrderPatchingFacet(
 	 * @param identifier if null, acts as a no-op
 	 * @param columnListing if null, clears the map entry
 	 */
-	public void putColumnOrder(final @Nullable Identifier identifier, @Nullable final Iterable<String> columnListing) {
+	public void putColumnOrder(final @Nullable Identifier identifier, @Nullable final Can<String> columnListing) {
 		if(identifier==null)
 			return;
 		if(columnListing==null) {
 			clearColumnOrder(identifier);
 			return;
 		}
-		columnOrder.put(identifier, Can.ofIterable(columnListing));
+		columnOrder.put(identifier, columnListing);
 	}
 
 	public Optional<Can<String>> lookupColumnOrder(final @Nullable Identifier identifier) {

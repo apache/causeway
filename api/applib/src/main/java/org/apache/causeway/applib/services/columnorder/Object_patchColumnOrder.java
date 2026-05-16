@@ -19,7 +19,7 @@
 package org.apache.causeway.applib.services.columnorder;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
@@ -44,6 +44,10 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
+import org.apache.causeway.applib.util.Listing;
+import org.apache.causeway.applib.util.Listing.ListingHandler;
+import org.apache.causeway.applib.util.Listing.MergePolicy;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
@@ -96,11 +100,15 @@ public class Object_patchColumnOrder {
 
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
             @ParameterLayout(multiLine = 20)
-            final String columnDefinition) {
-    	// TODO flesh out: we need some holder of column order overrides (patches)
-        // make sure,
-        // org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.streamAssociationsForColumnRendering(Identifier, ManagedObject)
-        // honors any patches. Also patching must override any SPI, because that also is a use-case for patching.
+            final String columnListing) {
+
+    	var identifier = applicationFeatureRepository.asIdentifier(featureId)
+                .orElseThrow(); // not found -> unexpected
+
+    	var listing = listingHandler().parseListing(columnListing);
+    	var columns = Can.ofStream(listing.streamEnabled());
+
+    	metaModelService.patchColumnOrder(identifier, columns);
         return mixee;
     }
 
@@ -113,44 +121,44 @@ public class Object_patchColumnOrder {
             .toList();
     }
 
-    @MemberSupport public String defaultColumnDefinition(final @Nullable ApplicationFeatureId appFeatureId) {
-        if(appFeatureId==null)
+    @MemberSupport public String defaultColumnListing(final @Nullable ApplicationFeatureId featureId) {
+        if(featureId==null)
             return "# no feature selected";
 
-        var featureId = applicationFeatureRepository.asIdentifier(appFeatureId)
+        var identifier = applicationFeatureRepository.asIdentifier(featureId)
                 .orElseThrow(); // not found -> unexpected
 
-        if(featureId.type().isCollection())
+        if(identifier.type().isCollection())
             return listing(
-                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.AVAILABLE),
-                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.ENABLED));
+	                metaModelService.parentedAssociationsForColumnRendering(mixee, identifier, AssociationsLookup.AVAILABLE),
+	                metaModelService.parentedAssociationsForColumnRendering(mixee, identifier, AssociationsLookup.ENABLED))
+        		.toString();
 
-        if(featureId.type().isClass())
+        if(identifier.type().isClass())
             return listing(
-                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.AVAILABLE),
-                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.ENABLED));
+	                metaModelService.standaloneAssociationsForColumnRendering(identifier.logicalType(), AssociationsLookup.AVAILABLE),
+	                metaModelService.standaloneAssociationsForColumnRendering(identifier.logicalType(), AssociationsLookup.ENABLED))
+        		.toString();
 
-        throw _Exceptions.illegalArgument("unsupported feature type %s", featureId.type());
+        throw _Exceptions.illegalArgument("unsupported feature type %s", identifier.type());
     }
 
     // -- HELPER
 
-    private String listing(final Stream<Identifier> availableIds, final Stream<Identifier> enabledIds) {
+    private Listing<String> listing(final Stream<Identifier> availableIds, final Stream<Identifier> enabledIds) {
         // all column candidates
-        var available = availableIds
-                .map(Identifier::memberLogicalName)
-                .collect(Collectors.joining("\n"));
+        var available = listingHandler()
+        		.createListing(availableIds.map(Identifier::memberLogicalName));
 
         // all columns currently rendered
-        var enabled = enabledIds
-                .map(Identifier::memberLogicalName)
-                .collect(Collectors.joining("\n"));
+        var enabled = listingHandler()
+        		.createListing(enabledIds.map(Identifier::memberLogicalName));
 
-        // TODO flesh out using Listing?
-        return "# available\n"
-            + available
-            + "\n\n# enabled\n"
-            + enabled;
+        return enabled.merge(MergePolicy.ADD_NEW_AS_DISABLED, available);
+    }
+
+    private final static ListingHandler<String> listingHandler() {
+    	return new ListingHandler<>(String.class, UnaryOperator.identity(), UnaryOperator.identity(), UnaryOperator.identity());
     }
 
 }
