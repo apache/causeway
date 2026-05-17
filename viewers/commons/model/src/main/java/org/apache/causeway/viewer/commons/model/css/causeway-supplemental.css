@@ -58,30 +58,153 @@ i.ov-bottom-85 {
   top: 0.85em;
 }
 
-i.col-black {
-  color: black;
-}
-i.col-grey {
-  color: grey;
-}
-i.col-green {
-  color: green;
-}
-i.col-red {
-  color: red;
-}
-i.col-orange {
-  color: orange;
-}
-i.col-blue {
-  color: blue;
-}
-i.col-dodgerblue {
-  color: dodgerblue;
-}
-i.col-gold {
-  color: gold;
-}
-i.col-indigo {
-  color: indigo;
-}
+/* named colors */
+
+i.col-aliceblue { color: aliceblue; }
+i.col-antiquewhite { color: antiquewhite; }
+i.col-aqua { color: aqua; }
+i.col-aquamarine { color: aquamarine; }
+i.col-azure { color: azure; }
+i.col-beige { color: beige; }
+i.col-bisque { color: bisque; }
+i.col-black { color: black; }
+i.col-blanchedalmond { color: blanchedalmond; }
+i.col-blue { color: blue; }
+i.col-blueviolet { color: blueviolet; }
+i.col-brown { color: brown; }
+i.col-burlywood { color: burlywood; }
+i.col-cadetblue { color: cadetblue; }
+i.col-chartreuse { color: chartreuse; }
+i.col-chocolate { color: chocolate; }
+i.col-coral { color: coral; }
+i.col-cornflowerblue { color: cornflowerblue; }
+i.col-cornsilk { color: cornsilk; }
+i.col-crimson { color: crimson; }
+i.col-cyan { color: cyan; }
+i.col-darkblue { color: darkblue; }
+i.col-darkcyan { color: darkcyan; }
+i.col-darkgoldenrod { color: darkgoldenrod; }
+i.col-darkgray { color: darkgray; }
+i.col-darkgreen { color: darkgreen; }
+i.col-darkgrey { color: darkgrey; }
+i.col-darkkhaki { color: darkkhaki; }
+i.col-darkmagenta { color: darkmagenta; }
+i.col-darkolivegreen { color: darkolivegreen; }
+i.col-darkorange { color: darkorange; }
+i.col-darkorchid { color: darkorchid; }
+i.col-darkred { color: darkred; }
+i.col-darksalmon { color: darksalmon; }
+i.col-darkseagreen { color: darkseagreen; }
+i.col-darkslateblue { color: darkslateblue; }
+i.col-darkslategray { color: darkslategray; }
+i.col-darkslategrey { color: darkslategrey; }
+i.col-darkturquoise { color: darkturquoise; }
+i.col-darkviolet { color: darkviolet; }
+i.col-deeppink { color: deeppink; }
+i.col-deepskyblue { color: deepskyblue; }
+i.col-dimgray { color: dimgray; }
+i.col-dimgrey { color: dimgrey; }
+i.col-dodgerblue { color: dodgerblue; }
+i.col-firebrick { color: firebrick; }
+i.col-floralwhite { color: floralwhite; }
+i.col-forestgreen { color: forestgreen; }
+i.col-fuchsia { color: fuchsia; }
+i.col-gainsboro { color: gainsboro; }
+i.col-ghostwhite { color: ghostwhite; }
+i.col-gold { color: gold; }
+i.col-goldenrod { color: goldenrod; }
+i.col-gray { color: gray; }
+i.col-green { color: green; }
+i.col-greenyellow { color: greenyellow; }
+i.col-grey { color: grey; }
+i.col-honeydew { color: honeydew; }
+i.col-hotpink { color: hotpink; }
+i.col-indianred { color: indianred; }
+i.col-indigo { color: indigo; }
+i.col-ivory { color: ivory; }
+i.col-khaki { color: khaki; }
+i.col-lavender { color: lavender; }
+i.col-lavenderblush { color: lavenderblush; }
+i.col-lawngreen { color: lawngreen; }
+i.col-lemonchiffon { color: lemonchiffon; }
+i.col-lightblue { color: lightblue; }
+i.col-lightcoral { color: lightcoral; }
+i.col-lightcyan { color: lightcyan; }
+i.col-lightgoldenrodyellow { color: lightgoldenrodyellow; }
+i.col-lightgray { color: lightgray; }
+i.col-lightgreen { color: lightgreen; }
+i.col-lightgrey { color: lightgrey; }
+i.col-lightpink { color: lightpink; }
+i.col-lightsalmon { color: lightsalmon; }
+i.col-lightseagreen { color: lightseagreen; }
+i.col-lightskyblue { color: lightskyblue; }
+i.col-lightslategray { color: lightslategray; }
+i.col-lightslategrey { color: lightslategrey; }
+i.col-lightsteelblue { color: lightsteelblue; }
+i.col-lightyellow { color: lightyellow; }
+i.col-lime { color: lime; }
+i.col-limegreen { color: limegreen; }
+i.col-linen { color: linen; }
+i.col-magenta { color: magenta; }
+i.col-maroon { color: maroon; }
+i.col-mediumaquamarine { color: mediumaquamarine; }
+i.col-mediumblue { color: mediumblue; }
+i.col-mediumorchid { color: mediumorchid; }
+i.col-mediumpurple { color: mediumpurple; }
+i.col-mediumseagreen { color: mediumseagreen; }
+i.col-mediumslateblue { color: mediumslateblue; }
+i.col-mediumspringgreen { color: mediumspringgreen; }
+i.col-mediumturquoise { color: mediumturquoise; }
+i.col-mediumvioletred { color: mediumvioletred; }
+i.col-midnightblue { color: midnightblue; }
+i.col-mintcream { color: mintcream; }
+i.col-mistyrose { color: mistyrose; }
+i.col-moccasin { color: moccasin; }
+i.col-navajowhite { color: navajowhite; }
+i.col-navy { color: navy; }
+i.col-oldlace { color: oldlace; }
+i.col-olive { color: olive; }
+i.col-olivedrab { color: olivedrab; }
+i.col-orange { color: orange; }
+i.col-orangered { color: orangered; }
+i.col-orchid { color: orchid; }
+i.col-palegoldenrod { color: palegoldenrod; }
+i.col-palegreen { color: palegreen; }
+i.col-paleturquoise { color: paleturquoise; }
+i.col-palevioletred { color: palevioletred; }
+i.col-papayawhip { color: papayawhip; }
+i.col-peachpuff { color: peachpuff; }
+i.col-peru { color: peru; }
+i.col-pink { color: pink; }
+i.col-plum { color: plum; }
+i.col-powderblue { color: powderblue; }
+i.col-purple { color: purple; }
+i.col-rebeccapurple { color: rebeccapurple; }
+i.col-red { color: red; }
+i.col-rosybrown { color: rosybrown; }
+i.col-royalblue { color: royalblue; }
+i.col-saddlebrown { color: saddlebrown; }
+i.col-salmon { color: salmon; }
+i.col-sandybrown { color: sandybrown; }
+i.col-seagreen { color: seagreen; }
+i.col-seashell { color: seashell; }
+i.col-sienna { color: sienna; }
+i.col-silver { color: silver; }
+i.col-skyblue { color: skyblue; }
+i.col-slateblue { color: slateblue; }
+i.col-slategray { color: slategray; }
+i.col-slategrey { color: slategrey; }
+i.col-snow { color: snow; }
+i.col-springgreen { color: springgreen; }
+i.col-steelblue { color: steelblue; }
+i.col-tan { color: tan; }
+i.col-teal { color: teal; }
+i.col-thistle { color: thistle; }
+i.col-tomato { color: tomato; }
+i.col-turquoise { color: turquoise; }
+i.col-violet { color: violet; }
+i.col-wheat { color: wheat; }
+i.col-white { color: white; }
+i.col-whitesmoke { color: whitesmoke; }
+i.col-yellow { color: yellow; }
+i.col-yellowgreen { color: yellowgreen; }

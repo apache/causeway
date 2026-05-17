@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.services.columnorder;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,8 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * Default implementation of {@link ColumnOrderTxtFileService}.
  *
@@ -49,42 +46,39 @@ import lombok.RequiredArgsConstructor;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ColumnOrderTxtFileServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileService {
-
-    final SpecificationLoader specificationLoader;
+public record ColumnOrderTxtFileServiceDefault(
+        SpecificationLoader specificationLoader) implements ColumnOrderTxtFileService {
 
     @Override
     @Programmatic
     public byte[] toZip(final Object domainObject) {
+        var objSpec = specificationLoader.loadSpecification(domainObject.getClass());
         var zipBuilder = ZipUtils.zipEntryBuilder();
 
-        addStandaloneEntry(domainObject, zipBuilder);
-        addCollectionEntries(domainObject, zipBuilder);
+        addStandaloneEntry(objSpec, zipBuilder);
+        addCollectionEntries(objSpec, zipBuilder);
 
         return zipBuilder.toBytes();
     }
 
-    // HELPERS
+    // -- HELPER
 
-    private void addStandaloneEntry(final Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
+    private void addStandaloneEntry(final ObjectSpecification objSpec, final ZipUtils.EntryBuilder zipBuilder) {
         var buf = new StringBuilder();
 
-        parentSpec.streamAssociations(MixedIn.INCLUDED)
+        objSpec.streamAssociations(MixedIn.INCLUDED)
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
         var fileContents = buf.toString();
-        var fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
+        var fileName = "%s.columnOrder.txt".formatted(objSpec.getShortIdentifier());
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private void addCollectionEntries(final Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        parentSpec.streamCollections(MixedIn.INCLUDED)
-                .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
+    private void addCollectionEntries(final ObjectSpecification objSpec, final ZipUtils.EntryBuilder zipBuilder) {
+        objSpec.streamCollections(MixedIn.INCLUDED)
+                .forEach(collection -> addCollection(collection, objSpec, zipBuilder));
     }
 
     private void addCollection(
@@ -94,6 +88,7 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
 
         var buf = new StringBuilder();
 
+        //TODO  this does not account for any SPI from _MembersAsColumns - problem?
         collection.getElementType()
             .streamAssociations(MixedIn.INCLUDED)
             .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
@@ -101,7 +96,7 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
             .map(ObjectFeature::getId)
             .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        var fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
+        var fileName = "%s#%s.columnOrder.txt".formatted(parentSpec.getShortIdentifier(), collection.getId());
         var fileContents = buf.toString();
 
         zipBuilder.addAsUtf8(fileName, fileContents);

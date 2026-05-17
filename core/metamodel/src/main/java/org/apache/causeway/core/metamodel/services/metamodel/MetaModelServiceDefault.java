@@ -25,8 +25,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
@@ -36,7 +36,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
@@ -54,11 +54,18 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -72,7 +79,6 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public record MetaModelServiceDefault(
     Provider<SpecificationLoader> specificationLoaderProvider,
@@ -172,23 +178,19 @@ public record MetaModelServiceDefault(
     @Override
     public BeanSort sortOf(
             final @Nullable Class<?> domainType, final Mode mode) {
-        if(domainType == null) {
-            return null;
-        }
+        if(domainType == null)
+			return null;
         final ObjectSpecification objectSpec = specificationLoader().specForType(domainType).orElse(null);
-        if(objectSpec == null) {
-            return BeanSort.UNKNOWN;
-        }
+        if(objectSpec == null)
+			return BeanSort.UNKNOWN;
 
         if(objectSpec.getBeanSort().isUnknown()
-                && !(mode == Mode.RELAXED)) {
-
-            throw new IllegalArgumentException(String.format(
+                && !(mode == Mode.RELAXED))
+			throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
                     objectSpec.getFullIdentifier(),
                     domainType.getName()
                     ));
-        }
 
         return objectSpec.getBeanSort();
 
@@ -196,28 +198,24 @@ public record MetaModelServiceDefault(
 
     @Override
     public BeanSort sortOf(final Bookmark bookmark, final Mode mode) {
-        if(bookmark == null) {
-            return null;
-        }
+        if(bookmark == null)
+			return null;
 
-        final Class<?> domainType;
-        switch (mode) {
-        case RELAXED:
-            domainType = specificationLoader().specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElse(null);
-            break;
-
-        case STRICT:
-            // fall through to...
-        default:
-            domainType = specificationLoader().specForBookmark(bookmark)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("Cannot resolve logical type name %s to a java class",
-                                bookmark.logicalTypeName()));
-            break;
-        }
+        final Class<?> domainType = switch (mode) {
+        case RELAXED -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElse(null);
+        case STRICT -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        default -> specificationLoader().specForBookmark(bookmark)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .orElseThrow(()->_Exceptions
+                                .noSuchElement("Cannot resolve logical type name %s to a java class",
+                                        bookmark.logicalTypeName()));
+        };
         return sortOf(domainType, mode);
     }
 
@@ -227,22 +225,19 @@ public record MetaModelServiceDefault(
                 .newFeature(ApplicationFeatureSort.MEMBER, memberIdentifier);
 
         final String logicalTypeName = featureId.getLogicalTypeName();
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
-            return null;
-        }
+        if(_Strings.isNullOrEmpty(logicalTypeName))
+			return null;
 
         final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
-        if(spec == null) {
-            return null;
-        }
+        if(spec == null)
+			return null;
         final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
-        if (objectMemberIfAny == null) {
-            return null;
-        }
-        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.getFacet(CommandPublishingFacet.class);
-        if(commandPublishingFacet == null) {
-            return null;
-        }
+        if (objectMemberIfAny == null)
+			return null;
+        final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.lookupFacet(CommandPublishingFacet.class)
+                .orElse(null);
+        if(commandPublishingFacet == null)
+			return null;
         return commandPublishingFacet.getProcessor();
     }
 
@@ -273,5 +268,105 @@ public record MetaModelServiceDefault(
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs));
     }
+
+    @Override
+    public Stream<Identifier> streamActions(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED))
+            .map(ObjectAction::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamProperties(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamProperties(MixedIn.INCLUDED))
+            .map(OneToOneAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamCollections(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(spec->spec.streamCollections(MixedIn.INCLUDED))
+            .map(OneToManyAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> streamTypeHierarchy(@Nullable final Class<?> domainType) {
+        return specificationLoader()
+            .specForType(domainType)
+            .stream()
+            .flatMap(ObjectSpecification::streamTypeHierarchyAndInterfaces)
+            .filter(spec->!spec.getCorrespondingClass().equals(Object.class))
+            .map(ObjectSpecification::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> parentedAssociationsForColumnRendering(
+            final Object parentDomainObject,
+            final Identifier collectionId,
+            final AssociationsLookup columnQueryMode) {
+
+        if(parentDomainObject==null
+                || collectionId==null)
+			return Stream.empty();
+
+        var parentMo = ManagedObject.adaptSingular(specificationLoader(), parentDomainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(parentMo))
+			return Stream.empty();
+
+        var elementType = parentMo.objSpec().getCollection(collectionId.memberLogicalName())
+            .map(OneToManyAssociation::getElementType)
+            .orElse(null);
+        if(elementType==null)
+			return Stream.empty();
+
+        return elementType
+            .streamAssociationsForColumnRendering(new ColumnQuery(collectionId, parentMo, columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
+    }
+
+    @Override
+    public Stream<Identifier> standaloneAssociationsForColumnRendering(
+            final LogicalType logicalType,
+            final AssociationsLookup columnQueryMode) {
+
+        var elementType = specificationLoader()
+            .specForLogicalType(logicalType)
+            .orElse(null);
+
+        if(elementType == null)
+			return Stream.empty();
+
+        return elementType
+            .streamAssociationsForColumnRendering(ColumnQuery.forStandaloneTable(columnQueryMode))
+            .map(ObjectAssociation::getFeatureIdentifier);
+    }
+
+	@Override
+	public void patchColumnOrder(final Identifier identifier, final Can<String> columnsInOrder) {
+		final ObjectSpecification elementType = switch (identifier.type()) {
+			case CLASS -> specificationLoader()
+				.specForLogicalType(identifier.logicalType())
+				.orElseThrow();
+			case COLLECTION -> specificationLoader()
+				.specForLogicalType(identifier.logicalType())
+				.map(parentType->parentType.getCollectionElseFail(identifier.memberLogicalName()))
+				.map(OneToManyAssociation::getElementType)
+				.orElseThrow();
+			case ACTION, ACTION_PARAMETER, PROPERTY ->
+				throw new UnsupportedOperationException("Unimplemented case: " + identifier.type());
+		};
+
+		var columnOrderPatchingFacet = elementType.lookupFacet(ColumnOrderPatchingFacet.class)
+			.orElseGet(()->FacetUtil.addFacet(new ColumnOrderPatchingFacet(elementType)));
+
+		columnOrderPatchingFacet.putColumnOrder(identifier, columnsInOrder);
+	}
 
 }

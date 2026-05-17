@@ -20,8 +20,12 @@ package org.apache.causeway.applib.services.appfeat;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 
+import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 
 /**
@@ -52,4 +56,6 @@ public interface ApplicationFeatureRepository  {
     Collection<ApplicationFeature> allMembers();
 
     SortedSet<ApplicationFeatureId> propertyIdsFor(LogicalType logicalType);
+
+    Optional<Identifier> asIdentifier(@Nullable ApplicationFeatureId applicationFeatureId);
 }

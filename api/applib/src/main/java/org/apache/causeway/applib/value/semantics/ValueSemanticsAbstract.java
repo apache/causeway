@@ -43,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -227,8 +228,9 @@ ValueSemanticsProvider<T> {
             final ValueSemanticsProvider.@Nullable Context context,
             final @Nullable String text) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null)
-            return Optional.empty();
+        if(input==null) {
+			return Optional.empty();
+		}
         try {
             return parseDecimal(context, input, GroupingSeparatorPolicy.ALLOW)
                     .map(BigDecimal::toBigIntegerExact);
@@ -248,15 +250,17 @@ ValueSemanticsProvider<T> {
             final @Nullable String text,
             final GroupingSeparatorPolicy groupingSeparatorPolicy) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null)
-            return Optional.empty();
+        if(input==null) {
+			return Optional.empty();
+		}
 
         if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
             var userLocale = getUserLocale(context);
             var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
             var groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
-            if (input.contains(""+groupingSeparatorChar))
-                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
+            if (input.contains(""+groupingSeparatorChar)) {
+				throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
+			}
         }
 
         var format = getNumberFormat(context, FormatUsageFor.PARSING);
@@ -265,17 +269,19 @@ ValueSemanticsProvider<T> {
         var position = new ParsePosition(0);
         try {
             var number = (BigDecimal)format.parse(input, position);
-            if (position.getErrorIndex() != -1)
-                throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
-            else if (position.getIndex() < input.length())
-                throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
+            if (position.getErrorIndex() != -1) {
+				throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
+			} else if (position.getIndex() < input.length()) {
+				throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
+			}
             // check for maxFractionDigits if required ...
             final int maxFractionDigits = format.getMaximumFractionDigits();
             if(maxFractionDigits>-1
-                    && number.scale()>format.getMaximumFractionDigits())
-                throw new TextEntryParseException(String.format(
+                    && number.scale()>format.getMaximumFractionDigits()) {
+				throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
                                 + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
+			}
             return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
@@ -402,9 +408,11 @@ ValueSemanticsProvider<T> {
     /**
      * Uses Fontawesome.
      */
-    protected final String faIconAndTitle(final String faClasses, final String titleHtml) {
+    protected final String faIconAndTitle(final FontAwesomeLayers faLayers, final String titleHtml) {
         return """
-            <span><i class="%s"></i>%s</span>""".formatted(faClasses, titleHtml);
+            <span>%s%s</span>""".formatted(faLayers.toHtml(), titleHtml);
     }
+    
+    
 
 }

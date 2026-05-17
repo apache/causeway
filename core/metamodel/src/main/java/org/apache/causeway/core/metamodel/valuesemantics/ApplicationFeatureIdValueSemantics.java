@@ -24,6 +24,7 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -79,13 +80,13 @@ implements
 
     // uses font-awesome
     private String iconify(final ApplicationFeatureId featureId) {
-        var fa = switch (featureId.getSort()) {
-            case NAMESPACE -> "fa-solid fa-sitemap";
-            case MEMBER -> "fa-solid fa-circle-plus .col-indigo";
-            case TYPE -> "fa-solid fa-circle .col-indigo";
+        var faQuickNotation = switch (featureId.getSort()) {
+            case NAMESPACE -> "solid border-all .col-chocolate"; // resembling the package symbol from Eclipse IDE
+            case TYPE -> "solid copyright .col-green"; // resembling the class symbol from Eclipse IDE
+            case MEMBER -> "solid cube .col-gold"; // resembling member symbol as used in Eclipse Theia
         };
-
-        return faIconAndTitle(fa, toMonospace(featureId.stringify()));
+        var faLayers = FontAwesomeLayers.fromQuickNotation(faQuickNotation);
+        return faIconAndTitle(faLayers, toMonospace(featureId.stringify()));
     }
 
     // -- PARSER

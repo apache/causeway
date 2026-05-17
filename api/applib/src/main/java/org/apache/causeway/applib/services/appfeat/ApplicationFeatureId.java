@@ -26,6 +26,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -45,21 +46,20 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Synchronized;
 
 /**
  * Value type representing a namespace, type or member.
- * <p>
- * This value is {@link Comparable}, the implementation of which considers
+ *
+ * <p> This value is {@link Comparable}, the implementation of which considers
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace},
  * {@link #getTypeSimpleName() type simple name} and {@link #getLogicalMemberName() member-logical-name}.
- * <p>
- * If the represented member is an <i>action</i>, then {@link #getLogicalMemberName() member-logical-name}
+ *
+ * <p> If the represented member is an <i>action</i>, then {@link #getLogicalMemberName() member-logical-name}
  * must <b>not</b> include any parameter list or parentheses.
  * Consequently method overloading is not supported.
- * <p>
- * If there is a member name clash involving an <i>action</i> and an <i>association</i>,
+ *
+ * <p> If there is a member name clash involving an <i>action</i> and an <i>association</i>,
  * then consequently any permissions defined automatically apply to both and one cannot separate
  * these.
  *
@@ -79,13 +79,16 @@ implements
 
     // -- FACTORY METHODS
 
+    /**
+     * @apiNote the inverse conversion is available via
+     *  {@link ApplicationFeatureRepository#asIdentifier(ApplicationFeatureId)}
+     */
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
         var logicalTypeName = identifier.logicalTypeName();
 
-        if(identifier.type().isClass()) {
+        if(identifier.type().isClass())
             return newType(logicalTypeName);
-        }
         return newMember(logicalTypeName, identifier.memberLogicalName());
     }
 
@@ -93,15 +96,11 @@ implements
             final @NonNull ApplicationFeatureSort featureSort,
             final @NonNull String qualifiedLogicalName) {
 
-        switch (featureSort) {
-        case NAMESPACE:
-            return newNamespace(qualifiedLogicalName);
-        case TYPE:
-            return newType(qualifiedLogicalName);
-        case MEMBER:
-            return newMember(qualifiedLogicalName);
-        }
-        throw _Exceptions.illegalArgument("Unknown feature sort '%s'", featureSort);
+        return switch (featureSort) {
+            case NAMESPACE -> newNamespace(qualifiedLogicalName);
+            case TYPE -> newType(qualifiedLogicalName);
+            case MEMBER -> newMember(qualifiedLogicalName);
+        };
     }
 
     public static ApplicationFeatureId newFeature(
@@ -109,13 +108,11 @@ implements
             final @Nullable String logicalTypeSimpleName,
             final @Nullable String memberName) {
 
-        if(logicalTypeSimpleName == null) {
+        if(logicalTypeSimpleName == null)
             return newNamespace(namespace);
-        }
         var logicalTypeName = namespace + "." + logicalTypeSimpleName;
-        if(memberName == null) {
+        if(memberName == null)
             return newType(logicalTypeName);
-        }
         return newMember(logicalTypeName, memberName);
     }
 
@@ -161,9 +158,8 @@ implements
     public static ApplicationFeatureId newMember(final String fullyQualifiedLogicalName) {
         var featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         var i = fullyQualifiedLogicalName.lastIndexOf("#");
-        if(i == -1) {
+        if(i == -1)
             throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedLogicalName);
-        }
         var logicalTypeName = fullyQualifiedLogicalName.substring(0, i);
         var memberName = fullyQualifiedLogicalName.substring(i + 1);
         initType(featureId, logicalTypeName);
@@ -184,10 +180,9 @@ implements
         }
 
         // guard against empty namespace; there should be a meta-model validator that already catched that
-        if(_Strings.isEmpty(featureId.namespace)) {
+        if(_Strings.isEmpty(featureId.namespace))
             throw _Exceptions.illegalArgument(
                     "fullyQualifiedName '%s' must include a non-empty namespace", fullyQualifiedName);
-        }
 
         featureId.logicalMemberName = null;
     }
@@ -197,9 +192,8 @@ implements
     }
 
     private static String stripOffParamsIfAny(final @Nullable String name) {
-        if(_Strings.isEmpty(name)) {
+        if(_Strings.isEmpty(name))
             return name;
-        }
         final int paramListStartIndex = name.indexOf('(');
         return paramListStartIndex>-1
                 ? name.substring(0, paramListStartIndex)
@@ -284,9 +278,8 @@ implements
 
     @Programmatic
     public String getLogicalTypeName() {
-        if (getTypeSimpleName() == null) {
+        if (getTypeSimpleName() == null)
             return null;
-        }
         var buf = new StringBuilder();
         if(!_Strings.isNullOrEmpty(getNamespace())) {
             buf.append(getNamespace()).append(".");
@@ -305,13 +298,12 @@ implements
 
         _Assert.assertFalse(sort.isMember());
 
-        if(sort.isType()) {
+        if(sort.isType())
             return ApplicationFeatureId.newNamespace(getNamespace());
-        } else {
+        else {
             var namespace = getNamespace(); // eg aaa.bbb.ccc
-            if(!namespace.contains(".")) {
+            if(!namespace.contains("."))
                 return null; // parent is root
-            }
             final int cutOffPos = namespace.lastIndexOf('.');
             final String parentPackageName = namespace.substring(0, cutOffPos);
             return newNamespace(parentPackageName);
@@ -479,15 +471,12 @@ implements
      * @param logicalTypeName
      */
     public ApplicationFeatureId withLogicalTypeName(final @NonNull String logicalTypeName) {
-        switch (getSort()) {
-            case MEMBER:
-                return newMember(logicalTypeName, this.getLogicalMemberName());
-            case TYPE:
-                return newType(logicalTypeName);
-            case NAMESPACE:
-            default:
-                return this;
-        }
+        return switch (getSort()) {
+            case MEMBER -> newMember(logicalTypeName, this.getLogicalMemberName());
+            case TYPE -> newType(logicalTypeName);
+            case NAMESPACE -> this;
+            default -> this;
+        };
     }
 
 }
