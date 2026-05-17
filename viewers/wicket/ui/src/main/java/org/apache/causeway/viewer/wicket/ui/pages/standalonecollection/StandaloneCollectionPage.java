@@ -19,10 +19,8 @@
 package org.apache.causeway.viewer.wicket.ui.pages.standalonecollection;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -30,9 +28,8 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
@@ -81,29 +78,9 @@ public class StandaloneCollectionPage extends PageAbstract {
             final Can<PageRenderSubscriber> objectRenderSubscribers,
             final BiFunction<PageRenderSubscriber, Supplier<List<Bookmark>>, Void> handler) {
 
-        if(objectRenderSubscribers.isEmpty()) {
-            return;
-        }
-
-        Supplier<List<Bookmark>> listSupplier = () -> {
-
-            final var dataTableInteractive = collectionModel.getObject();
-            Observable<Can<ManagedObject>> dataElements = dataTableInteractive.dataElementsObservable();
-            Can<ManagedObject> managedObjects = dataElements.getValue();
-
-            final var bookmarks =
-                managedObjects.stream()
-                .map(ManagedObject::getBookmark)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toUnmodifiableList());
-            return bookmarks;
-        };
-
+    	var bookmarksLazy = _Lazy.threadSafe(collectionModel::bookmarks);
         objectRenderSubscribers
-            .forEach(subscriber -> {
-                handler.apply(subscriber, listSupplier);
-            });
+            .forEach(subscriber -> handler.apply(subscriber, bookmarksLazy::get));
     }
 
 }

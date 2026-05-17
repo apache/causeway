@@ -27,14 +27,14 @@ import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * Panel for rendering any value types that do not have their own custom
- * {@link AttributePanel panel} to render them.
+ * Panel for rendering value types readonly.
  */
 class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
@@ -45,9 +45,19 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
 
-        //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
-        // which has better rendering support
-        // (we probably need to remove StandaloneValuePanel and utilize the AttributePanel for standalone values instead)
+        var pseudoAttrModel = UiAttributeWkt.pseudo(valueModel);
+        var component = getComponentFactoryRegistry()
+        	.streamComponentFactories(UiComponentType.ATTRIBUTE_NAME_AND_VALUE, pseudoAttrModel)
+        	.findFirst()
+        	.map(factory->factory.createComponent(ID_STANDALONE_VALUE, pseudoAttrModel))
+        	.orElse(null);
+
+        if(component!=null) {
+        	Wkt.add(this, component);
+			return;
+        }
+
+        // fallback (legacy)
         if(isProbablySimpleInlineHtml(valueModel.elementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
                 MmValueUtils.htmlStringForValueType(

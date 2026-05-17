@@ -317,12 +317,13 @@ public final class Facets {
             .orElse(objectAdapter);
     }
 
-    public Optional<PromptStyle> promptStyle(final ObjectFeature feature) {
-        return feature.lookupFacet(PromptStyleFacet.class)
+    public Optional<PromptStyle> promptStyle(final @Nullable ObjectFeature feature) {
+        return Optional.ofNullable(feature)
+    		.flatMap(f->f.lookupFacet(PromptStyleFacet.class))
             .map(PromptStyleFacet::value);
     }
 
-    public PromptStyle promptStyleOrElse(final ObjectFeature feature, final PromptStyle fallback) {
+    public PromptStyle promptStyleOrElse(final @Nullable ObjectFeature feature, final PromptStyle fallback) {
         return Facets.promptStyle(feature)
             .map(promptStyle->
                 promptStyle == PromptStyle.AS_CONFIGURED

@@ -67,6 +67,13 @@ implements IModel<ManagedObject>, HasRenderingHints, UiAttribute, FormExecutorCo
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Returns a readonly variant, for standalone value rendering.
+     */
+    public static UiAttributeWkt pseudo(final ValueModel valueModel) {
+		return new PseudoAttributeModel(valueModel);
+    }
+
     private final UiObjectWkt parentEntityModel;
 
     @Getter(onMethod_={@Override})
@@ -215,11 +222,10 @@ implements IModel<ManagedObject>, HasRenderingHints, UiAttribute, FormExecutorCo
     }
 
     public void setInlinePromptContext(final InlinePromptContext inlinePromptContext) {
-        if (this.inlinePromptContext != null) {
-            // otherwise the components created for an property edit inline prompt will overwrite the original
+        if (this.inlinePromptContext != null)
+			// otherwise the components created for an property edit inline prompt will overwrite the original
             // components on the underlying page (which we go back to if the prompt is cancelled).
             return;
-        }
         this.inlinePromptContext = inlinePromptContext;
     }
 
