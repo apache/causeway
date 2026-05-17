@@ -23,18 +23,19 @@ import java.net.URL;
 import java.util.UUID;
 
 import org.apache.causeway.applib.services.bookmark.idstringifiers.PredefinedSerializables;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.blobclob.BlobAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * Panel for rendering any value types that do not have their own custom
- * {@link AttributePanel panel} to render them.
+ * Panel for rendering value types.
  */
 class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
@@ -44,6 +45,13 @@ extends PanelAbstract<ManagedObject, ValueModel> {
 
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
+
+        //TODO do this properly using ComponentFactory lookup
+        if(valueModel.elementType().getCorrespondingClass().equals(Blob.class)) {
+        	Wkt.add(this, new BlobAttributePanelFactory()
+        			.createComponent(ID_STANDALONE_VALUE, UiAttributeWkt.pseudo(valueModel)));
+			return;
+        }
 
         //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
         // which has better rendering support

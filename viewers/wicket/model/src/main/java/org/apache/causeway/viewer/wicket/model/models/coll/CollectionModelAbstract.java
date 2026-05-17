@@ -19,10 +19,13 @@
 package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -31,8 +34,6 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection (a member) of a domain object.
@@ -116,6 +117,16 @@ permits CollectionModelParented, CollectionModelStandalone {
     @Override
     public final Variant getVariant() {
         return variant;
+    }
+
+    // -- BOOKMARKS
+
+    public List<Bookmark> bookmarks() {
+        return getDataTableModel().dataElementsObservable().getValue().stream()
+            .map(ManagedObject::getBookmark)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
     }
 
     // -- LINKS PROVIDER
