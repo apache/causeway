@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
@@ -31,9 +32,11 @@ import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
@@ -46,20 +49,16 @@ class PseudoAttributeModel extends UiAttributeWkt {
 
 	private static final long serialVersionUID = 1L;
 
-	final ValueModel valueModel;
-
-	//TODO don't serialize the value object twice
 	protected PseudoAttributeModel(final ValueModel valueModel) {
 		super(UiObjectWkt.ofAdapter(valueModel.getObject()), ViewOrEditMode.VIEWING, RenderingHint.STANDALONE_PROPERTY_COLUMN);
-		this.valueModel = valueModel;
 	}
 
-	record PseudoFeature(ValueModel valueModel) implements ObjectFeature {
+	record PseudoFeature(ManagedObject valueMo) implements ObjectFeature {
 		@Override public FeatureType getFeatureType() {
 			return FeatureType.OBJECT;
 		}
 		@Override public FacetHolder getFacetHolder() {
-			return valueModel.elementType();
+			return valueMo.objSpec();
 		}
 		@Override public String getId() {
 			return "$value";
@@ -83,72 +82,69 @@ class PseudoAttributeModel extends UiAttributeWkt {
 			return Optional.empty();
 		}
 		@Override public ObjectSpecification getElementType() {
-			return valueModel.elementType();
+			return valueMo.objSpec();
 		}
 		@Override public String asciiId() {
 			return "$value";
 		}
 	}
 
-	record PseudoManagedValue(ValueModel valueModel) implements ManagedValue {
-
+	record PseudoManagedValue(PseudoFeature pseudoFeature) implements ManagedValue {
 		@Override public ObjectSpecification getElementType() {
-			return valueModel.elementType();
+			return pseudoFeature.getElementType();
 		}
 		@Override public Bindable<ManagedObject> getValue() {
-			return _Bindables.forValue(valueModel.getObject());
+			return _Bindables.forValue(pseudoFeature.valueMo());
 		}
+		@SuppressWarnings("unchecked")
 		@Override public Observable<String> getValueAsTitle() {
-			// TODO Auto-generated method stub
-			return null;
+			var valueFacet = valueFacet();
+			return _Observables.lazy(()->valueFacet.selectDefaultRenderer()
+					.map(Renderer.class::cast)
+					.map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(pseudoFeature), pojo()))
+					.orElseGet(()->"no renderer found for value type %s".formatted(getElementType())));
+
 		}
+		@SuppressWarnings("unchecked")
 		@Override public Observable<String> getValueAsHtml() {
-			// TODO Auto-generated method stub
-			return null;
+			var valueFacet = valueFacet();
+			return _Observables.lazy(()->valueFacet.selectDefaultRenderer()
+					.map(Renderer.class::cast)
+					.map(renderer->renderer.htmlPresentation(valueFacet.createValueSemanticsContext(pseudoFeature), pojo()))
+					.orElseGet(()->"no renderer found for value type %s".formatted(getElementType())));
+
 		}
-		@Override public boolean isValueAsParsableTextSupported() {
-			return false;
+		@Override public boolean isValueAsParsableTextSupported() { return false; }
+		@Override public Bindable<String> getValueAsParsableText() { return null; }
+		@Override public Observable<String> getValidationMessage() { return null; }
+		@Override public Bindable<String> getSearchArgument() { return null; }
+		@Override public Observable<Can<ManagedObject>> getChoices() { return _Observables.lazy(Can::empty); }
+		// -- HELPER
+		private Object pojo() {
+			return MmUnwrapUtils.single(pseudoFeature.valueMo());
 		}
-		@Override
-		public Bindable<String> getValueAsParsableText() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		@Override public Observable<String> getValidationMessage() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		@Override public Bindable<String> getSearchArgument() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		@Override public Observable<Can<ManagedObject>> getChoices() {
-			return _Observables.lazy(Can::empty);
+		private ValueFacet<?> valueFacet() {
+			return getElementType().valueFacetElseFail();
 		}
 	}
 
-	@Override
-	public ObjectFeature getMetaModel() {
-		return new PseudoFeature(valueModel);
+	@Override public ObjectFeature getMetaModel() {
+		return new PseudoFeature(getOwner());
 	}
 
-	@Override
-	public ManagedObject getOwner() {
-		return valueModel.getObject();
+	@Override public ManagedObject getOwner() {
+		return super.getParentObject();
 	}
 
-	@Override
-	public String getIdentifier() {
+	@Override public String getIdentifier() {
 		return "$value";
 	}
 
-	@Override
-	public ManagedValue proposedValue() {
-		return new PseudoManagedValue(valueModel);
+	@Override public ManagedValue proposedValue() {
+		return new PseudoManagedValue(new PseudoFeature(getOwner()));
 	}
 
-	@Override
-	protected String toStringOf() {
+	@Override protected String toStringOf() {
 		return "%s[%s]".formatted(getClass().getName(), getIdentifier());
 	}
 
@@ -161,7 +157,7 @@ class PseudoAttributeModel extends UiAttributeWkt {
 	@Override public boolean whetherHidden() { return false; }
 	@Override public Optional<InteractionVeto> disabledReason() { return Optional.empty(); }
 	@Override public int getAutoCompleteMinLength() { return 0; }
-	@Override public ManagedObject getDefault() { return valueModel.getObject(); }
+	@Override public ManagedObject getDefault() { return null; }
 	@Override public boolean hasChoices() {  return false; }
 	@Override public boolean hasAutoComplete() { return false; }
 	@Override public Can<ManagedObject> getChoices() { return Can.empty(); }
