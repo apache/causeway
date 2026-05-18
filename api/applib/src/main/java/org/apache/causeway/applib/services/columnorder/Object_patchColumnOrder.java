@@ -45,7 +45,6 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.applib.util.Listing;
-import org.apache.causeway.applib.util.Listing.ListingHandler;
 import org.apache.causeway.applib.util.Listing.MergePolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -157,8 +156,8 @@ public class Object_patchColumnOrder {
         return enabled.merge(MergePolicy.ADD_NEW_AS_DISABLED, available);
     }
 
-    private final static ListingHandler<String> listingHandler() {
-    	return new ListingHandler<>(String.class, UnaryOperator.identity(), UnaryOperator.identity(), UnaryOperator.identity());
+    private final static Listing.LineAdapter<String> listingHandler() {
+    	return Listing.lineAdapter(String.class, UnaryOperator.identity(), UnaryOperator.identity(), UnaryOperator.identity());
     }
 
 }

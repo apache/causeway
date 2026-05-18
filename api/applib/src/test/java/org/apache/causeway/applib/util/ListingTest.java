@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.util.StringUtils;
 
-import org.apache.causeway.applib.util.Listing.ListingHandler;
+import org.apache.causeway.applib.util.Listing.LineAdapter;
 import org.apache.causeway.applib.util.Listing.MergePolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
@@ -60,10 +60,9 @@ class ListingTest {
         }
     }
 
-    private final ListingHandler<Customer> listingHandler =
-            new ListingHandler<>(Customer.class, Customer::stringify, Customer::destringify, Customer::id);
-    private final Listing<Customer> listing =
-            sampleListing(listingHandler);
+    private final LineAdapter<Customer> lineAdapter = Listing
+    		.lineAdapter(Customer.class, Customer::stringify, Customer::destringify, Customer::id);
+    private final Listing<Customer> listing = sampleListing(lineAdapter);
 
     @Test
     void parsing() {
@@ -106,7 +105,7 @@ class ListingTest {
                 [c] Henry
                 [d] Martha
                 """;
-        var updateListing = listingHandler.parseListing(upd);
+        var updateListing = lineAdapter.parseListing(upd);
         var merged = listing.merge(MergePolicy.ADD_NEW_AS_DISABLED, updateListing);
         String expectedOutputAfterMerge = """
                 # this is a regular comment
@@ -129,7 +128,7 @@ class ListingTest {
 
     // -- HELPER
 
-    private Listing<Customer> sampleListing(final ListingHandler<Customer> listingHandler) {
+    private Listing<Customer> sampleListing(final LineAdapter<Customer> lineAdapter) {
         String input = """
                 # this is a regular comment
                 [a] Jeff
@@ -140,7 +139,7 @@ class ListingTest {
 
                 [b] Jane
                 """;
-        return listingHandler.parseListing(input);
+        return lineAdapter.parseListing(input);
     }
 
     private static void assertTextLinesMatch(final String a, final String b) {

@@ -50,36 +50,37 @@ import org.apache.causeway.commons.io.TextUtils;
  */
 @Programmatic
 public record Listing<T>(
-        @NonNull ListingHandler<T> handler,
+        @NonNull LineAdapter<T> lineAdapter,
         @NonNull Can<Line> lines) {
 
-    public record ListingHandler<T> (
-            @NonNull Class<T> objectType,
-            @NonNull Function<T, String> stringifier,
-            @NonNull Function<String, T> destringifier,
-            @NonNull Function<T, ?> keyExtractor) {
+	public interface LineAdapter<T> {
+		Class<T> objectType();
+		String stringify(T t);
+        T destringify(String literal);
+        Object extractKey(T t);
 
         // -- LISTING FACTORIES
 
-        public Listing<T> emptyListing() {
+		default Listing<T> emptyListing() {
             return createListing(Can.empty());
         }
 
-        public Listing<T> createListing(@Nullable final Iterable<T> enabledElements) {
+		default Listing<T> createListing(@Nullable final Iterable<T> enabledElements) {
             return createListing(_NullSafe.stream(enabledElements));
         }
-        public Listing<T> createListing(@Nullable final Stream<T> enabledElementStream) {
-            if(enabledElementStream==null) return emptyListing();
+		default Listing<T> createListing(@Nullable final Stream<T> enabledElementStream) {
+            if(enabledElementStream==null)
+            	return emptyListing();
             return new Listing<>(this, enabledElementStream
-                    .map(t->new LineEnabled<>(t, stringifier().apply(t)))
+                    .map(t->new LineEnabled<>(t, stringify(t)))
                     .collect(Can.toCan()));
         }
 
-        public Listing<T> parseListing(@Nullable final String wholeText) {
+		default Listing<T> parseListing(@Nullable final String wholeText) {
             if(wholeText==null) return emptyListing();
             return parseListing(TextUtils.readLines(wholeText));
         }
-        public Listing<T> parseListing(@Nullable final Can<String> textLines) {
+		default Listing<T> parseListing(@Nullable final Can<String> textLines) {
             if(textLines==null) return emptyListing();
             return new Listing<>(this, textLines.map(this::parseLine));
         }
@@ -92,7 +93,7 @@ public record Listing<T>(
          * <p>If a line is not a comment, but can also not be mapped to {@code T},
          * then it is commented out.
          */
-        public Line parseLine(final String wholeLine) {
+		default Line parseLine(final String wholeLine) {
             final var line = wholeLine.trim();
             if(line.isBlank())
                 return new LineComment(line);
@@ -120,9 +121,35 @@ public record Listing<T>(
         // -- HELPER
 
         private Try<T> asT(final String stringified) {
-            return Try.call(()->destringifier().apply(stringified));
+            return Try.call(()->destringify(stringified));
         }
 
+	}
+
+    // -- ADAPTERS
+
+	public static <T> LineAdapter<T> lineAdapter(
+            @NonNull final Class<T> objectType,
+            @NonNull final Function<T, String> stringifier,
+            @NonNull final Function<String, T> destringifier,
+            @NonNull final Function<T, ?> keyExtractor) {
+		return new SimpleLineAdapter<>(objectType, stringifier, destringifier, keyExtractor);
+	}
+
+    private record SimpleLineAdapter<T> (
+            @NonNull Class<T> objectType,
+            @NonNull Function<T, String> stringifier,
+            @NonNull Function<String, T> destringifier,
+            @NonNull Function<T, ?> keyExtractor) implements LineAdapter<T> {
+		@Override public String stringify(final T t) {
+			return stringifier.apply(t);
+		}
+	    @Override public T destringify(final String literal) {
+			return destringifier.apply(literal);
+		}
+	    @Override public Object extractKey(final T t) {
+			return keyExtractor.apply(t);
+		}
     }
 
     public sealed interface Line
@@ -249,11 +276,11 @@ public record Listing<T>(
     public <K> Listing<T> merge(@NonNull final MergePolicy policy, @Nullable final Listing<T> newerVersion) {
         if(newerVersion==null) return this;
         final Map<Object, LineEnabled<T>> incomingByKey = newerVersion.streamEnabledLines()
-                .collect(Collectors.toMap(
-                        line->handler().keyExtractor().apply(line.object()),
-                        UnaryOperator.identity(),
-                        (a, b)->a,
-                        LinkedHashMap::new));
+            .collect(Collectors.toMap(
+                line->lineAdapter().extractKey(line.object()),
+                UnaryOperator.identity(),
+                (a, b)->a,
+                LinkedHashMap::new));
         if(incomingByKey.isEmpty()) return this;
 
         var mergedLines = new ArrayList<Line>();
@@ -265,7 +292,7 @@ public record Listing<T>(
         .forEach((final Line line)->{
             @SuppressWarnings("unchecked")
             var key = (line instanceof MappedLine mappedLine)
-                    ? handler().keyExtractor().apply((T) mappedLine.object())
+                    ? lineAdapter().extractKey((T) mappedLine.object())
                     : null;
             final boolean incomingContainsKey = key!=null
                     ? incomingByKey.remove(key)!=null
@@ -309,7 +336,7 @@ public record Listing<T>(
             }
         }
 
-        return new Listing<>(handler, Can.ofCollection(mergedLines));
+        return new Listing<>(lineAdapter, Can.ofCollection(mergedLines));
     }
 
 }
