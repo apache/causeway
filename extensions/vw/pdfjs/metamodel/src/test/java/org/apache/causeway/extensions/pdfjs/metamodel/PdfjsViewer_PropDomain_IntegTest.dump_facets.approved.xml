@@ -1173,6 +1173,13 @@
           </mml:param>
           <mml:param id="columnListing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
+              <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
+                <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
+                <mml:attr name="originalText" value="Automaticly filled in are all currently enabled and available column-ids, one per line. Those available (but not enabled) are commented out. Reorder or remove column-ids as desired."/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="translated" value="Automaticly filled in are all currently enabled and available column-ids, one per line. Those available (but not enabled) are commented out. Reorder or remove column-ids as desired."/>
+              </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                 <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
