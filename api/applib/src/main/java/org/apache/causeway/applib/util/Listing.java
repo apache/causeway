@@ -255,6 +255,15 @@ public record Listing<T>(
     }
 
     /**
+     * Same as {@link #merge(MergePolicy, Listing, String)} using fixed merge-header '#AVAILABLE'.
+     *
+     * @see #merge(MergePolicy, Listing, String)
+     */
+    public <K> Listing<T> merge(@NonNull final MergePolicy policy, @Nullable final Listing<T> newerVersion) {
+		return merge(policy, newerVersion, "#AVAILABLE");
+    }
+
+    /**
      * Say this listing was edited by a human,
      * but needs to be synchronized with a newer version originating from some system process,
      * then we'd like to merge in this new information,

@@ -106,7 +106,7 @@ class ListingTest {
                 [d] Martha
                 """;
         var updateListing = lineAdapter.parseListing(upd);
-        var merged = listing.merge(MergePolicy.ADD_NEW_AS_DISABLED, updateListing, "#MERGED");
+        var merged = listing.merge(MergePolicy.ADD_NEW_AS_DISABLED, updateListing);
         String expectedOutputAfterMerge = """
                 # this is a regular comment
                 [a] Jeff
@@ -117,7 +117,7 @@ class ListingTest {
 
                 #REMOVED [b] Jane
 
-                #MERGED
+                #AVAILABLE
                 #[d] Martha""";
         //debug
         //System.err.printf("%s%n", merged);

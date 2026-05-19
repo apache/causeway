@@ -98,7 +98,9 @@ public class Object_patchColumnOrder {
     		final ApplicationFeatureId featureId,
 
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
-            @ParameterLayout(multiLine = 20)
+            @ParameterLayout(multiLine = 20, describedAs = "Automaticly filled in are all currently enabled and available "
+            		+ "column-ids, one per line. Those available (but not enabled) are commented out. "
+            		+ "Reorder or remove column-ids as desired.")
             final String columnListing) {
 
     	var identifier = applicationFeatureRepository.asIdentifier(featureId)
