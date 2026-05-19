@@ -29,6 +29,8 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.commons.collections.Can;
@@ -71,9 +73,11 @@ public record Listing<T>(
 		default Listing<T> createListing(@Nullable final Stream<T> enabledElementStream) {
             if(enabledElementStream==null)
             	return emptyListing();
-            return new Listing<>(this, enabledElementStream
-                    .map(t->new LineEnabled<>(t, stringify(t)))
-                    .collect(Can.toCan()));
+            return new Listing<>(
+            		this,
+            		enabledElementStream
+	                    .map(t->new LineEnabled<>(t, stringify(t)))
+	                    .collect(Can.toCan()));
         }
 
 		default Listing<T> parseListing(@Nullable final String wholeText) {
@@ -260,7 +264,7 @@ public record Listing<T>(
      * <li>line ordering</li>
      * </ul>
      *
-     * <p> We do this by adding a comment line {@code #MERGED} followed by any lines that are new.
+     * <p> We do this by adding a comment line {@code mergeHeader} followed by any lines that are new.
      *
      * <p> Any lines already existing are kept as they are,
      * unless the {@code newerVersion} no longer contains the referenced object of type {@code T},
@@ -272,8 +276,12 @@ public record Listing<T>(
      * for equality. We could have done the same by directly checking referenced objects for equality,
      * but - worst case - that would involve entire objects graphs to be assembled,
      * while for our use case its convenient to work with simple object facades.
+     *
+     * @param mergeHeader comment line automatically added on top of merged lines; if null or empty, then is omitted
      */
-    public <K> Listing<T> merge(@NonNull final MergePolicy policy, @Nullable final Listing<T> newerVersion) {
+    public <K> Listing<T> merge(@NonNull final MergePolicy policy,
+    		@Nullable final Listing<T> newerVersion,
+    		@Nullable final String mergeHeader) {
         if(newerVersion==null) return this;
         final Map<Object, LineEnabled<T>> incomingByKey = newerVersion.streamEnabledLines()
             .collect(Collectors.toMap(
@@ -324,8 +332,9 @@ public record Listing<T>(
 
         // process the remaining incoming lines
         if(!incomingByKey.isEmpty()) {
-            if(!mergedLines.isEmpty()) {
-                mergedLines.add(new LineComment("#MERGED")); // skip if we are filling an empty listing
+            if(!mergedLines.isEmpty()
+            		&& StringUtils.hasLength(mergeHeader)) {
+                mergedLines.add(new LineComment(mergeHeader)); // skip if we are filling an empty listing
             }
             if(MergePolicy.ADD_NEW_AS_ENABLED==policy) {
                 incomingByKey.values()

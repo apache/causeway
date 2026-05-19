@@ -153,7 +153,7 @@ public class Object_patchColumnOrder {
         var enabled = listingHandler()
         		.createListing(enabledIds.map(Identifier::memberLogicalName));
 
-        return enabled.merge(MergePolicy.ADD_NEW_AS_DISABLED, available);
+        return enabled.merge(MergePolicy.ADD_NEW_AS_DISABLED, available, "#AVAILABLE" /* custom merge header */);
     }
 
     private final static Listing.LineAdapter<String> listingHandler() {
