@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -33,7 +34,6 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 public sealed interface CollectionModel
@@ -58,19 +58,26 @@ permits CollectionModelAbstract, CollectionModelEmpty {
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
-        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
-        ;
+        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12);
+
         public boolean isStandalone() { return this == STANDALONE; }
         public boolean isParented() { return this == PARENTED; }
 
-        @Getter private final RenderingHint columnRenderingHint;
-        @Getter private final int pageSizeDefault;
+        public final RenderingHint columnRenderingHint;
+        public final int pageSizeDefault;
 
-        public RenderingHint getTitleColumnRenderingHint() {
+        public RenderingHint titleColumnRenderingHint() {
             return isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN;
         }
+
+        public Where whereContext() {
+            return isParented()
+                ? Where.PARENTED_TABLES
+                : Where.STANDALONE_TABLES;
+        }
+
     }
 
     // -- EMPTY
@@ -121,7 +128,7 @@ permits CollectionModelAbstract, CollectionModelEmpty {
     }
 
     default int getPageSize() {
-        return getDataTableModel().getPageSize(getVariant().getPageSizeDefault());
+        return getDataTableModel().getPageSize(getVariant().pageSizeDefault);
     }
 
     default Optional<TableDecorator> getTableDecoratorIfAny() {

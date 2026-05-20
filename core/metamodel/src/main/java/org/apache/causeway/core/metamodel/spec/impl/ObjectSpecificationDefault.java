@@ -41,6 +41,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -367,9 +368,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public Stream<ObjectAction> streamActionsForColumnRendering(
-            final Identifier memberIdentifier) {
-        return columnHelper.streamActionsForColumnRendering(this, memberIdentifier);
+    public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
+        return columnHelper.streamActionsForColumnRendering(this, where);
     }
 
     // -- DETERMINE INJECTABILITY

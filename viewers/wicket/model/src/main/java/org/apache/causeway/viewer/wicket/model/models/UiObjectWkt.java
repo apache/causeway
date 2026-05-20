@@ -89,7 +89,7 @@ implements
             final ManagedObject adapter,
             final CollectionModel.@NonNull Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
-                ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
+                ViewOrEditMode.VIEWING, variant.titleColumnRenderingHint());
     }
 
     public static UiObjectWkt ofBookmark(

@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
@@ -88,8 +88,8 @@ implements
     @Override public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
         return actionContainer.streamRuntimeActions(mixedIn);
     }
-    @Override public Stream<ObjectAction> streamActionsForColumnRendering(final Identifier memberIdentifier) {
-        return actionContainer.streamActionsForColumnRendering(memberIdentifier);
+    @Override public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
+        return actionContainer.streamActionsForColumnRendering(where);
     }
     @Override public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionScope> actionTypes, final MixedIn mixedIn) {
         return actionContainer.streamDeclaredActions(actionTypes, mixedIn);
