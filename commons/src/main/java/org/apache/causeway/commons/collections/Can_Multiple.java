@@ -33,6 +33,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -465,4 +467,17 @@ final class Can_Multiple<T> implements Can<T> {
         return elements.toArray(array);
     }
 
+    @Override
+    public String join(final @NonNull String delimiter) {
+        return join(Object::toString, delimiter);
+    }
+
+    @Override
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
+        return stream()
+                .map(toStringFunction)
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.joining(delimiter));
+    }
+    
 }
