@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -52,7 +51,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
@@ -68,6 +66,7 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefaul
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
+import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import lombok.val;
@@ -85,6 +84,7 @@ implements FacetHolder {
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final _MembersAsColumns columnHelper;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -119,6 +119,7 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+        this.columnHelper = new _MembersAsColumns(mmc);
     }
 
     @Override
@@ -312,14 +313,11 @@ implements FacetHolder {
     }
 
     // -- TABLE COLUMN RENDERING
-
-    @Override
-    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
-            final Identifier memberIdentifier,
-            final ManagedObject parentObject) {
-        return new _MembersAsColumns(getMetaModelContext())
-            .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
-    }
+    
+	@Override
+	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery) {
+		return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
+	}
     
     @Override
     public Stream<ObjectAction> streamActionsForColumnRendering(

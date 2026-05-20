@@ -22,9 +22,17 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationException;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 public interface ObjectAssociationContainer {
 
@@ -110,7 +118,6 @@ public interface ObjectAssociationContainer {
      */
     Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn);
 
-
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
@@ -131,12 +138,56 @@ public interface ObjectAssociationContainer {
                 .map(OneToManyAssociation.class::cast);
     }
 
+
     /**
-     * Properties and Collections visible as columns honoring order and visibility.
+     * Bundles parameters to query for Properties and Collections visible as columns.
+     *
+     * @param memberIdentifier not used for standalone tables
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     *
+     * @since 4.0
      */
-    Stream<ObjectAssociation> streamAssociationsForColumnRendering(
-            Identifier memberIdentifier,
-            ManagedObject parentObject);
+    @RequiredArgsConstructor @Getter @Accessors(fluent = true)
+    static class ColumnQuery {
+		final @Nullable Identifier memberIdentifier;
+		final @Nullable ManagedObject parentObject;
+        final AssociationsLookup mode;
+    	
+    	public static ColumnQuery forStandaloneTable(final AssociationsLookup mode) {
+    		return new ColumnQuery(null, null, mode);
+    	}
+    	public ColumnQuery(final ManagedMember managedMember, final AssociationsLookup enabled) {
+			this(managedMember.getIdentifier(), managedMember.getOwner(), enabled);
+		}
+    	/**
+    	 * The collection variant (standalone or parented).
+    	 */
+    	public Where where() {
+	        return isStandalone()
+	            ? Where.STANDALONE_TABLES
+	            : Where.PARENTED_TABLES;
+    	}
+    	public boolean isStandalone() {
+    		return memberIdentifier==null
+    				|| memberIdentifier.type().isClass()
+    				|| memberIdentifier.type().isAction();
+    	}
+    }
+
+    /**
+     * Properties and Collections visible as columns, honoring order and visibility.
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     */
+    Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery);
+    
+    /**
+     * @deprecated no longer available in 4.x 
+     */
+    @Deprecated
+    default Stream<ObjectAssociation> streamAssociationsForColumnRendering(Identifier memberIdentifier,
+			ManagedObject parentObject) {
+    	return streamAssociationsForColumnRendering(new ColumnQuery(memberIdentifier, parentObject, AssociationsLookup.ENABLED));
+    }
 
     // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
 
@@ -149,6 +200,5 @@ public interface ObjectAssociationContainer {
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      */
     Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn);
-
 
 }
