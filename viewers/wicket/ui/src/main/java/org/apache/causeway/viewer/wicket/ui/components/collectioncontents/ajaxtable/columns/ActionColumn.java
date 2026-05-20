@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
@@ -43,15 +42,15 @@ extends GenericColumnAbstract {
     private static final long serialVersionUID = 1L;
 
     public static Optional<ActionColumn> create(
-            final @NonNull Identifier featureId,
             final @NonNull ObjectSpecification elementType,
             final @NonNull Variant collectionVariant) {
     	var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
         if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
 
-        var actions = elementType.streamActionsForColumnRendering(featureId)
+        var actions = elementType.streamActionsForColumnRendering(collectionVariant.whereContext())
                 .collect(Can.toCan());
-        if(actions.isEmpty()) return Optional.empty();
+        if(actions.isEmpty()) 
+        	return Optional.empty();
 
         return Optional.of(new ActionColumn(elementType, actions, collectionVariant));
     }

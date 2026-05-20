@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -320,10 +320,9 @@ implements FacetHolder {
 	}
     
     @Override
-    public Stream<ObjectAction> streamActionsForColumnRendering(
-            final Identifier memberIdentifier) {
+    public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
         return new _MembersAsColumns(getMetaModelContext())
-                .streamActionsForColumnRendering(this, memberIdentifier);
+                .streamActionsForColumnRendering(this, where);
     }
 
     // -- DETERMINE INJECTABILITY

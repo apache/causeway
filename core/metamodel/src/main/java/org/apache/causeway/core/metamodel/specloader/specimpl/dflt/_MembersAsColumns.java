@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
@@ -66,12 +65,12 @@ public class _MembersAsColumns {
 
     public Stream<ObjectAction> streamActionsForColumnRendering(
             final ObjectSpecification elementType,
-            final Identifier memberIdentifier) {
+            final Where where) {
         if(elementType.isValue())
 			return Stream.empty();
 
         return elementType.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(Where.STANDALONE_TABLES))
+            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(where))
             .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
     }
 
