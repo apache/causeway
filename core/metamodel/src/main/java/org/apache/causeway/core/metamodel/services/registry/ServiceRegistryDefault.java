@@ -76,9 +76,10 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        val iocContainer = causewaySystemEnvironment.getIocContainer();
-        return iocContainer
-                .select(type, qualifiers);
+        var iocContainer = causewaySystemEnvironment.getIocContainer();
+        return iocContainer!=null
+    		? iocContainer.select(type, qualifiers)
+			: Can.empty();
     }
 
     @Override
@@ -95,10 +96,10 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         val managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
 
         causewaySystemEnvironment.getIocContainer()
-        .streamAllBeans()
-        .filter(contributes())
-        .forEach(singletonProvider->
-            managedBeanAdapterByName.put(singletonProvider.getId(), singletonProvider));
+	        .streamAllBeans()
+	        .filter(contributes())
+	        .forEach(singletonProvider->
+	            managedBeanAdapterByName.put(singletonProvider.getId(), singletonProvider));
 
         return managedBeanAdapterByName;
     }
