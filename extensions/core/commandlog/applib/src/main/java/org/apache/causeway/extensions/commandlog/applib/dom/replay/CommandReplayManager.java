@@ -167,9 +167,8 @@ public final class CommandReplayManager implements ViewModel {
     )
     @ActionLayout(
             sequence = "1.1",
-            associateWith = "pendingOrFailed",
             cssClass = "btn-secondary",
-            describedAs = "Imports commands from yaml format, then persists them with replayState=PENDING."
+            describedAs = "Imports commands from yaml format, then persists them with a replayState of PENDING."
     )
     public class importCommands {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
@@ -238,8 +237,8 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.2",
-            cssClass = "btn-primary",
+            associateWith = "pendingOrFailed", sequence = "1.3",
+            cssClass = "btn-secondary",
             cssClassFa = "solid circle-play",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
@@ -289,8 +288,8 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
-            cssClassFa = "solid circle-play",
+            associateWith = "pendingOrFailed", sequence = "1.1",
+            cssClassFa = "solid forward",
             cssClass = "btn-primary",
             describedAs = "Executes the oldest command.")
     public class replayOrRetryNext {
@@ -319,7 +318,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.4",
+            associateWith = "pendingOrFailed", sequence = "1.3",
             cssClass = "btn-secondary",
             describedAs = "Marks selected Commands to be EXCLUDED from replay"
     )
@@ -361,7 +360,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.4",
+            associateWith = "pendingOrFailed", sequence = "1.3",
             cssClass = "btn-danger",
             describedAs = "Deletes selected Commands (cannot be undone)"
     )
