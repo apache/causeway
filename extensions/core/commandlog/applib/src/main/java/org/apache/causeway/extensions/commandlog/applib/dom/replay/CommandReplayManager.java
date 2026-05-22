@@ -237,9 +237,9 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
+            associateWith = "pendingOrFailed", sequence = "1.2",
             cssClass = "btn-secondary",
-            cssClassFa = "solid circle-play",
+            cssClassFa = "solid forward",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
                     + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
@@ -289,7 +289,7 @@ public final class CommandReplayManager implements ViewModel {
     )
     @ActionLayout(
             associateWith = "pendingOrFailed", sequence = "1.1",
-            cssClassFa = "solid forward",
+            cssClassFa = "solid circle-play",
             cssClass = "btn-primary",
             describedAs = "Executes the oldest command.")
     public class replayOrRetryNext {
@@ -360,7 +360,7 @@ public final class CommandReplayManager implements ViewModel {
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
+            associateWith = "pendingOrFailed", sequence = "1.4",
             cssClass = "btn-danger",
             describedAs = "Deletes selected Commands (cannot be undone)"
     )
