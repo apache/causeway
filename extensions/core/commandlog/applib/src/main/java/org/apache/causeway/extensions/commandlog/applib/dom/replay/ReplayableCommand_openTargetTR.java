@@ -23,24 +23,24 @@ import lombok.RequiredArgsConstructor;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 @Action(
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_openTarget.DomainEvent.class,
+        domainEvent = ReplayableCommand_openTargetTR.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        sequence = "0.3", associateWith = "target",
-        describedAs = "Opens the underlying Target"
+        named = "Open Target",
+        describedAs = "Opens the underlying Target",
+        hidden = Where.OBJECT_FORMS // table row action.
 )
 @RequiredArgsConstructor
-public class ReplayableCommand_openTarget {
+public class ReplayableCommand_openTargetTR {
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_openTarget> {
+    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_openTargetTR> {
     }
 
     private final ReplayableCommand replayableCommand;
