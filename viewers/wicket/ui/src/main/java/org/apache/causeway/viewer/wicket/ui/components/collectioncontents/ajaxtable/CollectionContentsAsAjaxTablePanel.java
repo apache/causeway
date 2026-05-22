@@ -213,8 +213,8 @@ implements CollectionCountProvider {
             final ObjectSpecification elementType,
             final List<GenericColumn> columns) {
         var collectionModel = getModel();
-        var memberIdentifier = collectionModel.getIdentifier();
-        ActionColumn.create(memberIdentifier, elementType, collectionModel.getVariant()).ifPresent(columns::add);
+        ActionColumn.create(elementType, collectionModel.getVariant())
+        	.ifPresent(columns::add);
     }
 
 }

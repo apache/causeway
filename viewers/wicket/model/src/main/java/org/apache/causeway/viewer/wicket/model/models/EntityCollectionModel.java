@@ -20,10 +20,9 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Optional;
 
-import org.apache.wicket.model.IModel;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -31,8 +30,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
+import org.apache.wicket.model.IModel;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 public interface EntityCollectionModel
@@ -56,25 +55,26 @@ extends
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
-        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
-        ;
+        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12);
 
-        @Getter private final RenderingHint columnRenderingHint;
-        @Getter private final int pageSizeDefault;
+        public final RenderingHint columnRenderingHint;
+        public final int pageSizeDefault;
 
-        public RenderingHint getTitleColumnRenderingHint() {
+        public boolean isStandalone() { return this == STANDALONE; }
+        public boolean isParented() { return this == PARENTED; }
+        
+        public RenderingHint titleColumnRenderingHint() {
             return isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN;
         }
 
-        public boolean isStandalone() {
-            return this == STANDALONE;
+        public Where whereContext() {
+            return isParented()
+                ? Where.PARENTED_TABLES
+                : Where.STANDALONE_TABLES;
         }
-
-        public boolean isParented() {
-            return this == PARENTED;
-        }
+        
     }
 
     // -- IDENTITY
@@ -116,7 +116,7 @@ extends
     }
 
     default int getPageSize() {
-        return getDataTableModel().getPageSize(getVariant().getPageSizeDefault());
+        return getDataTableModel().getPageSize(getVariant().pageSizeDefault);
     }
 
     default Optional<TableDecorator> getTableDecoratorIfAny() {

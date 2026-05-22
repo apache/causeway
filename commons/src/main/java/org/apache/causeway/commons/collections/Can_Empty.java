@@ -31,6 +31,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -299,5 +300,14 @@ final class Can_Empty<T> implements Can<T> {
         return array;
     }
 
+    @Override
+    public String join(final @NonNull String delimiter) {
+        return "";
+    }
+    
+    @Override
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
+        return "";
+    }
 
 }

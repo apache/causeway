@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -143,8 +144,9 @@ public interface ObjectActionContainer {
     
     /**
      * Actions visible in dedicated actions-column, honoring order and visibility.
+     * @param where either {@link Where#STANDALONE_TABLES} or {@link Where#PARENTED_TABLES}
      */
-    Stream<ObjectAction> streamActionsForColumnRendering(Identifier memberIdentifier);
+    Stream<ObjectAction> streamActionsForColumnRendering(Where where);
 
     // -- ACTION STREAM (NO INHERITANCE)
 

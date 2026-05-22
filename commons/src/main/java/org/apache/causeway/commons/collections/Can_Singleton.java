@@ -33,6 +33,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -397,7 +398,20 @@ final class Can_Singleton<T> implements Can<T> {
         return array;
     }
 
+    @Override
+    public String join(final @NonNull String delimiter) {
+        var str = element.toString();
+        return str!=null
+                ? str
+                : "";
+    }
 
-
+    @Override
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
+        var str = toStringFunction.apply(element);
+        return str!=null
+                ? str
+                : "";
+    }
 
 }

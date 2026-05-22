@@ -832,4 +832,30 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     T[] toArray(Class<T> elementType);
 
+    // -- JOIN AS STRING
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(Object::toString)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param delimiter
+     * @apiNote the corner case,
+     *      when the {@code Object::toString} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join
+     */
+    String join(@NonNull String delimiter);
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(toStringFunction)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param toStringFunction
+     * @param delimiter
+     * @apiNote the corner case,
+     *      when given {@code toStringFunction} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join
+     */
+    String join(@NonNull Function<? super T, String> toStringFunction, @NonNull String delimiter);
+
+
 }

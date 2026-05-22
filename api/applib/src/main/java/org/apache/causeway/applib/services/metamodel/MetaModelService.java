@@ -20,11 +20,12 @@ package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
+import java.util.stream.Stream;
 
 import javax.inject.Named;
 
 import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -175,4 +176,91 @@ public interface MetaModelService {
      */
     ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter);
 
+    /**
+     * Stream of {@link Identifier} representing the <i>Actions</i> of given domainType, including mixed-in ones,
+     * but excluding <i>Actions</i>, that are only available for PROTOTYPING.
+     * @since 4.0
+     */
+    Stream<Identifier> streamActions(@Nullable Class<?> domainType);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Properties</i> of given domainType, including mixed-in ones.
+     * @since 4.0
+     */
+    Stream<Identifier> streamProperties(@Nullable Class<?> domainType);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Collections</i> of given domainType, including mixed-in ones.
+     * @since 4.0
+     */
+    Stream<Identifier> streamCollections(@Nullable Class<?> domainType);
+
+    /**
+     * Stream of {@link Identifier} representing the type hierarchy of given domainType, starting at given domainType,
+     * going 'up' in the hierarchy, but excluding {@link Object}.
+     *
+     * <p> Included are all types in the hierarchy, that are recognized by the Metamodel, recognized Interfaces last.
+     *
+     * @apiNote Since 4.0, the Metamodel supports Interfaces acting as element-types for Collections.
+     * This requires explicit {@link DomainObject} annotations on those Interfaces along with the constraint, that within
+     * a type hierarchy, every type can have at most one super-type.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> streamTypeHierarchy(@Nullable Class<?> domainType);
+
+    /**
+     * Parameter to lookup associations for column rendering.
+     *
+     * @since 4.0
+     */
+    public enum AssociationsLookup {
+		/**
+		 * The Column Order SPI and Column Order Patching have potential to hide otherwise visible columns.
+		 * This query mode shows all columns, that are not permanently hidden while ignoring hiding from above mechanisms.
+		 */
+		AVAILABLE,
+		/**
+		 * This query mode shows all currently visible columns.
+		 */
+		ENABLED;
+
+    	public boolean isAvailable() { return this==AVAILABLE; }
+		public boolean isEnabled() { return this==ENABLED; }
+    }
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Columns</i> for specified PARENTED collection.
+     *
+     * <p> Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given {@link AssociationsLookup}.
+     *
+     * <p> The availability lookup returns {@link Identifier}(s) in no particular order,
+     * whereas the enablement lookup returns them in same order as rendered.
+     *
+     * <p> If parentDomainObject is null returns an empty {@link Stream}.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> parentedAssociationsForColumnRendering(Object parentDomainObject, Identifier collectionId, AssociationsLookup lookup);
+
+    /**
+     * Stream of {@link Identifier} representing the <i>Columns</i> for specified STANDALONE collection.
+     *
+     * <p> Columns returned are those that are either in principle AVAILABLE or currently ENABLED, based on given {@link AssociationsLookup}.
+     *
+     * <p> The availability lookup returns {@link Identifier}(s) in no particular order,
+     * whereas the enablement lookup returns them in same order as rendered.
+     *
+     * @since 4.0
+     */
+    Stream<Identifier> standaloneAssociationsForColumnRendering(LogicalType logicalType, AssociationsLookup lookup);
+
+    /**
+     * @param identifier either for a TYPE or a COLLECTION
+     * @param columnsInOrder to be used instead of the default order
+     *
+     * @since 4.0
+     */
+	void patchColumnOrder(Identifier identifier, Can<String> columnsInOrder);
+    
 }

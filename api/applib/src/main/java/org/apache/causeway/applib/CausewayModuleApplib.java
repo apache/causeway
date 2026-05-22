@@ -37,6 +37,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip;
+import org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.causeway.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
@@ -110,6 +111,7 @@ import org.springframework.context.annotation.Import;
     Dto_downloadXml.class,
     Dto_downloadXsd.class,
     Object_downloadColumnOrderTxtFilesAsZip.class,
+    Object_patchColumnOrder.class,
     Object_downloadLayout.class,
     Object_patchLayout.class,
     Object_downloadMetamodelXml.class,
