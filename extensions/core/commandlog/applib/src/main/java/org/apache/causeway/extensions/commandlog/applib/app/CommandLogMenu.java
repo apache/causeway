@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,12 +33,16 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -46,6 +51,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplay
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
+
+import jnr.a64asm.OP;
 
 import lombok.RequiredArgsConstructor;
 
@@ -189,15 +196,21 @@ public class CommandLogMenu {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 
         @MemberSupport public CommandReplayManager act(
-                @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for replay.  Set to a time immediately before the commands to be replayed.")
-                final java.sql.Timestamp since
+                @Parameter(
+                        optionality = Optionality.OPTIONAL,
+                        fileAccept = ".yml,.yaml"
+                )
+                final Blob commandsYaml
         ) {
-            return new CommandReplayManager(since, replayContext);
+            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
+            final var commandReplayManager = new CommandReplayManager(now, replayContext);
+            return Optional.ofNullable(commandsYaml)
+                    .map(yaml -> importCommands(commandReplayManager).act(yaml, true))
+                    .orElse(commandReplayManager);
         }
 
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
-            return truncatedTo(now, ChronoUnit.HOURS);
+        private CommandReplayManager.importCommands importCommands(CommandReplayManager commandReplayManager) {
+            return factoryService.mixin(CommandReplayManager.importCommands.class, commandReplayManager);
         }
     }
 
@@ -208,4 +221,6 @@ public class CommandLogMenu {
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
+
+    @Inject private FactoryService factoryService;
 }
