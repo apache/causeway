@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +33,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -49,6 +51,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplay
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
+
+import jnr.a64asm.OP;
 
 import lombok.RequiredArgsConstructor;
 
@@ -192,12 +196,17 @@ public class CommandLogMenu {
         public class DomainEvent extends ActionDomainEvent<replayManager> { }
 
         @MemberSupport public CommandReplayManager act(
-                @Parameter(fileAccept = ".yml,.yaml")
+                @Parameter(
+                        optionality = Optionality.OPTIONAL,
+                        fileAccept = ".yml,.yaml"
+                )
                 final Blob commandsYaml
         ) {
             final var now = clockService.getClock().nowAsJavaSqlTimestamp();
             final var commandReplayManager = new CommandReplayManager(now, replayContext);
-            return importCommands(commandReplayManager).act(commandsYaml, true);
+            return Optional.ofNullable(commandsYaml)
+                    .map(yaml -> importCommands(commandReplayManager).act(yaml, true))
+                    .orElse(commandReplayManager);
         }
 
         private CommandReplayManager.importCommands importCommands(CommandReplayManager commandReplayManager) {
