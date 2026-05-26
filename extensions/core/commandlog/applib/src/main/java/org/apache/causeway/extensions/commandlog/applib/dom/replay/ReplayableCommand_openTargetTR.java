@@ -18,48 +18,50 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        restrictTo = RestrictTo.PROTOTYPING,
-        semantics = SemanticsOf.NON_IDEMPOTENT,
+        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_replayOrRetry.DomainEvent.class,
+        domainEvent = ReplayableCommand_openTargetTR.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        sequence = "0.1",
-        cssClassFa = "solid circle-play",
-        cssClass = "btn-primary"
-        //hidden = Where.NOWHERE // show in tables //TODO NPE bug
+        named = "Open Target",
+        describedAs = "Opens the underlying Target",
+        hidden = Where.OBJECT_FORMS // table row action.
 )
 @RequiredArgsConstructor
-public class ReplayableCommand_replayOrRetry {
+public class ReplayableCommand_openTargetTR {
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_replayOrRetry> {
+    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_openTargetTR> {
     }
 
+    @Inject private BookmarkService bookmarkService;
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
-    public ReplayableCommand act() {
-        replayableCommand.tryReplayOrRetry();
-        return replayableCommand;
+    public Object act() {
+        return replayableCommand.commandLogEntry()
+                .map(CommandLogEntry::getTarget)
+                .flatMap(bookmark -> bookmarkService.lookup(bookmark))
+                .orElse(null);
     }
 
     @MemberSupport
     public String disableAct() {
-        // previously we restricted this, but there are cases where a
-        // retry of a command that succeeded may be warranted
-        // return replayableCommand.disableReplayOrRetry();
-
-        return null;
+        return replayableCommand.commandLogEntry().isEmpty() ? "No corresponding CommandLogEntry" : null;
     }
+
 }

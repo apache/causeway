@@ -145,7 +145,7 @@ public record CommandReplayManager(
             sequence = "1.1",
             associateWith = "pendingOrFailed",
             cssClass = "btn-secondary",
-            describedAs = "Imports commands from yaml format, then persists them with replayState=PENDING.")
+            describedAs = "Imports commands from yaml format, then persists them with a replayState of PENDING.")
     public class importCommands {
         public class DomainEvent extends ActionDomainEvent<importCommands> { }
         @MemberSupport public CommandReplayManager act(
@@ -197,8 +197,8 @@ public record CommandReplayManager(
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
             associateWith = "pendingOrFailed", sequence = "1.2",
-            cssClass = "btn-primary",
-            cssClassFa = "solid circle-play",
+            cssClass = "btn-secondary",
+            cssClassFa = "solid forward",
             describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
                     + "If any of the given commands fails, "
                     + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
@@ -233,7 +233,7 @@ public record CommandReplayManager(
             executionPublishing = Publishing.DISABLED
     )
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.3",
+            associateWith = "pendingOrFailed", sequence = "1.1",
             cssClassFa = "solid circle-play",
             cssClass = "btn-primary",
             describedAs = "Executes the oldest command.")
@@ -260,7 +260,7 @@ public record CommandReplayManager(
             domainEvent = excludeSelectedFromReplay.DomainEvent.class,
             executionPublishing = Publishing.DISABLED)
     @ActionLayout(
-            associateWith = "pendingOrFailed", sequence = "1.4",
+            associateWith = "pendingOrFailed", sequence = "1.3",
             cssClass = "btn-secondary",
             describedAs = "Marks selected Commands to be EXCLUDED from replay")
     public class excludeSelectedFromReplay {
