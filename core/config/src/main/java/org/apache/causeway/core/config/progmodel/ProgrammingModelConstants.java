@@ -46,6 +46,8 @@ import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -122,9 +124,8 @@ public final class ProgrammingModelConstants {
 
         public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
-                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent())
                     return true;
-                }
             }
             return false;
         }
@@ -145,9 +146,8 @@ public final class ProgrammingModelConstants {
 
         public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
-                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent())
                     return true;
-                }
             }
             return false;
         }
@@ -256,9 +256,8 @@ public final class ProgrammingModelConstants {
         private final Can<Class<?>> returnTypes;
 
         public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementType) {
-            if(VOID.returnTypes.contains(elementType)) {
+            if(VOID.returnTypes.contains(elementType))
                 return Can.empty();
-            }
             return Can.<Class<?>>of(
                 Can.class,
                 Collection.class,
@@ -602,18 +601,30 @@ public final class ProgrammingModelConstants {
 
     }
 
+    // -- LITERALS
+
+    @RequiredArgsConstructor
+    public enum Literals {
+        ACTION_COLUMN_HEADER("Actions", new TranslationContext("tables.action-column-header")),
+        TITLE_COLUMN_HEADER_PARENTED("Related Object", new TranslationContext("tables.title-column-header-parented")),
+        TITLE_COLUMN_HEADER_STANDALONE("Object", new TranslationContext("tables.title-column-header-standalone"));
+        private final String literal;
+        private final TranslationContext translationContext;
+        public String translate(final TranslationService translationService) {
+            return translationService.translate(translationContext, literal);
+        }
+    }
+
     // -- HELPER
 
     private static String getCapitalizedMemberName(final Member member) {
-        if(member instanceof Method) {
-            var method = (Method)member;
+        if(member instanceof Method method) {
             var methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
-                    || !AccessorSemantics.isCandidateGetterName(methodName)) {
+                    || !AccessorSemantics.isCandidateGetterName(methodName))
                 // definitely an action not a getter
                 return _Strings.capitalize(methodName);
-            }
             // must be a getter
             return _Strings.baseName(methodName);
         }
