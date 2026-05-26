@@ -21,7 +21,6 @@ package org.apache.causeway.extensions.executionoutbox.applib.restapi;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -35,8 +34,6 @@ import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutbox
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * Provides a server-side REST API for the <i>outbox rest client</i> to call, to first obtain {@link #pending() pending}
  * {@link ExecutionOutboxEntry outbox entries} to be processed, and then later to request them to be
@@ -46,12 +43,11 @@ import lombok.RequiredArgsConstructor;
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
 @DomainService
-@RequiredArgsConstructor
-public class OutboxRestApi  {
+public record OutboxRestApi(
+        FactoryService factoryService,
+        ExecutionOutboxEntryRepository executionOutboxEntryRepository)  {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
-
-    final @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
 
     /**
      * This action is intended to be invoked with <code>Accept</code> header set to
@@ -96,7 +92,5 @@ public class OutboxRestApi  {
                     executionOutboxEntryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
                 });
     }
-
-    @Inject FactoryService factoryService;
 
 }

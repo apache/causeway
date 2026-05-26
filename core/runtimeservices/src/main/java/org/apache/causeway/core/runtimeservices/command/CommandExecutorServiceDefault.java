@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
@@ -67,8 +66,6 @@ import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -81,22 +78,20 @@ import lombok.extern.slf4j.Slf4j;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Slf4j
-@RequiredArgsConstructor
-public class CommandExecutorServiceDefault implements CommandExecutorService {
+public record CommandExecutorServiceDefault(
+        BookmarkService bookmarkService,
+        SudoService sudoService,
+        ClockService clockService,
+        TransactionService transactionService,
+        InteractionProvider interactionProvider,
+        SchemaValueMarshaller valueMarshaller,
+        MetaModelService metaModelService,
+        Provider<CommandPublisher> commandPublisherProvider,
+        SpecificationLoader specificationLoader
+        ) implements CommandExecutorService {
 
     private static final Pattern ID_PARSER =
             Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
-
-    @Inject final BookmarkService bookmarkService;
-    @Inject final SudoService sudoService;
-    @Inject final ClockService clockService;
-    @Inject final TransactionService transactionService;
-    @Inject final InteractionProvider interactionProvider;
-    @Inject final SchemaValueMarshaller valueMarshaller;
-    @Inject final MetaModelService metaModelService;
-    @Inject Provider<CommandPublisher> commandPublisherProvider;
-
-    @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override
     public Try<Bookmark> executeCommand(final Command command) {
