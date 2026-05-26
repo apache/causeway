@@ -18,27 +18,83 @@
  */
 package org.apache.causeway.viewer.wicket.ui;
 
+import java.util.List;
+
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.ui.app.logout.LogoutHandlerWkt;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupport;
+
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.ITheme;
+import de.agilecoders.wicket.core.settings.NoopThemeProvider;
+import de.agilecoders.wicket.core.settings.ThemeProvider;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleViewerCommonsServices.class,
         CausewayModuleViewerWicketModel.class,
 
         // @Service's
-        CausewayWicketThemeSupportDefault.class,
+        CausewayWicketThemeSupport.class,
         LogoutHandlerWkt.class,
 })
 public class CausewayModuleViewerWicketUi {
+
+    @Bean
+    ThemeProvider bootstrapDefaultThemeProvider() {
+        return new BootstrapDefaultThemeProvider();
+    }
+
+    @Bean
+    ThemeProvider bootswatchThemeProvider() {
+        return new BootswatchThemeProvider(BootswatchTheme.Flatly);
+    }
+
+    /**
+     * Default Bootstrap Theme
+     *
+     * @see NoopThemeProvider
+     */
+    private static class BootstrapDefaultThemeProvider implements ThemeProvider {
+        private final ITheme theme = new BootstrapDefaultTheme();
+        @Override public ITheme byName(final String name) {
+            return theme;
+        }
+        @Override public List<ITheme> available() {
+            return List.of(theme);
+        }
+        @Override public ITheme defaultTheme() {
+            return theme;
+        }
+        private static final class BootstrapDefaultTheme implements ITheme {
+            @Override public String name() {
+                return "Default";
+            }
+            @Override public List<HeaderItem> getDependencies() {
+                return List.of();
+            }
+            @Override public void renderHead(final IHeaderResponse response) {
+                response.render(CssHeaderItem.forReference(Bootstrap.getSettings().getCssResourceReference()));
+            }
+            @Override public Iterable<String> getCdnUrls() {
+                return List.of();
+            }
+        }
+    }
 
 }
