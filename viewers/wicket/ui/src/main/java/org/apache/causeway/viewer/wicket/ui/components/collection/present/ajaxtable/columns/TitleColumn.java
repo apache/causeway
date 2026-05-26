@@ -19,10 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns;
 
 import org.apache.wicket.Component;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -45,8 +46,7 @@ extends GenericColumnAbstract {
             final Bookmark contextBookmark,
             final int maxColumnTitleLength,
             final ColumnAbbreviationOptions opts) {
-
-        super(elementType, columnName(variant, maxColumnTitleLength)); // i18n
+        super(elementType, columnName(variant, maxColumnTitleLength, elementType.getTranslationService()));
         this.variant = variant;
         this.contextBookmark = contextBookmark;
         this.opts = opts;
@@ -83,11 +83,13 @@ extends GenericColumnAbstract {
 
     private static String columnName(
             final @Nullable Variant variant,
-            final int maxTitleLength) {
-        if(maxTitleLength == 0) {
+            final int maxTitleLength,
+            final TranslationService translationService) {
+        if(maxTitleLength == 0)
             return "";
-        }
-        return (variant.isParented() ? "Related ":"") + "Object";
+        return variant.isParented()
+            ? ProgrammingModelConstants.Literals.TITLE_COLUMN_HEADER_PARENTED.translate(translationService)
+            : ProgrammingModelConstants.Literals.TITLE_COLUMN_HEADER_STANDALONE.translate(translationService);
     }
 
 }

@@ -26,6 +26,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -63,7 +64,7 @@ extends GenericColumnAbstract {
             final ObjectSpecification elementType,
             final Can<ObjectAction> actionsForColumnRendering,
             final Variant collectionVariant) {
-        super(elementType, "Actions");
+        super(elementType, ProgrammingModelConstants.Literals.ACTION_COLUMN_HEADER.translate(elementType.getTranslationService()));
         this.actionsRef = new _StableValue<>(actionsForColumnRendering);
         this.actionIds = actionsForColumnRendering.map(ObjectAction::getId);
         this.collectionVariant = collectionVariant;
