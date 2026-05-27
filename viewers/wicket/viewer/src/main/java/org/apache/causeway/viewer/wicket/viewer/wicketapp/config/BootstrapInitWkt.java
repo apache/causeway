@@ -53,11 +53,10 @@ public class BootstrapInitWkt implements WicketApplicationInitializer {
             }
         });
 
-        serviceRegistry.select(CausewayWicketThemeSupport.class)
-        .getFirst()
-        .ifPresent(themeSupport->{
-            bsSettings.setThemeProvider(themeSupport.getThemeProvider());
-        });
+        serviceRegistry.lookupService(CausewayWicketThemeSupport.class)
+            .ifPresent(themeSupport->{
+                bsSettings.setThemeProvider(themeSupport.compositeThemeProvider());
+            });
     }
 
 }

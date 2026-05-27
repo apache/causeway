@@ -143,7 +143,7 @@ module org.apache.causeway.viewer.wicket.ui {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
-    requires wicket.bootstrap.core;
+    requires transitive wicket.bootstrap.core;
     requires wicket.bootstrap.extensions;
     requires wicket.bootstrap.themes;
     requires de.agilecoders.wicket.webjars;
