@@ -158,7 +158,7 @@ public class CausewayModuleCoreRuntimeServices {
 
             var secretFromEnv = Optional.ofNullable(System.getenv("causeway_hmac_sha256"))
                 .filter(StringUtils::hasText)
-                .map(_Bytes::parse)
+                .map(_Bytes::parseUtf8Base64)
                 .filter(secret->{
                     Assert.isTrue(secret.length>=16, ()->"Illegal Argument: "
                             + "env. var. 'causeway_hmac_sha256' underflows required byte count of 16");

@@ -31,8 +31,8 @@ class _BytesTest {
     void stringifyRoundtrip() throws NoSuchAlgorithmException {
         var secret = new byte[32];
         SecureRandom.getInstanceStrong().nextBytes(secret);
-        var before = _Bytes.stringify(secret);
-        var after = _Bytes.stringify(_Bytes.parse(before));
+        var before = _Bytes.stringifyUtf8Base64(secret);
+        var after = _Bytes.stringifyUtf8Base64(_Bytes.parseUtf8Base64(before));
 
         assertEquals(before, after);
     }

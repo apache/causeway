@@ -16,6 +16,25 @@ Notable changes in this release:
 The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes). 
 A minimum of 16 bytes is required, we recommend 32. (eg. `-13,4,0, ...`) 
 https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
++
+[IMPORTANT]
+====
+*UPDATE* as of May 27th 2026 (at time of writing, its unclear which release will see this first)
++
+Parsing environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes) is no longer supported, we replaced that with a _Base64_ encoded byte array, like e.g.
+`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=`
+[source,java]
+.32 byte HMAC Generator
+----
+import org.apache.causeway.commons.internal.base._Bytes;
+//..
+var secret = new byte[32]; // double the minimum requirement of 16
+SecureRandom.getInstanceStrong().nextBytes(secret);
+var hmacBase64 = _Bytes.stringifyUtf8Base64(secret);
+System.out.println(hmacBase64);
+----
+====
+
 - [Programming Model] Support for Property Clear Methods was removed https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
 
 ⭐ New Features

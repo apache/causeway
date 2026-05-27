@@ -21,11 +21,11 @@ package org.apache.causeway.commons.internal.base;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -419,20 +419,16 @@ public final class _Bytes {
         return bytes;
     }
 
-    public static byte[] parse(final String asString) {
-        var ints = Stream.of(asString.split("\\,"))
-            .map(String::trim)
-            .mapToInt(Integer::parseInt)
-            .toArray();
-        return fromInts(ints);
+    public static byte[] parseUtf8Base64(final @Nullable String asString) {
+        return asString == null
+            ? new byte[0]
+            : ofBase64.apply(asString.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String stringify(final byte[] bytes) {
-        var asString = IntStream.range(0, bytes.length)
-                .map(i->(int)bytes[i])
-                .mapToObj(i->""+i)
-                .collect(Collectors.joining(","));
-        return asString;
+    public static String stringifyUtf8Base64(final @Nullable byte[] bytes) {
+        return bytes == null
+            ? ""
+            : new String(asBase64.apply(bytes), StandardCharsets.UTF_8);
     }
 
 }
