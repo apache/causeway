@@ -76,6 +76,13 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onBeforeRender() {
         super.onBeforeRender();
         buildGui();
+        themeSupport().setCustomThemeProvider(getActiveTheme());
+    }
+
+    @Override
+    protected void onAfterRender() {
+        themeSupport().unsetCustomThemeProvider();
+        super.onAfterRender();
     }
 
     void buildGui() {

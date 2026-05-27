@@ -55,7 +55,7 @@ public class BootstrapInitWkt implements WicketApplicationInitializer {
 
         serviceRegistry.lookupService(CausewayWicketThemeSupport.class)
             .ifPresent(themeSupport->{
-                bsSettings.setThemeProvider(themeSupport.getThemeProvider());
+                bsSettings.setThemeProvider(themeSupport.compositeThemeProvider());
             });
     }
 

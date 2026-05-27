@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.util.string.Strings;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
+import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
@@ -50,23 +52,21 @@ import de.agilecoders.wicket.core.settings.ThemeProvider;
 @Slf4j
 public record CausewayWicketThemeSupport(
         ITheme defaultTheme,
-        Map<String, ITheme> themesByName) {
+        Map<String, ITheme> themeByNameLower,
+        Map<String, ThemeProvider> providerByThemeNameLower) {
 
     @Inject
     public CausewayWicketThemeSupport(final CausewayConfiguration configuration, final ServiceRegistry serviceRegistry) {
-        this(configuration, collectThemes(configuration, serviceRegistry));
+        this(Args.create(configuration, serviceRegistry));
     }
 
-    private CausewayWicketThemeSupport(final CausewayConfiguration configuration, final Map<String, ITheme> themesByName) {
-        this(
-                Optional.ofNullable(themesByName.get(configuration.viewer().wicket().themes().initial()))
-                    .orElseGet(()->new NoopThemeProvider().defaultTheme()),
-                themesByName);
+    private CausewayWicketThemeSupport(final Args args) {
+        this(args.defaultTheme, args.themeByNameLower, args.providerByThemeNameLower);
     }
 
     public ITheme byName(final String name) {
         if (!Strings.isEmpty(name)) {
-            var theme = themesByName.get(name.toLowerCase());
+            var theme = themeByNameLower.get(name.toLowerCase());
             if(theme!=null)
                 return theme;
         }
@@ -81,7 +81,7 @@ public record CausewayWicketThemeSupport(
     }
 
     public List<ITheme> available() {
-        return themesByName.values()
+        return themeByNameLower.values()
             .stream()
             .toList();
     }
@@ -93,7 +93,7 @@ public record CausewayWicketThemeSupport(
                 .toList();
     }
 
-    public ThemeProvider getThemeProvider() {
+    public ThemeProvider compositeThemeProvider() {
         return new ThemeProvider() {
             @Override public ITheme defaultTheme() {
                 return defaultTheme;
@@ -107,23 +107,58 @@ public record CausewayWicketThemeSupport(
         };
     }
 
+    /**
+     * Required in order for ThemeProvider specific resources to be made available.
+     *
+     * <p> set during {@link Component#beforeRender()}, un-set during {@link Component#afterRender()}
+     *
+     * @see #unsetCustomThemeProvider()
+     */
+    public void setCustomThemeProvider(final ITheme theme) {
+        Optional.ofNullable(providerByThemeNameLower.get(theme.name().toLowerCase()))
+            .ifPresent(Bootstrap.getSettings()::setThemeProvider);
+    }
+
+    public void unsetCustomThemeProvider() {
+        Bootstrap.getSettings().setThemeProvider(compositeThemeProvider());
+    }
+
     // -- HELPER
 
-    private static Map<String, ITheme> collectThemes(
-            final CausewayConfiguration configuration,
-            final ServiceRegistry serviceRegistry) {
-        var enabledThemeNamesLowercase = _NullSafe.stream(configuration.viewer().wicket().themes().enabled())
-            .map(String::toLowerCase)
-            .collect(Collectors.toCollection(HashSet::new));
+    /**
+     * Can be refactored/removed once we have flexible constructor bodies in Java.
+     */
+    private record Args(
+            ITheme defaultTheme,
+            Map<String, ITheme> themeByNameLower,
+            Map<String, ThemeProvider> providerByThemeNameLower) {
 
-        var themesByName = new LinkedHashMap<String, ITheme>();
-        serviceRegistry.select(ThemeProvider.class).stream()
-            .map(ThemeProvider::available)
-            .flatMap(List::stream)
-            .filter(theme->enabledThemeNamesLowercase.contains(theme.name().toLowerCase()))
-            .forEach(theme->
-                themesByName.put(theme.name().toLowerCase(), theme));
-        return themesByName;
+        static Args create(
+                final CausewayConfiguration configuration,
+                final ServiceRegistry serviceRegistry) {
+
+            var enabledThemeNamesLowercase = _NullSafe.stream(configuration.viewer().wicket().themes().enabled())
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toCollection(HashSet::new));
+
+            var providerByThemeNameLower = new LinkedHashMap<String, ThemeProvider>();
+            var themeByNameLower = new LinkedHashMap<String, ITheme>();
+            serviceRegistry.select(ThemeProvider.class)
+                .forEach(provider->{
+                    _NullSafe.stream(provider.available())
+                        .filter(theme->enabledThemeNamesLowercase.contains(theme.name().toLowerCase()))
+                        .forEach(theme->{
+                            var themeKey = theme.name().toLowerCase();
+                            themeByNameLower.put(themeKey, theme);
+                            providerByThemeNameLower.put(themeKey, provider);
+                        });
+                });
+
+            var defaultTheme = Optional.ofNullable(themeByNameLower.get(configuration.viewer().wicket().themes().initial()))
+                .orElseGet(()->new NoopThemeProvider().defaultTheme());
+
+            return new Args(defaultTheme, themeByNameLower, providerByThemeNameLower);
+        }
     }
 
 }
