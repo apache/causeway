@@ -167,6 +167,9 @@ public interface ObjectAssociationContainer {
     				|| memberIdentifier.type().isClass()
     				|| memberIdentifier.type().isAction();
     	}
+        public ColumnQuery toStandalone() {
+            return forStandaloneTable(mode);
+        }
     }
 
     /**
