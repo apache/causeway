@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.columnorder
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.Nullable;
 
@@ -82,6 +83,14 @@ public record ColumnOrderPatchingFacet(
 		return identifier!=null
 			? Optional.ofNullable(columnOrder.get(identifier))
 			: Optional.empty();
+	}
+
+	@Override
+	public void visitAttributes(final BiConsumer<String, Object> visitor) {
+	    Facet.super.visitAttributes(visitor);
+	    columnOrder.forEach((identifier, order)->{
+	        visitor.accept(identifier.toString(), order.join(","));
+	    });
 	}
 
 }
