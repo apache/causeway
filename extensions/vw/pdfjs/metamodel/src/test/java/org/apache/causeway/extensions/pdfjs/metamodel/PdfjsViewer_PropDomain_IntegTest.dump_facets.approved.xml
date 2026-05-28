@@ -1024,7 +1024,7 @@
             <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
-            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.act(org.apache.causeway.applib.services.appfeat.ApplicationFeatureId,java.lang.String)"/>
+            <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.act(org.apache.causeway.applib.Identifier,java.lang.String)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="returnType" value="java.lang.Object"/>
           </mml:facet>
@@ -1163,7 +1163,7 @@
                 <mml:attr name="value" value="RESET"/>
               </mml:facet>
             </mml:facets>
-            <mml:type>org.apache.causeway.applib.services.appfeat.ApplicationFeatureId</mml:type>
+            <mml:type>org.apache.causeway.applib.Identifier</mml:type>
           </mml:param>
           <mml:param id="columnListing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
@@ -1206,7 +1206,7 @@
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
                 <mml:attr name="intent.defaultColumnListing" value="DEFAULTS"/>
-                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.defaultColumnListing(org.apache.causeway.applib.services.appfeat.ApplicationFeatureId)"/>
+                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.applib.services.columnorder.Object_patchColumnOrder.defaultColumnListing(org.apache.causeway.applib.Identifier)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetForParameterAnnotation">

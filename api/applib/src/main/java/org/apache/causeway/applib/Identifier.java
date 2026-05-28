@@ -174,7 +174,7 @@ implements
         this(logicalType, memberLogicalName, memberParameterClassNames, type, -1);
     }
 
-    private Identifier(
+    public Identifier(
             final LogicalType logicalType,
             final String memberLogicalName,
             final Can<String> memberParameterClassNames,

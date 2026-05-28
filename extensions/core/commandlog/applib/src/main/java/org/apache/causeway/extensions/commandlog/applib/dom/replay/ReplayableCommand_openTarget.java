@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+
+import lombok.RequiredArgsConstructor;
 
 @Action(
         semantics = SemanticsOf.SAFE,

@@ -89,6 +89,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.CommandDtoValueSemantic
 import org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.FloatValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IdStringifierForSerializable;
+import org.apache.causeway.core.metamodel.valuesemantics.IdentifierValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
@@ -183,6 +184,7 @@ import lombok.NonNull;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
+        IdentifierValueSemantics.class,
         // fallback IdStringifier
         IdStringifierForSerializable.class,
 

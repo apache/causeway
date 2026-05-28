@@ -37,10 +37,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -69,6 +66,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.IdentifierValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -78,6 +76,9 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.lang.Nullable;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -751,6 +752,19 @@ public abstract class ValueTypeExample<T> {
         private ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
         @Action @Override
         public ApplicationFeatureId sampleAction(@Parameter @Nullable final ApplicationFeatureId value) { return value; }
+    }
+    
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleIdentifier")
+    @DomainObject(
+            nature = Nature.BEAN) @Scope("prototype")
+    public static class ValueTypeExampleIdentifier
+    extends ValueTypeExample<Identifier> {
+        @Property @Getter @Setter
+        private Identifier value = new IdentifierValueSemantics().getExamples().getElseFail(0);
+        @Getter
+        private Identifier updateValue = new IdentifierValueSemantics().getExamples().getElseFail(1);
+        @Action @Override
+        public Identifier sampleAction(@Parameter final @Nullable Identifier value) { return value; }
     }
 
     // -- EXAMPLES - DATA STRUCTURE

@@ -39,8 +39,6 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.applib.util.Listing;
@@ -80,7 +78,6 @@ public class Object_patchColumnOrder {
 	extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_patchColumnOrder> {}
 
 	@Inject MetaModelService metaModelService;
-	@Inject ApplicationFeatureRepository applicationFeatureRepository;
 
     private final Object mixee;
 
@@ -95,7 +92,7 @@ public class Object_patchColumnOrder {
                     + "represents the domain-type itself or one of the domain-type's super types. "
                     + "The Apache Causeway Programming Model also supports {parent-type, element-type} scoped "
                     + "column order definitions, which are not covered by patching yet.")
-    		final ApplicationFeatureId featureId,
+    		final Identifier featureId,
 
     		@Parameter(precedingParamsPolicy = PrecedingParamsPolicy.RESET)
             @ParameterLayout(multiLine = 20, describedAs = "Automaticly filled in are all currently enabled and available "
@@ -103,45 +100,37 @@ public class Object_patchColumnOrder {
             		+ "Reorder or remove column-ids as desired.")
             final String columnListing) {
 
-    	var identifier = applicationFeatureRepository.asIdentifier(featureId)
-                .orElseThrow(); // not found -> unexpected
-
     	var listing = listingHandler().parseListing(columnListing);
     	var columns = Can.ofStream(listing.streamEnabled());
 
-    	metaModelService.patchColumnOrder(identifier, columns);
+    	metaModelService.patchColumnOrder(featureId, columns);
         return mixee;
     }
 
-    @MemberSupport public List<ApplicationFeatureId> choicesFeatureId() {
+    @MemberSupport public List<Identifier> choicesFeatureId() {
         return Stream.concat(
-                metaModelService.streamTypeHierarchy(mixee.getClass())
-                    .map(ApplicationFeatureId::fromIdentifier),
-                metaModelService.streamCollections(mixee.getClass())
-                    .map(ApplicationFeatureId::fromIdentifier))
+                metaModelService.streamTypeHierarchy(mixee.getClass()),
+                metaModelService.streamCollections(mixee.getClass()))
     		.collect(Collectors.toList());
     }
 
-    @MemberSupport public String defaultColumnListing(final @Nullable ApplicationFeatureId featureId) {
+    @MemberSupport public String defaultColumnListing(final @Nullable Identifier featureId) {
         if(featureId==null)
             return "# no feature selected";
 
-        var identifier = applicationFeatureRepository.asIdentifier(featureId)
-                .orElseThrow(); // not found -> unexpected
-
-        if(identifier.type().isCollection())
+        if(featureId.type().isCollection())
             return listing(
-	                metaModelService.parentedAssociationsForColumnRendering(mixee, identifier, AssociationsLookup.AVAILABLE),
-	                metaModelService.parentedAssociationsForColumnRendering(mixee, identifier, AssociationsLookup.ENABLED))
+	                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.AVAILABLE),
+	                metaModelService.parentedAssociationsForColumnRendering(mixee, featureId, AssociationsLookup.ENABLED))
         		.toString();
 
-        if(identifier.type().isClass())
+        if(featureId.type().isClass())
             return listing(
-	                metaModelService.standaloneAssociationsForColumnRendering(identifier.logicalType(), AssociationsLookup.AVAILABLE),
-	                metaModelService.standaloneAssociationsForColumnRendering(identifier.logicalType(), AssociationsLookup.ENABLED))
+	                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.AVAILABLE),
+	                metaModelService.standaloneAssociationsForColumnRendering(featureId.logicalType(), AssociationsLookup.ENABLED))
         		.toString();
 
-        throw _Exceptions.illegalArgument("unsupported feature type %s", identifier.type());
+        throw _Exceptions.illegalArgument("unsupported feature type %s", featureId.type());
     }
 
     // -- HELPER

@@ -52,8 +52,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
 
-import jnr.a64asm.OP;
-
 import lombok.RequiredArgsConstructor;
 
 /**
