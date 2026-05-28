@@ -90,6 +90,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.FloatValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.IdentifierValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
@@ -180,6 +181,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
+        IdentifierValueSemantics.class,
 
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,

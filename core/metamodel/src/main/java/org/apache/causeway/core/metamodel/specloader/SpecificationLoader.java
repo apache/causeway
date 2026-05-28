@@ -165,17 +165,14 @@ public interface SpecificationLoader {
     // -- FEATURE RECOVERY
 
     default Optional<ObjectFeature> loadFeature(final @Nullable Identifier featureIdentifier) {
-        if(featureIdentifier==null) {
+        if(featureIdentifier==null)
             return Optional.empty();
-        }
         var typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
-        if(typeSpec==null) {
+        if(typeSpec==null)
             return Optional.empty();
-        }
         var member = typeSpec.getMember(featureIdentifier.memberLogicalName()).orElse(null);
-        if(member==null) {
+        if(member==null)
             return Optional.empty();
-        }
 
         final int paramIndex = featureIdentifier.parameterIndex();
 

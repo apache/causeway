@@ -182,10 +182,17 @@ record _MembersAsColumns(
 
     	var patchedColumnOrder = elementType
 			.lookupFacet(ColumnOrderPatchingFacet.class)
-			.flatMap(it->it.lookupColumnOrder(columnQuery.memberIdentifier()))
+			.flatMap(it->it.lookupColumnOrder(identifier))
 			.orElse(null);
-    	if(patchedColumnOrder==null)
-    		return false;
+
+    	if(patchedColumnOrder==null) {
+    	    // for the standalone case we are done
+    	    if(columnQuery.isStandalone())
+    	        return false;
+            // if the parented case is not patched, but we find a patch for the corresponding element-type,
+            // then use that as a fallback
+    	    return sortColumnsUsingPatch(columnQuery.toStandalone(), assocIdsInOrder, elementType);
+    	}
 
     	// intersect 'assocIdsInOrder' with 'patchedColumnOrder' while preserving order as given by the latter
     	var available = new HashSet<>(assocIdsInOrder);
@@ -223,7 +230,6 @@ record _MembersAsColumns(
                 assocIdsInOrder.clear();
                 assocIdsInOrder.addAll(assocReorderedIds);
             });
-
     }
 
 }

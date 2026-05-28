@@ -38,7 +38,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.id.LogicalType;
@@ -458,34 +457,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
     public Map<String, ApplicationFeatureId> getFeatureIdentifiersByName() {
         initializeIfRequired();
         return featureIdentifiersByName;
-    }
-
-    @Override
-    public Optional<Identifier> asIdentifier(final @Nullable ApplicationFeatureId applicationFeatureId) {
-        return applicationFeatureId!=null
-            ? specificationLoader.specForLogicalTypeName(applicationFeatureId.getLogicalTypeName())
-                .map(ObjectSpecification::logicalType)
-                .map(logicalType->toIdentifier(applicationFeatureId, logicalType))
-            : Optional.empty();
-    }
-
-    // -- HELPER
-
-    private Identifier toIdentifier(final ApplicationFeatureId featureId, final LogicalType logicalType) {
-        return switch (featureId.getSort()) {
-            case MEMBER -> Optional.ofNullable(findMember(featureId))
-                .flatMap(ApplicationFeature::getMemberSort)
-                .map(memberSort->switch (memberSort) {
-                    case PROPERTY -> Identifier.propertyIdentifier(logicalType, featureId.getLogicalMemberName());
-                    case COLLECTION -> Identifier.collectionIdentifier(logicalType, featureId.getLogicalMemberName());
-                    case ACTION -> Identifier.actionIdentifier(logicalType, featureId.getLogicalMemberName());
-                    default -> null;
-                })
-                .orElse(null);
-            case TYPE -> Identifier.classIdentifier(logicalType);
-            case NAMESPACE -> null;
-            default -> null;
-        };
     }
 
 }
