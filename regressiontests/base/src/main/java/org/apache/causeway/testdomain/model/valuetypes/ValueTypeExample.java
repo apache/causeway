@@ -37,10 +37,12 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -69,6 +71,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.IdentifierValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -124,7 +127,7 @@ public abstract class ValueTypeExample<T> {
     public Can<T> getParserRoundtripExamples() {
         return Can.ofCollection(semanticsList)
         .getFirst()
-        .map(semantics->semantics.getExamples())
+        .map(ValueSemanticsAbstract::getExamples)
         .orElseGet(()->Can.of(getValue(), getUpdateValue()));
     }
 
@@ -171,9 +174,8 @@ public abstract class ValueTypeExample<T> {
     // -- HELPER
 
     private static Optional<String> extractSuffix(final String name) {
-        if(!name.contains("_")) {
+        if(!name.contains("_"))
             return Optional.empty();
-        }
         return Optional.of(TextUtils.cutter(name)
                 .keepBefore("_")
                 .getValue());
@@ -695,6 +697,19 @@ public abstract class ValueTypeExample<T> {
         private ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
         @Action @Override
         public ApplicationFeatureId sampleAction(@Parameter final @Nullable ApplicationFeatureId value) { return value; }
+    }
+
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleIdentifier")
+    @DomainObject(
+            nature = Nature.BEAN) @Scope("prototype")
+    public static class ValueTypeExampleIdentifier
+    extends ValueTypeExample<Identifier> {
+        @Property @Getter @Setter
+        private Identifier value = new IdentifierValueSemantics().getExamples().getElseFail(0);
+        @Getter
+        private Identifier updateValue = new IdentifierValueSemantics().getExamples().getElseFail(1);
+        @Action @Override
+        public Identifier sampleAction(@Parameter final @Nullable Identifier value) { return value; }
     }
 
     // -- EXAMPLES - DATA STRUCTURE

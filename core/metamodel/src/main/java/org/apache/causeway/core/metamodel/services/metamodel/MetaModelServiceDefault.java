@@ -352,10 +352,10 @@ public record MetaModelServiceDefault(
 	public void patchColumnOrder(final Identifier identifier, final Can<String> columnsInOrder) {
 		final ObjectSpecification elementType = switch (identifier.type()) {
 			case CLASS -> specificationLoader()
-				.specForLogicalType(identifier.logicalType())
-				.orElseThrow();
+                .specForLogicalType(identifier.logicalType())
+                .orElseThrow();
 			case COLLECTION -> specificationLoader()
-				.specForLogicalType(identifier.logicalType())
+                .specForLogicalType(identifier.logicalType())
 				.map(parentType->parentType.getCollectionElseFail(identifier.memberLogicalName()))
 				.map(OneToManyAssociation::getElementType)
 				.orElseThrow();

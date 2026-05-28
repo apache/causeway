@@ -58,6 +58,14 @@ i.ov-bottom-85 {
   top: 0.85em;
 }
 
+/* named font sizes */
+
+i.font-size-50 { font-size: 0.5em; }
+i.font-size-60 { font-size: 0.6em; }
+i.font-size-70 { font-size: 0.7em; }
+i.font-size-80 { font-size: 0.8em; }
+i.font-size-90 { font-size: 0.9em; }
+
 /* named colors */
 
 i.col-aliceblue { color: aliceblue; }
