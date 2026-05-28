@@ -182,7 +182,7 @@ record _MembersAsColumns(
 
     	var patchedColumnOrder = elementType
 			.lookupFacet(ColumnOrderPatchingFacet.class)
-			.flatMap(it->it.lookupColumnOrder(columnQuery.memberIdentifier()))
+			.flatMap(it->it.lookupColumnOrder(identifier))
 			.orElse(null);
     	if(patchedColumnOrder==null)
     		return false;
