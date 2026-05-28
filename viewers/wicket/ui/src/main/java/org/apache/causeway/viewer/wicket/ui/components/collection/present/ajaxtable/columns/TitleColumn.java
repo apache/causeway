@@ -88,8 +88,8 @@ extends GenericColumnAbstract {
         if(maxTitleLength == 0)
             return "";
         return variant.isParented()
-            ? ProgrammingModelConstants.Literals.TITLE_COLUMN_HEADER_PARENTED.translate(translationService)
-            : ProgrammingModelConstants.Literals.TITLE_COLUMN_HEADER_STANDALONE.translate(translationService);
+            ? ProgrammingModelConstants.Literal.TITLE_COLUMN_HEADER_PARENTED.translate(translationService)
+            : ProgrammingModelConstants.Literal.TITLE_COLUMN_HEADER_STANDALONE.translate(translationService);
     }
 
 }

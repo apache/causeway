@@ -608,7 +608,7 @@ public final class ProgrammingModelConstants {
     // -- LITERALS
 
     @RequiredArgsConstructor
-    public enum Literals {
+    public enum Literal {
         ACTION_COLUMN_HEADER("Actions", new TranslationContext("tables.action-column-header")),
         TITLE_COLUMN_HEADER_PARENTED("Related Object", new TranslationContext("tables.title-column-header-parented")),
         TITLE_COLUMN_HEADER_STANDALONE("Object", new TranslationContext("tables.title-column-header-standalone"));

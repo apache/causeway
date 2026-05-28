@@ -64,7 +64,7 @@ extends GenericColumnAbstract {
             final ObjectSpecification elementType,
             final Can<ObjectAction> actionsForColumnRendering,
             final Variant collectionVariant) {
-        super(elementType, ProgrammingModelConstants.Literals.ACTION_COLUMN_HEADER.translate(elementType.getTranslationService()));
+        super(elementType, ProgrammingModelConstants.Literal.ACTION_COLUMN_HEADER.translate(elementType.getTranslationService()));
         this.actionsRef = new _StableValue<>(actionsForColumnRendering);
         this.actionIds = actionsForColumnRendering.map(ObjectAction::getId);
         this.collectionVariant = collectionVariant;
