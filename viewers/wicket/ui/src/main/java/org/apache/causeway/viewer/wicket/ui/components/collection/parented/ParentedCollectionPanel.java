@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
@@ -73,7 +74,12 @@ implements HasDynamicallyVisibleContent {
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
     // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecorator;
+    private transient @Nullable Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        return tableDecorator!=null
+            ? tableDecorator
+            : Optional.empty();
+    }
 
     private final WebMarkupContainer div;
 
@@ -118,7 +124,7 @@ implements HasDynamicallyVisibleContent {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        tableDecorator.ifPresent(tableDecorator->
+        tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
@@ -146,7 +152,7 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
                 .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            tableDecorator.ifPresent(tableDecorator->
+            tableDecorator().ifPresent(tableDecorator->
                 Wkt.cssAppend(div, tableDecorator.cssClass()));
 
             var collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
