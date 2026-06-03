@@ -122,9 +122,21 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
 
-    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since);
+    default List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
+        return findForegroundSinceTimestampAndCanBeExported(since, null);
+    }
 
-    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since);
+    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, final Integer limitIfAny);
+
+    List<CommandLogEntry> findForegroundBeforeTimestampAndCanBeExported(final Timestamp before, final Integer limitIfAny);
+
+    default List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since) {
+        return findForegroundSinceTimestampAndHasBeenExported(since, null);
+    }
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since, final Integer limitIfAny);
+
+    List<CommandLogEntry> findForegroundBeforeTimestampAndHasBeenExported(final Timestamp before, final Integer limitIfAny);
 
     /**
      * Command Replay feature: Can replay or retry.

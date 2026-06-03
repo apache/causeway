@@ -10,6 +10,11 @@
                 <cpt:action id="nextHour"/>
                 <cpt:property id="baseline"/>
             </cpt:fieldSet>
+            <cpt:fieldSet name=" " id="limit">
+                <cpt:action id="previousPage"/>
+                <cpt:action id="nextPage"/>
+                <cpt:property id="limit"/>
+            </cpt:fieldSet>
         </bs:col>
         <bs:col span="3">
             <bs:tabGroup>
@@ -42,10 +47,6 @@
             <bs:row>
                 <bs:col span="12" size="MD">
                     <cpt:collection defaultView="table" paged="15" id="notYetExported"/>
-                </bs:col>
-            </bs:row>
-            <bs:row>
-                <bs:col span="12" size="MD">
                     <cpt:collection defaultView="table" paged="15" id="exported"/>
                 </bs:col>
             </bs:row>

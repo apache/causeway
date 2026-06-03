@@ -151,6 +151,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         public static final String FIND_MOST_RECENT_COMPLETED           = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE
                                                                         = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayState";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE
+                                                                        = LOGICAL_TYPE_NAME + ".findForegroundByTimestampBeforeAndReplayState";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES
                                                                         = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayStates";
         public static final String FIND_BACKGROUND_AND_NOT_YET_STARTED  = LOGICAL_TYPE_NAME + ".findBackgroundAndNotYetStarted";
