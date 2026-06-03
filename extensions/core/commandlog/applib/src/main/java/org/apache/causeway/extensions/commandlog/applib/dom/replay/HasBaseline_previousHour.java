@@ -25,7 +25,7 @@ public class HasBaseline_previousHour {
 
     @MemberSupport
     public HasBaseline act() {
-        final var baseline = HasBaseline.Util.addSeconds(hasBaseline.getBaseline(), -3600);
+        final var baseline = HasBaseline.addSeconds(hasBaseline.getBaseline(), -3600);
         return hasBaseline.withBaseline(baseline);
     }
 }
