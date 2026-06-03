@@ -13,9 +13,9 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "baseline", sequence = "4",
-        named = "Next Page",
-        position = ActionLayout.Position.PANEL,
+        associateWith = "limit", sequence = "1",
+        named = "Previous",
+        position = ActionLayout.Position.BELOW,
         describedAs = "Move backwards to previous page of commands"
 )
 @RequiredArgsConstructor

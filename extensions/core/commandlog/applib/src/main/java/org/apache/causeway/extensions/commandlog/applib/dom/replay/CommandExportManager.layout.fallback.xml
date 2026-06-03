@@ -5,15 +5,18 @@
         </bs:col>
         <bs:col span="3">
             <cpt:fieldSet name=" " id="baseline">
-                <cpt:action id="previousHour"/>
-                <cpt:action id="changeBaseline"/>
-                <cpt:action id="nextHour"/>
-                <cpt:property id="baseline"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name=" " id="limit">
-                <cpt:action id="previousPage"/>
-                <cpt:action id="nextPage"/>
-                <cpt:property id="limit"/>
+                <cpt:property id="baseline">
+                    <cpt:action id="previousHour"/>
+                    <cpt:action id="changeBaseline"/>
+                    <cpt:action id="nextHour"/>
+                </cpt:property>
+                <cpt:property id="limit">
+                    <cpt:action id="previousPage"/>
+                    <cpt:action id="nextPage"/>
+                </cpt:property>
+                <cpt:property id="mode">
+                    <cpt:action id="ToggleMode"/>
+                </cpt:property>
             </cpt:fieldSet>
         </bs:col>
         <bs:col span="3">
