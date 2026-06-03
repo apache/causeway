@@ -95,16 +95,6 @@ public final class CommandReplayManager implements ViewModel, HasBaseline {
         return new CommandExportManager(baseline, replayContext);
     }
 
-    static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
-        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
-    }
-
-    private static Timestamp toJavaSqlTimestamp(XMLGregorianCalendar xgc) {
-        if (xgc == null) return null;
-        Instant instant = xgc.toGregorianCalendar().toZonedDateTime().toInstant();
-        return Timestamp.from(instant);
-    }
-
 
     // -- PENDING OR FAILED
 

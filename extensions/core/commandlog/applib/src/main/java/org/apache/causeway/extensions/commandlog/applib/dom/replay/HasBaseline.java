@@ -1,6 +1,5 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 import java.sql.Timestamp;
@@ -17,11 +16,9 @@ public interface HasBaseline {
 
     HasBaseline withBaseline(Timestamp baseline);
 
-    @UtilityClass
-    class Util {
 
-        static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
-            return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
-        }
+    static Timestamp addSeconds(Timestamp ts, int secondsToAdd) {
+        return Timestamp.from(ts.toInstant().plusSeconds(secondsToAdd));
     }
+
 }
