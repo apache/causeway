@@ -232,6 +232,8 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
 
     @Data
     public static class State {
+        private static final String DELIMITER = "--";
+
         private final Timestamp timestamp;
         private final int limit;
         private final Mode mode;
@@ -241,7 +243,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
                 return fallback;
             }
             try {
-                final String[] parts = memento.split("\\|", -1);
+                String[] parts = memento.split(DELIMITER, -1);
                 if(parts.length != 3) {
                     return fallback;
                 }
@@ -263,7 +265,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
         }
 
         public String toMemento() {
-            return TimestampMarshallUtil.toString(timestamp) + "|" + limit + "|" + mode;
+            return TimestampMarshallUtil.toString(timestamp) + DELIMITER + limit + DELIMITER + mode;
         }
     }
 
