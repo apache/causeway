@@ -13,9 +13,9 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "baseline", sequence = "4",
+        associateWith = "limit", sequence = "2",
         named = "Next Page",
-        position = ActionLayout.Position.PANEL,
+        position = ActionLayout.Position.BELOW,
         describedAs = "Move forward to next page of commands"
 )
 @RequiredArgsConstructor

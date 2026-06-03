@@ -14,6 +14,7 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
 )
 @ActionLayout(
         sequence = "1.1",
+        named = "Toggle",
         cssClass = "btn-secondary",
         describedAs = "Toggle between exporting and un-exporting."
 )
