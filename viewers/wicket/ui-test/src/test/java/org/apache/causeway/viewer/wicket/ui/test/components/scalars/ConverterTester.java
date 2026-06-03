@@ -29,6 +29,7 @@ import org.jspecify.annotations.NonNull;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,9 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.util.TestPropertyValues;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.clock.VirtualClock;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
@@ -103,10 +102,9 @@ public class ConverterTester<T extends Serializable> {
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
-        var identifier = Identifier.classIdentifier(LogicalType.fqcn(valueType));
         var reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
-        assertNotNull(reg.selectValueSemantics(identifier, valueType));
-        assertTrue(reg.selectValueSemantics(identifier, valueType).isNotEmpty());
+        var sem = reg.streamValueSemantics(valueType).toList();
+        assertFalse(sem.isEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
         assertNotNull(mmc.getInteractionService());
     }
@@ -125,7 +123,7 @@ public class ConverterTester<T extends Serializable> {
         var customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         var prop = customerSpec.getPropertyElseFail("value");
         var propType = (Class<T>) prop.getElementType().getCorrespondingClass();
-        return new ConverterBasedOnValueSemantics<T>(propType, prop, representation);
+        return new ConverterBasedOnValueSemantics<>(propType, prop, representation);
     }
 
     public void runWithInteraction(final @NonNull ThrowingRunnable runnable) {

@@ -23,6 +23,7 @@ import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.ClassUtils;
@@ -40,6 +41,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -74,6 +76,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -426,6 +429,15 @@ public final class Facets {
             .filter(typeGuard(requiredType))
             .flatMap(ValueFacet::selectDefaultSemantics)
             .map(_Casts::uncheckedCast);
+    }
+
+    /**
+     * Optionally the qualifier string, that selects for a (qualified) {@link ValueSemanticsProvider}.
+     */
+    public Optional<String> valueQualifier(@NonNull final ObjectFeature feature) {
+        return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
+                .map(ValueSemanticsSelectingFacet::value)
+                .map(_Strings::emptyToNull);
     }
 
     @SuppressWarnings("unchecked")

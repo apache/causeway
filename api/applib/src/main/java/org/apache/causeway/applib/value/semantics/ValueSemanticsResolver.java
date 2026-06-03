@@ -20,10 +20,7 @@ package org.apache.causeway.applib.value.semantics;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.commons.collections.Can;
-
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @since 2.0 {@index}
@@ -33,11 +30,8 @@ public interface ValueSemanticsResolver {
     boolean hasValueSemantics(Class<?> valueType);
 
     <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
+    <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType, @Nullable String requiredQualifier);
 
     Stream<Class<?>> streamClassesWithValueSemantics();
-
-    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
-            @NonNull Identifier featureIdentifier,
-            @NonNull Class<T> valueType);
 
 }

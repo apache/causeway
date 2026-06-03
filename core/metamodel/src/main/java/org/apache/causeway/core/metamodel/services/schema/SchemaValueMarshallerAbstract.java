@@ -48,6 +48,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
@@ -73,7 +74,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
         public static <T> Context<T> forNonValue(
                 final Class<T> correspondingClass,
                 final ObjectFeature feature) {
-            return new Context<T>(correspondingClass, feature,
+            return new Context<>(correspondingClass, feature,
                     feature.getFeatureType().isCollection()
                         ? ValueType.COLLECTION
                         : ValueType.REFERENCE,
@@ -237,7 +238,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
     }
 
     // -- HELPER
-    
+
     /**
      * Recovers an {@link Identifier} for given {@code logicalMemberIdentifier}.
      */
@@ -275,10 +276,11 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
     private <T> Context<T> newContext(
             final Class<T> valueCls,
-            final ObjectFeature feature){
+            final ObjectFeature feature) {
+
         return getValueSemanticsResolver()
-                .selectValueSemantics(feature.getFeatureIdentifier(), valueCls)
-                .getFirst()
+                .streamValueSemantics(valueCls, Facets.valueQualifier(feature).orElse(null))
+                .findFirst()
                 .map(valueSemantics->Context.forValue(valueCls, feature, valueSemantics))
                 .orElseGet(()->Context.forNonValue(valueCls, feature));
     }
@@ -331,9 +333,8 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         _Assert.assertEquals(valueTypeHelper.schemaValueType(), collectionDto.getType());
 
-        if(_NullSafe.isEmpty(collectionDto.getValue())) {
+        if(_NullSafe.isEmpty(collectionDto.getValue()))
             return Can.empty();
-        }
 
         var elementDtos = collectionDto.getValue();
         var list = new ArrayList<ManagedObject>(elementDtos.size());
@@ -353,9 +354,8 @@ implements SchemaValueMarshaller, HasMetaModelContext {
     protected Can<ManagedObject> recoverCollectionOfReferences(
             final CollectionDto collectionDto) {
 
-        if(_NullSafe.isEmpty(collectionDto.getValue())) {
+        if(_NullSafe.isEmpty(collectionDto.getValue()))
             return Can.empty();
-        }
 
         var elementDtos = collectionDto.getValue();
         var list = new ArrayList<ManagedObject>(elementDtos.size());
@@ -375,11 +375,10 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         if(valueWithTypeDto==null
                 || (valueWithTypeDto.isNull()!=null
-                    && valueWithTypeDto.isNull())) {
+                    && valueWithTypeDto.isNull()))
             return cardinalityConstraint.isMultiple()
                     ? ManagedObject.packed(feature.getElementType(), Can.empty())
                     : ManagedObject.empty(feature.getElementType());
-        }
 
         var valueCls = feature.getElementType().getCorrespondingClass();
 

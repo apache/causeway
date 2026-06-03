@@ -45,7 +45,6 @@ public record SingletonBeanProvider(
          */
         @NonNull String id,
         @NonNull Class<?> beanClass,
-
         //@ToString.Exclude @EqualsAndHashCode.Exclude
         @NonNull Supplier<?> beanProvider) {
 

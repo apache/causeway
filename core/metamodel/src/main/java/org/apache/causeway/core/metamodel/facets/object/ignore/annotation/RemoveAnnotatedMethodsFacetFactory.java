@@ -108,7 +108,8 @@ extends FacetFactoryAbstract {
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier
         var cls = processClassContext.getCls();
-        var mixinMainMethodName = getClassCache().head(cls).attributeMap().get(Attribute.MIXIN_MAIN_METHOD_NAME);
+        var mixinMainMethodName = getClassCache().head(cls).getAttribute(Attribute.MIXIN_MAIN_METHOD_NAME)
+                .orElse(null);
         return method->method.name().equals(mixinMainMethodName);
     }
 

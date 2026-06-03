@@ -41,6 +41,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
@@ -88,6 +89,10 @@ public final class _ClassCache implements AutoCloseable {
          */
         SPRING_NAMED,
         /**
+         * Corresponds to the bean qualifier of Spring managed beans.
+         */
+        SPRING_QUALIFIED,
+        /**
          * Corresponds to DomainObject#mixinMethod().
          */
         MIXIN_MAIN_METHOD_NAME;
@@ -121,12 +126,12 @@ public final class _ClassCache implements AutoCloseable {
 
     public void setSpringNamed(final Class<?> beanClass, final String beanDefinitionName) {
         _Assert.assertNotEmpty(beanDefinitionName);
-        head(beanClass).attributeMap().put(Attribute.SPRING_NAMED, beanDefinitionName);
+        head(beanClass).putAttribute(Attribute.SPRING_NAMED, beanDefinitionName);
     }
 
     public String getLogicalName(final Class<?> type) {
         var head = head(type);
-        return Optional.ofNullable(head.attributeMap().get(Attribute.SPRING_NAMED))
+        return head.getAttribute(Attribute.SPRING_NAMED)
             .or(()->Optional.ofNullable(head.named()))
             .or(()->Optional.ofNullable(type.getCanonicalName()))
             .orElseGet(type::getName);
@@ -270,7 +275,10 @@ public final class _ClassCache implements AutoCloseable {
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
             @Nullable String named,
-            Map<Attribute, String> attributeMap) {
+            /**
+             * implemented as cache (supports computeIfAbsent)
+             */
+            Map<Attribute, Optional<String>> attributeMap) {
 
         static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
@@ -300,9 +308,35 @@ public final class _ClassCache implements AutoCloseable {
 
         public Can<String> springProfiles() {
             var profileAnnot = mergedAnnotations.get(Profile.class);
-            if(!profileAnnot.isPresent()) return Can.empty();
-            return Can.ofArray(profileAnnot.getStringArray("value"));
+            return profileAnnot.isPresent()
+                ? Can.ofArray(profileAnnot.getStringArray("value"))
+                : Can.empty();
         }
+
+        /**
+         * Optionally the type's qualifier as specified via {@link Qualifier} annotation.
+         */
+        public Optional<String> qualifier() {
+            return attributeMap.computeIfAbsent(Attribute.SPRING_QUALIFIED, it->{
+                var qualifierAnnot = mergedAnnotations.get(Qualifier.class);
+                return qualifierAnnot.isPresent()
+                    ? Optional.ofNullable(qualifierAnnot.getString("value"))
+                    : Optional.empty();
+            });
+        }
+
+        public Optional<String> getAttribute(final Attribute attribute) {
+            var opt = attributeMap.get(attribute);
+            return opt!=null
+                ? opt
+                : Optional.empty();
+        }
+
+        public ClassModelHead putAttribute(final Attribute attribute, @Nullable final String value) {
+            attributeMap().put(attribute, Optional.ofNullable(value));
+            return this;
+        }
+
     }
 
     private record ClassModelBody(
