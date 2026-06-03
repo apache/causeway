@@ -48,6 +48,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
@@ -90,7 +91,9 @@ public class CommandLogMenu {
     )
     @ActionLayout(cssClassFa = "fa-bolt", sequence="10")
     public class activeCommands {
-        public class DomainEvent extends ActionDomainEvent<activeCommands> { }
+        public class DomainEvent extends ActionDomainEvent<activeCommands> {
+            public DomainEvent() { }
+        }
 
         @MemberSupport public List<? extends CommandLogEntry> act() {
             return commandLogEntryRepository.findCurrent();
@@ -124,7 +127,9 @@ public class CommandLogMenu {
     )
     @ActionLayout(cssClassFa = "fa-search", sequence="30")
     public class findCommands {
-        public class DomainEvent extends ActionDomainEvent<findCommands> { }
+        public class DomainEvent extends ActionDomainEvent<findCommands> {
+            public DomainEvent() { }
+        }
 
         @MemberSupport public List<? extends CommandLogEntry> act(
                 final @Nullable LocalDate from,
@@ -151,7 +156,9 @@ public class CommandLogMenu {
     )
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
     public class findAll {
-        public class DomainEvent extends ActionDomainEvent<findAll> { }
+        public class DomainEvent extends ActionDomainEvent<findAll> {
+            public DomainEvent() { }
+        }
 
         @MemberSupport public List<? extends CommandLogEntry> act() {
             return commandLogEntryRepository.findAll();
@@ -167,7 +174,9 @@ public class CommandLogMenu {
     )
     @ActionLayout(cssClassFa = "solid share-from-square", sequence="50")
     public class exportManager {
-        public class DomainEvent extends ActionDomainEvent<exportManager> { }
+        public class DomainEvent extends ActionDomainEvent<exportManager> {
+            public DomainEvent() { }
+        }
 
         @MemberSupport public CommandExportManager act(
                 @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
@@ -191,7 +200,9 @@ public class CommandLogMenu {
     )
     @ActionLayout(cssClassFa = "solid circle-play", sequence="51")
     public class replayManager {
-        public class DomainEvent extends ActionDomainEvent<replayManager> { }
+        public class DomainEvent extends ActionDomainEvent<replayManager> {
+            public DomainEvent() { }
+        }
 
         @MemberSupport public CommandReplayManager act(
                 @Parameter(
@@ -207,8 +218,8 @@ public class CommandLogMenu {
                     .orElse(commandReplayManager);
         }
 
-        private CommandReplayManager.importCommands importCommands(CommandReplayManager commandReplayManager) {
-            return factoryService.mixin(CommandReplayManager.importCommands.class, commandReplayManager);
+        private CommandReplayManager_importCommands importCommands(CommandReplayManager commandReplayManager) {
+            return factoryService.mixin(CommandReplayManager_importCommands.class, commandReplayManager);
         }
     }
 

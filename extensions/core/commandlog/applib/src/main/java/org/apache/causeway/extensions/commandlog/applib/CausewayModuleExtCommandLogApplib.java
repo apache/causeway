@@ -35,7 +35,17 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_makeSelectedExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedPendingOrFailed;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedSucceededOrExcluded;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_excludeSelectedFromReplay;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetrySelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
@@ -76,19 +86,17 @@ import org.springframework.context.annotation.Import;
         ReplayableCommand_replayOrRetry.class,
         ReplayableCommand_excludeFromReplay.class,
         ReplayableCommand_delete.class,
-        CommandExportManager.changeBaseline.class,
-        CommandExportManager.previousHour.class,
-        CommandExportManager.nextHour.class,
-        CommandExportManager.exportSelected.class,
-        CommandExportManager.makeSelectedExportable.class,
-        CommandReplayManager.changeBaseline.class,
-        CommandExportManager.previousHour.class,
-        CommandReplayManager.nextHour.class,
-        CommandReplayManager.importCommands.class,
-        CommandReplayManager.replayOrRetrySelected.class,
-        CommandReplayManager.excludeSelectedFromReplay.class,
-        CommandReplayManager.deleteSelectedSucceededOrExcluded.class,
-        CommandReplayManager.deleteSelectedPendingOrFailed.class,
+        HasBaseline_changeBaseline.class,
+        HasBaseline_previousHour.class,
+        HasBaseline_previousHour.class,
+        HasBaseline_nextHour.class,
+        CommandExportManager_exportSelected.class,
+        CommandExportManager_makeSelectedExportable.class,
+        CommandReplayManager_importCommands.class,
+        CommandReplayManager_replayOrRetrySelected.class,
+        CommandReplayManager_excludeSelectedFromReplay.class,
+        CommandReplayManager_deleteSelectedSucceededOrExcluded.class,
+        CommandReplayManager_deleteSelectedPendingOrFailed.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,
