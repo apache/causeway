@@ -21,34 +21,27 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.causeway.applib.ViewModel;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
+import org.eclipse.persistence.sessions.coordination.CommandManager;
 import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
@@ -91,8 +84,8 @@ public final class CommandReplayManager implements ViewModel, HasBaseline {
 
     @Override
     @Programmatic
-    public CommandExportManager withBaseline(Timestamp baseline) {
-        return new CommandExportManager(baseline, replayContext);
+    public CommandReplayManager withBaseline(Timestamp baseline) {
+        return new CommandReplayManager(baseline, replayContext);
     }
 
 

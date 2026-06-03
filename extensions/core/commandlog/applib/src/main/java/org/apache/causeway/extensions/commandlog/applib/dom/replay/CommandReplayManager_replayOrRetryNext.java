@@ -1,5 +1,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.causeway.applib.annotation.*;
 
 @Action(
@@ -15,15 +17,12 @@ import org.apache.causeway.applib.annotation.*;
         cssClassFa = "solid circle-play",
         cssClass = "btn-primary",
         describedAs = "Executes the oldest command.")
+@RequiredArgsConstructor
 public class CommandReplayManager_replayOrRetryNext {
+
+    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_replayOrRetrySelected> { }
+
     private final CommandReplayManager commandReplayManager;
-
-    public CommandReplayManager_replayOrRetryNext(CommandReplayManager commandReplayManager) {
-        this.commandReplayManager = commandReplayManager;
-    }
-
-    public class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_replayOrRetrySelected> {
-    }
 
     @MemberSupport
     public CommandReplayManager act() {

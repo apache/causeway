@@ -214,6 +214,14 @@ import lombok.Setter;
                   + "    && replayState == :replayState "
                   + " ORDER BY timestamp ASC"),
     @Query(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE,
+            value = "SELECT "
+                  + "  FROM " + CommandLogEntry.FQCN + " "
+                  + " WHERE executeIn == 'FOREGROUND' "
+                  + "    && timestamp < :to "
+                  + "    && replayState == :replayState "
+                  + " ORDER BY timestamp DESC"),
+    @Query(
             name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "

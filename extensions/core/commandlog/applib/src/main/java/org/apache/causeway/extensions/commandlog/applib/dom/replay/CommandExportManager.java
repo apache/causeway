@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
@@ -40,7 +42,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
@@ -58,13 +62,15 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
     public CommandExportManager(
             final String memento,
             final ReplayContext replayContext) {
-        this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
+        this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50, Mode.EXPORT)),  replayContext);
     }
 
     public CommandExportManager(
-            final java.sql.Timestamp baseline,
+            final State state,
             final ReplayContext replayContext) {
-        this.baseline = baseline;
+        this.baseline = state.timestamp;
+        this.limit = state.limit;
+        this.mode = state.mode;
         this.replayContext = replayContext;
     }
 
@@ -72,18 +78,58 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
         return "Command Export Manager";
     }
 
+    @RequiredArgsConstructor
+    public enum Mode {
+        EXPORT("Export commands (UNDEFINED -> EXPORTED)"),
+        UNEXPORT("Unexport commands (EXPORTED -> UNDEFINED)");
+
+        private final String title;
+
+        @ObjectSupport
+        public String title() {
+            return title;
+        }
+
+
+        Mode toggle() {
+            return this == UNEXPORT ? EXPORT : UNEXPORT;
+        }
+    }
+
 
     @Property
-    @PropertyLayout(describedAs = "Only commands after this timestamp are available for export")
+    @PropertyLayout(describedAs = "Only commands after this timestamp are available")
     @Getter
     private java.sql.Timestamp baseline;
+
+    @Property
+    @PropertyLayout(describedAs = "Number of commands per page")
+    @Getter
+    private int limit;
+
+    @Property
+    @PropertyLayout(describedAs = "Whether to export or unexport commands")
+    @Getter
+    private Mode mode;
+
 
 
     @Override
     @Programmatic
     public CommandExportManager withBaseline(Timestamp baseline) {
-        return new CommandExportManager(baseline, replayContext);
+        return new CommandExportManager(new State(baseline, this.limit, this.mode), replayContext);
     }
+
+    @Programmatic
+    public CommandExportManager withLimit(int limit) {
+        return new CommandExportManager(new State(this.baseline, limit, this.mode), replayContext);
+    }
+
+    @Programmatic
+    public CommandExportManager withMode(Mode mode) {
+        return new CommandExportManager(new State(this.baseline, this.limit, mode), replayContext);
+    }
+
 
 
     // -- NOT YET EXPORTED
@@ -93,7 +139,19 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
             describedAs = "Commands that can be exported"
     )
     public List<ReplayableCommand> getNotYetExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline, limit).stream()
+            .map(entry->new ReplayableCommand(
+                    entry.getInteractionId(),
+                    replayContext))
+            .collect(Collectors.toList());
+    }
+    @MemberSupport
+    public boolean hideNotYetExported() {
+        return this.mode == Mode.UNEXPORT;
+    }
+    @Programmatic
+    public List<ReplayableCommand> getNotYetExportedPrevious() {
+        return commandLogEntryRepository().findForegroundBeforeTimestampAndCanBeExported(baseline, limit).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -101,28 +159,112 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
     }
 
 
-    // -- EXPORTED
+
+    // -- HAVE BEEN EXPORTED
 
     @Collection
-    @CollectionLayout(describedAs = "Commands that have been exported")
+    @CollectionLayout(
+            describedAs = "Commands that have been exported"
+    )
     public List<ReplayableCommand> getExported() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline).stream()
+        return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline, limit).stream()
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
             .collect(Collectors.toList());
     }
+    @MemberSupport
+    public boolean hideExported() {
+        return this.mode == Mode.EXPORT;
+    }
+
+    @Programmatic
+    private List<ReplayableCommand> getExportedPrevious() {
+        return commandLogEntryRepository().findForegroundBeforeTimestampAndHasBeenExported(baseline, limit).stream()
+            .map(entry->new ReplayableCommand(
+                    entry.getInteractionId(),
+                    replayContext))
+            .collect(Collectors.toList());
+    }
+
+
+    public enum Direction {
+        NEXT, PREVIOUS
+    }
+
+    @Programmatic
+    public List<ReplayableCommand> commands(Direction direction) {
+        switch (mode) {
+            case EXPORT:
+                switch (direction) {
+                    case NEXT:
+                        return getNotYetExported();
+                    case PREVIOUS:
+                    default:
+                        return getNotYetExportedPrevious();
+                }
+            case UNEXPORT:
+            default:
+                switch (direction) {
+                    case NEXT:
+                        return getExported();
+                    case PREVIOUS:
+                    default:
+                        return getExportedPrevious();
+                }
+        }
+    }
+
+
 
 
     // -- VM STATE
 
     @Override
     public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.baseline);
+        return new State(baseline, limit, mode).toMemento();
     }
 
     // -- HELPER
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }
+
+    @Data
+    public static class State {
+        private final Timestamp timestamp;
+        private final int limit;
+        private final Mode mode;
+
+        public static State parseMemento(String memento, State fallback) {
+            if(memento == null || memento.isEmpty()) {
+                return fallback;
+            }
+            try {
+                final String[] parts = memento.split("\\|", -1);
+                if(parts.length != 3) {
+                    return fallback;
+                }
+
+                final Timestamp fallbackTimestamp = fallback != null
+                        ? fallback.timestamp
+                        : Timestamp.from(Instant.now());
+                final int fallbackLimit = fallback != null ? fallback.limit : 0;
+                final Mode fallbackMode = fallback != null ? fallback.mode : Mode.EXPORT;
+
+                final Timestamp timestamp = fromString(parts[0], fallbackTimestamp);
+                final int limit = parts[1].isBlank() ? fallbackLimit : Integer.parseInt(parts[1]);
+                final Mode mode = parts[2].isBlank() ? fallbackMode : Mode.valueOf(parts[2]);
+
+                return new State(timestamp, limit, mode);
+            } catch (Exception e) {
+                return fallback;
+            }
+        }
+
+        public String toMemento() {
+            return TimestampMarshallUtil.toString(timestamp) + "|" + limit + "|" + mode;
+        }
+    }
+
 }

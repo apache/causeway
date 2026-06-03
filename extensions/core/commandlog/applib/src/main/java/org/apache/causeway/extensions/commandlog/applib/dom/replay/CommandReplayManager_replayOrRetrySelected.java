@@ -1,5 +1,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,15 +23,12 @@ import org.apache.causeway.applib.annotation.*;
                 + "If any of the given commands fails, "
                 + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
                 + "The command, that caused the failure, gets marked FAILED.")
+@RequiredArgsConstructor
 public class CommandReplayManager_replayOrRetrySelected {
+
+    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_replayOrRetrySelected> { }
+
     private final CommandReplayManager commandReplayManager;
-
-    public CommandReplayManager_replayOrRetrySelected(CommandReplayManager commandReplayManager) {
-        this.commandReplayManager = commandReplayManager;
-    }
-
-    public class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_replayOrRetrySelected> {
-    }
 
     @MemberSupport
     public CommandReplayManager act(final List<ReplayableCommand> selected) {
