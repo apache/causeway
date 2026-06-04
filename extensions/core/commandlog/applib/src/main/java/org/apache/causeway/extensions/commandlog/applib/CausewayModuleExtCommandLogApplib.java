@@ -62,7 +62,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCom
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
-import org.apache.causeway.extensions.commandlog.applib.spi.ReplayResultMappingListener;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.springframework.context.annotation.Bean;
@@ -173,11 +173,11 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final java.util.List<ReplayResultMappingListener> replayResultMappingListeners) {
+            final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
-                replayResultMappingListeners);
+                commandReplayMappingListeners);
     }
 
 }

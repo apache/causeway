@@ -18,15 +18,47 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 /**
- * Listens for mappings from imported replay result bookmarks to actual replay result bookmarks.
+ * Maps replay command inputs before execution and listens for mappings from imported replay result bookmarks to actual replay result bookmarks.
  *
  * @since 2.1 {@index}
  */
-public interface ReplayResultMappingListener {
+public interface CommandReplayMappingListener {
+
+    /**
+     * Optionally remaps a command target bookmark before replay execution.
+     *
+     * @param commandLogEntry the command log entry being replayed
+     * @param recordedTarget the target bookmark recorded in the imported command DTO
+     * @return replacement target bookmark, or empty to keep the recorded target
+     */
+    default Optional<Bookmark> remapTarget(
+            final CommandLogEntry commandLogEntry,
+            final Bookmark recordedTarget) {
+        return Optional.empty();
+    }
+
+    /**
+     * Optionally remaps a reference-valued action parameter before replay execution.
+     *
+     * @param commandLogEntry the command log entry being replayed
+     * @param parameterName the parameter name from the command DTO
+     * @param parameterIndex the zero-based parameter index from the command DTO
+     * @param recordedReference the reference bookmark recorded for the parameter
+     * @return replacement reference bookmark, or empty to keep the recorded reference
+     */
+    default Optional<Bookmark> remapReferenceParameter(
+            final CommandLogEntry commandLogEntry,
+            final String parameterName,
+            final int parameterIndex,
+            final Bookmark recordedReference) {
+        return Optional.empty();
+    }
 
     /**
      * Notifies that replay produced an actual result bookmark for a command whose imported command log entry had a recorded result bookmark.

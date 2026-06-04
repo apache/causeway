@@ -46,6 +46,7 @@ import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -56,10 +57,13 @@ import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.causeway.extensions.commandlog.applib.spi.ReplayResultMappingListener;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.OidDto;
+import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
@@ -365,7 +369,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .map(commandLogEntry->tryReplay(commandLogEntry.getCommandDto())
+            .map(commandLogEntry->tryReplay(commandDtoForReplay(commandLogEntry))
                 .mapSuccessAsNullable(__ -> this))
             // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
@@ -386,6 +390,105 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
      * Replays given command in its own transaction and handles {@link ReplayState} transition to
      * either {@link ReplayState#OK} or {@link ReplayState#FAILED}.
      */
+    CommandDto commandDtoForReplay(final CommandLogEntry commandLogEntry) {
+        final CommandDto commandDto = copyCommandDto(commandLogEntry.getCommandDto());
+        remapTargets(commandLogEntry, commandDto);
+        remapReferenceParameters(commandLogEntry, commandDto);
+        return commandDto;
+    }
+
+    private CommandDto copyCommandDto(final CommandDto commandDto) {
+        return Try.call(() -> CommandDtoUtils.dtoMapper().read(CommandDtoUtils.dtoMapper().toString(commandDto)))
+                .ifFailureFail()
+                .getValue()
+                .orElse(commandDto);
+    }
+
+    private void remapTargets(
+            final CommandLogEntry commandLogEntry,
+            final CommandDto commandDto) {
+        Optional.ofNullable(commandDto.getTargets())
+            .stream()
+            .flatMap(targets -> targets.getOid().stream())
+            .forEach(target -> remapTarget(commandLogEntry, target));
+    }
+
+    private void remapTarget(
+            final CommandLogEntry commandLogEntry,
+            final OidDto target) {
+        final Bookmark recordedTarget = Bookmark.forOidDto(target);
+        _NullSafe.stream(replayContext.commandReplayMappingListeners())
+            .forEach(listener -> remapTarget(listener, commandLogEntry, target, recordedTarget));
+    }
+
+    private void remapTarget(
+            final CommandReplayMappingListener listener,
+            final CommandLogEntry commandLogEntry,
+            final OidDto target,
+            final Bookmark recordedTarget) {
+        try {
+            Optional.ofNullable(listener.remapTarget(commandLogEntry, recordedTarget))
+                .orElseGet(Optional::empty)
+                .ifPresent(replacement -> copyBookmarkToOidDto(replacement, target));
+        } catch (Exception ex) {
+            log.warn("Command replay target remapping listener failed", ex);
+        }
+    }
+
+    private void remapReferenceParameters(
+            final CommandLogEntry commandLogEntry,
+            final CommandDto commandDto) {
+        if (!(commandDto.getMember() instanceof ActionDto)) {
+            return;
+        }
+        Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
+            .stream()
+            .flatMap(parameters -> parameters.getParameter().stream())
+            .forEach(new java.util.function.Consumer<ParamDto>() {
+                private int parameterIndex = 0;
+                @Override
+                public void accept(final ParamDto parameter) {
+                    remapReferenceParameter(commandLogEntry, parameter, parameterIndex++);
+                }
+            });
+    }
+
+    private void remapReferenceParameter(
+            final CommandLogEntry commandLogEntry,
+            final ParamDto parameter,
+            final int parameterIndex) {
+        if (parameter.getType() != ValueType.REFERENCE || parameter.getReference() == null) {
+            return;
+        }
+        final Bookmark recordedReference = Bookmark.forOidDto(parameter.getReference());
+        _NullSafe.stream(replayContext.commandReplayMappingListeners())
+            .forEach(listener -> remapReferenceParameter(
+                    listener, commandLogEntry, parameter, parameterIndex, recordedReference));
+    }
+
+    private void remapReferenceParameter(
+            final CommandReplayMappingListener listener,
+            final CommandLogEntry commandLogEntry,
+            final ParamDto parameter,
+            final int parameterIndex,
+            final Bookmark recordedReference) {
+        try {
+            Optional.ofNullable(listener.remapReferenceParameter(
+                    commandLogEntry, parameter.getName(), parameterIndex, recordedReference))
+                .orElseGet(Optional::empty)
+                .ifPresent(replacement -> copyBookmarkToOidDto(replacement, parameter.getReference()));
+        } catch (Exception ex) {
+            log.warn("Command replay reference parameter remapping listener failed", ex);
+        }
+    }
+
+    private void copyBookmarkToOidDto(
+            final Bookmark bookmark,
+            final OidDto oidDto) {
+        oidDto.setType(bookmark.getLogicalTypeName());
+        oidDto.setId(bookmark.getIdentifier());
+    }
+
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
         var tryResultBookmark = replayContext.transactionService()
             .callTransactional(Propagation.REQUIRES_NEW, () -> replayContext.commandExecutorService()
@@ -455,12 +558,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         if (recordedResult == null || actualResult == null) {
             return;
         }
-        _NullSafe.stream(replayContext.replayResultMappingListeners())
+        _NullSafe.stream(replayContext.commandReplayMappingListeners())
             .forEach(listener -> notifyReplayResultMapped(listener, recordedResult, actualResult, commandLogEntry));
     }
 
     private void notifyReplayResultMapped(
-            final ReplayResultMappingListener listener,
+            final CommandReplayMappingListener listener,
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
