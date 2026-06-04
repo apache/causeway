@@ -1,0 +1,28 @@
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "with-result"
+  username: "approval-user"
+  targets:
+    oid:
+    - type: "demo.Customer"
+      id: "123"
+  member: !<ACT>
+    logicalMemberIdentifier: "demo.Customer#noop"
+    interactionType: "action_invocation"
+returnedObject:
+  logicalTypeName: "demo.Invoice"
+  id: "456"
+---
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "void-result"
+  username: "approval-user"
+  targets:
+    oid:
+    - type: "demo.Customer"
+      id: "123"
+  member: !<ACT>
+    logicalMemberIdentifier: "demo.Customer#noop"
+    interactionType: "action_invocation"
