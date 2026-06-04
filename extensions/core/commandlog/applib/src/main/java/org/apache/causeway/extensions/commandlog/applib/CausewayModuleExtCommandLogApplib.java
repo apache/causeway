@@ -35,6 +35,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_nextPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_previousPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_toggleMode;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_makeSelectedExportable;
@@ -92,6 +96,10 @@ import org.springframework.context.annotation.Import;
         HasBaseline_nextHour.class,
         CommandExportManager_exportSelected.class,
         CommandExportManager_makeSelectedExportable.class,
+        CommandExportManager_previousPage.class,
+        CommandExportManager_nextPage.class,
+        CommandExportManager_toggleMode.class,
+        CommandExportManager_changeLimit.class,
         CommandReplayManager_importCommands.class,
         CommandReplayManager_replayOrRetrySelected.class,
         CommandReplayManager_excludeSelectedFromReplay.class,

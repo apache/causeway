@@ -80,8 +80,8 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
 
     @RequiredArgsConstructor
     public enum Mode {
-        EXPORT("Export commands (UNDEFINED -> EXPORTED)"),
-        UNEXPORT("Unexport commands (EXPORTED -> UNDEFINED)");
+        EXPORT("Export"),
+        UNEXPORT("Unexport");
 
         private final String title;
 
