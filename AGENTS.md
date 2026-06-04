@@ -17,6 +17,12 @@ When archiving a change with delta specs, sync the delta specs to the main specs
 After archiving and syncing, create a git commit for the archive and spec-sync changes.
 Use the repository git commit message rules above for that commit.
 
+## OpenSpec apply policy
+
+When running `/opsx-apply`, first check whether there are uncommitted OpenSpec proposal artifacts for the active change.
+If proposal artifacts are uncommitted, create a git commit for those proposal docs before starting implementation.
+Use the repository git commit message rules above for that commit.
+
 ## Session handoff
 
 If `SESSION_HANDOFF.md` exists at the repository root, read it at the start of a new session for recent context.
