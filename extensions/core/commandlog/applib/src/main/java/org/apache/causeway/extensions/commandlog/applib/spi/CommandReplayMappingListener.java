@@ -31,32 +31,15 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 public interface CommandReplayMappingListener {
 
     /**
-     * Optionally remaps a command target bookmark before replay execution.
+     * Optionally remaps a recorded command target or reference-valued action parameter bookmark before replay execution.
      *
      * @param commandLogEntry the command log entry being replayed
-     * @param recordedTarget the target bookmark recorded in the imported command DTO
-     * @return replacement target bookmark, or empty to keep the recorded target
+     * @param recordedBookmark the target or reference parameter bookmark recorded in the imported command DTO
+     * @return replacement bookmark, or empty to keep the recorded bookmark
      */
-    default Optional<Bookmark> remapTarget(
+    default Optional<Bookmark> remap(
             final CommandLogEntry commandLogEntry,
-            final Bookmark recordedTarget) {
-        return Optional.empty();
-    }
-
-    /**
-     * Optionally remaps a reference-valued action parameter before replay execution.
-     *
-     * @param commandLogEntry the command log entry being replayed
-     * @param parameterName the parameter name from the command DTO
-     * @param parameterIndex the zero-based parameter index from the command DTO
-     * @param recordedReference the reference bookmark recorded for the parameter
-     * @return replacement reference bookmark, or empty to keep the recorded reference
-     */
-    default Optional<Bookmark> remapReferenceParameter(
-            final CommandLogEntry commandLogEntry,
-            final String parameterName,
-            final int parameterIndex,
-            final Bookmark recordedReference) {
+            final Bookmark recordedBookmark) {
         return Optional.empty();
     }
 
@@ -67,9 +50,9 @@ public interface CommandReplayMappingListener {
      * @param actualResult the result bookmark produced by replay execution
      * @param commandLogEntry the replayed command log entry
      */
-    void onReplayResultMapped(
+    default void onReplayResultMapped(
             Bookmark recordedResult,
             Bookmark actualResult,
-            CommandLogEntry commandLogEntry);
+            CommandLogEntry commandLogEntry) {}
 
 }

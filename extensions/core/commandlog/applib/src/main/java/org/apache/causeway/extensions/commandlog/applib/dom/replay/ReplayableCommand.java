@@ -428,7 +428,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final OidDto target,
             final Bookmark recordedTarget) {
         try {
-            Optional.ofNullable(listener.remapTarget(commandLogEntry, recordedTarget))
+            Optional.ofNullable(listener.remap(commandLogEntry, recordedTarget))
                 .orElseGet(Optional::empty)
                 .ifPresent(replacement -> copyBookmarkToOidDto(replacement, target));
         } catch (Exception ex) {
@@ -445,37 +445,28 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
             .stream()
             .flatMap(parameters -> parameters.getParameter().stream())
-            .forEach(new java.util.function.Consumer<ParamDto>() {
-                private int parameterIndex = 0;
-                @Override
-                public void accept(final ParamDto parameter) {
-                    remapReferenceParameter(commandLogEntry, parameter, parameterIndex++);
-                }
-            });
+            .forEach(parameter -> remapReferenceParameter(commandLogEntry, parameter));
     }
 
     private void remapReferenceParameter(
             final CommandLogEntry commandLogEntry,
-            final ParamDto parameter,
-            final int parameterIndex) {
+            final ParamDto parameter) {
         if (parameter.getType() != ValueType.REFERENCE || parameter.getReference() == null) {
             return;
         }
         final Bookmark recordedReference = Bookmark.forOidDto(parameter.getReference());
         _NullSafe.stream(replayContext.commandReplayMappingListeners())
             .forEach(listener -> remapReferenceParameter(
-                    listener, commandLogEntry, parameter, parameterIndex, recordedReference));
+                    listener, commandLogEntry, parameter, recordedReference));
     }
 
     private void remapReferenceParameter(
             final CommandReplayMappingListener listener,
             final CommandLogEntry commandLogEntry,
             final ParamDto parameter,
-            final int parameterIndex,
             final Bookmark recordedReference) {
         try {
-            Optional.ofNullable(listener.remapReferenceParameter(
-                    commandLogEntry, parameter.getName(), parameterIndex, recordedReference))
+            Optional.ofNullable(listener.remap(commandLogEntry, recordedReference))
                 .orElseGet(Optional::empty)
                 .ifPresent(replacement -> copyBookmarkToOidDto(replacement, parameter.getReference()));
         } catch (Exception ex) {

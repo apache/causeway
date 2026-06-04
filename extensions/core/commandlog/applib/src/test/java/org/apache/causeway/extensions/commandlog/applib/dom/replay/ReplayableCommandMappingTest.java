@@ -62,7 +62,7 @@ class ReplayableCommandMappingTest {
         CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter("simple.SimpleObject", "1", "simple.SimpleObject", "3");
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remapTarget(
+        when(listener.remap(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
@@ -91,10 +91,8 @@ class ReplayableCommandMappingTest {
         CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter("simple.SimpleObject", "1", "simple.SimpleObject", "3");
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remapReferenceParameter(
+        when(listener.remap(
                 commandLogEntry,
-                "simpleObject",
-                0,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
 
@@ -135,7 +133,8 @@ class ReplayableCommandMappingTest {
         ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
 
         assertThat(replayParameter.getString()).isEqualTo("unchanged");
-        verify(listener, never()).remapReferenceParameter(any(), any(), any(Integer.class), any());
+        verify(listener, never()).remap(
+                any(), eq(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")));
     }
 
     @Test
@@ -163,14 +162,12 @@ class ReplayableCommandMappingTest {
                 .thenReturn(Try.success(null));
 
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remapTarget(
+        when(listener.remap(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
-        when(listener.remapReferenceParameter(
+        when(listener.remap(
                 commandLogEntry,
-                "simpleObject",
-                0,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
         ReplayContext replayContext = new ReplayContext(
@@ -189,6 +186,12 @@ class ReplayableCommandMappingTest {
         assertThat(replayParameter.getReference().getId()).isEqualTo("4");
         assertThat(recordedCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
         assertThat(recordedParameter.getReference().getId()).isEqualTo("3");
+        verify(listener).remap(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"));
+        verify(listener).remap(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3"));
     }
 
     @Test
