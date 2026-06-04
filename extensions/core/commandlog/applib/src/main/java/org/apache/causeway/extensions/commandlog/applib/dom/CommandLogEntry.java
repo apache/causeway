@@ -174,8 +174,12 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         setStartedAt(command.getStartedAt());
         setCompletedAt(command.getCompletedAt());
 
-        setResult(command.getResult());
-        setException(command.getException());
+        if (getReplayState().isPendingOrFailed()) {
+            // we DON'T overwrite the result if we're replaying.
+        } else {
+            setResult(command.getResult());
+            setException(command.getException());
+        }
     }
 
 
@@ -209,7 +213,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
                 setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timings.getCompletedAt()));
             });
 
-        copyOver(commandDto, UserDataKeys.RESULT, value -> this.setResult(Bookmark.parse(value).orElse(null)));
+
+        copyOver(commandDto, UserDataKeys.RESULT, value -> Bookmark.parse(value).ifPresent(this::setResult));
         copyOver(commandDto, UserDataKeys.EXCEPTION, this::setException);
 
         setReplayState(replayState);

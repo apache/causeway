@@ -67,7 +67,7 @@ class ReplayableCommandMappingTest {
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
 
-        CommandDto replayCommandDto = replayableCommand(listener).commandDtoForReplay(commandLogEntry);
+        CommandDto replayCommandDto = replayableCommand(listener).commandDtoPossiblyRemappedForReplay(commandLogEntry);
 
         assertThat(replayCommandDto.getTargets().getOid().get(0).getType()).isEqualTo("simple.SimpleObject");
         assertThat(replayCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("2");
@@ -80,7 +80,7 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        CommandDto replayCommandDto = replayableCommand(listener).commandDtoForReplay(commandLogEntry);
+        CommandDto replayCommandDto = replayableCommand(listener).commandDtoPossiblyRemappedForReplay(commandLogEntry);
 
         assertThat(replayCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
         assertThat(recordedCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
@@ -98,7 +98,7 @@ class ReplayableCommandMappingTest {
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
 
-        CommandDto replayCommandDto = replayableCommand(listener).commandDtoForReplay(commandLogEntry);
+        CommandDto replayCommandDto = replayableCommand(listener).commandDtoPossiblyRemappedForReplay(commandLogEntry);
         ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
         ParamDto recordedParameter = ((ActionDto) recordedCommandDto.getMember()).getParameters().getParameter().get(0);
 
@@ -113,7 +113,7 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        CommandDto replayCommandDto = replayableCommand(listener).commandDtoForReplay(commandLogEntry);
+        CommandDto replayCommandDto = replayableCommand(listener).commandDtoPossiblyRemappedForReplay(commandLogEntry);
         ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
         ParamDto recordedParameter = ((ActionDto) recordedCommandDto.getMember()).getParameters().getParameter().get(0);
 
@@ -131,7 +131,7 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        CommandDto replayCommandDto = replayableCommand(listener).commandDtoForReplay(commandLogEntry);
+        CommandDto replayCommandDto = replayableCommand(listener).commandDtoPossiblyRemappedForReplay(commandLogEntry);
         ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
 
         assertThat(replayParameter.getString()).isEqualTo("unchanged");

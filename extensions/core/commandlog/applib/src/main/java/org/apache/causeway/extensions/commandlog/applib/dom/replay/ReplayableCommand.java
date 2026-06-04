@@ -369,7 +369,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .map(commandLogEntry->tryReplay(commandDtoForReplay(commandLogEntry))
+                .map(this::commandDtoPossiblyRemappedForReplay)
+            .map(commandDto->tryReplay(commandDto)
                 .mapSuccessAsNullable(__ -> this))
             // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
@@ -390,7 +391,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
      * Replays given command in its own transaction and handles {@link ReplayState} transition to
      * either {@link ReplayState#OK} or {@link ReplayState#FAILED}.
      */
-    CommandDto commandDtoForReplay(final CommandLogEntry commandLogEntry) {
+    CommandDto commandDtoPossiblyRemappedForReplay(final CommandLogEntry commandLogEntry) {
         final CommandDto commandDto = copyCommandDto(commandLogEntry.getCommandDto());
         remapTargets(commandLogEntry, commandDto);
         remapReferenceParameters(commandLogEntry, commandDto);
