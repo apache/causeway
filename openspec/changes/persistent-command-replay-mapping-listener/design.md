@@ -1,6 +1,6 @@
 ## Context
 
-The command log applib currently provides a built-in `CommandReplayMappingListenerDefault` that remembers non-identity replay result mappings in an in-memory `HashMap`.
+The command log applib currently provides a built-in `CommandReplayMappingListenerInMemory` that remembers non-identity replay result mappings in an in-memory `HashMap`.
 The listener also remaps later replay inputs by looking up recorded bookmarks in that map.
 A recently added conflict policy controls whether conflicting mappings throw an exception or are logged and ignored.
 
@@ -15,7 +15,7 @@ A persistent implementation needs to follow the existing command log persistence
 - Preserve the current in-memory listener as the default storage strategy.
 - Use a configuration property to choose between in-memory and persistent built-in storage.
 - Keep custom `CommandReplayMappingListener` beans authoritative over both built-in implementations.
-- Persist recorded and actual bookmarks as logical type plus identifier columns.
+- Persist recorded and actual bookmarks as `Bookmark` value type properties.
 - Provide abstract applib entity and repository types plus concrete JDO and JPA implementations.
 - Provide menu access and fallback layout metadata for the persisted mappings.
 - Reuse the existing conflict policy semantics for both built-in listener implementations.
@@ -38,8 +38,8 @@ A persistent implementation needs to follow the existing command log persistence
   Its bean factory should be guarded by no custom `CommandReplayMappingListener` and by storage strategy `IN_MEMORY`.
   The persistent listener should use the same no-custom-listener guard and a storage strategy `PERSISTENT` guard.
 
-- Introduce an abstract applib entity, for example `CommandReplayResultMapping`, with fields for recorded logical type, recorded identifier, actual logical type, and actual identifier.
-  Store the bookmark components separately rather than serializing a whole bookmark string so queries and uniqueness constraints can target recorded bookmark identity directly.
+- Introduce an abstract applib entity, for example `CommandReplayResultMapping`, with `Bookmark` fields for the recorded and actual bookmarks.
+  Reuse the existing `Bookmark` value type persistence support, as `CommandLogEntry` does for target and result bookmarks.
 
 - Introduce an abstract applib repository, for example `CommandReplayResultMappingRepository`, with operations to find by recorded bookmark, list all mappings, and create or retrieve mappings.
   Concrete JDO and JPA repositories should follow the `CommandLogEntryRepository` pattern and live in the matching persistence modules.
@@ -53,7 +53,7 @@ A persistent implementation needs to follow the existing command log persistence
   Concrete persistence modules provide the entity implementations that make the returned objects renderable.
 
 - Add a `.fallback.layout.xml` for the abstract applib mapping entity or for each concrete entity following existing command log layout conventions.
-  The layout should expose recorded and actual bookmark components and hide technical persistence details where appropriate.
+  The layout should expose recorded and actual bookmark properties and hide technical persistence details where appropriate.
 
 ## Risks / Trade-offs
 

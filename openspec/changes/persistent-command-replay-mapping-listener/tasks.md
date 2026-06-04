@@ -7,7 +7,7 @@
 
 ## 2. Applib Persistent Mapping Model
 
-- [x] 2.1 Add an abstract applib replay result mapping entity with recorded and actual bookmark logical type and identifier properties.
+- [x] 2.1 Add an abstract applib replay result mapping entity with recorded and actual bookmark properties.
 - [x] 2.2 Add bookmark conversion helpers on the applib entity for recorded and actual bookmarks.
 - [x] 2.3 Add an abstract applib replay result mapping repository contract for lookup by recorded bookmark, listing all mappings, and creating mappings.
 - [x] 2.4 Add a fallback layout XML for the replay result mapping entity.

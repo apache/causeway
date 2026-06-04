@@ -63,7 +63,7 @@ import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeSchedu
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerDefault;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.springframework.context.annotation.Bean;
@@ -113,7 +113,7 @@ import org.springframework.context.annotation.Import;
         // @Component's
         RunBackgroundCommandsJob.class,
         RunBackgroundCommandsJobListener.Noop.class,
-        CommandReplayMappingListenerDefault.BeanFactory.class,
+        CommandReplayMappingListenerInMemory.BeanFactory.class,
 
         // @Service's
         CommandSubscriberForCommandLog.class,

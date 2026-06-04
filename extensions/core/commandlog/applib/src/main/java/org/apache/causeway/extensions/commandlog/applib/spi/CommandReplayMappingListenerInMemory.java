@@ -40,16 +40,16 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.1 {@index}
  */
 @Log4j2
-public class CommandReplayMappingListenerDefault implements CommandReplayMappingListener {
+public class CommandReplayMappingListenerInMemory implements CommandReplayMappingListener {
 
     private final Map<Bookmark, Bookmark> actualBookmarkByRecordedBookmark = new HashMap<>();
     private final OnConflictPolicy onConflictPolicy;
 
-    public CommandReplayMappingListenerDefault() {
+    public CommandReplayMappingListenerInMemory() {
         this(OnConflictPolicy.THROW_EXCEPTION);
     }
 
-    CommandReplayMappingListenerDefault(final OnConflictPolicy onConflictPolicy) {
+    CommandReplayMappingListenerInMemory(final OnConflictPolicy onConflictPolicy) {
         this.onConflictPolicy = onConflictPolicy;
     }
 
@@ -97,9 +97,9 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
                 name = "storage-strategy",
                 havingValue = "IN_MEMORY",
                 matchIfMissing = true)
-        CommandReplayMappingListener commandReplayMappingListenerDefault(
+        CommandReplayMappingListener commandReplayMappingListenerInMemory(
                 final CausewayConfiguration causewayConfiguration) {
-            return new CommandReplayMappingListenerDefault(causewayConfiguration
+            return new CommandReplayMappingListenerInMemory(causewayConfiguration
                     .getExtensions()
                     .getCommandLog()
                     .getReplayResultMapping()

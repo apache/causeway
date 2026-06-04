@@ -18,15 +18,21 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 
 import lombok.NoArgsConstructor;
@@ -38,6 +44,7 @@ import lombok.experimental.UtilityClass;
         entityChangePublishing = Publishing.DISABLED
 )
 @DomainObjectLayout(
+        cssClassFa = "fa-solid fa-arrow-right-from-bracket",
         titleUiEvent = CommandReplayResultMapping.TitleUiEvent.class,
         iconUiEvent = CommandReplayResultMapping.IconUiEvent.class,
         cssClassUiEvent = CommandReplayResultMapping.CssClassUiEvent.class,
@@ -61,70 +68,48 @@ public abstract class CommandReplayResultMapping {
         public static final String FIND_BY_RECORDED_BOOKMARK = LOGICAL_TYPE_NAME + ".findByRecordedBookmark";
     }
 
+    @ObjectSupport public String title() {
+        return new TitleBuffer()
+                .append(getRecordedBookmark())
+                .append(" → ")
+                .append(getActualBookmark())
+                .toString();
+    }
+
     @Programmatic
     public void init(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
-        setRecordedLogicalTypeName(recordedBookmark.getLogicalTypeName());
-        setRecordedIdentifier(recordedBookmark.getIdentifier());
-        setActualLogicalTypeName(actualBookmark.getLogicalTypeName());
-        setActualIdentifier(actualBookmark.getIdentifier());
+        setRecordedBookmark(recordedBookmark);
+        setActualBookmark(actualBookmark);
     }
 
-    @Programmatic
-    public Bookmark getRecordedBookmark() {
-        return Bookmark.forLogicalTypeNameAndIdentifier(getRecordedLogicalTypeName(), getRecordedIdentifier());
-    }
-
-    @Programmatic
-    public Bookmark getActualBookmark() {
-        return Bookmark.forLogicalTypeNameAndIdentifier(getActualLogicalTypeName(), getActualIdentifier());
-    }
-
-    @Property
-    @RecordedLogicalTypeName
-    public abstract String getRecordedLogicalTypeName();
-    public abstract void setRecordedLogicalTypeName(String recordedLogicalTypeName);
-
-    @Property
-    @RecordedIdentifier
-    public abstract String getRecordedIdentifier();
-    public abstract void setRecordedIdentifier(String recordedIdentifier);
-
-    @Property
-    @ActualLogicalTypeName
-    public abstract String getActualLogicalTypeName();
-    public abstract void setActualLogicalTypeName(String actualLogicalTypeName);
-
-    @Property
-    @ActualIdentifier
-    public abstract String getActualIdentifier();
-    public abstract void setActualIdentifier(String actualIdentifier);
-
-    public @interface RecordedLogicalTypeName {
-        String NAME = "recordedLogicalTypeName";
-        int MAX_LENGTH = 255;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
-    }
-
-    public @interface RecordedIdentifier {
-        String NAME = "recordedIdentifier";
+    @Property(
+            domainEvent = RecordedBookmark.DomainEvent.class
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RecordedBookmark {
+        class DomainEvent extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<CommandReplayResultMapping, Bookmark> {}
         int MAX_LENGTH = 2000;
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
+    @RecordedBookmark
+    public abstract Bookmark getRecordedBookmark();
+    public abstract void setRecordedBookmark(Bookmark recordedBookmark);
 
-    public @interface ActualLogicalTypeName {
-        String NAME = "actualLogicalTypeName";
-        int MAX_LENGTH = 255;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
-    }
-
-    public @interface ActualIdentifier {
-        String NAME = "actualIdentifier";
+    @Property(
+            domainEvent = ActualBookmark.DomainEvent.class
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ActualBookmark {
+        class DomainEvent extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<CommandReplayResultMapping, Bookmark> {}
         int MAX_LENGTH = 2000;
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
+    @ActualBookmark
+    public abstract Bookmark getActualBookmark();
+    public abstract void setActualBookmark(Bookmark actualBookmark);
 
 }

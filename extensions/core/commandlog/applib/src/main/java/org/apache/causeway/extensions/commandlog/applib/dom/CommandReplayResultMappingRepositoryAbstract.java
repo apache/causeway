@@ -51,8 +51,7 @@ implements CommandReplayResultMappingRepository {
     public Optional<CommandReplayResultMapping> findByRecordedBookmark(final Bookmark recordedBookmark) {
         return _Casts.uncheckedCast(repositoryService().firstMatch(
                 Query.named(entityClass, CommandReplayResultMapping.Nq.FIND_BY_RECORDED_BOOKMARK)
-                        .withParameter("recordedLogicalTypeName", recordedBookmark.getLogicalTypeName())
-                        .withParameter("recordedIdentifier", recordedBookmark.getIdentifier())));
+                        .withParameter("recordedBookmark", recordedBookmark)));
     }
 
     @Override

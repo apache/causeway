@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.jpa.dom;
 
 import javax.inject.Named;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -35,8 +36,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping.Nq;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,24 +50,22 @@ import lombok.Setter;
         schema = CommandReplayResultMapping.SCHEMA,
         name = CommandReplayResultMapping.TABLE,
         indexes = {
-                @Index(name = "CommandReplayResultMapping__recorded__IDX", columnList = "recordedLogicalTypeName, recordedIdentifier")
+                @Index(name = "CommandReplayResultMapping__recordedBookmark__IDX", columnList = "recordedBookmark")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "CommandReplayResultMapping__recorded__UNQ", columnNames = { "recordedLogicalTypeName", "recordedIdentifier" })
+                @UniqueConstraint(name = "CommandReplayResultMapping__recordedBookmark__UNQ", columnNames = { "recordedBookmark" })
         }
 )
 @NamedQueries({
     @NamedQuery(
             name = Nq.FIND,
             query = "SELECT m "
-                  + "  FROM CommandReplayResultMapping m "
-                  + " ORDER BY m.recordedLogicalTypeName ASC, m.recordedIdentifier ASC"),
+                  + "  FROM CommandReplayResultMapping m"),
     @NamedQuery(
             name = Nq.FIND_BY_RECORDED_BOOKMARK,
             query = "SELECT m "
                   + "  FROM CommandReplayResultMapping m "
-                  + " WHERE m.recordedLogicalTypeName = :recordedLogicalTypeName "
-                  + "   AND m.recordedIdentifier = :recordedIdentifier")
+                  + " WHERE m.recordedBookmark = :recordedBookmark")
 })
 @Named(org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -82,24 +83,16 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResult
     @Getter @Setter
     private Long id;
 
-    @Column(nullable = RecordedLogicalTypeName.NULLABLE, length = RecordedLogicalTypeName.MAX_LENGTH)
-    @RecordedLogicalTypeName
+    @Convert(converter = CausewayBookmarkConverter.class)
+    @Column(nullable = RecordedBookmark.NULLABLE, length = RecordedBookmark.MAX_LENGTH)
+    @RecordedBookmark
     @Getter @Setter
-    private String recordedLogicalTypeName;
+    private Bookmark recordedBookmark;
 
-    @Column(nullable = RecordedIdentifier.NULLABLE, length = RecordedIdentifier.MAX_LENGTH)
-    @RecordedIdentifier
+    @Convert(converter = CausewayBookmarkConverter.class)
+    @Column(nullable = ActualBookmark.NULLABLE, length = ActualBookmark.MAX_LENGTH)
+    @ActualBookmark
     @Getter @Setter
-    private String recordedIdentifier;
-
-    @Column(nullable = ActualLogicalTypeName.NULLABLE, length = ActualLogicalTypeName.MAX_LENGTH)
-    @ActualLogicalTypeName
-    @Getter @Setter
-    private String actualLogicalTypeName;
-
-    @Column(nullable = ActualIdentifier.NULLABLE, length = ActualIdentifier.MAX_LENGTH)
-    @ActualIdentifier
-    @Getter @Setter
-    private String actualIdentifier;
+    private Bookmark actualBookmark;
 
 }

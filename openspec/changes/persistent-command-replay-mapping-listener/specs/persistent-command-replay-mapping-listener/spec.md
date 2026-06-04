@@ -2,7 +2,7 @@
 
 ### Requirement: Persistent replay mapping listener records result mappings
 The system SHALL provide a persistent command replay mapping listener that records non-identity replay result mappings by recorded result bookmark.
-The persisted mapping SHALL store the recorded bookmark logical type, recorded bookmark identifier, actual bookmark logical type, and actual bookmark identifier.
+The persisted mapping SHALL store the recorded bookmark and actual bookmark as bookmark value type properties.
 When replay notifies the persistent listener with equal recorded and actual result bookmarks, the listener MUST NOT persist a mapping for that notification.
 When no mapping exists for a recorded result bookmark, the persistent listener SHALL create a mapping to the actual result bookmark.
 When the same recorded bookmark is notified more than once with the same actual bookmark, the persistent listener SHALL treat the notification as idempotent.
@@ -10,7 +10,7 @@ When the same recorded bookmark is notified more than once with a different actu
 
 #### Scenario: Persistent mapping is recorded
 - **WHEN** command replay notifies the persistent listener that recorded result bookmark `demoInvoice:1` mapped to actual result bookmark `demoInvoice:2`
-- **THEN** the system persists a mapping with recorded logical type `demoInvoice`, recorded identifier `1`, actual logical type `demoInvoice`, and actual identifier `2`
+- **THEN** the system persists a mapping with recorded bookmark `demoInvoice:1` and actual bookmark `demoInvoice:2`
 
 #### Scenario: Equal result mapping is not persisted
 - **WHEN** command replay notifies the persistent listener that recorded result bookmark `demoInvoice:1` mapped to actual result bookmark `demoInvoice:1`
@@ -53,7 +53,7 @@ The persistent listener SHALL perform remapping without resolving recorded or ac
 - **THEN** the persistent listener returns no replacement
 
 ### Requirement: Persistent replay mappings are represented by applib and persistence-specific types
-The system SHALL define an abstract applib replay result mapping entity that exposes recorded and actual bookmark components.
+The system SHALL define an abstract applib replay result mapping entity that exposes recorded and actual bookmark properties.
 The system SHALL define an abstract applib repository for finding, listing, and creating replay result mappings.
 The JDO command log persistence module SHALL provide a concrete replay result mapping entity and repository.
 The JPA command log persistence module SHALL provide a concrete replay result mapping entity and repository.
@@ -95,4 +95,4 @@ The list action SHALL return persisted mappings using the abstract applib reposi
 #### Scenario: User lists persisted replay mappings
 - **WHEN** a user invokes the command log menu action for replay result mappings
 - **THEN** the system returns the persisted replay result mappings
-- **AND** each mapping displays its recorded and actual bookmark components
+- **AND** each mapping displays its recorded and actual bookmarks

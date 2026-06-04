@@ -232,49 +232,27 @@ class CommandReplayMappingListenerPersistentTest {
 
     static class FakeMapping extends CommandReplayResultMapping {
 
-        private String recordedLogicalTypeName;
-        private String recordedIdentifier;
-        private String actualLogicalTypeName;
-        private String actualIdentifier;
+        private Bookmark recordedBookmark;
+        private Bookmark actualBookmark;
 
         @Override
-        public String getRecordedLogicalTypeName() {
-            return recordedLogicalTypeName;
+        public Bookmark getRecordedBookmark() {
+            return recordedBookmark;
         }
 
         @Override
-        public void setRecordedLogicalTypeName(final String recordedLogicalTypeName) {
-            this.recordedLogicalTypeName = recordedLogicalTypeName;
+        public void setRecordedBookmark(final Bookmark recordedBookmark) {
+            this.recordedBookmark = recordedBookmark;
         }
 
         @Override
-        public String getRecordedIdentifier() {
-            return recordedIdentifier;
+        public Bookmark getActualBookmark() {
+            return actualBookmark;
         }
 
         @Override
-        public void setRecordedIdentifier(final String recordedIdentifier) {
-            this.recordedIdentifier = recordedIdentifier;
-        }
-
-        @Override
-        public String getActualLogicalTypeName() {
-            return actualLogicalTypeName;
-        }
-
-        @Override
-        public void setActualLogicalTypeName(final String actualLogicalTypeName) {
-            this.actualLogicalTypeName = actualLogicalTypeName;
-        }
-
-        @Override
-        public String getActualIdentifier() {
-            return actualIdentifier;
-        }
-
-        @Override
-        public void setActualIdentifier(final String actualIdentifier) {
-            this.actualIdentifier = actualIdentifier;
+        public void setActualBookmark(final Bookmark actualBookmark) {
+            this.actualBookmark = actualBookmark;
         }
     }
 }

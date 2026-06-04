@@ -6,7 +6,7 @@ Replay workflows that span JVM restarts, multiple operators, or long-running imp
 ## What Changes
 
 - Add a persistent `CommandReplayMappingListener` implementation backed by command log persistence entities.
-- Store recorded bookmark logical type and identifier together with actual bookmark logical type and identifier, matching the structure used by the in-memory map but persisted in the datastore.
+- Store recorded and actual bookmarks as `Bookmark` value types, matching the command log entry result/target mapping style but persisted in the datastore.
 - Add abstract applib domain and repository types for replay result mappings, plus concrete JDO and JPA implementations following the `CommandLogEntry` pattern.
 - Add configuration to select the built-in listener storage strategy, with `IN_MEMORY` preserving the current default and `PERSISTENT` enabling the new persistent implementation.
 - Rework the current default in-memory listener so it is conditionally enabled only when the storage strategy is `IN_MEMORY` and no custom listener exists.
