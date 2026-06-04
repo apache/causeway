@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -31,25 +30,26 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Default in-memory implementation of {@link CommandReplayMappingListener}.
+ * Persistent implementation of {@link CommandReplayMappingListener}.
  *
  * @since 2.1 {@index}
  */
 @Log4j2
-public class CommandReplayMappingListenerDefault implements CommandReplayMappingListener {
+public class CommandReplayMappingListenerPersistent implements CommandReplayMappingListener {
 
-    private final Map<Bookmark, Bookmark> actualBookmarkByRecordedBookmark = new HashMap<>();
+    private final CommandReplayResultMappingRepository commandReplayResultMappingRepository;
     private final OnConflictPolicy onConflictPolicy;
 
-    public CommandReplayMappingListenerDefault() {
-        this(OnConflictPolicy.THROW_EXCEPTION);
-    }
-
-    CommandReplayMappingListenerDefault(final OnConflictPolicy onConflictPolicy) {
+    public CommandReplayMappingListenerPersistent(
+            final CommandReplayResultMappingRepository commandReplayResultMappingRepository,
+            final OnConflictPolicy onConflictPolicy) {
+        this.commandReplayResultMappingRepository = commandReplayResultMappingRepository;
         this.onConflictPolicy = onConflictPolicy;
     }
 
@@ -57,7 +57,8 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
     public Optional<Bookmark> remap(
             final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
-        return Optional.ofNullable(actualBookmarkByRecordedBookmark.get(recordedBookmark));
+        return commandReplayResultMappingRepository.findByRecordedBookmark(recordedBookmark)
+                .map(CommandReplayResultMapping::getActualBookmark);
     }
 
     @Override
@@ -68,11 +69,13 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
         if(recordedResult.equals(actualResult)) {
             return;
         }
-        final Bookmark existingActualResult = actualBookmarkByRecordedBookmark.get(recordedResult);
-        if(existingActualResult == null) {
-            actualBookmarkByRecordedBookmark.put(recordedResult, actualResult);
+        final Optional<CommandReplayResultMapping> existingMappingIfAny =
+                commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult);
+        if(existingMappingIfAny.isEmpty()) {
+            commandReplayResultMappingRepository.createAndPersist(recordedResult, actualResult);
             return;
         }
+        final Bookmark existingActualResult = existingMappingIfAny.get().getActualBookmark();
         if(!existingActualResult.equals(actualResult)) {
             final String message = String.format(
                     "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot remap to '%s'",
@@ -91,19 +94,22 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
     public static class BeanFactory {
 
         @Bean
+        @ConditionalOnBean(CommandReplayResultMappingRepository.class)
         @ConditionalOnMissingBean(CommandReplayMappingListener.class)
         @ConditionalOnProperty(
                 prefix = "causeway.extensions.command-log.replay-result-mapping",
                 name = "storage-strategy",
-                havingValue = "IN_MEMORY",
-                matchIfMissing = true)
-        CommandReplayMappingListener commandReplayMappingListenerDefault(
+                havingValue = "PERSISTENT")
+        CommandReplayMappingListener commandReplayMappingListenerPersistent(
+                final CommandReplayResultMappingRepository commandReplayResultMappingRepository,
                 final CausewayConfiguration causewayConfiguration) {
-            return new CommandReplayMappingListenerDefault(causewayConfiguration
-                    .getExtensions()
-                    .getCommandLog()
-                    .getReplayResultMapping()
-                    .getOnConflictPolicy());
+            return new CommandReplayMappingListenerPersistent(
+                    commandReplayResultMappingRepository,
+                    causewayConfiguration
+                            .getExtensions()
+                            .getCommandLog()
+                            .getReplayResultMapping()
+                            .getOnConflictPolicy());
         }
 
     }

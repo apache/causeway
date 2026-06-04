@@ -46,6 +46,8 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
@@ -80,6 +82,7 @@ public class CommandLogMenu {
 
 
     final CommandLogEntryRepository commandLogEntryRepository;
+    final Optional<CommandReplayResultMappingRepository> commandReplayResultMappingRepository;
     final ClockService clockService;
     final ReplayContext replayContext;
 
@@ -163,6 +166,30 @@ public class CommandLogMenu {
 
         @MemberSupport public List<? extends CommandLogEntry> act() {
             return commandLogEntryRepository.findAll();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="45")
+    public class findReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappings> {
+            public DomainEvent() { }
+        }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act() {
+            return commandReplayResultMappingRepository
+                    .map(CommandReplayResultMappingRepository::findAll)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
         }
     }
 

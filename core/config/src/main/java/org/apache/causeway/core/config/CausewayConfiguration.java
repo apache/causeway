@@ -3984,7 +3984,26 @@ public class CausewayConfiguration {
             public static class ReplayResultMapping {
 
                 /**
-                 * How the default command replay mapping listener handles a conflicting replay result mapping.
+                 * Which built-in command replay mapping listener storage strategy to use.
+                 *
+                 * <p>
+                 *     External property: {@code causeway.extensions.command-log.replay-result-mapping.storage-strategy}.
+                 *     Accepted values are {@code IN_MEMORY} and {@code PERSISTENT}.
+                 * </p>
+                 */
+                public enum StorageStrategy {
+                    /**
+                     * Store replay result mappings in the default listener instance only.
+                     */
+                    IN_MEMORY,
+                    /**
+                     * Store replay result mappings in the configured command log persistence store.
+                     */
+                    PERSISTENT;
+                }
+
+                /**
+                 * How the built-in command replay mapping listener handles a conflicting replay result mapping.
                  *
                  * <p>
                  *     External property: {@code causeway.extensions.command-log.replay-result-mapping.on-conflict-policy}.
@@ -4007,7 +4026,12 @@ public class CausewayConfiguration {
                 }
 
                 /**
-                 * If replay result mapping conflicts, what should the default listener do?
+                 * Which built-in replay mapping listener storage strategy should be used?
+                 */
+                private StorageStrategy storageStrategy = StorageStrategy.IN_MEMORY;
+
+                /**
+                 * If replay result mapping conflicts, what should the built-in listener do?
                  */
                 private OnConflictPolicy onConflictPolicy = OnConflictPolicy.THROW_EXCEPTION;
             }

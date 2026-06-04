@@ -41,7 +41,10 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
@@ -88,6 +91,37 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
     protected abstract Counter newCounter(String name);
 
+
+    @Test
+    void replay_result_mapping_repository_and_persistent_listener() {
+        String suffix = UUID.randomUUID().toString();
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "recorded-" + suffix);
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "actual-" + suffix);
+        Bookmark conflictingActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "conflicting-" + suffix);
+
+        CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
+                commandReplayResultMappingRepository, OnConflictPolicy.THROW_EXCEPTION);
+
+        listener.onReplayResultMapped(recordedResult, actualResult, null);
+        listener.onReplayResultMapped(recordedResult, actualResult, null);
+
+        assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .extracting("actualBookmark")
+                .isEqualTo(actualResult);
+        assertThat(commandReplayResultMappingRepository.findAll())
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult));
+        assertThat(listener.remap(null, recordedResult)).contains(actualResult);
+
+        Assertions.assertThatThrownBy(() -> listener.onReplayResultMapped(recordedResult, conflictingActualResult, null))
+                .isInstanceOf(IllegalStateException.class);
+        assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .extracting("actualBookmark")
+                .isEqualTo(actualResult);
+    }
 
     @Test
     void invoke_mixin() {
@@ -477,6 +511,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     }
 
     @Inject CommandLogEntryRepository commandLogEntryRepository;
+    @Inject CommandReplayResultMappingRepository commandReplayResultMappingRepository;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
