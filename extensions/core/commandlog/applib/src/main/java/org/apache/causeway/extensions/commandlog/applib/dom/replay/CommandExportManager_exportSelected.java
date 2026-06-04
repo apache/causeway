@@ -51,9 +51,11 @@ public class CommandExportManager_exportSelected {
                 .sorted()
                 .collect(Collectors.toList());
 
-        var yaml = CommandDtoUtils.toYaml(
+        var yaml = CommandDtoUtils.toYamlExport(
                 selectedCommandLogEntries.stream()
-                        .map(CommandLogEntry::getCommandDto)
+                        .map(entry -> CommandDtoUtils.CommandExportDto.of(
+                                entry.getCommandDto(),
+                                entry.getResult()))
                         .collect(Collectors.toList()));
 
         final var replayableCommand = selected.get(0);  // validate ensures there is at least one command

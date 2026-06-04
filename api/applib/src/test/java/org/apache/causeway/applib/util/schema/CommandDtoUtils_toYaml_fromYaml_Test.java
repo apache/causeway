@@ -28,6 +28,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -39,6 +40,49 @@ import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 class CommandDtoUtils_toYaml_fromYaml_Test {
+
+    @Test
+    void bookmark_metadata_maps_returned_object_bookmark() {
+        CommandDtoUtils.BookmarkDto bookmarkDto = CommandDtoUtils.BookmarkDto.of(
+                Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"));
+
+        Assertions.assertThat(bookmarkDto.getLogicalTypeName()).isEqualTo("demo.Invoice");
+        Assertions.assertThat(bookmarkDto.getId()).isEqualTo("456");
+    }
+
+    @Test
+    void bookmark_metadata_is_absent_for_void_result() {
+        CommandDtoUtils.CommandExportDto exportDto = CommandDtoUtils.CommandExportDto.of(command("void-result"), null);
+
+        Assertions.assertThat(exportDto.getReturnedObject()).isNull();
+    }
+
+    @Test
+    void from_yaml_accepts_wrapped_export_shape_and_ignores_returned_object_metadata() {
+        CommandDto withResult = command("with-result");
+        String yaml = CommandDtoUtils.toYamlExport(List.of(
+                CommandDtoUtils.CommandExportDto.of(
+                        withResult,
+                        Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"))));
+
+        List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(commandDtos)
+                .singleElement()
+                .satisfies(command -> Assertions.assertThat(command.getInteractionId()).isEqualTo("with-result"));
+    }
+
+    @Test
+    void from_yaml_keeps_legacy_command_dto_shape() {
+        CommandDto legacy = command("legacy-command");
+        String yaml = CommandDtoUtils.toYaml(List.of(legacy));
+
+        List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(commandDtos)
+                .singleElement()
+                .satisfies(command -> Assertions.assertThat(command.getInteractionId()).isEqualTo("legacy-command"));
+    }
 
     @Test
     void localDate_roundtrips_as_date_only_without_timezone() throws Exception {
@@ -53,18 +97,7 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
             XMLGregorianCalendar originalTime = datatypeFactory
                     .newXMLGregorianCalendar("10:15:30");
 
-            CommandDto command = new CommandDto();
-            command.setMajorVersion("2");
-            command.setMinorVersion("0");
-            command.setInteractionId("localdate-roundtrip-bug");
-            command.setUsername("sven");
-
-            OidDto oid = new OidDto();
-            oid.setType("demo.Customer");
-            oid.setId("123");
-            OidsDto targets = new OidsDto();
-            targets.getOid().add(oid);
-            command.setTargets(targets);
+            CommandDto command = command("localdate-roundtrip-bug");
 
             ParamDto localDateParam = new ParamDto();
             localDateParam.setName("Invoice Date");
@@ -128,5 +161,26 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
         } finally {
             TimeZone.setDefault(originalDefault);
         }
+    }
+
+    private static CommandDto command(final String interactionId) {
+        CommandDto command = new CommandDto();
+        command.setMajorVersion("2");
+        command.setMinorVersion("0");
+        command.setInteractionId(interactionId);
+        command.setUsername("sven");
+
+        OidDto oid = new OidDto();
+        oid.setType("demo.Customer");
+        oid.setId("123");
+        OidsDto targets = new OidsDto();
+        targets.getOid().add(oid);
+        command.setTargets(targets);
+
+        ActionDto action = new ActionDto();
+        action.setLogicalMemberIdentifier("demo.Customer#noop");
+        action.setInteractionType(InteractionType.ACTION_INVOCATION);
+        command.setMember(action);
+        return command;
     }
 }
