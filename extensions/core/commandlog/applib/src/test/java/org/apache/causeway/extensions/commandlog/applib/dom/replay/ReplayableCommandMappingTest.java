@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -215,6 +216,95 @@ class ReplayableCommandMappingTest {
         replayableCommand(listener).notifyReplayResultMapped(commandLogEntry, result);
 
         verify(listener).onReplayResultMapped(result, result, commandLogEntry);
+    }
+
+    @Test
+    void notifies_listener_in_same_transaction_as_command_execution() throws Exception {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto commandDto = new CommandDto();
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(recordedResult);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+
+        AtomicInteger transactionSequence = new AtomicInteger();
+        AtomicInteger currentTransaction = new AtomicInteger(-1);
+        AtomicInteger commandExecutionTransaction = new AtomicInteger(-1);
+        TransactionService transactionService = mock(TransactionService.class);
+        when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
+                .thenAnswer(invocation -> {
+                    @SuppressWarnings("unchecked")
+                    Callable<Object> callable = invocation.getArgument(1);
+                    int transactionId = transactionSequence.incrementAndGet();
+                    currentTransaction.set(transactionId);
+                    Try<Object> result = Try.call(callable);
+                    currentTransaction.set(-1);
+                    return result;
+                });
+
+        CommandExecutorService commandExecutorService = mock(CommandExecutorService.class);
+        when(commandExecutorService.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
+                .thenAnswer(invocation -> {
+                    commandExecutionTransaction.set(currentTransaction.get());
+                    return Try.success(actualResult);
+                });
+
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        org.mockito.Mockito.doAnswer(invocation -> {
+            assertThat(currentTransaction.get()).isEqualTo(commandExecutionTransaction.get());
+            return null;
+        }).when(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        ReplayContext replayContext = new ReplayContext(
+                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
+
+        Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
+
+        assertThat(result.isSuccess()).isTrue();
+        verify(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+    }
+
+    @Test
+    void listener_exception_causes_replay_failure() throws Exception {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto commandDto = new CommandDto();
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(recordedResult);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+
+        TransactionService transactionService = mock(TransactionService.class);
+        when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
+                .thenAnswer(invocation -> {
+                    @SuppressWarnings("unchecked")
+                    Callable<Object> callable = invocation.getArgument(1);
+                    return Try.call(callable);
+                });
+
+        CommandExecutorService commandExecutorService = mock(CommandExecutorService.class);
+        when(commandExecutorService.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
+                .thenReturn(Try.success(actualResult));
+
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        doThrow(new IllegalStateException("conflicting result mapping"))
+                .when(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        ReplayContext replayContext = new ReplayContext(
+                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
+
+        Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
+
+        assertThat(result.isFailure()).isTrue();
+        verify(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        verify(commandLogEntry).saveAnalysis("java.lang.IllegalStateException: conflicting result mapping");
     }
 
     @Test

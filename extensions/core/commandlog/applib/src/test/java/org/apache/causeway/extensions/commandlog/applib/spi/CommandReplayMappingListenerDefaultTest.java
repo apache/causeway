@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,20 @@ class CommandReplayMappingListenerDefaultTest {
     }
 
     @Test
-    void repeated_recorded_bookmark_mapping_uses_latest_actual_bookmark() {
+    void repeated_recorded_bookmark_mapping_with_same_actual_bookmark_is_idempotent() {
+        CommandReplayMappingListenerDefault listener = new CommandReplayMappingListenerDefault();
+        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+
+        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+
+        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(actualResult);
+    }
+
+    @Test
+    void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_rejected() {
         CommandReplayMappingListenerDefault listener = new CommandReplayMappingListenerDefault();
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
@@ -63,9 +77,13 @@ class CommandReplayMappingListenerDefaultTest {
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
         listener.onReplayResultMapped(recordedResult, firstActualResult, commandLogEntry);
-        listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry);
 
-        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(secondActualResult);
+        assertThatThrownBy(() -> listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("demoInvoice:1")
+                .hasMessageContaining("demoInvoice:2")
+                .hasMessageContaining("demoInvoice:3");
+        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(firstActualResult);
     }
 
     @Test

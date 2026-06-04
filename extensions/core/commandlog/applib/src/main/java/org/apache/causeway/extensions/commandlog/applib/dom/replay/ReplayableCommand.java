@@ -483,18 +483,20 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
         var tryResultBookmark = replayContext.transactionService()
-            .callTransactional(Propagation.REQUIRES_NEW, () -> replayContext.commandExecutorService()
-                .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
-                // if we have a replay failure, this throws, which will roll back the surrounding transaction
-                .valueAsNullableElseFail());
-
-        replayContext.transactionService()
-            .runTransactional(Propagation.REQUIRES_NEW, () -> {
-                // handle the replay outcome
-                tryResultBookmark.accept(
-                        this::onReplayError,
-                        bookmarkOpt->onReplaySuccess(bookmarkOpt.orElse(null)));
+            .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                final Bookmark actualResult = replayContext.commandExecutorService()
+                    .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
+                    // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                    .valueAsNullableElseFail();
+                onReplaySuccess(actualResult);
+                return actualResult;
             });
+
+        tryResultBookmark.ifFailure(ex -> replayContext.transactionService()
+            .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                onReplayError(ex);
+                return null;
+            }));
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
         invalidateCachedRecord();
@@ -559,10 +561,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
-        try {
-            listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
-        } catch (Exception ex) {
-            log.warn("Replay result mapping listener failed", ex);
-        }
+        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
     }
 }

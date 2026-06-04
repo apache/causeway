@@ -50,8 +50,20 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
-        if(!recordedResult.equals(actualResult)) {
+        if(recordedResult.equals(actualResult)) {
+            return;
+        }
+        final Bookmark existingActualResult = actualBookmarkByRecordedBookmark.get(recordedResult);
+        if(existingActualResult == null) {
             actualBookmarkByRecordedBookmark.put(recordedResult, actualResult);
+            return;
+        }
+        if(!existingActualResult.equals(actualResult)) {
+            throw new IllegalStateException(String.format(
+                    "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot remap to '%s'",
+                    recordedResult,
+                    existingActualResult,
+                    actualResult));
         }
     }
 
