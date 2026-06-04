@@ -52,7 +52,7 @@ A persistent implementation needs to follow the existing command log persistence
   The action should delegate to the abstract repository and return all persisted mappings.
   Concrete persistence modules provide the entity implementations that make the returned objects renderable.
 
-- Add a `.fallback.layout.xml` for the abstract applib mapping entity or for each concrete entity following existing command log layout conventions.
+- Add a `layout.fallback.xml` for the abstract applib mapping entity following existing command log layout conventions.
   The layout should expose recorded and actual bookmark properties and hide technical persistence details where appropriate.
 
 ## Risks / Trade-offs
