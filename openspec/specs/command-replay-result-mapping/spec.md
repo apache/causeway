@@ -1,43 +1,43 @@
 ## Purpose
 
 Define the command replay mapping SPI that lets applications remap replay inputs and observe mappings from recorded returned object bookmarks to actual replay result bookmarks.
-
 ## Requirements
-
 ### Requirement: Replay mapping SPI can remap command targets before execution
-The system SHALL ask the command replay mapping SPI whether each replayed command target bookmark should be remapped before command execution.
+The system SHALL ask the command replay mapping SPI's common remap method whether each replayed command target bookmark should be remapped before command execution.
 When the SPI provides a replacement target bookmark, the system SHALL execute the replayed command using the replacement target identifier.
 When no SPI implementation exists or no replacement is provided, the system SHALL execute the replayed command using the recorded target identifier.
+The system SHALL use the same remap method for command targets and reference action parameters.
 
 #### Scenario: Target bookmark is remapped
 - **WHEN** command replay is about to execute a command whose recorded target bookmark is `demoCustomer:1`
-- **AND** the command replay mapping SPI returns replacement target bookmark `demoCustomer:2`
+- **AND** the command replay mapping SPI returns replacement bookmark `demoCustomer:2` from its common remap method
 - **THEN** the system executes the replayed command against target bookmark `demoCustomer:2`
 
 #### Scenario: Target bookmark is not remapped
 - **WHEN** command replay is about to execute a command whose recorded target bookmark is `demoCustomer:1`
-- **AND** no command replay mapping SPI provides a replacement target bookmark
+- **AND** no command replay mapping SPI provides a replacement bookmark from its common remap method
 - **THEN** the system executes the replayed command against target bookmark `demoCustomer:1`
 
 ### Requirement: Replay mapping SPI can remap reference action parameters before execution
-The system SHALL ask the command replay mapping SPI whether each replayed action parameter represented as `type: "reference"` with a populated `reference` OID should be remapped before command execution.
+The system SHALL ask the command replay mapping SPI's common remap method whether each replayed action parameter represented as `type: "reference"` with a populated `reference` OID should be remapped before command execution.
 When the SPI provides a replacement reference bookmark, the system SHALL execute the replayed command using the replacement parameter reference.
 When no SPI implementation exists or no replacement is provided, the system SHALL execute the replayed command using the recorded parameter reference.
 The system MUST leave non-reference action parameters unchanged by this reference remapping flow.
+The system MUST NOT require the SPI to receive parameter name or parameter index metadata to remap a reference action parameter.
 
 #### Scenario: Reference action parameter is remapped
 - **WHEN** command replay is about to execute an action command with parameter `simpleObject` recorded as `reference.type: "simple.SimpleObject"` and `reference.id: "1"`
-- **AND** the command replay mapping SPI returns replacement reference bookmark `simple.SimpleObject:2`
+- **AND** the command replay mapping SPI returns replacement bookmark `simple.SimpleObject:2` from its common remap method
 - **THEN** the system executes the replayed command with parameter `simpleObject` set to `reference.type: "simple.SimpleObject"` and `reference.id: "2"`
 
 #### Scenario: Reference action parameter is not remapped
 - **WHEN** command replay is about to execute an action command with parameter `simpleObject` recorded as `reference.type: "simple.SimpleObject"` and `reference.id: "1"`
-- **AND** no command replay mapping SPI provides a replacement reference bookmark
+- **AND** no command replay mapping SPI provides a replacement bookmark from its common remap method
 - **THEN** the system executes the replayed command with parameter `simpleObject` set to `reference.type: "simple.SimpleObject"` and `reference.id: "1"`
 
 #### Scenario: Non-reference action parameter is not remapped by reference flow
 - **WHEN** command replay is about to execute an action command with a parameter that is not represented as `type: "reference"`
-- **THEN** the system does not ask the reference parameter remapping flow to replace that parameter
+- **THEN** the system does not ask the command replay mapping SPI's common remap method to replace that parameter
 
 ### Requirement: Replay input remapping does not mutate recorded command data
 The system SHALL preserve the imported command log entry's recorded command DTO when applying replay-time target or reference parameter remapping.
@@ -91,3 +91,4 @@ The system SHALL pass target bookmarks to the command replay mapping SPI without
 #### Scenario: Target object is not resolvable before remapping
 - **WHEN** command replay is about to execute a command whose recorded target bookmark does not resolve to a local domain object
 - **THEN** the system can still ask the command replay mapping SPI for a replacement target bookmark
+
