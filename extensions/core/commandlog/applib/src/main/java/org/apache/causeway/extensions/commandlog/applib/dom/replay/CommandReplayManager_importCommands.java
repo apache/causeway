@@ -12,6 +12,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
@@ -40,11 +41,17 @@ public class CommandReplayManager_importCommands {
             @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top") final boolean moveBaselineToOldest) {
         var yamlDs = commandsYaml.asDataSource();
 
-        final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-        commandDtos.forEach(commandLogEntryRepository::saveForReplay);
+        final List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(yamlDs);
+        importedCommandDtos.forEach(importedCommandDto -> {
+            final CommandLogEntry commandLogEntry = commandLogEntryRepository.saveForReplay(importedCommandDto.getCommand());
+            if (importedCommandDto.getReturnedObject() != null) {
+                commandLogEntry.setResult(importedCommandDto.getReturnedObject());
+            }
+        });
 
-        return commandDtos.stream()
+        return importedCommandDtos.stream()
                 .filter(x -> moveBaselineToOldest)
+                .map(CommandDtoUtils.ImportedCommandDto::getCommand)
                 .map(CommandDto::getTimestamp)
                 .map(CommandReplayManager_importCommands::toJavaSqlTimestamp)
                 .sorted()

@@ -73,6 +73,43 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
     }
 
     @Test
+    void from_yaml_for_replay_accepts_wrapped_export_shape_and_keeps_returned_object_metadata() {
+        CommandDto withResult = command("with-result");
+        String yaml = CommandDtoUtils.toYamlExport(List.of(
+                CommandDtoUtils.CommandExportDto.of(
+                        withResult,
+                        Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"))));
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("with-result");
+                    Assertions.assertThat(importedCommandDto.getReturnedObject())
+                            .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"));
+                });
+    }
+
+    @Test
+    void from_yaml_for_replay_accepts_wrapped_export_shape_without_returned_object_metadata() {
+        CommandDto voidResult = command("void-result");
+        String yaml = CommandDtoUtils.toYamlExport(List.of(
+                CommandDtoUtils.CommandExportDto.of(voidResult, null)));
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("void-result");
+                    Assertions.assertThat(importedCommandDto.getReturnedObject()).isNull();
+                });
+    }
+
+    @Test
     void from_yaml_keeps_legacy_command_dto_shape() {
         CommandDto legacy = command("legacy-command");
         String yaml = CommandDtoUtils.toYaml(List.of(legacy));
@@ -82,6 +119,41 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
         Assertions.assertThat(commandDtos)
                 .singleElement()
                 .satisfies(command -> Assertions.assertThat(command.getInteractionId()).isEqualTo("legacy-command"));
+    }
+
+    @Test
+    void from_yaml_for_replay_keeps_legacy_multi_document_command_dto_shape() {
+        CommandDto legacy = command("legacy-command");
+        String yaml = CommandDtoUtils.toYaml(List.of(legacy));
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("legacy-command");
+                    Assertions.assertThat(importedCommandDto.getReturnedObject()).isNull();
+                });
+    }
+
+    @Test
+    void from_yaml_for_replay_rejects_legacy_command_dto_list_shape() {
+        String yaml = "- majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"list-command\"\n"
+                + "  username: \"sven\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"demo.Customer\"\n"
+                + "      id: \"123\"\n"
+                + "  member: !<ACT>\n"
+                + "    logicalMemberIdentifier: \"demo.Customer#noop\"\n"
+                + "    interactionType: \"action_invocation\"\n";
+
+        Throwable thrown = Assertions.catchThrowable(() -> CommandDtoUtils.fromYamlForReplay(DataSource.ofStringUtf8(yaml)));
+
+        Assertions.assertThat(thrown).isNotNull();
     }
 
     @Test
