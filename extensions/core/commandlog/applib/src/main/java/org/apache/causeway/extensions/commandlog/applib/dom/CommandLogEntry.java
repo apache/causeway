@@ -174,7 +174,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         setStartedAt(command.getStartedAt());
         setCompletedAt(command.getCompletedAt());
 
-        if (getReplayState().isPendingOrFailed()) {
+        if (org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.isPendingOrFailed(getReplayState())) {
             // we DON'T overwrite the result if we're replaying.
         } else {
             setResult(command.getResult());
