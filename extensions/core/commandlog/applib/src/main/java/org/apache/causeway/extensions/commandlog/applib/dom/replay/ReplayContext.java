@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.ReplayResultMappingListener;
 import org.springframework.lang.Nullable;
 
 import lombok.Value;
@@ -44,6 +46,7 @@ public final class ReplayContext {
         CommandLogEntryRepository commandLogEntryRepository;
         CommandExecutorService commandExecutorService;
         ClockService clockService;
+        List<ReplayResultMappingListener> replayResultMappingListeners;
         
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
     	return interactionId!=null

@@ -47,6 +47,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
@@ -55,6 +56,7 @@ import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.spi.ReplayResultMappingListener;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.common.v2.OidDto;
@@ -66,6 +68,7 @@ import org.springframework.transaction.annotation.Propagation;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Viewmodel that wraps a {@link CommandLogEntry}.
@@ -74,6 +77,7 @@ import lombok.experimental.Accessors;
 @DomainObjectLayout//(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 @AllArgsConstructor
+@Log4j2
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
 
     public static abstract class ActionDomainEvent<T>
@@ -394,7 +398,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 // handle the replay outcome
                 tryResultBookmark.accept(
                         this::onReplayError,
-                        bookmarkOpt->onReplaySuccess());
+                        bookmarkOpt->onReplaySuccess(bookmarkOpt.orElse(null)));
             });
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
@@ -436,8 +440,34 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     /**
      * Handles the happy replay case.
      */
-    private void onReplaySuccess() {
+    private void onReplaySuccess(final Bookmark actualResult) {
         commandLogEntry() // refetch from persistence
-            .ifPresent(entry->entry.saveAnalysis(null));
+            .ifPresent(entry->{
+                entry.saveAnalysis(null);
+                notifyReplayResultMapped(entry, actualResult);
+            });
+    }
+
+    void notifyReplayResultMapped(
+            final CommandLogEntry commandLogEntry,
+            final Bookmark actualResult) {
+        final Bookmark recordedResult = commandLogEntry.getResult();
+        if (recordedResult == null || actualResult == null) {
+            return;
+        }
+        _NullSafe.stream(replayContext.replayResultMappingListeners())
+            .forEach(listener -> notifyReplayResultMapped(listener, recordedResult, actualResult, commandLogEntry));
+    }
+
+    private void notifyReplayResultMapped(
+            final ReplayResultMappingListener listener,
+            final Bookmark recordedResult,
+            final Bookmark actualResult,
+            final CommandLogEntry commandLogEntry) {
+        try {
+            listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        } catch (Exception ex) {
+            log.warn("Replay result mapping listener failed", ex);
+        }
     }
 }
