@@ -107,8 +107,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline {
     @Getter
     private int limit;
 
-    @Property
-    @PropertyLayout(describedAs = "Whether to export or unexport commands")
+    @Programmatic
     @Getter
     private Mode mode;
 

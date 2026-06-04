@@ -14,37 +14,33 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
 )
 @ActionLayout(
         associateWith = "limit", sequence = "1",
-        named = "Previous",
+        named = "-1 page",
         position = ActionLayout.Position.BELOW,
         describedAs = "Move backwards to previous page of commands"
 )
 @RequiredArgsConstructor
 public class CommandExportManager_previousPage {
 
-    public static class DomainEvent extends HasBaseline.ActionDomainEvent<CommandExportManager_previousPage> { }
+    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_previousPage> { }
 
     private final CommandExportManager commandExportManager;
 
     @MemberSupport
     public CommandExportManager act() {
-        final var commands = commandExportManager.commands(NEXT);
+        final var commands = commandExportManager.commands(PREVIOUS);   // returns descending, latest (youngest) first
         final var size = commands.size();
         if (size == 0) {
             return commandExportManager;
         }
-        final var firstReplayable = commands.get(0);
-        return commandExportManager(firstReplayable);
+        final var earliestReplayable = commands.get(size - 1);
+        return commandExportManager(earliestReplayable);
     }
 
     @MemberSupport
     public String disableAct() {
-        final var commands = commandExportManager.commands(NEXT);
+        final var commands = commandExportManager.commands(PREVIOUS);
         final var size = commands.size();
-        if (size == 0) {
-            return "No commands";
-        }
-        final var firstReplayable = commands.get(0);
-        return commandExportManager(firstReplayable).commands(PREVIOUS).isEmpty() ? "No previous commands" : null;
+        return size == 0 ? "No commands" : null;
     }
 
     private CommandExportManager commandExportManager(final ReplayableCommand replayableCommand) {

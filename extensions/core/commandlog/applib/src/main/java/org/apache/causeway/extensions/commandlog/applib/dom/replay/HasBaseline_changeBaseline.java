@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.causeway.applib.annotation.*;
 
 @Action(
-        restrictTo = RestrictTo.PROTOTYPING,
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         domainEvent = HasBaseline_changeBaseline.DomainEvent.class,
@@ -13,8 +12,7 @@ import org.apache.causeway.applib.annotation.*;
 )
 @ActionLayout(
         associateWith = "baseline", sequence = "2",
-        named = "Change",
-        position = ActionLayout.Position.PANEL
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT
 )
 @RequiredArgsConstructor
 public class HasBaseline_changeBaseline {

@@ -12,15 +12,14 @@ import org.apache.causeway.applib.annotation.*;
 )
 @ActionLayout(
         associateWith = "baseline", sequence = "3",
-        named = "Next",
+        named = "+1 hour",
         position = ActionLayout.Position.PANEL,
         describedAs = "Move forward one hour"
 )
 @RequiredArgsConstructor
 public class HasBaseline_nextHour {
 
-    public static class DomainEvent extends HasBaseline.ActionDomainEvent<HasBaseline_nextHour> {
-    }
+    public static class DomainEvent extends HasBaseline.ActionDomainEvent<HasBaseline_nextHour> { }
 
     private final HasBaseline hasBaseline;
 

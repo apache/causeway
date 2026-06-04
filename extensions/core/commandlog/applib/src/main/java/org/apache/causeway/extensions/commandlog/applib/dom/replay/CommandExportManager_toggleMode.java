@@ -14,14 +14,13 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
 )
 @ActionLayout(
         sequence = "1.1",
-        named = "Toggle",
         cssClass = "btn-secondary",
         describedAs = "Toggle between exporting and un-exporting."
 )
 @RequiredArgsConstructor
 public class CommandExportManager_toggleMode {
 
-    public static class DomainEvent extends HasBaseline.ActionDomainEvent<CommandExportManager_toggleMode> { }
+    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_toggleMode> { }
 
     private final CommandExportManager commandExportManager;
 

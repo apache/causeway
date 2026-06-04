@@ -4,18 +4,15 @@
             <cpt:domainObject/>
         </bs:col>
         <bs:col span="3">
-            <cpt:fieldSet name=" " id="baseline">
+            <cpt:fieldSet name="Control" id="control">
+                <cpt:action id="toggleMode"/>
                 <cpt:property id="baseline">
                     <cpt:action id="previousHour"/>
-                    <cpt:action id="changeBaseline"/>
                     <cpt:action id="nextHour"/>
                 </cpt:property>
                 <cpt:property id="limit">
                     <cpt:action id="previousPage"/>
                     <cpt:action id="nextPage"/>
-                </cpt:property>
-                <cpt:property id="mode">
-                    <cpt:action id="ToggleMode"/>
                 </cpt:property>
             </cpt:fieldSet>
         </bs:col>
@@ -49,8 +46,8 @@
         <bs:col span="12">
             <bs:row>
                 <bs:col span="12" size="MD">
-                    <cpt:collection defaultView="table" paged="15" id="notYetExported"/>
-                    <cpt:collection defaultView="table" paged="15" id="exported"/>
+                    <cpt:collection defaultView="table" paged="100" id="notYetExported"/>
+                    <cpt:collection defaultView="table" paged="100" id="exported"/>
                 </bs:col>
             </bs:row>
         </bs:col>

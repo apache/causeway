@@ -14,14 +14,14 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
 )
 @ActionLayout(
         associateWith = "limit", sequence = "2",
-        named = "Next Page",
+        named = "+1 page",
         position = ActionLayout.Position.BELOW,
         describedAs = "Move forward to next page of commands"
 )
 @RequiredArgsConstructor
 public class CommandExportManager_nextPage {
 
-    public static class DomainEvent extends HasBaseline.ActionDomainEvent<CommandExportManager_nextPage> { }
+    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_nextPage> { }
 
     private final CommandExportManager commandExportManager;
 

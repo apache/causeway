@@ -12,7 +12,7 @@ import org.apache.causeway.applib.annotation.*;
 )
 @ActionLayout(
         associateWith = "baseline", sequence = "1",
-        named = "Previous",
+        named = "-1 hour",
         position = ActionLayout.Position.PANEL,
         describedAs = "Move back one hour"
 )
