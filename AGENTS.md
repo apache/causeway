@@ -16,3 +16,7 @@ When running `/opsx-archive` without an explicit change name, if there is exactl
 When archiving a change with delta specs, sync the delta specs to the main specs automatically because syncing is the recommended path.
 After archiving and syncing, create a git commit for the archive and spec-sync changes.
 Use the repository git commit message rules above for that commit.
+
+## Session handoff
+
+If `SESSION_HANDOFF.md` exists at the repository root, read it at the start of a new session for recent context.
