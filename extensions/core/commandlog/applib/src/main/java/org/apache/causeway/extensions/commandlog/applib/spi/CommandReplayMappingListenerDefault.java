@@ -27,16 +27,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Default in-memory implementation of {@link CommandReplayMappingListener}.
  *
  * @since 2.1 {@index}
  */
+@Log4j2
 public class CommandReplayMappingListenerDefault implements CommandReplayMappingListener {
 
     private final Map<Bookmark, Bookmark> actualBookmarkByRecordedBookmark = new HashMap<>();
+    private final OnConflictPolicy onConflictPolicy;
+
+    public CommandReplayMappingListenerDefault() {
+        this(OnConflictPolicy.THROW_EXCEPTION);
+    }
+
+    CommandReplayMappingListenerDefault(final OnConflictPolicy onConflictPolicy) {
+        this.onConflictPolicy = onConflictPolicy;
+    }
 
     @Override
     public Optional<Bookmark> remap(
@@ -59,11 +73,16 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
             return;
         }
         if(!existingActualResult.equals(actualResult)) {
-            throw new IllegalStateException(String.format(
+            final String message = String.format(
                     "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot remap to '%s'",
                     recordedResult,
                     existingActualResult,
-                    actualResult));
+                    actualResult);
+            if(onConflictPolicy == OnConflictPolicy.LOG_AND_CONTINUE) {
+                log.error(message);
+                return;
+            }
+            throw new IllegalStateException(message);
         }
     }
 
@@ -72,8 +91,13 @@ public class CommandReplayMappingListenerDefault implements CommandReplayMapping
 
         @Bean
         @ConditionalOnMissingBean(CommandReplayMappingListener.class)
-        CommandReplayMappingListener commandReplayMappingListenerDefault() {
-            return new CommandReplayMappingListenerDefault();
+        CommandReplayMappingListener commandReplayMappingListenerDefault(
+                final CausewayConfiguration causewayConfiguration) {
+            return new CommandReplayMappingListenerDefault(causewayConfiguration
+                    .getExtensions()
+                    .getCommandLog()
+                    .getReplayResultMapping()
+                    .getOnConflictPolicy());
         }
 
     }

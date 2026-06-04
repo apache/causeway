@@ -22,12 +22,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.StandardEnvironment;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 class CommandReplayMappingListenerDefaultTest {
@@ -69,7 +74,7 @@ class CommandReplayMappingListenerDefaultTest {
     }
 
     @Test
-    void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_rejected() {
+    void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_rejected_by_default() {
         CommandReplayMappingListenerDefault listener = new CommandReplayMappingListenerDefault();
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
@@ -87,6 +92,20 @@ class CommandReplayMappingListenerDefaultTest {
     }
 
     @Test
+    void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_logged_and_ignored_when_configured() {
+        CommandReplayMappingListenerDefault listener = new CommandReplayMappingListenerDefault(OnConflictPolicy.LOG_AND_CONTINUE);
+        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+
+        listener.onReplayResultMapped(recordedResult, firstActualResult, commandLogEntry);
+        listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry);
+
+        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(firstActualResult);
+    }
+
+    @Test
     void unmapped_bookmark_returns_no_replacement() {
         CommandReplayMappingListenerDefault listener = new CommandReplayMappingListenerDefault();
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
@@ -98,6 +117,7 @@ class CommandReplayMappingListenerDefaultTest {
     @Test
     void autoconfiguration_creates_default_listener_when_missing() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                CausewayConfigurationForTest.class,
                 CommandReplayMappingListenerDefault.BeanFactory.class)) {
 
             assertThat(context.getBean(CommandReplayMappingListener.class))
@@ -108,6 +128,7 @@ class CommandReplayMappingListenerDefaultTest {
     @Test
     void autoconfiguration_backs_off_when_custom_listener_exists() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                CausewayConfigurationForTest.class,
                 CustomListenerConfiguration.class,
                 CommandReplayMappingListenerDefault.BeanFactory.class)) {
 
@@ -117,6 +138,47 @@ class CommandReplayMappingListenerDefaultTest {
             assertThat(context.getBean(CommandReplayMappingListener.class))
                     .isSameAs(CustomListenerConfiguration.CUSTOM_LISTENER);
         }
+    }
+
+    @Test
+    void autoconfiguration_uses_configured_conflict_policy() {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                LogAndContinueCausewayConfigurationForTest.class,
+                CommandReplayMappingListenerDefault.BeanFactory.class)) {
+            CommandReplayMappingListener listener = context.getBean(CommandReplayMappingListener.class);
+            CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+            Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+            Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+            Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+
+            listener.onReplayResultMapped(recordedResult, firstActualResult, commandLogEntry);
+            listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry);
+
+            assertThat(listener.remap(commandLogEntry, recordedResult)).contains(firstActualResult);
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class CausewayConfigurationForTest {
+
+        @Bean
+        CausewayConfiguration causewayConfiguration() {
+            return new CausewayConfiguration(new StandardEnvironment(), Optional.empty());
+        }
+
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class LogAndContinueCausewayConfigurationForTest {
+
+        @Bean
+        CausewayConfiguration causewayConfiguration() {
+            CausewayConfiguration causewayConfiguration = new CausewayConfiguration(new StandardEnvironment(), Optional.empty());
+            causewayConfiguration.getExtensions().getCommandLog().getReplayResultMapping()
+                    .setOnConflictPolicy(OnConflictPolicy.LOG_AND_CONTINUE);
+            return causewayConfiguration;
+        }
+
     }
 
     @Configuration(proxyBeanMethods = false)

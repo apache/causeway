@@ -3979,6 +3979,39 @@ public class CausewayConfiguration {
              */
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
+            private final ReplayResultMapping replayResultMapping = new ReplayResultMapping();
+            @Data
+            public static class ReplayResultMapping {
+
+                /**
+                 * How the default command replay mapping listener handles a conflicting replay result mapping.
+                 *
+                 * <p>
+                 *     External property: {@code causeway.extensions.command-log.replay-result-mapping.on-conflict-policy}.
+                 *     Accepted values are {@code THROW_EXCEPTION} and {@code LOG_AND_CONTINUE}.
+                 * </p>
+                 */
+                public enum OnConflictPolicy {
+                    /**
+                     * Throw an exception when the same recorded result bookmark maps to different actual bookmarks.
+                     *
+                     * <p>
+                     *     This is the default fail-fast behavior.
+                     * </p>
+                     */
+                    THROW_EXCEPTION,
+                    /**
+                     * Log the conflicting mapping and continue without replacing the remembered mapping.
+                     */
+                    LOG_AND_CONTINUE;
+                }
+
+                /**
+                 * If replay result mapping conflicts, what should the default listener do?
+                 */
+                private OnConflictPolicy onConflictPolicy = OnConflictPolicy.THROW_EXCEPTION;
+            }
+
             private final RunBackgroundCommands runBackgroundCommands = new RunBackgroundCommands();
             @Data
             public static class RunBackgroundCommands {
