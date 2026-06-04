@@ -27,8 +27,10 @@ Today the SPI provides the hooks, but applications must supply their own listene
   An alternative was to add a separate mapping store service, but that would add indirection without current persistence or distribution requirements.
 
 - Use a simple in-memory `HashMap<Bookmark, Bookmark>` keyed by the recorded bookmark and valued by the actual replay bookmark.
-  `onReplayResultMapped(...)` will update the map, and `remap(...)` will return the mapped actual bookmark when present.
-  An alternative was to use a concurrent map, but command replay is expected to use this listener in a straightforward replay flow and the requested implementation explicitly calls for a simple hashmap.
+  `onReplayResultMapped(...)` will update the map only when the actual bookmark differs from the recorded bookmark, and `remap(...)` will return the mapped actual bookmark when present.
+  Equal recorded and actual bookmarks do not need saved mappings because replay can keep using the recorded bookmark unchanged.
+  An alternative was to store identity mappings too, but that would grow the map without changing later remapping behavior.
+  Another alternative was to use a concurrent map, but command replay is expected to use this listener in a straightforward replay flow and the requested implementation explicitly calls for a simple hashmap.
 
 - Register the default listener with Spring Boot autoconfiguration guarded by `@ConditionalOnMissingBean(CommandReplayMappingListener.class)`.
   This lets applications override the default by declaring their own listener bean while giving simpler applications out-of-the-box remapping behavior.

@@ -6,7 +6,7 @@ Without a default implementation, each application must repeat the same simple i
 ## What Changes
 
 - Add a default command replay mapping listener implementation backed by a simple in-memory `HashMap` from recorded bookmarks to actual replay result bookmarks.
-- Record mappings when replay reports `onReplayResultMapped(...)` and consult the recorded-to-actual map from `remap(...)` before command execution.
+- Record mappings when replay reports `onReplayResultMapped(...)` and the actual bookmark differs from the recorded bookmark, then consult the recorded-to-actual map from `remap(...)` before command execution.
 - Register the default listener through Spring Boot autoconfiguration only when no other `CommandReplayMappingListener` bean is present.
 - Leave existing custom listener implementations in control by ensuring the default bean is conditional on missing bean.
 
