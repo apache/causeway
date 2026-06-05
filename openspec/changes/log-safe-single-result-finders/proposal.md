@@ -14,7 +14,7 @@ Today command logging normally captures only state-changing commands, so replay 
 ## Capabilities
 
 ### New Capabilities
-- `safe-single-result-finder-command-logging`: Opt-in command publishing for safe actions, enabling exported regression recordings to include finder steps and any returned object bookmarks that the framework can capture.
+- `safe-action-command-publishing`: Opt-in command publishing for safe actions, enabling exported regression recordings to include finder steps and any returned object bookmarks that the framework can capture.
 
 ### Modified Capabilities
 - `command-export-yaml-result`: Exported command YAML includes returned object metadata for safe action command log entries when a result bookmark is available.

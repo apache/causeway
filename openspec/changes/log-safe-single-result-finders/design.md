@@ -43,7 +43,7 @@ Explicit `@Action(commandPublishing = DISABLED)` remains a local opt-out, and ex
 Alternative considered: create command log entries during `CommandSubscriberForCommandLog#onCompleted` for safe actions that were not published earlier.
 That was rejected because it still required special command-log subscriber logic instead of using the existing command publishing facet model.
 
-Alternative considered: force safe finder commands through ready/start publishing from `MemberExecutorServiceDefault` after the action result was known.
+Alternative considered: force safe action commands through ready/start publishing from `MemberExecutorServiceDefault` after the action result was known.
 That was rejected because it was a bolt-on around the normal logging boundary and duplicated command publishing concerns outside the facet and subscriber pipeline.
 
 ### Decision: Do not use result shape for eligibility

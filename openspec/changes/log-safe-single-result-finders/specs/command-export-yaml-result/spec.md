@@ -12,8 +12,8 @@ The system SHALL preserve compatibility with existing command replay import for 
 - **THEN** the generated YAML contains the embedded command DTO for the safe action invocation
 - **AND** the generated YAML contains returned object metadata with logical type name `demoCustomer` and id `1`
 
-#### Scenario: Export command stream containing finder and state-changing commands
-- **GIVEN** a command export selection contains a logged safe finder command followed by a state-changing command that uses the found object
+#### Scenario: Export command stream containing safe and state-changing commands
+- **GIVEN** a command export selection contains a logged safe action command followed by a state-changing command that uses the found object
 - **WHEN** the commands are exported
 - **THEN** the generated YAML preserves both command entries in replay order
-- **AND** the safe finder entry includes its returned object metadata when available
+- **AND** the safe action entry includes its returned object metadata when available

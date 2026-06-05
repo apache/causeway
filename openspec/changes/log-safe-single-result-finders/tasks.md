@@ -24,7 +24,7 @@
 
 - [x] 4.1 Verify command export includes logged safe finder entries in replay order.
 - [x] 4.2 Verify exported safe finder entries include returned object metadata when a result bookmark is present.
-- [x] 4.3 Verify replay executes imported safe finder command entries.
+- [x] 4.3 Verify replay executes imported safe action command entries.
 - [x] 4.4 Verify replay result mapping notifications are emitted for safe finder entries with recorded and actual result bookmarks.
 - [x] 4.5 Verify later replay command targets and reference parameters can be remapped using mappings learned from safe finder replay results.
 
@@ -33,7 +33,7 @@
 - [x] 5.1 Add unit tests for the new configuration property default and enabled values.
 - [x] 5.2 Add tests for safe action command publishing eligibility and result shapes without exclusion.
 - [x] 5.3 Add tests ensuring explicitly command-published safe actions are not duplicated.
-- [x] 5.4 Add export tests covering safe finder command entries and returned object metadata.
+- [x] 5.4 Add export tests covering safe action command entries and returned object metadata.
 - [x] 5.5 Add replay tests covering finder result mapping notifications and subsequent input remapping.
 - [x] 5.6 Update user-facing documentation for regression recording usage and the new configuration property.
 
