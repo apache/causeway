@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.*;
 
@@ -35,6 +37,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -51,6 +57,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -58,9 +65,13 @@ import org.apache.causeway.core.metamodel.facets.members.publish.command.Command
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -327,12 +338,106 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
     }
 
+    @Test
+    void selector_invocation_prepares_command_for_publishing_when_safe_action_publishing_enabled() {
+        val commandPublisher = Mockito.mock(CommandPublisher.class);
+        val interactionProvider = Mockito.mock(InteractionProvider.class);
+        val interaction = Mockito.mock(Interaction.class);
+        val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val publishingSelectorAction = publishingLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val lease = new Lease();
+        val matchingItem = new LeaseItem("first", 1, null);
+        lease.getItems().add(matchingItem);
+        val leaseAdapter = publishingMmc.getObjectManager().adapt(lease);
+        val command = commandFor(publishingSelectorAction, leaseAdapter);
+        Mockito.when(interaction.getCommand()).thenReturn(command);
+        Mockito.when(interactionProvider.currentInteraction()).thenReturn(Optional.of(interaction));
+        Mockito.when(interactionProvider.currentInteractionElseFail()).thenReturn(interaction);
+
+        val result = publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
+                publishingSelectorAction,
+                publishingSelectorAction.interactionHead(leaseAdapter),
+                arguments(publishingMmc, leaseAdapter, "first", 1),
+                InteractionInitiatedBy.USER);
+
+        assertThat(result.getPojo(), is(matchingItem));
+        assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.READY));
+        Mockito.verify(commandPublisher).ready(command);
+        assertThat(command.getCommandDto().getMember(), instanceOf(ActionDto.class));
+        assertThat(command.getCommandDto().getMember().getLogicalMemberIdentifier(),
+                is(IdentifierUtil.logicalMemberIdentifierFor(publishingSelectorAction.interactionHead(leaseAdapter), publishingSelectorAction)));
+        val exportDto = CommandDtoUtils.CommandExportDto.of(command.getCommandDto(), command.getResult());
+        assertThat(exportDto.getCommand(), is(command.getCommandDto()));
+    }
+
+    @Test
+    void selector_invocation_does_not_prepare_command_when_safe_action_publishing_disabled() {
+        val commandPublisher = Mockito.mock(CommandPublisher.class);
+        val interactionProvider = Mockito.mock(InteractionProvider.class);
+        val interaction = Mockito.mock(Interaction.class);
+        val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val publishingSelectorAction = publishingLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("first", 1, null));
+        val leaseAdapter = publishingMmc.getObjectManager().adapt(lease);
+        val command = commandFor(publishingSelectorAction, leaseAdapter);
+        Mockito.when(interaction.getCommand()).thenReturn(command);
+        Mockito.when(interactionProvider.currentInteraction()).thenReturn(Optional.of(interaction));
+        Mockito.when(interactionProvider.currentInteractionElseFail()).thenReturn(interaction);
+
+        publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
+                publishingSelectorAction,
+                publishingSelectorAction.interactionHead(leaseAdapter),
+                arguments(publishingMmc, leaseAdapter, "first", 1),
+                InteractionInitiatedBy.USER);
+
+        assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.ONHOLD));
+        Mockito.verify(commandPublisher).ready(command);
+    }
+
     private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {
         return MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .causewayBeanTypeRegistry(new CausewayBeanTypeRegistryDefault(Can.ofArray(mixinTypes)
                         .map(mixinType -> CausewayBeanMetaData.notManaged(BeanSort.MIXIN, mixinType))))
                 .build();
+    }
+
+    private MetaModelContext_forTesting newMetamodelContextWithServices(
+            final CommandPublisher commandPublisher,
+            final InteractionProvider interactionProvider) {
+        return MetaModelContext_forTesting.builder()
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
+                .singleton(commandPublisher)
+                .singleton(interactionProvider)
+                .build();
+    }
+
+    private Command commandFor(
+            final ObjectAction action,
+            final ManagedObject targetAdapter) {
+        val command = new Command(UUID.randomUUID());
+        command.updater().setCommandDtoAndIdentifier(commandDtoFor(action, targetAdapter, command.getInteractionId()));
+        return command;
+    }
+
+    private CommandDto commandDtoFor(
+            final ObjectAction action,
+            final ManagedObject targetAdapter,
+            final UUID interactionId) {
+        val commandDto = new CommandDto();
+        commandDto.setInteractionId(interactionId.toString());
+        val actionDto = new ActionDto();
+        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(action.interactionHead(targetAdapter), action));
+        commandDto.setMember(actionDto);
+        return commandDto;
     }
 
     private Consent validate(
@@ -375,10 +480,18 @@ class ParentedCollectionSelectorActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
+        return arguments(mmc, leaseAdapter, name, sequence);
+    }
+
+    private Can<ManagedObject> arguments(
+            final MetaModelContext_forTesting context,
+            final ManagedObject leaseAdapter,
+            final String name,
+            final Integer sequence) {
         return Can.of(
                 leaseAdapter,
-                mmc.getObjectManager().adapt(name),
-                mmc.getObjectManager().adapt(sequence));
+                context.getObjectManager().adapt(name),
+                context.getObjectManager().adapt(sequence));
     }
 
 }

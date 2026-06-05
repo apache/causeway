@@ -19,17 +19,23 @@
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.NonNull;
@@ -78,6 +84,9 @@ implements ActionInvocationFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val command = commandIfAny();
+        prepareCommandForPublishing(command, head, owningAction, interactionInitiatedBy);
+
         val matchResult = ParentedCollectionSelectorMatchingUtil.match(
                 collection,
                 scalarProperties,
@@ -87,7 +96,47 @@ implements ActionInvocationFacet {
         if(validationMessage != null) {
             throw new RecoverableException(validationMessage);
         }
-        return matchResult.singleMatch();
+        val singleMatch = matchResult.singleMatch();
+        setCommandResultIfBookmarkable(command, singleMatch, interactionInitiatedBy);
+        return singleMatch;
+    }
+
+    private Command commandIfAny() {
+        return lookupService(InteractionProvider.class)
+                .flatMap(InteractionProvider::currentInteraction)
+                .map(interaction -> interaction.getCommand())
+                .orElse(null);
+    }
+
+    private void prepareCommandForPublishing(
+            final Command command,
+            final InteractionHead head,
+            final ObjectAction owningAction,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        if(command == null || interactionInitiatedBy.isPassThrough()) {
+            return;
+        }
+        if(IdentifierUtil.isCommandForMember(command, head, owningAction)
+                && CommandPublishingFacet.isPublishingEnabled(facetHolder())) {
+            command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
+        }
+        lookupService(CommandPublisher.class)
+                .ifPresent(commandPublisher -> commandPublisher.ready(command));
+    }
+
+    private void setCommandResultIfBookmarkable(
+            final Command command,
+            final ManagedObject result,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        if(command == null || interactionInitiatedBy.isPassThrough() || command.getResult() != null) {
+            return;
+        }
+        val entityState = result.getEntityState();
+        if(!entityState.isPersistable() || !entityState.hasOid()) {
+            return;
+        }
+        result.getBookmark()
+                .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }
 
 }
