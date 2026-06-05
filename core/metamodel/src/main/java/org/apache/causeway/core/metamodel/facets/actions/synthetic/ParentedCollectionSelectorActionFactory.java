@@ -144,7 +144,6 @@ public class ParentedCollectionSelectorActionFactory {
                 scalarProperties,
                 facetedMethod));
         FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionSelector(
-                facetedMethod.getMethod(),
                 parentSpec,
                 collection.getElementType(),
                 collection,

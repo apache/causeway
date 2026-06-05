@@ -952,9 +952,13 @@ implements ObjectSpecification {
         replaceAssociations(Stream.concat(
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
-
     }
 
+    /**
+     * Mixed-in associations are appended lazily and can be materialized before or after actions.
+     * When selector actions are enabled, make sure collection mixins receive matching synthetic actions
+     * without treating ordinary collection-returning mixin actions as selector sources.
+     */
     private void ensureParentedCollectionSelectorActionsForMixedInAssociations() {
         if(!isParentedCollectionSelectorActionsEnabled()) {
             return;

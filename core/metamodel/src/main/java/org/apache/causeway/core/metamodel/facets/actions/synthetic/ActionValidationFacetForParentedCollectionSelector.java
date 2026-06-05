@@ -80,7 +80,7 @@ implements ActionValidationFacet {
                 scalarProperties,
                 arguments,
                 interactionInitiatedBy);
-        return ParentedCollectionSelectorMatching.validationMessage(collection, actionId, matchResult);
+        return ParentedCollectionSelectorMatching.validationMessage(actionId, matchResult);
     }
 
 }

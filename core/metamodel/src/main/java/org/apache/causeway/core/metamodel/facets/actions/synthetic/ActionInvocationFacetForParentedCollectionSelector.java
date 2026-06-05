@@ -49,7 +49,6 @@ implements ActionInvocationFacet {
     private final @NonNull Can<ObjectAssociation> scalarProperties;
 
     public ActionInvocationFacetForParentedCollectionSelector(
-            final @NonNull org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade method,
             final @NonNull ObjectSpecification declaringType,
             final @NonNull ObjectSpecification returnType,
             final @NonNull OneToManyAssociation collection,
@@ -84,7 +83,7 @@ implements ActionInvocationFacet {
                 scalarProperties,
                 argumentAdapters,
                 interactionInitiatedBy);
-        val validationMessage = ParentedCollectionSelectorMatching.validationMessage(collection, owningAction.getId(), matchResult);
+        val validationMessage = ParentedCollectionSelectorMatching.validationMessage(owningAction.getId(), matchResult);
         if(validationMessage != null) {
             throw new RecoverableException(validationMessage);
         }

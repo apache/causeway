@@ -64,7 +64,6 @@ class ParentedCollectionSelectorMatching {
     }
 
     String validationMessage(
-            final @NonNull OneToManyAssociation collection,
             final @NonNull String actionId,
             final @NonNull MatchResult matchResult) {
         switch (matchResult.getStatus()) {
