@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -102,6 +103,21 @@ class ParentedCollectionSelectorActionFactoryTest {
         assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(false));
+    }
+
+    @Test
+    void associates_selector_action_with_parented_collection() {
+        val layoutGroupFacet = selectorAction.getFacet(LayoutGroupFacet.class);
+
+        assertThat(layoutGroupFacet, instanceOf(LayoutGroupFacetForParentedCollectionSelector.class));
+        assertThat(layoutGroupFacet.getGroupId(), is("items"));
+        assertThat(layoutGroupFacet.getGroupName(), is("Items"));
+    }
+
+    @Test
+    void names_selector_action_select_while_preserving_deterministic_id() {
+        assertThat(selectorAction.getId(), is(ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "items"));
+        assertThat(selectorAction.getCanonicalFriendlyName(), is("Select"));
     }
 
     @Test

@@ -134,8 +134,9 @@ public class ParentedCollectionSelectorActionFactory {
             final OneToManyAssociation collection,
             final Can<ObjectAssociation> scalarProperties,
             final FacetedMethod facetedMethod) {
-        FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName(
-                "Select " + collection.getElementType().getSingularName(), facetedMethod));
+        FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Select", facetedMethod));
+        FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionSelector(
+                collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
         FacetUtil.addFacet(new ParentedCollectionSelectorFacetDefault(collection, facetedMethod));
         FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionSelector(facetedMethod));
         FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionSelector(
