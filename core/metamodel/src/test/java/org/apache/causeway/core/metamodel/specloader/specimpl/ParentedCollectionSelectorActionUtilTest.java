@@ -50,6 +50,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -139,7 +140,7 @@ class ParentedCollectionSelectorActionUtilTest {
     @BeforeEach
     void setUp() {
         mmc = newMetamodelContext();
-        mmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         leaseSpec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
         selectorAction = leaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
     }
@@ -157,7 +158,7 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(selectorAction.getId(), is(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items"));
         MatcherAssert.assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
-        assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(false));
+        assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
 
     @Test
@@ -177,7 +178,7 @@ class ParentedCollectionSelectorActionUtilTest {
 
     @Test
     void participates_in_safe_action_command_publishing_when_enabled() {
-        mmc.getConfiguration().getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
@@ -185,7 +186,7 @@ class ParentedCollectionSelectorActionUtilTest {
     @Test
     void synthesizes_selector_action_for_mixed_in_collection_when_enabled() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
-        mixinMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
         val mixinSelectorAction = mixinLeaseSpec.getAction(
@@ -203,7 +204,7 @@ class ParentedCollectionSelectorActionUtilTest {
     @Test
     void synthesizes_selector_action_for_mixed_in_collection_when_associations_are_loaded_first() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
-        mixinMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
         assertThat(mixinLeaseSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
@@ -344,8 +345,7 @@ class ParentedCollectionSelectorActionUtilTest {
         val interactionProvider = Mockito.mock(InteractionProvider.class);
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
-        publishingMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
-        publishingMmc.getConfiguration().getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
         val publishingSelectorAction = publishingLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
@@ -380,10 +380,11 @@ class ParentedCollectionSelectorActionUtilTest {
         val interactionProvider = Mockito.mock(InteractionProvider.class);
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
-        publishingMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
         val publishingSelectorAction = publishingLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
         val leaseAdapter = publishingMmc.getObjectManager().adapt(lease);

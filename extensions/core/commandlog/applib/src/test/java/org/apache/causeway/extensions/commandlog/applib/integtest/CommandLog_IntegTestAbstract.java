@@ -46,6 +46,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
@@ -79,7 +80,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         counterRepository.removeAll();
         commandLogEntryRepository.removeAll();
-        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(false);
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
 
         assertThat(counterRepository.find()).isEmpty();
 
@@ -234,7 +235,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void safe_action_command_publishing_enabled() {
 
         // given
-        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
         // when
         wrapperFactory.wrap(counter1).findSelf();
@@ -260,7 +261,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void safe_action_with_explicit_command_publishing_is_not_duplicated() {
 
         // given
-        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
         // when
         wrapperFactory.wrap(counter1).findSelfWithCommandPublishingEnabled();
@@ -277,7 +278,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void safe_action_command_publishing_logs_null_list_and_scalar_results() {
 
         // given
-        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
         // when
         wrapperFactory.wrap(counter1).findNull();

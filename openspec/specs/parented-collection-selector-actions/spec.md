@@ -4,9 +4,12 @@
 TBD - created by archiving change synthesize-parented-collection-actions. Update Purpose after archive.
 ## Requirements
 ### Requirement: Framework synthesizes selector actions for parented collections
-The system SHALL provide the disabled-by-default `causeway.extensions.command-log.parented-collection-selector-actions-enabled` configuration property that enables synthetic parented collection selector action creation.
-When synthetic parented collection selector action creation is enabled, the system SHALL synthesize a safe metamodel `ObjectAction` for each eligible parented collection association.
-When synthetic parented collection selector action creation is disabled, the system MUST NOT synthesize parented collection selector actions.
+The system SHALL provide the `causeway.extensions.command-log.recording-support` configuration property that controls command-log recording support behavior.
+The `recording-support` property SHALL be an enum with values `ENABLED` and `DISABLED`.
+The system SHALL default `recording-support` to `DISABLED`.
+When `recording-support` is `ENABLED`, the system SHALL synthesize a safe metamodel `ObjectAction` for each eligible parented collection association.
+When `recording-support` is `DISABLED`, the system MUST NOT synthesize parented collection selector actions.
+The system MUST NOT require or use a separate `causeway.extensions.command-log.parented-collection-selector-actions-enabled` boolean property to enable synthetic parented collection selector action creation.
 The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
@@ -15,13 +18,13 @@ The synthetic action SHALL have the display name `Select` through name metadata 
 
 #### Scenario: Synthetic action is not available by default
 - **GIVEN** an entity type has a parented collection of child entities
-- **AND** synthetic parented collection selector action creation is disabled
+- **AND** command-log recording support is not configured
 - **WHEN** the framework fully introspects the entity type
 - **THEN** the metamodel does not include a synthetic selector action for that collection
 
-#### Scenario: Synthetic action is available when enabled for a parented collection
+#### Scenario: Synthetic action is available when recording support is enabled for a parented collection
 - **GIVEN** an entity type has a parented collection of child entities
-- **AND** synthetic parented collection selector action creation is enabled
+- **AND** command-log recording support is `ENABLED`
 - **WHEN** the framework fully introspects the entity type
 - **THEN** the metamodel includes a synthetic safe action for selecting one element from that collection
 - **AND** the synthetic action is associated with the collection owner type
@@ -38,13 +41,13 @@ The synthetic action SHALL have the display name `Select` through name metadata 
 
 #### Scenario: Synthetic action is associated with its parented collection
 - **GIVEN** an entity type `Lease` has a parented collection `items`
-- **AND** synthetic parented collection selector action creation is enabled
+- **AND** command-log recording support is `ENABLED`
 - **WHEN** the framework synthesizes the selector action for `items`
 - **THEN** the action has layout association metadata for collection id `items`
 
 #### Scenario: Synthetic action display name is Select
 - **GIVEN** an entity type `Lease` has a parented collection `items`
-- **AND** synthetic parented collection selector action creation is enabled
+- **AND** command-log recording support is `ENABLED`
 - **WHEN** the framework synthesizes the selector action for `items`
 - **THEN** the action display name is `Select`
 

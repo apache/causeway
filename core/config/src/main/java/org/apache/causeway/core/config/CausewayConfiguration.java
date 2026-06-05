@@ -3980,38 +3980,35 @@ public class CausewayConfiguration {
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
             /**
-             * Whether safe action invocations should be command published so they can be persisted to the command log.
+             * Whether command-log recording support should be enabled.
              *
              * <p>
-             *     This is disabled by default because safe actions can be frequent.
-             *     It is intended for regression recording scenarios where finder commands need to be exported and replayed.
+             *     This is disabled by default because safe actions can be frequent and synthetic selector actions are
+             *     intended for command recording and replay tooling.
+             *     When enabled, safe action invocations can be command published and synthetic safe selector actions are
+             *     created for parented collections.
              * </p>
              *
              * <p>
-             *     External property: {@code causeway.extensions.command-log.safe-action-command-publishing}.
-             * </p>
-             */
-            private boolean safeActionCommandPublishing = false;
-
-            /**
-             * Whether synthetic safe actions should be created for parented collections.
-             *
-             * <p>
-             *     This is disabled by default because the actions are intended for command recording and replay tooling.
-             * </p>
-             *
-             * <p>
-             *     External property: {@code causeway.extensions.command-log.parented-collection-selector-actions-enabled}.
+             *     External property: {@code causeway.extensions.command-log.recording-support}.
+             *     Accepted values are {@code ENABLED} and {@code DISABLED}.
              * </p>
              */
-            private boolean parentedCollectionSelectorActionsEnabled = false;
+            private RecordingSupport recordingSupport = RecordingSupport.DISABLED;
 
-            public boolean getSafeActionCommandPublishing() {
-                return safeActionCommandPublishing;
-            }
+            public enum RecordingSupport {
+                /**
+                 * Command-log recording support is enabled.
+                 */
+                ENABLED,
+                /**
+                 * Command-log recording support is disabled.
+                 */
+                DISABLED;
 
-            public void setSafeActionCommandPublishing(final boolean safeActionCommandPublishing) {
-                this.safeActionCommandPublishing = safeActionCommandPublishing;
+                public boolean isEnabled() {
+                    return this == ENABLED;
+                }
             }
 
             private final ReplayResultMapping replayResultMapping = new ReplayResultMapping();

@@ -74,7 +74,7 @@ public abstract class CommandPublishingFacetForActionFromConfiguration extends C
 
         @Override
         public boolean isEnabled() {
-            return configuration.getExtensions().getCommandLog().getSafeActionCommandPublishing();
+            return configuration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
         }
     }
 

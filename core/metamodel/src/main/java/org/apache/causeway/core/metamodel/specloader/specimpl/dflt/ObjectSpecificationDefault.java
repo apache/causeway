@@ -85,7 +85,7 @@ implements FacetHolder {
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
-    private final boolean parentedCollectionSelectorActionsEnabled;
+    private final boolean recordingSupportEnabled;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -121,8 +121,8 @@ implements FacetHolder {
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.columnHelper = new _MembersAsColumns(mmc);
-        this.parentedCollectionSelectorActionsEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
-                .isParentedCollectionSelectorActionsEnabled();
+        this.recordingSupportEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
+                .getRecordingSupport().isEnabled();
     }
 
     @Override
@@ -186,7 +186,7 @@ implements FacetHolder {
         // create associations and actions
         val associations = createAssociations().collect(Can.toCan());
         replaceAssociations(associations.stream());
-        val actions = parentedCollectionSelectorActionsEnabled
+        val actions = recordingSupportEnabled
                 ? Stream.concat(
                         createActions(),
                         ParentedCollectionSelectorActionUtil.createFor(this, associations.stream()))
@@ -197,8 +197,8 @@ implements FacetHolder {
     }
 
     @Override
-    protected boolean isParentedCollectionSelectorActionsEnabled() {
-        return parentedCollectionSelectorActionsEnabled;
+    protected boolean isRecordingSupportEnabled() {
+        return recordingSupportEnabled;
     }
 
     private void addNamedFacetIfRequired() {

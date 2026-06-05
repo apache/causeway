@@ -981,7 +981,7 @@ implements ObjectSpecification {
      * without treating ordinary collection-returning mixin actions as selector sources.
      */
     private void ensureParentedCollectionSelectorActionsForMixedInAssociations() {
-        if(!isParentedCollectionSelectorActionsEnabled()) {
+        if(!isRecordingSupportEnabled()) {
             return;
         }
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
@@ -1008,7 +1008,7 @@ implements ObjectSpecification {
                 selectorActions.stream()));
     }
 
-    protected boolean isParentedCollectionSelectorActionsEnabled() {
+    protected boolean isRecordingSupportEnabled() {
         return false;
     }
 
