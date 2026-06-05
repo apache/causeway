@@ -197,6 +197,11 @@ implements FacetHolder {
         postProcess();
     }
 
+    @Override
+    protected boolean isParentedCollectionSelectorActionsEnabled() {
+        return parentedCollectionSelectorActionsEnabled;
+    }
+
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(

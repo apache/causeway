@@ -56,6 +56,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionSelectorActionFactory;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -86,6 +87,7 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -753,6 +755,7 @@ implements ObjectSpecification {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
+        ensureParentedCollectionSelectorActionsForMixedInAssociations();
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
@@ -949,6 +952,39 @@ implements ObjectSpecification {
         replaceAssociations(Stream.concat(
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
+
+    }
+
+    private void ensureParentedCollectionSelectorActionsForMixedInAssociations() {
+        if(!isParentedCollectionSelectorActionsEnabled()) {
+            return;
+        }
+        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
+
+        val existingActionIds = objectActions.stream()
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        val mixedInCollectionsWithoutSelector = stream(unmodifiableAssociations.get())
+                .filter(MixedInMember.class::isInstance)
+                .filter(ObjectAssociation::isOneToManyAssociation)
+                .filter(association -> !existingActionIds.contains(
+                        ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + association.getId()))
+                .collect(Can.toCan());
+        val selectorActions = ParentedCollectionSelectorActionFactory
+                .createFor(this, mixedInCollectionsWithoutSelector.stream())
+                .collect(Collectors.toList());
+        if(selectorActions.isEmpty()) {
+            return;
+        }
+
+        val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+        replaceActions(Stream.concat(
+                regularActions.stream(),
+                selectorActions.stream()));
+    }
+
+    protected boolean isParentedCollectionSelectorActionsEnabled() {
+        return false;
     }
 
     @Getter(lazy = true)

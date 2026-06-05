@@ -34,9 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -50,6 +54,7 @@ import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterD
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -82,6 +87,17 @@ class ParentedCollectionSelectorActionFactoryTest {
     static class LeaseTerm {
         @Getter
         private final String description;
+    }
+
+    @RequiredArgsConstructor
+    @org.apache.causeway.applib.annotation.Collection
+    static class Lease_mixinItems {
+        private final Lease mixee;
+
+        @MemberSupport
+        public List<LeaseItem> coll() {
+            return mixee.getItems();
+        }
     }
 
     private MetaModelContext_forTesting mmc;
@@ -132,6 +148,37 @@ class ParentedCollectionSelectorActionFactoryTest {
         mmc.getConfiguration().getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
 
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+    }
+
+    @Test
+    void synthesizes_selector_action_for_mixed_in_collection_when_enabled() {
+        val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
+        mixinMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
+
+        val mixinSelectorAction = mixinLeaseSpec.getAction(
+                ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
+        val layoutGroupFacet = mixinSelectorAction.getFacet(LayoutGroupFacet.class);
+
+        assertThat(mixinSelectorAction.getFacet(ParentedCollectionSelectorFacet.class),
+                instanceOf(ParentedCollectionSelectorFacetDefault.class));
+        assertThat(layoutGroupFacet.getGroupId(), is("mixinItems"));
+        assertThat(layoutGroupFacet.getGroupName(), is("Mixin Items"));
+        assertThat(mixinSelectorAction.getParameters().getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
+        assertThat(mixinSelectorAction.getParameters().stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
+    }
+
+    @Test
+    void synthesizes_selector_action_for_mixed_in_collection_when_associations_are_loaded_first() {
+        val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
+        mixinMmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
+        val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
+
+        assertThat(mixinLeaseSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
+                .anyMatch(association -> association.getId().equals("mixinItems")), is(true));
+
+        assertThat(mixinLeaseSpec.getAction(
+                ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
     }
 
     @Test
@@ -251,9 +298,11 @@ class ParentedCollectionSelectorActionFactoryTest {
         assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
     }
 
-    private MetaModelContext_forTesting newMetamodelContext() {
+    private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {
         return MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
+                .causewayBeanTypeRegistry(new CausewayBeanTypeRegistryDefault(Can.ofArray(mixinTypes)
+                        .map(mixinType -> CausewayBeanMetaData.notManaged(BeanSort.MIXIN, mixinType))))
                 .build();
     }
 
