@@ -75,12 +75,12 @@ implements ActionValidationFacet {
             final @NonNull String actionId,
             final Can<ManagedObject> arguments,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
-        val matchResult = ParentedCollectionSelectorMatching.match(
+        val matchResult = ParentedCollectionSelectorMatchingUtil.match(
                 collection,
                 scalarProperties,
                 arguments,
                 interactionInitiatedBy);
-        return ParentedCollectionSelectorMatching.validationMessage(actionId, matchResult);
+        return ParentedCollectionSelectorMatchingUtil.validationMessage(actionId, matchResult);
     }
 
 }

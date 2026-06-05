@@ -37,7 +37,7 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 @UtilityClass
-class ParentedCollectionSelectorMatching {
+class ParentedCollectionSelectorMatchingUtil {
 
     MatchResult match(
             final @NonNull OneToManyAssociation collection,

@@ -16,11 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.synthetic;
+package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.*;
+
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -61,7 +64,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-class ParentedCollectionSelectorActionFactoryTest {
+class ParentedCollectionSelectorActionUtilTest {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class Lease {
@@ -109,7 +112,7 @@ class ParentedCollectionSelectorActionFactoryTest {
         mmc = newMetamodelContext();
         mmc.getConfiguration().getExtensions().getCommandLog().setParentedCollectionSelectorActionsEnabled(true);
         leaseSpec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
-        selectorAction = leaseSpec.getAction(ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "items").orElseThrow();
+        selectorAction = leaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
     }
 
     @Test
@@ -117,13 +120,13 @@ class ParentedCollectionSelectorActionFactoryTest {
         val disabledMmc = newMetamodelContext();
         val disabledLeaseSpec = disabledMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
-        assertThat(disabledLeaseSpec.getAction(ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "items").isPresent(), is(false));
+        assertThat(disabledLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
 
     @Test
     void synthesizes_selector_action_with_marker_and_safe_semantics_when_enabled() {
-        assertThat(selectorAction.getId(), is(ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "items"));
-        assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
+        assertThat(selectorAction.getId(), is(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items"));
+        MatcherAssert.assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(false));
     }
@@ -139,7 +142,7 @@ class ParentedCollectionSelectorActionFactoryTest {
 
     @Test
     void names_selector_action_select_while_preserving_deterministic_id() {
-        assertThat(selectorAction.getId(), is(ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "items"));
+        assertThat(selectorAction.getId(), is(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items"));
         assertThat(selectorAction.getCanonicalFriendlyName(), is("Select"));
     }
 
@@ -157,7 +160,7 @@ class ParentedCollectionSelectorActionFactoryTest {
         val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
         val mixinSelectorAction = mixinLeaseSpec.getAction(
-                ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
         val layoutGroupFacet = mixinSelectorAction.getFacet(LayoutGroupFacet.class);
 
         assertThat(mixinSelectorAction.getFacet(ParentedCollectionSelectorFacet.class),
@@ -178,7 +181,7 @@ class ParentedCollectionSelectorActionFactoryTest {
                 .anyMatch(association -> association.getId().equals("mixinItems")), is(true));
 
         assertThat(mixinLeaseSpec.getAction(
-                ParentedCollectionSelectorActionFactory.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
     }
 
     @Test

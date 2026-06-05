@@ -49,7 +49,6 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionSelectorActionFactory;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -190,7 +189,7 @@ implements FacetHolder {
         val actions = parentedCollectionSelectorActionsEnabled
                 ? Stream.concat(
                         createActions(),
-                        ParentedCollectionSelectorActionFactory.createFor(this, associations.stream()))
+                        ParentedCollectionSelectorActionUtil.createFor(this, associations.stream()))
                 : createActions();
         replaceActions(actions);
 
@@ -328,12 +327,12 @@ implements FacetHolder {
     }
 
     // -- TABLE COLUMN RENDERING
-    
+
 	@Override
 	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery) {
 		return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
 	}
-    
+
     @Override
     public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
         return new _MembersAsColumns(getMetaModelContext())

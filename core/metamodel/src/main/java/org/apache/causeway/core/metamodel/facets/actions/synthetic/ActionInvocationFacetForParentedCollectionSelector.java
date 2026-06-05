@@ -78,12 +78,12 @@ implements ActionInvocationFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val matchResult = ParentedCollectionSelectorMatching.match(
+        val matchResult = ParentedCollectionSelectorMatchingUtil.match(
                 collection,
                 scalarProperties,
                 argumentAdapters,
                 interactionInitiatedBy);
-        val validationMessage = ParentedCollectionSelectorMatching.validationMessage(owningAction.getId(), matchResult);
+        val validationMessage = ParentedCollectionSelectorMatchingUtil.validationMessage(owningAction.getId(), matchResult);
         if(validationMessage != null) {
             throw new RecoverableException(validationMessage);
         }
