@@ -3993,6 +3993,19 @@ public class CausewayConfiguration {
              */
             private boolean safeActionCommandPublishing = false;
 
+            /**
+             * Whether synthetic safe actions should be created for parented collections.
+             *
+             * <p>
+             *     This is disabled by default because the actions are intended for command recording and replay tooling.
+             * </p>
+             *
+             * <p>
+             *     External property: {@code causeway.extensions.command-log.parented-collection-selector-actions-enabled}.
+             * </p>
+             */
+            private boolean parentedCollectionSelectorActionsEnabled = false;
+
             public boolean getSafeActionCommandPublishing() {
                 return safeActionCommandPublishing;
             }

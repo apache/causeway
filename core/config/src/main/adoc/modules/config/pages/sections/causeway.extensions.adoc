@@ -46,6 +46,17 @@ It is intended for regression recording scenarios where finder commands need to 
 
 
 |
+[[causeway.extensions.command-log.parented-collection-selector-actions-enabled]]
+causeway.extensions.command-log. +
+parented-collection-selector-actions-enabled
+
+|  false
+| Whether synthetic safe actions should be created for parented collections.
+
+This is disabled by default because the actions are intended for command recording and replay tooling.
+
+
+|
 [[causeway.extensions.command-log.run-background-commands.batch-size]]
 causeway.extensions.command-log. +
 run-background-commands.batch-size

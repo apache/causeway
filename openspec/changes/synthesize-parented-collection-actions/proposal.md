@@ -5,11 +5,11 @@ Today selecting a row from a rendered collection is a UI interaction rather than
 
 ## What Changes
 
-- Synthesize safe `ObjectAction`s in the metamodel for parented collections so a recorder can navigate from a parent object to a child object through an invokable command.
+- Add the disabled-by-default `causeway.extensions.command-log.parented-collection-selector-actions-enabled` configuration property that enables synthetic parented collection selector action creation.
+- Synthesize safe `ObjectAction`s in the metamodel for parented collections only when that configuration property is enabled so a recorder can navigate from a parent object to a child object through an invokable command.
 - Add one mandatory parameter for the parent object and optional scalar parameters that can identify or narrow the child object within the collection.
-- Return the selected collection element as the action result so existing safe action command logging, export, and replay result mapping can establish the recorded-to-replayed object correspondence.
-- Hide these actions from normal application pages unless explicitly surfaced for command recording or metamodel tooling.
-- Preserve existing collection rendering and direct row selection behavior for ordinary UI navigation.
+- Return the selected collection element as the action result so command recording can identify the child object selected from the parented collection.
+- Preserve existing collection rendering and direct row selection behavior for ordinary UI navigation when synthetic selector action creation is disabled.
 
 ## Capabilities
 
@@ -18,12 +18,10 @@ Today selecting a row from a rendered collection is a UI interaction rather than
 
 ### Modified Capabilities
 - `safe-action-command-publishing`: Synthetic parented collection selector actions are safe actions and participate in the existing opt-in safe action command publishing flow.
-- `command-export-yaml-result`: Exported command YAML can include returned object metadata for logged synthetic selector actions.
-- `command-replay-result-mapping`: Replay result mapping can use logged synthetic selector action results to remap later command targets and reference parameters.
 
 ## Impact
 
 - Affects metamodel introspection in `ObjectSpecificationDefault`, where associations and actions are assembled.
 - Adds internal synthetic `ObjectAction` support for collection-derived lookup actions and their parameters.
-- May affect viewers, metamodel export, command export, and replay tests that enumerate or invoke actions.
-- Requires tests for action synthesis, parameter shape, invocation semantics, visibility to command recording, and integration with safe action command publishing/export/replay.
+- May affect viewers and metamodel export tests that enumerate or invoke actions when the feature is enabled.
+- Requires tests for config-gated action synthesis, parameter shape, invocation semantics, and integration with safe action command publishing.

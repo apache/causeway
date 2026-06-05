@@ -49,6 +49,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionSelectorActionFactory;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -85,6 +86,7 @@ implements FacetHolder {
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
+    private final boolean parentedCollectionSelectorActionsEnabled;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -120,6 +122,8 @@ implements FacetHolder {
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.columnHelper = new _MembersAsColumns(mmc);
+        this.parentedCollectionSelectorActionsEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
+                .isParentedCollectionSelectorActionsEnabled();
     }
 
     @Override
@@ -181,8 +185,14 @@ implements FacetHolder {
         }
 
         // create associations and actions
-        replaceAssociations(createAssociations());
-        replaceActions(createActions());
+        val associations = createAssociations().collect(Can.toCan());
+        replaceAssociations(associations.stream());
+        val actions = parentedCollectionSelectorActionsEnabled
+                ? Stream.concat(
+                        createActions(),
+                        ParentedCollectionSelectorActionFactory.createFor(this, associations.stream()))
+                : createActions();
+        replaceActions(actions);
 
         postProcess();
     }

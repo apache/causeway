@@ -2,31 +2,32 @@
 
 `ObjectSpecificationDefault` builds the metamodel for entity types by creating associations from association faceted methods and actions from action faceted methods during full introspection.
 Parented collections already carry enough metadata to know the parent type, collection id, element type, and element scalar properties, but selecting an element from a rendered collection does not currently pass through `ObjectAction` invocation.
-Command export and replay already know how to record logged safe action invocations, exported returned-object metadata, and replay result mappings.
+Command recording already knows how to record logged safe action invocations.
 The missing piece is an invokable, safe metamodel member that represents parent-to-child collection navigation.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Generate synthetic actions for parented collections during metamodel introspection.
+- Generate synthetic actions for parented collections during metamodel introspection only when explicitly enabled by configuration.
 - Make each synthetic action invokable by command recording code using the normal `ObjectAction` path.
 - Use a mandatory parent reference parameter and optional scalar filter parameters to identify a child object within the parented collection.
-- Return a single child object bookmarkable through the existing command result metadata flow.
-- Keep ordinary collection rendering and row-click navigation unchanged.
+- Return a single child object from the synthetic selector invocation.
+- Keep ordinary collection rendering and row-click navigation unchanged when the feature is disabled.
 
 **Non-Goals:**
 
 - Do not replace collection rendering or require end users to use synthetic actions during normal browsing.
-- Do not add a new command export YAML shape.
-- Do not add a new replay mapping SPI.
+- Do not add command export or replay result mapping behavior for synthetic selector action results.
 - Do not infer arbitrary business identity for non-scalar associations or plural child matches beyond deterministic selection rules.
 
 ## Decisions
 
-### Synthesize actions from collection associations after associations are created
+### Gate synthetic action creation behind configuration
 
-Create synthetic selector actions in `ObjectSpecificationDefault` after `replaceAssociations(createAssociations())` has populated declared associations and before the final action list is installed.
+Create synthetic selector actions only when the disabled-by-default `causeway.extensions.command-log.parented-collection-selector-actions-enabled` configuration property is enabled.
+This keeps ordinary applications from seeing additional metamodel members unless they opt in for command recording or replay tooling.
+When enabled, create synthetic selector actions in `ObjectSpecificationDefault` after `replaceAssociations(createAssociations())` has populated declared associations and before the final action list is installed.
 This keeps collection-derived actions close to the metamodel data that defines them and avoids requiring domain developers to add mixins or explicit finder methods.
 The action stream should concatenate declared actions with synthetic actions derived from eligible parented `OneToManyAssociation`s.
 
@@ -37,10 +38,10 @@ That would make command recording possible, but it would push framework replay i
 
 Each selector should be an `ObjectAction` with safe semantics and an invocation facet that reads the parented collection from the supplied parent object and returns the matching element.
 The action id should be deterministic and namespaced to avoid colliding with developer actions, for example using a reserved prefix plus the collection id.
-The action should carry marker metadata that lets viewers and metamodel export distinguish synthetic recording actions from user-authored actions.
+The action should carry marker metadata that lets viewers and metamodel export distinguish synthetic recording actions from user-authored actions when the feature is enabled.
 
 Alternative considered: bypass `ObjectAction` and inject command log entries directly from collection row clicks.
-That would record navigation but would not give replay a command target, parameters, or the existing result mapping lifecycle.
+That would record navigation but would not provide a normal command target and parameter model.
 
 ### Parameterize by parent plus optional scalar child values
 
@@ -49,7 +50,7 @@ Additional parameters should be optional and derived from scalar properties of t
 Synthetic selectors should ignore child collections and reference properties as automatic parameters to avoid deep traversal, unstable object identity, and ambiguous command DTO parameter mapping.
 
 Alternative considered: use a single child bookmark parameter.
-That would not solve replay when recorded and replayed child identifiers differ, and it would not produce the dotted parent-to-child path required by command result mapping.
+That would not model the dotted parent-to-child navigation path through the parented collection.
 
 ### Return one selected child or fail deterministically
 
@@ -58,12 +59,11 @@ If no child matches or multiple children match, invocation should fail with a cl
 This makes exported recordings stable and forces the recorder to supply enough scalar values for replay.
 
 Alternative considered: return a list of matching children.
-Replay result mapping expects object-to-object correspondence for later command targets, so returning a list would lose the single dotted path step.
+Returning a list would lose the single dotted path step.
 
 ### Integrate through existing safe action command publishing
 
 Synthetic selector actions should be safe actions and should be command logged only when the existing safe action command publishing configuration enables safe action logging or when an equivalent explicit recording path invokes them.
-Once logged, export and replay should use existing returned-object metadata and result mapping behavior.
 This keeps the new behavior additive and avoids special cases in command export and replay.
 
 Alternative considered: always command-publish synthetic selector actions.
@@ -72,7 +72,7 @@ That would surprise applications that are not recording replay scripts and would
 ## Risks / Trade-offs
 
 - Synthetic action enumeration could affect viewers or tooling that assume every action comes from application code.
-  Mitigation: add marker metadata and hide the actions from ordinary UI surfaces unless command recording or metamodel tooling opts in.
+  Mitigation: only create synthetic selector actions when the explicit configuration property is enabled, and add marker metadata so tooling can identify them.
 - Scalar filters may not uniquely identify every collection element.
   Mitigation: require exact single-match results and document that recordings must supply enough scalar values.
 - Creating parameters from every scalar child property can produce large action signatures.

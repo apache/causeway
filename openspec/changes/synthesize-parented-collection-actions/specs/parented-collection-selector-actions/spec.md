@@ -1,13 +1,22 @@
 ## ADDED Requirements
 
 ### Requirement: Framework synthesizes selector actions for parented collections
-The system SHALL synthesize a safe metamodel `ObjectAction` for each eligible parented collection association.
+The system SHALL provide the disabled-by-default `causeway.extensions.command-log.parented-collection-selector-actions-enabled` configuration property that enables synthetic parented collection selector action creation.
+When synthetic parented collection selector action creation is enabled, the system SHALL synthesize a safe metamodel `ObjectAction` for each eligible parented collection association.
+When synthetic parented collection selector action creation is disabled, the system MUST NOT synthesize parented collection selector actions.
 The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
 
-#### Scenario: Synthetic action is available for a parented collection
+#### Scenario: Synthetic action is not available by default
 - **GIVEN** an entity type has a parented collection of child entities
+- **AND** synthetic parented collection selector action creation is disabled
+- **WHEN** the framework fully introspects the entity type
+- **THEN** the metamodel does not include a synthetic selector action for that collection
+
+#### Scenario: Synthetic action is available when enabled for a parented collection
+- **GIVEN** an entity type has a parented collection of child entities
+- **AND** synthetic parented collection selector action creation is enabled
 - **WHEN** the framework fully introspects the entity type
 - **THEN** the metamodel includes a synthetic safe action for selecting one element from that collection
 - **AND** the synthetic action is associated with the collection owner type
@@ -65,17 +74,19 @@ The synthetic selector action MUST fail clearly when no child matches or when mu
 - **WHEN** the synthetic selector action is invoked
 - **THEN** the invocation fails with a clear ambiguous-match error
 
-### Requirement: Synthetic selector actions are hidden from ordinary navigation
-The system SHALL preserve existing collection rendering and direct row selection behavior.
-The system SHALL hide synthetic selector actions from ordinary application pages unless a command recording or metamodel tooling surface explicitly includes them.
+### Requirement: Disabled selector action creation preserves ordinary navigation
+The system SHALL preserve existing collection rendering and direct row selection behavior when synthetic selector action creation is disabled.
+The system SHALL avoid adding synthetic selector actions to ordinary metamodel action lists unless the configuration property is enabled.
 
-#### Scenario: Ordinary collection browsing is unchanged
+#### Scenario: Ordinary collection browsing is unchanged by default
 - **GIVEN** a user views a parent object page containing a collection
+- **AND** synthetic parented collection selector action creation is disabled
 - **WHEN** the viewer renders the collection
 - **THEN** the user can still navigate by selecting a rendered collection row
-- **AND** the synthetic selector action is not shown as an ordinary domain action by default
+- **AND** the metamodel does not include a synthetic selector action for the collection
 
-#### Scenario: Command recording can include synthetic actions
+#### Scenario: Command recording can include synthetic actions after opt-in
 - **GIVEN** a command recording surface supports synthetic selector actions
+- **AND** synthetic parented collection selector action creation is enabled
 - **WHEN** the recorder enumerates actions for navigating a parented collection
 - **THEN** the synthetic selector action is available for recording the parent-to-child navigation step
