@@ -161,6 +161,8 @@ public class ParentedCollectionSelectorActionFactory {
                 facetedMethod.getMethod().getParameterName(0), parameters.getElseFail(0)));
         FacetUtil.addFacet(MandatoryFacetDefault.required(parameters.getElseFail(0)));
         FacetUtil.addFacet(new ActionParameterChoicesFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
+        FacetUtil.addFacet(new ActionParameterDefaultsFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
+        FacetUtil.addFacet(new DisabledFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
         for(int i = 0; i < scalarProperties.size(); i++) {
             val parameter = parameters.getElseFail(i + 1);
             FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionSelector(

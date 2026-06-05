@@ -39,8 +39,11 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -136,6 +139,45 @@ class ParentedCollectionSelectorActionFactoryTest {
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("otherLease")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("terms")), is(false));
+    }
+
+    @Test
+    void defaults_parent_parameter_to_action_target() {
+        val lease = new Lease();
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        val pendingArgs = Mockito.mock(ParameterNegotiationModel.class);
+        Mockito.when(pendingArgs.getActionTarget()).thenReturn(leaseAdapter);
+
+        val parentParameter = selectorAction.getParameters().getElseFail(0);
+        val defaultsFacet = parentParameter.getFacet(ActionParameterDefaultsFacet.class);
+
+        assertThat(defaultsFacet, instanceOf(ActionParameterDefaultsFacetForParentedCollectionSelectorParent.class));
+        assertThat(parentParameter.hasDefaults(), is(true));
+        assertThat(parentParameter.getDefault(pendingArgs), is(leaseAdapter));
+    }
+
+    @Test
+    void disables_parent_parameter_but_not_scalar_filter_parameters() {
+        val lease = new Lease();
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        val pendingArgs = Can.of(
+                leaseAdapter,
+                ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(String.class)),
+                ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(Integer.class)));
+        val parameters = selectorAction.getParameters();
+        val parentParameter = parameters.getElseFail(0);
+        val scalarParameter = parameters.getElseFail(1);
+
+        assertThat(parentParameter.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForParentedCollectionSelectorParent.class));
+        assertThat(parentParameter.isUsable(
+                selectorAction.interactionHead(leaseAdapter),
+                pendingArgs,
+                InteractionInitiatedBy.USER).isVetoed(), is(true));
+        assertThat(scalarParameter.getFacet(DisabledFacet.class), is((DisabledFacet) null));
+        assertThat(scalarParameter.isUsable(
+                selectorAction.interactionHead(leaseAdapter),
+                pendingArgs,
+                InteractionInitiatedBy.USER).isAllowed(), is(true));
     }
 
     @Test
