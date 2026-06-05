@@ -139,6 +139,10 @@ public class ParentedCollectionSelectorActionFactory {
                 collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
         FacetUtil.addFacet(new ParentedCollectionSelectorFacetDefault(collection, facetedMethod));
         FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionSelector(facetedMethod));
+        FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionSelector(
+                collection,
+                scalarProperties,
+                facetedMethod));
         FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionSelector(
                 facetedMethod.getMethod(),
                 parentSpec,

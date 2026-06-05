@@ -18,77 +18,69 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionInvocationFacetForParentedCollectionSelector
+public class ActionValidationFacetForParentedCollectionSelector
 extends FacetAbstract
-implements ActionInvocationFacet {
+implements ActionValidationFacet {
 
     private static Class<? extends Facet> type() {
-        return ActionInvocationFacet.class;
+        return ActionValidationFacet.class;
     }
 
-    private final @NonNull ObjectSpecification declaringType;
-    private final @NonNull ObjectSpecification returnType;
     private final @NonNull OneToManyAssociation collection;
     private final @NonNull Can<ObjectAssociation> scalarProperties;
 
-    public ActionInvocationFacetForParentedCollectionSelector(
-            final @NonNull org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade method,
-            final @NonNull ObjectSpecification declaringType,
-            final @NonNull ObjectSpecification returnType,
+    public ActionValidationFacetForParentedCollectionSelector(
             final @NonNull OneToManyAssociation collection,
             final @NonNull Can<ObjectAssociation> scalarProperties,
             final @NonNull org.apache.causeway.core.metamodel.facetapi.FacetHolder holder) {
         super(type(), holder);
-        this.declaringType = declaringType;
-        this.returnType = returnType;
         this.collection = collection;
         this.scalarProperties = scalarProperties;
     }
 
     @Override
-    public ObjectSpecification getDeclaringType() {
-        return declaringType;
+    public String invalidates(final ValidityContext context) {
+        if (!(context instanceof ActionValidityContext)) {
+            return null;
+        }
+        val actionValidityContext = (ActionValidityContext) context;
+        return invalidReason(
+                actionValidityContext.getObjectAction().getId(),
+                actionValidityContext.getArgs(),
+                actionValidityContext.getInitiatedBy());
     }
 
     @Override
-    public ObjectSpecification getReturnType() {
-        return returnType;
+    public String invalidReason(
+            final ManagedObject target,
+            final Can<ManagedObject> arguments) {
+        return invalidReason(getFacetHolder().getFeatureIdentifier().memberLogicalName(), arguments, InteractionInitiatedBy.USER);
     }
 
-    @Override
-    public ManagedObject invoke(
-            final ObjectAction owningAction,
-            final InteractionHead head,
-            final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
+    private String invalidReason(
+            final @NonNull String actionId,
+            final Can<ManagedObject> arguments,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
         val matchResult = ParentedCollectionSelectorMatching.match(
                 collection,
                 scalarProperties,
-                argumentAdapters,
+                arguments,
                 interactionInitiatedBy);
-        val validationMessage = ParentedCollectionSelectorMatching.validationMessage(collection, owningAction.getId(), matchResult);
-        if(validationMessage != null) {
-            throw new RecoverableException(validationMessage);
-        }
-        return matchResult.singleMatch();
+        return ParentedCollectionSelectorMatching.validationMessage(collection, actionId, matchResult);
     }
 
 }

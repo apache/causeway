@@ -31,14 +31,18 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.applib.exceptions.RecoverableException;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
@@ -181,11 +185,14 @@ class ParentedCollectionSelectorActionFactoryTest {
     }
 
     @Test
-    void invokes_selector_action_returning_single_matching_child() {
+    void validates_and_invokes_selector_action_returning_single_matching_child() {
         val lease = new Lease();
         val matchingItem = new LeaseItem("first", 1, null);
         lease.getItems().add(matchingItem);
         lease.getItems().add(new LeaseItem("second", 2, null));
+
+        assertThat(selectorAction.getFacet(ActionValidationFacet.class), instanceOf(ActionValidationFacetForParentedCollectionSelector.class));
+        assertThat(validate(lease, "first", null).isAllowed(), is(true));
 
         val result = invoke(lease, "first", null);
 
@@ -193,30 +200,84 @@ class ParentedCollectionSelectorActionFactoryTest {
     }
 
     @Test
-    void selector_action_fails_when_no_child_matches() {
+    void selector_action_validation_rejects_when_no_child_matches() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
 
-        val ex = assertThrows(IllegalArgumentException.class, () -> invoke(lease, "missing", null));
+        val consent = validate(lease, "missing", null);
 
-        assertThat(ex.getMessage(), containsString("no element"));
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("0 items match. Use parameters to match just one item."));
+
+        val ex = assertThrows(RecoverableException.class, () -> executeWithRuleChecking(lease, "missing", null));
+
+        assertThat(ex.getMessage(), containsString("0 items match. Use parameters to match just one item."));
     }
 
     @Test
-    void selector_action_fails_when_multiple_children_match() {
+    void selector_action_validation_rejects_when_multiple_children_match() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("same", 1, null));
         lease.getItems().add(new LeaseItem("same", 2, null));
 
-        val ex = assertThrows(IllegalArgumentException.class, () -> invoke(lease, "same", null));
+        val consent = validate(lease, "same", null);
 
-        assertThat(ex.getMessage(), containsString("multiple elements"));
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("2 items match. Use parameters to match just one item."));
+
+        val ex = assertThrows(RecoverableException.class, () -> executeWithRuleChecking(lease, "same", null));
+
+        assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
+    }
+
+    @Test
+    void direct_invocation_still_fails_when_no_child_matches() {
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("first", 1, null));
+
+        val ex = assertThrows(RecoverableException.class, () -> invoke(lease, "missing", null));
+
+        assertThat(ex.getMessage(), containsString("0 items match. Use parameters to match just one item."));
+    }
+
+    @Test
+    void direct_invocation_still_fails_when_multiple_children_match() {
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("same", 1, null));
+        lease.getItems().add(new LeaseItem("same", 2, null));
+
+        val ex = assertThrows(RecoverableException.class, () -> invoke(lease, "same", null));
+
+        assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
     }
 
     private MetaModelContext_forTesting newMetamodelContext() {
         return MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
+    }
+
+    private Consent validate(
+            final Lease lease,
+            final String name,
+            final Integer sequence) {
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        return selectorAction.isArgumentSetValid(
+                selectorAction.interactionHead(leaseAdapter),
+                arguments(leaseAdapter, name, sequence),
+                InteractionInitiatedBy.USER);
+    }
+
+    private ManagedObject executeWithRuleChecking(
+            final Lease lease,
+            final String name,
+            final Integer sequence) {
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        return selectorAction.executeWithRuleChecking(
+                selectorAction.interactionHead(leaseAdapter),
+                arguments(leaseAdapter, name, sequence),
+                InteractionInitiatedBy.USER,
+                null);
     }
 
     private ManagedObject invoke(
@@ -228,11 +289,18 @@ class ParentedCollectionSelectorActionFactoryTest {
         return actionInvocationFacet.invoke(
                 selectorAction,
                 selectorAction.interactionHead(leaseAdapter),
-                Can.of(
-                        leaseAdapter,
-                        mmc.getObjectManager().adapt(name),
-                        mmc.getObjectManager().adapt(sequence)),
+                arguments(leaseAdapter, name, sequence),
                 InteractionInitiatedBy.USER);
+    }
+
+    private Can<ManagedObject> arguments(
+            final ManagedObject leaseAdapter,
+            final String name,
+            final Integer sequence) {
+        return Can.of(
+                leaseAdapter,
+                mmc.getObjectManager().adapt(name),
+                mmc.getObjectManager().adapt(sequence));
     }
 
 }
