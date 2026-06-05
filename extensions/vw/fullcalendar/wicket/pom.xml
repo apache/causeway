@@ -23,17 +23,17 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-fullcalendar</artifactId>
-        <version>${revision}</version>
+        <version>2.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
     <name>Apache Causeway Ext - FullCalendar Wicket</name>
 
     <packaging>pom</packaging>
-    
+
     <modules>
     	<module>integration</module>
     	<module>ui</module>
     </modules>
-    
+
 </project>
