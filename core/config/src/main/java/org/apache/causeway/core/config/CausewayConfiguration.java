@@ -3979,6 +3979,28 @@ public class CausewayConfiguration {
              */
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
+            /**
+             * Whether safe action invocations should be command published so they can be persisted to the command log.
+             *
+             * <p>
+             *     This is disabled by default because safe actions can be frequent.
+             *     It is intended for regression recording scenarios where finder commands need to be exported and replayed.
+             * </p>
+             *
+             * <p>
+             *     External property: {@code causeway.extensions.command-log.safe-action-command-publishing}.
+             * </p>
+             */
+            private boolean safeActionCommandPublishing = false;
+
+            public boolean getSafeActionCommandPublishing() {
+                return safeActionCommandPublishing;
+            }
+
+            public void setSafeActionCommandPublishing(final boolean safeActionCommandPublishing) {
+                this.safeActionCommandPublishing = safeActionCommandPublishing;
+            }
+
             private final ReplayResultMapping replayResultMapping = new ReplayResultMapping();
             @Data
             public static class ReplayResultMapping {

@@ -20,6 +20,8 @@
 
 package org.apache.causeway.extensions.commandlog.applib.integtest.model;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -28,6 +30,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 @Named("commandlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
@@ -58,6 +61,31 @@ public abstract class Counter implements Comparable<Counter> {
     @Action(commandPublishing = Publishing.DISABLED)
     public Counter bumpUsingDeclaredActionWithCommandPublishingDisabled() {
         return doBump();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Counter findSelf() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE, commandPublishing = Publishing.ENABLED)
+    public Counter findSelfWithCommandPublishingEnabled() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Counter findNull() {
+        return null;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findSelfAsList() {
+        return List.of(this);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public String findNameAsScalar() {
+        return getName();
     }
 
     Counter doBump() {

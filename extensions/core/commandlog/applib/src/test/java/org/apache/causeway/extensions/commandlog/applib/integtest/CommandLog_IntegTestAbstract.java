@@ -37,6 +37,8 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -77,6 +79,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         counterRepository.removeAll();
         commandLogEntryRepository.removeAll();
+        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(false);
 
         assertThat(counterRepository.find()).isEmpty();
 
@@ -213,6 +216,85 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
         assertThat(mostRecentCompleted).isEmpty();
+    }
+
+    @Test
+    void safe_action_command_publishing_disabled_by_default() {
+
+        // when
+        wrapperFactory.wrap(counter1).findSelf();
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
+    }
+
+    @Test
+    void safe_action_command_publishing_enabled() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+
+        // when
+        wrapperFactory.wrap(counter1).findSelf();
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
+
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#findSelf");
+        assertThat(commandLogEntry.getCommandDto()).isNotNull();
+        assertThat(commandLogEntry.getCommandDto().getMember()).isInstanceOf(ActionDto.class);
+        assertThat(commandLogEntry.getResult()).isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+
+        val exportDto = CommandDtoUtils.CommandExportDto.of(
+                commandLogEntry.getCommandDto(),
+                commandLogEntry.getResult());
+        assertThat(exportDto.getReturnedObject().getLogicalTypeName()).isEqualTo("commandlog.test.Counter");
+    }
+
+    @Test
+    void safe_action_with_explicit_command_publishing_is_not_duplicated() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+
+        // when
+        wrapperFactory.wrap(counter1).findSelfWithCommandPublishingEnabled();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries).hasSize(1);
+        assertThat(entries.get(0).getLogicalMemberIdentifier())
+                .isEqualTo("commandlog.test.Counter#findSelfWithCommandPublishingEnabled");
+    }
+
+    @Test
+    void safe_action_command_publishing_logs_null_list_and_scalar_results() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setSafeActionCommandPublishing(true);
+
+        // when
+        wrapperFactory.wrap(counter1).findNull();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfAsList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findNameAsScalar();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries)
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains(
+                        "commandlog.test.Counter#findNull",
+                        "commandlog.test.Counter#findSelfAsList",
+                        "commandlog.test.Counter#findNameAsScalar");
     }
 
 
@@ -519,6 +601,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
+    @Inject CausewayConfiguration causewayConfiguration;
     @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
 }

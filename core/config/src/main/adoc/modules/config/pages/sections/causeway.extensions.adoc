@@ -34,6 +34,18 @@ One reason to use this option is if you wish to provide your own implementation 
 
 
 |
+[[causeway.extensions.command-log.safe-action-command-publishing]]
+causeway.extensions.command-log. +
+safe-action-command-publishing
+
+|  false
+| Whether safe action invocations should be command published so they can be persisted to the command log.
+
+This is disabled by default because safe actions can be frequent.
+It is intended for regression recording scenarios where finder commands need to be exported and replayed.
+
+
+|
 [[causeway.extensions.command-log.run-background-commands.batch-size]]
 causeway.extensions.command-log. +
 run-background-commands.batch-size

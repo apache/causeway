@@ -63,9 +63,10 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
 
         val publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
 
+        val safeSemantics = hasSafeSemantics(holder);
+
         return actionsIfAny
-                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .map(action -> {
+                .<CommandPublishingFacet>map(action -> {
                     Publishing publishing = action.commandPublishing();
 
                     final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
@@ -76,14 +77,23 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                     }
 
                     switch (publishing) {
+                        case NOT_SPECIFIED:
+                            return safeSemantics
+                                    ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
+                                            holder, servicesInjector, configuration)
+                                    : null;
                         case AS_CONFIGURED:
                             switch (publishingPolicy) {
                                 case NONE:
-                                    return new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
+                                    return safeSemantics
+                                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
+                                                    holder, servicesInjector, configuration)
+                                            : new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
                                 case IGNORE_QUERY_ONLY:
                                 case IGNORE_SAFE:
-                                    return hasSafeSemantics(holder)
-                                            ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
+                                    return safeSemantics
+                                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
+                                                    holder, servicesInjector, configuration)
                                             : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
                                 case ALL:
                                     return new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
@@ -98,7 +108,11 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                         default:
                             throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));
                     }
-                });
+                })
+                .or(() -> safeSemantics
+                        ? Optional.of((CommandPublishingFacet)new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByCommandLogProperty(
+                                holder, servicesInjector, configuration))
+                        : Optional.empty());
     }
 
     static boolean hasSafeSemantics(final FacetHolder holder) {
