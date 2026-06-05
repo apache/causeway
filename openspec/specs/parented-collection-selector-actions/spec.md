@@ -10,6 +10,8 @@ When synthetic parented collection selector action creation is disabled, the sys
 The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
+The synthetic action SHALL be associated with the parented collection through layout metadata equivalent to `@ActionLayout(associateWith=...)`.
+The synthetic action SHALL have the display name `Select` through name metadata equivalent to `@ActionLayout(named="Select")`.
 
 #### Scenario: Synthetic action is not available by default
 - **GIVEN** an entity type has a parented collection of child entities
@@ -33,6 +35,18 @@ The synthetic action SHALL be distinguishable from developer-authored actions by
 #### Scenario: Ordinary action lists can identify synthetic actions
 - **WHEN** a viewer or metamodel exporter enumerates actions for a type
 - **THEN** it can determine whether a listed action is a synthetic parented collection selector action
+
+#### Scenario: Synthetic action is associated with its parented collection
+- **GIVEN** an entity type `Lease` has a parented collection `items`
+- **AND** synthetic parented collection selector action creation is enabled
+- **WHEN** the framework synthesizes the selector action for `items`
+- **THEN** the action has layout association metadata for collection id `items`
+
+#### Scenario: Synthetic action display name is Select
+- **GIVEN** an entity type `Lease` has a parented collection `items`
+- **AND** synthetic parented collection selector action creation is enabled
+- **WHEN** the framework synthesizes the selector action for `items`
+- **THEN** the action display name is `Select`
 
 ### Requirement: Selector actions expose parent and scalar child parameters
 The synthetic selector action SHALL define one mandatory parent object parameter.
