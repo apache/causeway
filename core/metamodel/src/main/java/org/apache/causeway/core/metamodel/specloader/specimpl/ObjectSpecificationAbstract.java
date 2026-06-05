@@ -54,6 +54,8 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -1024,6 +1026,14 @@ implements ObjectSpecification {
 
         public static final String ACTION_ID_PREFIX = "__causeway_select_";
 
+        private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
+                "logicalTypeName",
+                "id",
+                "version",
+                "objectIdentifier",
+                "datanucleusVersionLong",
+                "datanucleusVersionTimestamp");
+
         public static Stream<ObjectAction> createFor(
                 final @NonNull ObjectSpecification parentSpec,
                 final @NonNull Stream<ObjectAssociation> associations) {
@@ -1075,9 +1085,24 @@ implements ObjectSpecification {
 
         private static Can<ObjectAssociation> scalarPropertiesOf(final ObjectSpecification childSpec) {
             return childSpec.streamAssociations(MixedIn.INCLUDED)
-                    .filter(ObjectAssociation::isOneToOneAssociation)
-                    .filter(property -> property.getElementType() != null && property.getElementType().isValue())
+                    .filter(ParentedCollectionSelectorActionUtil::isEligibleScalarParameterProperty)
                     .collect(Can.toCan());
+        }
+
+        private static boolean isEligibleScalarParameterProperty(final ObjectAssociation property) {
+            if(!property.isOneToOneAssociation()) {
+                return false;
+            }
+            val elementType = property.getElementType();
+            if(elementType == null || !elementType.isValue()) {
+                return false;
+            }
+            if(EXCLUDED_PARAMETER_PROPERTY_IDS.contains(property.getId())) {
+                return false;
+            }
+            val correspondingClass = elementType.getCorrespondingClass();
+            return correspondingClass != Blob.class
+                    && correspondingClass != Clob.class;
         }
 
         private static Class<?>[] parameterTypes(

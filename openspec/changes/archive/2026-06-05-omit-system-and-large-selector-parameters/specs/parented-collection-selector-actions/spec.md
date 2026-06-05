@@ -8,7 +8,7 @@ The parent parameter SHALL be disabled so it cannot be changed by the user.
 The synthetic selector action SHALL define optional parameters for eligible scalar properties of the collection element type.
 The synthetic selector action MUST NOT automatically create selector parameters for child collections or reference properties.
 The synthetic selector action MUST NOT create selector parameters for blob or clob child properties.
-The synthetic selector action MUST NOT create selector parameters for child properties whose ids are `logicalTypeName`, `id`, or `version`.
+The synthetic selector action MUST NOT create selector parameters for child properties whose ids are `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`.
 
 #### Scenario: Parent parameter is mandatory
 - **GIVEN** an entity type `Lease` has a parented collection `items`
@@ -43,6 +43,6 @@ The synthetic selector action MUST NOT create selector parameters for child prop
 - **THEN** the action does not create automatic parameters for the blob or clob properties
 
 #### Scenario: Technical metadata child properties are excluded from automatic filters
-- **GIVEN** `LeaseItem` has scalar properties named `logicalTypeName`, `id`, and `version`
+- **GIVEN** `LeaseItem` has scalar properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp`
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
-- **THEN** the action does not create automatic parameters for `logicalTypeName`, `id`, or `version`
+- **THEN** the action does not create automatic parameters for `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`

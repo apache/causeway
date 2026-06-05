@@ -3,7 +3,7 @@
 Synthetic parented collection selector actions are generated in the metamodel when the command-log extension opt-in is enabled.
 The current parameter generation uses each child scalar property as an optional equality filter.
 That is useful for ordinary scalar fields, but blob and clob properties can be large and expensive to compare.
-Technical properties named `logicalTypeName`, `id`, and `version` are also poor user-facing filters and should not appear in selector action prompts or command DTO parameters.
+Technical properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp` are also poor user-facing filters and should not appear in selector action prompts or command DTO parameters.
 
 ## Goals / Non-Goals
 
@@ -12,7 +12,7 @@ Technical properties named `logicalTypeName`, `id`, and `version` are also poor 
 - Keep the existing parent selector parameter unchanged.
 - Continue exposing ordinary scalar child properties as optional selector filters.
 - Exclude blob and clob value properties from selector filters before parameter types and names are derived.
-- Exclude child properties named `logicalTypeName`, `id`, and `version` from selector filters before parameter types and names are derived.
+- Exclude child properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp` from selector filters before parameter types and names are derived.
 - Ensure validation and invocation receive the same filtered property list used to define the action signature.
 
 **Non-Goals:**
@@ -32,7 +32,7 @@ Technical properties named `logicalTypeName`, `id`, and `version` are also poor 
   This targets the actual large value semantics regardless of how the property is declared.
   The alternative was to check names or annotations, but that would be less reliable and could miss framework-provided blob or clob value types.
 
-- Treat `logicalTypeName`, `id`, and `version` exclusion as exact property-id based.
+- Treat `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp` exclusion as exact property-id based.
   This matches the metamodel identifiers used for generated action parameter names and avoids changing similarly named business properties such as `externalId` or `versionLabel`.
   The alternative was a broader substring or case-insensitive rule, but that could remove legitimate domain filters unexpectedly.
 

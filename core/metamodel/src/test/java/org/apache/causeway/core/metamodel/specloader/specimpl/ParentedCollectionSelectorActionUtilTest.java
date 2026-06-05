@@ -41,6 +41,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
@@ -83,6 +85,22 @@ class ParentedCollectionSelectorActionUtilTest {
         private final Lease otherLease;
         @Getter
         private final List<LeaseTerm> terms = new ArrayList<>();
+        @Getter
+        private Blob attachment;
+        @Getter
+        private Clob notes;
+        @Getter
+        private String logicalTypeName;
+        @Getter
+        private String id;
+        @Getter
+        private Long version;
+        @Getter
+        private String objectIdentifier;
+        @Getter
+        private Long datanucleusVersionLong;
+        @Getter
+        private java.sql.Timestamp datanucleusVersionTimestamp;
     }
 
     @RequiredArgsConstructor
@@ -193,6 +211,14 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("otherLease")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("terms")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("attachment")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("notes")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("logicalTypeName")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("id")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("version")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("objectIdentifier")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("datanucleusVersionLong")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("datanucleusVersionTimestamp")), is(false));
     }
 
     @Test

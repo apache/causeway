@@ -55,6 +55,8 @@ The parent parameter SHALL default to the current action target.
 The parent parameter SHALL be disabled so it cannot be changed by the user.
 The synthetic selector action SHALL define optional parameters for eligible scalar properties of the collection element type.
 The synthetic selector action MUST NOT automatically create selector parameters for child collections or reference properties.
+The synthetic selector action MUST NOT create selector parameters for blob or clob child properties.
+The synthetic selector action MUST NOT create selector parameters for child properties whose ids are `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`.
 
 #### Scenario: Parent parameter is mandatory
 - **GIVEN** an entity type `Lease` has a parented collection `items`
@@ -82,6 +84,16 @@ The synthetic selector action MUST NOT automatically create selector parameters 
 - **GIVEN** `LeaseItem` has a child collection and a reference property
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action does not create automatic parameters for the child collection or reference property
+
+#### Scenario: Blob and clob child properties are excluded from automatic filters
+- **GIVEN** `LeaseItem` has blob and clob properties
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action does not create automatic parameters for the blob or clob properties
+
+#### Scenario: Technical metadata child properties are excluded from automatic filters
+- **GIVEN** `LeaseItem` has scalar properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp`
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action does not create automatic parameters for `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`
 
 ### Requirement: Selector action invocation returns exactly one child object
 The synthetic selector action SHALL access the collection from the supplied parent object.
