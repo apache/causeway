@@ -325,6 +325,31 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
+    void partial_string_filter_validates_and_invokes_when_it_identifies_one_child() {
+        val lease = new Lease();
+        val matchingItem = new LeaseItem("first child", 1, null);
+        lease.getItems().add(matchingItem);
+        lease.getItems().add(new LeaseItem("second child", 2, null));
+
+        assertThat(validate(lease, "irs", null).isAllowed(), is(true));
+
+        val result = invoke(lease, "irs", null);
+
+        assertThat(result.getPojo(), is(matchingItem));
+    }
+
+    @Test
+    void non_string_scalar_filter_still_uses_exact_equality() {
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("first", 12, null));
+
+        val consent = validate(lease, "first", 1);
+
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("0 items match. Use parameters to match just one item."));
+    }
+
+    @Test
     void selector_action_validation_rejects_when_no_child_matches() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
@@ -351,6 +376,22 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(consent.getReasonAsString().orElseThrow(), containsString("2 items match. Use parameters to match just one item."));
 
         val ex = assertThrows(RecoverableException.class, () -> executeWithRuleChecking(lease, "same", null));
+
+        assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
+    }
+
+    @Test
+    void partial_string_filter_is_ambiguous_when_it_matches_multiple_children() {
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("first child", 1, null));
+        lease.getItems().add(new LeaseItem("second child", 2, null));
+
+        val consent = validate(lease, "child", null);
+
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("2 items match. Use parameters to match just one item."));
+
+        val ex = assertThrows(RecoverableException.class, () -> executeWithRuleChecking(lease, "child", null));
 
         assertThat(ex.getMessage(), containsString("2 items match. Use parameters to match just one item."));
     }

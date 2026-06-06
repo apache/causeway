@@ -93,11 +93,19 @@ class ParentedCollectionSelectorMatchingUtil {
             }
             val property = scalarProperties.getElseFail(i);
             val propertyValue = property.get(childAdapter, interactionInitiatedBy);
-            if(!Objects.equals(MmUnwrapUtils.single(propertyValue), MmUnwrapUtils.single(argumentAdapter))) {
+            if(!matches(MmUnwrapUtils.single(propertyValue), MmUnwrapUtils.single(argumentAdapter))) {
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean matches(final Object propertyValue, final Object argumentValue) {
+        if(propertyValue instanceof String
+                && argumentValue instanceof String) {
+            return ((String) propertyValue).contains((String) argumentValue);
+        }
+        return Objects.equals(propertyValue, argumentValue);
     }
 
     @Value(staticConstructor = "of")
