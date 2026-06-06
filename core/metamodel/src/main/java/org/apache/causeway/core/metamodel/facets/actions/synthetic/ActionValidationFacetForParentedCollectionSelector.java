@@ -41,15 +41,15 @@ implements ActionValidationFacet {
     }
 
     private final @NonNull OneToManyAssociation collection;
-    private final @NonNull Can<ObjectAssociation> scalarProperties;
+    private final @NonNull Can<ObjectAssociation> filterProperties;
 
     public ActionValidationFacetForParentedCollectionSelector(
             final @NonNull OneToManyAssociation collection,
-            final @NonNull Can<ObjectAssociation> scalarProperties,
+            final @NonNull Can<ObjectAssociation> filterProperties,
             final @NonNull org.apache.causeway.core.metamodel.facetapi.FacetHolder holder) {
         super(type(), holder);
         this.collection = collection;
-        this.scalarProperties = scalarProperties;
+        this.filterProperties = filterProperties;
     }
 
     @Override
@@ -77,7 +77,7 @@ implements ActionValidationFacet {
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
         val matchResult = ParentedCollectionSelectorMatchingUtil.match(
                 collection,
-                scalarProperties,
+                filterProperties,
                 arguments,
                 interactionInitiatedBy);
         return ParentedCollectionSelectorMatchingUtil.validationMessage(actionId, matchResult);

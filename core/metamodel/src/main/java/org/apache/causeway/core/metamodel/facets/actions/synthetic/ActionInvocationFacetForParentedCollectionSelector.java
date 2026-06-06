@@ -52,19 +52,19 @@ implements ActionInvocationFacet {
     private final @NonNull ObjectSpecification declaringType;
     private final @NonNull ObjectSpecification returnType;
     private final @NonNull OneToManyAssociation collection;
-    private final @NonNull Can<ObjectAssociation> scalarProperties;
+    private final @NonNull Can<ObjectAssociation> filterProperties;
 
     public ActionInvocationFacetForParentedCollectionSelector(
             final @NonNull ObjectSpecification declaringType,
             final @NonNull ObjectSpecification returnType,
             final @NonNull OneToManyAssociation collection,
-            final @NonNull Can<ObjectAssociation> scalarProperties,
+            final @NonNull Can<ObjectAssociation> filterProperties,
             final @NonNull org.apache.causeway.core.metamodel.facetapi.FacetHolder holder) {
         super(type(), holder);
         this.declaringType = declaringType;
         this.returnType = returnType;
         this.collection = collection;
-        this.scalarProperties = scalarProperties;
+        this.filterProperties = filterProperties;
     }
 
     @Override
@@ -89,7 +89,7 @@ implements ActionInvocationFacet {
 
         val matchResult = ParentedCollectionSelectorMatchingUtil.match(
                 collection,
-                scalarProperties,
+                filterProperties,
                 argumentAdapters,
                 interactionInitiatedBy);
         val validationMessage = ParentedCollectionSelectorMatchingUtil.validationMessage(owningAction.getId(), matchResult);

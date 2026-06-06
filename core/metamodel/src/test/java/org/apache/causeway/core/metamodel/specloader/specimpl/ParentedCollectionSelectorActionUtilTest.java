@@ -42,6 +42,7 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
+import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -98,6 +99,19 @@ class ParentedCollectionSelectorActionUtilTest {
         @Getter
         private final Lease otherLease;
         @Getter
+        private BoundedReference boundedReference;
+        @Getter
+        private SelectableReference choicesReference;
+        @Getter
+        private SelectableReference autocompleteReference;
+        @Getter
+        private ObjectAutocompleteReference objectAutocompleteReference;
+        @Getter
+        private SelectableReference unconstrainedReference;
+        @Getter
+        @PropertyLayout(hidden = Where.PARENTED_TABLES)
+        private SelectableReference nonColumnChoicesReference;
+        @Getter
         private final List<LeaseTerm> terms = new ArrayList<>();
         @Getter
         private Blob attachment;
@@ -118,6 +132,48 @@ class ParentedCollectionSelectorActionUtilTest {
         private Long datanucleusVersionLong;
         @Getter
         private java.sql.Timestamp datanucleusVersionTimestamp;
+
+        @MemberSupport
+        public List<SelectableReference> choicesChoicesReference() {
+            return List.of();
+        }
+
+        @MemberSupport
+        public List<SelectableReference> autoCompleteAutocompleteReference(final String search) {
+            return List.of();
+        }
+
+        @MemberSupport
+        public List<SelectableReference> choicesNonColumnChoicesReference() {
+            return List.of();
+        }
+    }
+
+    @RequiredArgsConstructor
+    @DomainObject(nature = Nature.VIEW_MODEL, bounding = Bounding.BOUNDED)
+    static class BoundedReference {
+        @Getter
+        private final String title;
+    }
+
+    @RequiredArgsConstructor
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    static class SelectableReference {
+        @Getter
+        private final String title;
+    }
+
+    static class ObjectAutocompleteReferenceRepository {
+        public List<ObjectAutocompleteReference> autoComplete(final String search) {
+            return List.of();
+        }
+    }
+
+    @RequiredArgsConstructor
+    @DomainObject(nature = Nature.VIEW_MODEL, autoCompleteRepository = ObjectAutocompleteReferenceRepository.class)
+    static class ObjectAutocompleteReference {
+        @Getter
+        private final String title;
     }
 
     @RequiredArgsConstructor
@@ -237,14 +293,20 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
-    void exposes_mandatory_parent_parameter_and_optional_scalar_child_parameters() {
+    void exposes_mandatory_parent_parameter_and_optional_scalar_and_selectable_reference_child_parameters() {
         val parameters = selectorAction.getParameters();
         assertThat(parameters.getElseFail(0).getId(), is("lease"));
         assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("boundedReference")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("choicesReference")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("autocompleteReference")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("objectAutocompleteReference")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("internalCode")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("otherLease")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("unconstrainedReference")), is(false));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("nonColumnChoicesReference")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("terms")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("attachment")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("notes")), is(false));
@@ -350,6 +412,40 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
+    void reference_filter_validates_and_invokes_when_it_identifies_one_child() {
+        val lease = new Lease();
+        val matchingReference = new BoundedReference("same title");
+        val otherReference = new BoundedReference("same title");
+        val matchingItem = new LeaseItem("first", 1, null);
+        matchingItem.boundedReference = matchingReference;
+        val otherItem = new LeaseItem("second", 2, null);
+        otherItem.boundedReference = otherReference;
+        lease.getItems().add(matchingItem);
+        lease.getItems().add(otherItem);
+
+        assertThat(validate(lease, null, null, matchingReference, null, null).isAllowed(), is(true));
+
+        val result = invoke(lease, null, null, matchingReference, null, null);
+
+        assertThat(result.getPojo(), is(matchingItem));
+    }
+
+    @Test
+    void reference_filter_uses_exact_reference_equality_not_title_or_partial_string_matching() {
+        val lease = new Lease();
+        val storedReference = new BoundedReference("same title");
+        val suppliedDifferentReferenceWithSameTitle = new BoundedReference("same title");
+        val matchingItem = new LeaseItem("first", 1, null);
+        matchingItem.boundedReference = storedReference;
+        lease.getItems().add(matchingItem);
+
+        val consent = validate(lease, null, null, suppliedDifferentReferenceWithSameTitle, null, null);
+
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("0 items match. Use parameters to match just one item."));
+    }
+
+    @Test
     void selector_action_validation_rejects_when_no_child_matches() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
@@ -439,7 +535,7 @@ class ParentedCollectionSelectorActionUtilTest {
         val result = publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
                 publishingSelectorAction,
                 publishingSelectorAction.interactionHead(leaseAdapter),
-                arguments(publishingMmc, leaseAdapter, "first", 1),
+                arguments(publishingSelectorAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(result.getPojo(), is(matchingItem));
@@ -474,7 +570,7 @@ class ParentedCollectionSelectorActionUtilTest {
         publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
                 publishingSelectorAction,
                 publishingSelectorAction.interactionHead(leaseAdapter),
-                arguments(publishingMmc, leaseAdapter, "first", 1),
+                arguments(publishingSelectorAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.ONHOLD));
@@ -523,10 +619,20 @@ class ParentedCollectionSelectorActionUtilTest {
             final Lease lease,
             final String name,
             final Integer sequence) {
+        return validate(lease, name, sequence, null, null, null);
+    }
+
+    private Consent validate(
+            final Lease lease,
+            final String name,
+            final Integer sequence,
+            final BoundedReference boundedReference,
+            final SelectableReference choicesReference,
+            final SelectableReference autocompleteReference) {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         return selectorAction.isArgumentSetValid(
                 selectorAction.interactionHead(leaseAdapter),
-                arguments(leaseAdapter, name, sequence),
+                arguments(selectorAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
                 InteractionInitiatedBy.USER);
     }
 
@@ -537,7 +643,7 @@ class ParentedCollectionSelectorActionUtilTest {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         return selectorAction.executeWithRuleChecking(
                 selectorAction.interactionHead(leaseAdapter),
-                arguments(leaseAdapter, name, sequence),
+                arguments(selectorAction, mmc, leaseAdapter, name, sequence, null, null, null),
                 InteractionInitiatedBy.USER,
                 null);
     }
@@ -546,12 +652,22 @@ class ParentedCollectionSelectorActionUtilTest {
             final Lease lease,
             final String name,
             final Integer sequence) {
+        return invoke(lease, name, sequence, null, null, null);
+    }
+
+    private ManagedObject invoke(
+            final Lease lease,
+            final String name,
+            final Integer sequence,
+            final BoundedReference boundedReference,
+            final SelectableReference choicesReference,
+            final SelectableReference autocompleteReference) {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         val actionInvocationFacet = selectorAction.getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet.invoke(
                 selectorAction,
                 selectorAction.interactionHead(leaseAdapter),
-                arguments(leaseAdapter, name, sequence),
+                arguments(selectorAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
                 InteractionInitiatedBy.USER);
     }
 
@@ -559,7 +675,7 @@ class ParentedCollectionSelectorActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return arguments(mmc, leaseAdapter, name, sequence);
+        return arguments(selectorAction, mmc, leaseAdapter, name, sequence, null, null, null);
     }
 
     private Can<ManagedObject> arguments(
@@ -567,10 +683,52 @@ class ParentedCollectionSelectorActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return Can.of(
-                leaseAdapter,
-                context.getObjectManager().adapt(name),
-                context.getObjectManager().adapt(sequence));
+        return arguments(selectorAction, context, leaseAdapter, name, sequence, null, null, null);
+    }
+
+    private Can<ManagedObject> arguments(
+            final ObjectAction action,
+            final MetaModelContext_forTesting context,
+            final ManagedObject leaseAdapter,
+            final String name,
+            final Integer sequence,
+            final BoundedReference boundedReference,
+            final SelectableReference choicesReference,
+            final SelectableReference autocompleteReference) {
+        return action.getParameters().stream()
+                .map(parameter -> {
+                    if(parameter.getId().equals("lease")) {
+                        return leaseAdapter;
+                    }
+                    val value = valueFor(parameter.getId(), name, sequence, boundedReference, choicesReference, autocompleteReference);
+                    return value != null
+                            ? context.getObjectManager().adapt(value)
+                            : ManagedObject.empty(parameter.getElementType());
+                })
+                .collect(Can.toCan());
+    }
+
+    private Object valueFor(
+            final String parameterId,
+            final String name,
+            final Integer sequence,
+            final BoundedReference boundedReference,
+            final SelectableReference choicesReference,
+            final SelectableReference autocompleteReference) {
+        switch (parameterId) {
+        case "name":
+            return name;
+        case "sequence":
+            return sequence;
+        case "boundedReference":
+            return boundedReference;
+        case "choicesReference":
+            return choicesReference;
+        case "autocompleteReference":
+            return autocompleteReference;
+        default:
+            return null;
+        }
     }
 
 }

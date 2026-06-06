@@ -30,7 +30,7 @@ It should continue to use facets already present on the child property or refere
   Alternative considered: maintain separate scalar and reference lists, but that would complicate parameter index alignment without adding useful behavior.
 
 - Treat a reference property as eligible when it is one-to-one, non-value, non-collection, visible in parented tables, not technically excluded, and has a selectable facet.
-  Selectable means the property has `PropertyChoicesFacet` or `PropertyAutoCompleteFacet`, or the referenced type has the object-value `ChoicesFacet` installed by bounded semantics.
+  Selectable means the property has a non-fallback `PropertyChoicesFacet` or `PropertyAutoCompleteFacet`, or the referenced type has a non-fallback object-level `ChoicesFacet` from bounded semantics or `AutoCompleteFacet` from domain-object autocomplete semantics.
   Alternative considered: inspect annotations directly, but facet checks are less coupled to annotation sources and match the existing metamodel design.
 
 - Check only for facet presence during synthesis.
@@ -44,6 +44,6 @@ It should continue to use facets already present on the child property or refere
 ## Risks / Trade-offs
 
 - Reference equality may be sensitive to proxies or detached instances → Use the existing `ManagedObject` unwrapping path and add tests using the same object instances created by the metamodel fixture.
-- Bounded-type detection may use a facet installed on the referenced specification rather than the property → Encapsulate selectable-reference eligibility in a helper so the facet lookup can check both the property and element type consistently.
+- Bounded-type and domain-object autocomplete detection use facets installed on the referenced specification rather than the property → Encapsulate selectable-reference eligibility in a helper so the facet lookup can check both the property and element type consistently.
 - More parameters may make selector actions broader than before → Limit references to selectable facets and keep hidden, blob/clob, collection, and technical exclusions.
 - Existing tests and helper names are scalar-specific → Update names carefully while preserving behavior and adding regression coverage for existing scalar cases.

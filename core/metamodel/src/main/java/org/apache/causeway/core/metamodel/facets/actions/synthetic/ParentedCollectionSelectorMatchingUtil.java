@@ -41,7 +41,7 @@ class ParentedCollectionSelectorMatchingUtil {
 
     MatchResult match(
             final @NonNull OneToManyAssociation collection,
-            final @NonNull Can<ObjectAssociation> scalarProperties,
+            final @NonNull Can<ObjectAssociation> filterProperties,
             final Can<ManagedObject> argumentAdapters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -57,7 +57,7 @@ class ParentedCollectionSelectorMatchingUtil {
 
         val collectionAdapter = collection.get(parentAdapter, interactionInitiatedBy);
         val matches = CollectionFacet.streamAdapters(collectionAdapter)
-                .filter(childAdapter -> matches(childAdapter, scalarProperties, argumentAdapters, interactionInitiatedBy))
+                .filter(childAdapter -> matches(childAdapter, filterProperties, argumentAdapters, interactionInitiatedBy))
                 .collect(Collectors.toList());
 
         return MatchResult.of(matches);
@@ -80,10 +80,10 @@ class ParentedCollectionSelectorMatchingUtil {
 
     private boolean matches(
             final ManagedObject childAdapter,
-            final Can<ObjectAssociation> scalarProperties,
+            final Can<ObjectAssociation> filterProperties,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        for(int i = 0; i < scalarProperties.size(); i++) {
+        for(int i = 0; i < filterProperties.size(); i++) {
             if(argumentAdapters.size() <= i + 1) {
                 continue;
             }
@@ -91,7 +91,7 @@ class ParentedCollectionSelectorMatchingUtil {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(argumentAdapter)) {
                 continue;
             }
-            val property = scalarProperties.getElseFail(i);
+            val property = filterProperties.getElseFail(i);
             val propertyValue = property.get(childAdapter, interactionInitiatedBy);
             if(!matches(MmUnwrapUtils.single(propertyValue), MmUnwrapUtils.single(argumentAdapter))) {
                 return false;

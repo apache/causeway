@@ -7,9 +7,10 @@ The parent parameter SHALL default to the current action target.
 The parent parameter SHALL be disabled so it cannot be changed by the user.
 The synthetic selector action SHALL define optional parameters for eligible scalar properties of the collection element type that appear as columns of the associated parented collection.
 The synthetic selector action SHALL also define optional parameters for eligible reference properties of the collection element type that appear as columns of the associated parented collection and have a bounded, choices, or autocomplete facet installed.
-A reference property with a bounded referenced type SHALL be considered selectable when the bounded semantics install a choices facet for that referenced type.
-A reference property with property choices SHALL be considered selectable when a property choices facet is installed on the child property.
-A reference property with property autocomplete SHALL be considered selectable when a property autocomplete facet is installed on the child property.
+A reference property with a bounded referenced type SHALL be considered selectable when the bounded semantics install a non-fallback choices facet for that referenced type.
+A reference property with property choices SHALL be considered selectable when a non-fallback property choices facet is installed on the child property.
+A reference property with property autocomplete SHALL be considered selectable when a non-fallback property autocomplete facet is installed on the child property.
+A reference property with a domain-object autocomplete referenced type SHALL be considered selectable when domain-object autocomplete semantics install a non-fallback autocomplete facet for that referenced type.
 The synthetic selector action SHALL order child filter parameters according to the associated parented collection column order.
 The synthetic selector action MUST NOT automatically create selector parameters for child collections.
 The synthetic selector action MUST NOT automatically create selector parameters for reference properties that do not have a bounded, choices, or autocomplete facet installed.
@@ -53,6 +54,12 @@ The synthetic selector action MUST NOT create selector parameters for child prop
 #### Scenario: Collection column autocomplete reference child properties become optional filters
 - **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
 - **AND** the child reference property has an autocomplete facet
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action has an optional parameter corresponding to that column-backed reference property
+
+#### Scenario: Collection column domain-object autocomplete reference child properties become optional filters
+- **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
+- **AND** the referenced type has domain-object autocomplete semantics that install an autocomplete facet
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action has an optional parameter corresponding to that column-backed reference property
 

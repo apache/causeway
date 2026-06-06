@@ -89,6 +89,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
+import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
@@ -97,6 +98,9 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
+import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectTitleContext;
@@ -1065,9 +1069,9 @@ implements ObjectSpecification {
                 final OneToManyAssociation collection) {
 
             val childSpec = collection.getElementType();
-            val scalarProperties = scalarPropertiesOf(parentSpec, collection);
-            val parameterTypes = parameterTypes(parentSpec, scalarProperties);
-            val parameterNames = parameterNames(parentSpec, scalarProperties);
+            val filterProperties = filterPropertiesOf(parentSpec, collection);
+            val parameterTypes = parameterTypes(parentSpec, filterProperties);
+            val parameterNames = parameterNames(parentSpec, filterProperties);
             val actionId = actionIdFor(collection);
 
             val facetedMethod = FacetedMethod.createSyntheticAction(
@@ -1078,34 +1082,42 @@ implements ObjectSpecification {
                     parameterTypes,
                     parameterNames);
 
-            installActionFacets(parentSpec, collection, scalarProperties, facetedMethod);
-            installParameterFacets(scalarProperties, facetedMethod);
+            installActionFacets(parentSpec, collection, filterProperties, facetedMethod);
+            installParameterFacets(filterProperties, facetedMethod);
 
             return ObjectActionDefault.forMethod(facetedMethod);
         }
 
-        private static Can<ObjectAssociation> scalarPropertiesOf(
+        private static Can<ObjectAssociation> filterPropertiesOf(
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection) {
             return collection.getElementType()
                     .streamAssociations(MixedIn.INCLUDED)
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
-                    .filter(ParentedCollectionSelectorActionUtil::isEligibleScalarParameterProperty)
+                    .filter(ParentedCollectionSelectorActionUtil::isEligibleFilterParameterProperty)
                     .sorted(ObjectMember.Comparators
                             .<ObjectAssociation>byMemberOrderSequence(false)
                             .thenComparing(ObjectAssociation::getId))
                     .collect(Can.toCan());
         }
 
-        private static boolean isEligibleScalarParameterProperty(final ObjectAssociation property) {
+        private static boolean isEligibleFilterParameterProperty(final ObjectAssociation property) {
             if(!property.isOneToOneAssociation()) {
                 return false;
             }
-            val elementType = property.getElementType();
-            if(elementType == null || !elementType.isValue()) {
+            if(EXCLUDED_PARAMETER_PROPERTY_IDS.contains(property.getId())) {
                 return false;
             }
-            if(EXCLUDED_PARAMETER_PROPERTY_IDS.contains(property.getId())) {
+            val elementType = property.getElementType();
+            if(elementType == null) {
+                return false;
+            }
+            return isEligibleScalarParameterProperty(elementType)
+                    || isEligibleReferenceParameterProperty(property, elementType);
+        }
+
+        private static boolean isEligibleScalarParameterProperty(final ObjectSpecification elementType) {
+            if(!elementType.isValue()) {
                 return false;
             }
             val correspondingClass = elementType.getCorrespondingClass();
@@ -1113,24 +1125,34 @@ implements ObjectSpecification {
                     && correspondingClass != Clob.class;
         }
 
+        private static boolean isEligibleReferenceParameterProperty(
+                final ObjectAssociation property,
+                final ObjectSpecification elementType) {
+            return !elementType.isValue()
+                    && (property.containsNonFallbackFacet(PropertyChoicesFacet.class)
+                            || property.containsNonFallbackFacet(PropertyAutoCompleteFacet.class)
+                            || elementType.containsNonFallbackFacet(ChoicesFacet.class)
+                            || elementType.containsNonFallbackFacet(AutoCompleteFacet.class));
+        }
+
         private static Class<?>[] parameterTypes(
                 final ObjectSpecification parentSpec,
-                final Can<ObjectAssociation> scalarProperties) {
-            val parameterTypes = new Class<?>[scalarProperties.size() + 1];
+                final Can<ObjectAssociation> filterProperties) {
+            val parameterTypes = new Class<?>[filterProperties.size() + 1];
             parameterTypes[0] = parentSpec.getCorrespondingClass();
-            for(int i = 0; i < scalarProperties.size(); i++) {
-                parameterTypes[i + 1] = scalarProperties.getElseFail(i).getElementType().getCorrespondingClass();
+            for(int i = 0; i < filterProperties.size(); i++) {
+                parameterTypes[i + 1] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
             }
             return parameterTypes;
         }
 
         private static String[] parameterNames(
                 final ObjectSpecification parentSpec,
-                final Can<ObjectAssociation> scalarProperties) {
-            val parameterNames = new String[scalarProperties.size() + 1];
+                final Can<ObjectAssociation> filterProperties) {
+            val parameterNames = new String[filterProperties.size() + 1];
             parameterNames[0] = _Strings.asCamelCaseDecapitalized.apply(parentSpec.getShortIdentifier());
-            for(int i = 0; i < scalarProperties.size(); i++) {
-                parameterNames[i + 1] = scalarProperties.getElseFail(i).getId();
+            for(int i = 0; i < filterProperties.size(); i++) {
+                parameterNames[i + 1] = filterProperties.getElseFail(i).getId();
             }
             return parameterNames;
         }
@@ -1142,7 +1164,7 @@ implements ObjectSpecification {
         private static void installActionFacets(
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection,
-                final Can<ObjectAssociation> scalarProperties,
+                final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
             FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Select", facetedMethod));
             FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionSelector(
@@ -1151,13 +1173,13 @@ implements ObjectSpecification {
             FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionSelector(facetedMethod));
             FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionSelector(
                     collection,
-                    scalarProperties,
+                    filterProperties,
                     facetedMethod));
             FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionSelector(
                     parentSpec,
                     collection.getElementType(),
                     collection,
-                    scalarProperties,
+                    filterProperties,
                     facetedMethod));
             FacetUtil.addFacetIfPresent(CommandPublishingFacetForActionAnnotation.create(
                     Optional.empty(),
@@ -1167,7 +1189,7 @@ implements ObjectSpecification {
         }
 
         private static void installParameterFacets(
-                final Can<ObjectAssociation> scalarProperties,
+                final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
             val parameters = facetedMethod.getParameters();
             FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionSelector(
@@ -1176,10 +1198,10 @@ implements ObjectSpecification {
             FacetUtil.addFacet(new ActionParameterChoicesFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
             FacetUtil.addFacet(new ActionParameterDefaultsFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
             FacetUtil.addFacet(new DisabledFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
-            for(int i = 0; i < scalarProperties.size(); i++) {
+            for(int i = 0; i < filterProperties.size(); i++) {
                 val parameter = parameters.getElseFail(i + 1);
                 FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionSelector(
-                        scalarProperties.getElseFail(i).getCanonicalFriendlyName(), parameter));
+                        filterProperties.getElseFail(i).getCanonicalFriendlyName(), parameter));
                 FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));
             }
         }
