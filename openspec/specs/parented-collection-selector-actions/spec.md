@@ -58,9 +58,15 @@ The synthetic selector action SHALL define one mandatory parent object parameter
 The parent parameter SHALL be typed as the collection owner type.
 The parent parameter SHALL default to the current action target.
 The parent parameter SHALL be disabled so it cannot be changed by the user.
-The synthetic selector action SHALL define optional parameters only for eligible scalar properties of the collection element type that appear as columns of the associated parented collection.
+The synthetic selector action SHALL define optional parameters for eligible scalar properties of the collection element type that appear as columns of the associated parented collection.
+The synthetic selector action SHALL also define optional parameters for eligible reference properties of the collection element type that appear as columns of the associated parented collection and have a bounded, choices, or autocomplete facet installed.
+A reference property with a bounded referenced type SHALL be considered selectable when the bounded semantics install a non-fallback choices facet for that referenced type.
+A reference property with property choices SHALL be considered selectable when a non-fallback property choices facet is installed on the child property.
+A reference property with property autocomplete SHALL be considered selectable when a non-fallback property autocomplete facet is installed on the child property.
+A reference property with a domain-object autocomplete referenced type SHALL be considered selectable when domain-object autocomplete semantics install a non-fallback autocomplete facet for that referenced type.
 The synthetic selector action SHALL order child filter parameters according to the associated parented collection column order.
-The synthetic selector action MUST NOT automatically create selector parameters for child collections or reference properties.
+The synthetic selector action MUST NOT automatically create selector parameters for child collections.
+The synthetic selector action MUST NOT automatically create selector parameters for reference properties that do not have a bounded, choices, or autocomplete facet installed.
 The synthetic selector action MUST NOT create selector parameters for blob or clob child properties.
 The synthetic selector action MUST NOT create selector parameters for child properties whose ids are `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`.
 
@@ -86,20 +92,55 @@ The synthetic selector action MUST NOT create selector parameters for child prop
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action has optional parameters corresponding to those column-backed scalar properties
 
+#### Scenario: Collection column bounded reference child properties become optional filters
+- **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
+- **AND** the referenced type has bounded semantics that install a choices facet
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action has an optional parameter corresponding to that column-backed reference property
+
+#### Scenario: Collection column choices reference child properties become optional filters
+- **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
+- **AND** the child reference property has a choices facet
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action has an optional parameter corresponding to that column-backed reference property
+
+#### Scenario: Collection column autocomplete reference child properties become optional filters
+- **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
+- **AND** the child reference property has an autocomplete facet
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action has an optional parameter corresponding to that column-backed reference property
+
+#### Scenario: Collection column domain-object autocomplete reference child properties become optional filters
+- **GIVEN** `Lease.items` renders an eligible child reference property as a collection column
+- **AND** the referenced type has domain-object autocomplete semantics that install an autocomplete facet
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action has an optional parameter corresponding to that column-backed reference property
+
 #### Scenario: Scalar child properties that are not collection columns are excluded from automatic filters
 - **GIVEN** `LeaseItem` has an eligible scalar property that is not rendered as a column of `Lease.items`
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action does not create an automatic parameter for that non-column scalar property
 
+#### Scenario: Selectable reference child properties that are not collection columns are excluded from automatic filters
+- **GIVEN** `LeaseItem` has a selectable reference property that is not rendered as a column of `Lease.items`
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action does not create an automatic parameter for that non-column reference property
+
 #### Scenario: Child filter parameters follow collection column order
-- **GIVEN** `Lease.items` renders eligible scalar child properties as columns in a configured order
+- **GIVEN** `Lease.items` renders eligible scalar and selectable reference child properties as columns in a configured order
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action lists child filter parameters in the same relative order as the collection columns
 
-#### Scenario: Non-scalar child members are excluded from automatic filters
-- **GIVEN** `LeaseItem` has a child collection and a reference property that appear as collection columns
+#### Scenario: Non-scalar child collections are excluded from automatic filters
+- **GIVEN** `LeaseItem` has a child collection that appears as a collection column
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
-- **THEN** the action does not create automatic parameters for the child collection or reference property
+- **THEN** the action does not create an automatic parameter for the child collection
+
+#### Scenario: Unconstrained reference child properties are excluded from automatic filters
+- **GIVEN** `LeaseItem` has a reference property that appears as a collection column
+- **AND** the reference property has no bounded, choices, or autocomplete facet installed
+- **WHEN** the framework synthesizes the selector action for `Lease.items`
+- **THEN** the action does not create an automatic parameter for the reference property
 
 #### Scenario: Blob and clob child properties are excluded from automatic filters
 - **GIVEN** `LeaseItem` has blob and clob properties that appear as collection columns
@@ -107,16 +148,17 @@ The synthetic selector action MUST NOT create selector parameters for child prop
 - **THEN** the action does not create automatic parameters for the blob or clob properties
 
 #### Scenario: Technical metadata child properties are excluded from automatic filters
-- **GIVEN** `LeaseItem` has scalar properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp` that appear as collection columns
+- **GIVEN** `LeaseItem` has scalar or reference properties named `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, and `datanucleusVersionTimestamp` that appear as collection columns
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the action does not create automatic parameters for `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`
 
 ### Requirement: Selector action invocation returns exactly one child object
 The synthetic selector action SHALL access the collection from the supplied parent object.
-The synthetic selector action SHALL filter collection elements using the supplied scalar parameter values.
+The synthetic selector action SHALL filter collection elements using the supplied scalar and reference parameter values.
 When a supplied scalar parameter value is a string, the synthetic selector action SHALL match child string property values that contain the supplied string value.
 When a supplied scalar parameter value is not a string, the synthetic selector action SHALL match child property values by exact equality.
-The synthetic selector action SHALL be valid only when the supplied parent and scalar parameter values identify exactly one matching child object.
+When a supplied reference parameter value is present, the synthetic selector action SHALL match child reference property values by exact equality.
+The synthetic selector action SHALL be valid only when the supplied parent and filter parameter values identify exactly one matching child object.
 The synthetic selector action MUST prevent invocation with a clear no-match validation reason when no child matches.
 The synthetic selector action MUST prevent invocation with a clear ambiguous-match validation reason when multiple children match.
 The synthetic selector action SHALL return the single matching child object when exactly one child matches.
@@ -144,14 +186,28 @@ The synthetic selector action MUST fail clearly if invocation is attempted witho
 - **WHEN** the synthetic selector action parameters are validated
 - **THEN** validation does not treat the non-string value as a partial match
 
+#### Scenario: Reference filter identifies a single child by exact reference
+- **GIVEN** a `Lease` has several `LeaseItem` children with selectable reference properties
+- **AND** exactly one child refers to the supplied reference parameter value
+- **WHEN** the synthetic selector action parameters are validated
+- **THEN** validation allows invocation
+- **WHEN** the synthetic selector action is invoked
+- **THEN** the action returns that child
+
+#### Scenario: Reference filters do not use partial string matching
+- **GIVEN** a `Lease` has several `LeaseItem` children with selectable reference properties
+- **AND** a supplied reference parameter value has the same title text as a different child reference but is not the same referenced object
+- **WHEN** the synthetic selector action parameters are validated
+- **THEN** validation does not match that different child reference by title text
+
 #### Scenario: No child match prevents invocation
-- **GIVEN** a `Lease` has no `LeaseItem` matching the supplied scalar values
+- **GIVEN** a `Lease` has no `LeaseItem` matching the supplied scalar or reference values
 - **WHEN** the synthetic selector action parameters are validated
 - **THEN** validation rejects the action with a clear no-match reason
 - **AND** the action is not invoked
 
 #### Scenario: Multiple child matches prevent invocation
-- **GIVEN** a `Lease` has more than one `LeaseItem` matching the supplied scalar values
+- **GIVEN** a `Lease` has more than one `LeaseItem` matching the supplied scalar or reference values
 - **WHEN** the synthetic selector action parameters are validated
 - **THEN** validation rejects the action with a clear ambiguous-match reason
 - **AND** the action is not invoked
@@ -164,13 +220,13 @@ The synthetic selector action MUST fail clearly if invocation is attempted witho
 
 #### Scenario: Direct invocation still fails for no child match
 - **GIVEN** a caller bypasses validation
-- **AND** a `Lease` has no `LeaseItem` matching the supplied scalar values
+- **AND** a `Lease` has no `LeaseItem` matching the supplied scalar or reference values
 - **WHEN** the synthetic selector action is invoked directly
 - **THEN** the invocation fails with a clear no-match error
 
 #### Scenario: Direct invocation still fails for multiple child matches
 - **GIVEN** a caller bypasses validation
-- **AND** a `Lease` has more than one `LeaseItem` matching the supplied scalar values
+- **AND** a `Lease` has more than one `LeaseItem` matching the supplied scalar or reference values
 - **WHEN** the synthetic selector action is invoked directly
 - **THEN** the invocation fails with a clear ambiguous-match error
 
