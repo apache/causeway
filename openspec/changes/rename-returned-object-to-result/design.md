@@ -16,7 +16,7 @@ The requested change intentionally removes the old field name rather than preser
 **Non-Goals:**
 
 - Do not support deserializing the old `returnedObject` YAML field.
-- Do not change the nested bookmark metadata shape; it still contains `logicalTypeName` and `id`.
+- Align the nested result bookmark metadata shape with target and reference OID metadata by using `type` and `id`.
 - Do not change `CommandLogEntry#getResult()` semantics or replay result mapping behavior.
 - Do not change legacy multi-document `CommandDto` import support.
 
@@ -28,9 +28,9 @@ The requested change intentionally removes the old field name rather than preser
 - Remove old-field compatibility.
   This satisfies the explicit requirement that backwards compatibility is unnecessary and avoids dual-property ambiguity during import.
   The alternative was to accept both names, but that would complicate validation and make exported examples less definitive.
-- Keep the nested result object structure unchanged.
-  Only the field name changes, so replay result bookmark import/export behavior remains focused and testable.
-  The alternative was to redesign the bookmark payload, but that is outside the requested rename.
+- Rename the nested result bookmark logical type field to `type`.
+  This aligns result metadata with target OIDs and reference parameter OIDs, which already use `type` and `id`.
+  The alternative was to keep `logicalTypeName`, but that would leave result metadata inconsistent with the other bookmark-like YAML structures.
 
 ## Risks / Trade-offs
 

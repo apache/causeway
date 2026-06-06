@@ -44,8 +44,8 @@ public class CommandReplayManager_importCommands {
         final List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(yamlDs);
         importedCommandDtos.forEach(importedCommandDto -> {
             final CommandLogEntry commandLogEntry = commandLogEntryRepository.saveForReplay(importedCommandDto.getCommand());
-            if (importedCommandDto.getReturnedObject() != null) {
-                commandLogEntry.setResult(importedCommandDto.getReturnedObject());
+            if (importedCommandDto.getResult() != null) {
+                commandLogEntry.setResult(importedCommandDto.getResult());
             }
         });
 

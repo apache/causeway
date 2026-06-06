@@ -42,11 +42,11 @@ import org.apache.causeway.schema.common.v2.OidsDto;
 class CommandReplayManager_importCommandsTest {
 
     @Test
-    void imports_command_export_returned_object_as_command_log_result() {
+    void imports_command_export_result_as_command_log_result() {
         CommandDto command = command("with-result");
-        Bookmark returnedObject = Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456");
+        Bookmark result = Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456");
         String yaml = CommandDtoUtils.toYamlExport(List.of(
-                CommandDtoUtils.CommandExportDto.of(command, returnedObject)));
+                CommandDtoUtils.CommandExportDto.of(command, result)));
         Blob commandsYaml = new Blob("commands.yaml", "text", "yaml", yaml.getBytes(StandardCharsets.UTF_8));
 
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
@@ -59,7 +59,7 @@ class CommandReplayManager_importCommandsTest {
         importCommands.act(commandsYaml, false);
 
         verify(commandLogEntryRepository).saveForReplay(any(CommandDto.class));
-        verify(commandLogEntry).setResult(returnedObject);
+        verify(commandLogEntry).setResult(result);
     }
 
     private static CommandDto command(final String interactionId) {

@@ -264,7 +264,7 @@ public final class CommandDtoUtils {
                 .filter(commandExport -> commandExport.getCommand() != null)
                 .map(commandExport -> ImportedCommandDto.of(
                         commandExport.getCommand(),
-                        Optional.ofNullable(commandExport.getReturnedObject())
+                        Optional.ofNullable(commandExport.getResult())
                                 .map(BookmarkDto::toBookmark)
                                 .orElse(null)))
                 .collect(Collectors.toList());
@@ -288,14 +288,14 @@ public final class CommandDtoUtils {
     public static class ImportedCommandDto {
 
         private CommandDto command;
-        private Bookmark returnedObject;
+        private Bookmark result;
 
         public static ImportedCommandDto of(
                 final CommandDto command,
-                final Bookmark returnedObject) {
+                final Bookmark result) {
             final var importedCommandDto = new ImportedCommandDto();
             importedCommandDto.setCommand(command);
-            importedCommandDto.setReturnedObject(returnedObject);
+            importedCommandDto.setResult(result);
             return importedCommandDto;
         }
 
@@ -307,26 +307,27 @@ public final class CommandDtoUtils {
             this.command = command;
         }
 
-        public Bookmark getReturnedObject() {
-            return returnedObject;
+        public Bookmark getResult() {
+            return result;
         }
 
-        public void setReturnedObject(final Bookmark returnedObject) {
-            this.returnedObject = returnedObject;
+        public void setResult(final Bookmark result) {
+            this.result = result;
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class CommandExportDto {
 
         private CommandDto command;
-        private BookmarkDto returnedObject;
+        private BookmarkDto result;
 
         public static CommandExportDto of(
                 final CommandDto command,
-                final Bookmark returnedObject) {
+                final Bookmark result) {
             final var commandExportDto = new CommandExportDto();
             commandExportDto.setCommand(command);
-            commandExportDto.setReturnedObject(BookmarkDto.of(returnedObject));
+            commandExportDto.setResult(BookmarkDto.of(result));
             return commandExportDto;
         }
 
@@ -338,18 +339,18 @@ public final class CommandDtoUtils {
             this.command = command;
         }
 
-        public BookmarkDto getReturnedObject() {
-            return returnedObject;
+        public BookmarkDto getResult() {
+            return result;
         }
 
-        public void setReturnedObject(final BookmarkDto returnedObject) {
-            this.returnedObject = returnedObject;
+        public void setResult(final BookmarkDto result) {
+            this.result = result;
         }
     }
 
     public static class BookmarkDto {
 
-        private String logicalTypeName;
+        private String type;
         private String id;
 
         public static BookmarkDto of(final Bookmark bookmark) {
@@ -357,17 +358,17 @@ public final class CommandDtoUtils {
                 return null;
             }
             final var bookmarkDto = new BookmarkDto();
-            bookmarkDto.setLogicalTypeName(bookmark.getLogicalTypeName());
+            bookmarkDto.setType(bookmark.getLogicalTypeName());
             bookmarkDto.setId(bookmark.getIdentifier());
             return bookmarkDto;
         }
 
-        public String getLogicalTypeName() {
-            return logicalTypeName;
+        public String getType() {
+            return type;
         }
 
-        public void setLogicalTypeName(final String logicalTypeName) {
-            this.logicalTypeName = logicalTypeName;
+        public void setType(final String type) {
+            this.type = type;
         }
 
         public String getId() {
@@ -379,7 +380,7 @@ public final class CommandDtoUtils {
         }
 
         public Bookmark toBookmark() {
-            return Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id);
+            return Bookmark.forLogicalTypeNameAndIdentifier(type, id);
         }
     }
 

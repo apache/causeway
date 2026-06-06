@@ -1,0 +1,111 @@
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "6f0c92b0-a680-4877-af90-5b6177c3dc02"
+  timestamp: "2026-06-06T06:37:45.219+00:00"
+  username: "__system"
+  targets:
+    oid:
+    - type: "petowner.PetOwner"
+      id: "237"
+  member: !<ACT>
+    parameters:
+      parameter:
+      - type: "reference"
+        name: "pet"
+      - localDateTime: "2026-01-12T16:45:00.000"
+        type: "localDateTime"
+        name: "visitAt"
+    logicalMemberIdentifier: "petowner.PetOwner#bookVisit"
+    interactionType: "action_invocation"
+result:
+  type: "petowner.PetOwner"
+  id: "237"
+---
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "6a941f74-d161-4d74-88c6-0f5ff69aec6e"
+  timestamp: "2026-06-06T06:42:22.514+00:00"
+  username: "sven"
+  targets:
+    oid:
+    - type: "petowner.PetOwners"
+      id: "1"
+  member: !<ACT>
+    parameters:
+      parameter:
+      - string: "Fred"
+        type: "string"
+        name: "name"
+      - type: "string"
+        "null": true
+        name: "knownAs"
+      - type: "string"
+        "null": true
+        name: "telephoneNumber"
+      - type: "string"
+        "null": true
+        name: "emailAddress"
+    logicalMemberIdentifier: "petowner.PetOwners#create"
+    interactionType: "action_invocation"
+result:
+  type: "petowner.PetOwner"
+  id: "714"
+---
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "f136b8af-dfeb-4d69-a94d-0354c6a4615a"
+  timestamp: "2026-06-06T06:45:04.616+00:00"
+  username: "sven"
+  targets:
+    oid:
+    - type: "petowner.PetOwner"
+      id: "714"
+  member: !<ACT>
+    parameters:
+      parameter:
+      - string: "Bob"
+        type: "string"
+        name: "name"
+      - enum:
+          enumType: "domainapp.modules.petowner.dom.pet.PetSpecies"
+          enumName: "Cat"
+        type: "enum"
+        name: "species"
+    logicalMemberIdentifier: "petowner.PetOwner#addPet"
+    interactionType: "action_invocation"
+result:
+  type: "petowner.PetOwner"
+  id: "714"
+---
+command:
+  majorVersion: "2"
+  minorVersion: "0"
+  interactionId: "e8b7dd25-2e6b-4176-bd58-a53a57e042f9"
+  timestamp: "2026-06-06T06:45:11.908+00:00"
+  username: "sven"
+  targets:
+    oid:
+    - type: "petowner.PetOwner"
+      id: "714"
+  member: !<ACT>
+    parameters:
+      parameter:
+      - reference:
+          type: "petowner.PetOwner"
+          id: "714"
+        type: "reference"
+        name: "petOwner"
+      - string: "B"
+        type: "string"
+        name: "name"
+      - type: "enum"
+        "null": true
+        name: "species"
+    logicalMemberIdentifier: "petowner.PetOwner#__causeway_select_from_pets"
+    interactionType: "action_invocation"
+result:
+  type: "petowner.Pet"
+  id: "723"

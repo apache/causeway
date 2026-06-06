@@ -3,12 +3,12 @@
 ### Requirement: Exported command YAML includes returned object metadata
 The system SHALL include result metadata for each exported command whose underlying `CommandLogEntry` has a non-null result bookmark.
 The result metadata SHALL be emitted under a YAML field named `result`.
-The result metadata SHALL contain `logicalTypeName` and `id` fields derived from the result bookmark.
+The result metadata SHALL contain `type` and `id` fields derived from the result bookmark.
 The system MUST NOT emit the old `returnedObject` field for result metadata.
 
 #### Scenario: Export command with result
 - **WHEN** a command selected for export has a non-null `CommandLogEntry#getResult()` bookmark
-- **THEN** the generated YAML contains result metadata for that command under field `result` with `logicalTypeName` set to the bookmark logical type name and `id` set to the bookmark identifier
+- **THEN** the generated YAML contains result metadata for that command under field `result` with `type` set to the bookmark logical type name and `id` set to the bookmark identifier
 - **AND** the generated YAML does not contain field `returnedObject`
 
 #### Scenario: Export command without result
@@ -42,7 +42,7 @@ The system MUST NOT read imported result metadata from the old `returnedObject` 
 The system MUST NOT require the result bookmark to resolve to an existing domain object during import.
 
 #### Scenario: Import command export with result
-- **WHEN** command replay import receives a multi-document YAML file containing a `CommandExportDto` whose `result` has `logicalTypeName` and `id`
+- **WHEN** command replay import receives a multi-document YAML file containing a `CommandExportDto` whose `result` has `type` and `id`
 - **THEN** the system persists the embedded command DTO for replay and sets the created `CommandLogEntry` result bookmark from that result metadata
 
 #### Scenario: Import command export without result
@@ -65,7 +65,7 @@ The system MUST NOT emit the old `returnedObject` field for logged safe action r
 - **AND** a safe action command log entry has result bookmark `demoCustomer:1`
 - **WHEN** the command is selected for export
 - **THEN** the generated YAML contains the embedded command DTO for the safe action invocation
-- **AND** the generated YAML contains result metadata under field `result` with logical type name `demoCustomer` and id `1`
+- **AND** the generated YAML contains result metadata under field `result` with type `demoCustomer` and id `1`
 - **AND** the generated YAML does not contain field `returnedObject`
 
 #### Scenario: Export logged selector action command with result
@@ -74,7 +74,7 @@ The system MUST NOT emit the old `returnedObject` field for logged safe action r
 - **AND** a synthetic selector action command log entry has result bookmark `demoChild:1`
 - **WHEN** the selector action command is selected for export
 - **THEN** the generated YAML contains the embedded command DTO for the selector action invocation
-- **AND** the generated YAML contains result metadata under field `result` with logical type name `demoChild` and id `1`
+- **AND** the generated YAML contains result metadata under field `result` with type `demoChild` and id `1`
 - **AND** the generated YAML does not contain field `returnedObject`
 
 #### Scenario: Export command stream containing safe and state-changing commands

@@ -67,7 +67,7 @@ class CommandDtoUtils_toYaml_Approval_Test {
     }
 
     @Test
-    void marshals_exported_commands_with_returned_object_metadata() {
+    void marshals_exported_commands_with_result_metadata() {
         String yaml = CommandDtoUtils.toYamlExport(List.of(
                 CommandDtoUtils.CommandExportDto.of(
                         command("with-result"),

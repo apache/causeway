@@ -254,7 +254,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         val exportDto = CommandDtoUtils.CommandExportDto.of(
                 commandLogEntry.getCommandDto(),
                 commandLogEntry.getResult());
-        assertThat(exportDto.getReturnedObject().getLogicalTypeName()).isEqualTo("commandlog.test.Counter");
+        assertThat(exportDto.getResult().getType()).isEqualTo("commandlog.test.Counter");
     }
 
     @Test

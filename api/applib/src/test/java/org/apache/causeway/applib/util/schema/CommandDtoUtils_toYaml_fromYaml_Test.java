@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -46,7 +49,7 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
         CommandDtoUtils.BookmarkDto bookmarkDto = CommandDtoUtils.BookmarkDto.of(
                 Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"));
 
-        Assertions.assertThat(bookmarkDto.getLogicalTypeName()).isEqualTo("demo.Invoice");
+        Assertions.assertThat(bookmarkDto.getType()).isEqualTo("demo.Invoice");
         Assertions.assertThat(bookmarkDto.getId()).isEqualTo("456");
     }
 
@@ -54,11 +57,11 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
     void bookmark_metadata_is_absent_for_void_result() {
         CommandDtoUtils.CommandExportDto exportDto = CommandDtoUtils.CommandExportDto.of(command("void-result"), null);
 
-        Assertions.assertThat(exportDto.getReturnedObject()).isNull();
+        Assertions.assertThat(exportDto.getResult()).isNull();
     }
 
     @Test
-    void from_yaml_accepts_wrapped_export_shape_and_ignores_returned_object_metadata() {
+    void from_yaml_accepts_wrapped_export_shape_and_ignores_result_metadata() {
         CommandDto withResult = command("with-result");
         String yaml = CommandDtoUtils.toYamlExport(List.of(
                 CommandDtoUtils.CommandExportDto.of(
@@ -73,7 +76,7 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
     }
 
     @Test
-    void from_yaml_for_replay_accepts_wrapped_export_shape_and_keeps_returned_object_metadata() {
+    void from_yaml_for_replay_accepts_wrapped_export_shape_and_keeps_result_metadata() {
         CommandDto withResult = command("with-result");
         String yaml = CommandDtoUtils.toYamlExport(List.of(
                 CommandDtoUtils.CommandExportDto.of(
@@ -87,13 +90,57 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
                 .singleElement()
                 .satisfies(importedCommandDto -> {
                     Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("with-result");
-                    Assertions.assertThat(importedCommandDto.getReturnedObject())
+                    Assertions.assertThat(importedCommandDto.getResult())
                             .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"));
                 });
     }
 
     @Test
-    void from_yaml_for_replay_accepts_wrapped_export_shape_without_returned_object_metadata() {
+    void from_yaml_for_replay_accepts_multi_document_export_shape_with_result_type() {
+        String yaml = "command:\n"
+                + "  majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"first-result-type\"\n"
+                + "  username: \"sven\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"demo.Customer\"\n"
+                + "      id: \"123\"\n"
+                + "  member: !<ACT>\n"
+                + "    logicalMemberIdentifier: \"demo.Customer#noop\"\n"
+                + "    interactionType: \"action_invocation\"\n"
+                + "result:\n"
+                + "  type: \"demo.Invoice\"\n"
+                + "  id: \"456\"\n"
+                + "---\n"
+                + "command:\n"
+                + "  majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"second-result-type\"\n"
+                + "  username: \"sven\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"demo.Customer\"\n"
+                + "      id: \"789\"\n"
+                + "  member: !<ACT>\n"
+                + "    logicalMemberIdentifier: \"demo.Customer#noop\"\n"
+                + "    interactionType: \"action_invocation\"\n"
+                + "result:\n"
+                + "  type: \"demo.Invoice\"\n"
+                + "  id: \"987\"\n";
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos).hasSize(2);
+        Assertions.assertThat(importedCommandDtos.get(0).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456"));
+        Assertions.assertThat(importedCommandDtos.get(1).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "987"));
+    }
+
+    @Test
+    void from_yaml_for_replay_accepts_wrapped_export_shape_without_result_metadata() {
         CommandDto voidResult = command("void-result");
         String yaml = CommandDtoUtils.toYamlExport(List.of(
                 CommandDtoUtils.CommandExportDto.of(voidResult, null)));
@@ -105,7 +152,136 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
                 .singleElement()
                 .satisfies(importedCommandDto -> {
                     Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("void-result");
-                    Assertions.assertThat(importedCommandDto.getReturnedObject()).isNull();
+                    Assertions.assertThat(importedCommandDto.getResult()).isNull();
+                });
+    }
+
+    @Test
+    void from_yaml_for_replay_ignores_old_returned_object_field() {
+        String yaml = "command:\n"
+                + "  majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"old-field\"\n"
+                + "  username: \"sven\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"demo.Customer\"\n"
+                + "      id: \"123\"\n"
+                + "  member: !<ACT>\n"
+                + "    logicalMemberIdentifier: \"demo.Customer#noop\"\n"
+                + "    interactionType: \"action_invocation\"\n"
+                + "returnedObject:\n"
+                + "  type: \"demo.Invoice\"\n"
+                + "  id: \"456\"\n";
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("old-field");
+                    Assertions.assertThat(importedCommandDto.getResult()).isNull();
+                });
+    }
+
+    @Test
+    void from_yaml_for_replay_accepts_real_exported_result_type_yaml() throws IOException {
+        String yaml = Files.readString(Path.of(
+                "src/test/resources/org/apache/causeway/applib/util/schema/CommandDtoUtils_toYaml_fromYaml_Test.replay-export-with-result-type.yaml"));
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos).hasSize(4);
+        Assertions.assertThat(importedCommandDtos.get(0).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.PetOwner", "237"));
+        Assertions.assertThat(importedCommandDtos.get(1).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.PetOwner", "714"));
+        Assertions.assertThat(importedCommandDtos.get(2).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.PetOwner", "714"));
+        Assertions.assertThat(importedCommandDtos.get(3).getResult())
+                .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.Pet", "723"));
+    }
+
+    @Test
+    void from_yaml_for_replay_accepts_exported_result_type_with_empty_reference_parameter() {
+        String yaml = "command:\n"
+                + "  majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"6f0c92b0-a680-4877-af90-5b6177c3dc02\"\n"
+                + "  timestamp: \"2026-06-06T06:37:45.219+00:00\"\n"
+                + "  username: \"__system\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"petowner.PetOwner\"\n"
+                + "      id: \"237\"\n"
+                + "  member: !<ACT>\n"
+                + "    parameters:\n"
+                + "      parameter:\n"
+                + "      - type: \"reference\"\n"
+                + "        name: \"pet\"\n"
+                + "      - localDateTime: \"2026-01-12T16:45:00.000\"\n"
+                + "        type: \"localDateTime\"\n"
+                + "        name: \"visitAt\"\n"
+                + "    logicalMemberIdentifier: \"petowner.PetOwner#bookVisit\"\n"
+                + "    interactionType: \"action_invocation\"\n"
+                + "result:\n"
+                + "  type: \"petowner.PetOwner\"\n"
+                + "  id: \"237\"\n";
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId())
+                            .isEqualTo("6f0c92b0-a680-4877-af90-5b6177c3dc02");
+                    Assertions.assertThat(importedCommandDto.getResult())
+                            .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.PetOwner", "237"));
+                });
+    }
+
+    @Test
+    void from_yaml_for_replay_accepts_exported_result_type_with_enum_parameter() {
+        String yaml = "command:\n"
+                + "  majorVersion: \"2\"\n"
+                + "  minorVersion: \"0\"\n"
+                + "  interactionId: \"f136b8af-dfeb-4d69-a94d-0354c6a4615a\"\n"
+                + "  timestamp: \"2026-06-06T06:45:04.616+00:00\"\n"
+                + "  username: \"sven\"\n"
+                + "  targets:\n"
+                + "    oid:\n"
+                + "    - type: \"petowner.PetOwner\"\n"
+                + "      id: \"714\"\n"
+                + "  member: !<ACT>\n"
+                + "    parameters:\n"
+                + "      parameter:\n"
+                + "      - string: \"Bob\"\n"
+                + "        type: \"string\"\n"
+                + "        name: \"name\"\n"
+                + "      - enum:\n"
+                + "          enumType: \"domainapp.modules.petowner.dom.pet.PetSpecies\"\n"
+                + "          enumName: \"Cat\"\n"
+                + "        type: \"enum\"\n"
+                + "        name: \"species\"\n"
+                + "    logicalMemberIdentifier: \"petowner.PetOwner#addPet\"\n"
+                + "    interactionType: \"action_invocation\"\n"
+                + "result:\n"
+                + "  type: \"petowner.PetOwner\"\n"
+                + "  id: \"714\"\n";
+
+        List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(
+                DataSource.ofStringUtf8(yaml));
+
+        Assertions.assertThat(importedCommandDtos)
+                .singleElement()
+                .satisfies(importedCommandDto -> {
+                    Assertions.assertThat(importedCommandDto.getCommand().getInteractionId())
+                            .isEqualTo("f136b8af-dfeb-4d69-a94d-0354c6a4615a");
+                    Assertions.assertThat(importedCommandDto.getResult())
+                            .isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("petowner.PetOwner", "714"));
                 });
     }
 
@@ -133,7 +309,7 @@ class CommandDtoUtils_toYaml_fromYaml_Test {
                 .singleElement()
                 .satisfies(importedCommandDto -> {
                     Assertions.assertThat(importedCommandDto.getCommand().getInteractionId()).isEqualTo("legacy-command");
-                    Assertions.assertThat(importedCommandDto.getReturnedObject()).isNull();
+                    Assertions.assertThat(importedCommandDto.getResult()).isNull();
                 });
     }
 
