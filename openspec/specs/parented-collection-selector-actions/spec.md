@@ -12,6 +12,7 @@ When `recording-support` is `DISABLED`, the system MUST NOT synthesize parented 
 The system MUST NOT require or use a separate `causeway.extensions.command-log.parented-collection-selector-actions-enabled` boolean property to enable synthetic parented collection selector action creation.
 The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
+The synthetic action identifier SHALL use the reserved prefix `__causeway_select_from_` followed by the associated parented collection id.
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
 The synthetic action SHALL be associated with the parented collection through layout metadata equivalent to `@ActionLayout(associateWith=...)`.
 The synthetic action SHALL have the display name `Select` through name metadata equivalent to `@ActionLayout(named="Select")`.
@@ -33,6 +34,7 @@ The synthetic action SHALL have the display name `Select` through name metadata 
 - **GIVEN** the framework introspects the same parented collection in two application runs
 - **WHEN** the synthetic selector action is created in each run
 - **THEN** both actions have the same action identifier
+- **AND** the identifier uses the reserved prefix `__causeway_select_from_`
 - **AND** the identifier is reserved so it does not conflict with application action ids
 
 #### Scenario: Ordinary action lists can identify synthetic actions
