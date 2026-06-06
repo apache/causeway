@@ -176,7 +176,8 @@ class ParentedCollectionSelectorActionUtilTest {
 
     @Test
     void synthesizes_selector_action_with_marker_and_safe_semantics_when_enabled() {
-        assertThat(selectorAction.getId(), is(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items"));
+        assertThat(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX, is("__causeway_select_from_"));
+        assertThat(selectorAction.getId(), is("__causeway_select_from_items"));
         MatcherAssert.assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
@@ -193,7 +194,7 @@ class ParentedCollectionSelectorActionUtilTest {
 
     @Test
     void names_selector_action_select_while_preserving_deterministic_id() {
-        assertThat(selectorAction.getId(), is(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items"));
+        assertThat(selectorAction.getId(), is("__causeway_select_from_items"));
         assertThat(selectorAction.getCanonicalFriendlyName(), is("Select"));
     }
 

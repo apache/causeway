@@ -1025,7 +1025,7 @@ implements ObjectSpecification {
     @UtilityClass
     public static class ParentedCollectionSelectorActionUtil {
 
-        public static final String ACTION_ID_PREFIX = "__causeway_select_";
+        public static final String ACTION_ID_PREFIX = "__causeway_select_from_";
 
         private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
                 "logicalTypeName",
