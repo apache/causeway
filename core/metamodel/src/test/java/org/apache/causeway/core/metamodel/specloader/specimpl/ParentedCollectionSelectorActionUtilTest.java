@@ -45,7 +45,9 @@ import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -102,6 +104,9 @@ class ParentedCollectionSelectorActionUtilTest {
         @Getter
         private Clob notes;
         @Getter
+        @PropertyLayout(hidden = Where.PARENTED_TABLES)
+        private String internalCode;
+        @Getter
         private String logicalTypeName;
         @Getter
         private String id;
@@ -120,6 +125,22 @@ class ParentedCollectionSelectorActionUtilTest {
     static class LeaseTerm {
         @Getter
         private final String description;
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    static class OrderedLease {
+        @Getter
+        private final List<OrderedLeaseItem> items = new ArrayList<>();
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    static class OrderedLeaseItem {
+        @Getter
+        @PropertyLayout(sequence = "2")
+        private String name;
+        @Getter
+        @PropertyLayout(sequence = "1")
+        private Integer sequence;
     }
 
     @RequiredArgsConstructor
@@ -221,6 +242,7 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("internalCode")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("otherLease")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("terms")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("attachment")), is(false));
@@ -231,6 +253,20 @@ class ParentedCollectionSelectorActionUtilTest {
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("objectIdentifier")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("datanucleusVersionLong")), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("datanucleusVersionTimestamp")), is(false));
+    }
+
+    @Test
+    void orders_scalar_child_parameters_using_static_collection_column_order() {
+        val orderedMmc = newMetamodelContext();
+        orderedMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+        val orderedLeaseSpec = orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class);
+        val orderedSelectorAction = orderedLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val parameters = orderedSelectorAction.getParameters();
+
+        assertThat(parameters.getElseFail(0).getId(), is("orderedLease"));
+        assertThat(parameters.getElseFail(1).getId(), is("sequence"));
+        assertThat(parameters.getElseFail(2).getId(), is("name"));
     }
 
     @Test

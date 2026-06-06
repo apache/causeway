@@ -50,6 +50,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
@@ -1064,7 +1065,7 @@ implements ObjectSpecification {
                 final OneToManyAssociation collection) {
 
             val childSpec = collection.getElementType();
-            val scalarProperties = scalarPropertiesOf(childSpec);
+            val scalarProperties = scalarPropertiesOf(parentSpec, collection);
             val parameterTypes = parameterTypes(parentSpec, scalarProperties);
             val parameterNames = parameterNames(parentSpec, scalarProperties);
             val actionId = actionIdFor(collection);
@@ -1083,9 +1084,16 @@ implements ObjectSpecification {
             return ObjectActionDefault.forMethod(facetedMethod);
         }
 
-        private static Can<ObjectAssociation> scalarPropertiesOf(final ObjectSpecification childSpec) {
-            return childSpec.streamAssociations(MixedIn.INCLUDED)
+        private static Can<ObjectAssociation> scalarPropertiesOf(
+                final ObjectSpecification parentSpec,
+                final OneToManyAssociation collection) {
+            return collection.getElementType()
+                    .streamAssociations(MixedIn.INCLUDED)
+                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
                     .filter(ParentedCollectionSelectorActionUtil::isEligibleScalarParameterProperty)
+                    .sorted(ObjectMember.Comparators
+                            .<ObjectAssociation>byMemberOrderSequence(false)
+                            .thenComparing(ObjectAssociation::getId))
                     .collect(Can.toCan());
         }
 
