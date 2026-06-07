@@ -67,12 +67,23 @@ public final class ReplayableCommandParticipant implements ViewModel {
             final Role role,
             final String parameterName,
             final Bookmark recordedBookmark,
-            final Bookmark actualBookmark) {
+            final Bookmark actualBookmark,
+            final BookmarkService bookmarkService) {
         this.owningInteractionId = owningInteractionId;
         this.role = role;
         this.parameterName = parameterName;
         this.recordedBookmark = recordedBookmark;
         this.actualBookmark = actualBookmark;
+        this.bookmarkService = bookmarkService;
+    }
+
+    ReplayableCommandParticipant(
+            final UUID owningInteractionId,
+            final Role role,
+            final String parameterName,
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark) {
+        this(owningInteractionId, role, parameterName, recordedBookmark, actualBookmark, null);
     }
 
     public ReplayableCommandParticipant(
@@ -118,27 +129,33 @@ public final class ReplayableCommandParticipant implements ViewModel {
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "1")
+    @PropertyLayout(sequence = "0")
     public UUID getOwningInteractionId() {
         return owningInteractionId;
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "2")
+    @PropertyLayout(sequence = "1")
     public Role getRole() {
         return role;
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "3")
+    @PropertyLayout(sequence = "2")
     public String getParameterName() {
         return parameterName;
     }
 
     @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "3")
+    public Bookmark getRecordedBookmark() {
+        return recordedBookmark;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "4")
     public Object getTarget() {
-        if (role != Role.TARGET && role != Role.PARAMETER) {
+        if (role != Role.TARGET) {
             return null;
         }
         return lookupActualObject().orElse(null);
@@ -146,8 +163,8 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "5")
-    public Object getResult() {
-        if (role != Role.RESULT) {
+    public Object getParameter() {
+        if (role != Role.PARAMETER) {
             return null;
         }
         return lookupActualObject().orElse(null);
@@ -155,8 +172,11 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "6")
-    public Bookmark getRecordedBookmark() {
-        return recordedBookmark;
+    public Object getResult() {
+        if (role != Role.RESULT) {
+            return null;
+        }
+        return lookupActualObject().orElse(null);
     }
 
     @Property(optionality = Optionality.OPTIONAL)

@@ -31,17 +31,13 @@
                             <cpt:fieldSet name="Metadata" id="metadata">
                                 <cpt:property id="logicalTypeName"/>
                                 <cpt:property id="interactionId"/>
+                                <cpt:property id="member"/>
                             </cpt:fieldSet>
                         </bs:col>
                     </bs:row>
                 </bs:tab>
             </bs:tabGroup>
-            <cpt:fieldSet name="Target" id="target">
-                <cpt:action id="openTarget" position="PANEL"/>
-                <cpt:property id="targetType"/>
-                <cpt:property id="targetId"/>
-                <cpt:property id="member"/>
-            </cpt:fieldSet>
+            <cpt:collection id="participants"/>
             <cpt:fieldSet name="Control" id="control">
                 <cpt:action id="replayOrRetry" position="PANEL"/>
                 <cpt:property id="replayState"/>
@@ -56,7 +52,7 @@
     </bs:row>
     <bs:row>
         <bs:col span="12">
-            <cpt:collection defaultView="table" paged="15" id="remappings"/>
+            <cpt:collection defaultView="table" paged="15" id="participants"/>
         </bs:col>
     </bs:row>
     <bs:row>

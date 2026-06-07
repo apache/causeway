@@ -7,19 +7,18 @@
     <bs:row>
         <bs:col span="6">
             <cpt:fieldSet name="Participant" id="participant">
-                <cpt:property id="owningInteractionId"/>
                 <cpt:property id="role"/>
                 <cpt:property id="parameterName"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Objects" id="objects">
+                <cpt:property id="recordedBookmark"/>
                 <cpt:property id="target"/>
+                <cpt:property id="parameter"/>
                 <cpt:property id="result"/>
+                <cpt:property id="actualBookmark"/>
             </cpt:fieldSet>
         </bs:col>
         <bs:col span="6">
-            <cpt:fieldSet name="Bookmarks" id="bookmarks">
-                <cpt:property id="recordedBookmark"/>
-                <cpt:property id="actualBookmark"/>
+            <cpt:fieldSet name="Metadata" id="metadata">
+                <cpt:property id="owningInteractionId"/>
             </cpt:fieldSet>
         </bs:col>
     </bs:row>

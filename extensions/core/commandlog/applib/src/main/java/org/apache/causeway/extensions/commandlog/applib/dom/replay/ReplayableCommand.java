@@ -74,7 +74,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 import org.springframework.transaction.annotation.Propagation;
 
-import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
@@ -85,7 +84,6 @@ import lombok.extern.log4j.Log4j2;
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout//(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
-@AllArgsConstructor
 @Log4j2
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
 
@@ -153,6 +151,15 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final UUID interactionId,
             final ReplayContext replayContext) {
         this(interactionId, replayContext, new ObjectReference<>(null));
+    }
+
+    ReplayableCommand(
+            final UUID interactionId,
+            final ReplayContext replayContext,
+            final ObjectReference<CommandRecord> recordRef) {
+        this.interactionId = interactionId;
+        this.replayContext = replayContext;
+        this.recordRef = recordRef;
     }
 
     @ObjectSupport public String title() {
@@ -303,8 +310,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     @Collection
-    @CollectionLayout(sequence = "10")
-    public List<ReplayableCommandParticipant> getRemappings() {
+    @CollectionLayout(sequence = "10", named = "Participants")
+    public List<ReplayableCommandParticipant> getParticipants() {
         return commandLogEntry()
                 .map(this::participantsFor)
                 .orElseGet(List::of);
@@ -327,7 +334,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             .map(CommandDto::getTargets)
             .stream()
             .flatMap(targets -> targets.getOid().stream())
-            .forEach(target -> addParticipantIfMapped(
+            .forEach(target -> addParticipant(
                     participants,
                     commandLogEntry,
                     Role.TARGET,
@@ -347,7 +354,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             .flatMap(parameters -> parameters.getParameter().stream())
             .filter(parameter -> parameter.getType() == ValueType.REFERENCE)
             .filter(parameter -> parameter.getReference() != null)
-            .forEach(parameter -> addParticipantIfMapped(
+            .forEach(parameter -> addParticipant(
                     participants,
                     commandLogEntry,
                     Role.PARAMETER,
@@ -355,27 +362,38 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                     Bookmark.forOidDto(parameter.getReference())));
     }
 
-    private void addParticipantIfMapped(
+    private void addParticipant(
             final List<ReplayableCommandParticipant> participants,
             final CommandLogEntry commandLogEntry,
             final Role role,
             final String parameterName,
             final Bookmark recordedBookmark) {
-        findActualBookmark(commandLogEntry, recordedBookmark)
-            .map(actualBookmark -> participant(commandLogEntry, role, parameterName, recordedBookmark, actualBookmark))
-            .ifPresent(participants::add);
+        participants.add(participant(
+                commandLogEntry,
+                role,
+                parameterName,
+                recordedBookmark,
+                actualBookmarkFor(commandLogEntry, recordedBookmark).orElse(null)));
     }
 
     private void addResultParticipant(
             final List<ReplayableCommandParticipant> participants,
             final CommandLogEntry commandLogEntry) {
-        if (commandLogEntry.getReplayState() != ReplayState.OK || commandLogEntry.getResult() == null) {
+        if (commandLogEntry.getResult() == null) {
             return;
         }
         final Bookmark recordedResult = commandLogEntry.getResult();
-        findActualBookmark(commandLogEntry, recordedResult)
-            .map(actualResult -> participant(commandLogEntry, Role.RESULT, null, recordedResult, actualResult))
-            .ifPresent(participants::add);
+        addParticipant(participants, commandLogEntry, Role.RESULT, null, recordedResult);
+    }
+
+    private Optional<Bookmark> actualBookmarkFor(
+            final CommandLogEntry commandLogEntry,
+            final Bookmark recordedBookmark) {
+        if (commandLogEntry.getReplayState() != ReplayState.OK) {
+            return Optional.empty();
+        }
+        return findActualBookmark(commandLogEntry, recordedBookmark)
+                .or(() -> Optional.of(recordedBookmark));
     }
 
     private ReplayableCommandParticipant participant(
@@ -392,7 +410,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 role,
                 parameterName,
                 recordedBookmark,
-                actualBookmark);
+                actualBookmark,
+                bookmarkService);
     }
 
     private Optional<Bookmark> findActualBookmark(
@@ -691,4 +710,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final CommandLogEntry commandLogEntry) {
         listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
     }
+
+    @Inject BookmarkService bookmarkService;
 }

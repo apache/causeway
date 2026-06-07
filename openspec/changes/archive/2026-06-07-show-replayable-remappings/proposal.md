@@ -5,13 +5,13 @@ Users need to see which target, reference parameter, or result bookmarks differe
 
 ## What Changes
 
-- Add a replayable command remappings collection that is populated on the fly from the command DTO, replay state, and replay mapping listeners or persisted mapping data.
+- Add a replayable command participants collection named `Participants` that is populated on the fly from the command DTO, replay state, and replay mapping listeners or persisted mapping data.
 - Represent each remapping row with a new `ReplayableCommandParticipant` view model.
-- Display the owning command interaction id, participant role, target object, parameter name where applicable, result object, recorded bookmark, and actual bookmark.
+- Display participant role, parameter name, recorded bookmark, target object, parameter object, result object, and actual bookmark.
 - Resolve target and parameter bookmarks to local domain objects when possible, while still showing bookmark values when objects cannot be resolved.
-- Resolve result bookmarks only when the command has replayed successfully.
+- Resolve actual bookmarks and objects only when the command has replayed successfully.
 - Add fallback layout metadata for `ReplayableCommandParticipant`.
-- Update the fallback layout metadata for `ReplayableCommand` to include the remappings table.
+- Update the fallback layout metadata for `ReplayableCommand` to include the participants table.
 
 ## Capabilities
 

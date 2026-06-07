@@ -9,7 +9,7 @@ The UI currently requires users to infer those remappings from raw DTO YAML or s
 
 **Goals:**
 - Add a `ReplayableCommandParticipant` view model for remapping rows derived from a replayable command.
-- Add a collection on `ReplayableCommand` that lists only participants where a relevant actual bookmark is available and differs from or confirms a recorded bookmark.
+- Add a collection on `ReplayableCommand` that lists recorded target, reference parameter, and result participants, with actual bookmarks populated after successful replay.
 - Include target, reference parameter, and result participants in the same table.
 - Resolve target and parameter actual bookmarks to objects when possible.
 - Resolve result actual bookmarks only after the replayable command is in a successful replay state.
@@ -38,13 +38,15 @@ The alternative was to use a DTO-like inner class, but that would make fallback 
 ### Use replay mapping lookup for target and parameter participants
 
 Target and reference parameter rows will start from recorded bookmarks in the command DTO and ask the configured replay mapping listeners for actual bookmarks using the same lookup contract used by replay execution.
-Rows without an actual replacement will be omitted, because the table is intended to show relevant remappings.
+Rows without an actual replacement will still be included so that recorded participants are visible before replay.
+After successful replay, rows without an explicit actual replacement will use the recorded bookmark as their actual bookmark.
 Listener failures will not break the UI and will be handled consistently with replay-time lookup behaviour.
 
-### Use result mapping only after successful replay
+### Show result participant before replay and actual result after success
 
-The result row will be included only when the replayable command is `OK`, the recorded result bookmark is available, and an actual result bookmark can be found from the replay mapping data.
-This prevents the UI from presenting speculative result data before replay succeeds.
+The result row will be included when the recorded result bookmark is available.
+Before replay succeeds, only the recorded result bookmark is shown.
+After replay succeeds, the actual result bookmark is found from replay mapping data, or falls back to the recorded result bookmark when no explicit mapping exists.
 If the actual result cannot be resolved to an object, the bookmark fields still show the recorded and actual values.
 
 ### Resolve objects best-effort

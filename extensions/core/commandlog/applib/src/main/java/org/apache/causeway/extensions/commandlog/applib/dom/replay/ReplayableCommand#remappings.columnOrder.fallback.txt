@@ -1,7 +1,0 @@
-#owningInteractionId
-role
-parameterName
-target
-result
-recordedBookmark
-actualBookmark

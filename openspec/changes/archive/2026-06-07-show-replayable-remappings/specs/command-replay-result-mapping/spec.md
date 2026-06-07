@@ -4,12 +4,18 @@
 The system SHALL make replay mapping data relevant to a replayable command visible from that replayable command's UI.
 The visible data SHALL include target bookmark replacements discovered through replay mapping lookup.
 The visible data SHALL include reference parameter bookmark replacements discovered through replay mapping lookup.
-The visible data SHALL include result bookmark mappings only after the replayable command has successfully replayed.
+The visible data SHALL include recorded target, reference parameter, and result bookmarks before replay.
+The visible data SHALL include actual target, reference parameter, and result bookmarks after the replayable command has successfully replayed.
 The system SHALL preserve the existing replay mapping SPI contracts while surfacing this data.
 
-#### Scenario: User inspects replay input remappings
+#### Scenario: User inspects replay input participants
+- **WHEN** a replayable command has a recorded target or reference parameter bookmark
+- **THEN** the replayable command UI exposes the recorded bookmark for that participant
+
+#### Scenario: User inspects replay input remappings after success
 - **WHEN** a replayable command target or reference parameter is remapped by the replay mapping lookup flow
-- **THEN** the replayable command UI exposes the recorded bookmark and actual bookmark for that remapping
+- **AND** the replayable command has successfully replayed
+- **THEN** the replayable command UI exposes the recorded bookmark and actual bookmark for that participant
 
 #### Scenario: User inspects replay result remapping after success
 - **WHEN** a replayable command has replayed successfully
