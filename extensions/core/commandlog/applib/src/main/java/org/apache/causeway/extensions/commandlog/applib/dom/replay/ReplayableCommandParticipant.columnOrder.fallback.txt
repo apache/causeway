@@ -1,3 +1,4 @@
+#replayableCommand
 role
 parameterName
 #recordedBookmark

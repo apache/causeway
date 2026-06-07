@@ -27,11 +27,13 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.util.TitleBuffer;
@@ -61,6 +63,24 @@ public final class ReplayableCommandParticipant implements ViewModel {
     private final Bookmark actualBookmark;
 
     BookmarkService bookmarkService;
+    ReplayContext replayContext;
+
+    ReplayableCommandParticipant(
+            final UUID owningInteractionId,
+            final Role role,
+            final String parameterName,
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark,
+            final BookmarkService bookmarkService,
+            final ReplayContext replayContext) {
+        this.owningInteractionId = owningInteractionId;
+        this.role = role;
+        this.parameterName = parameterName;
+        this.recordedBookmark = recordedBookmark;
+        this.actualBookmark = actualBookmark;
+        this.bookmarkService = bookmarkService;
+        this.replayContext = replayContext;
+    }
 
     ReplayableCommandParticipant(
             final UUID owningInteractionId,
@@ -69,12 +89,7 @@ public final class ReplayableCommandParticipant implements ViewModel {
             final Bookmark recordedBookmark,
             final Bookmark actualBookmark,
             final BookmarkService bookmarkService) {
-        this.owningInteractionId = owningInteractionId;
-        this.role = role;
-        this.parameterName = parameterName;
-        this.recordedBookmark = recordedBookmark;
-        this.actualBookmark = actualBookmark;
-        this.bookmarkService = bookmarkService;
+        this(owningInteractionId, role, parameterName, recordedBookmark, actualBookmark, bookmarkService, null);
     }
 
     ReplayableCommandParticipant(
@@ -88,7 +103,8 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     public ReplayableCommandParticipant(
             final String memento,
-            final BookmarkService bookmarkService) {
+            final BookmarkService bookmarkService,
+            final ReplayContext replayContext) {
         final String[] parts = memento.split("\\|", -1);
         this.owningInteractionId = parts.length > 0 && !parts[0].isEmpty()
                 ? UUID.fromString(parts[0])
@@ -106,11 +122,18 @@ public final class ReplayableCommandParticipant implements ViewModel {
                 ? Bookmark.parseElseFail(parts[4])
                 : null;
         this.bookmarkService = bookmarkService;
+        this.replayContext = replayContext;
     }
 
     @ObjectSupport public String title() {
-        return new TitleBuffer()
-                .append(getRole())
+        final TitleBuffer title = new TitleBuffer()
+                .append("Replay participant")
+                .append(" - ")
+                .append(getRole());
+        if (parameterName != null) {
+            title.append(" ").append(parameterName);
+        }
+        return title
                 .append(" ")
                 .append(getRecordedBookmark())
                 .append(" → ")
@@ -130,6 +153,14 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "0")
+    public ReplayableCommand getReplayableCommand() {
+        return owningInteractionId != null && replayContext != null
+                ? new ReplayableCommand(owningInteractionId, replayContext)
+                : null;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "0.1", hidden = Where.OBJECT_FORMS)
     public UUID getOwningInteractionId() {
         return owningInteractionId;
     }
@@ -161,6 +192,11 @@ public final class ReplayableCommandParticipant implements ViewModel {
         return lookupActualObject().orElse(null);
     }
 
+    @MemberSupport
+    public boolean hideTarget() {
+        return role != Role.TARGET;
+    }
+
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "5")
     public Object getArgument() {
@@ -170,6 +206,11 @@ public final class ReplayableCommandParticipant implements ViewModel {
         return lookupActualObject().orElse(null);
     }
 
+    @MemberSupport
+    public boolean hideArgument() {
+        return role != Role.PARAMETER;
+    }
+
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "6")
     public Object getResult() {
@@ -177,6 +218,11 @@ public final class ReplayableCommandParticipant implements ViewModel {
             return null;
         }
         return lookupActualObject().orElse(null);
+    }
+
+    @MemberSupport
+    public boolean hideResult() {
+        return role != Role.RESULT;
     }
 
     @Property(optionality = Optionality.OPTIONAL)

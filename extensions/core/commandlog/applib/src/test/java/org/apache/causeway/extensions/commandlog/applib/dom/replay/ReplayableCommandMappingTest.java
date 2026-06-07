@@ -27,6 +27,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,6 +40,8 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.mockito.ArgumentCaptor;
 
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
@@ -245,6 +249,60 @@ class ReplayableCommandMappingTest {
         assertThat(participant.getTarget()).isSameAs(actualObject);
         assertThat(participant.getArgument()).isNull();
         assertThat(participant.getResult()).isNull();
+    }
+
+    @Test
+    void participant_cosmetics_expose_title_parent_metadata_and_role_specific_visibility() throws Exception {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry);
+
+        ReplayableCommandParticipant parameterParticipant = replayableCommand.getParticipants().stream()
+                .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.PARAMETER)
+                .findFirst()
+                .orElseThrow();
+        ReplayableCommandParticipant targetParticipant = replayableCommand.getParticipants().stream()
+                .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.TARGET)
+                .findFirst()
+                .orElseThrow();
+        ReplayableCommandParticipant resultParticipant = new ReplayableCommandParticipant(
+                interactionId,
+                ReplayableCommandParticipant.Role.RESULT,
+                null,
+                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1"),
+                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2"));
+
+        assertThat(parameterParticipant.title())
+                .contains("Replay participant", "PARAMETER", "simpleObject", "simple.SimpleObject:3");
+        assertThat(parameterParticipant.getReplayableCommand().viewModelMemento()).isEqualTo(interactionId.toString());
+        assertThat(parameterParticipant.hideTarget()).isTrue();
+        assertThat(parameterParticipant.hideArgument()).isFalse();
+        assertThat(parameterParticipant.hideResult()).isTrue();
+        assertThat(targetParticipant.hideTarget()).isFalse();
+        assertThat(resultParticipant.hideResult()).isFalse();
+        assertThat(ReplayableCommandParticipant.class.getMethod("getOwningInteractionId")
+                .getAnnotation(PropertyLayout.class).hidden()).isEqualTo(Where.OBJECT_FORMS);
+
+        String layoutXml = Files.readString(replayableCommandParticipantLayoutPath());
+        assertThat(layoutXml).contains(
+                "<bs:col span=\"4\">",
+                "<cpt:fieldSet name=\"General\" id=\"general\">",
+                "<cpt:property id=\"replayableCommand\"/>",
+                "<cpt:property id=\"role\"/>",
+                "<cpt:property id=\"parameterName\"/>",
+                "<cpt:fieldSet name=\"Metadata\" id=\"metadata\">",
+                "<cpt:property id=\"logicalTypeName\"/>",
+                "<cpt:fieldSet name=\"Recorded\" id=\"recorded\">",
+                "<cpt:property id=\"recordedBookmark\"/>",
+                "<cpt:property id=\"target\"/>",
+                "<cpt:property id=\"argument\"/>",
+                "<cpt:fieldSet name=\"Actual\" id=\"actual\">",
+                "<cpt:property id=\"actualBookmark\"/>",
+                "<cpt:property id=\"result\"/>");
     }
 
     @Test
@@ -626,6 +684,14 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
         return commandLogEntry;
+    }
+
+    private static Path replayableCommandParticipantLayoutPath() {
+        Path moduleRelativePath = Path.of("src/main/java/org/apache/causeway/extensions/commandlog/applib/dom/replay/ReplayableCommandParticipant.layout.fallback.xml");
+        if (Files.exists(moduleRelativePath)) {
+            return moduleRelativePath;
+        }
+        return Path.of("extensions/core/commandlog/applib").resolve(moduleRelativePath);
     }
 
     private static CommandDto commandWithTargetAndReferenceParameter(

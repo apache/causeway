@@ -376,7 +376,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 parameterName,
                 recordedBookmark,
                 actualBookmark,
-                bookmarkService);
+                bookmarkService,
+                replayContext);
     }
 
     private Optional<Bookmark> findActualBookmark(
