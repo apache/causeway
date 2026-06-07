@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.mockito.ArgumentCaptor;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
@@ -137,6 +138,118 @@ class ReplayableCommandMappingTest {
         assertThat(replayParameter.getString()).isEqualTo("unchanged");
         verify(listener, never()).lookup(
                 any(), eq(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")));
+    }
+
+    @Test
+    void target_remapping_participant_uses_lookup_and_keeps_unresolved_bookmarks_visible() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
+                .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
+
+        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getRemappings();
+
+        assertThat(remappings).hasSize(1);
+        ReplayableCommandParticipant participant = remappings.get(0);
+        assertThat(participant.getOwningInteractionId()).isEqualTo(interactionId);
+        assertThat(participant.getRole()).isEqualTo(ReplayableCommandParticipant.Role.TARGET);
+        assertThat(participant.getParameterName()).isNull();
+        assertThat(participant.getRecordedBookmark()).isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"));
+        assertThat(participant.getActualBookmark()).isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2"));
+        assertThat(participant.getTarget()).isNull();
+    }
+
+    @Test
+    void participant_resolves_actual_object_best_effort() {
+        Object actualObject = new Object();
+        ReplayableCommandParticipant participant = new ReplayableCommandParticipant(
+                UUID.randomUUID(),
+                ReplayableCommandParticipant.Role.TARGET,
+                null,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"),
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2"));
+        BookmarkService bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")))
+                .thenReturn(Optional.of(actualObject));
+        participant.bookmarkService = bookmarkService;
+
+        assertThat(participant.getTarget()).isSameAs(actualObject);
+        assertThat(participant.getResult()).isNull();
+    }
+
+    @Test
+    void reference_parameter_participant_uses_parameter_name_and_omits_non_reference_parameters() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        ParamDto stringParameter = new ParamDto();
+        stringParameter.setName("description");
+        stringParameter.setType(ValueType.STRING);
+        stringParameter.setString("unchanged");
+        ((ActionDto) recordedCommandDto.getMember()).getParameters().getParameter().add(stringParameter);
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
+                .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
+
+        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getRemappings();
+
+        assertThat(remappings).hasSize(1);
+        ReplayableCommandParticipant participant = remappings.get(0);
+        assertThat(participant.getRole()).isEqualTo(ReplayableCommandParticipant.Role.PARAMETER);
+        assertThat(participant.getParameterName()).isEqualTo("simpleObject");
+        assertThat(participant.getRecordedBookmark()).isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3"));
+        assertThat(participant.getActualBookmark()).isEqualTo(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4"));
+        verify(listener, never()).lookup(
+                any(), eq(Bookmark.forLogicalTypeNameAndIdentifier("description", "unchanged")));
+    }
+
+    @Test
+    void result_participant_is_only_visible_after_successful_replay() {
+        UUID interactionId = UUID.randomUUID();
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(new CommandDto(), recordedResult);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(commandLogEntry, recordedResult)).thenReturn(Optional.of(actualResult));
+
+        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getRemappings();
+
+        assertThat(remappings).hasSize(1);
+        ReplayableCommandParticipant participant = remappings.get(0);
+        assertThat(participant.getRole()).isEqualTo(ReplayableCommandParticipant.Role.RESULT);
+        assertThat(participant.getRecordedBookmark()).isEqualTo(recordedResult);
+        assertThat(participant.getActualBookmark()).isEqualTo(actualResult);
+
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        assertThat(replayableCommand(interactionId, commandLogEntry, listener).getRemappings()).isEmpty();
+    }
+
+    @Test
+    void participant_derivation_tolerates_listener_lookup_failure() {
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        doThrow(new IllegalStateException("lookup failed"))
+                .when(listener).lookup(commandLogEntry, Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"));
+
+        assertThat(replayableCommand(UUID.randomUUID(), commandLogEntry, listener).getRemappings()).isEmpty();
+        assertThat(recordedCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
     }
 
     @Test
@@ -416,11 +529,17 @@ class ReplayableCommandMappingTest {
     }
 
     private static ReplayableCommand replayableCommand(final CommandLogEntry commandLogEntry) {
-        UUID interactionId = UUID.randomUUID();
+        return replayableCommand(UUID.randomUUID(), commandLogEntry);
+    }
+
+    private static ReplayableCommand replayableCommand(
+            final UUID interactionId,
+            final CommandLogEntry commandLogEntry,
+            final CommandReplayMappingListener... listeners) {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
         ReplayContext replayContext = new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of());
+                null, null, null, commandLogEntryRepository, null, null, List.of(listeners));
         return new ReplayableCommand(interactionId, replayContext);
     }
 

@@ -21,7 +21,9 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.chrono.ChronoZonedDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,6 +33,8 @@ import javax.inject.Named;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
@@ -64,6 +68,7 @@ import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.ValueType;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant.Role;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
@@ -295,6 +300,122 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return new AsciiDocBuilder()
                 .append(doc->AsciiDocFactory.sourceBlock(doc, "yaml", yaml))
                 .buildAsValue();
+    }
+
+    @Collection
+    @CollectionLayout(sequence = "10")
+    public List<ReplayableCommandParticipant> getRemappings() {
+        return commandLogEntry()
+                .map(this::participantsFor)
+                .orElseGet(List::of);
+    }
+
+    private List<ReplayableCommandParticipant> participantsFor(final CommandLogEntry commandLogEntry) {
+        final List<ReplayableCommandParticipant> participants = new ArrayList<>();
+        final CommandDto commandDto = commandLogEntry.getCommandDto();
+        addTargetParticipants(participants, commandLogEntry, commandDto);
+        addReferenceParameterParticipants(participants, commandLogEntry, commandDto);
+        addResultParticipant(participants, commandLogEntry);
+        return participants;
+    }
+
+    private void addTargetParticipants(
+            final List<ReplayableCommandParticipant> participants,
+            final CommandLogEntry commandLogEntry,
+            final CommandDto commandDto) {
+        Optional.ofNullable(commandDto)
+            .map(CommandDto::getTargets)
+            .stream()
+            .flatMap(targets -> targets.getOid().stream())
+            .forEach(target -> addParticipantIfMapped(
+                    participants,
+                    commandLogEntry,
+                    Role.TARGET,
+                    null,
+                    Bookmark.forOidDto(target)));
+    }
+
+    private void addReferenceParameterParticipants(
+            final List<ReplayableCommandParticipant> participants,
+            final CommandLogEntry commandLogEntry,
+            final CommandDto commandDto) {
+        if (commandDto == null || !(commandDto.getMember() instanceof ActionDto)) {
+            return;
+        }
+        Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
+            .stream()
+            .flatMap(parameters -> parameters.getParameter().stream())
+            .filter(parameter -> parameter.getType() == ValueType.REFERENCE)
+            .filter(parameter -> parameter.getReference() != null)
+            .forEach(parameter -> addParticipantIfMapped(
+                    participants,
+                    commandLogEntry,
+                    Role.PARAMETER,
+                    parameter.getName(),
+                    Bookmark.forOidDto(parameter.getReference())));
+    }
+
+    private void addParticipantIfMapped(
+            final List<ReplayableCommandParticipant> participants,
+            final CommandLogEntry commandLogEntry,
+            final Role role,
+            final String parameterName,
+            final Bookmark recordedBookmark) {
+        findActualBookmark(commandLogEntry, recordedBookmark)
+            .map(actualBookmark -> participant(commandLogEntry, role, parameterName, recordedBookmark, actualBookmark))
+            .ifPresent(participants::add);
+    }
+
+    private void addResultParticipant(
+            final List<ReplayableCommandParticipant> participants,
+            final CommandLogEntry commandLogEntry) {
+        if (commandLogEntry.getReplayState() != ReplayState.OK || commandLogEntry.getResult() == null) {
+            return;
+        }
+        final Bookmark recordedResult = commandLogEntry.getResult();
+        findActualBookmark(commandLogEntry, recordedResult)
+            .map(actualResult -> participant(commandLogEntry, Role.RESULT, null, recordedResult, actualResult))
+            .ifPresent(participants::add);
+    }
+
+    private ReplayableCommandParticipant participant(
+            final CommandLogEntry commandLogEntry,
+            final Role role,
+            final String parameterName,
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark) {
+        final UUID owningInteractionId = commandLogEntry.getInteractionId() != null
+                ? commandLogEntry.getInteractionId()
+                : interactionId;
+        return new ReplayableCommandParticipant(
+                owningInteractionId,
+                role,
+                parameterName,
+                recordedBookmark,
+                actualBookmark);
+    }
+
+    private Optional<Bookmark> findActualBookmark(
+            final CommandLogEntry commandLogEntry,
+            final Bookmark recordedBookmark) {
+        return _NullSafe.stream(replayContext.commandReplayMappingListeners())
+                .map(listener -> lookupActualBookmark(listener, commandLogEntry, recordedBookmark))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
+    }
+
+    private Optional<Bookmark> lookupActualBookmark(
+            final CommandReplayMappingListener listener,
+            final CommandLogEntry commandLogEntry,
+            final Bookmark recordedBookmark) {
+        try {
+            return Optional.ofNullable(listener.lookup(commandLogEntry, recordedBookmark))
+                    .orElseGet(Optional::empty);
+        } catch (Exception ex) {
+            log.warn("Command replay participant mapping listener failed", ex);
+            return Optional.empty();
+        }
     }
 
     // -- ACTIONS

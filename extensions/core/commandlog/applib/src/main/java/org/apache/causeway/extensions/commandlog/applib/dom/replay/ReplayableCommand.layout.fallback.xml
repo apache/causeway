@@ -56,6 +56,11 @@
     </bs:row>
     <bs:row>
         <bs:col span="12">
+            <cpt:collection defaultView="table" paged="15" id="remappings"/>
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="12">
             <bs:tabGroup unreferencedCollections="true"/>
         </bs:col>
     </bs:row>
