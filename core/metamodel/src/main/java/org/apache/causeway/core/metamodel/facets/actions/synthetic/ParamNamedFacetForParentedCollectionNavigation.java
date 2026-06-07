@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacetAbstract;
 
-public class ParamNamedFacetForParentedCollectionSelector extends ParamNamedFacetAbstract {
+public class ParamNamedFacetForParentedCollectionNavigation extends ParamNamedFacetAbstract {
 
-    public ParamNamedFacetForParentedCollectionSelector(
+    public ParamNamedFacetForParentedCollectionNavigation(
             final String name,
             final FacetHolder holder) {
         super(name, holder);

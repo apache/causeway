@@ -14,10 +14,10 @@ The system MUST NOT require or use a separate `causeway.extensions.command-log.p
 An eligible parented collection association SHALL be allowed when its owning type is an entity or view model and its element type is an entity, view model, or abstract domain type.
 The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
-The synthetic action identifier SHALL use the reserved prefix `__causeway_select_from_` followed by the associated parented collection id.
+The synthetic action identifier SHALL use the reserved prefix `__causeway_navigate_to_` followed by the associated parented collection id.
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
 The synthetic action SHALL be associated with the parented collection through layout metadata equivalent to `@ActionLayout(associateWith=...)`.
-The synthetic action SHALL have the display name `Select` through name metadata equivalent to `@ActionLayout(named="Select")`.
+The synthetic action SHALL have the display name `Navigate To` through name metadata equivalent to `@ActionLayout(named="Navigate To")`.
 The synthetic action SHALL have action layout CSS class metadata equivalent to `@ActionLayout(cssClass="btn-outline-secondary")`.
 The synthetic action SHALL have action layout Font Awesome metadata equivalent to `@ActionLayout(cssClassFa="hand-point-left")`.
 
@@ -32,7 +32,7 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **AND** command-log recording support is `ENABLED`
 - **AND** the entity type does not implement the command recording suppression marker interface
 - **WHEN** the framework fully introspects the entity type
-- **THEN** the metamodel includes a synthetic safe action for selecting one element from that collection
+- **THEN** the metamodel includes a synthetic safe action for navigating to one element from that collection
 - **AND** the synthetic action is associated with the collection owner type
 
 #### Scenario: Synthetic action is available when recording support is enabled for a view-model-owned parented collection
@@ -40,7 +40,7 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **AND** command-log recording support is `ENABLED`
 - **AND** the view model type does not implement the command recording suppression marker interface
 - **WHEN** the framework fully introspects the view model type
-- **THEN** the metamodel includes a synthetic safe action for selecting one element from that collection
+- **THEN** the metamodel includes a synthetic safe action for navigating to one element from that collection
 - **AND** the synthetic action is associated with the collection owner type
 
 #### Scenario: Synthetic action is not added for marked entity type
@@ -61,7 +61,7 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **GIVEN** the framework introspects the same parented collection in two application runs
 - **WHEN** the synthetic selector action is created in each run
 - **THEN** both actions have the same action identifier
-- **AND** the identifier uses the reserved prefix `__causeway_select_from_`
+- **AND** the identifier uses the reserved prefix `__causeway_navigate_to_`
 - **AND** the identifier is reserved so it does not conflict with application action ids
 
 #### Scenario: Ordinary action lists can identify synthetic actions
@@ -75,12 +75,12 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **WHEN** the framework synthesizes the selector action for `items`
 - **THEN** the action has layout association metadata for collection id `items`
 
-#### Scenario: Synthetic action display name is Select
+#### Scenario: Synthetic action display name is Navigate To
 - **GIVEN** an entity type `Lease` has a parented collection `items`
 - **AND** command-log recording support is `ENABLED`
 - **AND** `Lease` does not implement the command recording suppression marker interface
 - **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action display name is `Select`
+- **THEN** the action display name is `Navigate To`
 
 #### Scenario: Synthetic action uses secondary button styling
 - **GIVEN** an entity type `Lease` has a parented collection `items`

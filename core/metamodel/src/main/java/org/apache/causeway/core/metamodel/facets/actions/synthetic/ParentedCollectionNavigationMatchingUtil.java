@@ -37,7 +37,7 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 @UtilityClass
-class ParentedCollectionSelectorMatchingUtil {
+class ParentedCollectionNavigationMatchingUtil {
 
     MatchResult match(
             final @NonNull OneToManyAssociation collection,
@@ -68,7 +68,7 @@ class ParentedCollectionSelectorMatchingUtil {
             final @NonNull MatchResult matchResult) {
         switch (matchResult.getStatus()) {
         case MISSING_PARENT:
-            return String.format("missing parent argument for synthetic selector %s", actionId);
+            return String.format("missing parent argument for synthetic navigation %s", actionId);
         case NO_MATCH:
         case MULTIPLE_MATCHES:
             return String.format("%d items match. Use parameters to match just one item.", matchResult.getMatches().size());

@@ -22,9 +22,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class ActionSemanticsFacetForParentedCollectionSelector extends ActionSemanticsFacetAbstract {
+public class ActionSemanticsFacetForParentedCollectionNavigation extends ActionSemanticsFacetAbstract {
 
-    public ActionSemanticsFacetForParentedCollectionSelector(final FacetHolder holder) {
+    public ActionSemanticsFacetForParentedCollectionNavigation(final FacetHolder holder) {
         super(SemanticsOf.SAFE, holder);
     }
 

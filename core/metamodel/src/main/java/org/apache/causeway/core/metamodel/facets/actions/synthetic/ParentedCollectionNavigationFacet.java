@@ -18,19 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
- * Keeps the selector parent parameter fixed to the current action target.
+ * Marks an action synthesized by the framework to navigate to one child object from a parented collection.
  */
-public class DisabledFacetForParentedCollectionSelectorParent
-extends DisabledFacetAbstract {
+public interface ParentedCollectionNavigationFacet extends Facet {
 
-    public DisabledFacetForParentedCollectionSelectorParent(final FacetHolder holder) {
-        super(Where.ANYWHERE, VetoReason.explicit("Parent is fixed by the selector action target"), holder);
-    }
+    OneToManyAssociation getCollection();
 
 }

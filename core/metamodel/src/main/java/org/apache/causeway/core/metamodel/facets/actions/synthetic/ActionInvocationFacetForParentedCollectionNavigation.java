@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionInvocationFacetForParentedCollectionSelector
+public class ActionInvocationFacetForParentedCollectionNavigation
 extends FacetAbstract
 implements ActionInvocationFacet {
 
@@ -54,7 +54,7 @@ implements ActionInvocationFacet {
     private final @NonNull OneToManyAssociation collection;
     private final @NonNull Can<ObjectAssociation> filterProperties;
 
-    public ActionInvocationFacetForParentedCollectionSelector(
+    public ActionInvocationFacetForParentedCollectionNavigation(
             final @NonNull ObjectSpecification declaringType,
             final @NonNull ObjectSpecification returnType,
             final @NonNull OneToManyAssociation collection,
@@ -87,12 +87,12 @@ implements ActionInvocationFacet {
         val command = commandIfAny();
         prepareCommandForPublishing(command, head, owningAction, interactionInitiatedBy);
 
-        val matchResult = ParentedCollectionSelectorMatchingUtil.match(
+        val matchResult = ParentedCollectionNavigationMatchingUtil.match(
                 collection,
                 filterProperties,
                 argumentAdapters,
                 interactionInitiatedBy);
-        val validationMessage = ParentedCollectionSelectorMatchingUtil.validationMessage(owningAction.getId(), matchResult);
+        val validationMessage = ParentedCollectionNavigationMatchingUtil.validationMessage(owningAction.getId(), matchResult);
         if(validationMessage != null) {
             throw new RecoverableException(validationMessage);
         }

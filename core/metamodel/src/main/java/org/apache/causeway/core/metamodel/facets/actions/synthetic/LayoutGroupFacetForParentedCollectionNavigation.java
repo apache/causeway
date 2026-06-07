@@ -18,27 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import lombok.NonNull;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
 
 /**
- * Defaults the selector parent parameter to the current action target.
+ * Associates a synthetic navigation action with the collection it navigates from.
  */
-public class ActionParameterDefaultsFacetForParentedCollectionSelectorParent
-extends ActionParameterDefaultsFacetAbstract {
+public class LayoutGroupFacetForParentedCollectionNavigation
+extends LayoutGroupFacetAbstract {
 
-    public ActionParameterDefaultsFacetForParentedCollectionSelectorParent(final FacetHolder holder) {
-        super(holder);
-    }
-
-    @Override
-    public Can<ManagedObject> getDefault(final @NonNull ParameterNegotiationModel pendingArgs) {
-        return Can.of(pendingArgs.getActionTarget());
+    public LayoutGroupFacetForParentedCollectionNavigation(
+            final String collectionId,
+            final String collectionName,
+            final FacetHolder holder) {
+        super(GroupIdAndName.of(collectionId, collectionName), holder);
     }
 
 }

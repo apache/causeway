@@ -18,21 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
-import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-/**
- * Associates a synthetic selector action with the collection it selects from.
- */
-public class LayoutGroupFacetForParentedCollectionSelector
-extends LayoutGroupFacetAbstract {
+import lombok.Getter;
+import lombok.NonNull;
 
-    public LayoutGroupFacetForParentedCollectionSelector(
-            final String collectionId,
-            final String collectionName,
-            final FacetHolder holder) {
-        super(GroupIdAndName.of(collectionId, collectionName), holder);
+public class ParentedCollectionNavigationFacetDefault
+extends FacetAbstract
+implements ParentedCollectionNavigationFacet {
+
+    private static Class<? extends Facet> type() {
+        return ParentedCollectionNavigationFacet.class;
+    }
+
+    @Getter(onMethod_ = @Override)
+    private final @NonNull OneToManyAssociation collection;
+
+    public ParentedCollectionNavigationFacetDefault(
+            final @NonNull OneToManyAssociation collection,
+            final @NonNull FacetHolder holder) {
+        super(type(), holder);
+        this.collection = collection;
     }
 
 }

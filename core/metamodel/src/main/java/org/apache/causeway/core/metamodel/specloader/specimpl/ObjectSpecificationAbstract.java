@@ -29,18 +29,18 @@ import java.util.stream.Stream;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterChoicesFacetForParentedCollectionSelectorParent;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterDefaultsFacetForParentedCollectionSelectorParent;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForParentedCollectionSelectorParent;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionSelector;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionSelectorFacetDefault;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterChoicesFacetForParentedCollectionNavigationParent;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterDefaultsFacetForParentedCollectionNavigationParent;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForParentedCollectionNavigationParent;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacetDefault;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
@@ -785,7 +785,7 @@ implements ObjectSpecification {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
-        ensureParentedCollectionSelectorActionsForMixedInAssociations();
+        ensureParentedCollectionNavigationActionsForMixedInAssociations();
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
@@ -986,10 +986,10 @@ implements ObjectSpecification {
 
     /**
      * Mixed-in associations are appended lazily and can be materialized before or after actions.
-     * When selector actions are enabled, make sure collection mixins receive matching synthetic actions
-     * without treating ordinary collection-returning mixin actions as selector sources.
+     * When navigation actions are enabled, make sure collection mixins receive matching synthetic actions
+     * without treating ordinary collection-returning mixin actions as navigation sources.
      */
-    private void ensureParentedCollectionSelectorActionsForMixedInAssociations() {
+    private void ensureParentedCollectionNavigationActionsForMixedInAssociations() {
         if(!isRecordingSupportEnabled()) {
             return;
         }
@@ -998,23 +998,23 @@ implements ObjectSpecification {
         val existingActionIds = objectActions.stream()
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet());
-        val mixedInCollectionsWithoutSelector = stream(unmodifiableAssociations.get())
+        val mixedInCollectionsWithoutNavigation = stream(unmodifiableAssociations.get())
                 .filter(MixedInMember.class::isInstance)
                 .filter(ObjectAssociation::isOneToManyAssociation)
                 .filter(association -> !existingActionIds.contains(
-                        ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + association.getId()))
+                        ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + association.getId()))
                 .collect(Can.toCan());
-        val selectorActions = ParentedCollectionSelectorActionUtil
-                .createFor(this, mixedInCollectionsWithoutSelector.stream())
+        val navigationActions = ParentedCollectionNavigationActionUtil
+                .createFor(this, mixedInCollectionsWithoutNavigation.stream())
                 .collect(Collectors.toList());
-        if(selectorActions.isEmpty()) {
+        if(navigationActions.isEmpty()) {
             return;
         }
 
         val regularActions = _Lists.newArrayList(objectActions); // defensive copy
         replaceActions(Stream.concat(
                 regularActions.stream(),
-                selectorActions.stream()));
+                navigationActions.stream()));
     }
 
     protected boolean isRecordingSupportEnabled() {
@@ -1031,9 +1031,9 @@ implements ObjectSpecification {
         getServiceRegistry().select(EntityTitleSubscriber.class);
 
     @UtilityClass
-    public static class ParentedCollectionSelectorActionUtil {
+    public static class ParentedCollectionNavigationActionUtil {
 
-        public static final String ACTION_ID_PREFIX = "__causeway_select_from_";
+        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
 
         private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
                 "logicalTypeName",
@@ -1095,7 +1095,7 @@ implements ObjectSpecification {
             return collection.getElementType()
                     .streamAssociations(MixedIn.INCLUDED)
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
-                    .filter(ParentedCollectionSelectorActionUtil::isEligibleFilterParameterProperty)
+                    .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
                     .sorted(ObjectMember.Comparators
                             .<ObjectAssociation>byMemberOrderSequence(false)
                             .thenComparing(ObjectAssociation::getId))
@@ -1167,19 +1167,19 @@ implements ObjectSpecification {
                 final OneToManyAssociation collection,
                 final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
-            FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Select", facetedMethod));
-            FacetUtil.addFacet(new CssClassFacetForParentedCollectionSelector(facetedMethod));
-            FacetUtil.addFacet(new FaFacetForParentedCollectionSelector(facetedMethod));
-            FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionSelector(
+            FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod));
+            FacetUtil.addFacet(new CssClassFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new FaFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionNavigation(
                     collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
-            FacetUtil.addFacet(new ParentedCollectionSelectorFacetDefault(collection, facetedMethod));
-            FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionSelector(collection, facetedMethod));
-            FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionSelector(facetedMethod));
-            FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionSelector(
+            FacetUtil.addFacet(new ParentedCollectionNavigationFacetDefault(collection, facetedMethod));
+            FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionNavigation(collection, facetedMethod));
+            FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionNavigation(
                     collection,
                     filterProperties,
                     facetedMethod));
-            FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionSelector(
+            FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionNavigation(
                     parentSpec,
                     collection.getElementType(),
                     collection,
@@ -1196,15 +1196,15 @@ implements ObjectSpecification {
                 final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
             val parameters = facetedMethod.getParameters();
-            FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionSelector(
+            FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
                     facetedMethod.getMethod().getParameterName(0), parameters.getElseFail(0)));
             FacetUtil.addFacet(MandatoryFacetDefault.required(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new ActionParameterChoicesFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new DisabledFacetForParentedCollectionSelectorParent(parameters.getElseFail(0)));
+            FacetUtil.addFacet(new ActionParameterChoicesFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
+            FacetUtil.addFacet(new DisabledFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
             for(int i = 0; i < filterProperties.size(); i++) {
                 val parameter = parameters.getElseFail(i + 1);
-                FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionSelector(
+                FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
                         filterProperties.getElseFail(i).getCanonicalFriendlyName(), parameter));
                 FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));
             }

@@ -189,7 +189,7 @@ implements FacetHolder {
         val actions = recordingSupportEnabled
                 ? Stream.concat(
                         createActions(),
-                        ParentedCollectionSelectorActionUtil.createFor(this, associations.stream()))
+                        ParentedCollectionNavigationActionUtil.createFor(this, associations.stream()))
                 : createActions();
         replaceActions(actions);
 

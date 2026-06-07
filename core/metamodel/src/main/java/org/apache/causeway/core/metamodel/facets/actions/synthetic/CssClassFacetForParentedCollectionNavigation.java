@@ -18,20 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
 /**
- * Provides default icon styling for synthetic parented collection selector actions.
+ * Provides default button styling for synthetic parented collection navigation actions.
  */
-public class FaFacetForParentedCollectionSelector
-extends FaStaticFacetAbstract {
+public class CssClassFacetForParentedCollectionNavigation
+extends CssClassFacetSimple {
 
-    public static final String CSS_CLASS_FA = "hand-point-left";
+    public static final String CSS_CLASS = "btn-outline-secondary";
 
-    public FaFacetForParentedCollectionSelector(final FacetHolder holder) {
-        super(CSS_CLASS_FA, CssClassFaPosition.LEFT, holder);
+    public CssClassFacetForParentedCollectionNavigation(final FacetHolder holder) {
+        super(CSS_CLASS, holder);
     }
 
 }

@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionValidationFacetForParentedCollectionSelector
+public class ActionValidationFacetForParentedCollectionNavigation
 extends FacetAbstract
 implements ActionValidationFacet {
 
@@ -43,7 +43,7 @@ implements ActionValidationFacet {
     private final @NonNull OneToManyAssociation collection;
     private final @NonNull Can<ObjectAssociation> filterProperties;
 
-    public ActionValidationFacetForParentedCollectionSelector(
+    public ActionValidationFacetForParentedCollectionNavigation(
             final @NonNull OneToManyAssociation collection,
             final @NonNull Can<ObjectAssociation> filterProperties,
             final @NonNull org.apache.causeway.core.metamodel.facetapi.FacetHolder holder) {
@@ -75,12 +75,12 @@ implements ActionValidationFacet {
             final @NonNull String actionId,
             final Can<ManagedObject> arguments,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
-        val matchResult = ParentedCollectionSelectorMatchingUtil.match(
+        val matchResult = ParentedCollectionNavigationMatchingUtil.match(
                 collection,
                 filterProperties,
                 arguments,
                 interactionInitiatedBy);
-        return ParentedCollectionSelectorMatchingUtil.validationMessage(actionId, matchResult);
+        return ParentedCollectionNavigationMatchingUtil.validationMessage(actionId, matchResult);
     }
 
 }

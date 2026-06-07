@@ -18,30 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-import lombok.Getter;
-import lombok.NonNull;
+/**
+ * Keeps the navigation parent parameter fixed to the current action target.
+ */
+public class DisabledFacetForParentedCollectionNavigationParent
+extends DisabledFacetAbstract {
 
-public class ParentedCollectionSelectorFacetDefault
-extends FacetAbstract
-implements ParentedCollectionSelectorFacet {
-
-    private static Class<? extends Facet> type() {
-        return ParentedCollectionSelectorFacet.class;
-    }
-
-    @Getter(onMethod_ = @Override)
-    private final @NonNull OneToManyAssociation collection;
-
-    public ParentedCollectionSelectorFacetDefault(
-            final @NonNull OneToManyAssociation collection,
-            final @NonNull FacetHolder holder) {
-        super(type(), holder);
-        this.collection = collection;
+    public DisabledFacetForParentedCollectionNavigationParent(final FacetHolder holder) {
+        super(Where.ANYWHERE, VetoReason.explicit("Parent is fixed by the navigation action target"), holder);
     }
 
 }

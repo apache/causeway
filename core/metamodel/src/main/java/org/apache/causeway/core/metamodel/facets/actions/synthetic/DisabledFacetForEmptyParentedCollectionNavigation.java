@@ -32,16 +32,16 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Disables a synthetic selector action when its associated collection has no selectable rows.
+ * Disables a synthetic navigation action when its associated collection has no navigable rows.
  */
-public class DisabledFacetForEmptyParentedCollectionSelector
+public class DisabledFacetForEmptyParentedCollectionNavigation
 extends DisabledFacetAbstract {
 
-    public static final String REASON = "No items to select.";
+    public static final String REASON = "No items to navigate to.";
 
     private final @NonNull OneToManyAssociation collection;
 
-    public DisabledFacetForEmptyParentedCollectionSelector(
+    public DisabledFacetForEmptyParentedCollectionNavigation(
             final @NonNull OneToManyAssociation collection,
             final @NonNull org.apache.causeway.core.metamodel.facetapi.FacetHolder holder) {
         super(Where.ANYWHERE, VetoReason.explicit(REASON), holder);

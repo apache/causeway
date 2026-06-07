@@ -19,27 +19,26 @@
 package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
+import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterChoicesFacetForParentedCollectionSelectorParent
-extends ActionParameterChoicesFacetAbstract {
+import lombok.NonNull;
 
-    public ActionParameterChoicesFacetForParentedCollectionSelectorParent(final FacetHolder holder) {
+/**
+ * Defaults the navigation parent parameter to the current action target.
+ */
+public class ActionParameterDefaultsFacetForParentedCollectionNavigationParent
+extends ActionParameterDefaultsFacetAbstract {
+
+    public ActionParameterDefaultsFacetForParentedCollectionNavigationParent(final FacetHolder holder) {
         super(holder);
     }
 
     @Override
-    public Can<ManagedObject> getChoices(
-            final ObjectSpecification requiredSpec,
-            final ActionInteractionHead head,
-            final Can<ManagedObject> pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return Can.ofSingleton(head.getTarget());
+    public Can<ManagedObject> getDefault(final @NonNull ParameterNegotiationModel pendingArgs) {
+        return Can.of(pendingArgs.getActionTarget());
     }
 
 }

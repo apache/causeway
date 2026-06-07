@@ -84,7 +84,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-class ParentedCollectionSelectorActionUtilTest {
+class ParentedCollectionNavigationActionUtilTest {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class Lease {
@@ -236,88 +236,88 @@ class ParentedCollectionSelectorActionUtilTest {
 
     private MetaModelContext_forTesting mmc;
     private ObjectSpecification leaseSpec;
-    private ObjectAction selectorAction;
+    private ObjectAction navigationAction;
 
     @BeforeEach
     void setUp() {
         mmc = newMetamodelContext();
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         leaseSpec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
-        selectorAction = leaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        navigationAction = leaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
     }
 
     @Test
-    void does_not_synthesize_selector_action_unless_enabled() {
+    void does_not_synthesize_navigation_action_unless_enabled() {
         val disabledMmc = newMetamodelContext();
         val disabledLeaseSpec = disabledMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
-        assertThat(disabledLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
+        assertThat(disabledLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
 
     @Test
-    void synthesizes_selector_action_with_marker_and_safe_semantics_when_enabled() {
-        assertThat(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX, is("__causeway_select_from_"));
-        assertThat(selectorAction.getId(), is("__causeway_select_from_items"));
-        MatcherAssert.assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
-        assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
-        assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+    void synthesizes_navigation_action_with_marker_and_safe_semantics_when_enabled() {
+        assertThat(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX, is("__causeway_navigate_to_"));
+        assertThat(navigationAction.getId(), is("__causeway_navigate_to_items"));
+        MatcherAssert.assertThat(navigationAction.getFacet(ParentedCollectionNavigationFacet.class), instanceOf(ParentedCollectionNavigationFacetDefault.class));
+        assertThat(navigationAction.getSemantics(), is(SemanticsOf.SAFE));
+        assertThat(navigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
 
     @Test
-    void does_not_synthesize_selector_action_for_suppressed_owner_type() {
+    void does_not_synthesize_navigation_action_for_suppressed_owner_type() {
         val suppressedLeaseSpec = mmc.getSpecificationLoader().loadSpecification(SuppressedLease.class);
 
-        assertThat(suppressedLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
+        assertThat(suppressedLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
 
     @Test
-    void associates_selector_action_with_parented_collection() {
-        val layoutGroupFacet = selectorAction.getFacet(LayoutGroupFacet.class);
+    void associates_navigation_action_with_parented_collection() {
+        val layoutGroupFacet = navigationAction.getFacet(LayoutGroupFacet.class);
 
-        assertThat(layoutGroupFacet, instanceOf(LayoutGroupFacetForParentedCollectionSelector.class));
+        assertThat(layoutGroupFacet, instanceOf(LayoutGroupFacetForParentedCollectionNavigation.class));
         assertThat(layoutGroupFacet.getGroupId(), is("items"));
         assertThat(layoutGroupFacet.getGroupName(), is("Items"));
     }
 
     @Test
-    void names_selector_action_select_while_preserving_deterministic_id() {
-        assertThat(selectorAction.getId(), is("__causeway_select_from_items"));
-        assertThat(selectorAction.getCanonicalFriendlyName(), is("Select"));
+    void names_navigation_action_navigate_to_while_preserving_deterministic_id() {
+        assertThat(navigationAction.getId(), is("__causeway_navigate_to_items"));
+        assertThat(navigationAction.getCanonicalFriendlyName(), is("Navigate To"));
     }
 
     @Test
-    void styles_selector_action_as_secondary_select_navigation() {
-        assertSelectorActionStyling(selectorAction);
+    void styles_navigation_action_as_secondary_navigate_to() {
+        assertNavigationActionStyling(navigationAction);
     }
 
     @Test
     void participates_in_safe_action_command_publishing_when_enabled() {
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
-        assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+        assertThat(navigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
 
     @Test
-    void synthesizes_selector_action_for_mixed_in_collection_when_enabled() {
+    void synthesizes_navigation_action_for_mixed_in_collection_when_enabled() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
         mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
 
-        val mixinSelectorAction = mixinLeaseSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
-        val layoutGroupFacet = mixinSelectorAction.getFacet(LayoutGroupFacet.class);
+        val mixinNavigationAction = mixinLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
+        val layoutGroupFacet = mixinNavigationAction.getFacet(LayoutGroupFacet.class);
 
-        assertThat(mixinSelectorAction.getFacet(ParentedCollectionSelectorFacet.class),
-                instanceOf(ParentedCollectionSelectorFacetDefault.class));
+        assertThat(mixinNavigationAction.getFacet(ParentedCollectionNavigationFacet.class),
+                instanceOf(ParentedCollectionNavigationFacetDefault.class));
         assertThat(layoutGroupFacet.getGroupId(), is("mixinItems"));
         assertThat(layoutGroupFacet.getGroupName(), is("Mixin Items"));
-        assertSelectorActionStyling(mixinSelectorAction);
-        assertThat(mixinSelectorAction.getParameters().getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
-        assertThat(mixinSelectorAction.getParameters().stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
+        assertNavigationActionStyling(mixinNavigationAction);
+        assertThat(mixinNavigationAction.getParameters().getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
+        assertThat(mixinNavigationAction.getParameters().stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
     }
 
     @Test
-    void synthesizes_selector_action_for_mixed_in_collection_when_associations_are_loaded_first() {
+    void synthesizes_navigation_action_for_mixed_in_collection_when_associations_are_loaded_first() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
         mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
@@ -326,26 +326,26 @@ class ParentedCollectionSelectorActionUtilTest {
                 .anyMatch(association -> association.getId().equals("mixinItems")), is(true));
 
         assertThat(mixinLeaseSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
     }
 
     @Test
-    void synthesizes_selector_action_for_view_model_owned_collection_with_entity_elements() {
+    void synthesizes_navigation_action_for_view_model_owned_collection_with_entity_elements() {
         val homePageSpec = mmc.getSpecificationLoader().loadSpecification(HomePageViewModel.class);
-        val homePageSelectorAction = homePageSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val homePageNavigationAction = homePageSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
 
-        assertThat(homePageSelectorAction.getId(), is("__causeway_select_from_items"));
-        assertThat(homePageSelectorAction.getCanonicalFriendlyName(), is("Select"));
-        assertThat(homePageSelectorAction.getFacet(ParentedCollectionSelectorFacet.class),
-                instanceOf(ParentedCollectionSelectorFacetDefault.class));
-        assertSelectorActionStyling(homePageSelectorAction);
+        assertThat(homePageNavigationAction.getId(), is("__causeway_navigate_to_items"));
+        assertThat(homePageNavigationAction.getCanonicalFriendlyName(), is("Navigate To"));
+        assertThat(homePageNavigationAction.getFacet(ParentedCollectionNavigationFacet.class),
+                instanceOf(ParentedCollectionNavigationFacetDefault.class));
+        assertNavigationActionStyling(homePageNavigationAction);
 
-        val layoutGroupFacet = homePageSelectorAction.getFacet(LayoutGroupFacet.class);
+        val layoutGroupFacet = homePageNavigationAction.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet.getGroupId(), is("items"));
         assertThat(layoutGroupFacet.getGroupName(), is("Items"));
 
-        val parameters = homePageSelectorAction.getParameters();
+        val parameters = homePageNavigationAction.getParameters();
         assertThat(parameters.getElseFail(0).getId(), is("homePageViewModel"));
         assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(HomePageViewModel.class));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
@@ -354,7 +354,7 @@ class ParentedCollectionSelectorActionUtilTest {
 
     @Test
     void exposes_mandatory_parent_parameter_and_optional_scalar_and_selectable_reference_child_parameters() {
-        val parameters = selectorAction.getParameters();
+        val parameters = navigationAction.getParameters();
         assertThat(parameters.getElseFail(0).getId(), is("lease"));
         assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
@@ -383,9 +383,9 @@ class ParentedCollectionSelectorActionUtilTest {
         val orderedMmc = newMetamodelContext();
         orderedMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val orderedLeaseSpec = orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class);
-        val orderedSelectorAction = orderedLeaseSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
-        val parameters = orderedSelectorAction.getParameters();
+        val orderedNavigationAction = orderedLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val parameters = orderedNavigationAction.getParameters();
 
         assertThat(parameters.getElseFail(0).getId(), is("orderedLease"));
         assertThat(parameters.getElseFail(1).getId(), is("sequence"));
@@ -399,10 +399,10 @@ class ParentedCollectionSelectorActionUtilTest {
         val pendingArgs = Mockito.mock(ParameterNegotiationModel.class);
         Mockito.when(pendingArgs.getActionTarget()).thenReturn(leaseAdapter);
 
-        val parentParameter = selectorAction.getParameters().getElseFail(0);
+        val parentParameter = navigationAction.getParameters().getElseFail(0);
         val defaultsFacet = parentParameter.getFacet(ActionParameterDefaultsFacet.class);
 
-        assertThat(defaultsFacet, instanceOf(ActionParameterDefaultsFacetForParentedCollectionSelectorParent.class));
+        assertThat(defaultsFacet, instanceOf(ActionParameterDefaultsFacetForParentedCollectionNavigationParent.class));
         assertThat(parentParameter.hasDefaults(), is(true));
         assertThat(parentParameter.getDefault(pendingArgs), is(leaseAdapter));
     }
@@ -415,51 +415,51 @@ class ParentedCollectionSelectorActionUtilTest {
                 leaseAdapter,
                 ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(String.class)),
                 ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(Integer.class)));
-        val parameters = selectorAction.getParameters();
+        val parameters = navigationAction.getParameters();
         val parentParameter = parameters.getElseFail(0);
         val scalarParameter = parameters.getElseFail(1);
 
-        assertThat(parentParameter.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForParentedCollectionSelectorParent.class));
+        assertThat(parentParameter.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForParentedCollectionNavigationParent.class));
         assertThat(parentParameter.isUsable(
-                selectorAction.interactionHead(leaseAdapter),
+                navigationAction.interactionHead(leaseAdapter),
                 pendingArgs,
                 InteractionInitiatedBy.USER).isVetoed(), is(true));
         assertThat(scalarParameter.getFacet(DisabledFacet.class), is((DisabledFacet) null));
         assertThat(scalarParameter.isUsable(
-                selectorAction.interactionHead(leaseAdapter),
+                navigationAction.interactionHead(leaseAdapter),
                 pendingArgs,
                 InteractionInitiatedBy.USER).isAllowed(), is(true));
     }
 
     @Test
-    void disables_selector_action_when_associated_collection_is_empty() {
+    void disables_navigation_action_when_associated_collection_is_empty() {
         val lease = new Lease();
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
 
-        val consent = selectorAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        val consent = navigationAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
 
-        assertThat(selectorAction.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForEmptyParentedCollectionSelector.class));
+        assertThat(navigationAction.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForEmptyParentedCollectionNavigation.class));
         assertThat(consent.isVetoed(), is(true));
-        assertThat(consent.getReasonAsString().orElseThrow(), containsString(DisabledFacetForEmptyParentedCollectionSelector.REASON));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString(DisabledFacetForEmptyParentedCollectionNavigation.REASON));
     }
 
     @Test
-    void leaves_selector_action_enabled_when_associated_collection_is_not_empty() {
+    void leaves_navigation_action_enabled_when_associated_collection_is_not_empty() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
 
-        assertThat(selectorAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed(), is(true));
+        assertThat(navigationAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed(), is(true));
     }
 
     @Test
-    void validates_and_invokes_selector_action_returning_single_matching_child() {
+    void validates_and_invokes_navigation_action_returning_single_matching_child() {
         val lease = new Lease();
         val matchingItem = new LeaseItem("first", 1, null);
         lease.getItems().add(matchingItem);
         lease.getItems().add(new LeaseItem("second", 2, null));
 
-        assertThat(selectorAction.getFacet(ActionValidationFacet.class), instanceOf(ActionValidationFacetForParentedCollectionSelector.class));
+        assertThat(navigationAction.getFacet(ActionValidationFacet.class), instanceOf(ActionValidationFacetForParentedCollectionNavigation.class));
         assertThat(validate(lease, "first", null).isAllowed(), is(true));
 
         val result = invoke(lease, "first", null);
@@ -527,7 +527,7 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
-    void selector_action_validation_rejects_when_no_child_matches() {
+    void navigation_action_validation_rejects_when_no_child_matches() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
 
@@ -542,7 +542,7 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
-    void selector_action_validation_rejects_when_multiple_children_match() {
+    void navigation_action_validation_rejects_when_multiple_children_match() {
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("same", 1, null));
         lease.getItems().add(new LeaseItem("same", 2, null));
@@ -595,28 +595,28 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
-    void selector_invocation_prepares_command_for_publishing_when_safe_action_publishing_enabled() {
+    void navigation_invocation_prepares_command_for_publishing_when_safe_action_publishing_enabled() {
         val commandPublisher = Mockito.mock(CommandPublisher.class);
         val interactionProvider = Mockito.mock(InteractionProvider.class);
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
-        val publishingSelectorAction = publishingLeaseSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val publishingNavigationAction = publishingLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val lease = new Lease();
         val matchingItem = new LeaseItem("first", 1, null);
         lease.getItems().add(matchingItem);
         val leaseAdapter = publishingMmc.getObjectManager().adapt(lease);
-        val command = commandFor(publishingSelectorAction, leaseAdapter);
+        val command = commandFor(publishingNavigationAction, leaseAdapter);
         Mockito.when(interaction.getCommand()).thenReturn(command);
         Mockito.when(interactionProvider.currentInteraction()).thenReturn(Optional.of(interaction));
         Mockito.when(interactionProvider.currentInteractionElseFail()).thenReturn(interaction);
 
-        val result = publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
-                publishingSelectorAction,
-                publishingSelectorAction.interactionHead(leaseAdapter),
-                arguments(publishingSelectorAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
+        val result = publishingNavigationAction.getFacet(ActionInvocationFacet.class).invoke(
+                publishingNavigationAction,
+                publishingNavigationAction.interactionHead(leaseAdapter),
+                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(result.getPojo(), is(matchingItem));
@@ -624,48 +624,48 @@ class ParentedCollectionSelectorActionUtilTest {
         Mockito.verify(commandPublisher).ready(command);
         assertThat(command.getCommandDto().getMember(), instanceOf(ActionDto.class));
         assertThat(command.getCommandDto().getMember().getLogicalMemberIdentifier(),
-                is(IdentifierUtil.logicalMemberIdentifierFor(publishingSelectorAction.interactionHead(leaseAdapter), publishingSelectorAction)));
+                is(IdentifierUtil.logicalMemberIdentifierFor(publishingNavigationAction.interactionHead(leaseAdapter), publishingNavigationAction)));
         val exportDto = CommandDtoUtils.CommandExportDto.of(command.getCommandDto(), command.getResult());
         assertThat(exportDto.getCommand(), is(command.getCommandDto()));
     }
 
     @Test
-    void selector_invocation_does_not_prepare_command_when_safe_action_publishing_disabled() {
+    void navigation_invocation_does_not_prepare_command_when_safe_action_publishing_disabled() {
         val commandPublisher = Mockito.mock(CommandPublisher.class);
         val interactionProvider = Mockito.mock(InteractionProvider.class);
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
-        val publishingSelectorAction = publishingLeaseSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val publishingNavigationAction = publishingLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
         val lease = new Lease();
         lease.getItems().add(new LeaseItem("first", 1, null));
         val leaseAdapter = publishingMmc.getObjectManager().adapt(lease);
-        val command = commandFor(publishingSelectorAction, leaseAdapter);
+        val command = commandFor(publishingNavigationAction, leaseAdapter);
         Mockito.when(interaction.getCommand()).thenReturn(command);
         Mockito.when(interactionProvider.currentInteraction()).thenReturn(Optional.of(interaction));
         Mockito.when(interactionProvider.currentInteractionElseFail()).thenReturn(interaction);
 
-        publishingSelectorAction.getFacet(ActionInvocationFacet.class).invoke(
-                publishingSelectorAction,
-                publishingSelectorAction.interactionHead(leaseAdapter),
-                arguments(publishingSelectorAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
+        publishingNavigationAction.getFacet(ActionInvocationFacet.class).invoke(
+                publishingNavigationAction,
+                publishingNavigationAction.interactionHead(leaseAdapter),
+                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.ONHOLD));
         Mockito.verify(commandPublisher).ready(command);
     }
 
-    private void assertSelectorActionStyling(final ObjectAction action) {
+    private void assertNavigationActionStyling(final ObjectAction action) {
         val cssClassFacet = action.getFacet(CssClassFacet.class);
-        assertThat(cssClassFacet, instanceOf(CssClassFacetForParentedCollectionSelector.class));
-        assertThat(cssClassFacet.cssClass(null), is(CssClassFacetForParentedCollectionSelector.CSS_CLASS));
+        assertThat(cssClassFacet, instanceOf(CssClassFacetForParentedCollectionNavigation.class));
+        assertThat(cssClassFacet.cssClass(null), is(CssClassFacetForParentedCollectionNavigation.CSS_CLASS));
 
         val faFacet = action.getFacet(FaFacet.class);
-        assertThat(faFacet, instanceOf(FaFacetForParentedCollectionSelector.class));
-        assertThat(faFacet.getSpecialization().leftIfAny().getLayers().toQuickNotation(), is(FaFacetForParentedCollectionSelector.CSS_CLASS_FA));
+        assertThat(faFacet, instanceOf(FaFacetForParentedCollectionNavigation.class));
+        assertThat(faFacet.getSpecialization().leftIfAny().getLayers().toQuickNotation(), is(FaFacetForParentedCollectionNavigation.CSS_CLASS_FA));
     }
 
     private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {
@@ -721,9 +721,9 @@ class ParentedCollectionSelectorActionUtilTest {
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
-        return selectorAction.isArgumentSetValid(
-                selectorAction.interactionHead(leaseAdapter),
-                arguments(selectorAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
+        return navigationAction.isArgumentSetValid(
+                navigationAction.interactionHead(leaseAdapter),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
                 InteractionInitiatedBy.USER);
     }
 
@@ -732,9 +732,9 @@ class ParentedCollectionSelectorActionUtilTest {
             final String name,
             final Integer sequence) {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
-        return selectorAction.executeWithRuleChecking(
-                selectorAction.interactionHead(leaseAdapter),
-                arguments(selectorAction, mmc, leaseAdapter, name, sequence, null, null, null),
+        return navigationAction.executeWithRuleChecking(
+                navigationAction.interactionHead(leaseAdapter),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null),
                 InteractionInitiatedBy.USER,
                 null);
     }
@@ -754,11 +754,11 @@ class ParentedCollectionSelectorActionUtilTest {
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
-        val actionInvocationFacet = selectorAction.getFacet(ActionInvocationFacet.class);
+        val actionInvocationFacet = navigationAction.getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet.invoke(
-                selectorAction,
-                selectorAction.interactionHead(leaseAdapter),
-                arguments(selectorAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
+                navigationAction,
+                navigationAction.interactionHead(leaseAdapter),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
                 InteractionInitiatedBy.USER);
     }
 
@@ -766,7 +766,7 @@ class ParentedCollectionSelectorActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return arguments(selectorAction, mmc, leaseAdapter, name, sequence, null, null, null);
+        return arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null);
     }
 
     private Can<ManagedObject> arguments(
@@ -774,7 +774,7 @@ class ParentedCollectionSelectorActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return arguments(selectorAction, context, leaseAdapter, name, sequence, null, null, null);
+        return arguments(navigationAction, context, leaseAdapter, name, sequence, null, null, null);
     }
 
     private Can<ManagedObject> arguments(

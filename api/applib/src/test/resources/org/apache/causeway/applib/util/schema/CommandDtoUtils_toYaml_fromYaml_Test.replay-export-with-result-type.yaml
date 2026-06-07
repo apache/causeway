@@ -104,7 +104,7 @@ command:
       - type: "enum"
         "null": true
         name: "species"
-    logicalMemberIdentifier: "petowner.PetOwner#__causeway_select_from_pets"
+    logicalMemberIdentifier: "petowner.PetOwner#__causeway_navigate_to_pets"
     interactionType: "action_invocation"
 result:
   type: "petowner.Pet"
