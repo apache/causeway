@@ -16,18 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testing.fixtures.applib.events;
+package org.apache.causeway.applib.services.command;
 
 import org.apache.causeway.applib.events.EventObjectBase;
 
 /**
- * Posted immediately after the configured initial fixture script installation scope exits.
+ * Pauses command-log persistence for a scoped operation.
+ *
+ * <p>
+ * Command logging implementations can subscribe to this event to temporarily ignore command lifecycle notifications
+ * without disabling command publishing itself.
+ * Every pause event should be paired with a {@link ResumeCommandLoggingEvent}, preferably from a {@code finally} block.
+ * Nested pauses are supported by command logging implementations that track pause depth, so command logging resumes
+ * only after all active pauses have been resumed.
+ * </p>
  *
  * @since 3.x {@index}
  */
-public class InitialFixtureScriptsInstalledEvent extends EventObjectBase<Object> {
+public class PauseCommandLoggingEvent extends EventObjectBase<Object> {
 
-    public InitialFixtureScriptsInstalledEvent(final Object source) {
+    public PauseCommandLoggingEvent(final Object source) {
         super(source);
     }
 

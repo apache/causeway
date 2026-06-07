@@ -31,10 +31,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -86,10 +86,10 @@ public class InitialFixtureScriptsInstaller {
 
             log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
             try {
-                eventBusService.post(new InitialFixtureScriptsInstallingEvent(this));
+                eventBusService.post(new PauseCommandLoggingEvent(this));
                 fixtureScripts.run(initialFixtureScript);
             } finally {
-                eventBusService.post(new InitialFixtureScriptsInstalledEvent(this));
+                eventBusService.post(new ResumeCommandLoggingEvent(this));
             }
         }
     }

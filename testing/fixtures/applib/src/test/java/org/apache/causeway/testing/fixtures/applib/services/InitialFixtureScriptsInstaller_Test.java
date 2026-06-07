@@ -34,8 +34,8 @@ import org.springframework.core.env.StandardEnvironment;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -54,9 +54,9 @@ class InitialFixtureScriptsInstaller_Test {
         installer.onMetamodelEvent(MetamodelEvent.AFTER_METAMODEL_LOADED);
 
         InOrder inOrder = inOrder(eventBusService, fixtureScripts);
-        inOrder.verify(eventBusService).post(any(InitialFixtureScriptsInstallingEvent.class));
+        inOrder.verify(eventBusService).post(any(PauseCommandLoggingEvent.class));
         inOrder.verify(fixtureScripts).run(any(TestFixtureScript.class));
-        inOrder.verify(eventBusService).post(any(InitialFixtureScriptsInstalledEvent.class));
+        inOrder.verify(eventBusService).post(any(ResumeCommandLoggingEvent.class));
         verifyNoMoreInteractions(eventBusService);
     }
 
@@ -77,8 +77,8 @@ class InitialFixtureScriptsInstaller_Test {
             // expected
         }
 
-        verify(eventBusService).post(any(InitialFixtureScriptsInstallingEvent.class));
-        verify(eventBusService).post(any(InitialFixtureScriptsInstalledEvent.class));
+        verify(eventBusService).post(any(PauseCommandLoggingEvent.class));
+        verify(eventBusService).post(any(ResumeCommandLoggingEvent.class));
     }
 
     public static class TestFixtureScript extends FixtureScript {

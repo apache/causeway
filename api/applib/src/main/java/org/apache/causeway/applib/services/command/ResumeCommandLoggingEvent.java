@@ -16,25 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.commandlog.applib.events;
+package org.apache.causeway.applib.services.command;
 
 import org.apache.causeway.applib.events.EventObjectBase;
 
 /**
- * Pauses command-log persistence for a scoped operation.
+ * Resumes command-log persistence after a scoped pause.
  *
  * <p>
- * Subscribers in the command-log module use this event to temporarily ignore command lifecycle notifications without
- * disabling command publishing itself.
- * Every pause event should be paired with a {@link ResumeLoggingEvent}, preferably from a {@code finally} block.
- * Nested pauses are supported, so command logging resumes only after all active pauses have been resumed.
+ * This event should be posted for each matching {@link PauseCommandLoggingEvent}.
+ * Command logging implementations that track pause depth should tolerate unmatched resume events and never let pause
+ * depth become negative.
  * </p>
  *
  * @since 3.x {@index}
  */
-public class PauseLoggingEvent extends EventObjectBase<Object> {
+public class ResumeCommandLoggingEvent extends EventObjectBase<Object> {
 
-    public PauseLoggingEvent(final Object source) {
+    public ResumeCommandLoggingEvent(final Object source) {
         super(source);
     }
 

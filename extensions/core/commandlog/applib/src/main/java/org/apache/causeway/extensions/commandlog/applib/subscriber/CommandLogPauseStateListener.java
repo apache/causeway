@@ -26,11 +26,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
-import org.apache.causeway.extensions.commandlog.applib.events.PauseLoggingEvent;
-import org.apache.causeway.extensions.commandlog.applib.events.ResumeLoggingEvent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,23 +45,13 @@ public class CommandLogPauseStateListener {
 
     private final CommandLogPauseState commandLogPauseState;
 
-    @EventListener(PauseLoggingEvent.class)
-    public void onPauseLoggingEvent(final PauseLoggingEvent event) {
+    @EventListener(PauseCommandLoggingEvent.class)
+    public void onPauseCommandLoggingEvent(final PauseCommandLoggingEvent event) {
         commandLogPauseState.pause();
     }
 
-    @EventListener(ResumeLoggingEvent.class)
-    public void onResumeLoggingEvent(final ResumeLoggingEvent event) {
-        commandLogPauseState.resume();
-    }
-
-    @EventListener(InitialFixtureScriptsInstallingEvent.class)
-    public void onInitialFixtureScriptsInstallingEvent(final InitialFixtureScriptsInstallingEvent event) {
-        commandLogPauseState.pause();
-    }
-
-    @EventListener(InitialFixtureScriptsInstalledEvent.class)
-    public void onInitialFixtureScriptsInstalledEvent(final InitialFixtureScriptsInstalledEvent event) {
+    @EventListener(ResumeCommandLoggingEvent.class)
+    public void onResumeCommandLoggingEvent(final ResumeCommandLoggingEvent event) {
         commandLogPauseState.resume();
     }
 

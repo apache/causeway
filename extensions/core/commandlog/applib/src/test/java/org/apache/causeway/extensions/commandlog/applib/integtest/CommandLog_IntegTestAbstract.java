@@ -48,11 +48,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.causeway.extensions.commandlog.applib.events.PauseLoggingEvent;
-import org.apache.causeway.extensions.commandlog.applib.events.ResumeLoggingEvent;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
-import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
@@ -328,7 +326,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void paused_command_logging_suppresses_commands_until_resumed() {
 
         // given
-        eventBusService.post(new PauseLoggingEvent(this));
+        eventBusService.post(new PauseCommandLoggingEvent(this));
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
@@ -338,7 +336,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(commandLogEntryRepository.findAll()).isEmpty();
 
         // and when
-        eventBusService.post(new ResumeLoggingEvent(this));
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.nextInteraction();
 
@@ -350,11 +348,11 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void nested_paused_command_logging_requires_matching_resumes() {
 
         // given
-        eventBusService.post(new PauseLoggingEvent(this));
-        eventBusService.post(new PauseLoggingEvent(this));
+        eventBusService.post(new PauseCommandLoggingEvent(this));
+        eventBusService.post(new PauseCommandLoggingEvent(this));
 
         // when
-        eventBusService.post(new ResumeLoggingEvent(this));
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.nextInteraction();
 
@@ -362,7 +360,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(commandLogEntryRepository.findAll()).isEmpty();
 
         // and when
-        eventBusService.post(new ResumeLoggingEvent(this));
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.nextInteraction();
 
@@ -370,27 +368,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(commandLogEntryRepository.findAll()).hasSize(1);
     }
 
-    @Test
-    void initial_fixture_script_events_suppress_command_logging_until_installed_event() {
-
-        // given
-        eventBusService.post(new InitialFixtureScriptsInstallingEvent(this));
-
-        // when
-        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
-        interactionService.nextInteraction();
-
-        // then
-        assertThat(commandLogEntryRepository.findAll()).isEmpty();
-
-        // and when
-        eventBusService.post(new InitialFixtureScriptsInstalledEvent(this));
-        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
-        interactionService.nextInteraction();
-
-        // then
-        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
-    }
 
     @Test
     void edit() {
