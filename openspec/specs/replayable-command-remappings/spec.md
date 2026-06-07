@@ -145,7 +145,11 @@ The `parameterName` parameter SHALL default to the only parameter participant na
 The `parameterName` parameter SHALL have no default when more than one parameter participant is available.
 The `openArgument` action SHALL validate the selected `parameterName` when the matching parameter participant has no actual bookmark for its argument.
 The `openArgument` action SHALL open the selected actual argument object when the matching parameter participant has an actual argument object available.
-Target and argument inspection and navigation SHALL be available through rows and actions associated with the participants collection.
+The `ReplayableCommand` object view SHALL expose an `openResult` action associated with the participants collection.
+The `openResult` action SHALL have layout sequence `3`.
+The `openResult` action SHALL open the actual result object when a result participant has an actual result object available.
+The `openResult` action SHALL be disabled when no actual result object is available.
+Target, argument, and result inspection and navigation SHALL be available through rows and actions associated with the participants collection.
 
 #### Scenario: User views participants table on a replayable command
 - **WHEN** a user views a replayable command using fallback layout metadata
@@ -196,3 +200,13 @@ Target and argument inspection and navigation SHALL be available through rows an
 - **WHEN** a replayable command parameter participant has parameter name `customer`
 - **AND** the parameter participant has no actual bookmark
 - **THEN** validating the `openArgument` action `parameterName` parameter with `customer` rejects the selection
+
+#### Scenario: User opens actual result from participants action
+- **WHEN** a replayable command result participant has an actual result object available
+- **THEN** the replayable command exposes an `openResult` action associated with the participants collection
+- **AND** the `openResult` action has layout sequence `3`
+- **AND** invoking the action opens the actual result object
+
+#### Scenario: User cannot open result without actual result
+- **WHEN** a replayable command has no result participant actual result object available
+- **THEN** the `openResult` action is disabled
