@@ -50,7 +50,8 @@ import lombok.Setter;
         schema = CommandReplayResultMapping.SCHEMA,
         name = CommandReplayResultMapping.TABLE,
         indexes = {
-                @Index(name = "CommandReplayResultMapping__recordedBookmark__IDX", columnList = "recordedBookmark")
+                @Index(name = "CommandReplayResultMapping__recordedBookmark__IDX", columnList = "recordedBookmark"),
+                @Index(name = "CommandReplayResultMapping__actualBookmark__IDX", columnList = "actualBookmark")
         },
         uniqueConstraints = {
                 @UniqueConstraint(name = "CommandReplayResultMapping__recordedBookmark__UNQ", columnNames = { "recordedBookmark" })
@@ -62,10 +63,20 @@ import lombok.Setter;
             query = "SELECT m "
                   + "  FROM CommandReplayResultMapping m"),
     @NamedQuery(
+            name = Nq.FIND_CHANGED,
+            query = "SELECT m "
+                  + "  FROM CommandReplayResultMapping m "
+                  + " WHERE m.recordedBookmark <> m.actualBookmark"),
+    @NamedQuery(
             name = Nq.FIND_BY_RECORDED_BOOKMARK,
             query = "SELECT m "
                   + "  FROM CommandReplayResultMapping m "
-                  + " WHERE m.recordedBookmark = :recordedBookmark")
+                  + " WHERE m.recordedBookmark = :recordedBookmark"),
+    @NamedQuery(
+            name = Nq.FIND_BY_ACTUAL_BOOKMARK,
+            query = "SELECT m "
+                  + "  FROM CommandReplayResultMapping m "
+                  + " WHERE m.actualBookmark = :actualBookmark")
 })
 @Named(org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping.LOGICAL_TYPE_NAME)
 @DomainObject(

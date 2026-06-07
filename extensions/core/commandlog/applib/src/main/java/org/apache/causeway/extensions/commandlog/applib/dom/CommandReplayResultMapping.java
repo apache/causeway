@@ -65,7 +65,9 @@ public abstract class CommandReplayResultMapping {
     @UtilityClass
     public static class Nq {
         public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_CHANGED = LOGICAL_TYPE_NAME + ".findChanged";
         public static final String FIND_BY_RECORDED_BOOKMARK = LOGICAL_TYPE_NAME + ".findByRecordedBookmark";
+        public static final String FIND_BY_ACTUAL_BOOKMARK = LOGICAL_TYPE_NAME + ".findByActualBookmark";
     }
 
     @ObjectSupport public String title() {

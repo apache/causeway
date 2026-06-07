@@ -46,6 +46,7 @@ import lombok.Setter;
         table = CommandReplayResultMapping.TABLE)
 @Indices({
         @Index(name = "CommandReplayResultMapping__recordedBookmark__IDX", members = { "recordedBookmark" }, unique = "true"),
+        @Index(name = "CommandReplayResultMapping__actualBookmark__IDX", members = { "actualBookmark" }),
 })
 @Queries({
     @Query(
@@ -53,10 +54,20 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandReplayResultMapping.FQCN),
     @Query(
+            name = Nq.FIND_CHANGED,
+            value = "SELECT "
+                  + "  FROM " + CommandReplayResultMapping.FQCN + " "
+                  + " WHERE recordedBookmark != actualBookmark"),
+    @Query(
             name = Nq.FIND_BY_RECORDED_BOOKMARK,
             value = "SELECT "
                   + "  FROM " + CommandReplayResultMapping.FQCN + " "
-                  + " WHERE recordedBookmark == :recordedBookmark")
+                  + " WHERE recordedBookmark == :recordedBookmark"),
+    @Query(
+            name = Nq.FIND_BY_ACTUAL_BOOKMARK,
+            value = "SELECT "
+                  + "  FROM " + CommandReplayResultMapping.FQCN + " "
+                  + " WHERE actualBookmark == :actualBookmark")
 })
 @Named(org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping.LOGICAL_TYPE_NAME)
 @DomainObject(

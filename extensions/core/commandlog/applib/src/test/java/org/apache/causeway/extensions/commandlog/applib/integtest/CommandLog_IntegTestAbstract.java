@@ -100,6 +100,8 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     void replay_result_mapping_repository_and_persistent_listener() {
         String suffix = UUID.randomUUID().toString();
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "recorded-" + suffix);
+        Bookmark secondRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "recorded-2-" + suffix);
+        Bookmark identityResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "identity-" + suffix);
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "actual-" + suffix);
         Bookmark conflictingActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "conflicting-" + suffix);
 
@@ -108,6 +110,8 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         listener.onReplayResult(recordedResult, actualResult, null);
         listener.onReplayResult(recordedResult, actualResult, null);
+        listener.onReplayResult(secondRecordedResult, actualResult, null);
+        listener.onReplayResult(identityResult, identityResult, null);
 
         assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
                 .isPresent()
@@ -116,6 +120,12 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
                 .isEqualTo(actualResult);
         assertThat(commandReplayResultMappingRepository.findAll())
                 .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult));
+        assertThat(commandReplayResultMappingRepository.findChanged())
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult))
+                .noneSatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(identityResult));
+        assertThat(commandReplayResultMappingRepository.findByActualBookmark(actualResult))
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult))
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(secondRecordedResult));
         assertThat(listener.lookup(null, recordedResult)).contains(actualResult);
 
         Assertions.assertThatThrownBy(() -> listener.onReplayResult(recordedResult, conflictingActualResult, null))

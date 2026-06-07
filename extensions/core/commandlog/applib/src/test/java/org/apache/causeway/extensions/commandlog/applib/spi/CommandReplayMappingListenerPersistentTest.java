@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -127,6 +128,38 @@ class CommandReplayMappingListenerPersistentTest {
     }
 
     @Test
+    void repository_finds_changed_mappings() {
+        FakeRepository repository = new FakeRepository();
+        Bookmark identityResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark changedRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        Bookmark changedActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+
+        CommandReplayResultMapping identityMapping = repository.createAndPersist(identityResult, identityResult);
+        CommandReplayResultMapping changedMapping = repository.createAndPersist(changedRecordedResult, changedActualResult);
+
+        assertThat(new ArrayList<Object>(repository.findChanged()))
+                .containsExactly(changedMapping)
+                .doesNotContain(identityMapping);
+    }
+
+    @Test
+    void repository_finds_mappings_by_actual_bookmark() {
+        FakeRepository repository = new FakeRepository();
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "9");
+        Bookmark firstRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark secondRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        Bookmark otherRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+        Bookmark otherActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "4");
+
+        CommandReplayResultMapping firstMapping = repository.createAndPersist(firstRecordedResult, actualResult);
+        CommandReplayResultMapping secondMapping = repository.createAndPersist(secondRecordedResult, actualResult);
+        repository.createAndPersist(otherRecordedResult, otherActualResult);
+
+        assertThat(new ArrayList<Object>(repository.findByActualBookmark(actualResult)))
+                .containsExactly(firstMapping, secondMapping);
+    }
+
+    @Test
     void autoconfiguration_creates_persistent_listener_when_configured() {
         try (AnnotationConfigApplicationContext context = contextWithPersistentStorage(
                 CausewayConfigurationForTest.class,
@@ -214,6 +247,20 @@ class CommandReplayMappingListenerPersistentTest {
         @Override
         public Optional<CommandReplayResultMapping> findByRecordedBookmark(final Bookmark recordedBookmark) {
             return Optional.ofNullable(mappings.get(recordedBookmark));
+        }
+
+        @Override
+        public List<? extends CommandReplayResultMapping> findByActualBookmark(final Bookmark actualBookmark) {
+            return mappings.values().stream()
+                    .filter(mapping -> mapping.getActualBookmark().equals(actualBookmark))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<? extends CommandReplayResultMapping> findChanged() {
+            return mappings.values().stream()
+                    .filter(mapping -> !mapping.getRecordedBookmark().equals(mapping.getActualBookmark()))
+                    .collect(Collectors.toList());
         }
 
         @Override

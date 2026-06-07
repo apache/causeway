@@ -61,6 +61,11 @@ The replay mapping menu actions MUST be hidden when no persistent replay result 
 - **AND** a user invokes the command log menu action to find by recorded bookmark `demoInvoice:1`
 - **THEN** the system returns the persisted replay result mapping with recorded bookmark `demoInvoice:1`
 
+#### Scenario: User finds no replay mapping by recorded bookmark
+- **WHEN** no persisted replay result mapping has recorded bookmark `demoInvoice:99`
+- **AND** a user invokes the command log menu action to find by recorded bookmark `demoInvoice:99`
+- **THEN** the system returns an empty result set
+
 #### Scenario: User finds replay mappings by actual bookmark
 - **WHEN** persisted replay result mappings include recorded bookmark `demoInvoice:1` with actual bookmark `demoInvoice:9`
 - **AND** persisted replay result mappings include recorded bookmark `demoInvoice:2` with actual bookmark `demoInvoice:9`

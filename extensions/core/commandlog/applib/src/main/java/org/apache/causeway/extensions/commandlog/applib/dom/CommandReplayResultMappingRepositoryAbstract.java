@@ -55,6 +55,19 @@ implements CommandReplayResultMappingRepository {
     }
 
     @Override
+    public List<? extends CommandReplayResultMapping> findByActualBookmark(final Bookmark actualBookmark) {
+        return _Casts.uncheckedCast(repositoryService().allMatches(
+                Query.named(entityClass, CommandReplayResultMapping.Nq.FIND_BY_ACTUAL_BOOKMARK)
+                        .withParameter("actualBookmark", actualBookmark)));
+    }
+
+    @Override
+    public List<? extends CommandReplayResultMapping> findChanged() {
+        return _Casts.uncheckedCast(repositoryService().allMatches(
+                Query.named(entityClass, CommandReplayResultMapping.Nq.FIND_CHANGED)));
+    }
+
+    @Override
     public List<? extends CommandReplayResultMapping> findAll() {
         return _Casts.uncheckedCast(repositoryService().allMatches(
                 Query.named(entityClass, CommandReplayResultMapping.Nq.FIND)));

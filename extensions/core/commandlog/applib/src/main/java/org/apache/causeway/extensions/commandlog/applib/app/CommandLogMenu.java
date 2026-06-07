@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.value.Blob;
@@ -185,6 +186,83 @@ public class CommandLogMenu {
         @MemberSupport public List<? extends CommandReplayResultMapping> act() {
             return commandReplayResultMappingRepository
                     .map(CommandReplayResultMappingRepository::findAll)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findChangedReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="46")
+    public class findChangedReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<findChangedReplayResultMappings> {
+            public DomainEvent() { }
+        }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act() {
+            return commandReplayResultMappingRepository
+                    .map(CommandReplayResultMappingRepository::findChanged)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappingByRecordedBookmark.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="47")
+    public class findReplayResultMappingByRecordedBookmark {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappingByRecordedBookmark> {
+            public DomainEvent() { }
+        }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act(
+                @Parameter(optionality = Optionality.MANDATORY)
+                final Bookmark recordedBookmark) {
+            return commandReplayResultMappingRepository
+                    .flatMap(repository -> repository.findByRecordedBookmark(recordedBookmark))
+                    .map(List::of)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappingsByActualBookmark.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="48")
+    public class findReplayResultMappingsByActualBookmark {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappingsByActualBookmark> {
+            public DomainEvent() { }
+        }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act(
+                @Parameter(optionality = Optionality.MANDATORY)
+                final Bookmark actualBookmark) {
+            return commandReplayResultMappingRepository
+                    .map(repository -> repository.findByActualBookmark(actualBookmark))
                     .orElseGet(List::of);
         }
 

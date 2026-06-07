@@ -32,6 +32,10 @@ public interface CommandReplayResultMappingRepository {
 
     Optional<CommandReplayResultMapping> findByRecordedBookmark(final Bookmark recordedBookmark);
 
+    List<? extends CommandReplayResultMapping> findByActualBookmark(final Bookmark actualBookmark);
+
+    List<? extends CommandReplayResultMapping> findChanged();
+
     List<? extends CommandReplayResultMapping> findAll();
 
     CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark);
