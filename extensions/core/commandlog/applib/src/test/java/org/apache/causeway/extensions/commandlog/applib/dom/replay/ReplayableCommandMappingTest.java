@@ -292,6 +292,49 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void open_result_mixin_is_associated_with_participants_collection_after_open_argument() {
+        ActionLayout actionLayout = ReplayableCommand_openResult.class.getAnnotation(ActionLayout.class);
+
+        assertThat(actionLayout.associateWith()).isEqualTo("participants");
+        assertThat(actionLayout.sequence()).isEqualTo("3");
+    }
+
+    @Test
+    void open_result_mixin_opens_actual_result_from_participants() {
+        UUID interactionId = UUID.randomUUID();
+        Object actualResult = new Object();
+        Bookmark recordedResultBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResultBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(new CommandDto(), recordedResultBookmark);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(commandLogEntry, recordedResultBookmark)).thenReturn(Optional.of(actualResultBookmark));
+        BookmarkService bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(actualResultBookmark)).thenReturn(Optional.of(actualResult));
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
+        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand_openResult openResult = new ReplayableCommand_openResult(replayableCommand);
+
+        assertThat(openResult.disableAct()).isNull();
+        assertThat(openResult.act()).isSameAs(actualResult);
+    }
+
+    @Test
+    void open_result_mixin_is_disabled_without_actual_result() {
+        UUID interactionId = UUID.randomUUID();
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(
+                new CommandDto(), Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1"));
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        ReplayableCommand_openResult openResult = new ReplayableCommand_openResult(
+                replayableCommand(interactionId, commandLogEntry));
+
+        assertThat(openResult.disableAct()).isEqualTo("No actual result available");
+        assertThat(openResult.act()).isNull();
+    }
+
+    @Test
     void successful_replay_populates_unchanged_actual_bookmarks_and_objects() {
         UUID interactionId = UUID.randomUUID();
         Object targetObject = new Object();
