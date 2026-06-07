@@ -1058,12 +1058,8 @@ implements ObjectSpecification {
             if(collection.getElementType() == null) {
                 return false;
             }
-            if(parentSpec.isEntity() && collection.getElementType().isEntityOrViewModelOrAbstract()) {
-                return true;
-            }
-            return MetaModelContext.instanceElseFail().getSystemEnvironment().isUnitTesting()
-                    && parentSpec.isViewModel()
-                    && collection.getElementType().isViewModel();
+            return (parentSpec.isEntity() || parentSpec.isViewModel())
+                    && collection.getElementType().isEntityOrViewModelOrAbstract();
         }
 
         private static ObjectAction create(

@@ -186,6 +186,21 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @DomainObject(nature = Nature.VIEW_MODEL)
+    static class HomePageViewModel {
+        @Getter
+        private final List<EntityLeaseItem> items = new ArrayList<>();
+    }
+
+    @RequiredArgsConstructor
+    @DomainObject(nature = Nature.ENTITY)
+    static class EntityLeaseItem {
+        @Getter
+        private final String name;
+        @Getter
+        private final Integer sequence;
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL)
     static class OrderedLease {
         @Getter
         private final List<OrderedLeaseItem> items = new ArrayList<>();
@@ -298,6 +313,29 @@ class ParentedCollectionSelectorActionUtilTest {
 
         assertThat(mixinLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "mixinItems").isPresent(), is(true));
+    }
+
+    @Test
+    void synthesizes_selector_action_for_view_model_owned_collection_with_entity_elements() {
+        val homePageSpec = mmc.getSpecificationLoader().loadSpecification(HomePageViewModel.class);
+        val homePageSelectorAction = homePageSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+
+        assertThat(homePageSelectorAction.getId(), is("__causeway_select_from_items"));
+        assertThat(homePageSelectorAction.getCanonicalFriendlyName(), is("Select"));
+        assertThat(homePageSelectorAction.getFacet(ParentedCollectionSelectorFacet.class),
+                instanceOf(ParentedCollectionSelectorFacetDefault.class));
+        assertSelectorActionStyling(homePageSelectorAction);
+
+        val layoutGroupFacet = homePageSelectorAction.getFacet(LayoutGroupFacet.class);
+        assertThat(layoutGroupFacet.getGroupId(), is("items"));
+        assertThat(layoutGroupFacet.getGroupName(), is("Items"));
+
+        val parameters = homePageSelectorAction.getParameters();
+        assertThat(parameters.getElseFail(0).getId(), is("homePageViewModel"));
+        assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(HomePageViewModel.class));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
     }
 
     @Test
