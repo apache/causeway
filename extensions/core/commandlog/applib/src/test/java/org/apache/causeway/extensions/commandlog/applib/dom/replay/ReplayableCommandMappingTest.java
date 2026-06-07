@@ -170,6 +170,44 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void open_target_mixin_opens_actual_target_from_participants() {
+        UUID interactionId = UUID.randomUUID();
+        Object actualTarget = new Object();
+        Bookmark recordedTargetBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1");
+        Bookmark actualTargetBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2");
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(commandLogEntry, recordedTargetBookmark)).thenReturn(Optional.of(actualTargetBookmark));
+        BookmarkService bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(actualTargetBookmark)).thenReturn(Optional.of(actualTarget));
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
+        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand_openTarget openTarget = new ReplayableCommand_openTarget(replayableCommand);
+
+        assertThat(openTarget.disableAct()).isNull();
+        assertThat(openTarget.act()).isSameAs(actualTarget);
+    }
+
+    @Test
+    void open_target_mixin_is_disabled_without_actual_target() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        ReplayableCommand_openTarget openTarget = new ReplayableCommand_openTarget(
+                replayableCommand(interactionId, commandLogEntry));
+
+        assertThat(openTarget.disableAct()).isEqualTo("No actual target available");
+        assertThat(openTarget.act()).isNull();
+    }
+
+    @Test
     void successful_replay_populates_unchanged_actual_bookmarks_and_objects() {
         UUID interactionId = UUID.randomUUID();
         Object targetObject = new Object();
