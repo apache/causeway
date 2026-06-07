@@ -23,11 +23,11 @@ That metadata is stored on the associated `CommandLogEntry`, but it is not visib
 
 ## Decisions
 
-- Add a ReplayableCommand property for the recorded result bookmark rather than modifying the existing DTO property.
-  This keeps the raw command DTO view unchanged and makes result metadata easy to find in the details for imported or exported commands.
-  An alternative was to append the result into the displayed `CommandDto` YAML, but that would blur the distinction between the command DTO and the export wrapper metadata.
+- Render the existing ReplayableCommand DTO property as a `CommandExportDto` YAML wrapper.
+  This keeps command and result metadata together in the same shape used by exported command YAML.
+  An alternative was to add a separate result property, but that would split the export wrapper across two UI properties and make inspection less faithful to the exported form.
 
-- Render result metadata from `CommandLogEntry#getResult()` using `type` and `id` fields.
+- Populate the `CommandExportDto` result metadata from `CommandLogEntry#getResult()` using `type` and `id` fields.
   This matches the export wrapper contract while avoiding object resolution.
   An alternative was to display a `Bookmark` string, but that would not match the exported `result` element shape requested by users.
 

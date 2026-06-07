@@ -40,6 +40,7 @@ import org.mockito.ArgumentCaptor;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.Try;
@@ -193,6 +194,52 @@ class ReplayableCommandMappingTest {
         verify(listener).remap(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3"));
+    }
+
+    @Test
+    void displays_recorded_result_inside_command_export_dto() {
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(
+                new CommandDto(),
+                Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "1"));
+
+        AsciiDoc dto = replayableCommand(commandLogEntry).getDto();
+
+        assertThat(dto).isNotNull();
+        assertThat(dto.getAdoc())
+                .contains("command:")
+                .contains("result:")
+                .contains("type: \"demoCustomer\"")
+                .contains("id: \"1\"")
+                .doesNotContain("returnedObject");
+    }
+
+    @Test
+    void omits_result_from_command_export_dto_when_missing() {
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(new CommandDto(), null);
+
+        AsciiDoc dto = replayableCommand(commandLogEntry).getDto();
+
+        assertThat(dto).isNotNull();
+        assertThat(dto.getAdoc())
+                .contains("command:")
+                .doesNotContain("result:")
+                .doesNotContain("returnedObject");
+    }
+
+    @Test
+    void displays_unresolved_recorded_result_as_bookmark_metadata_inside_command_export_dto() {
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(
+                new CommandDto(),
+                Bookmark.forLogicalTypeNameAndIdentifier("unresolvable.Customer", "123"));
+
+        AsciiDoc dto = replayableCommand(commandLogEntry).getDto();
+
+        assertThat(dto).isNotNull();
+        assertThat(dto.getAdoc())
+                .contains("command:")
+                .contains("result:")
+                .contains("type: \"unresolvable.Customer\"")
+                .contains("id: \"123\"");
     }
 
     @Test
@@ -368,6 +415,15 @@ class ReplayableCommandMappingTest {
         return new ReplayableCommand(UUID.randomUUID(), replayContext);
     }
 
+    private static ReplayableCommand replayableCommand(final CommandLogEntry commandLogEntry) {
+        UUID interactionId = UUID.randomUUID();
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        ReplayContext replayContext = new ReplayContext(
+                null, null, null, commandLogEntryRepository, null, null, List.of());
+        return new ReplayableCommand(interactionId, replayContext);
+    }
+
     private static CommandLogEntry commandLogEntryWithCommandDto(final CommandDto commandDto) {
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
@@ -410,6 +466,14 @@ class ReplayableCommandMappingTest {
 
     private static CommandLogEntry commandLogEntryWithRecordedResult(final Bookmark recordedResult) {
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+        when(commandLogEntry.getResult()).thenReturn(recordedResult);
+        return commandLogEntry;
+    }
+
+    private static CommandLogEntry commandLogEntryWithCommandDtoAndRecordedResult(
+            final CommandDto commandDto,
+            final Bookmark recordedResult) {
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(commandDto);
         when(commandLogEntry.getResult()).thenReturn(recordedResult);
         return commandLogEntry;
     }

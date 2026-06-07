@@ -278,16 +278,23 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             fieldSetId = "dto",
             hidden = Where.ALL_TABLES,
             labelPosition = LabelPosition.NONE,
-            describedAs = "DTO of the original (replayable) Command")
+            describedAs = "Export DTO of the original (replayable) Command")
     public AsciiDoc getDto() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(commandDto->YamlUtils.toStringUtf8(commandDto,
+        return commandLogEntry()
+            .filter(commandLogEntry->commandLogEntry.getCommandDto()!=null)
+            .map(commandLogEntry->CommandDtoUtils.CommandExportDto.of(
+                    commandLogEntry.getCommandDto(),
+                    commandLogEntry.getResult()))
+            .map(commandExportDto->YamlUtils.toStringUtf8(commandExportDto,
                 JsonUtils::onlyIncludeNonNull))
-            .map(yaml->new AsciiDocBuilder()
-                    .append(doc->AsciiDocFactory.sourceBlock(doc, "yaml", yaml))
-                    .buildAsValue())
+            .map(ReplayableCommand::asYamlSourceBlock)
             .orElseGet(()->new AsciiDoc("empty"));
+    }
+
+    private static AsciiDoc asYamlSourceBlock(final String yaml) {
+        return new AsciiDocBuilder()
+                .append(doc->AsciiDocFactory.sourceBlock(doc, "yaml", yaml))
+                .buildAsValue();
     }
 
     // -- ACTIONS
