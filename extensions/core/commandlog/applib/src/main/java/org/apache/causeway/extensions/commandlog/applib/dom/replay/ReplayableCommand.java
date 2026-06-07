@@ -435,7 +435,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final OidDto target,
             final Bookmark recordedTarget) {
         try {
-            Optional.ofNullable(listener.remap(commandLogEntry, recordedTarget))
+            Optional.ofNullable(listener.lookup(commandLogEntry, recordedTarget))
                 .orElseGet(Optional::empty)
                 .ifPresent(replacement -> copyBookmarkToOidDto(replacement, target));
         } catch (Exception ex) {
@@ -473,7 +473,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final ParamDto parameter,
             final Bookmark recordedReference) {
         try {
-            Optional.ofNullable(listener.remap(commandLogEntry, recordedReference))
+            Optional.ofNullable(listener.lookup(commandLogEntry, recordedReference))
                 .orElseGet(Optional::empty)
                 .ifPresent(replacement -> copyBookmarkToOidDto(replacement, parameter.getReference()));
         } catch (Exception ex) {
@@ -548,11 +548,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         commandLogEntry() // refetch from persistence
             .ifPresent(entry->{
                 entry.saveAnalysis(null);
-                notifyReplayResultMapped(entry, actualResult);
+                notifyReplayResult(entry, actualResult);
             });
     }
 
-    void notifyReplayResultMapped(
+    void notifyReplayResult(
             final CommandLogEntry commandLogEntry,
             final Bookmark actualResult) {
         final Bookmark recordedResult = commandLogEntry.getResult();
@@ -560,14 +560,14 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return;
         }
         _NullSafe.stream(replayContext.commandReplayMappingListeners())
-            .forEach(listener -> notifyReplayResultMapped(listener, recordedResult, actualResult, commandLogEntry));
+            .forEach(listener -> notifyReplayResult(listener, recordedResult, actualResult, commandLogEntry));
     }
 
-    private void notifyReplayResultMapped(
+    private void notifyReplayResult(
             final CommandReplayMappingListener listener,
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
-        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
     }
 }

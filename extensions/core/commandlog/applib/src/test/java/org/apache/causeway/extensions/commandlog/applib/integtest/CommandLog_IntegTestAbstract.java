@@ -106,8 +106,8 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
                 commandReplayResultMappingRepository, OnConflictPolicy.THROW_EXCEPTION);
 
-        listener.onReplayResultMapped(recordedResult, actualResult, null);
-        listener.onReplayResultMapped(recordedResult, actualResult, null);
+        listener.onReplayResult(recordedResult, actualResult, null);
+        listener.onReplayResult(recordedResult, actualResult, null);
 
         assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
                 .isPresent()
@@ -116,9 +116,9 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
                 .isEqualTo(actualResult);
         assertThat(commandReplayResultMappingRepository.findAll())
                 .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult));
-        assertThat(listener.remap(null, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(null, recordedResult)).contains(actualResult);
 
-        Assertions.assertThatThrownBy(() -> listener.onReplayResultMapped(recordedResult, conflictingActualResult, null))
+        Assertions.assertThatThrownBy(() -> listener.onReplayResult(recordedResult, conflictingActualResult, null))
                 .isInstanceOf(IllegalStateException.class);
         assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
                 .isPresent()

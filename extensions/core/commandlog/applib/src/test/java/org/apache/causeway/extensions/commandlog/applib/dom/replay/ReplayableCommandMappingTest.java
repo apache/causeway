@@ -64,7 +64,7 @@ class ReplayableCommandMappingTest {
         CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter("simple.SimpleObject", "1", "simple.SimpleObject", "3");
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remap(
+        when(listener.lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
@@ -93,7 +93,7 @@ class ReplayableCommandMappingTest {
         CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter("simple.SimpleObject", "1", "simple.SimpleObject", "3");
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remap(
+        when(listener.lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
@@ -135,7 +135,7 @@ class ReplayableCommandMappingTest {
         ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
 
         assertThat(replayParameter.getString()).isEqualTo("unchanged");
-        verify(listener, never()).remap(
+        verify(listener, never()).lookup(
                 any(), eq(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")));
     }
 
@@ -164,11 +164,11 @@ class ReplayableCommandMappingTest {
                 .thenReturn(Try.success(null));
 
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.remap(
+        when(listener.lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
-        when(listener.remap(
+        when(listener.lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
@@ -188,10 +188,10 @@ class ReplayableCommandMappingTest {
         assertThat(replayParameter.getReference().getId()).isEqualTo("4");
         assertThat(recordedCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
         assertThat(recordedParameter.getReference().getId()).isEqualTo("3");
-        verify(listener).remap(
+        verify(listener).lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"));
-        verify(listener).remap(
+        verify(listener).lookup(
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3"));
     }
@@ -249,9 +249,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(recordedResult);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        replayableCommand(listener).notifyReplayResultMapped(commandLogEntry, actualResult);
+        replayableCommand(listener).notifyReplayResult(commandLogEntry, actualResult);
 
-        verify(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        verify(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
     }
 
     @Test
@@ -260,9 +260,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(result);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        replayableCommand(listener).notifyReplayResultMapped(commandLogEntry, result);
+        replayableCommand(listener).notifyReplayResult(commandLogEntry, result);
 
-        verify(listener).onReplayResultMapped(result, result, commandLogEntry);
+        verify(listener).onReplayResult(result, result, commandLogEntry);
     }
 
     @Test
@@ -305,14 +305,14 @@ class ReplayableCommandMappingTest {
         org.mockito.Mockito.doAnswer(invocation -> {
             assertThat(currentTransaction.get()).isEqualTo(commandExecutionTransaction.get());
             return null;
-        }).when(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        }).when(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
         ReplayContext replayContext = new ReplayContext(
                 null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
 
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
         assertThat(result.isSuccess()).isTrue();
-        verify(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        verify(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
     }
 
     @Test
@@ -343,14 +343,14 @@ class ReplayableCommandMappingTest {
 
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         doThrow(new IllegalStateException("conflicting result mapping"))
-                .when(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+                .when(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
         ReplayContext replayContext = new ReplayContext(
                 null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
 
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
         assertThat(result.isFailure()).isTrue();
-        verify(listener).onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        verify(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
         verify(commandLogEntry).saveAnalysis("java.lang.IllegalStateException: conflicting result mapping");
     }
 
@@ -360,9 +360,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(null);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        replayableCommand(listener).notifyReplayResultMapped(commandLogEntry, actualResult);
+        replayableCommand(listener).notifyReplayResult(commandLogEntry, actualResult);
 
-        verify(listener, never()).onReplayResultMapped(any(), any(), any());
+        verify(listener, never()).onReplayResult(any(), any(), any());
     }
 
     @Test
@@ -371,9 +371,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithRecordedResult(recordedResult);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
 
-        replayableCommand(listener).notifyReplayResultMapped(commandLogEntry, null);
+        replayableCommand(listener).notifyReplayResult(commandLogEntry, null);
 
-        verify(listener, never()).onReplayResultMapped(any(), any(), any());
+        verify(listener, never()).onReplayResult(any(), any(), any());
     }
 
     @Test
@@ -407,7 +407,7 @@ class ReplayableCommandMappingTest {
 
         new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
-        verify(listener, never()).onReplayResultMapped(any(), any(), any());
+        verify(listener, never()).onReplayResult(any(), any(), any());
     }
 
     private static ReplayableCommand replayableCommand(final CommandReplayMappingListener listener) {

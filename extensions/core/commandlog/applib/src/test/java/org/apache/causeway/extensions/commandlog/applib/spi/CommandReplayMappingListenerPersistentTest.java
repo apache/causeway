@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultM
 class CommandReplayMappingListenerPersistentTest {
 
     @Test
-    void records_result_mapping_and_returns_it_from_remap() {
+    void records_result_mapping_and_returns_it_from_lookup() {
         FakeRepository repository = new FakeRepository();
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
                 repository, OnConflictPolicy.THROW_EXCEPTION);
@@ -53,24 +53,24 @@ class CommandReplayMappingListenerPersistentTest {
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
 
-        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(actualResult);
         assertThat(repository.findAll()).hasSize(1);
     }
 
     @Test
-    void equal_recorded_and_actual_bookmark_is_not_recorded() {
+    void equal_recorded_and_actual_bookmark_is_recorded() {
         FakeRepository repository = new FakeRepository();
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
                 repository, OnConflictPolicy.THROW_EXCEPTION);
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
 
-        listener.onReplayResultMapped(recordedResult, recordedResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, recordedResult, commandLogEntry);
 
-        assertThat(listener.remap(commandLogEntry, recordedResult)).isEmpty();
-        assertThat(repository.findAll()).isEmpty();
+        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(recordedResult);
+        assertThat(repository.findAll()).hasSize(1);
     }
 
     @Test
@@ -82,10 +82,10 @@ class CommandReplayMappingListenerPersistentTest {
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
-        listener.onReplayResultMapped(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
 
-        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(actualResult);
         assertThat(repository.findAll()).hasSize(1);
     }
 
@@ -99,14 +99,14 @@ class CommandReplayMappingListenerPersistentTest {
         Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-        listener.onReplayResultMapped(recordedResult, firstActualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry);
 
-        assertThatThrownBy(() -> listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry))
+        assertThatThrownBy(() -> listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("demoInvoice:1")
                 .hasMessageContaining("demoInvoice:2")
                 .hasMessageContaining("demoInvoice:3");
-        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(firstActualResult);
+        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
     }
 
     @Test
@@ -119,10 +119,10 @@ class CommandReplayMappingListenerPersistentTest {
         Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-        listener.onReplayResultMapped(recordedResult, firstActualResult, commandLogEntry);
-        listener.onReplayResultMapped(recordedResult, secondActualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry);
 
-        assertThat(listener.remap(commandLogEntry, recordedResult)).contains(firstActualResult);
+        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
         assertThat(repository.findAll()).hasSize(1);
     }
 

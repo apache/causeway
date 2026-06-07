@@ -24,33 +24,33 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 /**
- * Maps replay command inputs before execution and listens for mappings from imported replay result bookmarks to actual replay result bookmarks.
+ * Looks up replay command inputs before execution and listens for replay result bookmark observations.
  *
  * @since 2.1 {@index}
  */
 public interface CommandReplayMappingListener {
 
     /**
-     * Optionally remaps a recorded command target or reference-valued action parameter bookmark before replay execution.
+     * Optionally looks up a recorded command target or reference-valued action parameter bookmark before replay execution.
      *
      * @param commandLogEntry the command log entry being replayed
      * @param recordedBookmark the target or reference parameter bookmark recorded in the imported command DTO
      * @return replacement bookmark, or empty to keep the recorded bookmark
      */
-    default Optional<Bookmark> remap(
+    default Optional<Bookmark> lookup(
             final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
         return Optional.empty();
     }
 
     /**
-     * Notifies that replay produced an actual result bookmark for a command whose imported command log entry had a recorded result bookmark.
+     * Notifies that replay observed an actual result bookmark for a command whose imported command log entry had a recorded result bookmark.
      *
      * @param recordedResult the result bookmark recorded during import
      * @param actualResult the result bookmark produced by replay execution
      * @param commandLogEntry the replayed command log entry
      */
-    default void onReplayResultMapped(
+    default void onReplayResult(
             Bookmark recordedResult,
             Bookmark actualResult,
             CommandLogEntry commandLogEntry) {}

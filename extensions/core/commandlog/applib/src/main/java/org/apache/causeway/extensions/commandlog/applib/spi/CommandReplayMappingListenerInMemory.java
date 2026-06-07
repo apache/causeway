@@ -54,20 +54,17 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
     }
 
     @Override
-    public Optional<Bookmark> remap(
+    public Optional<Bookmark> lookup(
             final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
         return Optional.ofNullable(actualBookmarkByRecordedBookmark.get(recordedBookmark));
     }
 
     @Override
-    public void onReplayResultMapped(
+    public void onReplayResult(
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
-        if(recordedResult.equals(actualResult)) {
-            return;
-        }
         final Bookmark existingActualResult = actualBookmarkByRecordedBookmark.get(recordedResult);
         if(existingActualResult == null) {
             actualBookmarkByRecordedBookmark.put(recordedResult, actualResult);
@@ -75,7 +72,7 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
         }
         if(!existingActualResult.equals(actualResult)) {
             final String message = String.format(
-                    "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot remap to '%s'",
+                    "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot map to '%s'",
                     recordedResult,
                     existingActualResult,
                     actualResult);
