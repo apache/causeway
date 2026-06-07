@@ -35,6 +35,7 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParamet
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionSelector;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForParentedCollectionSelectorParent;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionSelector;
@@ -1170,6 +1171,7 @@ implements ObjectSpecification {
             FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionSelector(
                     collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
             FacetUtil.addFacet(new ParentedCollectionSelectorFacetDefault(collection, facetedMethod));
+            FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionSelector(collection, facetedMethod));
             FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionSelector(facetedMethod));
             FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionSelector(
                     collection,

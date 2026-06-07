@@ -418,6 +418,27 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
+    void disables_selector_action_when_associated_collection_is_empty() {
+        val lease = new Lease();
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+
+        val consent = selectorAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
+
+        assertThat(selectorAction.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForEmptyParentedCollectionSelector.class));
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString(DisabledFacetForEmptyParentedCollectionSelector.REASON));
+    }
+
+    @Test
+    void leaves_selector_action_enabled_when_associated_collection_is_not_empty() {
+        val lease = new Lease();
+        lease.getItems().add(new LeaseItem("first", 1, null));
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+
+        assertThat(selectorAction.isUsable(leaseAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed(), is(true));
+    }
+
+    @Test
     void validates_and_invokes_selector_action_returning_single_matching_child() {
         val lease = new Lease();
         val matchingItem = new LeaseItem("first", 1, null);
