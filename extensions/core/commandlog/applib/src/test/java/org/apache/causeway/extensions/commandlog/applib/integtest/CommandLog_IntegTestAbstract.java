@@ -33,6 +33,7 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -47,7 +48,11 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.events.PauseLoggingEvent;
+import org.apache.causeway.extensions.commandlog.applib.events.ResumeLoggingEvent;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
+import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
+import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
@@ -318,6 +323,74 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     }
 
 
+
+    @Test
+    void paused_command_logging_suppresses_commands_until_resumed() {
+
+        // given
+        eventBusService.post(new PauseLoggingEvent(this));
+
+        // when
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+
+        // and when
+        eventBusService.post(new ResumeLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void nested_paused_command_logging_requires_matching_resumes() {
+
+        // given
+        eventBusService.post(new PauseLoggingEvent(this));
+        eventBusService.post(new PauseLoggingEvent(this));
+
+        // when
+        eventBusService.post(new ResumeLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+
+        // and when
+        eventBusService.post(new ResumeLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void initial_fixture_script_events_suppress_command_logging_until_installed_event() {
+
+        // given
+        eventBusService.post(new InitialFixtureScriptsInstallingEvent(this));
+
+        // when
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+
+        // and when
+        eventBusService.post(new InitialFixtureScriptsInstalledEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
+    }
 
     @Test
     void edit() {
@@ -623,5 +696,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     @Inject BookmarkService bookmarkService;
     @Inject CausewayConfiguration causewayConfiguration;
     @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    @Inject EventBusService eventBusService;
 
 }

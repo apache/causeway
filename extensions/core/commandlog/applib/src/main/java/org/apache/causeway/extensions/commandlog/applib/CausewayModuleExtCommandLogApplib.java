@@ -64,6 +64,8 @@ import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommand
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
+import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseStateListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -114,6 +116,8 @@ import org.springframework.context.annotation.Import;
         CommandReplayMappingListenerInMemory.BeanFactory.class,
 
         // @Service's
+        CommandLogPauseState.class,
+        CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
 

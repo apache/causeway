@@ -31,7 +31,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstalledEvent;
+import org.apache.causeway.testing.fixtures.applib.events.InitialFixtureScriptsInstallingEvent;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -48,15 +51,18 @@ import lombok.extern.log4j.Log4j2;
 public class InitialFixtureScriptsInstaller {
 
     private final FixtureScripts fixtureScripts;
+    private final EventBusService eventBusService;
 
     private FixtureScript initialFixtureScript;
 
     @Inject
     public InitialFixtureScriptsInstaller(
             final CausewayConfiguration causewayConfiguration,
-            final FixtureScripts fixtureScripts) {
+            final FixtureScripts fixtureScripts,
+            final EventBusService eventBusService) {
 
         this.fixtureScripts = fixtureScripts;
+        this.eventBusService = eventBusService;
 
         final Class<?> initialScript = causewayConfiguration.getTesting().getFixtures().getInitialScript();
         if (initialScript != null
@@ -79,7 +85,12 @@ public class InitialFixtureScriptsInstaller {
                 && initialFixtureScript != null) {
 
             log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
-            fixtureScripts.run(initialFixtureScript);
+            try {
+                eventBusService.post(new InitialFixtureScriptsInstallingEvent(this));
+                fixtureScripts.run(initialFixtureScript);
+            } finally {
+                eventBusService.post(new InitialFixtureScriptsInstalledEvent(this));
+            }
         }
     }
 
