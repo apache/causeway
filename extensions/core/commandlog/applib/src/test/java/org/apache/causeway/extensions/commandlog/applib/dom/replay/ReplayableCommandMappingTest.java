@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.mockito.ArgumentCaptor;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
@@ -171,170 +170,6 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
-    void open_target_mixin_opens_actual_target_from_participants() {
-        UUID interactionId = UUID.randomUUID();
-        Object actualTarget = new Object();
-        Bookmark recordedTargetBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1");
-        Bookmark actualTargetBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2");
-        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
-                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.lookup(commandLogEntry, recordedTargetBookmark)).thenReturn(Optional.of(actualTargetBookmark));
-        BookmarkService bookmarkService = mock(BookmarkService.class);
-        when(bookmarkService.lookup(actualTargetBookmark)).thenReturn(Optional.of(actualTarget));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
-        replayableCommand.bookmarkService = bookmarkService;
-        ReplayableCommand_openTarget openTarget = new ReplayableCommand_openTarget(replayableCommand);
-
-        assertThat(openTarget.disableAct()).isNull();
-        assertThat(openTarget.act()).isSameAs(actualTarget);
-    }
-
-    @Test
-    void open_target_mixin_is_disabled_without_actual_target() {
-        UUID interactionId = UUID.randomUUID();
-        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
-                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        ReplayableCommand_openTarget openTarget = new ReplayableCommand_openTarget(
-                replayableCommand(interactionId, commandLogEntry));
-
-        assertThat(openTarget.disableAct()).isEqualTo("No actual target available");
-        assertThat(openTarget.act()).isNull();
-    }
-
-    @Test
-    void open_argument_mixin_is_associated_with_participants_collection_after_open_target() {
-        ActionLayout actionLayout = ReplayableCommand_openArgument.class.getAnnotation(ActionLayout.class);
-
-        assertThat(actionLayout.associateWith()).isEqualTo("participants");
-        assertThat(actionLayout.sequence()).isEqualTo("2");
-    }
-
-    @Test
-    void open_argument_mixin_opens_selected_actual_argument_from_participants() {
-        UUID interactionId = UUID.randomUUID();
-        Object actualArgument = new Object();
-        Bookmark recordedArgumentBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3");
-        Bookmark actualArgumentBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4");
-        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
-                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.lookup(commandLogEntry, recordedArgumentBookmark)).thenReturn(Optional.of(actualArgumentBookmark));
-        BookmarkService bookmarkService = mock(BookmarkService.class);
-        when(bookmarkService.lookup(actualArgumentBookmark)).thenReturn(Optional.of(actualArgument));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
-        replayableCommand.bookmarkService = bookmarkService;
-        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(replayableCommand);
-
-        assertThat(openArgument.disableAct()).isNull();
-        assertThat(openArgument.choicesParameterName()).containsExactly("simpleObject");
-        assertThat(openArgument.defaultParameterName()).isEqualTo("simpleObject");
-        assertThat(openArgument.validateParameterName("simpleObject")).isNull();
-        assertThat(openArgument.act("simpleObject")).isSameAs(actualArgument);
-    }
-
-    @Test
-    void open_argument_mixin_is_disabled_without_parameter_participants() {
-        UUID interactionId = UUID.randomUUID();
-        CommandDto recordedCommandDto = commandWithTargetOnly("simple.SimpleObject", "1");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
-                replayableCommand(interactionId, commandLogEntry));
-
-        assertThat(openArgument.disableAct()).isEqualTo("No parameter participants available");
-        assertThat(openArgument.choicesParameterName()).isEmpty();
-        assertThat(openArgument.defaultParameterName()).isNull();
-    }
-
-    @Test
-    void open_argument_mixin_has_no_default_parameter_name_with_multiple_parameter_participants() {
-        UUID interactionId = UUID.randomUUID();
-        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
-                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
-        addReferenceParameter(recordedCommandDto, "otherObject", "simple.SimpleObject", "5");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
-                replayableCommand(interactionId, commandLogEntry));
-
-        assertThat(openArgument.disableAct()).isNull();
-        assertThat(openArgument.choicesParameterName()).containsExactly("simpleObject", "otherObject");
-        assertThat(openArgument.defaultParameterName()).isNull();
-    }
-
-    @Test
-    void open_argument_mixin_validates_missing_actual_argument_bookmark() {
-        UUID interactionId = UUID.randomUUID();
-        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
-                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
-                replayableCommand(interactionId, commandLogEntry));
-
-        assertThat(openArgument.disableAct()).isNull();
-        assertThat(openArgument.validateParameterName("simpleObject"))
-                .isEqualTo("No actual argument bookmark available for simpleObject");
-        assertThat(openArgument.act("simpleObject")).isNull();
-    }
-
-    @Test
-    void open_result_mixin_is_associated_with_participants_collection_after_open_argument() {
-        ActionLayout actionLayout = ReplayableCommand_openResult.class.getAnnotation(ActionLayout.class);
-
-        assertThat(actionLayout.associateWith()).isEqualTo("participants");
-        assertThat(actionLayout.sequence()).isEqualTo("3");
-    }
-
-    @Test
-    void open_result_mixin_opens_actual_result_from_participants() {
-        UUID interactionId = UUID.randomUUID();
-        Object actualResult = new Object();
-        Bookmark recordedResultBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
-        Bookmark actualResultBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(new CommandDto(), recordedResultBookmark);
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
-        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        when(listener.lookup(commandLogEntry, recordedResultBookmark)).thenReturn(Optional.of(actualResultBookmark));
-        BookmarkService bookmarkService = mock(BookmarkService.class);
-        when(bookmarkService.lookup(actualResultBookmark)).thenReturn(Optional.of(actualResult));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
-        replayableCommand.bookmarkService = bookmarkService;
-        ReplayableCommand_openResult openResult = new ReplayableCommand_openResult(replayableCommand);
-
-        assertThat(openResult.disableAct()).isNull();
-        assertThat(openResult.act()).isSameAs(actualResult);
-    }
-
-    @Test
-    void open_result_mixin_is_disabled_without_actual_result() {
-        UUID interactionId = UUID.randomUUID();
-        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(
-                new CommandDto(), Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1"));
-        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        ReplayableCommand_openResult openResult = new ReplayableCommand_openResult(
-                replayableCommand(interactionId, commandLogEntry));
-
-        assertThat(openResult.disableAct()).isEqualTo("No actual result available");
-        assertThat(openResult.act()).isNull();
-    }
-
-    @Test
     void successful_replay_populates_unchanged_actual_bookmarks_and_objects() {
         UUID interactionId = UUID.randomUUID();
         Object targetObject = new Object();
@@ -454,16 +289,22 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(new CommandDto(), recordedResult);
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        Object actualResultObject = new Object();
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         when(listener.lookup(commandLogEntry, recordedResult)).thenReturn(Optional.of(actualResult));
+        BookmarkService bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(actualResult)).thenReturn(Optional.of(actualResultObject));
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
+        replayableCommand.bookmarkService = bookmarkService;
 
-        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getParticipants();
+        List<ReplayableCommandParticipant> remappings = replayableCommand.getParticipants();
 
         assertThat(remappings).hasSize(1);
         ReplayableCommandParticipant participant = remappings.get(0);
         assertThat(participant.getRole()).isEqualTo(ReplayableCommandParticipant.Role.RESULT);
         assertThat(participant.getRecordedBookmark()).isEqualTo(recordedResult);
         assertThat(participant.getActualBookmark()).isEqualTo(actualResult);
+        assertThat(participant.getResult()).isSameAs(actualResultObject);
 
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
         List<ReplayableCommandParticipant> pendingParticipants = replayableCommand(interactionId, commandLogEntry, listener).getParticipants();
@@ -818,15 +659,6 @@ class ReplayableCommandMappingTest {
         targets.getOid().add(target);
         commandDto.setTargets(targets);
         return commandDto;
-    }
-
-    private static void addReferenceParameter(
-            final CommandDto commandDto,
-            final String parameterName,
-            final String parameterType,
-            final String parameterId) {
-        ((ActionDto) commandDto.getMember()).getParameters().getParameter().add(
-                referenceParameter(parameterName, parameterType, parameterId));
     }
 
     private static ParamDto referenceParameter(
