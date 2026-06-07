@@ -37,7 +37,7 @@
                     </bs:row>
                 </bs:tab>
             </bs:tabGroup>
-            <cpt:collection id="participants"/>
+            <cpt:collection defaultView="table" paged="15" id="participants"/>
             <cpt:fieldSet name="Control" id="control">
                 <cpt:action id="replayOrRetry" position="PANEL"/>
                 <cpt:property id="replayState"/>
@@ -48,11 +48,6 @@
                 <cpt:action id="openCommandLogEntry" position="PANEL"/>
                 <cpt:property id="dto"/>
             </cpt:fieldSet>
-        </bs:col>
-    </bs:row>
-    <bs:row>
-        <bs:col span="12">
-            <cpt:collection defaultView="table" paged="15" id="participants"/>
         </bs:col>
     </bs:row>
     <bs:row>

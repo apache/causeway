@@ -31,20 +31,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -54,7 +50,6 @@ import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.YamlUtils;
@@ -164,7 +159,17 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     @ObjectSupport public String title() {
         final var timestamp = getTimestampIfAny().map(ChronoZonedDateTime::toInstant).map(Instant::toString).map(x -> " @ " + x).orElse("");
-        return getTargetType() + ":" + getTargetId() + " #" + getMember() + timestamp;
+        return targetTitlePrefix() + " #" + getMember() + timestamp;
+    }
+
+    private String targetTitlePrefix() {
+        return commandRecord()
+            .map(CommandRecord::commandDto)
+            .map(CommandDto::getTargets)
+            .filter(targets -> !targets.getOid().isEmpty())
+            .map(targets -> targets.getOid().get(0))
+            .map(target -> target.getType() + ":" + target.getId())
+            .orElse("");
     }
 
 //requires v4
@@ -207,53 +212,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .map(CommandDto::getTimestamp)
                 .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime);
     }
-
-    @Property
-    @PropertyLayout(
-            sequence = "2.1",
-            fieldSetId = "details",
-            describedAs = "Target Type of the original (replayable) Command")
-    public String getTargetType() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(commandDto->commandDto.getTargets().getOid().get(0))
-            .map(OidDto::getType)
-            .orElse(null);
-    }
-
-    @Property
-    @PropertyLayout(
-            sequence = "2.2",
-            fieldSetId = "details",
-            describedAs = "Target ID of the original (replayable) Command")
-    public String getTargetId() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(commandDto->commandDto.getTargets().getOid().get(0))
-            .map(OidDto::getId)
-            .map(id->_Strings.ellipsifyAtEnd(id, 10, "..."))
-            .orElse(null);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(
-            cssClassFa = "fa-bullseye"
-    )
-    public class openTarget {
-
-        @MemberSupport public Object act() {
-            return commandLogEntry()
-                    .map(CommandLogEntry::getTarget)
-                    .flatMap(bookmark -> bookmarkService.lookup(bookmark))
-                    .orElse(null);
-        }
-        @MemberSupport public String disableAct() {
-            return commandLogEntry().isPresent() ? null : "Unknown target";
-        }
-
-        @Inject BookmarkService bookmarkService;
-    }
-
 
     @Property
     @PropertyLayout(
