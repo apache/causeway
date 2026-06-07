@@ -331,7 +331,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 role,
                 parameterName,
                 recordedBookmark,
-                actualBookmarkFor(commandLogEntry, recordedBookmark).orElse(null)));
+                actualBookmarkFor(commandLogEntry, role, recordedBookmark).orElse(null)));
     }
 
     private void addResultParticipant(
@@ -346,7 +346,14 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     private Optional<Bookmark> actualBookmarkFor(
             final CommandLogEntry commandLogEntry,
+            final Role role,
             final Bookmark recordedBookmark) {
+        if (role == Role.TARGET || role == Role.PARAMETER) {
+            return findActualBookmark(commandLogEntry, recordedBookmark)
+                    .or(() -> commandLogEntry.getReplayState() == ReplayState.OK
+                            ? Optional.of(recordedBookmark)
+                            : Optional.empty());
+        }
         if (commandLogEntry.getReplayState() != ReplayState.OK) {
             return Optional.empty();
         }

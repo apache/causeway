@@ -147,7 +147,7 @@ class ReplayableCommandMappingTest {
                 "simple.SimpleObject", "1", "simple.SimpleObject", "3");
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         when(listener.lookup(
                 commandLogEntry,
@@ -206,6 +206,29 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void pending_replay_leaves_unmapped_target_and_parameter_actual_bookmarks_empty() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+
+        List<ReplayableCommandParticipant> participants = replayableCommand(interactionId, commandLogEntry).getParticipants();
+
+        ReplayableCommandParticipant targetParticipant = participants.stream()
+                .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.TARGET)
+                .findFirst()
+                .orElseThrow();
+        ReplayableCommandParticipant parameterParticipant = participants.stream()
+                .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.PARAMETER)
+                .findFirst()
+                .orElseThrow();
+        assertThat(targetParticipant.getActualBookmark()).isNull();
+        assertThat(parameterParticipant.getActualBookmark()).isNull();
+    }
+
+    @Test
     void participant_resolves_actual_object_best_effort() {
         Object actualObject = new Object();
         ReplayableCommandParticipant participant = new ReplayableCommandParticipant(
@@ -236,7 +259,7 @@ class ReplayableCommandMappingTest {
         ((ActionDto) recordedCommandDto.getMember()).getParameters().getParameter().add(stringParameter);
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         when(listener.lookup(
                 commandLogEntry,
