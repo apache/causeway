@@ -39,8 +39,9 @@
             </bs:tabGroup>
             <cpt:collection defaultView="table" paged="15" id="participants"/>
             <cpt:fieldSet name="Control" id="control">
-                <cpt:action id="replayOrRetry" position="PANEL"/>
-                <cpt:property id="replayState"/>
+                <cpt:property id="replayState">
+                    <cpt:action id="replayOrRetry"/>
+                </cpt:property>
             </cpt:fieldSet>
         </bs:col>
         <bs:col span="6">

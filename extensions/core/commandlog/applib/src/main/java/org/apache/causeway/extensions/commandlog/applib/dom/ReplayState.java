@@ -51,8 +51,13 @@ public enum ReplayState {
      */
     EXCLUDED;
 
-    public boolean isExported() { return this == EXPORTED; }
-    public boolean isFailed() { return this == FAILED; }
+    public boolean isExported() {
+        return this == EXPORTED;
+    }
+
+    public boolean isFailed() {
+        return this == FAILED;
+    }
 
     public boolean isExportable() {
         return this == ReplayState.UNDEFINED;
@@ -60,6 +65,12 @@ public enum ReplayState {
 
     public boolean isPendingOrFailed() {
         return this == ReplayState.PENDING
+                || this == ReplayState.FAILED;
+    }
+
+    public boolean isReplayOrRetryEnabled() {
+        return this == ReplayState.PENDING
+                || this == ReplayState.OK
                 || this == ReplayState.FAILED;
     }
 
@@ -71,6 +82,10 @@ public enum ReplayState {
 
     public static boolean isPendingOrFailed(final @Nullable ReplayState replayState) {
         return replayState != null && replayState.isPendingOrFailed();
+    }
+
+    public static boolean isReplayOrRetryEnabled(final @Nullable ReplayState replayState) {
+        return replayState != null && replayState.isReplayOrRetryEnabled();
     }
 
     public static boolean isOkOrExcluded(ReplayState replayState) {

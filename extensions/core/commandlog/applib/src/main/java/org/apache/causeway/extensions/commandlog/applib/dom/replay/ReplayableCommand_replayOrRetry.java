@@ -52,10 +52,6 @@ public class ReplayableCommand_replayOrRetry {
 
     @MemberSupport
     public String disableAct() {
-        // previously we restricted this, but there are cases where a
-        // retry of a command that succeeded may be warranted
-        // return replayableCommand.disableReplayOrRetry();
-
-        return null;
+        return replayableCommand.disableReplayOrRetry();
     }
 }

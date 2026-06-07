@@ -68,6 +68,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCom
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+
 import org.springframework.transaction.annotation.Propagation;
 
 import lombok.Value;
@@ -84,55 +85,86 @@ import lombok.extern.log4j.Log4j2;
 public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed {
 
     public static abstract class ActionDomainEvent<T>
-            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> {
+    }
 
     private final UUID interactionId;
-    @Programmatic
-    public UUID interactionId() { return interactionId; }
 
-	private final ReplayContext replayContext;
     @Programmatic
-    public ReplayContext replayContext() { return replayContext; }
+    public UUID interactionId() {
+        return interactionId;
+    }
+
+    private final ReplayContext replayContext;
+
+    @Programmatic
+    public ReplayContext replayContext() {
+        return replayContext;
+    }
 
 
-	private final ObjectReference<CommandRecord> recordRef;
+    private final ObjectReference<CommandRecord> recordRef;
+
     @Programmatic
-    public ObjectReference<CommandRecord> recordRef() { return recordRef; }
+    public ObjectReference<CommandRecord> recordRef() {
+        return recordRef;
+    }
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
     // decoupled from the underlying entity
-    @Value @Accessors(fluent = true)
+    @Value
+    @Accessors(fluent = true)
     final static class CommandRecord {
 
-	    final CommandDto commandDto;
-	    final ReplayState replayState;
+        final CommandDto commandDto;
+        final ReplayState replayState;
+
+        boolean canReplayOrRetry() {
+            return replayState.isReplayOrRetryEnabled();
+        }
 
         boolean canReplayOrRetryOrMarkForExclusion() {
             return replayState.isPendingOrFailed();
         }
+
         public String faQuickIcon() {
-            switch(replayState) {
-                case UNDEFINED: return "solid terminal .col-indigo";
-                case EXPORTED:  return "solid terminal .col-indigo, solid circle-arrow-right .ov-size-80 .ov-right-45 .ov-bottom-45 .col-dodgerblue";
-                case PENDING:   return "solid terminal .col-indigo, solid circle-pause       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-gold";
-                case OK:        return "solid terminal .col-indigo, solid circle-check       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-green";
-                case FAILED:    return "solid terminal .col-indigo, solid circle-exclamation .ov-size-80 .ov-right-45 .ov-bottom-45 .col-red";
-                case EXCLUDED:  return "solid terminal .col-indigo, solid circle-xmark       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-grey";
-            };
-			return null;
+            switch (replayState) {
+                case UNDEFINED:
+                    return "solid terminal .col-indigo";
+                case EXPORTED:
+                    return "solid terminal .col-indigo, solid circle-arrow-right .ov-size-80 .ov-right-45 .ov-bottom-45 .col-dodgerblue";
+                case PENDING:
+                    return "solid terminal .col-indigo, solid circle-pause       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-gold";
+                case OK:
+                    return "solid terminal .col-indigo, solid circle-check       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-green";
+                case FAILED:
+                    return "solid terminal .col-indigo, solid circle-exclamation .ov-size-80 .ov-right-45 .ov-bottom-45 .col-red";
+                case EXCLUDED:
+                    return "solid terminal .col-indigo, solid circle-xmark       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-grey";
+            }
+            ;
+            return null;
         }
+
         //v2 backport, using png screenshots from v4
         public String iconSuffix() {
-            switch(replayState) {
-                case UNDEFINED: return "";
-                case EXPORTED:  return "exported";
-                case PENDING:   return "pending";
-                case OK:        return "ok";
-                case FAILED:    return "failed";
-                case EXCLUDED:  return "excluded";
-            };
-			return null;
+            switch (replayState) {
+                case UNDEFINED:
+                    return "";
+                case EXPORTED:
+                    return "exported";
+                case PENDING:
+                    return "pending";
+                case OK:
+                    return "ok";
+                case FAILED:
+                    return "failed";
+                case EXCLUDED:
+                    return "excluded";
+            }
+            ;
+            return null;
         }
     }
 
@@ -158,22 +190,23 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         this.recordRef = recordRef;
     }
 
-    @ObjectSupport public String title() {
+    @ObjectSupport
+    public String title() {
         final var timestamp = getTimestampIfAny().map(ChronoZonedDateTime::toInstant).map(Instant::toString).map(x -> " @ " + x).orElse("");
         return targetTitlePrefix() + " #" + getMember() + timestamp;
     }
 
     private String targetTitlePrefix() {
         return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(CommandDto::getTargets)
-            .filter(targets -> !targets.getOid().isEmpty())
-            .map(targets -> targets.getOid().get(0))
-            .map(target -> target.getType() + ":" + target.getId())
-            .orElse("");
+                .map(CommandRecord::commandDto)
+                .map(CommandDto::getTargets)
+                .filter(targets -> !targets.getOid().isEmpty())
+                .map(targets -> targets.getOid().get(0))
+                .map(target -> target.getType() + ":" + target.getId())
+                .orElse("");
     }
 
-//requires v4
+    //requires v4
 //    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
 //        return commandRecord()
 //                .map(CommandRecord::faQuickIcon)
@@ -181,10 +214,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 //                .map(ObjectSupport.FontAwesomeIconResource::new)
 //                .orElse(null);
 //    }
-    @ObjectSupport public String iconName() {
-    	return commandRecord()
-    			.map(CommandRecord::iconSuffix)
-    			.orElse(null);
+    @ObjectSupport
+    public String iconName() {
+        return commandRecord()
+                .map(CommandRecord::iconSuffix)
+                .orElse(null);
     }
 
     @Property
@@ -203,7 +237,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             describedAs = "Timestamp of the original (replayable) Command")
     public ZonedDateTime getTimestamp() {
         return getTimestampIfAny()
-            .orElse(null);
+                .orElse(null);
     }
 
     @Programmatic
@@ -221,12 +255,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             describedAs = "Replayable Action or Property, that was executed as captured by the original Command")
     public String getMember() {
         return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(CommandDto::getMember)
-            .map(MemberDto::getLogicalMemberIdentifier)
-            .map(TextUtils::cutter)
-            .map(cutter->cutter.keepAfter("#").getValue())
-            .orElse(null);
+                .map(CommandRecord::commandDto)
+                .map(CommandDto::getMember)
+                .map(MemberDto::getLogicalMemberIdentifier)
+                .map(TextUtils::cutter)
+                .map(cutter -> cutter.keepAfter("#").getValue())
+                .orElse(null);
     }
 
     @Property
@@ -239,8 +273,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                     + "Can be manually set to EXCLUDED, which marks it to be ignored for replay.")
     public ReplayState getReplayState() {
         return commandRecord()
-            .map(CommandRecord::replayState)
-            .orElse(null);
+                .map(CommandRecord::replayState)
+                .orElse(null);
     }
 
     @Property
@@ -252,19 +286,19 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             describedAs = "Export DTO of the original (replayable) Command")
     public AsciiDoc getDto() {
         return commandLogEntry()
-            .filter(commandLogEntry->commandLogEntry.getCommandDto()!=null)
-            .map(commandLogEntry->CommandDtoUtils.CommandExportDto.of(
-                    commandLogEntry.getCommandDto(),
-                    commandLogEntry.getResult()))
-            .map(commandExportDto->YamlUtils.toStringUtf8(commandExportDto,
-                JsonUtils::onlyIncludeNonNull))
-            .map(ReplayableCommand::asYamlSourceBlock)
-            .orElseGet(()->new AsciiDoc("empty"));
+                .filter(commandLogEntry -> commandLogEntry.getCommandDto() != null)
+                .map(commandLogEntry -> CommandDtoUtils.CommandExportDto.of(
+                        commandLogEntry.getCommandDto(),
+                        commandLogEntry.getResult()))
+                .map(commandExportDto -> YamlUtils.toStringUtf8(commandExportDto,
+                        JsonUtils::onlyIncludeNonNull))
+                .map(ReplayableCommand::asYamlSourceBlock)
+                .orElseGet(() -> new AsciiDoc("empty"));
     }
 
     private static AsciiDoc asYamlSourceBlock(final String yaml) {
         return new AsciiDocBuilder()
-                .append(doc->AsciiDocFactory.sourceBlock(doc, "yaml", yaml))
+                .append(doc -> AsciiDocFactory.sourceBlock(doc, "yaml", yaml))
                 .buildAsValue();
     }
 
@@ -290,15 +324,15 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final CommandLogEntry commandLogEntry,
             final CommandDto commandDto) {
         Optional.ofNullable(commandDto)
-            .map(CommandDto::getTargets)
-            .stream()
-            .flatMap(targets -> targets.getOid().stream())
-            .forEach(target -> addParticipant(
-                    participants,
-                    commandLogEntry,
-                    Role.TARGET,
-                    null,
-                    Bookmark.forOidDto(target)));
+                .map(CommandDto::getTargets)
+                .stream()
+                .flatMap(targets -> targets.getOid().stream())
+                .forEach(target -> addParticipant(
+                        participants,
+                        commandLogEntry,
+                        Role.TARGET,
+                        null,
+                        Bookmark.forOidDto(target)));
     }
 
     private void addReferenceParameterParticipants(
@@ -309,16 +343,16 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return;
         }
         Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
-            .stream()
-            .flatMap(parameters -> parameters.getParameter().stream())
-            .filter(parameter -> parameter.getType() == ValueType.REFERENCE)
-            .filter(parameter -> parameter.getReference() != null)
-            .forEach(parameter -> addParticipant(
-                    participants,
-                    commandLogEntry,
-                    Role.PARAMETER,
-                    parameter.getName(),
-                    Bookmark.forOidDto(parameter.getReference())));
+                .stream()
+                .flatMap(parameters -> parameters.getParameter().stream())
+                .filter(parameter -> parameter.getType() == ValueType.REFERENCE)
+                .filter(parameter -> parameter.getReference() != null)
+                .forEach(parameter -> addParticipant(
+                        participants,
+                        commandLogEntry,
+                        Role.PARAMETER,
+                        parameter.getName(),
+                        Bookmark.forOidDto(parameter.getReference())));
     }
 
     private void addParticipant(
@@ -408,20 +442,21 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
 
     ReplayableCommand makeExportable() {
-        if(disableMakeExportable()!=null) {
+        if (disableMakeExportable() != null) {
             return this; // safeguard when called programmatically
         }
         commandLogEntry()
-                .filter(commandLogEntry->ReplayState.isExported(commandLogEntry.getReplayState()))
-                .ifPresent(commandLogEntry->{
+                .filter(commandLogEntry -> ReplayState.isExported(commandLogEntry.getReplayState()))
+                .ifPresent(commandLogEntry -> {
                     commandLogEntry.setReplayState(ReplayState.UNDEFINED);
                     invalidateCachedRecord();
                 });
         return this;
     }
+
     String disableMakeExportable() {
         return commandRecord()
-                .map(rec->ReplayState.isExported(rec.replayState()))
+                .map(rec -> ReplayState.isExported(rec.replayState()))
                 .orElse(false)
                 ? null
                 : "Cannot make exportable, if not EXPORTED";
@@ -429,17 +464,18 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
 
     ReplayableCommand excludeFromReplay() {
-        if(disableExcludeFromReplay()!=null) {
+        if (disableExcludeFromReplay() != null) {
             return ReplayableCommand.this; // safeguard when called programmatically
         }
         commandLogEntry()
                 .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-                .ifPresent(commandLogEntry->{
+                .ifPresent(commandLogEntry -> {
                     commandLogEntry.setReplayState(ReplayState.EXCLUDED);
                     invalidateCachedRecord();
                 });
         return ReplayableCommand.this;
     }
+
     String disableExcludeFromReplay() {
         return commandRecord()
                 .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
@@ -452,7 +488,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @Programmatic
     void deleteObj() {
         commandLogEntry()
-                .ifPresent(commandLogEntry->{
+                .ifPresent(commandLogEntry -> {
                     replayContext.repositoryService().remove(commandLogEntry);
                     invalidateCachedRecord();
                 });
@@ -479,23 +515,23 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     // -- UTIL
 
     Try<ReplayableCommand> tryReplayOrRetry() {
-        if(disableReplayOrRetry()!=null)
+        if (disableReplayOrRetry() != null)
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
-            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
+                .filter(ReplayableCommand::canReplayOrRetry)
                 .map(this::commandDtoPossiblyRemappedForReplay)
-            .map(commandDto->tryReplay(commandDto)
-                .mapSuccessAsNullable(__ -> this))
-            // if nothing to do, return with an 'empty success'
-            .orElseGet(()->Try.success(null));
+                .map(commandDto -> tryReplay(commandDto)
+                        .mapSuccessAsNullable(__ -> this))
+                // if nothing to do, return with an 'empty success'
+                .orElseGet(() -> Try.success(null));
     }
 
     String disableReplayOrRetry() {
         return commandRecord()
-                .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+                .map(CommandRecord::canReplayOrRetry)
                 .orElse(false)
                 ? null
-                : "Cannot replay, if neither PENDING nor FAILED";
+                : "Cannot replay or retry unless replay state is PENDING, OK, or FAILED";
     }
 
     // -- HELPER
@@ -523,9 +559,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final CommandLogEntry commandLogEntry,
             final CommandDto commandDto) {
         Optional.ofNullable(commandDto.getTargets())
-            .stream()
-            .flatMap(targets -> targets.getOid().stream())
-            .forEach(target -> remapTarget(commandLogEntry, target));
+                .stream()
+                .flatMap(targets -> targets.getOid().stream())
+                .forEach(target -> remapTarget(commandLogEntry, target));
     }
 
     private void remapTarget(
@@ -533,7 +569,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final OidDto target) {
         final Bookmark recordedTarget = Bookmark.forOidDto(target);
         _NullSafe.stream(replayContext.commandReplayMappingListeners())
-            .forEach(listener -> remapTarget(listener, commandLogEntry, target, recordedTarget));
+                .forEach(listener -> remapTarget(listener, commandLogEntry, target, recordedTarget));
     }
 
     private void remapTarget(
@@ -543,8 +579,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final Bookmark recordedTarget) {
         try {
             Optional.ofNullable(listener.lookup(commandLogEntry, recordedTarget))
-                .orElseGet(Optional::empty)
-                .ifPresent(replacement -> copyBookmarkToOidDto(replacement, target));
+                    .orElseGet(Optional::empty)
+                    .ifPresent(replacement -> copyBookmarkToOidDto(replacement, target));
         } catch (Exception ex) {
             log.warn("Command replay target remapping listener failed", ex);
         }
@@ -557,9 +593,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return;
         }
         Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
-            .stream()
-            .flatMap(parameters -> parameters.getParameter().stream())
-            .forEach(parameter -> remapReferenceParameter(commandLogEntry, parameter));
+                .stream()
+                .flatMap(parameters -> parameters.getParameter().stream())
+                .forEach(parameter -> remapReferenceParameter(commandLogEntry, parameter));
     }
 
     private void remapReferenceParameter(
@@ -570,8 +606,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         }
         final Bookmark recordedReference = Bookmark.forOidDto(parameter.getReference());
         _NullSafe.stream(replayContext.commandReplayMappingListeners())
-            .forEach(listener -> remapReferenceParameter(
-                    listener, commandLogEntry, parameter, recordedReference));
+                .forEach(listener -> remapReferenceParameter(
+                        listener, commandLogEntry, parameter, recordedReference));
     }
 
     private void remapReferenceParameter(
@@ -581,8 +617,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final Bookmark recordedReference) {
         try {
             Optional.ofNullable(listener.lookup(commandLogEntry, recordedReference))
-                .orElseGet(Optional::empty)
-                .ifPresent(replacement -> copyBookmarkToOidDto(replacement, parameter.getReference()));
+                    .orElseGet(Optional::empty)
+                    .ifPresent(replacement -> copyBookmarkToOidDto(replacement, parameter.getReference()));
         } catch (Exception ex) {
             log.warn("Command replay reference parameter remapping listener failed", ex);
         }
@@ -597,20 +633,20 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
         var tryResultBookmark = replayContext.transactionService()
-            .callTransactional(Propagation.REQUIRES_NEW, () -> {
-                final Bookmark actualResult = replayContext.commandExecutorService()
-                    .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
-                    // if we have a replay failure, this throws, which will roll back the surrounding transaction
-                    .valueAsNullableElseFail();
-                onReplaySuccess(actualResult);
-                return actualResult;
-            });
+                .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                    final Bookmark actualResult = replayContext.commandExecutorService()
+                            .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
+                            // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                            .valueAsNullableElseFail();
+                    onReplaySuccess(actualResult);
+                    return actualResult;
+                });
 
         tryResultBookmark.ifFailure(ex -> replayContext.transactionService()
-            .callTransactional(Propagation.REQUIRES_NEW, () -> {
-                onReplayError(ex);
-                return null;
-            }));
+                .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                    onReplayError(ex);
+                    return null;
+                }));
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
         invalidateCachedRecord();
@@ -619,22 +655,26 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private void invalidateCachedRecord() {
-        recordRef.update(__->null); // invalidate cache
+        recordRef.update(__ -> null); // invalidate cache
     }
 
     private Optional<CommandRecord> commandRecord() {
-        return Optional.ofNullable(recordRef.computeIfAbsent(()->
-            commandLogEntry()
-                .filter(commandLogEntry->commandLogEntry.getCommandDto()!=null)
-                .filter(commandLogEntry->commandLogEntry.getReplayState()!=null)
-                .map(commandLogEntry->new CommandRecord(
-                        commandLogEntry.getCommandDto(),
-                        commandLogEntry.getReplayState()))
-                .orElse(null)));
+        return Optional.ofNullable(recordRef.computeIfAbsent(() ->
+                commandLogEntry()
+                        .filter(commandLogEntry -> commandLogEntry.getCommandDto() != null)
+                        .filter(commandLogEntry -> commandLogEntry.getReplayState() != null)
+                        .map(commandLogEntry -> new CommandRecord(
+                                commandLogEntry.getCommandDto(),
+                                commandLogEntry.getReplayState()))
+                        .orElse(null)));
     }
 
     Optional<CommandLogEntry> commandLogEntry() {
         return replayContext.lookupCommandLogEntry(interactionId());
+    }
+
+    private static boolean canReplayOrRetry(final CommandLogEntry commandLogEntry) {
+        return ReplayState.isReplayOrRetryEnabled(commandLogEntry.getReplayState());
     }
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
@@ -646,17 +686,18 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
      */
     private void onReplayError(final Throwable ex) {
         commandLogEntry() // refetch from persistence
-            .ifPresent(entry->entry.saveAnalysis(ex.toString()));
+                .ifPresent(entry -> entry.saveAnalysis(ex.toString()));
     }
+
     /**
      * Handles the happy replay case.
      */
     private void onReplaySuccess(final Bookmark actualResult) {
         commandLogEntry() // refetch from persistence
-            .ifPresent(entry->{
-                entry.saveAnalysis(null);
-                notifyReplayResult(entry, actualResult);
-            });
+                .ifPresent(entry -> {
+                    entry.saveAnalysis(null);
+                    notifyReplayResult(entry, actualResult);
+                });
     }
 
     void notifyReplayResult(
@@ -667,7 +708,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return;
         }
         _NullSafe.stream(replayContext.commandReplayMappingListeners())
-            .forEach(listener -> notifyReplayResult(listener, recordedResult, actualResult, commandLogEntry));
+                .forEach(listener -> notifyReplayResult(listener, recordedResult, actualResult, commandLogEntry));
     }
 
     private void notifyReplayResult(

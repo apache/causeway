@@ -37,6 +37,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
+
 import org.springframework.transaction.annotation.Propagation;
 
 import org.mockito.ArgumentCaptor;
@@ -73,6 +74,49 @@ class ReplayableCommandMappingTest {
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommand.class);
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommandParticipant.class);
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandLogEntry.class);
+    }
+
+    @Test
+    void replay_or_retry_disablement_allows_only_pending_ok_or_failed_states() {
+        for (ReplayState replayState : ReplayState.values()) {
+            ReplayableCommand replayableCommand = replayableCommand(commandLogEntryWithReplayState(replayState));
+
+            String disableReason = replayableCommand.disableReplayOrRetry();
+
+            if (replayState == ReplayState.PENDING || replayState == ReplayState.OK || replayState == ReplayState.FAILED) {
+                assertThat(disableReason).as(replayState.name()).isNull();
+            } else {
+                assertThat(disableReason).as(replayState.name())
+                        .isEqualTo("Cannot replay or retry unless replay state is PENDING, OK, or FAILED");
+            }
+        }
+    }
+
+    @Test
+    void replay_or_retry_action_delegates_disablement_to_replayable_command() {
+        ReplayableCommand undefinedCommand = replayableCommand(commandLogEntryWithReplayState(ReplayState.UNDEFINED));
+        ReplayableCommand pendingCommand = replayableCommand(commandLogEntryWithReplayState(ReplayState.PENDING));
+
+        assertThat(new ReplayableCommand_replayOrRetry(undefinedCommand).disableAct())
+                .isEqualTo("Cannot replay or retry unless replay state is PENDING, OK, or FAILED");
+        assertThat(new ReplayableCommand_replayOrRetry(pendingCommand).disableAct()).isNull();
+    }
+
+    @Test
+    void direct_replay_or_retry_invocation_is_guarded_for_undefined_state() {
+        UUID interactionId = UUID.randomUUID();
+        CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.UNDEFINED);
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        TransactionService transactionService = mock(TransactionService.class);
+        ReplayContext replayContext = new ReplayContext(
+                null, null, transactionService, commandLogEntryRepository, null, null, List.of());
+
+        Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
+
+        assertThat(result.isSuccess()).isTrue();
+        assertThat(result.getValue().orElse(null)).isNull();
+        verify(transactionService, never()).callTransactional(any(Propagation.class), any(Callable.class));
     }
 
     @Test
@@ -788,6 +832,12 @@ class ReplayableCommandMappingTest {
     private static CommandLogEntry commandLogEntryWithCommandDto(final CommandDto commandDto) {
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
+        return commandLogEntry;
+    }
+
+    private static CommandLogEntry commandLogEntryWithReplayState(final ReplayState replayState) {
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(commandWithTargetOnly("simple.SimpleObject", "1"));
+        when(commandLogEntry.getReplayState()).thenReturn(replayState);
         return commandLogEntry;
     }
 
