@@ -69,8 +69,6 @@ import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
-import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -312,7 +310,7 @@ class ParentedCollectionNavigationActionUtilTest {
         assertThat(layoutGroupFacet.getGroupId(), is("mixinItems"));
         assertThat(layoutGroupFacet.getGroupName(), is("Mixin Items"));
         assertNavigationActionStyling(mixinNavigationAction);
-        assertThat(mixinNavigationAction.getParameters().getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
+        assertThat(mixinNavigationAction.getParameters().stream().anyMatch(parameter -> parameter.getElementType().getCorrespondingClass().equals(Lease.class)), is(false));
         assertThat(mixinNavigationAction.getParameters().stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
     }
 
@@ -346,17 +344,15 @@ class ParentedCollectionNavigationActionUtilTest {
         assertThat(layoutGroupFacet.getGroupName(), is("Items"));
 
         val parameters = homePageNavigationAction.getParameters();
-        assertThat(parameters.getElseFail(0).getId(), is("homePageViewModel"));
-        assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(HomePageViewModel.class));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getElementType().getCorrespondingClass().equals(HomePageViewModel.class)), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
     }
 
     @Test
-    void exposes_mandatory_parent_parameter_and_optional_scalar_and_selectable_reference_child_parameters() {
+    void exposes_only_optional_scalar_and_selectable_reference_child_parameters() {
         val parameters = navigationAction.getParameters();
-        assertThat(parameters.getElseFail(0).getId(), is("lease"));
-        assertThat(parameters.getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
+        assertThat(parameters.stream().anyMatch(parameter -> parameter.getElementType().getCorrespondingClass().equals(Lease.class)), is(false));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("sequence")), is(true));
         assertThat(parameters.stream().anyMatch(parameter -> parameter.getId().equals("boundedReference")), is(true));
@@ -387,43 +383,19 @@ class ParentedCollectionNavigationActionUtilTest {
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val parameters = orderedNavigationAction.getParameters();
 
-        assertThat(parameters.getElseFail(0).getId(), is("orderedLease"));
-        assertThat(parameters.getElseFail(1).getId(), is("sequence"));
-        assertThat(parameters.getElseFail(2).getId(), is("name"));
+        assertThat(parameters.getElseFail(0).getId(), is("sequence"));
+        assertThat(parameters.getElseFail(1).getId(), is("name"));
     }
 
     @Test
-    void defaults_parent_parameter_to_action_target() {
-        val lease = new Lease();
-        val leaseAdapter = mmc.getObjectManager().adapt(lease);
-        val pendingArgs = Mockito.mock(ParameterNegotiationModel.class);
-        Mockito.when(pendingArgs.getActionTarget()).thenReturn(leaseAdapter);
-
-        val parentParameter = navigationAction.getParameters().getElseFail(0);
-        val defaultsFacet = parentParameter.getFacet(ActionParameterDefaultsFacet.class);
-
-        assertThat(defaultsFacet, instanceOf(ActionParameterDefaultsFacetForParentedCollectionNavigationParent.class));
-        assertThat(parentParameter.hasDefaults(), is(true));
-        assertThat(parentParameter.getDefault(pendingArgs), is(leaseAdapter));
-    }
-
-    @Test
-    void disables_parent_parameter_but_not_scalar_filter_parameters() {
+    void leaves_scalar_filter_parameters_usable() {
         val lease = new Lease();
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         val pendingArgs = Can.of(
-                leaseAdapter,
                 ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(String.class)),
                 ManagedObject.empty(mmc.getSpecificationLoader().loadSpecification(Integer.class)));
-        val parameters = navigationAction.getParameters();
-        val parentParameter = parameters.getElseFail(0);
-        val scalarParameter = parameters.getElseFail(1);
+        val scalarParameter = navigationAction.getParameters().getElseFail(0);
 
-        assertThat(parentParameter.getFacet(DisabledFacet.class), instanceOf(DisabledFacetForParentedCollectionNavigationParent.class));
-        assertThat(parentParameter.isUsable(
-                navigationAction.interactionHead(leaseAdapter),
-                pendingArgs,
-                InteractionInitiatedBy.USER).isVetoed(), is(true));
         assertThat(scalarParameter.getFacet(DisabledFacet.class), is((DisabledFacet) null));
         assertThat(scalarParameter.isUsable(
                 navigationAction.interactionHead(leaseAdapter),
@@ -788,9 +760,6 @@ class ParentedCollectionNavigationActionUtilTest {
             final SelectableReference autocompleteReference) {
         return action.getParameters().stream()
                 .map(parameter -> {
-                    if(parameter.getId().equals("lease")) {
-                        return leaseAdapter;
-                    }
                     val value = valueFor(parameter.getId(), name, sequence, boundedReference, choicesReference, autocompleteReference);
                     return value != null
                             ? context.getObjectManager().adapt(value)

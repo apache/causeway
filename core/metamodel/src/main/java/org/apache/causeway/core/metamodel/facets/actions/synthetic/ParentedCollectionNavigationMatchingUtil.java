@@ -42,15 +42,10 @@ class ParentedCollectionNavigationMatchingUtil {
     MatchResult match(
             final @NonNull OneToManyAssociation collection,
             final @NonNull Can<ObjectAssociation> filterProperties,
+            final ManagedObject parentAdapter,
             final Can<ManagedObject> argumentAdapters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(argumentAdapters == null
-                || argumentAdapters.isEmpty()) {
-            return MatchResult.missingParent();
-        }
-
-        val parentAdapter = argumentAdapters.getElseFail(0);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(parentAdapter)) {
             return MatchResult.missingParent();
         }
@@ -68,7 +63,7 @@ class ParentedCollectionNavigationMatchingUtil {
             final @NonNull MatchResult matchResult) {
         switch (matchResult.getStatus()) {
         case MISSING_PARENT:
-            return String.format("missing parent argument for synthetic navigation %s", actionId);
+            return String.format("missing target for synthetic navigation %s", actionId);
         case NO_MATCH:
         case MULTIPLE_MATCHES:
             return String.format("%d items match. Use parameters to match just one item.", matchResult.getMatches().size());
@@ -84,10 +79,11 @@ class ParentedCollectionNavigationMatchingUtil {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         for(int i = 0; i < filterProperties.size(); i++) {
-            if(argumentAdapters.size() <= i + 1) {
+            if(argumentAdapters == null
+                    || argumentAdapters.size() <= i) {
                 continue;
             }
-            val argumentAdapter = argumentAdapters.getElseFail(i + 1);
+            val argumentAdapter = argumentAdapters.getElseFail(i);
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(argumentAdapter)) {
                 continue;
             }

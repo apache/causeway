@@ -30,13 +30,10 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionNavigation;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterChoicesFacetForParentedCollectionNavigationParent;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterDefaultsFacetForParentedCollectionNavigationParent;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionNavigation;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForParentedCollectionNavigationParent;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionNavigation;
@@ -44,7 +41,6 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedColle
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
@@ -1139,10 +1135,9 @@ implements ObjectSpecification {
         private static Class<?>[] parameterTypes(
                 final ObjectSpecification parentSpec,
                 final Can<ObjectAssociation> filterProperties) {
-            val parameterTypes = new Class<?>[filterProperties.size() + 1];
-            parameterTypes[0] = parentSpec.getCorrespondingClass();
+            val parameterTypes = new Class<?>[filterProperties.size()];
             for(int i = 0; i < filterProperties.size(); i++) {
-                parameterTypes[i + 1] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
+                parameterTypes[i] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
             }
             return parameterTypes;
         }
@@ -1150,10 +1145,9 @@ implements ObjectSpecification {
         private static String[] parameterNames(
                 final ObjectSpecification parentSpec,
                 final Can<ObjectAssociation> filterProperties) {
-            val parameterNames = new String[filterProperties.size() + 1];
-            parameterNames[0] = _Strings.asCamelCaseDecapitalized.apply(parentSpec.getShortIdentifier());
+            val parameterNames = new String[filterProperties.size()];
             for(int i = 0; i < filterProperties.size(); i++) {
-                parameterNames[i + 1] = filterProperties.getElseFail(i).getId();
+                parameterNames[i] = filterProperties.getElseFail(i).getId();
             }
             return parameterNames;
         }
@@ -1196,14 +1190,8 @@ implements ObjectSpecification {
                 final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
             val parameters = facetedMethod.getParameters();
-            FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
-                    facetedMethod.getMethod().getParameterName(0), parameters.getElseFail(0)));
-            FacetUtil.addFacet(MandatoryFacetDefault.required(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new ActionParameterChoicesFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
-            FacetUtil.addFacet(new DisabledFacetForParentedCollectionNavigationParent(parameters.getElseFail(0)));
             for(int i = 0; i < filterProperties.size(); i++) {
-                val parameter = parameters.getElseFail(i + 1);
+                val parameter = parameters.getElseFail(i);
                 FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
                         filterProperties.getElseFail(i).getCanonicalFriendlyName(), parameter));
                 FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));

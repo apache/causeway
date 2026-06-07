@@ -60,6 +60,7 @@ implements ActionValidationFacet {
         val actionValidityContext = (ActionValidityContext) context;
         return invalidReason(
                 actionValidityContext.getObjectAction().getId(),
+                actionValidityContext.getTarget(),
                 actionValidityContext.getArgs(),
                 actionValidityContext.getInitiatedBy());
     }
@@ -68,16 +69,18 @@ implements ActionValidationFacet {
     public String invalidReason(
             final ManagedObject target,
             final Can<ManagedObject> arguments) {
-        return invalidReason(getFacetHolder().getFeatureIdentifier().memberLogicalName(), arguments, InteractionInitiatedBy.USER);
+        return invalidReason(getFacetHolder().getFeatureIdentifier().memberLogicalName(), target, arguments, InteractionInitiatedBy.USER);
     }
 
     private String invalidReason(
             final @NonNull String actionId,
+            final ManagedObject target,
             final Can<ManagedObject> arguments,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
         val matchResult = ParentedCollectionNavigationMatchingUtil.match(
                 collection,
                 filterProperties,
+                target,
                 arguments,
                 interactionInitiatedBy);
         return ParentedCollectionNavigationMatchingUtil.validationMessage(actionId, matchResult);

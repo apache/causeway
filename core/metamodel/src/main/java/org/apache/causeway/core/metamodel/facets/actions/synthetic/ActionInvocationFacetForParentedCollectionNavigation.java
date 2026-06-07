@@ -90,6 +90,7 @@ implements ActionInvocationFacet {
         val matchResult = ParentedCollectionNavigationMatchingUtil.match(
                 collection,
                 filterProperties,
+                head.getTarget(),
                 argumentAdapters,
                 interactionInitiatedBy);
         val validationMessage = ParentedCollectionNavigationMatchingUtil.validationMessage(owningAction.getId(), matchResult);
