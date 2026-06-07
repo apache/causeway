@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -148,9 +149,12 @@ class CommandLogMenuTest {
         }
 
         @Override
-        public CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
+        public CommandReplayResultMapping createAndPersist(
+                final Bookmark recordedBookmark,
+                final Bookmark actualBookmark,
+                final UUID commandInteractionId) {
             FakeMapping mapping = new FakeMapping();
-            mapping.init(recordedBookmark, actualBookmark);
+            mapping.init(recordedBookmark, actualBookmark, commandInteractionId);
             mappings.put(recordedBookmark, mapping);
             return mapping;
         }
@@ -160,6 +164,7 @@ class CommandLogMenuTest {
 
         private Bookmark recordedBookmark;
         private Bookmark actualBookmark;
+        private UUID commandInteractionId;
 
         @Override
         public Bookmark getRecordedBookmark() {
@@ -179,6 +184,16 @@ class CommandLogMenuTest {
         @Override
         public void setActualBookmark(final Bookmark actualBookmark) {
             this.actualBookmark = actualBookmark;
+        }
+
+        @Override
+        public UUID getCommandInteractionId() {
+            return commandInteractionId;
+        }
+
+        @Override
+        public void setCommandInteractionId(final UUID commandInteractionId) {
+            this.commandInteractionId = commandInteractionId;
         }
     }
 }

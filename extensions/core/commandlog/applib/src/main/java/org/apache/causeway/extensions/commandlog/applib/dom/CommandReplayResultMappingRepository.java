@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
@@ -38,6 +39,13 @@ public interface CommandReplayResultMappingRepository {
 
     List<? extends CommandReplayResultMapping> findAll();
 
-    CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark);
+    default CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
+        return createAndPersist(recordedBookmark, actualBookmark, null);
+    }
+
+    CommandReplayResultMapping createAndPersist(
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark,
+            final UUID commandInteractionId);
 
 }

@@ -19,6 +19,8 @@
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
@@ -104,20 +106,25 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         Bookmark identityResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "identity-" + suffix);
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "actual-" + suffix);
         Bookmark conflictingActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "conflicting-" + suffix);
+        UUID commandInteractionId = UUID.randomUUID();
+        CommandLogEntry replayedCommandLogEntry = mock(CommandLogEntry.class);
+        when(replayedCommandLogEntry.getInteractionId()).thenReturn(commandInteractionId);
 
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
                 commandReplayResultMappingRepository, OnConflictPolicy.THROW_EXCEPTION);
 
-        listener.onReplayResult(recordedResult, actualResult, null);
-        listener.onReplayResult(recordedResult, actualResult, null);
+        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
         listener.onReplayResult(secondRecordedResult, actualResult, null);
         listener.onReplayResult(identityResult, identityResult, null);
 
         assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
                 .isPresent()
                 .get()
-                .extracting("actualBookmark")
-                .isEqualTo(actualResult);
+                .satisfies(mapping -> {
+                    assertThat(mapping.getActualBookmark()).isEqualTo(actualResult);
+                    assertThat(mapping.getCommandInteractionId()).isEqualTo(commandInteractionId);
+                });
         assertThat(commandReplayResultMappingRepository.findAll())
                 .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult));
         assertThat(commandReplayResultMappingRepository.findChanged())
@@ -133,8 +140,10 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
                 .isPresent()
                 .get()
-                .extracting("actualBookmark")
-                .isEqualTo(actualResult);
+                .satisfies(mapping -> {
+                    assertThat(mapping.getActualBookmark()).isEqualTo(actualResult);
+                    assertThat(mapping.getCommandInteractionId()).isEqualTo(commandInteractionId);
+                });
     }
 
     @Test

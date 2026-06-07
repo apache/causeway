@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.UUID;
 
 import javax.inject.Named;
 
@@ -28,9 +29,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -80,8 +83,17 @@ public abstract class CommandReplayResultMapping {
 
     @Programmatic
     public void init(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
+        init(recordedBookmark, actualBookmark, null);
+    }
+
+    @Programmatic
+    public void init(
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark,
+            final UUID commandInteractionId) {
         setRecordedBookmark(recordedBookmark);
         setActualBookmark(actualBookmark);
+        setCommandInteractionId(commandInteractionId);
     }
 
     @Property(
@@ -113,5 +125,21 @@ public abstract class CommandReplayResultMapping {
     @ActualBookmark
     public abstract Bookmark getActualBookmark();
     public abstract void setActualBookmark(Bookmark actualBookmark);
+
+    @Property(
+            domainEvent = CommandInteractionId.DomainEvent.class,
+            optionality = Optionality.OPTIONAL
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CommandInteractionId {
+        class DomainEvent extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<CommandReplayResultMapping, UUID> {}
+        int MAX_LENGTH = HasInteractionId.InteractionId.MAX_LENGTH;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
+    }
+    @CommandInteractionId
+    public abstract UUID getCommandInteractionId();
+    public abstract void setCommandInteractionId(UUID commandInteractionId);
 
 }

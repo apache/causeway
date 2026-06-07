@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.jdo.dom;
 
+import java.util.UUID;
+
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -92,5 +94,10 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResult
     @ActualBookmark
     @Getter @Setter
     private Bookmark actualBookmark;
+
+    @Column(allowsNull = CommandInteractionId.ALLOWS_NULL, length = CommandInteractionId.MAX_LENGTH)
+    @CommandInteractionId
+    @Getter @Setter
+    private UUID commandInteractionId;
 
 }

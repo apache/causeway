@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.dom;
 
+import java.util.UUID;
+
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -105,5 +107,10 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResult
     @ActualBookmark
     @Getter @Setter
     private Bookmark actualBookmark;
+
+    @Column(nullable = CommandInteractionId.NULLABLE, length = CommandInteractionId.MAX_LENGTH)
+    @CommandInteractionId
+    @Getter @Setter
+    private UUID commandInteractionId;
 
 }

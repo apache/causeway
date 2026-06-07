@@ -21,9 +21,11 @@ package org.apache.causeway.extensions.commandlog.applib.spi;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -49,6 +51,48 @@ class CommandReplayMappingListenerInMemoryTest {
         listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
 
         assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(actualResult);
+    }
+
+    @Test
+    void records_command_interaction_id_when_creating_mapping() {
+        CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
+        UUID commandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        CommandLogEntry commandLogEntry = commandLogEntry(commandInteractionId);
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+
+        assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(commandInteractionId);
+    }
+
+    @Test
+    void repeated_recorded_bookmark_mapping_with_same_actual_bookmark_keeps_original_command_interaction_id() {
+        CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
+        UUID firstCommandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        UUID secondCommandInteractionId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(firstCommandInteractionId));
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(secondCommandInteractionId));
+
+        assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(firstCommandInteractionId);
+    }
+
+    @Test
+    void logged_conflict_keeps_original_command_interaction_id() {
+        CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory(OnConflictPolicy.LOG_AND_CONTINUE);
+        UUID firstCommandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        UUID secondCommandInteractionId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+
+        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry(firstCommandInteractionId));
+        listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry(secondCommandInteractionId));
+
+        assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(firstCommandInteractionId);
     }
 
     @Test
@@ -170,6 +214,12 @@ class CommandReplayMappingListenerInMemoryTest {
 
             assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
         }
+    }
+
+    private static CommandLogEntry commandLogEntry(final UUID interactionId) {
+        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        return commandLogEntry;
     }
 
     @Configuration(proxyBeanMethods = false)

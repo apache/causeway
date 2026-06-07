@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.spi;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CommandReplayMappingListenerInMemory implements CommandReplayMappingListener {
 
-    private final Map<Bookmark, Bookmark> actualBookmarkByRecordedBookmark = new HashMap<>();
+    private final Map<Bookmark, Mapping> mappingByRecordedBookmark = new HashMap<>();
     private final OnConflictPolicy onConflictPolicy;
 
     public CommandReplayMappingListenerInMemory() {
@@ -57,7 +58,8 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
     public Optional<Bookmark> lookup(
             final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
-        return Optional.ofNullable(actualBookmarkByRecordedBookmark.get(recordedBookmark));
+        return Optional.ofNullable(mappingByRecordedBookmark.get(recordedBookmark))
+                .map(Mapping::getActualBookmark);
     }
 
     @Override
@@ -65,11 +67,14 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
             final Bookmark recordedResult,
             final Bookmark actualResult,
             final CommandLogEntry commandLogEntry) {
-        final Bookmark existingActualResult = actualBookmarkByRecordedBookmark.get(recordedResult);
-        if(existingActualResult == null) {
-            actualBookmarkByRecordedBookmark.put(recordedResult, actualResult);
+        final Mapping existingMapping = mappingByRecordedBookmark.get(recordedResult);
+        if(existingMapping == null) {
+            mappingByRecordedBookmark.put(recordedResult, new Mapping(
+                    actualResult,
+                    commandLogEntry != null ? commandLogEntry.getInteractionId() : null));
             return;
         }
+        final Bookmark existingActualResult = existingMapping.getActualBookmark();
         if(!existingActualResult.equals(actualResult)) {
             final String message = String.format(
                     "Recorded result bookmark '%s' was already mapped to actual bookmark '%s', cannot map to '%s'",
@@ -81,6 +86,29 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
                 return;
             }
             throw new IllegalStateException(message);
+        }
+    }
+
+    Mapping getMapping(final Bookmark recordedBookmark) {
+        return mappingByRecordedBookmark.get(recordedBookmark);
+    }
+
+    static class Mapping {
+
+        private final Bookmark actualBookmark;
+        private final UUID commandInteractionId;
+
+        Mapping(final Bookmark actualBookmark, final UUID commandInteractionId) {
+            this.actualBookmark = actualBookmark;
+            this.commandInteractionId = commandInteractionId;
+        }
+
+        Bookmark getActualBookmark() {
+            return actualBookmark;
+        }
+
+        UUID getCommandInteractionId() {
+            return commandInteractionId;
         }
     }
 

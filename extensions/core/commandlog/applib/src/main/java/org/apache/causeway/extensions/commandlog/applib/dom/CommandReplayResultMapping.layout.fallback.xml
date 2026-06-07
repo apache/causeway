@@ -53,14 +53,19 @@
         </bs:col>
     </bs:row>
     <bs:row>
-        <bs:col span="6">
+        <bs:col span="4">
             <cpt:fieldSet name="Recorded Bookmark" id="recorded">
                 <cpt:property id="recordedBookmark"/>
             </cpt:fieldSet>
         </bs:col>
-        <bs:col span="6">
+        <bs:col span="4">
             <cpt:fieldSet name="Actual Bookmark" id="actual">
                 <cpt:property id="actualBookmark"/>
+            </cpt:fieldSet>
+        </bs:col>
+        <bs:col span="4">
+            <cpt:fieldSet name="Command" id="command">
+                <cpt:property id="commandInteractionId"/>
             </cpt:fieldSet>
         </bs:col>
     </bs:row>

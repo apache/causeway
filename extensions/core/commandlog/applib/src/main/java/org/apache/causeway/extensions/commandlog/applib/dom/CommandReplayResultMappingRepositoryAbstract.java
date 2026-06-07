@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -74,9 +75,12 @@ implements CommandReplayResultMappingRepository {
     }
 
     @Override
-    public CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
+    public CommandReplayResultMapping createAndPersist(
+            final Bookmark recordedBookmark,
+            final Bookmark actualBookmark,
+            final UUID commandInteractionId) {
         C mapping = factoryService.detachedEntity(entityClass);
-        mapping.init(recordedBookmark, actualBookmark);
+        mapping.init(recordedBookmark, actualBookmark, commandInteractionId);
         repositoryService().persistAndFlush(mapping);
         return mapping;
     }

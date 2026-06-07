@@ -69,7 +69,10 @@ public class CommandReplayMappingListenerPersistent implements CommandReplayMapp
         final Optional<CommandReplayResultMapping> existingMappingIfAny =
                 commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult);
         if(existingMappingIfAny.isEmpty()) {
-            commandReplayResultMappingRepository.createAndPersist(recordedResult, actualResult);
+            commandReplayResultMappingRepository.createAndPersist(
+                    recordedResult,
+                    actualResult,
+                    commandLogEntry != null ? commandLogEntry.getInteractionId() : null);
             return;
         }
         final Bookmark existingActualResult = existingMappingIfAny.get().getActualBookmark();

@@ -21,12 +21,14 @@ package org.apache.causeway.extensions.commandlog.applib.spi;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,25 @@ class CommandReplayMappingListenerPersistentTest {
     }
 
     @Test
+    void records_command_interaction_id_when_creating_mapping() {
+        FakeRepository repository = new FakeRepository();
+        CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
+                repository, OnConflictPolicy.THROW_EXCEPTION);
+        UUID commandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        CommandLogEntry commandLogEntry = commandLogEntry(commandInteractionId);
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+
+        assertThat(repository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .extracting(CommandReplayResultMapping::getCommandInteractionId)
+                .isEqualTo(commandInteractionId);
+    }
+
+    @Test
     void equal_recorded_and_actual_bookmark_is_recorded() {
         FakeRepository repository = new FakeRepository();
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
@@ -72,6 +93,26 @@ class CommandReplayMappingListenerPersistentTest {
 
         assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(recordedResult);
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void repeated_recorded_bookmark_mapping_with_same_actual_bookmark_keeps_original_command_interaction_id() {
+        FakeRepository repository = new FakeRepository();
+        CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
+                repository, OnConflictPolicy.THROW_EXCEPTION);
+        UUID firstCommandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        UUID secondCommandInteractionId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(firstCommandInteractionId));
+        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(secondCommandInteractionId));
+
+        assertThat(repository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .extracting(CommandReplayResultMapping::getCommandInteractionId)
+                .isEqualTo(firstCommandInteractionId);
     }
 
     @Test
@@ -125,6 +166,27 @@ class CommandReplayMappingListenerPersistentTest {
 
         assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void logged_conflict_keeps_original_command_interaction_id() {
+        FakeRepository repository = new FakeRepository();
+        CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
+                repository, OnConflictPolicy.LOG_AND_CONTINUE);
+        UUID firstCommandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        UUID secondCommandInteractionId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
+        Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
+        Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
+
+        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry(firstCommandInteractionId));
+        listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry(secondCommandInteractionId));
+
+        assertThat(repository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .extracting(CommandReplayResultMapping::getCommandInteractionId)
+                .isEqualTo(firstCommandInteractionId);
     }
 
     @Test
@@ -195,6 +257,12 @@ class CommandReplayMappingListenerPersistentTest {
             assertThat(context.getBean(CommandReplayMappingListener.class))
                     .isSameAs(CustomListenerConfiguration.CUSTOM_LISTENER);
         }
+    }
+
+    private static CommandLogEntry commandLogEntry(final UUID interactionId) {
+        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        return commandLogEntry;
     }
 
     private static AnnotationConfigApplicationContext contextWithPersistentStorage(final Class<?>... configClasses) {
@@ -269,9 +337,12 @@ class CommandReplayMappingListenerPersistentTest {
         }
 
         @Override
-        public CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
+        public CommandReplayResultMapping createAndPersist(
+                final Bookmark recordedBookmark,
+                final Bookmark actualBookmark,
+                final UUID commandInteractionId) {
             FakeMapping mapping = new FakeMapping();
-            mapping.init(recordedBookmark, actualBookmark);
+            mapping.init(recordedBookmark, actualBookmark, commandInteractionId);
             mappings.put(recordedBookmark, mapping);
             return mapping;
         }
@@ -281,6 +352,7 @@ class CommandReplayMappingListenerPersistentTest {
 
         private Bookmark recordedBookmark;
         private Bookmark actualBookmark;
+        private UUID commandInteractionId;
 
         @Override
         public Bookmark getRecordedBookmark() {
@@ -300,6 +372,16 @@ class CommandReplayMappingListenerPersistentTest {
         @Override
         public void setActualBookmark(final Bookmark actualBookmark) {
             this.actualBookmark = actualBookmark;
+        }
+
+        @Override
+        public UUID getCommandInteractionId() {
+            return commandInteractionId;
+        }
+
+        @Override
+        public void setCommandInteractionId(final UUID commandInteractionId) {
+            this.commandInteractionId = commandInteractionId;
         }
     }
 }
