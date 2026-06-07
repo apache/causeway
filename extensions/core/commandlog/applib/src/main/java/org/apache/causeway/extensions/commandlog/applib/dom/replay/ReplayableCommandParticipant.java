@@ -105,22 +105,18 @@ public final class ReplayableCommandParticipant implements ViewModel {
             final String memento,
             final BookmarkService bookmarkService,
             final ReplayContext replayContext) {
-        final String[] parts = memento.split("\\|", -1);
-        this.owningInteractionId = parts.length > 0 && !parts[0].isEmpty()
-                ? UUID.fromString(parts[0])
-                : null;
-        this.role = parts.length > 1 && !parts[1].isEmpty()
-                ? Role.valueOf(parts[1])
-                : null;
-        this.parameterName = parts.length > 2 && !parts[2].isEmpty()
-                ? parts[2]
-                : null;
-        this.recordedBookmark = parts.length > 3 && !parts[3].isEmpty()
-                ? Bookmark.parseElseFail(parts[3])
-                : null;
-        this.actualBookmark = parts.length > 4 && !parts[4].isEmpty()
-                ? Bookmark.parseElseFail(parts[4])
-                : null;
+        final Memento parsedMemento = Memento.parse(memento);
+        final Optional<ReplayableCommandParticipant> derivedParticipant = parsedMemento
+                .participantFrom(replayContext);
+        this.owningInteractionId = parsedMemento.owningInteractionId;
+        this.role = parsedMemento.role;
+        this.parameterName = parsedMemento.parameterName;
+        this.recordedBookmark = derivedParticipant
+                .map(ReplayableCommandParticipant::getRecordedBookmark)
+                .orElse(null);
+        this.actualBookmark = derivedParticipant
+                .map(ReplayableCommandParticipant::getActualBookmark)
+                .orElse(null);
         this.bookmarkService = bookmarkService;
         this.replayContext = replayContext;
     }
@@ -143,12 +139,19 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     @Override
     public String viewModelMemento() {
-        return String.join("|",
-                owningInteractionId != null ? owningInteractionId.toString() : "",
-                role != null ? role.name() : "",
-                parameterName != null ? parameterName : "",
-                recordedBookmark != null ? recordedBookmark.stringify() : "",
-                actualBookmark != null ? actualBookmark.stringify() : "");
+        if (owningInteractionId == null || role == null) {
+            return "";
+        }
+        switch (role) {
+            case TARGET:
+                return owningInteractionId + "--target";
+            case PARAMETER:
+                return owningInteractionId + "--parameter--" + (parameterName != null ? parameterName : "");
+            case RESULT:
+                return owningInteractionId + "--result";
+            default:
+                return "";
+        }
     }
 
     @Property(optionality = Optionality.OPTIONAL)
@@ -236,5 +239,54 @@ public final class ReplayableCommandParticipant implements ViewModel {
         return bookmarkService != null && actualBookmark != null
                 ? bookmarkService.lookup(actualBookmark)
                 : Optional.empty();
+    }
+
+    private static final class Memento {
+
+        private final UUID owningInteractionId;
+        private final Role role;
+        private final String parameterName;
+
+        private Memento(
+                final UUID owningInteractionId,
+                final Role role,
+                final String parameterName) {
+            this.owningInteractionId = owningInteractionId;
+            this.role = role;
+            this.parameterName = parameterName;
+        }
+
+        static Memento parse(final String memento) {
+            final String[] parts = memento.split("--", 3);
+            final UUID owningInteractionId = parts.length > 0 && !parts[0].isEmpty()
+                    ? UUID.fromString(parts[0])
+                    : null;
+            final Role role = parts.length > 1 && !parts[1].isEmpty()
+                    ? Role.valueOf(parts[1].toUpperCase())
+                    : null;
+            final String parameterName = role == Role.PARAMETER && parts.length > 2 && !parts[2].isEmpty()
+                    ? parts[2]
+                    : null;
+            return new Memento(owningInteractionId, role, parameterName);
+        }
+
+        Optional<ReplayableCommandParticipant> participantFrom(final ReplayContext replayContext) {
+            if (owningInteractionId == null || role == null || replayContext == null) {
+                return Optional.empty();
+            }
+            return new ReplayableCommand(owningInteractionId, replayContext)
+                    .getParticipants()
+                    .stream()
+                    .filter(this::matches)
+                    .findFirst();
+        }
+
+        private boolean matches(final ReplayableCommandParticipant participant) {
+            if (participant.getRole() != role) {
+                return false;
+            }
+            return role != Role.PARAMETER
+                    || java.util.Objects.equals(participant.getParameterName(), parameterName);
+        }
     }
 }
