@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.mockito.ArgumentCaptor;
 
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
@@ -205,6 +206,89 @@ class ReplayableCommandMappingTest {
 
         assertThat(openTarget.disableAct()).isEqualTo("No actual target available");
         assertThat(openTarget.act()).isNull();
+    }
+
+    @Test
+    void open_argument_mixin_is_associated_with_participants_collection_after_open_target() {
+        ActionLayout actionLayout = ReplayableCommand_openArgument.class.getAnnotation(ActionLayout.class);
+
+        assertThat(actionLayout.associateWith()).isEqualTo("participants");
+        assertThat(actionLayout.sequence()).isEqualTo("2");
+    }
+
+    @Test
+    void open_argument_mixin_opens_selected_actual_argument_from_participants() {
+        UUID interactionId = UUID.randomUUID();
+        Object actualArgument = new Object();
+        Bookmark recordedArgumentBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3");
+        Bookmark actualArgumentBookmark = Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4");
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(commandLogEntry, recordedArgumentBookmark)).thenReturn(Optional.of(actualArgumentBookmark));
+        BookmarkService bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(actualArgumentBookmark)).thenReturn(Optional.of(actualArgument));
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
+        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(replayableCommand);
+
+        assertThat(openArgument.disableAct()).isNull();
+        assertThat(openArgument.choicesParameterName()).containsExactly("simpleObject");
+        assertThat(openArgument.defaultParameterName()).isEqualTo("simpleObject");
+        assertThat(openArgument.validateParameterName("simpleObject")).isNull();
+        assertThat(openArgument.act("simpleObject")).isSameAs(actualArgument);
+    }
+
+    @Test
+    void open_argument_mixin_is_disabled_without_parameter_participants() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetOnly("simple.SimpleObject", "1");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
+                replayableCommand(interactionId, commandLogEntry));
+
+        assertThat(openArgument.disableAct()).isEqualTo("No parameter participants available");
+        assertThat(openArgument.choicesParameterName()).isEmpty();
+        assertThat(openArgument.defaultParameterName()).isNull();
+    }
+
+    @Test
+    void open_argument_mixin_has_no_default_parameter_name_with_multiple_parameter_participants() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        addReferenceParameter(recordedCommandDto, "otherObject", "simple.SimpleObject", "5");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
+                replayableCommand(interactionId, commandLogEntry));
+
+        assertThat(openArgument.disableAct()).isNull();
+        assertThat(openArgument.choicesParameterName()).containsExactly("simpleObject", "otherObject");
+        assertThat(openArgument.defaultParameterName()).isNull();
+    }
+
+    @Test
+    void open_argument_mixin_validates_missing_actual_argument_bookmark() {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+        ReplayableCommand_openArgument openArgument = new ReplayableCommand_openArgument(
+                replayableCommand(interactionId, commandLogEntry));
+
+        assertThat(openArgument.disableAct()).isNull();
+        assertThat(openArgument.validateParameterName("simpleObject"))
+                .isEqualTo("No actual argument bookmark available for simpleObject");
+        assertThat(openArgument.act("simpleObject")).isNull();
     }
 
     @Test
@@ -665,6 +749,20 @@ class ReplayableCommandMappingTest {
             final String targetId,
             final String parameterType,
             final String parameterId) {
+        CommandDto commandDto = commandWithTargetOnly(targetType, targetId);
+        ParamsDto parameters = new ParamsDto();
+        parameters.getParameter().add(referenceParameter("simpleObject", parameterType, parameterId));
+        ActionDto action = new ActionDto();
+        action.setLogicalMemberIdentifier("simple.SimpleObject#sameAs");
+        action.setInteractionType(InteractionType.ACTION_INVOCATION);
+        action.setParameters(parameters);
+        commandDto.setMember(action);
+        return commandDto;
+    }
+
+    private static CommandDto commandWithTargetOnly(
+            final String targetType,
+            final String targetId) {
         CommandDto commandDto = new CommandDto();
         commandDto.setMajorVersion("2");
         commandDto.setMinorVersion("0");
@@ -676,22 +774,30 @@ class ReplayableCommandMappingTest {
         OidsDto targets = new OidsDto();
         targets.getOid().add(target);
         commandDto.setTargets(targets);
+        return commandDto;
+    }
 
+    private static void addReferenceParameter(
+            final CommandDto commandDto,
+            final String parameterName,
+            final String parameterType,
+            final String parameterId) {
+        ((ActionDto) commandDto.getMember()).getParameters().getParameter().add(
+                referenceParameter(parameterName, parameterType, parameterId));
+    }
+
+    private static ParamDto referenceParameter(
+            final String parameterName,
+            final String parameterType,
+            final String parameterId) {
         OidDto reference = new OidDto();
         reference.setType(parameterType);
         reference.setId(parameterId);
         ParamDto parameter = new ParamDto();
-        parameter.setName("simpleObject");
+        parameter.setName(parameterName);
         parameter.setType(ValueType.REFERENCE);
         parameter.setReference(reference);
-        ParamsDto parameters = new ParamsDto();
-        parameters.getParameter().add(parameter);
-        ActionDto action = new ActionDto();
-        action.setLogicalMemberIdentifier("simple.SimpleObject#sameAs");
-        action.setInteractionType(InteractionType.ACTION_INVOCATION);
-        action.setParameters(parameters);
-        commandDto.setMember(action);
-        return commandDto;
+        return parameter;
     }
 
     private static CommandLogEntry commandLogEntryWithRecordedResult(final Bookmark recordedResult) {
