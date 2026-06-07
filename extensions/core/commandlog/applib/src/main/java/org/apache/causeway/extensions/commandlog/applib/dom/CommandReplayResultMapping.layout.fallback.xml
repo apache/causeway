@@ -25,6 +25,7 @@
     <bs:row>
         <bs:col span="7" unreferencedActions="true">
             <cpt:domainObject/>
+            <cpt:action id="delete" position="PANEL"/>
         </bs:col>
         <bs:col span="5">
             <bs:tabGroup>

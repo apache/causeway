@@ -34,6 +34,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandReplayResultMapping_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_nextPage;
@@ -86,6 +87,7 @@ import org.springframework.context.annotation.Import;
         CommandLogEntry_childCommands.class,
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
+        CommandReplayResultMapping_delete.class,
         ReplayableCommand_makeExportable.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_openTarget.class,
