@@ -5,7 +5,7 @@ Adding default styling makes the generated `Select` action easier to recognize i
 
 ## What Changes
 
-- Add layout facets to synthetic parented collection selector actions equivalent to `@ActionLayout(cssClass = "btn-secondary", cssClassFa = "hand-point-left", ...)`.
+- Add layout facets to synthetic parented collection selector actions equivalent to `@ActionLayout(cssClass = "btn-outline-secondary", cssClassFa = "hand-point-left", ...)`.
 - Preserve the existing selector action name, collection association, invocation, validation, and parameter behavior.
 - Ensure the styling metadata is part of the synthesized action metamodel so viewers and layout exporters can consume it consistently.
 - No breaking changes.

@@ -34,7 +34,9 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParamet
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionParameterDefaultsFacetForParentedCollectionSelectorParent;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionSelector;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForParentedCollectionSelectorParent;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionSelector;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionSelectorFacetDefault;
@@ -1167,6 +1169,8 @@ implements ObjectSpecification {
                 final Can<ObjectAssociation> filterProperties,
                 final FacetedMethod facetedMethod) {
             FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Select", facetedMethod));
+            FacetUtil.addFacet(new CssClassFacetForParentedCollectionSelector(facetedMethod));
+            FacetUtil.addFacet(new FaFacetForParentedCollectionSelector(facetedMethod));
             FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionSelector(
                     collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
             FacetUtil.addFacet(new ParentedCollectionSelectorFacetDefault(collection, facetedMethod));

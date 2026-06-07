@@ -63,7 +63,9 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -255,6 +257,11 @@ class ParentedCollectionSelectorActionUtilTest {
     }
 
     @Test
+    void styles_selector_action_as_secondary_select_navigation() {
+        assertSelectorActionStyling(selectorAction);
+    }
+
+    @Test
     void participates_in_safe_action_command_publishing_when_enabled() {
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
@@ -275,6 +282,7 @@ class ParentedCollectionSelectorActionUtilTest {
                 instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(layoutGroupFacet.getGroupId(), is("mixinItems"));
         assertThat(layoutGroupFacet.getGroupName(), is("Mixin Items"));
+        assertSelectorActionStyling(mixinSelectorAction);
         assertThat(mixinSelectorAction.getParameters().getElseFail(0).getElementType().getCorrespondingClass(), is(Lease.class));
         assertThat(mixinSelectorAction.getParameters().stream().anyMatch(parameter -> parameter.getId().equals("name")), is(true));
     }
@@ -575,6 +583,16 @@ class ParentedCollectionSelectorActionUtilTest {
 
         assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.ONHOLD));
         Mockito.verify(commandPublisher).ready(command);
+    }
+
+    private void assertSelectorActionStyling(final ObjectAction action) {
+        val cssClassFacet = action.getFacet(CssClassFacet.class);
+        assertThat(cssClassFacet, instanceOf(CssClassFacetForParentedCollectionSelector.class));
+        assertThat(cssClassFacet.cssClass(null), is(CssClassFacetForParentedCollectionSelector.CSS_CLASS));
+
+        val faFacet = action.getFacet(FaFacet.class);
+        assertThat(faFacet, instanceOf(FaFacetForParentedCollectionSelector.class));
+        assertThat(faFacet.getSpecialization().leftIfAny().getLayers().toQuickNotation(), is(FaFacetForParentedCollectionSelector.CSS_CLASS_FA));
     }
 
     private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {

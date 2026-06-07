@@ -9,7 +9,7 @@ This change only needs to make the synthetic selector action install the same st
 
 **Goals:**
 
-- Install a static action CSS class of `btn-secondary` on every synthetic parented collection selector action.
+- Install a static action CSS class of `btn-outline-secondary` on every synthetic parented collection selector action.
 - Install a static Font Awesome icon of `hand-point-left` on every synthetic parented collection selector action.
 - Keep the existing selector action id, name, association, semantics, command publishing, parameters, validation, and invocation behavior unchanged.
 - Cover the new facets with metamodel tests so viewer-independent behavior is specified.
@@ -28,14 +28,14 @@ This change only needs to make the synthetic selector action install the same st
   Dedicated classes can extend the same common facet bases, `CssClassFacetSimple` and `FaStaticFacetAbstract`, to expose equivalent metamodel semantics without fabricating an annotation.
 - Install the style facets in `installActionFacets(...)` alongside the existing name and layout group facets.
   This keeps all static synthetic action layout metadata in one place and ensures mixed-in collection selectors receive the same styling path as ordinary collection selectors.
-- Use literal constants for `btn-secondary` and `hand-point-left` in the synthetic facet classes or action synthesis utility.
+- Use literal constants for `btn-outline-secondary` and `hand-point-left` in the synthetic facet classes or action synthesis utility.
   The values are part of the default generated selector action contract, and there is no proposal requirement for runtime configuration.
 - Validate through `ParentedCollectionSelectorActionUtilTest` by asserting the selector action exposes `CssClassFacet` and static `FaFacet` values.
   This verifies metamodel behavior without coupling the change to a particular viewer implementation.
 
 ## Risks / Trade-offs
 
-- [Risk] Viewers may interpret `btn-secondary` differently or ignore it entirely.
+- [Risk] Viewers may interpret `btn-outline-secondary` differently or ignore it entirely.
   → Mitigation: expose standard layout facets only, matching existing `@ActionLayout` metadata, and leave rendering decisions to viewers.
 - [Risk] Font Awesome quick notation may require the same value shape as annotations.
   → Mitigation: use the annotation-equivalent quick notation `hand-point-left` and test the resulting static facet quick notation.

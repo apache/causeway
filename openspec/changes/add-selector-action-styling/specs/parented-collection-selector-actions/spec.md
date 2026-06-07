@@ -13,7 +13,7 @@ The synthetic action identifier SHALL use the reserved prefix `__causeway_select
 The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
 The synthetic action SHALL be associated with the parented collection through layout metadata equivalent to `@ActionLayout(associateWith=...)`.
 The synthetic action SHALL have the display name `Select` through name metadata equivalent to `@ActionLayout(named="Select")`.
-The synthetic action SHALL have action layout CSS class metadata equivalent to `@ActionLayout(cssClass="btn-secondary")`.
+The synthetic action SHALL have action layout CSS class metadata equivalent to `@ActionLayout(cssClass="btn-outline-secondary")`.
 The synthetic action SHALL have action layout Font Awesome metadata equivalent to `@ActionLayout(cssClassFa="hand-point-left")`.
 
 #### Scenario: Synthetic action is not available by default
@@ -56,7 +56,7 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **GIVEN** an entity type `Lease` has a parented collection `items`
 - **AND** command-log recording support is `ENABLED`
 - **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action has CSS class metadata of `btn-secondary`
+- **THEN** the action has CSS class metadata of `btn-outline-secondary`
 
 #### Scenario: Synthetic action uses select navigation icon styling
 - **GIVEN** an entity type `Lease` has a parented collection `items`
