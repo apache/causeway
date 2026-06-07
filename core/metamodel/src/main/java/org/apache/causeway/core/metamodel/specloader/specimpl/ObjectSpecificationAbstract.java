@@ -57,6 +57,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -1060,6 +1061,7 @@ implements ObjectSpecification {
                 return false;
             }
             return (parentSpec.isEntity() || parentSpec.isViewModel())
+                    && !CommandRecordingSuppressed.class.isAssignableFrom(parentSpec.getCorrespondingClass())
                     && collection.getElementType().isEntityOrViewModelOrAbstract();
         }
 

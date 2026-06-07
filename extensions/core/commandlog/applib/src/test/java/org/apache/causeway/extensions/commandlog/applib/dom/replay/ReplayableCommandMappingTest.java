@@ -46,6 +46,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -64,6 +65,15 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 class ReplayableCommandMappingTest {
+
+    @Test
+    void command_log_replay_helpers_suppress_command_recording() {
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandReplayManager.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandExportManager.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommand.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommandParticipant.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandLogEntry.class);
+    }
 
     @Test
     void target_remapping_changes_replay_command_dto() {

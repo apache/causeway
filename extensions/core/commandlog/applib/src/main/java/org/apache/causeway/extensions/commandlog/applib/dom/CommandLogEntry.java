@@ -56,6 +56,7 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.commanddto.HasCommandDto;
 import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
@@ -101,7 +102,7 @@ import lombok.experimental.UtilityClass;
 )
 @NoArgsConstructor
 public abstract class CommandLogEntry
-implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
+implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandRecordingSuppressed {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
     public static final String SCHEMA = CausewayModuleExtCommandLogApplib.SCHEMA;

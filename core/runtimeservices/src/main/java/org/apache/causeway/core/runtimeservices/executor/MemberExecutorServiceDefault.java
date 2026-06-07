@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
@@ -369,12 +370,23 @@ implements MemberExecutorService {
             final @NonNull ObjectMember objectMember,
             final @NonNull FacetHolder facetHolder) {
 
+        if(targetSuppressesCommandRecording(interactionHead)) {
+            return;
+        }
+
         if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
                 && isPublishingEnabled(facetHolder)) {
             command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         }
 
         commandPublisherProvider.get().ready(command);
+    }
+
+    private boolean targetSuppressesCommandRecording(final InteractionHead interactionHead) {
+        val ownerPojo = MmUnwrapUtils.single(interactionHead.getOwner());
+        val targetPojo = MmUnwrapUtils.single(interactionHead.getTarget());
+        return ownerPojo instanceof CommandRecordingSuppressed
+                || targetPojo instanceof CommandRecordingSuppressed;
     }
 
 }

@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
@@ -87,6 +88,12 @@ class ParentedCollectionSelectorActionUtilTest {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class Lease {
+        @Getter
+        private final List<LeaseItem> items = new ArrayList<>();
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    static class SuppressedLease implements CommandRecordingSuppressed {
         @Getter
         private final List<LeaseItem> items = new ArrayList<>();
     }
@@ -254,6 +261,13 @@ class ParentedCollectionSelectorActionUtilTest {
         MatcherAssert.assertThat(selectorAction.getFacet(ParentedCollectionSelectorFacet.class), instanceOf(ParentedCollectionSelectorFacetDefault.class));
         assertThat(selectorAction.getSemantics(), is(SemanticsOf.SAFE));
         assertThat(selectorAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+    }
+
+    @Test
+    void does_not_synthesize_selector_action_for_suppressed_owner_type() {
+        val suppressedLeaseSpec = mmc.getSpecificationLoader().loadSpecification(SuppressedLease.class);
+
+        assertThat(suppressedLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionSelectorActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
 
     @Test

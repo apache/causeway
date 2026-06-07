@@ -36,6 +36,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 
@@ -45,7 +46,7 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout
 @Named(ReplayableCommandParticipant.LOGICAL_TYPE_NAME)
-public final class ReplayableCommandParticipant implements ViewModel {
+public final class ReplayableCommandParticipant implements ViewModel, CommandRecordingSuppressed {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE
             + ".ReplayableCommandParticipant";
