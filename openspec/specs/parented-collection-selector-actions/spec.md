@@ -97,10 +97,8 @@ The synthetic action SHALL have action layout Font Awesome metadata equivalent t
 - **THEN** the action has Font Awesome metadata of `hand-point-left`
 
 ### Requirement: Selector actions expose parent and scalar child parameters
-The synthetic selector action SHALL define one mandatory parent object parameter.
-The parent parameter SHALL be typed as the collection owner type.
-The parent parameter SHALL default to the current action target.
-The parent parameter SHALL be disabled so it cannot be changed by the user.
+The synthetic selector action MUST NOT define a parameter for the current action target.
+The synthetic selector action SHALL use the current action target as the parent object for collection access.
 The synthetic selector action SHALL define optional parameters for eligible scalar properties of the collection element type that appear as columns of the associated parented collection.
 The synthetic selector action SHALL also define optional parameters for eligible reference properties of the collection element type that appear as columns of the associated parented collection and have a bounded, choices, or autocomplete facet installed.
 A reference property with a bounded referenced type SHALL be considered selectable when the bounded semantics install a non-fallback choices facet for that referenced type.
@@ -113,22 +111,16 @@ The synthetic selector action MUST NOT automatically create selector parameters 
 The synthetic selector action MUST NOT create selector parameters for blob or clob child properties.
 The synthetic selector action MUST NOT create selector parameters for child properties whose ids are `logicalTypeName`, `id`, `version`, `objectIdentifier`, `datanucleusVersionLong`, or `datanucleusVersionTimestamp`.
 
-#### Scenario: Parent parameter is mandatory
+#### Scenario: Current target is not exposed as a parameter
 - **GIVEN** an entity type `Lease` has a parented collection `items`
 - **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action has a mandatory parameter typed as `Lease`
+- **THEN** the action has no mandatory disabled parameter typed as `Lease`
 
-#### Scenario: Parent parameter defaults to action target
+#### Scenario: Current target supplies the parent collection owner
 - **GIVEN** an entity type `Lease` has a parented collection `items`
 - **AND** synthetic parented collection selector action creation is enabled
-- **WHEN** the framework evaluates defaults for the selector action on a `Lease` target
-- **THEN** the parent parameter default is that `Lease` target
-
-#### Scenario: Parent parameter is disabled
-- **GIVEN** an entity type `Lease` has a parented collection `items`
-- **AND** synthetic parented collection selector action creation is enabled
-- **WHEN** the framework evaluates parameter usability for the selector action
-- **THEN** the parent parameter is disabled
+- **WHEN** the framework validates or invokes the selector action on a `Lease` target
+- **THEN** the action accesses `items` from that `Lease` target
 
 #### Scenario: Collection column scalar child properties become optional filters
 - **GIVEN** `Lease.items` renders eligible scalar child properties as collection columns
