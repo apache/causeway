@@ -7,7 +7,7 @@ Define the replayable command participants UI that surfaces recorded and actual 
 ### Requirement: Replayable command displays command participants
 The system SHALL expose a participants collection on each replayable command.
 The participants collection SHALL contain rows represented by `ReplayableCommandParticipant` view models.
-Each participant SHALL expose the role, parameter name, recorded bookmark, target object, parameter object, result object, and actual bookmark in that order.
+Each participant SHALL expose the role, parameter name, recorded bookmark, target object, argument object, result object, and actual bookmark in that order.
 The system SHALL include target participants when the command DTO has recorded target bookmarks.
 The system SHALL include reference parameter participants when the command DTO has recorded reference parameter bookmarks.
 The system MUST NOT include non-reference parameters as bookmark participants.
@@ -79,7 +79,7 @@ When a successful replay has no explicit replacement bookmark for a result parti
 
 ### Requirement: Replayable command participant resolves target, parameter, and result objects best-effort
 The `ReplayableCommandParticipant` view model SHALL expose a target object for target participants when the actual bookmark resolves locally.
-The `ReplayableCommandParticipant` view model SHALL expose a parameter object for parameter participants when the actual bookmark resolves locally.
+The `ReplayableCommandParticipant` view model SHALL expose an argument object for parameter participants when the actual bookmark resolves locally.
 The `ReplayableCommandParticipant` view model SHALL expose a result object for result participants when the actual bookmark resolves locally.
 The `ReplayableCommandParticipant` view model SHALL still expose recorded and actual bookmark values when the actual bookmark cannot be resolved locally.
 The system MUST NOT require recorded bookmarks to resolve locally in order to display a participant.
@@ -94,14 +94,14 @@ The system MUST NOT require recorded bookmarks to resolve locally in order to di
 #### Scenario: Parameter participant resolves actual object
 - **WHEN** a parameter participant has actual bookmark `demoCustomer:2`
 - **AND** bookmark lookup resolves `demoCustomer:2` to a local domain object
-- **THEN** the participant parameter property exposes that local domain object
+- **THEN** the participant argument property exposes that local domain object
 - **AND** the participant still displays recorded bookmark `demoCustomer:1`
 - **AND** the participant still displays actual bookmark `demoCustomer:2`
 
 #### Scenario: Parameter participant keeps unresolved bookmark values
 - **WHEN** a reference parameter participant has actual bookmark `external.Customer:2`
 - **AND** bookmark lookup cannot resolve `external.Customer:2` to a local domain object
-- **THEN** the participant parameter property is empty
+- **THEN** the participant argument property is empty
 - **AND** the participant still displays recorded bookmark `external.Customer:1`
 - **AND** the participant still displays actual bookmark `external.Customer:2`
 
@@ -129,7 +129,7 @@ The system MUST NOT resolve or display a result object for commands that have no
 
 ### Requirement: Replayable participant layouts expose participant data
 The system SHALL provide fallback layout metadata for `ReplayableCommandParticipant`.
-The participant layout SHALL expose role, parameter name, recorded bookmark, target, parameter, result, and actual bookmark in that order.
+The participant layout SHALL expose role, parameter name, recorded bookmark, target, argument, result, and actual bookmark in that order.
 The `ReplayableCommand` fallback layout SHALL include the participants collection as a table named `Participants` before the control field set.
 The `ReplayableCommand` object view MUST NOT expose separate target summary properties for target type or target identifier.
 The `ReplayableCommand` object view SHALL expose an `openTarget` action associated with the participants collection.
@@ -145,7 +145,7 @@ Target inspection and navigation SHALL be available through target rows in the p
 
 #### Scenario: User views participant fields
 - **WHEN** a user views a replayable command participant using fallback layout metadata
-- **THEN** the layout displays the participant role, parameter name, recorded bookmark, target, parameter, result, and actual bookmark in order
+- **THEN** the layout displays the participant role, parameter name, recorded bookmark, target, argument, result, and actual bookmark in order
 
 #### Scenario: User inspects target through participants
 - **WHEN** a user views a replayable command using fallback layout metadata
