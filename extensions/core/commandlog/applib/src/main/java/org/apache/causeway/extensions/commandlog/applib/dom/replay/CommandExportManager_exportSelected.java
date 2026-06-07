@@ -1,6 +1,5 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
 import java.time.chrono.ChronoZonedDateTime;
@@ -8,7 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
@@ -30,12 +34,19 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
         describedAs = "Exports selected Commands as zipped DTOs for import later. "
                 + "Refresh the page to see changed states."
 )
-@RequiredArgsConstructor
 public class CommandExportManager_exportSelected {
 
-    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_exportSelected> { }
+    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_exportSelected> {
+    }
 
     private final CommandExportManager commandExportManager;
+
+    @Inject MetaModelService metaModelService;
+
+    @Inject
+    public CommandExportManager_exportSelected(final CommandExportManager commandExportManager) {
+        this.commandExportManager = commandExportManager;
+    }
 
     @MemberSupport
     public Clob act(
@@ -43,13 +54,12 @@ public class CommandExportManager_exportSelected {
             @ParameterLayout(describedAs = "File name for the exported file.") final String filenamePrefix,
             @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name.") final boolean filenameTimestamp) {
 
-        var selectedCommandLogEntries = selected.stream()
-                .map(ReplayableCommand::commandLogEntry)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(entry -> !ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
-                .sorted()
-                .collect(Collectors.toList());
+        var selectedCommandLogEntries = selectedCommandLogEntries(selected);
+
+        validator().validate(commandExportManager.getBaseline(), selectedCommandLogEntries)
+                .ifPresent(failure -> {
+                    throw new RecoverableException(failure.message());
+                });
 
         var yaml = CommandDtoUtils.toYamlExport(
                 selectedCommandLogEntries.stream()
@@ -93,7 +103,37 @@ public class CommandExportManager_exportSelected {
 
     @MemberSupport
     public String validateSelected(final List<ReplayableCommand> selected) {
-        return selected != null && selected.isEmpty() ? "Select at least one command to export" : null;
+        if (selected != null && selected.isEmpty()) {
+            return "Select at least one command to export";
+        }
+        return validator()
+                .validate(commandExportManager.getBaseline(), selectedCommandLogEntries(selected))
+                .map(CommandExportKnownTargetValidator.Failure::message)
+                .orElse(null);
+    }
+
+    private List<CommandLogEntry> selectedCommandLogEntries(final List<ReplayableCommand> selected) {
+        if (selected == null) {
+            return List.of();
+        }
+        return selected.stream()
+                .map(ReplayableCommand::commandLogEntry)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(entry -> !ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    private CommandExportKnownTargetValidator validator() {
+        return new CommandExportKnownTargetValidator(this::isExportRoot);
+    }
+
+    private boolean isExportRoot(final Bookmark bookmark) {
+        return metaModelService != null
+                && metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+                .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(DomainService.class))
+                .orElse(false);
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet

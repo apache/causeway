@@ -1,0 +1,179 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.extensions.commandlog.applib.dom.replay;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.schema.cmd.v2.MemberDto;
+import org.apache.causeway.schema.cmd.v2.PropertyDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
+
+class CommandExportKnownTargetValidatorTest {
+
+    private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
+    private static final Timestamp BEFORE_BASELINE = Timestamp.from(Instant.parse("2026-06-07T09:59:59Z"));
+    private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
+    private static final Timestamp T2 = Timestamp.from(Instant.parse("2026-06-07T10:00:02Z"));
+
+    private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
+    private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+    private static final Bookmark ORDER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Order", "1");
+
+    @Test
+    void accepts_root_menu_service_target() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(action(T1, MENU_SERVICE, null)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void accepts_target_returned_by_earlier_selected_command() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(T1, MENU_SERVICE, CUSTOMER),
+                action(T2, CUSTOMER, null)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void rejects_unknown_non_root_target_and_reports_command_and_bookmark() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var selected = action(T1, CUSTOMER, null);
+
+        final var failure = validator.validate(BASELINE, List.of(selected));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message())
+                .contains(CUSTOMER.toString())
+                .contains(selected.getInteractionId().toString())
+                .contains("unknown for command export")
+                .contains("navigation or finder action");
+    }
+
+    @Test
+    void ignores_result_before_baseline_when_validating_later_target() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(BEFORE_BASELINE, MENU_SERVICE, CUSTOMER),
+                action(T2, CUSTOMER, null)));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message()).contains(CUSTOMER.toString());
+    }
+
+    @Test
+    void does_not_treat_locally_resolvable_object_as_root() {
+        final var validator = new CommandExportKnownTargetValidator(__ -> false);
+
+        final var failure = validator.validate(BASELINE, List.of(action(T1, CUSTOMER, null)));
+
+        assertThat(failure).isPresent();
+    }
+
+    @Test
+    void later_result_does_not_validate_earlier_target() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(T1, CUSTOMER, null),
+                action(T2, MENU_SERVICE, CUSTOMER)));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message()).contains(CUSTOMER.toString());
+    }
+
+    @Test
+    void safe_action_without_result_does_not_establish_unrelated_target() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(T1, MENU_SERVICE, null),
+                action(T2, ORDER, null)));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message()).contains(ORDER.toString());
+    }
+
+    @Test
+    void non_action_commands_are_not_target_validated_but_their_results_establish_known_targets() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                property(T1, CUSTOMER),
+                action(T2, CUSTOMER, null)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    private static CommandLogEntry action(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result) {
+        final var actionDto = new ActionDto();
+        actionDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#act");
+        return entry(timestamp, target, result, actionDto);
+    }
+
+    private static CommandLogEntry property(
+            final Timestamp timestamp,
+            final Bookmark result) {
+        final var propertyDto = new PropertyDto();
+        propertyDto.setLogicalMemberIdentifier("demo.PropertyHolder#name");
+        return entry(timestamp, CUSTOMER, result, propertyDto);
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final MemberDto memberDto) {
+        final var commandDto = new CommandDto();
+        commandDto.setMember(memberDto);
+        commandDto.setTargets(new OidsDto());
+        commandDto.getTargets().getOid().add(target.toOidDto());
+
+        final var entry = mock(CommandLogEntry.class);
+        final var interactionId = UUID.randomUUID();
+        when(entry.getInteractionId()).thenReturn(interactionId);
+        when(entry.getTimestamp()).thenReturn(timestamp);
+        when(entry.getTarget()).thenReturn(target);
+        when(entry.getResult()).thenReturn(result);
+        when(entry.getCommandDto()).thenReturn(commandDto);
+        when(entry.getLogicalMemberIdentifier()).thenReturn(memberDto.getLogicalMemberIdentifier());
+        return entry;
+    }
+}
