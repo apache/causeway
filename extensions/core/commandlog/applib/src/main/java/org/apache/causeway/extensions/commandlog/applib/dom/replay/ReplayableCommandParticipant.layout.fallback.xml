@@ -11,7 +11,7 @@
                 <cpt:property id="parameterName"/>
                 <cpt:property id="recordedBookmark"/>
                 <cpt:property id="target"/>
-                <cpt:property id="parameter"/>
+                <cpt:property id="argument"/>
                 <cpt:property id="result"/>
                 <cpt:property id="actualBookmark"/>
             </cpt:fieldSet>

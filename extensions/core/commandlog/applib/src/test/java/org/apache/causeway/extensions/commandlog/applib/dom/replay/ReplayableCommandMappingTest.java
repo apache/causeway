@@ -240,7 +240,7 @@ class ReplayableCommandMappingTest {
         assertThat(targetParticipant.getTarget()).isSameAs(targetObject);
         assertThat(parameterParticipant.getRecordedBookmark()).isEqualTo(parameterBookmark);
         assertThat(parameterParticipant.getActualBookmark()).isEqualTo(parameterBookmark);
-        assertThat(parameterParticipant.getParameter()).isSameAs(parameterObject);
+        assertThat(parameterParticipant.getArgument()).isSameAs(parameterObject);
     }
 
     @Test
@@ -281,7 +281,7 @@ class ReplayableCommandMappingTest {
         participant.bookmarkService = bookmarkService;
 
         assertThat(participant.getTarget()).isSameAs(actualObject);
-        assertThat(participant.getParameter()).isNull();
+        assertThat(participant.getArgument()).isNull();
         assertThat(participant.getResult()).isNull();
     }
 

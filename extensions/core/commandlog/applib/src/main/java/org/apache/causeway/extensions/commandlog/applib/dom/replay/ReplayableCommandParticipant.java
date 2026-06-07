@@ -163,7 +163,7 @@ public final class ReplayableCommandParticipant implements ViewModel {
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "5")
-    public Object getParameter() {
+    public Object getArgument() {
         if (role != Role.PARAMETER) {
             return null;
         }

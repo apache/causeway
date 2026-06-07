@@ -2,6 +2,6 @@ role
 parameterName
 #recordedBookmark
 target
-parameter
+argument
 result
 #actualBookmark
