@@ -185,19 +185,19 @@ public abstract class CommandLogEntry
         setLogicalMemberIdentifier(command.getLogicalMemberIdentifier());
 
         syncExecutionMetadata(command);
-
-        if (org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.isPendingOrFailed(getReplayState())) {
-            // we DON'T overwrite the result if we're replaying.
-        } else {
-            setResult(command.getResult());
-            setException(command.getException());
-        }
     }
 
     @Programmatic
     public void syncExecutionMetadata(final Command command) {
         setStartedAt(command.getStartedAt());
         setCompletedAt(command.getCompletedAt());
+
+        if (org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.isReplayOrRetryEnabled(getReplayState())) {
+            // we DON'T overwrite the recorded result/exception if we're replaying.
+            return;
+        }
+        setResult(command.getResult());
+        setException(command.getException());
     }
 
 
