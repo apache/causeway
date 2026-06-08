@@ -44,6 +44,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplay
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_makeSelectedExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
@@ -99,6 +100,7 @@ import org.springframework.context.annotation.Import;
         HasBaseline_nextHour.class,
         CommandExportManager_exportSelected.class,
         CommandExportManager_makeSelectedExportable.class,
+        CommandExportManager_moveCommands.class,
         CommandExportManager_previousPage.class,
         CommandExportManager_nextPage.class,
         CommandExportManager_toggleMode.class,
