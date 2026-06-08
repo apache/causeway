@@ -260,6 +260,57 @@ class CommandExportManagerExportSelectedTest {
                 .isEqualTo("Select at least one command to export");
     }
 
+    @Test
+    void default_selected_includes_exportable_active_commands_only() {
+        final var unknownCustomerAction = entry(T1, CUSTOMER, null);
+        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER, null);
+        final var fixture = fixtureWith(unknownCustomerAction, finder, actionOnFoundCustomer);
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var defaults = fixture.action.defaultSelected();
+
+        assertThat(defaults)
+                .extracting(ReplayableCommand::interactionId)
+                .containsExactly(finder.getInteractionId(), actionOnFoundCustomer.getInteractionId());
+    }
+
+    @Test
+    void default_selected_excludes_commands_with_null_exportability() {
+        final var entry = entry(T1, CUSTOMER);
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry);
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var defaults = fixture.action.defaultSelected();
+
+        assertThat(defaults).isEmpty();
+    }
+
+    @Test
+    void choices_selected_still_include_full_active_command_collection() {
+        final var finder = entry(T1, MENU_SERVICE, CUSTOMER);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
+        final var fixture = fixtureWith(finder, actionOnFoundCustomer);
+
+        final var choices = fixture.action.choicesSelected();
+
+        assertThat(choices)
+                .extracting(ReplayableCommand::interactionId)
+                .containsExactly(finder.getInteractionId(), actionOnFoundCustomer.getInteractionId());
+    }
+
+    @Test
+    void default_selected_does_not_modify_replay_state() {
+        final var entry = entry(T1, MENU_SERVICE);
+        final var fixture = fixtureWith(entry);
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        assertThat(fixture.action.defaultSelected())
+                .extracting(ReplayableCommand::interactionId)
+                .containsExactly(entry.getInteractionId());
+        verify(entry, org.mockito.Mockito.never()).setReplayState(org.mockito.Mockito.any());
+    }
+
     private static Fixture fixtureWith(final CommandLogEntry... entries) {
         return fixtureWithRecordingSupport(RecordingSupport.ENABLED, entries);
     }
