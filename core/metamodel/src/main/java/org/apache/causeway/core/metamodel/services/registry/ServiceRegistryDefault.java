@@ -53,9 +53,17 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+
     // enforces provisioning order (this is a depends-on relationship)
-    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    @Inject
+    public ServiceRegistryDefault(
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
+        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
+    }
 
     @Override
     public Optional<SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {

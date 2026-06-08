@@ -26,6 +26,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
@@ -36,9 +39,6 @@ import org.apache.causeway.commons.collections.Cardinality;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -51,8 +51,7 @@ import org.jspecify.annotations.Nullable;
  * @since 2.0
  */
 public record SpringContextHolder(
-    @NonNull ApplicationContext springContext
-    ) {
+    @NonNull ApplicationContext springContext) {
 
     public Stream<SingletonBeanProvider> streamAllBeans() {
         return Stream.of(springContext.getBeanDefinitionNames())
@@ -105,7 +104,6 @@ public record SpringContextHolder(
      * @see #select(Class, Annotation[])
      * @see #getSingletonElseFail(Class)
      */
-    @SuppressWarnings("javadoc")
     public <T> Can<T> select(final @NonNull Class<T> requiredType) {
         var allMatchingBeans = springContext.getBeanProvider(requiredType)
                 .orderedStream()
@@ -128,7 +126,6 @@ public record SpringContextHolder(
      *
      * @see #select(Class)
      */
-    @SuppressWarnings("javadoc")
     public <T> Can<T> select(
         final @NonNull Class<T> requiredType,
         final @Nullable Annotation[] qualifiers) {
@@ -165,12 +162,10 @@ public record SpringContextHolder(
      * @return IoC managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
-    @SuppressWarnings("javadoc")
     public <T> T getSingletonElseFail(final @NonNull Class<T> type) {
         var candidates = select(type);
-        if (candidates.getCardinality() == Cardinality.ZERO) {
+        if (candidates.getCardinality() == Cardinality.ZERO)
             throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
-        }
         return candidates.getFirstElseFail();
     }
 
@@ -183,9 +178,8 @@ public record SpringContextHolder(
      * @return non-null
      */
     private static Set<Annotation> filterQualifiers(final @Nullable Annotation[] annotations) {
-        if(_NullSafe.isEmpty(annotations)) {
+        if(_NullSafe.isEmpty(annotations))
             return Collections.emptySet();
-        }
         return _NullSafe.stream(annotations)
                 .filter(SpringContextHolder::isGenericQualifier)
                 .collect(Collectors.toSet());
@@ -196,15 +190,12 @@ public record SpringContextHolder(
      * @return whether or not the annotation is a valid qualifier for Spring
      */
     private static boolean isGenericQualifier(final Annotation annotation) {
-        if(annotation==null) {
+        if(annotation==null)
             return false;
-        }
-        if(annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0) {
+        if(annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0)
             return true;
-        }
-        if(annotation.annotationType().equals(Primary.class)) {
+        if(annotation.annotationType().equals(Primary.class))
             return true;
-        }
         return false;
     }
 

@@ -99,12 +99,13 @@ extends FacetFactoryAbstract {
     // -- HELPER
 
     private <T> Optional<ValueFacet<T>> addAllFacetsForValueSemantics(
-            final Identifier identifier,
+            final Identifier featureId,
             final Class<T> valueClass,
             final ObjectSpecification valueSpec,
             final Optional<Value> valueIfAny) {
 
-        var semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
+        var semanticsProviders = getValueSemanticsResolver().streamValueSemantics(valueClass)
+                .collect(Can.toCan());
         if(semanticsProviders.isEmpty()) {
             if(valueIfAny.isPresent()) {
                 log.warn("could not find a ValueSemanticsProvider for value type {}; "

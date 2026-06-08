@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -38,13 +38,11 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -52,8 +50,9 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.util.Facets;
+
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public abstract class ValueFacetAbstract<T>
@@ -119,9 +118,8 @@ implements ValueFacet<T> {
     @Override
     public ValueSemanticsProvider.Context createValueSemanticsContext(final @Nullable ObjectFeature feature) {
         var iaProvider = super.getInteractionService();
-        if(iaProvider==null) {
+        if(iaProvider==null)
             return null; // JUnit context
-        }
         return new ValueSemanticsProvider.Context(
                 feature!=null
                     ? feature.getFeatureIdentifier()
@@ -147,7 +145,7 @@ implements ValueFacet<T> {
     public Optional<OrderRelation<T, ?>> selectDefaultOrderRelation() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getOrderRelation)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
@@ -160,7 +158,7 @@ implements ValueFacet<T> {
     public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(isMatching(Optional.empty()))
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }
@@ -171,7 +169,7 @@ implements ValueFacet<T> {
     public Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getDefaultsProvider)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -191,7 +189,7 @@ implements ValueFacet<T> {
     public Optional<Parser<T>> selectDefaultParser() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getParser)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -216,7 +214,7 @@ implements ValueFacet<T> {
     public Optional<Renderer<T>> selectDefaultRenderer() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getRenderer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -243,7 +241,7 @@ implements ValueFacet<T> {
                 ? streamValueSemanticsHonoringQualifiers(feature)
                 : getAllValueSemantics().stream())
             .filter(TemporalSupport.class::isInstance)
-            .map(temporalDecomposer->_Casts.<TemporalSupport<T>>uncheckedCast(temporalDecomposer))
+            .<TemporalSupport<T>>map(_Casts::uncheckedCast)
             .findFirst();
     }
 
@@ -275,7 +273,7 @@ implements ValueFacet<T> {
     public static <X> Parser<X> fallbackParser(
             final LogicalType valueType,
             final Identifier featureIdentifier) {
-        return new PseudoParserWithMessage<X>(String
+        return new PseudoParserWithMessage<>(String
                 .format("Could not find a parser for type %s "
                         + "in the context of %s",
                         valueType,
@@ -285,7 +283,7 @@ implements ValueFacet<T> {
     public static <X> Renderer<X> fallbackRenderer(
             final LogicalType valueType,
             final Identifier featureIdentifier) {
-        return new PseudoRendererWithMessage<X>(String
+        return new PseudoRendererWithMessage<>(String
                 .format("Could not find a renderer for type %s "
                         + "in the context of %s",
                         valueType,
@@ -298,46 +296,37 @@ implements ValueFacet<T> {
             final @NonNull ObjectFeature feature) {
         return getAllValueSemantics()
             .stream()
-            .filter(isMatchingAnyOf(qualifiersAccepted(feature)));
+            .filter(isMatching(Facets.valueQualifier(feature)));
     }
 
-    private Can<String> qualifiersAccepted(final @NonNull ObjectFeature feature) {
-        return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
-                    .map(ValueSemanticsSelectingFacet::value)
-                    .map(_Strings::emptyToNull)
-                    .stream()
-                    .collect(Can.toCan());
+    private Optional<String> qualifierProvided(final @NonNull ValueSemanticsProvider<T> semProv) {
+        return _ClassCache.getInstance().head(semProv.getClass())
+            .qualifier();
     }
 
-    private Predicate<ValueSemanticsProvider<T>> isMatchingAnyOf(final Can<String> qualifiersAccepted) {
-        return valueSemantics->{
+    private Predicate<ValueSemanticsProvider<T>> isMatching(final Optional<String> qualifierRequired) {
+        return semProv -> areMatching(qualifierRequired, qualifierProvided(semProv));
+    }
 
-            // qualifiers accepted vs. qualifiers present on bean type
-            // 1. empty     vs. empty      ->  accept
-            // 2. empty     vs. not-empty  ->  reject
-            // 3. not-empty vs. empty      ->  reject
-            // 4. not-empty vs. not-empty  ->  accept when any match
+    private boolean areMatching(
+            final Optional<String> qualifierRequired,
+            final Optional<String> qualifierProvided) {
 
-            var qualifiersOnBean =
-            _Annotations
-            .synthesize(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
-            .map(Qualifier::value)
-            .stream()
-            .map(_Strings::emptyToNull)
-            .collect(Can.toCan());
+        // qualifiers accepted vs. qualifiers present on bean type
+        // 1. empty     vs. empty      ->  accept
+        // 2. empty     vs. not-empty  ->  reject
+        // 3. not-empty vs. empty      ->  reject
+        // 4. not-empty vs. not-empty  ->  accept when any match
 
-            if(qualifiersAccepted.isEmpty()
-                    && qualifiersOnBean.isEmpty()) {
-                return true;
-            }
+        if(qualifierRequired.isEmpty()
+                && qualifierProvided.isEmpty())
+            return true;
 
-            if(qualifiersAccepted.isNotEmpty()
-                    && qualifiersOnBean.isNotEmpty()) {
-                return qualifiersAccepted.stream().anyMatch(qualifiersOnBean::contains);
-            }
+        if(qualifierRequired.isPresent()
+                && qualifierProvided.isPresent())
+            return qualifierRequired.get().equals(qualifierProvided.get());
 
-            return false;
-        };
+        return false;
     }
 
     /**
@@ -348,8 +337,9 @@ implements ValueFacet<T> {
      * @param feature - optionally provides (custom) qualifier
      */
     protected Optional<ObjectAction> resolveCompositeValueMixinForFeature(final ObjectFeature feature) {
-        return qualifiersAccepted(feature).add("default")
-            .stream()
+        return Stream.concat(
+                Facets.valueQualifier(feature).stream(),
+                Stream.of("default"))
             .map(qualifier->feature.getElementType().getAction(qualifier, MixedIn.ONLY))
             .filter(Optional::isPresent)
             .map(Optional::get)

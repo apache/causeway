@@ -25,22 +25,23 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemantics;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -67,18 +68,27 @@ implements ValueSemanticsResolver {
     }
 
     @Override
-    public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
-            final @NonNull Identifier featureIdentifier,
-            final Class<T> valueType) {
-        //FIXME[CAUSEWAY-2877] honor customizations
+    public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(
+            final Class<T> valueType,
+            @Nullable final String _requiredQualifier) {
+
+        var requiredQualifier = _Strings.emptyToNull(_requiredQualifier);
+        if(requiredQualifier==null)
+            return streamValueSemantics(valueType);
+
+        var classCache = _ClassCache.getInstance();
+
         return streamValueSemantics(valueType)
-                .collect(Can.toCan());
+            .filter(semProv->
+                classCache.head(ClassUtils.getUserClass(semProv)).qualifier()
+                    .map(qualifierProvided->qualifierProvided.equals(requiredQualifier))
+                    .orElse(false));
     }
 
     @Override
     public Stream<Class<?>> streamClassesWithValueSemantics() {
         return _NullSafe.stream(valueSemanticsProviders)
-        .map(ValueSemanticsProvider::getCorrespondingClass);
+            .map(ValueSemanticsProvider::getCorrespondingClass);
     }
 
     // -- HELPER
@@ -86,9 +96,9 @@ implements ValueSemanticsResolver {
     private <T> Stream<ValueSemanticsProvider<T>> streamExplicitValueSemantics(final Class<T> valueType) {
         final var nonPrimitiveValueType = ClassUtils.resolvePrimitiveIfNecessary(valueType);
         return _NullSafe.stream(valueSemanticsProviders)
-        //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
-        .filter(vs->vs.getCorrespondingClass().isAssignableFrom(nonPrimitiveValueType))
-        .map(provider->provider.castTo(valueType));
+            //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
+            .filter(vs->vs.getCorrespondingClass().isAssignableFrom(nonPrimitiveValueType))
+            .map(provider->provider.castTo(valueType));
     }
 
     private <T> Stream<ValueSemanticsProvider<T>> streamEnumValueSemantics(final Class<T> valueType) {

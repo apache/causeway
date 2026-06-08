@@ -376,7 +376,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private boolean isVetoedForInjection;
 
-    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
+    private final _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
         !isVetoedForInjection
                 && !getBeanSort().isAbstract()
                 && !getBeanSort().isValue()

@@ -84,38 +84,32 @@ public record CausewayBeanTypeClassifier(
             : logicalType; // name is already inferred, when discovered by Causeway
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
-                || type.isEnum()) {
+                || type.isEnum())
             return CausewayBeanMetaData.value(named.get(), discoveredBy);
-        }
 
-        if(CollectionSemantics.valueOf(type).isPresent()) {
+        if(CollectionSemantics.valueOf(type).isPresent())
             return CausewayBeanMetaData.collection(named.get(), discoveredBy);
-        }
 
         if(type.isInterface()
                 // modifier predicate must be called after testing for non-scalar type above,
                 // otherwise we'd get false positives
-                || Modifier.isAbstract(type.getModifiers())) {
-
+                || Modifier.isAbstract(type.getModifiers()))
             // apiNote: abstract types and interfaces cannot be vetoed
             // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
             // however, concrete types that inherit abstract ones with vetoes,
             // will effectively be vetoed through means of annotation synthesis
             return CausewayBeanMetaData.interfaceOrAbstract(named.get(), discoveredBy);
-        }
 
         var typeHead = classCache().head(type);
 
         // handle vetoing ...
-        if(TypeVetoMarker.anyMatchOn(typeHead)) {
+        if(TypeVetoMarker.anyMatchOn(typeHead))
             return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
-        }
 
         var profiles = typeHead.springProfiles();
         if(profiles.isNotEmpty()
-                && !profiles.stream().anyMatch(this::isProfileActive)) {
+                && !profiles.stream().anyMatch(this::isProfileActive))
             return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
-        }
 
         // handle introspection veto (programmatic bean) ...
         if(TypeProgrammaticMarker.anyMatchOn(typeHead)) {
@@ -127,51 +121,40 @@ public record CausewayBeanTypeClassifier(
         }
 
         // when implements ViewModel, yield VIEW_MODEL unless vetoed
-        if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
+        if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type))
             return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
-        }
 
         // value types
-        if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class)) {
+        if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class))
             return CausewayBeanMetaData.value(named.get(), discoveredBy);
-        }
 
         // domain service
-        if(typeHead.hasAnnotation(DomainService.class)) {
+        if(typeHead.hasAnnotation(DomainService.class))
             return CausewayBeanMetaData.springContributing(logicalType);
-        }
 
         // entity support
-        if(typeHead.hasAnnotation(Entity.class)) {
+        if(typeHead.hasAnnotation(Entity.class))
             return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JPA);
-        }
 
         // domain object
         var aDomainObject = typeHead.annotation(DomainObject.class).orElse(null);
-        if(aDomainObject!=null) {
-            switch (aDomainObject.nature()) {
-            case BEAN:
-                return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING);
-            case MIXIN:
+        if(aDomainObject!=null)
+            return switch (aDomainObject.nature()) {
+            case BEAN -> CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING);
+            case MIXIN -> {
                 // memoize mixin main name
-                typeHead.attributeMap().put(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
-                return CausewayBeanMetaData.mixin(named.get(), discoveredBy);
-            case ENTITY:
-                return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.UNSPECIFIED);
-            case VIEW_MODEL:
-            case NOT_SPECIFIED:
-                //because object is not associated with a persistence context unless discovered above
-                return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
+                typeHead.putAttribute(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
+                yield CausewayBeanMetaData.mixin(named.get(), discoveredBy);
             }
-        }
+            case ENTITY -> CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.UNSPECIFIED);
+            case VIEW_MODEL, NOT_SPECIFIED -> /*because object is not associated with a persistence context unless discovered above */ CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
+            };
 
-        if(typeHead.hasJaxbRootElementSemantics()) {
+        if(typeHead.hasJaxbRootElementSemantics())
             return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
-        }
 
-        if(typeHead.hasAnnotation(Component.class)) {
+        if(typeHead.hasAnnotation(Component.class))
             return CausewayBeanMetaData.unspecified(logicalType, discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
-        }
 
         // unless explicitly declared otherwise, map records to unknown
         if(type.isRecord()) {
@@ -182,9 +165,8 @@ public record CausewayBeanTypeClassifier(
                 : CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
         }
 
-        if(Serializable.class.isAssignableFrom(type)) {
+        if(Serializable.class.isAssignableFrom(type))
             return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.VALUE);
-        }
 
         return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
     }
