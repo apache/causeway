@@ -52,6 +52,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
@@ -61,6 +62,16 @@ class CommandExportManagerExportSelectedTest {
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
     private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+
+    @Test
+    void validate_selected_accepts_first_domain_service_target_before_invocation() {
+        final var fixture = fixtureWith(entry(T1, MENU_SERVICE));
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation).isNull();
+    }
 
     @Test
     void validate_selected_accepts_reachable_sequence_before_invocation() {
@@ -82,8 +93,18 @@ class CommandExportManagerExportSelectedTest {
 
         assertThat(validation)
                 .contains(CUSTOMER.toString())
-                .contains("unknown for command export")
-                .contains("navigation or finder action");
+                .contains("is unknown");
+    }
+
+    @Test
+    void validate_selected_reports_unknown_property_edit_target_before_invocation_when_recording_support_is_enabled() {
+        final var fixture = fixtureWith(propertyEditEntry(T1, CUSTOMER));
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation)
+                .contains(CUSTOMER.toString())
+                .contains("is unknown");
     }
 
     @Test
@@ -102,7 +123,7 @@ class CommandExportManagerExportSelectedTest {
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessageContaining(CUSTOMER.toString())
-                .hasMessageContaining("unknown for command export");
+                .hasMessageContaining("is unknown");
     }
 
     @Test
@@ -113,10 +134,9 @@ class CommandExportManagerExportSelectedTest {
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
         assertThat(validation)
-                .contains("Parameter customer")
+                .contains("parameter customer")
                 .contains(CUSTOMER.toString())
-                .contains("unknown for command export")
-                .contains("navigation or finder action");
+                .contains("is unknown");
     }
 
     @Test
@@ -138,9 +158,16 @@ class CommandExportManagerExportSelectedTest {
 
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
                 .isInstanceOf(RecoverableException.class)
-                .hasMessageContaining("Parameter customer")
+                .hasMessageContaining("parameter customer")
                 .hasMessageContaining(CUSTOMER.toString())
-                .hasMessageContaining("unknown for command export");
+                .hasMessageContaining("is unknown");
+    }
+
+    @Test
+    void exportable_is_true_for_first_domain_service_target_in_export_manager_context() {
+        final var commands = exportManagerCommandsWith(entry(T1, MENU_SERVICE));
+
+        assertThat(commands.get(0).getExportable()).isTrue();
     }
 
     @Test
@@ -155,6 +182,13 @@ class CommandExportManagerExportSelectedTest {
     @Test
     void exportable_is_false_for_command_with_unknown_target_in_export_manager_context() {
         final var commands = exportManagerCommandsWith(entry(T1, CUSTOMER));
+
+        assertThat(commands.get(0).getExportable()).isFalse();
+    }
+
+    @Test
+    void exportable_is_false_for_property_edit_with_unknown_target_in_export_manager_context() {
+        final var commands = exportManagerCommandsWith(propertyEditEntry(T1, CUSTOMER));
 
         assertThat(commands.get(0).getExportable()).isFalse();
     }
@@ -323,6 +357,14 @@ class CommandExportManagerExportSelectedTest {
         return entry(timestamp, target, result, ReplayState.UNDEFINED, actionDtoFor(target));
     }
 
+    private static CommandLogEntry propertyEditEntry(
+            final Timestamp timestamp,
+            final Bookmark target) {
+        final var propertyDto = new PropertyDto();
+        propertyDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#email");
+        return entry(timestamp, target, null, ReplayState.UNDEFINED, propertyDto);
+    }
+
     private static CommandLogEntry entryWithReferenceParameter(
             final Timestamp timestamp,
             final Bookmark target,
@@ -357,9 +399,9 @@ class CommandExportManagerExportSelectedTest {
             final Bookmark target,
             final Bookmark result,
             final ReplayState replayState,
-            final ActionDto actionDto) {
+            final org.apache.causeway.schema.cmd.v2.MemberDto memberDto) {
         final var commandDto = new CommandDto();
-        commandDto.setMember(actionDto);
+        commandDto.setMember(memberDto);
         commandDto.setTargets(new OidsDto());
         commandDto.getTargets().getOid().add(target.toOidDto());
 
@@ -370,7 +412,7 @@ class CommandExportManagerExportSelectedTest {
         when(entry.getTarget()).thenReturn(target);
         when(entry.getResult()).thenReturn(result);
         when(entry.getCommandDto()).thenReturn(commandDto);
-        when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
+        when(entry.getLogicalMemberIdentifier()).thenReturn(memberDto.getLogicalMemberIdentifier());
         when(entry.getReplayState()).thenReturn(replayState);
         return entry;
     }

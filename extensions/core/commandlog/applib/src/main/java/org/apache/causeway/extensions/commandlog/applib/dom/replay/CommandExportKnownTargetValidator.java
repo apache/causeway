@@ -67,7 +67,7 @@ final class CommandExportKnownTargetValidator {
     Optional<Failure> validateParticipants(
             final CommandLogEntry entry,
             final Set<Bookmark> knownTargets) {
-        if (!isActionCommand(entry.getCommandDto())) {
+        if (entry.getCommandDto() == null) {
             return Optional.empty();
         }
         for (final Participant participant : participantsFor(entry)) {
@@ -91,11 +91,6 @@ final class CommandExportKnownTargetValidator {
         return baseline != null
                 && entry.getTimestamp() != null
                 && entry.getTimestamp().before(baseline);
-    }
-
-    private static boolean isActionCommand(final CommandDto commandDto) {
-        return commandDto != null
-                && commandDto.getMember() instanceof ActionDto;
     }
 
     private static List<Participant> participantsFor(final CommandLogEntry entry) {
