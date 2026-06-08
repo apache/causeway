@@ -4,21 +4,22 @@
 TBD - created by archiving change add-move-commands-action. Update Purpose after archive.
 ## Requirements
 ### Requirement: Export manager moves selected commands after a target command
-When command-log recording support is `ENABLED`, the export manager SHALL provide an action to move one or more selected commands from the unified commands collection after a target command.
+When command-log recording support is `ENABLED`, the export manager SHALL provide an action to move one or more selected commands from the active commands collection after a target command.
 When command-log recording support is `DISABLED`, the export manager MUST disable command movement.
-The action SHALL operate only on commands at or after the export manager baseline.
-The target command choices SHALL include commands at or after the export manager baseline from the unified commands collection.
+The action SHALL operate only on commands at or after the export manager baseline whose replay state is `UNDEFINED` or `EXPORTED`.
+The target command choices SHALL include commands at or after the export manager baseline from the active commands collection.
 The target command choices MUST exclude every command selected for movement.
+The target command choices MUST exclude commands whose replay state is `EXCLUDED`.
 The action MUST reject execution when no commands are selected.
 The action MUST reject execution when the target command is missing.
 The action MUST reject execution when the target command is one of the selected commands.
-The action MUST reject execution when any selected command or target command is outside the baseline-bounded command set.
+The action MUST reject execution when any selected command or target command is outside the active commands collection.
 The action MUST NOT exclude a selected command or target command merely because its replay state is `EXPORTED`.
 
 #### Scenario: Target choices exclude selected commands
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
-- **AND** commands `A`, `B`, and `C` are in the unified commands collection after the baseline
+- **AND** commands `A`, `B`, and `C` are in the active commands collection after the baseline
 - **AND** commands `A` and `B` are selected for movement
 - **WHEN** the system provides target choices for the move action
 - **THEN** command `C` is offered as a target choice
@@ -29,10 +30,21 @@ The action MUST NOT exclude a selected command or target command merely because 
 - **AND** an export manager baseline is set
 - **AND** command `A` has replay state `UNDEFINED`
 - **AND** command `B` has replay state `EXPORTED`
-- **AND** commands `A` and `B` are in the unified commands collection after the baseline
+- **AND** commands `A` and `B` are in the active commands collection after the baseline
 - **AND** command `A` is selected for movement
 - **WHEN** the system provides target choices for the move action
 - **THEN** command `B` is offered as a target choice
+
+#### Scenario: Target choices exclude excluded commands
+- **GIVEN** command-log recording support is `ENABLED`
+- **AND** an export manager baseline is set
+- **AND** command `A` has replay state `UNDEFINED`
+- **AND** command `B` has replay state `EXCLUDED`
+- **AND** command `A` is in the active commands collection after the baseline
+- **AND** command `B` is in the excluded commands collection after the baseline
+- **AND** command `A` is selected for movement
+- **WHEN** the system provides target choices for the move action
+- **THEN** command `B` is not offered as a target choice
 
 #### Scenario: Cannot move without a selection
 - **GIVEN** command-log recording support is `ENABLED`
@@ -49,13 +61,21 @@ The action MUST NOT exclude a selected command or target command merely because 
 - **THEN** the system rejects the invocation
 - **AND** no command timestamps are changed
 
-#### Scenario: Cannot move commands outside the baseline-bounded set
+#### Scenario: Cannot move commands outside the baseline-bounded active set
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** command `A` is before the baseline
 - **WHEN** a caller bypasses the UI and invokes the move action with command `A` selected
 - **THEN** the system rejects the invocation
 - **AND** no command timestamps are changed
+
+#### Scenario: Cannot move excluded command by direct invocation
+- **GIVEN** command-log recording support is `ENABLED`
+- **AND** an export manager baseline is set
+- **AND** command `A` has replay state `EXCLUDED`
+- **WHEN** a caller bypasses the UI and invokes the move action with command `A` selected
+- **THEN** the system rejects the invocation
+- **AND** command `A` keeps its original timestamp
 
 #### Scenario: Move action is disabled when recording support is disabled
 - **GIVEN** command-log recording support is `DISABLED`

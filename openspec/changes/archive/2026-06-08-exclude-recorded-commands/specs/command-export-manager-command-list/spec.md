@@ -1,6 +1,6 @@
 ## MODIFIED Requirements
 
-### Requirement: Export manager shows one baseline-bounded active command collection
+### Requirement: Export manager shows one baseline-bounded command collection
 The export manager SHALL expose a collection named `commands`.
 The `commands` collection SHALL contain foreground command log entries at or after the export manager baseline whose replay state is `UNDEFINED` or `EXPORTED`.
 The `commands` collection MUST exclude command log entries whose replay state is `EXCLUDED`.
