@@ -34,11 +34,14 @@ import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Collects qualifier information into the _ClassCache.
  *
  * @since 4.0
  */
+@Slf4j
 record QualifiedValueSemanticsCollector(CausewaySystemEnvironment systemEnvironment) {
 
     /**
@@ -50,8 +53,12 @@ record QualifiedValueSemanticsCollector(CausewaySystemEnvironment systemEnvironm
         var springContext = Optional.ofNullable(systemEnvironment.springContextHolder())
                 .map(SpringContextHolder::springContext)
                 .orElse(null);
-        if(springContext==null) // TODO potentially too early, seen this when JUnit testing
+        if(springContext==null) {
+            // seen this when JUnit testing
+            log.warn("missing Spring Context; perhaps initialzed too early; "
+                    + "as a consequence will not detect qualified bean factory methods");
             return;
+        }
         var classCache = _ClassCache.getInstance();
         var beanFactory = ((ConfigurableApplicationContext) springContext).getBeanFactory();
 
