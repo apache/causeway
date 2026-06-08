@@ -590,6 +590,57 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void replay_failure_preserves_recorded_command_dto_after_input_remapping() throws Exception {
+        UUID interactionId = UUID.randomUUID();
+        CommandDto recordedCommandDto = commandWithTargetAndReferenceParameter(
+                "simple.SimpleObject", "1", "simple.SimpleObject", "3");
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
+
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+
+        TransactionService transactionService = mock(TransactionService.class);
+        when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
+                .thenAnswer(invocation -> {
+                    @SuppressWarnings("unchecked")
+                    Callable<Object> callable = invocation.getArgument(1);
+                    return Try.call(callable);
+                });
+
+        CommandExecutorService commandExecutorService = mock(CommandExecutorService.class);
+        when(commandExecutorService.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
+                .thenReturn(Try.failure(new RuntimeException("replay failed")));
+
+        CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
+        when(listener.lookup(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
+                .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
+        when(listener.lookup(
+                commandLogEntry,
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
+                .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
+        ReplayContext replayContext = new ReplayContext(
+                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
+
+        new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
+
+        ArgumentCaptor<CommandDto> commandDtoCaptor = ArgumentCaptor.forClass(CommandDto.class);
+        verify(commandExecutorService).executeCommand(
+                eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), commandDtoCaptor.capture());
+        CommandDto replayCommandDto = commandDtoCaptor.getValue();
+        ParamDto replayParameter = ((ActionDto) replayCommandDto.getMember()).getParameters().getParameter().get(0);
+        ParamDto recordedParameter = ((ActionDto) recordedCommandDto.getMember()).getParameters().getParameter().get(0);
+
+        assertThat(replayCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("2");
+        assertThat(replayParameter.getReference().getId()).isEqualTo("4");
+        assertThat(recordedCommandDto.getTargets().getOid().get(0).getId()).isEqualTo("1");
+        assertThat(recordedParameter.getReference().getId()).isEqualTo("3");
+    }
+
+    @Test
     void displays_recorded_result_inside_command_export_dto() {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDtoAndRecordedResult(
                 new CommandDto(),

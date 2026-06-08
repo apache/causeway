@@ -7,6 +7,10 @@ If replay remapping writes replacements into that stored DTO, replay loses the o
 The replay flow already has a narrow remapping point immediately before `CommandExecutorService#executeCommand(...)`.
 That is the right place to ensure remapping works on an isolated execution DTO rather than the persisted command DTO.
 
+The command subscriber also receives lifecycle callbacks for the in-memory `Command` created during replay execution.
+By the time `CommandSubscriberForCommandLog#onStarted(...)` or `onCompleted(...)` sees that command, its DTO can already contain replay remappings.
+Replay entries therefore need lifecycle sync that preserves recorded command data while still recording execution timing metadata.
+
 ## Goals / Non-Goals
 
 **Goals:**
@@ -43,6 +47,15 @@ Replayable participant display should continue deriving recorded bookmarks from 
 
 Alternative considered: persist both recorded and effective replay DTOs.
 That would add data model complexity before there is a requirement to retain the effective execution shape.
+
+### Subscriber lifecycle sync preserves replay entries
+
+For replay entries, command subscriber `onStarted(...)` and `onCompleted(...)` should not call full `CommandLogEntry#sync(Command)` because that copies the in-memory command DTO back into the persisted entry.
+Instead, replay entries should sync only execution metadata such as started and completed timestamps.
+Normal recorded commands should continue using full sync.
+
+Alternative considered: skip only `onStarted(...)` for replay entries.
+That is insufficient because `onCompleted(...)` can see the same remapped in-memory command DTO and overwrite the recorded DTO later in the lifecycle.
 
 ### Test target and parameter mutation independently
 

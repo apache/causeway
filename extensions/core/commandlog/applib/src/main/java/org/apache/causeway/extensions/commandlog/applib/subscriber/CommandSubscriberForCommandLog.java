@@ -37,6 +37,7 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -78,21 +79,21 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
         val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
-        if(existingCommandLogEntryIfAny.isPresent()) {
+        if (existingCommandLogEntryIfAny.isPresent()) {
 
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
                     // this isn't really expected to happen ... we just log the fact if it does and the value is different
-                    if(log.isWarnEnabled()) {
+                    if (log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                        val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
+                        val existingCommandDtoXml = Try.call(() -> CommandDtoUtils.dtoMapper().toString(existingCommandDto))
                                 .getValue().orElse("Dto to Xml failure");
-                        val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
+                        val commandDtoXml = Try.call(() -> CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
-                        if(!existingCommandDtoXml.equals(commandDtoXml)) {
+                        if (!existingCommandDtoXml.equals(commandDtoXml)) {
                             log.warn("existing: \n{}", existingCommandDtoXml);
                             log.warn("proposed: \n{}", commandDtoXml);
                         }
@@ -120,9 +121,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-            .ifPresent(commandLogEntry -> {
-                commandLogEntry.sync(command);
-            });
+                .ifPresent(commandLogEntry -> syncWithoutMutatingRecordedDtoForReplay(commandLogEntry, command));
     }
 
     @Override
@@ -133,9 +132,17 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-            .ifPresent(commandLogEntry -> {
-                commandLogEntry.sync(command);
-            });
+                .ifPresent(commandLogEntry -> syncWithoutMutatingRecordedDtoForReplay(commandLogEntry, command));
+    }
+
+    private void syncWithoutMutatingRecordedDtoForReplay(
+            final CommandLogEntry commandLogEntry,
+            final Command command) {
+        if (ReplayState.isReplayOrRetryEnabled(commandLogEntry.getReplayState())) {
+            commandLogEntry.syncExecutionMetadata(command);
+        } else {
+            commandLogEntry.sync(command);
+        }
     }
 
 }
