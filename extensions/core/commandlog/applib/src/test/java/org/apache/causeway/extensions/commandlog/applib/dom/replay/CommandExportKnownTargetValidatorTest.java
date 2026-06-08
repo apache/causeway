@@ -34,8 +34,11 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
+import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.apache.causeway.schema.common.v2.ValueType;
 
 class CommandExportKnownTargetValidatorTest {
 
@@ -139,13 +142,135 @@ class CommandExportKnownTargetValidatorTest {
         assertThat(failure).isEmpty();
     }
 
+    @Test
+    void accepts_reference_parameter_returned_by_earlier_selected_command() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(T1, MENU_SERVICE, CUSTOMER),
+                actionWithReferenceParameter(T2, MENU_SERVICE, null, "customer", CUSTOMER)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void accepts_reference_parameter_that_is_root_menu_service() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                actionWithReferenceParameter(T1, MENU_SERVICE, null, "menu", MENU_SERVICE)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void rejects_unknown_reference_parameter_and_reports_command_parameter_and_bookmark() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var selected = actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER);
+
+        final var failure = validator.validate(BASELINE, List.of(selected));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message())
+                .contains(CUSTOMER.toString())
+                .contains(selected.getInteractionId().toString())
+                .contains("Parameter customer")
+                .contains("unknown for command export")
+                .contains("navigation or finder action");
+    }
+
+    @Test
+    void later_result_does_not_validate_earlier_reference_parameter() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER),
+                action(T2, MENU_SERVICE, CUSTOMER)));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message())
+                .contains("Parameter customer")
+                .contains(CUSTOMER.toString());
+    }
+
+    @Test
+    void result_before_baseline_does_not_validate_reference_parameter() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                action(BEFORE_BASELINE, MENU_SERVICE, CUSTOMER),
+                actionWithReferenceParameter(T2, MENU_SERVICE, null, "customer", CUSTOMER)));
+
+        assertThat(failure).isPresent();
+        assertThat(failure.get().message())
+                .contains("Parameter customer")
+                .contains(CUSTOMER.toString());
+    }
+
+    @Test
+    void ignores_scalar_parameters_for_export_path_validation() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                actionWithScalarParameter(T1, MENU_SERVICE, null, "name")));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void ignores_reference_parameters_without_reference_bookmark() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var failure = validator.validate(BASELINE, List.of(
+                actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", null)));
+
+        assertThat(failure).isEmpty();
+    }
+
     private static CommandLogEntry action(
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result) {
+        return entry(timestamp, target, result, actionDtoFor(target));
+    }
+
+    private static CommandLogEntry actionWithReferenceParameter(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final String parameterName,
+            final Bookmark parameterBookmark) {
+        final var actionDto = actionDtoFor(target);
+        actionDto.setParameters(new ParamsDto());
+        final var parameter = new ParamDto();
+        parameter.setName(parameterName);
+        parameter.setType(ValueType.REFERENCE);
+        if (parameterBookmark != null) {
+            parameter.setReference(parameterBookmark.toOidDto());
+        }
+        actionDto.getParameters().getParameter().add(parameter);
+        return entry(timestamp, target, result, actionDto);
+    }
+
+    private static CommandLogEntry actionWithScalarParameter(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final String parameterName) {
+        final var actionDto = actionDtoFor(target);
+        actionDto.setParameters(new ParamsDto());
+        final var parameter = new ParamDto();
+        parameter.setName(parameterName);
+        parameter.setType(ValueType.STRING);
+        parameter.setString("Alice");
+        actionDto.getParameters().getParameter().add(parameter);
+        return entry(timestamp, target, result, actionDto);
+    }
+
+    private static ActionDto actionDtoFor(final Bookmark target) {
         final var actionDto = new ActionDto();
         actionDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#act");
-        return entry(timestamp, target, result, actionDto);
+        return actionDto;
     }
 
     private static CommandLogEntry property(

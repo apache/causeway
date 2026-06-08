@@ -43,7 +43,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
+import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.apache.causeway.schema.common.v2.ValueType;
 
 class CommandExportManagerExportSelectedTest {
 
@@ -82,6 +85,32 @@ class CommandExportManagerExportSelectedTest {
 
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
                 .isInstanceOf(RecoverableException.class)
+                .hasMessageContaining(CUSTOMER.toString())
+                .hasMessageContaining("unknown for command export");
+    }
+
+    @Test
+    void validate_selected_reports_unknown_action_reference_parameter_before_invocation() {
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation)
+                .contains("Parameter customer")
+                .contains(CUSTOMER.toString())
+                .contains("unknown for command export")
+                .contains("navigation or finder action");
+    }
+
+    @Test
+    void act_guards_unknown_action_reference_parameter_when_ui_validation_is_bypassed() {
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
+                .isInstanceOf(RecoverableException.class)
+                .hasMessageContaining("Parameter customer")
                 .hasMessageContaining(CUSTOMER.toString())
                 .hasMessageContaining("unknown for command export");
     }
@@ -128,9 +157,35 @@ class CommandExportManagerExportSelectedTest {
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result) {
+        return entry(timestamp, target, result, actionDtoFor(target));
+    }
+
+    private static CommandLogEntry entryWithReferenceParameter(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final String parameterName,
+            final Bookmark parameterBookmark) {
+        final var actionDto = actionDtoFor(target);
+        actionDto.setParameters(new ParamsDto());
+        final var parameter = new ParamDto();
+        parameter.setName(parameterName);
+        parameter.setType(ValueType.REFERENCE);
+        parameter.setReference(parameterBookmark.toOidDto());
+        actionDto.getParameters().getParameter().add(parameter);
+        return entry(timestamp, target, null, actionDto);
+    }
+
+    private static ActionDto actionDtoFor(final Bookmark target) {
         final var actionDto = new ActionDto();
         actionDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#act");
+        return actionDto;
+    }
 
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final ActionDto actionDto) {
         final var commandDto = new CommandDto();
         commandDto.setMember(actionDto);
         commandDto.setTargets(new OidsDto());

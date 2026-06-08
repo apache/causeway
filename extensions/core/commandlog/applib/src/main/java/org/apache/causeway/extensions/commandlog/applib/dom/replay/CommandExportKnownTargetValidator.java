@@ -31,10 +31,12 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
+import org.apache.causeway.schema.common.v2.ValueType;
 
 /**
- * Validates that an exported command sequence can reach every selected action target from a root service
- * or from a previously recorded result in the same baseline-bounded export sequence.
+ * Validates that an exported command sequence can reach every selected action target and reference parameter
+ * from a root service or from a previously recorded result in the same baseline-bounded export sequence.
  */
 final class CommandExportKnownTargetValidator {
 
@@ -52,7 +54,7 @@ final class CommandExportKnownTargetValidator {
             if (isBeforeBaseline(baseline, entry)) {
                 continue;
             }
-            final Optional<Failure> failure = validateTargets(entry, knownTargets);
+            final Optional<Failure> failure = validateParticipants(entry, knownTargets);
             if (failure.isPresent()) {
                 return failure;
             }
@@ -62,15 +64,15 @@ final class CommandExportKnownTargetValidator {
         return Optional.empty();
     }
 
-    private Optional<Failure> validateTargets(
+    private Optional<Failure> validateParticipants(
             final CommandLogEntry entry,
             final Set<Bookmark> knownTargets) {
         if (!isActionCommand(entry.getCommandDto())) {
             return Optional.empty();
         }
-        for (final Bookmark target : targetBookmarksFor(entry)) {
-            if (!isKnownTarget(target, knownTargets)) {
-                return Optional.of(new Failure(entry, target));
+        for (final Participant participant : participantsFor(entry)) {
+            if (!isKnownTarget(participant.bookmark, knownTargets)) {
+                return Optional.of(new Failure(entry, participant));
             }
         }
         return Optional.empty();
@@ -96,37 +98,110 @@ final class CommandExportKnownTargetValidator {
                 && commandDto.getMember() instanceof ActionDto;
     }
 
-    private static List<Bookmark> targetBookmarksFor(final CommandLogEntry entry) {
-        final List<Bookmark> targets = new ArrayList<>();
+    private static List<Participant> participantsFor(final CommandLogEntry entry) {
+        final List<Participant> participants = new ArrayList<>();
         Optional.ofNullable(entry.getCommandDto())
                 .map(CommandDto::getTargets)
                 .stream()
                 .flatMap(oidsDto -> oidsDto.getOid().stream())
                 .map(Bookmark::forOidDto)
                 .filter(Objects::nonNull)
-                .forEach(targets::add);
-        if (targets.isEmpty() && entry.getTarget() != null) {
-            targets.add(entry.getTarget());
+                .map(Participant::target)
+                .forEach(participants::add);
+        if (participants.isEmpty() && entry.getTarget() != null) {
+            participants.add(Participant.target(entry.getTarget()));
         }
-        return targets;
+        referenceParametersFor(entry)
+                .forEach(participants::add);
+        return participants;
+    }
+
+    private static List<Participant> referenceParametersFor(final CommandLogEntry entry) {
+        final List<Participant> participants = new ArrayList<>();
+        Optional.ofNullable(entry.getCommandDto())
+                .map(CommandDto::getMember)
+                .filter(ActionDto.class::isInstance)
+                .map(ActionDto.class::cast)
+                .map(ActionDto::getParameters)
+                .stream()
+                .flatMap(paramsDto -> paramsDto.getParameter().stream())
+                .filter(CommandExportKnownTargetValidator::isReferenceParameter)
+                .forEach(parameter -> participants.add(Participant.parameter(
+                        parameterName(parameter, participants.size()),
+                        Bookmark.forOidDto(parameter.getReference()))));
+        return participants;
+    }
+
+    private static boolean isReferenceParameter(final ParamDto parameter) {
+        return parameter.getType() == ValueType.REFERENCE
+                && parameter.getReference() != null;
+    }
+
+    private static String parameterName(
+            final ParamDto parameter,
+            final int parameterIndex) {
+        return parameter.getName() != null
+                ? parameter.getName()
+                : "parameter[" + parameterIndex + "]";
+    }
+
+    private static final class Participant {
+        private final Bookmark bookmark;
+        private final String parameterName;
+
+        private Participant(
+                final Bookmark bookmark,
+                final String parameterName) {
+            this.bookmark = bookmark;
+            this.parameterName = parameterName;
+        }
+
+        static Participant target(final Bookmark bookmark) {
+            return new Participant(bookmark, null);
+        }
+
+        static Participant parameter(
+                final String parameterName,
+                final Bookmark bookmark) {
+            return new Participant(bookmark, parameterName);
+        }
+
+        boolean isParameter() {
+            return parameterName != null;
+        }
     }
 
     static final class Failure {
         private final CommandLogEntry commandLogEntry;
-        private final Bookmark unknownTarget;
+        private final Participant participant;
 
         Failure(
                 final CommandLogEntry commandLogEntry,
-                final Bookmark unknownTarget) {
+                final Participant participant) {
             this.commandLogEntry = commandLogEntry;
-            this.unknownTarget = unknownTarget;
+            this.participant = participant;
         }
 
         String message() {
+            return participant.isParameter()
+                    ? parameterMessage()
+                    : targetMessage();
+        }
+
+        private String targetMessage() {
             return String.format(
-                    "Target %s is unknown for command export in command %s. "
+                    "Target '%s' is unknown for command export in command %s. "
                             + "Include an earlier navigation or finder action returning this target in the exportable sequence.",
-                    unknownTarget,
+                    participant.bookmark,
+                    commandIdentity(commandLogEntry));
+        }
+
+        private String parameterMessage() {
+            return String.format(
+                    "Parameter %s '%s' is unknown for command export in command %s. "
+                            + "Include an earlier navigation or finder action returning this parameter object in the exportable sequence.",
+                    participant.parameterName,
+                    participant.bookmark,
                     commandIdentity(commandLogEntry));
         }
 
