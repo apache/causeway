@@ -43,9 +43,7 @@ class CommandSubscriberForCommandLogTest {
 
         fixture.subscriber.onStarted(command);
 
-        verify(commandLogEntry).getReplayState();
-        verify(commandLogEntry).syncExecutionMetadata(command);
-        verify(commandLogEntry, never()).sync(command);
+        verify(commandLogEntry).sync(command);
     }
 
     @Test
@@ -56,9 +54,7 @@ class CommandSubscriberForCommandLogTest {
 
         fixture.subscriber.onCompleted(command);
 
-        verify(commandLogEntry).getReplayState();
-        verify(commandLogEntry).syncExecutionMetadata(command);
-        verify(commandLogEntry, never()).sync(command);
+        verify(commandLogEntry).sync(command);
     }
 
     @Test
@@ -69,9 +65,7 @@ class CommandSubscriberForCommandLogTest {
 
         fixture.subscriber.onStarted(command);
 
-        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).sync(command);
-        verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
 
     @Test
@@ -82,9 +76,7 @@ class CommandSubscriberForCommandLogTest {
 
         fixture.subscriber.onCompleted(command);
 
-        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).sync(command);
-        verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
 
     @Test
@@ -97,7 +89,6 @@ class CommandSubscriberForCommandLogTest {
 
         verify(fixture.commandLogEntryRepository, never()).findByInteractionId(command.getInteractionId());
         verify(commandLogEntry, never()).sync(command);
-        verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
 
     @Test
@@ -110,7 +101,6 @@ class CommandSubscriberForCommandLogTest {
 
         verify(fixture.commandLogEntryRepository, never()).findByInteractionId(command.getInteractionId());
         verify(commandLogEntry, never()).sync(command);
-        verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
 
     private static CommandLogEntry commandLogEntry(final ReplayState replayState) {

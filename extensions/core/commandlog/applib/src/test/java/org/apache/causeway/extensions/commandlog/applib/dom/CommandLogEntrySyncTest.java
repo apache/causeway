@@ -51,7 +51,7 @@ class CommandLogEntrySyncTest {
         final var command = commandWithExecutionMetadataAndResult();
         final var commandLogEntry = commandLogEntry(ReplayState.OK);
 
-        commandLogEntry.syncExecutionMetadata(command);
+        commandLogEntry.sync(command);
 
         verify(commandLogEntry).setStartedAt(STARTED_AT);
         verify(commandLogEntry).setCompletedAt(COMPLETED_AT);
@@ -65,7 +65,7 @@ class CommandLogEntrySyncTest {
         final var command = commandWithAllData(commandDto);
         final var commandLogEntry = commandLogEntry(ReplayState.OK);
 
-        commandLogEntry.syncExecutionMetadata(command);
+        commandLogEntry.sync(command);
 
         verify(commandLogEntry).setStartedAt(STARTED_AT);
         verify(commandLogEntry).setCompletedAt(COMPLETED_AT);
@@ -77,7 +77,7 @@ class CommandLogEntrySyncTest {
         final var command = commandWithExecutionMetadataAndResult();
         final var commandLogEntry = commandLogEntry(ReplayState.UNDEFINED);
 
-        commandLogEntry.syncExecutionMetadata(command);
+        commandLogEntry.sync(command);
 
         verify(commandLogEntry).setStartedAt(STARTED_AT);
         verify(commandLogEntry).setCompletedAt(COMPLETED_AT);

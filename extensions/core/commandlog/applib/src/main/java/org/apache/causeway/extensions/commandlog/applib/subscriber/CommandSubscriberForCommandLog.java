@@ -37,7 +37,6 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
-import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -121,7 +120,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-                .ifPresent(commandLogEntry -> syncWithoutMutatingRecordedDtoForReplay(commandLogEntry, command));
+                .ifPresent(commandLogEntry -> commandLogEntry.sync(command));
     }
 
     @Override
@@ -132,17 +131,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-                .ifPresent(commandLogEntry -> syncWithoutMutatingRecordedDtoForReplay(commandLogEntry, command));
-    }
-
-    private void syncWithoutMutatingRecordedDtoForReplay(
-            final CommandLogEntry commandLogEntry,
-            final Command command) {
-        if (ReplayState.isReplayOrRetryEnabled(commandLogEntry.getReplayState())) {
-            commandLogEntry.syncExecutionMetadata(command);
-        } else {
-            commandLogEntry.sync(command);
-        }
+                .ifPresent(commandLogEntry -> commandLogEntry.sync(command));
     }
 
 }

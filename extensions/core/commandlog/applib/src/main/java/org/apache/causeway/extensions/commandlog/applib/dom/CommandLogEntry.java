@@ -75,6 +75,8 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+import static org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.isReplayOrRetryEnabled;
+
 /**
  * A persistent representation of a {@link Command}, being the intention to edit a property or invoke an action.
  *
@@ -176,6 +178,14 @@ public abstract class CommandLogEntry
     @Programmatic
     public void sync(final Command command) {
 
+        setStartedAt(command.getStartedAt());
+        setCompletedAt(command.getCompletedAt());
+
+        if (isReplayOrRetryEnabled(getReplayState())) {
+            // we DON'T overwrite the recorded result/exception if we're replaying.
+            return;
+        }
+
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
@@ -184,18 +194,6 @@ public abstract class CommandLogEntry
         setTarget(command.getTarget());
         setLogicalMemberIdentifier(command.getLogicalMemberIdentifier());
 
-        syncExecutionMetadata(command);
-    }
-
-    @Programmatic
-    public void syncExecutionMetadata(final Command command) {
-        setStartedAt(command.getStartedAt());
-        setCompletedAt(command.getCompletedAt());
-
-        if (org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.isReplayOrRetryEnabled(getReplayState())) {
-            // we DON'T overwrite the recorded result/exception if we're replaying.
-            return;
-        }
         setResult(command.getResult());
         setException(command.getException());
     }
