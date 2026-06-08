@@ -190,25 +190,24 @@ final class CommandExportKnownTargetValidator {
 
         private String targetMessage() {
             return String.format(
-                    "Target '%s' is unknown for command export in command %s. "
-                            + "Include an earlier navigation or finder action returning this target in the exportable sequence.",
-                    participant.bookmark,
-                    commandIdentity(commandLogEntry));
+                    "%s, target '%s': is unknown.",
+                    commandIdentity(commandLogEntry),
+                    participant.bookmark
+            );
         }
 
         private String parameterMessage() {
             return String.format(
-                    "Parameter %s '%s' is unknown for command export in command %s. "
-                            + "Include an earlier navigation or finder action returning this parameter object in the exportable sequence.",
+                    "%s, parameter %s: '%s' is unknown.",
+                    commandIdentity(commandLogEntry),
                     participant.parameterName,
-                    participant.bookmark,
-                    commandIdentity(commandLogEntry));
+                    participant.bookmark
+            );
         }
 
         private static String commandIdentity(final CommandLogEntry entry) {
             return String.format(
-                    "%s (%s at %s)",
-                    entry.getInteractionId(),
+                    "%s (at %s)",
                     entry.getLogicalMemberIdentifier(),
                     entry.getTimestamp());
         }
