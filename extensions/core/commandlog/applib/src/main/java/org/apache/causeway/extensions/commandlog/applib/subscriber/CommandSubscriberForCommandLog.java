@@ -33,6 +33,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -106,10 +107,26 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             }
 
         } else {
+            guardAgainstPendingBackgroundCommands();
+
             val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
 
+    }
+
+    private void guardAgainstPendingBackgroundCommands() {
+        if (causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport() != RecordingSupport.ENABLED) {
+            return;
+        }
+
+        val pendingBackgroundCommands = commandLogEntryRepository.findBackgroundAndNotYetStarted();
+        if (!pendingBackgroundCommands.isEmpty()) {
+            throw new IllegalStateException(String.format(
+                    "Cannot continue command-log recording while %,d background command(s) are pending execution. "
+                    + "Please wait until pending background commands have executed and committed before continuing.",
+                    pendingBackgroundCommands.size()));
+        }
     }
 
     @Override
