@@ -74,10 +74,12 @@ The export manager MUST NOT treat ordinary persisted domain objects as roots mer
 ### Requirement: Export target knowledge follows baseline-bounded export order
 The export manager SHALL evaluate target knowledge using the same command ordering that command export uses for replayable sequences.
 The export manager SHALL use current command timestamps when evaluating baseline-bounded export order.
+The export manager SHALL derive the available export-order context from the unified commands collection rather than from a replay-state-filtered collection.
 When command timestamps have been changed by an export-manager command move action, the changed timestamps SHALL determine whether a command result is earlier or later for target and reference-parameter validation.
 A command result SHALL make a bookmark known only for selected commands that occur later in that ordering.
 A command result MUST NOT make the same bookmark known for an earlier selected command or for another selected command whose ordering is not after the result-producing command.
 A command before the export manager baseline MUST NOT make a target known for the selected export sequence.
+A command's replay state MUST NOT by itself make the command unavailable as an earlier result for export target knowledge when the command is at or after the baseline and participates in the selected export sequence.
 
 #### Scenario: Later result does not validate earlier selected target
 - **GIVEN** an export manager baseline is set
@@ -89,6 +91,13 @@ A command before the export manager baseline MUST NOT make a target known for th
 #### Scenario: Earlier result validates later selected target
 - **GIVEN** an export manager baseline is set
 - **AND** a command with result bookmark `demoCustomer:1` appears earlier in export order and at or after the baseline
+- **WHEN** a selected later action command targets bookmark `demoCustomer:1`
+- **THEN** the export manager accepts the later command for export
+
+#### Scenario: Exported earlier result validates later selected target
+- **GIVEN** an export manager baseline is set
+- **AND** a selected command with replay state `EXPORTED` has result bookmark `demoCustomer:1`
+- **AND** that selected command appears earlier in export order and at or after the baseline
 - **WHEN** a selected later action command targets bookmark `demoCustomer:1`
 - **THEN** the export manager accepts the later command for export
 

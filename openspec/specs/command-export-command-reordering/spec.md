@@ -4,24 +4,35 @@
 TBD - created by archiving change add-move-commands-action. Update Purpose after archive.
 ## Requirements
 ### Requirement: Export manager moves selected commands after a target command
-When command-log recording support is `ENABLED`, the export manager SHALL provide an action to move one or more selected exportable commands after a target command.
+When command-log recording support is `ENABLED`, the export manager SHALL provide an action to move one or more selected commands from the unified commands collection after a target command.
 When command-log recording support is `DISABLED`, the export manager MUST disable command movement.
 The action SHALL operate only on commands at or after the export manager baseline.
-The target command choices SHALL include commands at or after the export manager baseline.
+The target command choices SHALL include commands at or after the export manager baseline from the unified commands collection.
 The target command choices MUST exclude every command selected for movement.
 The action MUST reject execution when no commands are selected.
 The action MUST reject execution when the target command is missing.
 The action MUST reject execution when the target command is one of the selected commands.
-The action MUST reject execution when any selected command or target command is outside the baseline-bounded exportable command set.
+The action MUST reject execution when any selected command or target command is outside the baseline-bounded command set.
+The action MUST NOT exclude a selected command or target command merely because its replay state is `EXPORTED`.
 
 #### Scenario: Target choices exclude selected commands
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
-- **AND** commands `A`, `B`, and `C` are exportable after the baseline
+- **AND** commands `A`, `B`, and `C` are in the unified commands collection after the baseline
 - **AND** commands `A` and `B` are selected for movement
 - **WHEN** the system provides target choices for the move action
 - **THEN** command `C` is offered as a target choice
 - **AND** commands `A` and `B` are not offered as target choices
+
+#### Scenario: Target choices include exported commands
+- **GIVEN** command-log recording support is `ENABLED`
+- **AND** an export manager baseline is set
+- **AND** command `A` has replay state `UNDEFINED`
+- **AND** command `B` has replay state `EXPORTED`
+- **AND** commands `A` and `B` are in the unified commands collection after the baseline
+- **AND** command `A` is selected for movement
+- **WHEN** the system provides target choices for the move action
+- **THEN** command `B` is offered as a target choice
 
 #### Scenario: Cannot move without a selection
 - **GIVEN** command-log recording support is `ENABLED`
