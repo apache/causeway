@@ -2,3 +2,4 @@
 timestamp
 member
 replayState
+exportable

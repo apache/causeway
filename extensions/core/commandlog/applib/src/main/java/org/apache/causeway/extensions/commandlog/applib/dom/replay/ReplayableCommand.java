@@ -308,8 +308,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "4.1",
             fieldSetId = "details",
-            describedAs = "Whether this command is exportable from the current command export manager context. "
-                    + "Blank means the export manager context is not available.")
+            describedAs = "Whether this command is exportable from the current command export manager context.",
+            hidden = Where.OBJECT_FORMS
+    )
     public Boolean getExportable() {
         if (commandExportManager == null) {
             return null;
