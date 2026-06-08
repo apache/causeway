@@ -293,6 +293,9 @@ implements
         log.info(" - clearing layout caches");
         clearLayoutCaches();
 
+        log.info(" - collect qualified value semantics");
+        new QualifiedValueSemanticsCollector(causewaySystemEnvironment).collect();
+
         stopWatch.stop();
         log.info("Metamodel created in {}ms. ({} introspection)", stopWatch.getMillis(), parallel ? "parallel" : "sequential");
 

@@ -28,22 +28,16 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -112,9 +106,6 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
             .forEach(singletonProvider->
                 managedBeanAdapterByName.put(singletonProvider.id(), singletonProvider));
 
-        //TODO perhaps find a better place where to do this
-        //primeQualifierLookup(causewaySystemEnvironment);
-
         return managedBeanAdapterByName;
     }
 
@@ -123,34 +114,6 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
                 ? causewayBeanTypeRegistry.containsManagedBeansContributing(singletonProvider.beanClass())
                 // do not register unknown sort
                 : false;
-    }
-
-    /**
-     * Collects qualifier information into the _ClassCache.
-     */
-    private static void primeQualifierLookup(final CausewaySystemEnvironment causewaySystemEnvironment) {
-        var classCache = _ClassCache.getInstance();
-        var springContext = causewaySystemEnvironment.springContextHolder().springContext();
-        var beanFactory = ((ConfigurableApplicationContext) springContext).getBeanFactory();
-
-        Stream.of(springContext.getBeanDefinitionNames())
-            .forEach(name->{
-                var type = ClassUtils.getUserClass(springContext.getType(name));
-                lookupQualifier(name, beanFactory)
-                    .ifPresent(qualifier->
-                        classCache.head(type).putAttribute(_ClassCache.Attribute.SPRING_QUALIFIED, qualifier));
-            });
-    }
-
-    private static Optional<String> lookupQualifier(final String id, final ConfigurableListableBeanFactory beanFactory) {
-        var beanDefinition = beanFactory.getBean(id);
-        if (beanDefinition instanceof AnnotatedBeanDefinition annotatedBeanDefinition)
-            return Optional.ofNullable(
-                    annotatedBeanDefinition.getMetadata().getAnnotationAttributes(Qualifier.class.getName()))
-                .map(it->it.get("value"))
-                .map(String.class::cast)
-                .map(_Strings::emptyToNull);
-        return Optional.empty();
     }
 
 }

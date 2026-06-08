@@ -145,7 +145,7 @@ implements ValueFacet<T> {
     public Optional<OrderRelation<T, ?>> selectDefaultOrderRelation() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Optional.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getOrderRelation)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
@@ -158,7 +158,7 @@ implements ValueFacet<T> {
     public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Optional.empty()))
+                .filter(isMatching(Optional.empty()))
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }
@@ -169,7 +169,7 @@ implements ValueFacet<T> {
     public Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Optional.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getDefaultsProvider)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -189,7 +189,7 @@ implements ValueFacet<T> {
     public Optional<Parser<T>> selectDefaultParser() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Optional.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getParser)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -214,7 +214,7 @@ implements ValueFacet<T> {
     public Optional<Renderer<T>> selectDefaultRenderer() {
         return getAllValueSemantics()
                 .stream()
-                .filter(isMatchingAnyOf(Optional.empty()))
+                .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getRenderer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -296,7 +296,7 @@ implements ValueFacet<T> {
             final @NonNull ObjectFeature feature) {
         return getAllValueSemantics()
             .stream()
-            .filter(isMatchingAnyOf(Facets.valueQualifier(feature)));
+            .filter(isMatching(Facets.valueQualifier(feature)));
     }
 
     private Optional<String> qualifierProvided(final @NonNull ValueSemanticsProvider<T> semProv) {
@@ -304,11 +304,11 @@ implements ValueFacet<T> {
             .qualifier();
     }
 
-    private Predicate<ValueSemanticsProvider<T>> isMatchingAnyOf(final Optional<String> qualifierRequired) {
-        return semProv -> isMatchingAnyOf(qualifierRequired, qualifierProvided(semProv));
+    private Predicate<ValueSemanticsProvider<T>> isMatching(final Optional<String> qualifierRequired) {
+        return semProv -> areMatching(qualifierRequired, qualifierProvided(semProv));
     }
 
-    private boolean isMatchingAnyOf(
+    private boolean areMatching(
             final Optional<String> qualifierRequired,
             final Optional<String> qualifierProvided) {
 

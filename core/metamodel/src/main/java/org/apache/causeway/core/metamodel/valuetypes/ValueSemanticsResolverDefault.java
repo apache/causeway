@@ -96,9 +96,9 @@ implements ValueSemanticsResolver {
     private <T> Stream<ValueSemanticsProvider<T>> streamExplicitValueSemantics(final Class<T> valueType) {
         final var nonPrimitiveValueType = ClassUtils.resolvePrimitiveIfNecessary(valueType);
         return _NullSafe.stream(valueSemanticsProviders)
-        //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
-        .filter(vs->vs.getCorrespondingClass().isAssignableFrom(nonPrimitiveValueType))
-        .map(provider->provider.castTo(valueType));
+            //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
+            .filter(vs->vs.getCorrespondingClass().isAssignableFrom(nonPrimitiveValueType))
+            .map(provider->provider.castTo(valueType));
     }
 
     private <T> Stream<ValueSemanticsProvider<T>> streamEnumValueSemantics(final Class<T> valueType) {

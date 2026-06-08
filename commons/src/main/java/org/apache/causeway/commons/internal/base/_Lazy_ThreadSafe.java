@@ -20,17 +20,20 @@ package org.apache.causeway.commons.internal.base;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.jspecify.annotations.NonNull;
 import lombok.Synchronized;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * package private implementation of _Lazy
  * @since 2.0
  */
+@Slf4j
 final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
 
     private final ThrowingSupplier<? extends T> supplier;
@@ -65,6 +68,8 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
         getting = true; // prevent the supplier from doing a nested call
         try {
             value = supplier.get();
+        } catch (Exception e) {
+            log.error("lazy supplier threw an exception", e);
         } finally {
             getting = false;
             memoized = true; // post condition as per contract
@@ -91,9 +96,8 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
     // -- HELPER
 
     private final void guardAgainstRecursiveCall() {
-        if(getting) {
+        if(getting)
             throw _Exceptions.illegalState("recursive call of lazy getter detected");
-        }
     }
 
 }
