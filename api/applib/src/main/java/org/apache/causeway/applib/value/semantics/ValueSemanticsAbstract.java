@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.Optional;
@@ -33,7 +32,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -42,13 +40,10 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
@@ -58,6 +53,13 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 public abstract class ValueSemanticsAbstract<T>
 implements
 ValueSemanticsProvider<T> {
+
+    public enum FormatUsageFor {
+        PARSING,
+        RENDERING;
+        public boolean isParsing() { return this==PARSING; }
+        public boolean isRendering() { return this==RENDERING; }
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -176,40 +178,6 @@ ValueSemanticsProvider<T> {
                 : onNull.get();
     }
 
-    // -- NUMBER FORMATTING/PARSING
-
-//    /**
-//     * @param context - nullable in support of JUnit testing
-//     * @return {@link NumberFormat} the default from given context's locale
-//     * or else system's default locale
-//     *
-//     * @implNote the format's MaximumFractionDigits are initialized to 16, as
-//     * 64 bit IEEE 754 double has 15 decimal digits of precision;
-//     * this is typically overruled later by implementations of
-//     * {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
-//     */
-//    protected DecimalFormat getNumberFormat(
-//            final ValueSemanticsProvider.@Nullable Context context) {
-//        return getNumberFormat(context, FormatUsageFor.RENDERING);
-//    }
-//
-//    protected DecimalFormat getNumberFormat(
-//            final ValueSemanticsProvider.@Nullable Context context,
-//            final @NonNull FormatUsageFor usedFor) {
-//        var format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).numberFormatLocale());
-//        // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
-//        format.setMaximumFractionDigits(16);
-//        configureDecimalFormat(context, format, usedFor);
-//        return format;
-//    }
-
-    public static enum FormatUsageFor {
-        PARSING,
-        RENDERING;
-        public boolean isParsing() { return this==PARSING; }
-        public boolean isRendering() { return this==RENDERING; }
-    }
-
     // -- TEMPORAL RENDERING
 
     protected DateTimeFormatter getTemporalNoZoneRenderingFormat(
@@ -222,14 +190,13 @@ ValueSemanticsProvider<T> {
             final @Nullable String dateTimePattern) {
 
         final DateTimeFormatter noZoneOutputFormat = switch (temporalCharacteristic) {
-        case DATE_TIME -> dateTimePattern != null
-                            ? DateTimeFormatter.ofPattern(dateTimePattern)
-                            : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
-        case DATE_ONLY -> datePattern != null
-                            ? DateTimeFormatter.ofPattern(datePattern)
-                            : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
-        case TIME_ONLY -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
-        default -> throw _Exceptions.unmatchedCase(temporalCharacteristic);
+            case DATE_TIME -> dateTimePattern != null
+                                ? DateTimeFormatter.ofPattern(dateTimePattern)
+                                : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
+            case DATE_ONLY -> datePattern != null
+                                ? DateTimeFormatter.ofPattern(datePattern)
+                                : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
+            case TIME_ONLY -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
         };
 
         return noZoneOutputFormat
@@ -242,45 +209,9 @@ ValueSemanticsProvider<T> {
             final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
         return switch (offsetCharacteristic) {
-        case LOCAL -> Optional.empty();
-        case OFFSET -> Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
-        case ZONED -> Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
-        default -> throw _Exceptions.unmatchedCase(offsetCharacteristic);
-        };
-    }
-
-    // -- TEMPORAL FORMATTING/PARSING
-
-    protected DateTimeFormatter getTemporalEditingFormat(
-            final ValueSemanticsProvider.@Nullable Context context,
-            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
-            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
-            final @NonNull TimePrecision timePrecision,
-            final @NonNull EditingFormatDirection direction,
-            final @NonNull TemporalEditingPattern editingPattern) {
-
-        return new DateTimeFormatterBuilder()
-                .appendPattern(editingPattern
-                        .getEditingFormatAsPattern(
-                                temporalCharacteristic, offsetCharacteristic, timePrecision, direction))
-                .toFormatter(getUserLocale(context).timeFormatLocale());
-    }
-
-    protected DateTimeFormatter getTemporalIsoFormat(
-            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
-            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
-
-        return switch (temporalCharacteristic) {
-        case DATE_TIME -> offsetCharacteristic.isLocal()
-                            ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                            : DateTimeFormatter.ISO_DATE_TIME;
-        case DATE_ONLY -> offsetCharacteristic.isLocal()
-                            ? DateTimeFormatter.ISO_LOCAL_DATE
-                            : DateTimeFormatter.ISO_DATE;
-        case TIME_ONLY -> offsetCharacteristic.isLocal()
-                            ? DateTimeFormatter.ISO_LOCAL_TIME
-                            : DateTimeFormatter.ISO_TIME;
-        default -> throw _Exceptions.unmatchedCase(temporalCharacteristic);
+            case LOCAL -> Optional.empty();
+            case OFFSET -> Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
+            case ZONED -> Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
         };
     }
 
