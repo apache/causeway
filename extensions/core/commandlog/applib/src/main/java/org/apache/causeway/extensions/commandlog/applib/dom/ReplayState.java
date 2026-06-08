@@ -31,7 +31,7 @@ public enum ReplayState {
      */
     UNDEFINED,
     /**
-     * Marks a {@link CommandLogEntry} as exported, such that consecutive export actions will skip those.
+     * Marks a {@link CommandLogEntry} as exported, so command export tooling can show it has already been exported.
      */
     EXPORTED,
     /**

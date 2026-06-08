@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager.Mode;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager.State;
 import org.junit.jupiter.api.Test;
 
@@ -32,16 +31,15 @@ class CommandExportManagerStateTest {
     @Test
     void roundtrip_toMemento_and_parseMemento() {
         final var timestamp = Timestamp.from(Instant.parse("2026-06-03T12:34:56.789Z"));
-        final var state = new State(timestamp, 25, Mode.UNEXPORT);
+        final var state = new State(timestamp, 25);
 
         final String memento = state.toMemento();
         final State parsed = State.parseMemento(memento, null);
 
-        assertThat(memento).contains("--");
+        assertThat(memento).isEqualTo(TimestampMarshallUtil.toString(timestamp) + "--25");
         assertThat(parsed).isNotNull();
         assertThat(parsed.getTimestamp()).isEqualTo(timestamp);
         assertThat(parsed.getLimit()).isEqualTo(25);
-        assertThat(parsed.getMode()).isEqualTo(Mode.UNEXPORT);
     }
 
     @Test
@@ -66,39 +64,28 @@ class CommandExportManagerStateTest {
     void parseMemento_invalid_part_count_returns_fallback() {
         final State fallback = fallbackState();
 
-        final State parsed = State.parseMemento("only-timestamp", fallback);
+        final State parsed = State.parseMemento("timestamp--limit--mode", fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
 
     @Test
-    void parseMemento_blank_limit_and_mode_uses_fallback_values() {
+    void parseMemento_blank_limit_uses_fallback_value() {
         final State fallback = fallbackState();
         final Timestamp timestamp = Timestamp.from(Instant.parse("2026-06-01T00:00:00.000Z"));
-        final String memento = TimestampMarshallUtil.toString(timestamp) + "----";
+        final String memento = TimestampMarshallUtil.toString(timestamp) + "--";
 
         final State parsed = State.parseMemento(memento, fallback);
 
         assertThat(parsed).isNotNull();
         assertThat(parsed.getTimestamp()).isEqualTo(timestamp);
         assertThat(parsed.getLimit()).isEqualTo(fallback.getLimit());
-        assertThat(parsed.getMode()).isEqualTo(fallback.getMode());
     }
 
     @Test
     void parseMemento_invalid_limit_returns_fallback() {
         final State fallback = fallbackState();
-        final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "--abc--EXPORT";
-
-        final State parsed = State.parseMemento(memento, fallback);
-
-        assertThat(parsed).isSameAs(fallback);
-    }
-
-    @Test
-    void parseMemento_invalid_mode_returns_fallback() {
-        final State fallback = fallbackState();
-        final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "--10--UNKNOWN";
+        final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "--abc";
 
         final State parsed = State.parseMemento(memento, fallback);
 
@@ -109,18 +96,17 @@ class CommandExportManagerStateTest {
     void parseMemento_invalid_timestamp_uses_fallback_timestamp() {
         final State fallback = fallbackState();
 
-        final State parsed = State.parseMemento("not-a-timestamp--10--UNEXPORT", fallback);
+        final State parsed = State.parseMemento("not-a-timestamp--10", fallback);
 
         assertThat(parsed).isNotNull();
         assertThat(parsed.getTimestamp()).isEqualTo(fallback.getTimestamp());
         assertThat(parsed.getLimit()).isEqualTo(10);
-        assertThat(parsed.getMode()).isEqualTo(Mode.UNEXPORT);
     }
 
     @Test
     void parseMemento_legacy_delimiter_returns_fallback() {
         final State fallback = fallbackState();
-        final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "|10|UNEXPORT";
+        final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "|10";
 
         final State parsed = State.parseMemento(memento, fallback);
 
@@ -129,7 +115,7 @@ class CommandExportManagerStateTest {
 
     @Test
     void parseMemento_invalid_and_null_fallback_returns_null() {
-        final State parsed = State.parseMemento("not-three-parts", null);
+        final State parsed = State.parseMemento("not-two-parts", null);
 
         assertThat(parsed).isNull();
     }
@@ -137,9 +123,6 @@ class CommandExportManagerStateTest {
     private static State fallbackState() {
         return new State(
                 Timestamp.from(Instant.parse("2026-05-30T01:02:03.004Z")),
-                77,
-                Mode.EXPORT);
+                77);
     }
 }
-
-

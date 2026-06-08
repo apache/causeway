@@ -122,6 +122,14 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
 
+    default List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since) {
+        return findForegroundSinceTimestamp(since, null);
+    }
+
+    List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since, final Integer limitIfAny);
+
+    List<CommandLogEntry> findForegroundBeforeTimestamp(final Timestamp before, final Integer limitIfAny);
+
     default List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
         return findForegroundSinceTimestampAndCanBeExported(since, null);
     }

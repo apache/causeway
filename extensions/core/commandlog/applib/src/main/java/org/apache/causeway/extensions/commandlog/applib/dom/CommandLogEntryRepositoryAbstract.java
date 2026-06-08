@@ -398,6 +398,22 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
     @Override
+    public List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER)
+                .withParameter("from", since);
+
+        return allMatches(query, batchSizeIfAny);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundBeforeTimestamp(final Timestamp before, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE)
+                .withParameter("to", before);
+
+        return allMatches(query, batchSizeIfAny);
+    }
+
+    @Override
     public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
         return findForegroundSinceTimestampAndCanBeExported(since, null);
     }

@@ -22,14 +22,14 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "notYetExported",
+        choicesFrom = "commands",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         domainEvent = CommandExportManager_exportSelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "notYetExported", sequence = "1.1",
+        associateWith = "commands", sequence = "1.1",
         cssClassFa = "solid share-from-square",
         cssClass = "btn-primary",
         describedAs = "Exports selected Commands as zipped DTOs for import later. "
@@ -90,7 +90,7 @@ public class CommandExportManager_exportSelected {
 
     @MemberSupport
     public String disableAct() {
-        return commandExportManager.getNotYetExported().isEmpty() ? "No commands in collection" : null;
+        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -121,7 +121,6 @@ public class CommandExportManager_exportSelected {
                 .map(ReplayableCommand::commandLogEntry)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(entry -> !ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -152,6 +151,6 @@ public class CommandExportManager_exportSelected {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getNotYetExported();
+        return commandExportManager.getCommands();
     }
 }

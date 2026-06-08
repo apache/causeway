@@ -5,7 +5,6 @@
         </bs:col>
         <bs:col span="3">
             <cpt:fieldSet name="Control" id="control">
-                <cpt:action id="toggleMode"/>
                 <cpt:property id="baseline">
                     <cpt:action id="previousHour"/>
                     <cpt:action id="nextHour"/>
@@ -46,8 +45,7 @@
         <bs:col span="12">
             <bs:row>
                 <bs:col span="12" size="MD">
-                    <cpt:collection defaultView="table" paged="100" id="notYetExported"/>
-                    <cpt:collection defaultView="table" paged="100" id="exported"/>
+                    <cpt:collection defaultView="table" paged="100" id="commands"/>
                 </bs:col>
             </bs:row>
         </bs:col>

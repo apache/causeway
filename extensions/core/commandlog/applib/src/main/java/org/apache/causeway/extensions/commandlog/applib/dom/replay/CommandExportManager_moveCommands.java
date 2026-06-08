@@ -43,14 +43,14 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "notYetExported",
+        choicesFrom = "commands",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
         domainEvent = CommandExportManager_moveCommands.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "notYetExported", sequence = "1.2",
+        associateWith = "commands", sequence = "1.2",
         describedAs = "Moves selected Commands after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
@@ -98,7 +98,7 @@ public class CommandExportManager_moveCommands {
         if (!isRecordingSupportEnabled()) {
             return "Command movement requires command-log recording support to be enabled";
         }
-        return commandExportManager.getNotYetExported().isEmpty() ? "No commands in collection" : null;
+        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -118,7 +118,7 @@ public class CommandExportManager_moveCommands {
             return "Cannot move commands after one of the selected commands";
         }
 
-        final Set<UUID> availableIds = interactionIds(commandExportManager.getNotYetExported());
+        final Set<UUID> availableIds = interactionIds(commandExportManager.getCommands());
         if (!availableIds.contains(target.interactionId())) {
             return "Target command is not available for export from the current baseline";
         }
@@ -131,7 +131,7 @@ public class CommandExportManager_moveCommands {
     @MemberSupport
     public List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
         final Set<UUID> selectedIds = interactionIds(selected);
-        return commandExportManager.getNotYetExported().stream()
+        return commandExportManager.getCommands().stream()
                 .filter(command -> !selectedIds.contains(command.interactionId()))
                 .collect(Collectors.toList());
     }
@@ -139,7 +139,7 @@ public class CommandExportManager_moveCommands {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getNotYetExported();
+        return commandExportManager.getCommands();
     }
 
     private boolean isRecordingSupportEnabled() {

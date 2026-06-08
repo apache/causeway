@@ -164,6 +164,10 @@ public abstract class CommandLogEntry
          * primary before the production database was restored to the secondary.
          */
         public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER
+                = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfter";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_BEFORE
+                = LOGICAL_TYPE_NAME + ".findForegroundByTimestampBefore";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE
                 = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayState";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE

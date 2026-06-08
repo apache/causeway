@@ -8,14 +8,14 @@ import org.apache.causeway.applib.annotation.*;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "exported",
+        choicesFrom = "commands",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.IDEMPOTENT,
         domainEvent = CommandExportManager_makeSelectedExportable.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "exported", sequence = "2.1",
+        associateWith = "commands", sequence = "2.1",
         describedAs = "Makes selected Commands exportable (again)"
 )
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class CommandExportManager_makeSelectedExportable {
 
     @MemberSupport
     public String disableAct() {
-        return commandExportManager.getExported().isEmpty() ? "No commands in collection" : null;
+        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -44,6 +44,6 @@ public class CommandExportManager_makeSelectedExportable {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getExported();
+        return commandExportManager.getCommands();
     }
 }

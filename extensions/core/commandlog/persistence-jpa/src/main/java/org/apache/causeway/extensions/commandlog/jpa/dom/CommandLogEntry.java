@@ -209,6 +209,20 @@ import lombok.Setter;
                   + "   AND cl.completedAt is not null "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp < :to "
+                  + " ORDER BY cl.timestamp DESC"),
+    @NamedQuery(
             name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE,
             query = "SELECT cl "
                   + " FROM CommandLogEntry cl "

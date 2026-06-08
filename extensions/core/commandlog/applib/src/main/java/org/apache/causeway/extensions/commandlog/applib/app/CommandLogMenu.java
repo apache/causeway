@@ -288,7 +288,7 @@ public class CommandLogMenu {
                 @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
                 final java.sql.Timestamp since
                 ) {
-            return new CommandExportManager(new CommandExportManager.State(since, CommandExportManager_changeLimit.MAX_LIMIT, CommandExportManager.Mode.EXPORT), replayContext);
+            return new CommandExportManager(new CommandExportManager.State(since, CommandExportManager_changeLimit.MAX_LIMIT), replayContext);
         }
 
         @MemberSupport public java.sql.Timestamp defaultSince() {

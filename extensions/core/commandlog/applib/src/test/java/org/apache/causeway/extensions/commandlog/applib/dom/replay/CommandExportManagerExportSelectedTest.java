@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
@@ -140,6 +141,16 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
+    void act_marks_selected_commands_exported_without_filtering_by_prior_replay_state() {
+        final var alreadyExported = entry(T1, MENU_SERVICE, null, ReplayState.EXPORTED);
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, alreadyExported);
+
+        fixture.action.act(fixture.replayableCommands, "commands", false);
+
+        verify(alreadyExported).setReplayState(ReplayState.EXPORTED);
+    }
+
+    @Test
     void validate_selected_still_requires_at_least_one_command() {
         final var fixture = fixtureWith(entry(T1, CUSTOMER));
 
@@ -160,8 +171,10 @@ class CommandExportManagerExportSelectedTest {
         }
 
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(List.of(entries));
+
         final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50, CommandExportManager.Mode.EXPORT),
+                new CommandExportManager.State(BASELINE, 50),
                 replayContext);
         final var action = new CommandExportManager_exportSelected(manager);
         action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
@@ -194,7 +207,7 @@ class CommandExportManagerExportSelectedTest {
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result) {
-        return entry(timestamp, target, result, actionDtoFor(target));
+        return entry(timestamp, target, result, ReplayState.UNDEFINED, actionDtoFor(target));
     }
 
     private static CommandLogEntry entryWithReferenceParameter(
@@ -209,7 +222,7 @@ class CommandExportManagerExportSelectedTest {
         parameter.setType(ValueType.REFERENCE);
         parameter.setReference(parameterBookmark.toOidDto());
         actionDto.getParameters().getParameter().add(parameter);
-        return entry(timestamp, target, null, actionDto);
+        return entry(timestamp, target, null, ReplayState.UNDEFINED, actionDto);
     }
 
     private static ActionDto actionDtoFor(final Bookmark target) {
@@ -222,6 +235,15 @@ class CommandExportManagerExportSelectedTest {
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result,
+            final ReplayState replayState) {
+        return entry(timestamp, target, result, replayState, actionDtoFor(target));
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final ReplayState replayState,
             final ActionDto actionDto) {
         final var commandDto = new CommandDto();
         commandDto.setMember(actionDto);
@@ -236,7 +258,7 @@ class CommandExportManagerExportSelectedTest {
         when(entry.getResult()).thenReturn(result);
         when(entry.getCommandDto()).thenReturn(commandDto);
         when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
-        when(entry.getReplayState()).thenReturn(ReplayState.UNDEFINED);
+        when(entry.getReplayState()).thenReturn(replayState);
         return entry;
     }
 

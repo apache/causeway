@@ -82,6 +82,18 @@ class CommandExportManagerMoveCommandsTest {
     }
 
     @Test
+    void choices_target_includes_exported_commands() {
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.UNDEFINED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.EXPORTED);
+        final var fixture = fixtureWith(a, b);
+
+        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a));
+
+        assertThat(interactionIds(choices))
+                .containsExactly(b.getInteractionId());
+    }
+
+    @Test
     void validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T2, MENU_SERVICE, null);
@@ -235,14 +247,14 @@ class CommandExportManagerMoveCommandsTest {
             final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         final var availableEntries = List.of(entries);
-        when(repository.findForegroundSinceTimestampAndCanBeExported(BASELINE, 50)).thenReturn(availableEntries);
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(availableEntries);
         for (final CommandLogEntry entry : entries) {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
         final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50, CommandExportManager.Mode.EXPORT),
+                new CommandExportManager.State(BASELINE, 50),
                 replayContext);
         final var moveAction = new CommandExportManager_moveCommands(manager);
         moveAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
@@ -271,7 +283,15 @@ class CommandExportManagerMoveCommandsTest {
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result) {
-        return entry(timestamp, target, result, actionDtoFor(target));
+        return entry(timestamp, target, result, ReplayState.UNDEFINED);
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final ReplayState replayState) {
+        return entry(timestamp, target, result, replayState, actionDtoFor(target));
     }
 
     private static CommandLogEntry entryWithReferenceParameter(
@@ -287,7 +307,7 @@ class CommandExportManagerMoveCommandsTest {
         parameter.setType(ValueType.REFERENCE);
         parameter.setReference(parameterBookmark.toOidDto());
         actionDto.getParameters().getParameter().add(parameter);
-        return entry(timestamp, target, result, actionDto);
+        return entry(timestamp, target, result, ReplayState.UNDEFINED, actionDto);
     }
 
     private static ActionDto actionDtoFor(final Bookmark target) {
@@ -300,6 +320,7 @@ class CommandExportManagerMoveCommandsTest {
             final Timestamp timestamp,
             final Bookmark target,
             final Bookmark result,
+            final ReplayState replayState,
             final ActionDto actionDto) {
         final AtomicReference<Timestamp> timestampRef = new AtomicReference<>(timestamp);
         final var commandDto = new CommandDto();
@@ -321,7 +342,7 @@ class CommandExportManagerMoveCommandsTest {
         when(entry.getResult()).thenReturn(result);
         when(entry.getCommandDto()).thenReturn(commandDto);
         when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
-        when(entry.getReplayState()).thenReturn(ReplayState.UNDEFINED);
+        when(entry.getReplayState()).thenReturn(replayState);
         return entry;
     }
 

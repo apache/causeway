@@ -39,7 +39,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExport
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_nextPage;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_previousPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_toggleMode;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
@@ -103,7 +102,6 @@ import org.springframework.context.annotation.Import;
         CommandExportManager_moveCommands.class,
         CommandExportManager_previousPage.class,
         CommandExportManager_nextPage.class,
-        CommandExportManager_toggleMode.class,
         CommandExportManager_changeLimit.class,
         CommandReplayManager_importCommands.class,
         CommandReplayManager_replayOrRetryNext.class,
