@@ -46,6 +46,7 @@ When target remapping supplies a replacement bookmark, the replay execution DTO 
 When reference parameter remapping supplies a replacement bookmark, the replay execution DTO SHALL use the replacement parameter reference bookmark and the recorded command DTO SHALL retain the original parameter reference bookmark.
 Replay retry SHALL start from the recorded command DTO and MUST NOT reuse a previously remapped execution DTO as recorded input.
 Replay failure MUST NOT leave remapped target or reference parameter values in the recorded command DTO.
+Lifecycle synchronization for replay entries SHALL update execution timing metadata without overwriting recorded command DTO, target, member, result, or exception data.
 
 #### Scenario: Remapped replay target preserves recorded command
 - **WHEN** command replay remaps recorded target bookmark `demoCustomer:1` to actual target bookmark `demoCustomer:2`
@@ -73,6 +74,11 @@ Replay failure MUST NOT leave remapped target or reference parameter values in t
 - **WHEN** command replay remaps a recorded target or reference parameter bookmark before execution
 - **AND** replay execution fails
 - **THEN** the imported command log entry still records the original target and reference parameter bookmarks
+
+#### Scenario: Replay lifecycle sync preserves recorded replay entry data
+- **WHEN** command subscriber lifecycle synchronization receives an in-memory replay command with execution timing, command DTO, target, member, result, and exception data
+- **THEN** the replay command log entry records the execution timing metadata
+- **AND** the replay command log entry still retains its recorded command DTO, target, member, result, and exception data
 
 ### Requirement: Replay result mapping SPI is notified after successful replay
 The system SHALL provide a command replay mapping SPI that applications can implement to receive replay result bookmark observations and provide replay input bookmark lookups.

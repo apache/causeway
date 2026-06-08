@@ -48,14 +48,14 @@ Replayable participant display should continue deriving recorded bookmarks from 
 Alternative considered: persist both recorded and effective replay DTOs.
 That would add data model complexity before there is a requirement to retain the effective execution shape.
 
-### Subscriber lifecycle sync preserves replay entries
+### Command log entry sync preserves replay entries
 
-For replay entries, command subscriber `onStarted(...)` and `onCompleted(...)` should not call full `CommandLogEntry#sync(Command)` because that copies the in-memory command DTO back into the persisted entry.
-Instead, replay entries should sync only execution metadata such as started and completed timestamps.
-Normal recorded commands should continue using full sync.
+For replay entries, command subscriber `onStarted(...)` and `onCompleted(...)` continue to call `CommandLogEntry#sync(Command)`.
+`CommandLogEntry#sync(Command)` records execution timing metadata first, then returns early for replay-or-retry-enabled entries before copying the in-memory command DTO, target, member, result, or exception back into the persisted entry.
+Normal recorded commands continue using full sync.
 
-Alternative considered: skip only `onStarted(...)` for replay entries.
-That is insufficient because `onCompleted(...)` can see the same remapped in-memory command DTO and overwrite the recorded DTO later in the lifecycle.
+Alternative considered: make the subscriber branch around replay entries and call a separate execution-metadata sync method.
+That duplicated replay-state handling in the subscriber and was simplified by keeping the policy inside `CommandLogEntry#sync(Command)`.
 
 ### Test target and parameter mutation independently
 
