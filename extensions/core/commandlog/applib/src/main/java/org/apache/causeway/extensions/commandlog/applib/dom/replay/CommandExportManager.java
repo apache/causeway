@@ -22,7 +22,11 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Timest
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -38,8 +42,13 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.Data;
@@ -51,11 +60,16 @@ import lombok.Getter;
 public final class CommandExportManager implements ViewModel, HasBaseline, CommandRecordingSuppressed {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
+    static final String SCRATCHPAD_KEY = LOGICAL_TYPE_NAME + "#current";
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
     ReplayContext replayContext;
+
+    @Inject Scratchpad scratchpad;
+    @Inject MetaModelService metaModelService;
+    @Inject CausewayConfiguration causewayConfiguration;
 
     @Inject
     public CommandExportManager(
@@ -104,10 +118,12 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
             describedAs = "Commands since the baseline"
     )
     public List<ReplayableCommand> getCommands() {
+        putCurrentExportManagerOnScratchpad();
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
-                        replayContext))
+                        replayContext,
+                        scratchpad))
                 .collect(Collectors.toList());
     }
 
@@ -133,6 +149,74 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
             default:
                 return getCommandsPrevious();
         }
+    }
+
+    @Programmatic
+    Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
+            final List<CommandLogEntry> selectedCommandLogEntries) {
+        return isRecordingSupportEnabled()
+                ? validator().validate(baseline, selectedCommandLogEntries)
+                : Optional.empty();
+    }
+
+    @Programmatic
+    Boolean isExportable(final CommandLogEntry commandLogEntry) {
+        if (commandLogEntry == null || !isRecordingSupportEnabled()) {
+            return null;
+        }
+        return validator().validateParticipants(commandLogEntry, knownParticipantsAsOf(commandLogEntry.getInteractionId())).isEmpty();
+    }
+
+    @Programmatic
+    Set<Bookmark> knownParticipantsAsOf(final UUID interactionId) {
+        final Set<Bookmark> knownParticipants = new HashSet<>();
+        for (final CommandLogEntry entry : commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .sorted()
+                .collect(Collectors.toList())) {
+            if (sameInteractionId(entry, interactionId)) {
+                return knownParticipants;
+            }
+            Optional.ofNullable(entry.getResult())
+                    .ifPresent(knownParticipants::add);
+        }
+        return knownParticipants;
+    }
+
+    private static boolean sameInteractionId(
+            final CommandLogEntry entry,
+            final UUID interactionId) {
+        return entry != null
+                && interactionId != null
+                && interactionId.equals(entry.getInteractionId());
+    }
+
+    private boolean isRecordingSupportEnabled() {
+        return causewayConfiguration != null
+                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+    }
+
+    private CommandExportKnownTargetValidator validator() {
+        return new CommandExportKnownTargetValidator(this::isExportRoot);
+    }
+
+    private boolean isExportRoot(final Bookmark bookmark) {
+        return metaModelService != null
+                && metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+                .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
+                .orElse(false);
+    }
+
+    private void putCurrentExportManagerOnScratchpad() {
+        if (scratchpad != null) {
+            scratchpad.put(SCRATCHPAD_KEY, this);
+        }
+    }
+
+    static Optional<CommandExportManager> currentExportManager(final Scratchpad scratchpad) {
+        return Optional.ofNullable(scratchpad)
+                .map(sp -> sp.get(SCRATCHPAD_KEY))
+                .filter(CommandExportManager.class::isInstance)
+                .map(CommandExportManager.class::cast);
     }
 
     // -- VM STATE

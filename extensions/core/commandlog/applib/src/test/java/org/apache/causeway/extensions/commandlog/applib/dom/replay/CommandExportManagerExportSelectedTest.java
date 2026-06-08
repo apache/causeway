@@ -27,7 +27,9 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +42,7 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -141,6 +144,71 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
+    void exportable_is_true_for_command_with_known_target_in_export_manager_context() {
+        final var finder = entry(T1, MENU_SERVICE, CUSTOMER);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
+        final var commands = exportManagerCommandsWith(finder, actionOnFoundCustomer);
+
+        assertThat(commands.get(1).getExportable()).isTrue();
+    }
+
+    @Test
+    void exportable_is_false_for_command_with_unknown_target_in_export_manager_context() {
+        final var commands = exportManagerCommandsWith(entry(T1, CUSTOMER));
+
+        assertThat(commands.get(0).getExportable()).isFalse();
+    }
+
+    @Test
+    void exportable_is_false_when_required_result_is_later_in_export_order() {
+        final var actionOnCustomer = entry(T1, CUSTOMER, null);
+        final var laterFinder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
+        final var commands = exportManagerCommandsWith(actionOnCustomer, laterFinder);
+
+        assertThat(commands.get(0).getExportable()).isFalse();
+    }
+
+    @Test
+    void earlier_non_exportable_command_does_not_make_later_known_command_non_exportable() {
+        final var unknownCustomerAction = entry(T1, CUSTOMER, null);
+        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER, null);
+        final var commands = exportManagerCommandsWith(unknownCustomerAction, finder, actionOnFoundCustomer);
+
+        assertThat(commands.get(0).getExportable()).isFalse();
+        assertThat(commands.get(1).getExportable()).isTrue();
+        assertThat(commands.get(2).getExportable()).isTrue();
+    }
+
+    @Test
+    void exportable_is_null_when_recording_support_is_disabled() {
+        final var commands = exportManagerCommandsWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER));
+
+        assertThat(commands.get(0).getExportable()).isNull();
+    }
+
+    @Test
+    void exportable_is_null_outside_export_manager_context() {
+        final var entry = entry(T1, CUSTOMER);
+        final var repository = mock(CommandLogEntryRepository.class);
+        when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+
+        final var command = new ReplayableCommand(entry.getInteractionId(), replayContext);
+
+        assertThat(command.getExportable()).isNull();
+    }
+
+    @Test
+    void exportable_computation_does_not_modify_replay_state() {
+        final var entry = entry(T1, CUSTOMER);
+        final var commands = exportManagerCommandsWith(entry);
+
+        assertThat(commands.get(0).getExportable()).isFalse();
+        verify(entry, org.mockito.Mockito.never()).setReplayState(org.mockito.Mockito.any());
+    }
+
+    @Test
     void act_marks_selected_commands_exported_without_filtering_by_prior_replay_state() {
         final var alreadyExported = entry(T1, MENU_SERVICE, null, ReplayState.EXPORTED);
         final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, alreadyExported);
@@ -162,16 +230,29 @@ class CommandExportManagerExportSelectedTest {
         return fixtureWithRecordingSupport(RecordingSupport.ENABLED, entries);
     }
 
+    private static List<ReplayableCommand> exportManagerCommandsWith(final CommandLogEntry... entries) {
+        return exportManagerCommandsWithRecordingSupport(RecordingSupport.ENABLED, entries);
+    }
+
+    private static List<ReplayableCommand> exportManagerCommandsWithRecordingSupport(
+            final RecordingSupport recordingSupport,
+            final CommandLogEntry... entries) {
+        final var repository = repositoryWith(entries);
+        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var manager = new CommandExportManager(
+                new CommandExportManager.State(BASELINE, 50),
+                replayContext);
+        manager.scratchpad = scratchpad();
+        manager.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+        manager.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        return manager.getCommands();
+    }
+
     private static Fixture fixtureWithRecordingSupport(
             final RecordingSupport recordingSupport,
             final CommandLogEntry... entries) {
-        final var repository = mock(CommandLogEntryRepository.class);
-        for (final CommandLogEntry entry : entries) {
-            when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
-        }
-
+        final var repository = repositoryWith(entries);
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
-        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(List.of(entries));
 
         final var manager = new CommandExportManager(
                 new CommandExportManager.State(BASELINE, 50),
@@ -182,6 +263,38 @@ class CommandExportManagerExportSelectedTest {
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(java.util.stream.Collectors.toList());
         return new Fixture(action, replayableCommands);
+    }
+
+    private static CommandLogEntryRepository repositoryWith(final CommandLogEntry... entries) {
+        final var repository = mock(CommandLogEntryRepository.class);
+        for (final CommandLogEntry entry : entries) {
+            when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+        }
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(List.of(entries));
+        return repository;
+    }
+
+    private static Scratchpad scratchpad() {
+        return new Scratchpad() {
+            private final Map<Object, Object> userData = new HashMap<>();
+
+            @Override
+            public Object get(final Object key) {
+                return userData.get(key);
+            }
+
+            @Override
+            public void put(
+                    final Object key,
+                    final Object value) {
+                userData.put(key, value);
+            }
+
+            @Override
+            public void destroy() {
+                userData.clear();
+            }
+        };
     }
 
     private static CausewayConfiguration causewayConfigurationWith(final RecordingSupport recordingSupport) {

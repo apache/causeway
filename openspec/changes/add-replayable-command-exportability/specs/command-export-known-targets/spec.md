@@ -2,7 +2,7 @@
 
 ### Requirement: Exportability indicator uses export validation context
 When command-log recording support is `ENABLED`, the exportability property for replayable commands in the export manager SHALL use the same known target and known reference-parameter rules as the export action.
-When command-log recording support is `DISABLED`, the exportability property MUST NOT report a command as non-exportable merely because its target or reference parameters are unknown to the dotted-path export validation rule.
+When command-log recording support is `DISABLED`, the exportability property SHALL be `null` because exportability is undefined without command-log recording support.
 The exportability property SHALL evaluate target and reference-parameter knowledge using the export manager baseline and current command export ordering.
 The exportability property SHALL treat only commands earlier than or equal to the evaluated command as available for validating that command.
 The exportability property MUST NOT require the user to invoke export before receiving this validation feedback.
@@ -32,10 +32,18 @@ The exportability property MUST NOT require the user to invoke export before rec
 - **WHEN** the system computes exportability for the replayable action command in the export manager commands collection
 - **THEN** the replayable command exportability property is `false`
 
-#### Scenario: Disabled recording support does not mark unknown target non-exportable
+#### Scenario: Earlier invalid command does not poison later command exportability
+- **GIVEN** command-log recording support is `ENABLED`
+- **AND** an export manager baseline is set
+- **AND** an earlier replayable action command is not exportable because it targets unknown bookmark `demoCustomer:1`
+- **AND** a following finder command returns bookmark `demoCustomer:1`
+- **AND** a later replayable action command targets bookmark `demoCustomer:1`
+- **WHEN** the system computes exportability for the later replayable action command in the export manager commands collection
+- **THEN** the later replayable command exportability property is `true`
+
+#### Scenario: Disabled recording support makes exportability undefined
 - **GIVEN** command-log recording support is `DISABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command targets bookmark `demoCustomer:1`
-- **AND** the target bookmark `demoCustomer:1` is not known in the baseline-bounded export sequence
 - **WHEN** the system computes exportability for the replayable command in the export manager commands collection
-- **THEN** the replayable command exportability property is not `false` merely because of the unknown target validation rule
+- **THEN** the replayable command exportability property is `null`

@@ -44,14 +44,14 @@ This matches the requested tri-state behavior and avoids showing a false negativ
 Alternative considered: use an enum with labels such as `EXPORTABLE`, `NOT_EXPORTABLE`, and `UNKNOWN`.
 An enum would be more descriptive, but the requested API shape is a nullable Boolean and is enough for table display and sorting.
 
-3. Compute exportability using the baseline-bounded command prefix.
+3. Compute exportability from known participants as-of the command.
 
-For a replayable command created in the export manager context, gather the current command log entries from the manager's commands collection or repository ordering, retain entries at or after the baseline through the current command, and call the known-target validator on that prefix.
-If the validator returns no failure, the command is exportable.
-If it returns a failure, the command is not exportable.
+For a replayable command created in the export manager context, the export manager will expose `knownParticipantsAsOf(commandId)` to gather result bookmarks from commands that precede the evaluated command in the baseline-bounded export ordering.
+The replayable command then validates only its own target and reference participants against that known set plus export roots.
+This avoids allowing an earlier invalid command to poison later rows whose own participants are otherwise known.
 
-Alternative considered: validate only the single command against all earlier results already collected in a reusable accumulator.
-That would be more efficient, but a prefix validation reuses existing behavior with less risk for the first version.
+Alternative considered: validate the entire command prefix through the current command.
+That reused the export action validator, but it was too coarse because a failure on an earlier command would incorrectly make a later command appear non-exportable.
 
 4. Extract shared validation helpers if necessary.
 

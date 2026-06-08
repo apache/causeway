@@ -64,7 +64,7 @@ final class CommandExportKnownTargetValidator {
         return Optional.empty();
     }
 
-    private Optional<Failure> validateParticipants(
+    Optional<Failure> validateParticipants(
             final CommandLogEntry entry,
             final Set<Bookmark> knownTargets) {
         if (!isActionCommand(entry.getCommandDto())) {

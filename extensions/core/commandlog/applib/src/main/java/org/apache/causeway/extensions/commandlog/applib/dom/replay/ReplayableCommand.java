@@ -47,6 +47,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -110,6 +111,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return recordRef;
     }
 
+    private final CommandExportManager commandExportManager;
+
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
     // decoupled from the underlying entity
@@ -168,26 +171,50 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         }
     }
 
-    @Inject
     public ReplayableCommand(
             final String memento,
             final ReplayContext replayContext) {
         this(UUID.fromString(memento), replayContext);
     }
 
+    @Inject
+    public ReplayableCommand(
+            final String memento,
+            final ReplayContext replayContext,
+            final Scratchpad scratchpad) {
+        this(UUID.fromString(memento), replayContext, scratchpad);
+    }
+
     ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext) {
-        this(interactionId, replayContext, new ObjectReference<>(null));
+        this(interactionId, replayContext, new ObjectReference<>(null), null);
+    }
+
+    ReplayableCommand(
+            final UUID interactionId,
+            final ReplayContext replayContext,
+            final Scratchpad scratchpad) {
+        this(interactionId, replayContext, new ObjectReference<>(null),
+                CommandExportManager.currentExportManager(scratchpad).orElse(null));
     }
 
     ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext,
             final ObjectReference<CommandRecord> recordRef) {
+        this(interactionId, replayContext, recordRef, null);
+    }
+
+    private ReplayableCommand(
+            final UUID interactionId,
+            final ReplayContext replayContext,
+            final ObjectReference<CommandRecord> recordRef,
+            final CommandExportManager commandExportManager) {
         this.interactionId = interactionId;
         this.replayContext = replayContext;
         this.recordRef = recordRef;
+        this.commandExportManager = commandExportManager;
     }
 
     @ObjectSupport
@@ -274,6 +301,21 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     public ReplayState getReplayState() {
         return commandRecord()
                 .map(CommandRecord::replayState)
+                .orElse(null);
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "4.1",
+            fieldSetId = "details",
+            describedAs = "Whether this command is exportable from the current command export manager context. "
+                    + "Blank means the export manager context is not available.")
+    public Boolean getExportable() {
+        if (commandExportManager == null) {
+            return null;
+        }
+        return commandLogEntry()
+                .map(commandExportManager::isExportable)
                 .orElse(null);
     }
 

@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Clob;
@@ -127,25 +126,9 @@ public class CommandExportManager_exportSelected {
 
     private Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> selectedCommandLogEntries) {
-        return isRecordingSupportEnabled()
-                ? validator().validate(commandExportManager.getBaseline(), selectedCommandLogEntries)
-                : Optional.empty();
-    }
-
-    private boolean isRecordingSupportEnabled() {
-        return causewayConfiguration != null
-                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
-    }
-
-    private CommandExportKnownTargetValidator validator() {
-        return new CommandExportKnownTargetValidator(this::isExportRoot);
-    }
-
-    private boolean isExportRoot(final Bookmark bookmark) {
-        return metaModelService != null
-                && metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
-                .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(DomainService.class))
-                .orElse(false);
+        commandExportManager.metaModelService = metaModelService;
+        commandExportManager.causewayConfiguration = causewayConfiguration;
+        return commandExportManager.validateKnownTargets(selectedCommandLogEntries);
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
