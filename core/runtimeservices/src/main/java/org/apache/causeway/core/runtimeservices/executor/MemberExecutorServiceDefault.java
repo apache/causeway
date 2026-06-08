@@ -311,16 +311,34 @@ implements MemberExecutorService {
         return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
-    private void setCommandResultIfEntity(
+    void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
         if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;
         }
+        singletonResultCandidate(resultAdapter)
+                .ifPresent(candidate -> setCommandResultIfEntityScalar(command, candidate));
+    }
+
+    private Optional<ManagedObject> singletonResultCandidate(final ManagedObject resultAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return;
+            return Optional.empty();
         }
+        if(resultAdapter instanceof PackedManagedObject) {
+            val unpacked = ((PackedManagedObject)resultAdapter).unpack();
+            return unpacked.size() == 1
+                    ? unpacked.getSingleton()
+                            .filter(candidate -> !ManagedObjects.isNullOrUnspecifiedOrEmpty(candidate))
+                    : Optional.empty();
+        }
+        return Optional.of(resultAdapter);
+    }
+
+    private void setCommandResultIfEntityScalar(
+            final Command command,
+            final ManagedObject resultAdapter) {
         val entityState = resultAdapter.getEntityState();
         if(!entityState.isPersistable()) {
             return;

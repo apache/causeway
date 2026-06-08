@@ -84,6 +84,16 @@ public abstract class Counter implements Comparable<Counter> {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findEmptyList() {
+        return List.of();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findSelfTwiceAsList() {
+        return List.of(this, this);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     public String findNameAsScalar() {
         return getName();
     }

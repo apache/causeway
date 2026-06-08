@@ -307,6 +307,10 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         interactionService.nextInteraction();
         wrapperFactory.wrap(counter1).findSelfAsList();
         interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findEmptyList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfTwiceAsList();
+        interactionService.nextInteraction();
         wrapperFactory.wrap(counter1).findNameAsScalar();
         interactionService.nextInteraction();
 
@@ -317,7 +321,24 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
                 .contains(
                         "commandlog.test.Counter#findNull",
                         "commandlog.test.Counter#findSelfAsList",
+                        "commandlog.test.Counter#findEmptyList",
+                        "commandlog.test.Counter#findSelfTwiceAsList",
                         "commandlog.test.Counter#findNameAsScalar");
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfAsList").getResult())
+                .isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNull").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findEmptyList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfTwiceAsList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNull();
+    }
+
+    private CommandLogEntry entryFor(
+            final List<? extends CommandLogEntry> entries,
+            final String logicalMemberIdentifier) {
+        return entries.stream()
+                .filter(entry -> logicalMemberIdentifier.equals(entry.getLogicalMemberIdentifier()))
+                .findFirst()
+                .orElseThrow();
     }
 
 
