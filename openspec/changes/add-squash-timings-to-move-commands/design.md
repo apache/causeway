@@ -11,7 +11,7 @@ The requested change adds an explicit user choice to squash those internal timin
 
 - Add a checkbox parameter to the move action for enabling timing squash per invocation.
 - Keep the existing preserve-gap behavior as the default when the checkbox is not selected.
-- When squashing is enabled, assign moved command timestamps at deterministic 10ms increments while preserving selected command order.
+- When squashing is enabled, assign moved command timestamps at deterministic 1 second increments while preserving selected command order.
 - Continue updating both `CommandLogEntry.timestamp` and the timestamp inside the associated command DTO.
 - Cover both default and squash behavior with command-log applib tests.
 
@@ -36,16 +36,16 @@ The requested change adds an explicit user choice to squash those internal timin
   The current code already centralizes the timestamp rewrite in `moveAfter`, so adding a policy flag there keeps validation and DTO update behavior unchanged.
   The alternative was to split preserve-gap and squash code paths at the action level, but that would make it easier for future changes to update one path and not the other.
 
-- Use the existing 10ms minimum gap constant for squash increments.
-  This keeps the new behavior aligned with the current minimum-gap rule and avoids introducing another timing constant.
-  The alternative was a configurable increment, but the requirement is fixed at 10ms and configuration would add unnecessary surface area.
+- Use a dedicated 1 second gap constant for squash increments.
+  This keeps the existing 10ms minimum-gap behavior for non-squashed moves while making squashed moves easier to inspect and reliably ordered.
+  The alternative was a configurable increment, but the requirement is fixed at 1 second and configuration would add unnecessary surface area.
 
 ## Risks / Trade-offs
 
 - [Risk] Adding a boolean parameter changes the action signature and may affect callers that invoke the action programmatically.
   → Mitigation: Keep validation behavior unchanged and update tests to exercise the new signature.
 
-- [Risk] Squashed timings still may not fit if the available target gap is smaller than 10ms times the moved command count.
+- [Risk] Squashed timings still may not fit if the available target gap is smaller than 1 second times the moved command count.
   → Mitigation: The checkbox provides deterministic compression but does not promise a fit check; the scope explicitly avoids successor-gap validation.
 
 - [Risk] Users might not understand the difference between preserving and squashing timings.

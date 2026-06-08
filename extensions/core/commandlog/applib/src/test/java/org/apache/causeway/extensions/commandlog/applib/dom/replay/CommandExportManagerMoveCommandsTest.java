@@ -88,13 +88,13 @@ class CommandExportManagerMoveCommandsTest {
         final var beforeBaseline = entry(BEFORE_BASELINE, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b);
 
-        assertThat(fixture.moveAction.validateAct(List.of(), fixture.command(b)))
+        assertThat(fixture.moveAction.validateAct(List.of(), fixture.command(b), false))
                 .isEqualTo("Select at least one command to move");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), null))
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), null, false))
                 .isEqualTo("Select the command to move after");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a)))
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
                 .isEqualTo("Cannot move commands after one of the selected commands");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b)))
+        assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
 
@@ -103,7 +103,7 @@ class CommandExportManagerMoveCommandsTest {
         final var a = entry(T1, MENU_SERVICE, null);
         final var fixture = fixtureWith(a);
 
-        assertThatThrownBy(() -> fixture.moveAction.act(List.of(), fixture.command(a)))
+        assertThatThrownBy(() -> fixture.moveAction.act(List.of(), fixture.command(a), false))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessage("Select at least one command to move");
     }
@@ -118,12 +118,20 @@ class CommandExportManagerMoveCommandsTest {
     }
 
     @Test
+    void default_squash_timings_is_false() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a);
+
+        assertThat(fixture.moveAction.defaultSquashTimings()).isFalse();
+    }
+
+    @Test
     void moves_single_command_to_target_plus_ten_milliseconds() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b);
 
-        fixture.moveAction.act(fixture.commands(a), fixture.command(b));
+        fixture.moveAction.act(fixture.commands(a), fixture.command(b), false);
 
         assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
         assertThat(b.getTimestamp()).isEqualTo(T5);
@@ -138,11 +146,29 @@ class CommandExportManagerMoveCommandsTest {
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c));
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
 
         assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
         assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.260Z"));
         assertThat(c.getTimestamp()).isEqualTo(T5);
+    }
+
+    @Test
+    void moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var c = entry(timestamp("2026-06-07T10:00:10Z"), MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), true);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:11Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:12Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:10Z"));
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
+                .isEqualTo(a.getTimestamp());
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
     }
 
     @Test
@@ -152,7 +178,7 @@ class CommandExportManagerMoveCommandsTest {
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c));
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
 
         assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
         assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.020Z"));
@@ -165,7 +191,7 @@ class CommandExportManagerMoveCommandsTest {
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        fixture.moveAction.act(fixture.commands(a), fixture.command(c));
+        fixture.moveAction.act(fixture.commands(a), fixture.command(c), false);
 
         assertThat(b.getTimestamp()).isEqualTo(T2);
     }
@@ -179,7 +205,7 @@ class CommandExportManagerMoveCommandsTest {
         fixture.exportAction.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
         fixture.exportAction.causewayConfiguration = causewayConfigurationWith(RecordingSupport.ENABLED);
 
-        fixture.moveAction.act(fixture.commands(laterFinder), fixture.command(predecessor));
+        fixture.moveAction.act(fixture.commands(laterFinder), fixture.command(predecessor), false);
         final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionOnUnknownCustomer, laterFinder));
 
         assertThat(validation).isNull();
@@ -194,7 +220,7 @@ class CommandExportManagerMoveCommandsTest {
         fixture.exportAction.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
         fixture.exportAction.causewayConfiguration = causewayConfigurationWith(RecordingSupport.ENABLED);
 
-        fixture.moveAction.act(fixture.commands(laterNavigation), fixture.command(predecessor));
+        fixture.moveAction.act(fixture.commands(laterNavigation), fixture.command(predecessor), false);
         final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionWithUnknownParameter, laterNavigation));
 
         assertThat(validation).isNull();

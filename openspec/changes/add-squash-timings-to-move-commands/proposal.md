@@ -6,7 +6,7 @@ When those gaps are large, the moved block can extend beyond the gap between the
 ## What Changes
 
 - Add a checkbox parameter to the `CommandExportManager_moveCommands` action that lets the user choose whether to squash timings while moving commands.
-- When squash timings is selected, retimestamp moved commands as a contiguous sequence starting 10ms after the target command, with each moved command exactly 10ms after the preceding moved command.
+- When squash timings is selected, retimestamp moved commands as a contiguous sequence starting 1 second after the target command, with each moved command exactly 1 second after the preceding moved command.
 - Preserve the existing timing-gap behavior when squash timings is not selected.
 - Keep validation, target choices, selected command ordering, and non-selected command timestamps unchanged.
 

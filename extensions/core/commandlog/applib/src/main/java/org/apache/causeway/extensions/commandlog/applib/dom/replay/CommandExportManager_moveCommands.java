@@ -52,11 +52,12 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 @ActionLayout(
         associateWith = "notYetExported", sequence = "1.2",
         describedAs = "Moves selected Commands after another command by retimestamping them. "
-                + "The first moved command is placed 10ms after the target and subsequent moved commands preserve their original timing gaps."
+                + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
 public class CommandExportManager_moveCommands {
 
     private static final long MINIMUM_GAP_MILLIS = 10L;
+    private static final long SQUASH_GAP_MILLIS = 1000L;
 
     public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_moveCommands> {
     }
@@ -72,8 +73,11 @@ public class CommandExportManager_moveCommands {
     @MemberSupport
     public CommandExportManager act(
             final List<ReplayableCommand> selected,
-            @ParameterLayout(describedAs = "Command after which the selected commands will be moved.") final ReplayableCommand target) {
-        final String validation = validateAct(selected, target);
+            @ParameterLayout(describedAs = "Command after which the selected commands will be moved.") final ReplayableCommand target,
+            @ParameterLayout(
+                    named = "Squash timings",
+                    describedAs = "Discard original timing gaps between selected commands and place each moved command 1 second after the preceding moved command.") final boolean squashTimings) {
+        final String validation = validateAct(selected, target, squashTimings);
         if (validation != null) {
             throw new RecoverableException(validation);
         }
@@ -85,7 +89,7 @@ public class CommandExportManager_moveCommands {
                 .sorted(Comparator.naturalOrder())
                 .collect(Collectors.toList());
 
-        moveAfter(selectedEntries, targetEntry);
+        moveAfter(selectedEntries, targetEntry, squashTimings);
         return commandExportManager;
     }
 
@@ -100,7 +104,8 @@ public class CommandExportManager_moveCommands {
     @MemberSupport
     public String validateAct(
             final List<ReplayableCommand> selected,
-            final ReplayableCommand target) {
+            final ReplayableCommand target,
+            final boolean squashTimings) {
         if (selected == null || selected.isEmpty()) {
             return "Select at least one command to move";
         }
@@ -142,29 +147,36 @@ public class CommandExportManager_moveCommands {
                 && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
+    @MemberSupport
+    public boolean defaultSquashTimings() {
+        return false;
+    }
+
     private void moveAfter(
             final List<CommandLogEntry> selectedEntries,
-            final CommandLogEntry targetEntry) {
-        Timestamp nextTimestamp = addMillis(targetEntry.getTimestamp(), MINIMUM_GAP_MILLIS);
+            final CommandLogEntry targetEntry,
+            final boolean squashTimings) {
+        final long gapMillis = squashTimings ? SQUASH_GAP_MILLIS : MINIMUM_GAP_MILLIS;
+        Timestamp nextTimestamp = addMillis(targetEntry.getTimestamp(), gapMillis);
         Timestamp previousOriginalTimestamp = null;
         Timestamp previousNewTimestamp = null;
 
         for (final CommandLogEntry selectedEntry : selectedEntries) {
             final Timestamp originalTimestamp = selectedEntry.getTimestamp();
             final Timestamp newTimestamp;
-            if (previousOriginalTimestamp == null) {
+            if (previousNewTimestamp == null) {
                 newTimestamp = nextTimestamp;
             } else {
-                final long originalGap = originalTimestamp != null
-                        ? originalTimestamp.getTime() - previousOriginalTimestamp.getTime()
-                        : MINIMUM_GAP_MILLIS;
-                newTimestamp = addMillis(previousNewTimestamp, Math.max(originalGap, MINIMUM_GAP_MILLIS));
+                final long originalGap = squashTimings || originalTimestamp == null || previousOriginalTimestamp == null
+                        ? gapMillis
+                        : originalTimestamp.getTime() - previousOriginalTimestamp.getTime();
+                newTimestamp = addMillis(previousNewTimestamp, Math.max(originalGap, gapMillis));
             }
             selectedEntry.setTimestamp(newTimestamp);
             updateCommandDtoTimestamp(selectedEntry, newTimestamp);
             previousOriginalTimestamp = originalTimestamp;
             previousNewTimestamp = newTimestamp;
-            nextTimestamp = addMillis(newTimestamp, MINIMUM_GAP_MILLIS);
+            nextTimestamp = addMillis(newTimestamp, gapMillis);
         }
     }
 
