@@ -39,10 +39,11 @@ class CommandSubscriberForCommandLogTest {
     void on_started_preserves_recorded_command_data_for_replay_entries() {
         final var command = new Command(UUID.randomUUID());
         final var commandLogEntry = commandLogEntry(ReplayState.PENDING);
-        final var subscriber = subscriber(command, commandLogEntry);
+        final var fixture = subscriberFixture(command, commandLogEntry, true, false);
 
-        subscriber.onStarted(command);
+        fixture.subscriber.onStarted(command);
 
+        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).syncExecutionMetadata(command);
         verify(commandLogEntry, never()).sync(command);
     }
@@ -51,10 +52,11 @@ class CommandSubscriberForCommandLogTest {
     void on_completed_preserves_recorded_command_data_for_replay_entries() {
         final var command = new Command(UUID.randomUUID());
         final var commandLogEntry = commandLogEntry(ReplayState.FAILED);
-        final var subscriber = subscriber(command, commandLogEntry);
+        final var fixture = subscriberFixture(command, commandLogEntry, true, false);
 
-        subscriber.onCompleted(command);
+        fixture.subscriber.onCompleted(command);
 
+        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).syncExecutionMetadata(command);
         verify(commandLogEntry, never()).sync(command);
     }
@@ -63,10 +65,11 @@ class CommandSubscriberForCommandLogTest {
     void on_started_keeps_full_sync_for_exportable_entries() {
         final var command = new Command(UUID.randomUUID());
         final var commandLogEntry = commandLogEntry(ReplayState.UNDEFINED);
-        final var subscriber = subscriber(command, commandLogEntry);
+        final var fixture = subscriberFixture(command, commandLogEntry, true, false);
 
-        subscriber.onStarted(command);
+        fixture.subscriber.onStarted(command);
 
+        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).sync(command);
         verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
@@ -75,11 +78,38 @@ class CommandSubscriberForCommandLogTest {
     void on_completed_keeps_full_sync_for_exportable_entries() {
         final var command = new Command(UUID.randomUUID());
         final var commandLogEntry = commandLogEntry(ReplayState.UNDEFINED);
-        final var subscriber = subscriber(command, commandLogEntry);
+        final var fixture = subscriberFixture(command, commandLogEntry, true, false);
 
-        subscriber.onCompleted(command);
+        fixture.subscriber.onCompleted(command);
 
+        verify(commandLogEntry).getReplayState();
         verify(commandLogEntry).sync(command);
+        verify(commandLogEntry, never()).syncExecutionMetadata(command);
+    }
+
+    @Test
+    void on_started_does_not_lookup_entry_when_disabled() {
+        final var command = new Command(UUID.randomUUID());
+        final var commandLogEntry = commandLogEntry(ReplayState.UNDEFINED);
+        final var fixture = subscriberFixture(command, commandLogEntry, false, false);
+
+        fixture.subscriber.onStarted(command);
+
+        verify(fixture.commandLogEntryRepository, never()).findByInteractionId(command.getInteractionId());
+        verify(commandLogEntry, never()).sync(command);
+        verify(commandLogEntry, never()).syncExecutionMetadata(command);
+    }
+
+    @Test
+    void on_completed_does_not_lookup_entry_when_paused() {
+        final var command = new Command(UUID.randomUUID());
+        final var commandLogEntry = commandLogEntry(ReplayState.UNDEFINED);
+        final var fixture = subscriberFixture(command, commandLogEntry, true, true);
+
+        fixture.subscriber.onCompleted(command);
+
+        verify(fixture.commandLogEntryRepository, never()).findByInteractionId(command.getInteractionId());
+        verify(commandLogEntry, never()).sync(command);
         verify(commandLogEntry, never()).syncExecutionMetadata(command);
     }
 
@@ -89,14 +119,17 @@ class CommandSubscriberForCommandLogTest {
         return commandLogEntry;
     }
 
-    private static CommandSubscriberForCommandLog subscriber(
+    private static SubscriberFixture subscriberFixture(
             final Command command,
-            final CommandLogEntry commandLogEntry) {
+            final CommandLogEntry commandLogEntry,
+            final boolean enabled,
+            final boolean paused) {
         final var commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(command.getInteractionId()))
                 .thenReturn(Optional.of(commandLogEntry));
         final var commandLogPauseState = mock(CommandLogPauseState.class);
-        return new CommandSubscriberForCommandLog(
+        when(commandLogPauseState.isPaused()).thenReturn(paused);
+        final var subscriber = new CommandSubscriberForCommandLog(
                 commandLogEntryRepository,
                 null,
                 null,
@@ -104,8 +137,22 @@ class CommandSubscriberForCommandLogTest {
                 commandLogPauseState) {
             @Override
             public boolean isEnabled() {
-                return true;
+                return enabled;
             }
         };
+        return new SubscriberFixture(subscriber, commandLogEntryRepository);
+    }
+
+    private static class SubscriberFixture {
+
+        private final CommandSubscriberForCommandLog subscriber;
+        private final CommandLogEntryRepository commandLogEntryRepository;
+
+        private SubscriberFixture(
+                final CommandSubscriberForCommandLog subscriber,
+                final CommandLogEntryRepository commandLogEntryRepository) {
+            this.subscriber = subscriber;
+            this.commandLogEntryRepository = commandLogEntryRepository;
+        }
     }
 }
