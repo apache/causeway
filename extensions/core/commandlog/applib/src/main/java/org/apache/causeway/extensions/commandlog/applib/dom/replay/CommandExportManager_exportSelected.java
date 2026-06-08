@@ -16,6 +16,7 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
@@ -42,6 +43,7 @@ public class CommandExportManager_exportSelected {
     private final CommandExportManager commandExportManager;
 
     @Inject MetaModelService metaModelService;
+    @Inject CausewayConfiguration causewayConfiguration;
 
     @Inject
     public CommandExportManager_exportSelected(final CommandExportManager commandExportManager) {
@@ -56,7 +58,7 @@ public class CommandExportManager_exportSelected {
 
         var selectedCommandLogEntries = selectedCommandLogEntries(selected);
 
-        validator().validate(commandExportManager.getBaseline(), selectedCommandLogEntries)
+        validateKnownTargets(selectedCommandLogEntries)
                 .ifPresent(failure -> {
                     throw new RecoverableException(failure.message());
                 });
@@ -106,8 +108,7 @@ public class CommandExportManager_exportSelected {
         if (selected != null && selected.isEmpty()) {
             return "Select at least one command to export";
         }
-        return validator()
-                .validate(commandExportManager.getBaseline(), selectedCommandLogEntries(selected))
+        return validateKnownTargets(selectedCommandLogEntries(selected))
                 .map(CommandExportKnownTargetValidator.Failure::message)
                 .orElse(null);
     }
@@ -123,6 +124,18 @@ public class CommandExportManager_exportSelected {
                 .filter(entry -> !ReplayState.isExported(entry.getReplayState())) // shouldn't be necessary unless a race condition
                 .sorted()
                 .collect(Collectors.toList());
+    }
+
+    private Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
+            final List<CommandLogEntry> selectedCommandLogEntries) {
+        return isRecordingSupportEnabled()
+                ? validator().validate(commandExportManager.getBaseline(), selectedCommandLogEntries)
+                : Optional.empty();
+    }
+
+    private boolean isRecordingSupportEnabled() {
+        return causewayConfiguration != null
+                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private CommandExportKnownTargetValidator validator() {

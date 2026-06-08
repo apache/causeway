@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +39,8 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
@@ -68,7 +71,7 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
-    void validate_selected_reports_unknown_action_target_before_invocation() {
+    void validate_selected_reports_unknown_action_target_before_invocation_when_recording_support_is_enabled() {
         final var fixture = fixtureWith(entry(T1, CUSTOMER));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
@@ -80,7 +83,16 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
-    void act_guards_unknown_action_target_when_ui_validation_is_bypassed() {
+    void validate_selected_accepts_unknown_action_target_when_recording_support_is_disabled() {
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER));
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation).isNull();
+    }
+
+    @Test
+    void act_guards_unknown_action_target_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
         final var fixture = fixtureWith(entry(T1, CUSTOMER));
 
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
@@ -90,7 +102,7 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
-    void validate_selected_reports_unknown_action_reference_parameter_before_invocation() {
+    void validate_selected_reports_unknown_action_reference_parameter_before_invocation_when_recording_support_is_enabled() {
         final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
         fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
@@ -104,7 +116,19 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
-    void act_guards_unknown_action_reference_parameter_when_ui_validation_is_bypassed() {
+    void validate_selected_accepts_unknown_action_reference_parameter_when_recording_support_is_disabled() {
+        final var fixture = fixtureWithRecordingSupport(
+                RecordingSupport.DISABLED,
+                entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation).isNull();
+    }
+
+    @Test
+    void act_guards_unknown_action_reference_parameter_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
         final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
         fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
@@ -124,6 +148,12 @@ class CommandExportManagerExportSelectedTest {
     }
 
     private static Fixture fixtureWith(final CommandLogEntry... entries) {
+        return fixtureWithRecordingSupport(RecordingSupport.ENABLED, entries);
+    }
+
+    private static Fixture fixtureWithRecordingSupport(
+            final RecordingSupport recordingSupport,
+            final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         for (final CommandLogEntry entry : entries) {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
@@ -134,10 +164,17 @@ class CommandExportManagerExportSelectedTest {
                 new CommandExportManager.State(BASELINE, 50, CommandExportManager.Mode.EXPORT),
                 replayContext);
         final var action = new CommandExportManager_exportSelected(manager);
+        action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         final var replayableCommands = java.util.Arrays.stream(entries)
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(java.util.stream.Collectors.toList());
         return new Fixture(action, replayableCommands);
+    }
+
+    private static CausewayConfiguration causewayConfigurationWith(final RecordingSupport recordingSupport) {
+        final var causewayConfiguration = mock(CausewayConfiguration.class, RETURNS_DEEP_STUBS);
+        when(causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport()).thenReturn(recordingSupport);
+        return causewayConfiguration;
     }
 
     private static MetaModelService metaModelServiceRecognizingMenuServiceRoot() {
