@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -45,6 +46,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 public class FloatValueSemantics
 extends ValueSemanticsAbstract<Float>
 implements
+    NumericValueSemantics,
     DefaultsProvider<Float>,
     Parser<Float>,
     Renderer<Float> {
@@ -86,7 +88,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Float value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
+        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
     }
 
     // -- PARSER
@@ -101,7 +103,7 @@ implements
 
     @Override
     public Float parseTextRepresentation(final Context context, final String text) {
-        return _Floats.convertToFloat(super.parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
+        return _Floats.convertToFloat(parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
                 .orElse(null);
     }
 

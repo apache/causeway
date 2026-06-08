@@ -24,12 +24,15 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -38,8 +41,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -50,6 +51,7 @@ import org.jspecify.annotations.NonNull;
 public class LongValueSemantics
 extends ValueSemanticsAbstract<Long>
 implements
+    NumericValueSemantics,
     DefaultsProvider<Long>,
     Parser<Long>,
     Renderer<Long>,
@@ -104,7 +106,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Long value) {
-        return renderHtml(value, getNumberFormat(context)::format);
+        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
     }
 
     // -- PARSER
@@ -120,11 +122,10 @@ implements
     @Override
     public Long parseTextRepresentation(final Context context, final String text) {
         var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
+        if(input==null)
             return null;
-        }
         try {
-            return super.parseInteger(context, input)
+            return parseInteger(context, input)
                     .map(BigInteger::longValueExact)
                     .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {

@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -50,6 +51,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 public class IntValueSemantics
 extends ValueSemanticsAbstract<Integer>
 implements
+    NumericValueSemantics,
     DefaultsProvider<Integer>,
     Parser<Integer>,
     Renderer<Integer>,
@@ -104,7 +106,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Integer value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
+        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
     }
 
     // -- PARSER
@@ -123,7 +125,7 @@ implements
         if(input==null)
             return null;
         try {
-            return super.parseInteger(context, input)
+            return parseInteger(context, input)
                     .map(BigInteger::intValueExact)
                     .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {

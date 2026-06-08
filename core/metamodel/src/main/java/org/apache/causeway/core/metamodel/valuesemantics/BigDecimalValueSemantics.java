@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -57,6 +58,7 @@ import lombok.Setter;
 public class BigDecimalValueSemantics
 extends ValueSemanticsAbstract<BigDecimal>
 implements
+    NumericValueSemantics,
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal>,
@@ -114,7 +116,7 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
+        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
     }
 
     // -- PARSER
@@ -132,7 +134,7 @@ implements
         var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
                                 ? GroupingSeparatorPolicy.ALLOW
                                 : GroupingSeparatorPolicy.DISALLOW;
-        return super.parseDecimal(context, text, parsePolicy)
+        return parseDecimal(context, text, parsePolicy)
                 .orElse(null);
     }
 
@@ -146,7 +148,7 @@ implements
     }
 
     @Override
-    protected void configureDecimalFormat(
+    public void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
         var specificationLoader = MetaModelContext.instanceElseFail().getSpecificationLoader();

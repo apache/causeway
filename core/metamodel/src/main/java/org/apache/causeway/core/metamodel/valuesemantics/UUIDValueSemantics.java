@@ -91,7 +91,7 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final UUID value) {
-        return renderHtml(value, UUID::toString, super::toMonospace);
+        return renderHtml(value, pipe(UUID::toString, super::toMonospace));
     }
 
     // -- PARSER
