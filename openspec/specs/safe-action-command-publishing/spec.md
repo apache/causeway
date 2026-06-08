@@ -1,7 +1,9 @@
 # safe-action-command-publishing Specification
 
 ## Purpose
-TBD - created by archiving change log-safe-single-result-finders. Update Purpose after archive.
+TBD - created by archiving change log-safe-single-result-finders.
+Update Purpose after archive.
+
 ## Requirements
 ### Requirement: Safe action command publishing is configurable
 The system SHALL provide the `causeway.extensions.command-log.recording-support` configuration property that controls recording support behavior.
@@ -24,38 +26,40 @@ The system MUST NOT require or use a separate `causeway.extensions.command-log.s
 
 ### Requirement: Logged safe action entries include command DTO and available result bookmark
 When safe action command publishing is enabled, the system SHALL store a command DTO for each eligible safe action invocation.
-When the safe action returns exactly one bookmarkable domain object and the framework captures a returned object bookmark, the system SHALL store that returned object's bookmark as the command log entry result.
-When the safe action returns void, returns a non-bookmarkable result, or returns a list that does not produce exactly one returned object bookmark, the system SHALL still store the safe action command log entry without a result bookmark.
-A safe action command log entry with a single stored result bookmark SHALL be suitable for command export and command replay.
-A safe action command log entry without a stored result bookmark MUST NOT be exposed as a replayable command candidate merely because it was command logged.
+When the safe action returns a bookmarkable domain object and the framework captures a returned object bookmark, the system SHALL store that returned object's bookmark as the command log entry result.
+When the safe action returns a list, collection, array, or other framework-supported result container containing exactly one bookmarkable domain object, the system SHALL store that contained object's bookmark as the command log entry result.
+When the safe action result is empty, contains more than one object, or does not produce a returned object bookmark, the system SHALL still store the safe action command log entry without a result bookmark.
+The command log entry SHALL be suitable for command export and command replay.
 
 #### Scenario: Safe action returns one bookmarkable object
 - **GIVEN** safe action command publishing is enabled
 - **WHEN** a user invokes a safe action with command target and parameters that returns bookmark `demoCustomer:1`
 - **THEN** the system creates a command log entry containing a command DTO for that invocation
 - **AND** the command log entry result is bookmark `demoCustomer:1`
-- **AND** the command log entry remains eligible for command export and command replay
+
+#### Scenario: Safe action returns a singleton list containing one bookmarkable object
+- **GIVEN** safe action command publishing is enabled
+- **WHEN** a user invokes a safe action with command target and parameters that returns a list containing only object bookmark `demoCustomer:1`
+- **THEN** the system creates a command log entry containing a command DTO for that invocation
+- **AND** the command log entry result is bookmark `demoCustomer:1`
+
+#### Scenario: Safe action returns an empty list
+- **GIVEN** safe action command publishing is enabled
+- **WHEN** a user invokes a safe action whose result is an empty list
+- **THEN** the system creates a command log entry containing a command DTO for that invocation
+- **AND** the command log entry has no result bookmark
+
+#### Scenario: Safe action returns multiple bookmarkable objects
+- **GIVEN** safe action command publishing is enabled
+- **WHEN** a user invokes a safe action whose result contains bookmark `demoCustomer:1` and bookmark `demoCustomer:2`
+- **THEN** the system creates a command log entry containing a command DTO for that invocation
+- **AND** the command log entry has no result bookmark
 
 #### Scenario: Safe action returns a result without a bookmark
 - **GIVEN** safe action command publishing is enabled
 - **WHEN** a user invokes a safe action whose result does not produce a returned object bookmark
 - **THEN** the system creates a command log entry containing a command DTO for that invocation
 - **AND** the command log entry has no result bookmark
-- **AND** the command log entry is not exposed as a replayable command candidate
-
-#### Scenario: Safe action returns void
-- **GIVEN** safe action command publishing is enabled
-- **WHEN** a user invokes a safe action that returns void
-- **THEN** the system creates a command log entry containing a command DTO for that invocation
-- **AND** the command log entry has no result bookmark
-- **AND** the command log entry is not exposed as a replayable command candidate
-
-#### Scenario: Safe action returns multiple objects
-- **GIVEN** safe action command publishing is enabled
-- **WHEN** a user invokes a safe action that returns a list with more than one bookmarkable object
-- **THEN** the system creates a command log entry containing a command DTO for that invocation
-- **AND** the command log entry has no single result bookmark
-- **AND** the command log entry is not exposed as a replayable command candidate
 
 ### Requirement: Safe action command publishing does not affect state-changing action policy
 When safe action command publishing is enabled, the system MUST NOT use this property to determine whether idempotent or non-idempotent actions are command logged.
@@ -147,4 +151,3 @@ Safe actions that do not store a result bookmark MUST NOT establish a known targ
 - **AND** a logged safe action has no result bookmark
 - **WHEN** a later selected export action targets bookmark `demoCustomer:1`
 - **THEN** the safe action without a result does not make bookmark `demoCustomer:1` known
-
