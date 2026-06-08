@@ -9,7 +9,7 @@ When recording support is disabled, export skips dotted-path validation, so comm
 **Goals:**
 
 - Disable command movement from `CommandExportManager` when command-log recording support is disabled.
-- Reject direct invocation when recording support is disabled, even if UI disablement or choices are bypassed.
+- Keep the recording-support check in action disablement only, because disablement is evaluated before validation and greys out the action with a prompt reason.
 - Preserve existing selection, target-choice, and retimestamp behavior when recording support is enabled.
 
 **Non-Goals:**
@@ -24,18 +24,10 @@ When recording support is disabled, export skips dotted-path validation, so comm
 
 Inject or otherwise access `CausewayConfiguration` from `CommandExportManager_moveCommands`, matching the existing `CommandExportManager_exportSelected` pattern.
 Treat the action as available only when `causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled()` is true.
-Use the same helper in both `disableAct()` and validation so UI affordance and direct invocation are guarded consistently.
+Use the helper in `disableAct()` only, because the framework evaluates disablement before validation and uses that result to grey out the action with a clear reason.
 
 Alternative considered: hide the action entirely when recording support is disabled.
 Disablement is preferable because it gives users a clear reason and matches existing action guard patterns in the replay/export UI.
-
-### Put the recording-support guard before selection-specific validation
-
-Validate recording support before validating selection, target, or baseline-bounded membership.
-This gives a stable message when the feature is unavailable and avoids implying that a different selection would make movement available.
-
-Alternative considered: allow validation to continue and report selection errors first.
-That could obscure the configuration-level reason the action cannot execute.
 
 ## Risks / Trade-offs
 

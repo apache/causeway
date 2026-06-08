@@ -6,7 +6,7 @@ When recording support is disabled, moving commands changes historical command t
 ## What Changes
 
 - Disable the `CommandExportManager` move commands action when command-log recording support is `DISABLED`.
-- Guard direct invocation so selected commands cannot be moved when recording support is disabled, even if UI disablement is bypassed.
+- Keep the recording-support check in action disablement so the move action is greyed out with a clear reason.
 - Keep existing move behavior unchanged when command-log recording support is `ENABLED`.
 
 ## Capabilities
@@ -20,5 +20,5 @@ When recording support is disabled, moving commands changes historical command t
 ## Impact
 
 - Affects `CommandExportManager_moveCommands` and its validation/disablement behavior.
-- Requires focused tests for recording support enabled and disabled cases.
+- Requires focused tests for recording support enabled and disabled action disablement cases.
 - Does not change export YAML, replay import, or known-target validation behavior.

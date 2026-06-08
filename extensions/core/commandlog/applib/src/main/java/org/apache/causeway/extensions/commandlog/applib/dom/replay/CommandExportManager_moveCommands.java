@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -36,6 +38,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 @Action(
@@ -59,6 +62,8 @@ public class CommandExportManager_moveCommands {
     }
 
     private final CommandExportManager commandExportManager;
+
+    @Inject CausewayConfiguration causewayConfiguration;
 
     public CommandExportManager_moveCommands(final CommandExportManager commandExportManager) {
         this.commandExportManager = commandExportManager;
@@ -86,6 +91,9 @@ public class CommandExportManager_moveCommands {
 
     @MemberSupport
     public String disableAct() {
+        if (!isRecordingSupportEnabled()) {
+            return "Command movement requires command-log recording support to be enabled";
+        }
         return commandExportManager.getNotYetExported().isEmpty() ? "No commands in collection" : null;
     }
 
@@ -127,6 +135,11 @@ public class CommandExportManager_moveCommands {
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
         return commandExportManager.getNotYetExported();
+    }
+
+    private boolean isRecordingSupportEnabled() {
+        return causewayConfiguration != null
+                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private void moveAfter(

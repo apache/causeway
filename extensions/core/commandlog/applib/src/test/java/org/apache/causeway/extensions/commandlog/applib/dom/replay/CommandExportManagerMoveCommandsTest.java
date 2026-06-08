@@ -109,6 +109,15 @@ class CommandExportManagerMoveCommandsTest {
     }
 
     @Test
+    void disable_act_reports_recording_support_disabled() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, a);
+
+        assertThat(fixture.moveAction.disableAct())
+                .isEqualTo("Command movement requires command-log recording support to be enabled");
+    }
+
+    @Test
     void moves_single_command_to_target_plus_ten_milliseconds() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T5, MENU_SERVICE, null);
@@ -192,6 +201,12 @@ class CommandExportManagerMoveCommandsTest {
     }
 
     private static Fixture fixtureWith(final CommandLogEntry... entries) {
+        return fixtureWithRecordingSupport(RecordingSupport.ENABLED, entries);
+    }
+
+    private static Fixture fixtureWithRecordingSupport(
+            final RecordingSupport recordingSupport,
+            final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         final var availableEntries = List.of(entries);
         when(repository.findForegroundSinceTimestampAndCanBeExported(BASELINE, 50)).thenReturn(availableEntries);
@@ -203,10 +218,14 @@ class CommandExportManagerMoveCommandsTest {
         final var manager = new CommandExportManager(
                 new CommandExportManager.State(BASELINE, 50, CommandExportManager.Mode.EXPORT),
                 replayContext);
+        final var moveAction = new CommandExportManager_moveCommands(manager);
+        moveAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        final var exportAction = new CommandExportManager_exportSelected(manager);
+        exportAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         return new Fixture(
                 replayContext,
-                new CommandExportManager_moveCommands(manager),
-                new CommandExportManager_exportSelected(manager));
+                moveAction,
+                exportAction);
     }
 
     private static CausewayConfiguration causewayConfigurationWith(final RecordingSupport recordingSupport) {

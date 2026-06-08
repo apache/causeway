@@ -3,7 +3,6 @@
 ### Requirement: Export manager moves selected commands after a target command
 When command-log recording support is `ENABLED`, the export manager SHALL provide an action to move one or more selected exportable commands after a target command.
 When command-log recording support is `DISABLED`, the export manager MUST disable command movement.
-When command-log recording support is `DISABLED`, the export manager MUST reject direct command movement invocation without changing command timestamps.
 The action SHALL operate only on commands at or after the export manager baseline.
 The target command choices SHALL include commands at or after the export manager baseline.
 The target command choices MUST exclude every command selected for movement.
@@ -49,12 +48,3 @@ The action MUST reject execution when any selected command or target command is 
 - **AND** an export manager baseline is set
 - **WHEN** the framework evaluates the move action
 - **THEN** the move action is disabled
-
-#### Scenario: Direct move invocation is rejected when recording support is disabled
-- **GIVEN** command-log recording support is `DISABLED`
-- **AND** an export manager baseline is set
-- **AND** command `A` is selected for movement
-- **AND** command `B` is the target command
-- **WHEN** a caller bypasses the UI and invokes the move action
-- **THEN** the system rejects the invocation
-- **AND** commands `A` and `B` keep their original timestamps
