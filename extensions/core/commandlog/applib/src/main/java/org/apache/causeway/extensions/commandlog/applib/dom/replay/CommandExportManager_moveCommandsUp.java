@@ -42,6 +42,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 )
 @ActionLayout(
         associateWith = "commands", sequence = "1.2",
+        cssClassFa = "angles-up",
         describedAs = "Moves selected Commands upward after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
