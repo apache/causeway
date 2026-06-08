@@ -641,17 +641,23 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     private Optional<CommandLogEntry> previousCommandLogEntry(final Timestamp timestamp) {
         return replayContext.commandLogEntryRepository()
-                .findForegroundBeforeTimestamp(timestamp, 1)
+                .findForegroundBeforeTimestamp(timestamp, null)
                 .stream()
+                .filter(this::isReplayable)
                 .findFirst();
     }
 
     private Optional<CommandLogEntry> nextCommandLogEntry(final Timestamp timestamp) {
         return replayContext.commandLogEntryRepository()
-                .findForegroundSinceTimestamp(timestamp, 2)
+                .findForegroundSinceTimestamp(timestamp, null)
                 .stream()
                 .filter(entry -> !interactionId.equals(entry.getInteractionId()))
+                .filter(this::isReplayable)
                 .findFirst();
+    }
+
+    private boolean isReplayable(final CommandLogEntry entry) {
+        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
     }
 
     // -- HELPER

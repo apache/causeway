@@ -29,7 +29,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,112 +45,60 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-class CommandExportManagerCommandsTest {
+class CommandReplayManagerCommandsTest {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
     @Test
-    void commands_collection_includes_undefined_and_exported_replay_states_since_baseline() {
-        final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
-        final var repository = repositoryReturning(List.of(undefined, exported), List.of());
-        final var manager = manager(repository);
-
-        final var commands = manager.getCommands();
-
-        assertThat(interactionIds(commands))
-                .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
-    }
-
-    @Test
-    void commands_collection_omits_excluded_and_replay_execution_states_since_baseline() {
-        final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
-        final var excluded = entry(ReplayState.EXCLUDED);
-        final var pending = entry(ReplayState.PENDING);
-        final var ok = entry(ReplayState.OK);
-        final var failed = entry(ReplayState.FAILED);
-        final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending, ok, failed), List.of());
-        final var manager = manager(repository);
-
-        final var commands = manager.getCommands();
-
-        assertThat(interactionIds(commands))
-                .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
-    }
-
-    @Test
-    void excluded_commands_collection_includes_only_excluded_replay_states_since_baseline() {
-        final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
-        final var excluded = entry(ReplayState.EXCLUDED);
-        final var pending = entry(ReplayState.PENDING);
-        final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending), List.of());
-        final var manager = manager(repository);
-
-        final var commands = manager.getExcludedCommands();
-
-        assertThat(interactionIds(commands))
-                .containsExactly(excluded.getInteractionId());
-    }
-
-    @Test
-    void commands_collection_includes_safe_action_with_single_result() {
-        final var safeAction = safeActionEntry(ReplayState.UNDEFINED, RESULT);
-        final var repository = repositoryReturning(List.of(safeAction), List.of());
+    void pending_or_failed_includes_safe_action_with_single_result() {
+        final var safeAction = safeActionEntry(ReplayState.PENDING, RESULT);
+        final var repository = repositoryReturningPendingOrFailed(List.of(safeAction));
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        final var commands = manager.getCommands();
+        final var commands = manager.getPendingOrFailed();
 
-        assertThat(interactionIds(commands))
+        assertThat(commands)
+                .extracting(ReplayableCommand::interactionId)
                 .containsExactly(safeAction.getInteractionId());
     }
 
     @Test
-    void commands_collection_omits_safe_action_without_result_but_entry_remains_available_from_repository() {
-        final var safeAction = safeActionEntry(ReplayState.UNDEFINED, null);
-        final var repository = repositoryReturning(List.of(safeAction), List.of());
+    void pending_or_failed_omits_safe_action_without_result() {
+        final var safeAction = safeActionEntry(ReplayState.PENDING, null);
+        final var repository = repositoryReturningPendingOrFailed(List.of(safeAction));
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        final var commands = manager.getCommands();
+        final var commands = manager.getPendingOrFailed();
 
         assertThat(commands).isEmpty();
-        assertThat(repository.findForegroundSinceTimestamp(BASELINE, 50)).containsExactly(safeAction);
+        assertThat(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).containsExactly(safeAction);
     }
 
     @Test
-    void previous_page_uses_unified_unfiltered_query() {
-        final var excluded = entry(ReplayState.EXCLUDED);
-        final var exported = entry(ReplayState.EXPORTED);
-        final var repository = repositoryReturning(List.of(), List.of(exported, excluded));
-        final var manager = manager(repository);
+    void pending_or_failed_keeps_state_changing_command_without_result() {
+        final var command = entry(ReplayState.PENDING);
+        final var repository = repositoryReturningPendingOrFailed(List.of(command));
+        final var manager = manager(repository, safeActionSpecificationLoader());
 
-        final var commands = manager.commands(CommandExportManager.Direction.PREVIOUS);
+        final var commands = manager.getPendingOrFailed();
 
-        assertThat(interactionIds(commands))
-                .containsExactly(exported.getInteractionId(), excluded.getInteractionId());
+        assertThat(commands)
+                .extracting(ReplayableCommand::interactionId)
+                .containsExactly(command.getInteractionId());
     }
 
-    private static CommandExportManager manager(final CommandLogEntryRepository repository) {
-        return manager(repository, null);
-    }
-
-    private static CommandExportManager manager(
+    private static CommandReplayManager manager(
             final CommandLogEntryRepository repository,
             final SpecificationLoader specificationLoader) {
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of(), specificationLoader);
-        return new CommandExportManager(new CommandExportManager.State(BASELINE, 50), replayContext);
+        return new CommandReplayManager(BASELINE, replayContext);
     }
 
-    private static CommandLogEntryRepository repositoryReturning(
-            final List<CommandLogEntry> next,
-            final List<CommandLogEntry> previous) {
+    private static CommandLogEntryRepository repositoryReturningPendingOrFailed(final List<CommandLogEntry> entries) {
         final var repository = mock(CommandLogEntryRepository.class);
-        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(next);
-        when(repository.findForegroundBeforeTimestamp(BASELINE, 50)).thenReturn(previous);
-        java.util.stream.Stream.concat(next.stream(), previous.stream())
-                .forEach(entry -> when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry)));
+        when(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).thenReturn(entries);
+        entries.forEach(entry -> when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry)));
         return repository;
     }
 
@@ -190,11 +137,5 @@ class CommandExportManagerCommandsTest {
     }
 
     private static class Customer {
-    }
-
-    private static List<UUID> interactionIds(final List<ReplayableCommand> commands) {
-        return commands.stream()
-                .map(ReplayableCommand::interactionId)
-                .collect(Collectors.toList());
     }
 }

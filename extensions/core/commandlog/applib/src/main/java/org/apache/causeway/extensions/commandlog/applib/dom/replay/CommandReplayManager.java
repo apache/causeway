@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import org.eclipse.persistence.sessions.coordination.CommandManager;
@@ -103,6 +104,7 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
 
     @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
         return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
+                .filter(this::isReplayable)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext));
@@ -122,6 +124,7 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
     )
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
+            .filter(this::isReplayable)
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -137,6 +140,10 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
     }
 
     // -- HELPER
+    private boolean isReplayable(final CommandLogEntry entry) {
+        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
+    }
+
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }

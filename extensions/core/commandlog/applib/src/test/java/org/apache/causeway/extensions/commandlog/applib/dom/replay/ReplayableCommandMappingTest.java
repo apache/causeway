@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -43,8 +44,10 @@ import org.springframework.transaction.annotation.Propagation;
 
 import org.mockito.ArgumentCaptor;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -54,6 +57,9 @@ import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
@@ -136,8 +142,8 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
         when(commandLogEntryRepository.findByInteractionId(previousInteractionId)).thenReturn(Optional.of(previousEntry));
         when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
-        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, 1)).thenReturn(List.of(previousEntry));
-        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, 2)).thenReturn(List.of(currentEntry, nextEntry));
+        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
+        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
         ReplayContext replayContext = new ReplayContext(
                 null, null, null, commandLogEntryRepository, null, null, List.of());
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
@@ -157,14 +163,47 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void previous_and_next_skip_ineligible_safe_action_entries() {
+        UUID previousInteractionId = UUID.randomUUID();
+        UUID omittedInteractionId = UUID.randomUUID();
+        UUID currentInteractionId = UUID.randomUUID();
+        UUID nextInteractionId = UUID.randomUUID();
+        Timestamp previousTimestamp = Timestamp.valueOf("2026-06-08 10:00:00");
+        Timestamp omittedTimestamp = Timestamp.valueOf("2026-06-08 10:00:00.500");
+        Timestamp currentTimestamp = Timestamp.valueOf("2026-06-08 10:00:01");
+        Timestamp nextTimestamp = Timestamp.valueOf("2026-06-08 10:00:02");
+        CommandLogEntry previousEntry = commandLogEntry(previousInteractionId, previousTimestamp);
+        CommandLogEntry omittedSafeEntry = safeActionCommandLogEntry(omittedInteractionId, omittedTimestamp, null);
+        CommandLogEntry currentEntry = commandLogEntry(currentInteractionId, currentTimestamp);
+        CommandLogEntry nextEntry = commandLogEntry(nextInteractionId, nextTimestamp);
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
+        when(commandLogEntryRepository.findByInteractionId(previousInteractionId)).thenReturn(Optional.of(previousEntry));
+        when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
+        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(omittedSafeEntry, previousEntry));
+        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
+        ReplayContext replayContext = new ReplayContext(
+                null, null, null, commandLogEntryRepository, null, null, List.of(), safeActionSpecificationLoader());
+        ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
+
+        ReplayableCommand previous = replayableCommand.previous();
+        ReplayableCommand next = replayableCommand.next();
+
+        assertThat(previous.interactionId()).isEqualTo(previousInteractionId);
+        assertThat(next.interactionId()).isEqualTo(nextInteractionId);
+        assertThat(replayableCommand.disablePrevious()).isNull();
+        assertThat(replayableCommand.disableNext()).isNull();
+    }
+
+    @Test
     void navigation_actions_disable_at_command_boundaries() {
         UUID currentInteractionId = UUID.randomUUID();
         Timestamp currentTimestamp = Timestamp.valueOf("2026-06-08 10:00:01");
         CommandLogEntry currentEntry = commandLogEntry(currentInteractionId, currentTimestamp);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
-        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, 1)).thenReturn(List.of());
-        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, 2)).thenReturn(List.of(currentEntry));
+        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of());
+        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry));
         ReplayContext replayContext = new ReplayContext(
                 null, null, null, commandLogEntryRepository, null, null, List.of());
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
@@ -188,8 +227,8 @@ class ReplayableCommandMappingTest {
         CommandLogEntry nextEntry = commandLogEntry(nextInteractionId, nextTimestamp);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
-        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, 1)).thenReturn(List.of(previousEntry));
-        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, 2)).thenReturn(List.of(currentEntry, nextEntry));
+        when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
+        when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, new ReplayContext(
                 null, null, null, commandLogEntryRepository, null, null, List.of()));
 
@@ -1080,10 +1119,42 @@ class ReplayableCommandMappingTest {
         return commandLogEntry;
     }
 
+    private static CommandLogEntry safeActionCommandLogEntry(
+            final UUID interactionId,
+            final Timestamp timestamp,
+            final Bookmark result) {
+        CommandDto commandDto = commandWithTargetOnly("simple.SimpleObject", "1");
+        ActionDto action = new ActionDto();
+        action.setLogicalMemberIdentifier("simple.SimpleObject#find");
+        action.setInteractionType(InteractionType.ACTION_INVOCATION);
+        commandDto.setMember(action);
+        CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(commandDto);
+        when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
+        when(commandLogEntry.getTimestamp()).thenReturn(timestamp);
+        when(commandLogEntry.getLogicalMemberIdentifier()).thenReturn(action.getLogicalMemberIdentifier());
+        when(commandLogEntry.getReplayState()).thenReturn(ReplayState.UNDEFINED);
+        when(commandLogEntry.getResult()).thenReturn(result);
+        return commandLogEntry;
+    }
+
     private static CommandLogEntry commandLogEntryWithCommandDto(final CommandDto commandDto) {
         CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         when(commandLogEntry.getCommandDto()).thenReturn(commandDto);
         return commandLogEntry;
+    }
+
+    private static SpecificationLoader safeActionSpecificationLoader() {
+        final var specificationLoader = mock(SpecificationLoader.class);
+        final var objectSpecification = mock(ObjectSpecification.class);
+        final var objectAction = mock(ObjectAction.class);
+        doReturn(SimpleObject.class).when(objectSpecification).getCorrespondingClass();
+        when(objectAction.getSemantics()).thenReturn(SemanticsOf.SAFE);
+        when(specificationLoader.specForLogicalTypeNameElseFail("simple.SimpleObject")).thenReturn(objectSpecification);
+        when(specificationLoader.loadFeature(any(Identifier.class))).thenReturn(Optional.of(objectAction));
+        return specificationLoader;
+    }
+
+    private static class SimpleObject {
     }
 
     private static CommandLogEntry commandLogEntryWithReplayState(final ReplayState replayState) {

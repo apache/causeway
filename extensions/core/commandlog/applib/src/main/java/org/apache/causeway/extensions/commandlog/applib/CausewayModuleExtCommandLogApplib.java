@@ -24,6 +24,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasUsername_recentCommandsByUser;
@@ -189,11 +190,12 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners) {
+            final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final SpecificationLoader specificationLoader) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
-                commandReplayMappingListeners);
+                commandReplayMappingListeners, specificationLoader);
     }
 
 }

@@ -123,6 +123,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     public List<ReplayableCommand> getCommands() {
         putCurrentExportManagerOnScratchpad();
         return activeCommandLogEntries().stream()
+                .filter(this::isReplayable)
                 .map(this::replayableCommandInExportManagerContext)
                 .collect(Collectors.toList());
     }
@@ -135,6 +136,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     public List<ReplayableCommand> getExcludedCommands() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .filter(CommandExportManager::isExcludedCommand)
+                .filter(this::isReplayable)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext))
@@ -144,6 +146,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     @Programmatic
     public List<ReplayableCommand> getCommandsPrevious() {
         return commandLogEntryRepository().findForegroundBeforeTimestamp(baseline, limit).stream()
+                .filter(this::isReplayable)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext))
@@ -229,7 +232,12 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     List<CommandLogEntry> activeCommandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .filter(CommandExportManager::isActiveCommand)
+                .filter(this::isReplayable)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isReplayable(final CommandLogEntry entry) {
+        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
     }
 
     private ReplayableCommand replayableCommandInExportManagerContext(final CommandLogEntry entry) {
