@@ -596,11 +596,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     String disableReplayOrRetry() {
-        return commandRecord()
+        if (!commandRecord()
                 .map(CommandRecord::canReplayOrRetry)
-                .orElse(false)
-                ? null
-                : "Cannot replay or retry unless replay state is PENDING, OK, or FAILED";
+                .orElse(false)) {
+            return "Cannot replay or retry unless replay state is PENDING, OK, or FAILED";
+        }
+        return ReplayPendingBackgroundCommands.disableReason(replayContext);
     }
 
     ReplayableCommand previous() {

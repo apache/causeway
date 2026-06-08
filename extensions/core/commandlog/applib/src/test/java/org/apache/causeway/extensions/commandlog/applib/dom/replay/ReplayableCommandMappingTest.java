@@ -111,11 +111,44 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
+    void replay_or_retry_action_is_disabled_while_background_command_is_pending() {
+        UUID interactionId = UUID.randomUUID();
+        CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.PENDING);
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
+        ReplayContext replayContext = new ReplayContext(
+                null, null, null, commandLogEntryRepository, null, null, List.of());
+        ReplayableCommand pendingCommand = new ReplayableCommand(interactionId, replayContext);
+
+        assertThat(new ReplayableCommand_replayOrRetry(pendingCommand).disableAct())
+                .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
+    }
+
+    @Test
     void direct_replay_or_retry_invocation_is_guarded_for_undefined_state() {
         UUID interactionId = UUID.randomUUID();
         CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.UNDEFINED);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        TransactionService transactionService = mock(TransactionService.class);
+        ReplayContext replayContext = new ReplayContext(
+                null, null, transactionService, commandLogEntryRepository, null, null, List.of());
+
+        Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
+
+        assertThat(result.isSuccess()).isTrue();
+        assertThat(result.getValue().orElse(null)).isNull();
+        verify(transactionService, never()).callTransactional(any(Propagation.class), any(Callable.class));
+    }
+
+    @Test
+    void direct_replay_or_retry_invocation_is_guarded_for_pending_background_work() {
+        UUID interactionId = UUID.randomUUID();
+        CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.PENDING);
+        CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
+        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         TransactionService transactionService = mock(TransactionService.class);
         ReplayContext replayContext = new ReplayContext(
                 null, null, transactionService, commandLogEntryRepository, null, null, List.of());

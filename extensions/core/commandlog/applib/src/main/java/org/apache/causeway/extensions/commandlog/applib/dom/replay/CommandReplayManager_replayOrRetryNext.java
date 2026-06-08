@@ -26,6 +26,10 @@ public class CommandReplayManager_replayOrRetryNext {
 
     @MemberSupport
     public CommandReplayManager act() {
+        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
+            return commandReplayManager;
+        }
+
         var nextIfAny = commandReplayManager.streamPendingOrFailed().findFirst();
         // should always be present, due to our guard
         nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
@@ -34,6 +38,10 @@ public class CommandReplayManager_replayOrRetryNext {
 
     @MemberSupport
     public String disableAct() {
+        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandReplayManager.replayContext());
+        if (pendingBackgroundCommandsReason != null) {
+            return pendingBackgroundCommandsReason;
+        }
         return commandReplayManager.sizePendingOrFailed() == 0 ? "No commands in collection" : null;
     }
 }

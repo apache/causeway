@@ -32,12 +32,17 @@ public class CommandReplayManager_replayOrRetrySelected {
 
     @MemberSupport
     public CommandReplayManager act(final List<ReplayableCommand> selected) {
+        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
+            return commandReplayManager;
+        }
+
         var replayables = selected.stream()
                 .sorted()
                 .collect(Collectors.toList());
         for (var replayableCommand : replayables) {
             var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
-            if (tryReplayOrRetry.isFailure()) {
+            if (tryReplayOrRetry.isFailure()
+                    || ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
                 return commandReplayManager; // stop further execution
             }
         }
@@ -47,6 +52,10 @@ public class CommandReplayManager_replayOrRetrySelected {
 
     @MemberSupport
     public String disableAct() {
+        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandReplayManager.replayContext());
+        if (pendingBackgroundCommandsReason != null) {
+            return pendingBackgroundCommandsReason;
+        }
         return commandReplayManager.getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
     }
 

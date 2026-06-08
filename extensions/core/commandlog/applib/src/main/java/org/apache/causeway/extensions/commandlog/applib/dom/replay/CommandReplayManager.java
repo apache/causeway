@@ -60,6 +60,10 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
 
     ReplayContext replayContext;
 
+    ReplayContext replayContext() {
+        return replayContext;
+    }
+
     @Inject
     public CommandReplayManager(
             final String memento,

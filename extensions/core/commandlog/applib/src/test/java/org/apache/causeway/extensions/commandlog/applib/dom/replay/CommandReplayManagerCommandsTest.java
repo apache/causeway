@@ -20,8 +20,11 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
@@ -29,12 +32,19 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -43,7 +53,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.schema.common.v2.InteractionType;
+import org.apache.causeway.schema.common.v2.OidDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
 
 class CommandReplayManagerCommandsTest {
 
@@ -88,11 +101,106 @@ class CommandReplayManagerCommandsTest {
                 .containsExactly(command.getInteractionId());
     }
 
+    @Test
+    void selected_replay_stops_after_command_creates_pending_background_work() {
+        final var first = entryWithCommandDto(ReplayState.PENDING);
+        final var second = entryWithCommandDto(ReplayState.PENDING);
+        final var repository = repositoryReturningPendingOrFailed(List.of(first, second));
+        final var transactionService = transactionServiceExecutingCallable();
+        final var pendingBackgroundCommands = new AtomicBoolean(false);
+        when(repository.findBackgroundAndNotYetStarted()).thenAnswer(__ -> pendingBackgroundCommands.get()
+                ? List.of(mock(CommandLogEntry.class))
+                : List.of());
+        final var commandExecutorService = commandExecutorSettingPendingBackground(pendingBackgroundCommands);
+        final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
+
+        new CommandReplayManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+
+        verify(commandExecutorService, times(1)).executeCommand(
+                eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
+    }
+
+    @Test
+    void selected_replay_continues_when_no_background_work_is_pending() {
+        final var first = entryWithCommandDto(ReplayState.PENDING);
+        final var second = entryWithCommandDto(ReplayState.PENDING);
+        final var repository = repositoryReturningPendingOrFailed(List.of(first, second));
+        final var transactionService = transactionServiceExecutingCallable();
+        when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of());
+        final var commandExecutorService = commandExecutorReturningSuccess();
+        final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
+
+        new CommandReplayManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+
+        verify(commandExecutorService, times(2)).executeCommand(
+                eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
+    }
+
+    @Test
+    void selected_replay_is_disabled_while_background_work_is_pending() {
+        final var command = entry(ReplayState.PENDING);
+        final var repository = repositoryReturningPendingOrFailed(List.of(command));
+        when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
+        final var manager = manager(repository, safeActionSpecificationLoader());
+
+        assertThat(new CommandReplayManager_replayOrRetrySelected(manager).disableAct())
+                .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
+        assertThat(new CommandReplayManager_replayOrRetryNext(manager).disableAct())
+                .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
+    }
+
+    @Test
+    void replay_next_is_enabled_after_background_work_completes() {
+        final var command = entry(ReplayState.PENDING);
+        final var repository = repositoryReturningPendingOrFailed(List.of(command));
+        when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of());
+        final var manager = manager(repository, safeActionSpecificationLoader());
+
+        assertThat(new CommandReplayManager_replayOrRetryNext(manager).disableAct()).isNull();
+    }
+
     private static CommandReplayManager manager(
             final CommandLogEntryRepository repository,
             final SpecificationLoader specificationLoader) {
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of(), specificationLoader);
+        return manager(repository, null, null, specificationLoader);
+    }
+
+    private static CommandReplayManager manager(
+            final CommandLogEntryRepository repository,
+            final TransactionService transactionService,
+            final CommandExecutorService commandExecutorService,
+            final SpecificationLoader specificationLoader) {
+        final var replayContext = new ReplayContext(
+                null, null, transactionService, repository, commandExecutorService, null, List.of(), specificationLoader);
         return new CommandReplayManager(BASELINE, replayContext);
+    }
+
+    private static TransactionService transactionServiceExecutingCallable() {
+        final var transactionService = mock(TransactionService.class);
+        when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
+                .thenAnswer(invocation -> {
+                    @SuppressWarnings("unchecked")
+                    Callable<Object> callable = invocation.getArgument(1);
+                    return Try.call(callable);
+                });
+        return transactionService;
+    }
+
+    private static CommandExecutorService commandExecutorReturningSuccess() {
+        final var commandExecutorService = mock(CommandExecutorService.class);
+        when(commandExecutorService.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
+                .thenReturn(Try.success(null));
+        return commandExecutorService;
+    }
+
+    private static CommandExecutorService commandExecutorSettingPendingBackground(final AtomicBoolean pendingBackgroundCommands) {
+        final var commandExecutorService = mock(CommandExecutorService.class);
+        when(commandExecutorService.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
+                .thenAnswer(__ -> {
+                    pendingBackgroundCommands.set(true);
+                    return Try.success(null);
+                });
+        return commandExecutorService;
     }
 
     private static CommandLogEntryRepository repositoryReturningPendingOrFailed(final List<CommandLogEntry> entries) {
@@ -106,7 +214,14 @@ class CommandReplayManagerCommandsTest {
         final var entry = mock(CommandLogEntry.class);
         final var interactionId = UUID.randomUUID();
         when(entry.getInteractionId()).thenReturn(interactionId);
+        when(entry.getTimestamp()).thenReturn(Timestamp.from(Instant.now()));
         when(entry.getReplayState()).thenReturn(replayState);
+        return entry;
+    }
+
+    private static CommandLogEntry entryWithCommandDto(final ReplayState replayState) {
+        final var entry = entry(replayState);
+        when(entry.getCommandDto()).thenReturn(commandWithTargetOnly("demo.Customer", "1"));
         return entry;
     }
 
@@ -123,6 +238,22 @@ class CommandReplayManagerCommandsTest {
         when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
         when(entry.getResult()).thenReturn(result);
         return entry;
+    }
+
+    private static CommandDto commandWithTargetOnly(
+            final String targetType,
+            final String targetId) {
+        final var commandDto = new CommandDto();
+        commandDto.setInteractionId(UUID.randomUUID().toString());
+        commandDto.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(Timestamp.from(Instant.now())));
+
+        final var target = new OidDto();
+        target.setType(targetType);
+        target.setId(targetId);
+        final var targets = new OidsDto();
+        targets.getOid().add(target);
+        commandDto.setTargets(targets);
+        return commandDto;
     }
 
     private static SpecificationLoader safeActionSpecificationLoader() {
