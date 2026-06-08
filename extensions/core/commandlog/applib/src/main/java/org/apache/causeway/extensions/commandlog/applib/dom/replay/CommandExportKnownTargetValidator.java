@@ -111,12 +111,16 @@ final class CommandExportKnownTargetValidator {
         return participants;
     }
 
-    private static List<Participant> referenceParametersFor(final CommandLogEntry entry) {
-        final List<Participant> participants = new ArrayList<>();
-        Optional.ofNullable(entry.getCommandDto())
+    private static Optional<ActionDto> actionFor(final CommandLogEntry entry) {
+        return Optional.ofNullable(entry.getCommandDto())
                 .map(CommandDto::getMember)
                 .filter(ActionDto.class::isInstance)
-                .map(ActionDto.class::cast)
+                .map(ActionDto.class::cast);
+    }
+
+    private static List<Participant> referenceParametersFor(final CommandLogEntry entry) {
+        final List<Participant> participants = new ArrayList<>();
+        actionFor(entry)
                 .map(ActionDto::getParameters)
                 .stream()
                 .flatMap(paramsDto -> paramsDto.getParameter().stream())
@@ -185,7 +189,7 @@ final class CommandExportKnownTargetValidator {
 
         private String targetMessage() {
             return String.format(
-                    "%s, target '%s': is unknown.",
+                    "%s, target '%s': is unknown for command export; select a prior navigation or finder action that makes it known.",
                     commandIdentity(commandLogEntry),
                     participant.bookmark
             );
@@ -193,7 +197,7 @@ final class CommandExportKnownTargetValidator {
 
         private String parameterMessage() {
             return String.format(
-                    "%s, parameter %s: '%s' is unknown.",
+                    "%s, parameter %s: '%s' is unknown for command export; select a prior navigation or finder action that makes it known.",
                     commandIdentity(commandLogEntry),
                     participant.parameterName,
                     participant.bookmark

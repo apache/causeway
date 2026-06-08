@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +71,18 @@ class CommandExportKnownTargetValidatorTest {
     }
 
     @Test
+    void accepts_target_returned_by_earlier_singleton_container_command() {
+        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+
+        final var singletonContainerResult = CUSTOMER;
+        final var failure = validator.validate(BASELINE, List.of(
+                action(T1, MENU_SERVICE, singletonContainerResult),
+                action(T2, CUSTOMER, null)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
     void rejects_unknown_non_root_target_and_reports_command_and_bookmark() {
         final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
         final var selected = action(T1, CUSTOMER, null);
@@ -81,7 +92,7 @@ class CommandExportKnownTargetValidatorTest {
         assertThat(failure).isPresent();
         assertThat(failure.get().message())
                 .contains(CUSTOMER.toString())
-                .contains(selected.getInteractionId().toString())
+                .doesNotContain("[")
                 .contains("unknown for command export")
                 .contains("navigation or finder action");
     }
@@ -132,11 +143,11 @@ class CommandExportKnownTargetValidatorTest {
     }
 
     @Test
-    void non_action_commands_are_not_target_validated_but_their_results_establish_known_targets() {
+    void property_commands_with_known_targets_establish_result_as_later_known_target() {
         final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
-                property(T1, CUSTOMER),
+                property(T1, MENU_SERVICE, CUSTOMER),
                 action(T2, CUSTOMER, null)));
 
         assertThat(failure).isEmpty();
@@ -173,8 +184,8 @@ class CommandExportKnownTargetValidatorTest {
         assertThat(failure).isPresent();
         assertThat(failure.get().message())
                 .contains(CUSTOMER.toString())
-                .contains(selected.getInteractionId().toString())
-                .contains("Parameter customer")
+                .doesNotContain("[")
+                .contains("parameter customer")
                 .contains("unknown for command export")
                 .contains("navigation or finder action");
     }
@@ -189,7 +200,7 @@ class CommandExportKnownTargetValidatorTest {
 
         assertThat(failure).isPresent();
         assertThat(failure.get().message())
-                .contains("Parameter customer")
+                .contains("parameter customer")
                 .contains(CUSTOMER.toString());
     }
 
@@ -203,7 +214,7 @@ class CommandExportKnownTargetValidatorTest {
 
         assertThat(failure).isPresent();
         assertThat(failure.get().message())
-                .contains("Parameter customer")
+                .contains("parameter customer")
                 .contains(CUSTOMER.toString());
     }
 
@@ -275,10 +286,11 @@ class CommandExportKnownTargetValidatorTest {
 
     private static CommandLogEntry property(
             final Timestamp timestamp,
+            final Bookmark target,
             final Bookmark result) {
         final var propertyDto = new PropertyDto();
         propertyDto.setLogicalMemberIdentifier("demo.PropertyHolder#name");
-        return entry(timestamp, CUSTOMER, result, propertyDto);
+        return entry(timestamp, target, result, propertyDto);
     }
 
     private static CommandLogEntry entry(
@@ -292,8 +304,6 @@ class CommandExportKnownTargetValidatorTest {
         commandDto.getTargets().getOid().add(target.toOidDto());
 
         final var entry = mock(CommandLogEntry.class);
-        final var interactionId = UUID.randomUUID();
-        when(entry.getInteractionId()).thenReturn(interactionId);
         when(entry.getTimestamp()).thenReturn(timestamp);
         when(entry.getTarget()).thenReturn(target);
         when(entry.getResult()).thenReturn(result);

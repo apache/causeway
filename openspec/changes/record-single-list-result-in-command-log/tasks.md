@@ -16,7 +16,7 @@
 
 - [x] 3.1 Verify command export YAML emits the existing `result` field when a singleton-container result bookmark was recorded.
 - [x] 3.2 Verify command export YAML omits `result` for empty and multi-object container results.
-- [ ] 3.3 Verify export known-target validation treats a recorded singleton-container result bookmark as an earlier known result.
+- [x] 3.3 Verify export known-target validation treats a recorded singleton-container result bookmark as an earlier known result.
 - [x] 3.4 Verify replay result mapping receives recorded and actual result bookmarks for replayed commands whose recorded result came from a singleton container.
 
 ## 4. Tests and Documentation
@@ -28,6 +28,6 @@
 
 ## 5. Validation
 
-- [ ] 5.1 Run the relevant commandlog applib unit tests.
+- [x] 5.1 Run the relevant commandlog applib unit tests.
 - [x] 5.2 Run the relevant runtime services or metamodel tests for action result handling.
 - [x] 5.3 Run OpenSpec validation for `record-single-list-result-in-command-log`.
