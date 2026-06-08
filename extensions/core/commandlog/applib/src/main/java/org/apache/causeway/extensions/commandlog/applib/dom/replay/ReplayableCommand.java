@@ -206,7 +206,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         this(interactionId, replayContext, recordRef, null);
     }
 
-    private ReplayableCommand(
+    ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext,
             final ObjectReference<CommandRecord> recordRef,

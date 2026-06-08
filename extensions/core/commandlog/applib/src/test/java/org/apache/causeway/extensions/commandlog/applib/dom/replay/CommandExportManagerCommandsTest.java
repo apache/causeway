@@ -40,7 +40,7 @@ class CommandExportManagerCommandsTest {
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
 
     @Test
-    void commands_collection_includes_mixed_replay_states_since_baseline() {
+    void commands_collection_includes_undefined_and_exported_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
         final var exported = entry(ReplayState.EXPORTED);
         final var repository = repositoryReturning(List.of(undefined, exported), List.of());
@@ -50,6 +50,38 @@ class CommandExportManagerCommandsTest {
 
         assertThat(interactionIds(commands))
                 .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
+    }
+
+    @Test
+    void commands_collection_omits_excluded_and_replay_execution_states_since_baseline() {
+        final var undefined = entry(ReplayState.UNDEFINED);
+        final var exported = entry(ReplayState.EXPORTED);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var pending = entry(ReplayState.PENDING);
+        final var ok = entry(ReplayState.OK);
+        final var failed = entry(ReplayState.FAILED);
+        final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending, ok, failed), List.of());
+        final var manager = manager(repository);
+
+        final var commands = manager.getCommands();
+
+        assertThat(interactionIds(commands))
+                .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
+    }
+
+    @Test
+    void excluded_commands_collection_includes_only_excluded_replay_states_since_baseline() {
+        final var undefined = entry(ReplayState.UNDEFINED);
+        final var exported = entry(ReplayState.EXPORTED);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var pending = entry(ReplayState.PENDING);
+        final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending), List.of());
+        final var manager = manager(repository);
+
+        final var commands = manager.getExcludedCommands();
+
+        assertThat(interactionIds(commands))
+                .containsExactly(excluded.getInteractionId());
     }
 
     @Test

@@ -50,6 +50,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 import lombok.Data;
 import lombok.Getter;
@@ -119,11 +120,22 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     )
     public List<ReplayableCommand> getCommands() {
         putCurrentExportManagerOnScratchpad();
+        return activeCommandLogEntries().stream()
+                .map(this::replayableCommandInExportManagerContext)
+                .collect(Collectors.toList());
+    }
+
+    @Collection
+    @CollectionLayout(
+            sequence = "2",
+            describedAs = "Commands since the baseline that have been excluded from the active export sequence"
+    )
+    public List<ReplayableCommand> getExcludedCommands() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .filter(CommandExportManager::isExcludedCommand)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
-                        replayContext,
-                        scratchpad))
+                        replayContext))
                 .collect(Collectors.toList());
     }
 
@@ -170,7 +182,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     @Programmatic
     Set<Bookmark> knownParticipantsAsOf(final UUID interactionId) {
         final Set<Bookmark> knownParticipants = new HashSet<>();
-        for (final CommandLogEntry entry : commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+        for (final CommandLogEntry entry : activeCommandLogEntries().stream()
                 .sorted()
                 .collect(Collectors.toList())) {
             if (sameInteractionId(entry, interactionId)) {
@@ -204,6 +216,36 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
                 && metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
                 .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
                 .orElse(false);
+    }
+
+    @Programmatic
+    List<CommandLogEntry> activeCommandLogEntries() {
+        return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .filter(CommandExportManager::isActiveCommand)
+                .collect(Collectors.toList());
+    }
+
+    private ReplayableCommand replayableCommandInExportManagerContext(final CommandLogEntry entry) {
+        return scratchpad != null
+                ? new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext,
+                        scratchpad)
+                : new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext,
+                        new org.apache.causeway.commons.internal.base._Refs.ObjectReference<>(null),
+                        this);
+    }
+
+    private static boolean isActiveCommand(final CommandLogEntry entry) {
+        return entry != null
+                && (entry.getReplayState() == ReplayState.UNDEFINED
+                || entry.getReplayState() == ReplayState.EXPORTED);
+    }
+
+    private static boolean isExcludedCommand(final CommandLogEntry entry) {
+        return entry != null && entry.getReplayState() == ReplayState.EXCLUDED;
     }
 
     private void putCurrentExportManagerOnScratchpad() {

@@ -48,6 +48,11 @@
                     <cpt:collection defaultView="table" paged="100" id="commands"/>
                 </bs:col>
             </bs:row>
+            <bs:row>
+                <bs:col span="12" size="MD">
+                    <cpt:collection defaultView="table" paged="100" id="excludedCommands"/>
+                </bs:col>
+            </bs:row>
         </bs:col>
     </bs:row>
     <bs:row>

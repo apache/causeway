@@ -94,6 +94,28 @@ class CommandExportManagerMoveCommandsTest {
     }
 
     @Test
+    void choices_target_excludes_excluded_commands() {
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.UNDEFINED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(a, b);
+
+        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a));
+
+        assertThat(interactionIds(choices))
+                .isEmpty();
+    }
+
+    @Test
+    void validates_excluded_commands_are_outside_active_collection() {
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.EXCLUDED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.UNDEFINED);
+        final var fixture = fixtureWith(a, b);
+
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(b), false))
+                .isEqualTo("Selected commands must be available for export from the current baseline");
+    }
+
+    @Test
     void validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T2, MENU_SERVICE, null);
