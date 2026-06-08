@@ -59,7 +59,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_previous;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_replayOrRetry;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
@@ -94,6 +96,8 @@ import org.springframework.context.annotation.Import;
         ReplayableCommand_makeExportable.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_replayOrRetry.class,
+        ReplayableCommand_previous.class,
+        ReplayableCommand_next.class,
         ReplayableCommand_excludeFromReplay.class,
         ReplayableCommand_delete.class,
         HasBaseline_changeBaseline.class,

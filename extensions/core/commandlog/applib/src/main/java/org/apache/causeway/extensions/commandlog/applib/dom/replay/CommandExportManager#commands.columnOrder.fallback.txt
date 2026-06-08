@@ -1,5 +1,0 @@
-#interactionId
-timestamp
-member
-replayState
-exportable

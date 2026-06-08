@@ -11,6 +11,8 @@
                     <bs:row>
                         <bs:col span="12">
                             <cpt:fieldSet name="Id" id="id">
+                                <cpt:action id="previous" position="PANEL"/>
+                                <cpt:action id="next" position="PANEL"/>
                                 <cpt:action id="delete" position="PANEL"/>
                                 <cpt:property id="interactionId"/>
                                 <cpt:property id="timestamp"/>
@@ -43,6 +45,7 @@
                     <cpt:action id="replayOrRetry"/>
                     <cpt:action id="exportable"/>
                 </cpt:property>
+                <cpt:property id="hasResult"/>
             </cpt:fieldSet>
         </bs:col>
         <bs:col span="6">
