@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.chrono.ChronoZonedDateTime;
@@ -308,6 +309,17 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "4.1",
             fieldSetId = "details",
+            describedAs = "Whether this command stores a result bookmark.")
+    public boolean getHasResult() {
+        return commandLogEntry()
+                .map(CommandLogEntry::getResult)
+                .isPresent();
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "4.2",
+            fieldSetId = "details",
             describedAs = "Whether this command is exportable from the current command export manager context.",
             hidden = Where.OBJECT_FORMS
     )
@@ -426,9 +438,14 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final CommandLogEntry commandLogEntry,
             final Role role,
             final Bookmark recordedBookmark) {
+        if (role == Role.TARGET && isDomainService(recordedBookmark)) {
+            return Optional.of(recordedBookmark);
+        }
         if (role == Role.TARGET || role == Role.PARAMETER) {
             return findActualBookmark(commandLogEntry, recordedBookmark)
                     .or(() -> commandLogEntry.getReplayState() == ReplayState.OK
+                            || commandLogEntry.getReplayState() == ReplayState.UNDEFINED
+                            || commandLogEntry.getReplayState() == ReplayState.EXPORTED
                             ? Optional.of(recordedBookmark)
                             : Optional.empty());
         }
@@ -437,6 +454,15 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         }
         return findActualBookmark(commandLogEntry, recordedBookmark)
                 .or(() -> Optional.of(recordedBookmark));
+    }
+
+    private boolean isDomainService(final Bookmark bookmark) {
+        return bookmarkService != null
+                && Optional.ofNullable(bookmarkService.lookup(bookmark))
+                .flatMap(x -> x)
+                .map(Object::getClass)
+                .map(cls -> cls.isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
+                .orElse(false);
     }
 
     private ReplayableCommandParticipant participant(
@@ -575,6 +601,57 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .orElse(false)
                 ? null
                 : "Cannot replay or retry unless replay state is PENDING, OK, or FAILED";
+    }
+
+    ReplayableCommand previous() {
+        return adjacentCommand(-1)
+                .orElse(this);
+    }
+
+    String disablePrevious() {
+        return adjacentCommand(-1).isPresent()
+                ? null
+                : "No previous command";
+    }
+
+    ReplayableCommand next() {
+        return adjacentCommand(1)
+                .orElse(this);
+    }
+
+    String disableNext() {
+        return adjacentCommand(1).isPresent()
+                ? null
+                : "No next command";
+    }
+
+    private Optional<ReplayableCommand> adjacentCommand(final int direction) {
+        return adjacentCommandLogEntry(direction)
+                .map(CommandLogEntry::getInteractionId)
+                .map(adjacentInteractionId -> new ReplayableCommand(adjacentInteractionId, replayContext));
+    }
+
+    private Optional<CommandLogEntry> adjacentCommandLogEntry(final int direction) {
+        return commandLogEntry()
+                .map(CommandLogEntry::getTimestamp)
+                .flatMap(timestamp -> direction < 0
+                        ? previousCommandLogEntry(timestamp)
+                        : nextCommandLogEntry(timestamp));
+    }
+
+    private Optional<CommandLogEntry> previousCommandLogEntry(final Timestamp timestamp) {
+        return replayContext.commandLogEntryRepository()
+                .findForegroundBeforeTimestamp(timestamp, 1)
+                .stream()
+                .findFirst();
+    }
+
+    private Optional<CommandLogEntry> nextCommandLogEntry(final Timestamp timestamp) {
+        return replayContext.commandLogEntryRepository()
+                .findForegroundSinceTimestamp(timestamp, 2)
+                .stream()
+                .filter(entry -> !interactionId.equals(entry.getInteractionId()))
+                .findFirst();
     }
 
     // -- HELPER
