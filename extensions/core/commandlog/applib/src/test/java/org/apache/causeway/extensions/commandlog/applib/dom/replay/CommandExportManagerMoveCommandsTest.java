@@ -75,22 +75,22 @@ class CommandExportManagerMoveCommandsTest {
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a, b));
+        final var choices = fixture.moveUpAction.choicesTarget(fixture.commands(b, c));
 
         assertThat(interactionIds(choices))
-                .containsExactly(c.getInteractionId());
+                .containsExactly(a.getInteractionId());
     }
 
     @Test
     void choices_target_includes_exported_commands() {
-        final var a = entry(T1, MENU_SERVICE, null, ReplayState.UNDEFINED);
-        final var b = entry(T2, MENU_SERVICE, null, ReplayState.EXPORTED);
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.EXPORTED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.UNDEFINED);
         final var fixture = fixtureWith(a, b);
 
-        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a));
+        final var choices = fixture.moveUpAction.choicesTarget(fixture.commands(b));
 
         assertThat(interactionIds(choices))
-                .containsExactly(b.getInteractionId());
+                .containsExactly(a.getInteractionId());
     }
 
     @Test
@@ -99,7 +99,7 @@ class CommandExportManagerMoveCommandsTest {
         final var b = entry(T2, MENU_SERVICE, null, ReplayState.EXCLUDED);
         final var fixture = fixtureWith(a, b);
 
-        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a));
+        final var choices = fixture.moveUpAction.choicesTarget(fixture.commands(a));
 
         assertThat(interactionIds(choices))
                 .isEmpty();
@@ -111,7 +111,7 @@ class CommandExportManagerMoveCommandsTest {
         final var b = entry(T2, MENU_SERVICE, null, ReplayState.UNDEFINED);
         final var fixture = fixtureWith(a, b);
 
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(b), false))
+        assertThat(fixture.moveUpAction.validateAct(fixture.commands(a), fixture.command(b), false))
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
 
@@ -122,13 +122,15 @@ class CommandExportManagerMoveCommandsTest {
         final var beforeBaseline = entry(BEFORE_BASELINE, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b);
 
-        assertThat(fixture.moveAction.validateAct(List.of(), fixture.command(b), false))
+        assertThat(fixture.moveUpAction.validateAct(List.of(), fixture.command(b), false))
                 .isEqualTo("Select at least one command to move");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), null, false))
+        assertThat(fixture.moveUpAction.validateAct(fixture.commands(a), null, false))
                 .isEqualTo("Select the command to move after");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
+        assertThat(fixture.moveUpAction.validateAct(fixture.commands(a), fixture.command(a), false))
                 .isEqualTo("Cannot move commands after one of the selected commands");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
+        assertThat(fixture.moveUpAction.validateAct(fixture.commands(a), fixture.command(b), false))
+                .isEqualTo("Target command must be before the first selected command");
+        assertThat(fixture.moveUpAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
 
@@ -137,7 +139,7 @@ class CommandExportManagerMoveCommandsTest {
         final var a = entry(T1, MENU_SERVICE, null);
         final var fixture = fixtureWith(a);
 
-        assertThatThrownBy(() -> fixture.moveAction.act(List.of(), fixture.command(a), false))
+        assertThatThrownBy(() -> fixture.moveUpAction.act(List.of(), fixture.command(a), false))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessage("Select at least one command to move");
     }
@@ -147,7 +149,7 @@ class CommandExportManagerMoveCommandsTest {
         final var a = entry(T1, MENU_SERVICE, null);
         final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, a);
 
-        assertThat(fixture.moveAction.disableAct())
+        assertThat(fixture.moveUpAction.disableAct())
                 .isEqualTo("Command movement requires command-log recording support to be enabled");
     }
 
@@ -156,7 +158,7 @@ class CommandExportManagerMoveCommandsTest {
         final var a = entry(T1, MENU_SERVICE, null);
         final var fixture = fixtureWith(a);
 
-        assertThat(fixture.moveAction.defaultSquashTimings()).isFalse();
+        assertThat(fixture.moveUpAction.defaultSquashTimings()).isFalse();
     }
 
     @Test
@@ -165,57 +167,57 @@ class CommandExportManagerMoveCommandsTest {
         final var b = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b);
 
-        fixture.moveAction.act(fixture.commands(a), fixture.command(b), false);
+        fixture.moveUpAction.act(fixture.commands(b), fixture.command(a), false);
 
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
-        assertThat(b.getTimestamp()).isEqualTo(T5);
-        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
-                .isEqualTo(a.getTimestamp());
-    }
-
-    @Test
-    void moves_multiple_commands_preserving_original_internal_gaps() {
-        final var a = entry(T1, MENU_SERVICE, null);
-        final var b = entry(T1_250, MENU_SERVICE, null);
-        final var c = entry(T5, MENU_SERVICE, null);
-        final var fixture = fixtureWith(a, b, c);
-
-        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
-
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.260Z"));
-        assertThat(c.getTimestamp()).isEqualTo(T5);
-    }
-
-    @Test
-    void moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
-        final var a = entry(T1, MENU_SERVICE, null);
-        final var b = entry(T5, MENU_SERVICE, null);
-        final var c = entry(timestamp("2026-06-07T10:00:10Z"), MENU_SERVICE, null);
-        final var fixture = fixtureWith(a, b, c);
-
-        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), true);
-
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:11Z"));
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:12Z"));
-        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:10Z"));
-        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
-                .isEqualTo(a.getTimestamp());
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.010Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T1);
         assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
                 .isEqualTo(b.getTimestamp());
     }
 
     @Test
-    void moves_multiple_commands_with_minimum_gap_when_original_gap_is_not_positive() {
-        final var a = entry(T1, MENU_SERVICE, null);
+    void moves_multiple_commands_preserving_original_internal_gaps() {
+        final var a = entry(T0, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T1_250, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveUpAction.act(fixture.commands(b, c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.510Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.760Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T0);
+    }
+
+    @Test
+    void moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
+        final var a = entry(T0, MENU_SERVICE, null);
         final var b = entry(T1, MENU_SERVICE, null);
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
+        fixture.moveUpAction.act(fixture.commands(b, c), fixture.command(a), true);
 
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.020Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T0);
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(c.getCommandDto().getTimestamp()))
+                .isEqualTo(c.getTimestamp());
+    }
+
+    @Test
+    void moves_multiple_commands_with_minimum_gap_when_original_gap_is_not_positive() {
+        final var a = entry(T0, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveUpAction.act(fixture.commands(b, c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.510Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.520Z"));
     }
 
     @Test
@@ -225,7 +227,110 @@ class CommandExportManagerMoveCommandsTest {
         final var c = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b, c);
 
-        fixture.moveAction.act(fixture.commands(a), fixture.command(c), false);
+        fixture.moveUpAction.act(fixture.commands(c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(T2);
+    }
+
+    @Test
+    void down_choices_target_excludes_selected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        final var choices = fixture.moveDownAction.choicesTarget(fixture.commands(a, b));
+
+        assertThat(interactionIds(choices))
+                .containsExactly(c.getInteractionId());
+    }
+
+    @Test
+    void down_validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var beforeBaseline = entry(BEFORE_BASELINE, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        assertThat(fixture.moveDownAction.validateAct(List.of(), fixture.command(b), false))
+                .isEqualTo("Select at least one command to move");
+        assertThat(fixture.moveDownAction.validateAct(fixture.commands(a), null, false))
+                .isEqualTo("Select the command to move after");
+        assertThat(fixture.moveDownAction.validateAct(fixture.commands(a), fixture.command(a), false))
+                .isEqualTo("Cannot move commands after one of the selected commands");
+        assertThat(fixture.moveDownAction.validateAct(fixture.commands(b), fixture.command(a), false))
+                .isEqualTo("Target command must be after the last selected command");
+        assertThat(fixture.moveDownAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
+                .isEqualTo("Selected commands must be available for export from the current baseline");
+    }
+
+    @Test
+    void down_moves_single_command_to_target_plus_ten_milliseconds() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        fixture.moveDownAction.act(fixture.commands(a), fixture.command(b), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
+        assertThat(b.getTimestamp()).isEqualTo(T5);
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
+                .isEqualTo(a.getTimestamp());
+    }
+
+    @Test
+    void down_moves_multiple_commands_preserving_original_internal_gaps() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T1_250, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveDownAction.act(fixture.commands(a, b), fixture.command(c), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.260Z"));
+        assertThat(c.getTimestamp()).isEqualTo(T5);
+    }
+
+    @Test
+    void down_moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var c = entry(timestamp("2026-06-07T10:00:20Z"), MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveDownAction.act(fixture.commands(a, b), fixture.command(c), true);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:21Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:22Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:20Z"));
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
+                .isEqualTo(a.getTimestamp());
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
+    }
+
+    @Test
+    void down_moves_multiple_commands_with_minimum_gap_when_original_gap_is_not_positive() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveDownAction.act(fixture.commands(a, b), fixture.command(c), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.020Z"));
+    }
+
+    @Test
+    void down_does_not_retimestamp_unselected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveDownAction.act(fixture.commands(a), fixture.command(c), false);
 
         assertThat(b.getTimestamp()).isEqualTo(T2);
     }
@@ -239,7 +344,7 @@ class CommandExportManagerMoveCommandsTest {
         fixture.exportAction.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
         fixture.exportAction.causewayConfiguration = causewayConfigurationWith(RecordingSupport.ENABLED);
 
-        fixture.moveAction.act(fixture.commands(laterFinder), fixture.command(predecessor), false);
+        fixture.moveUpAction.act(fixture.commands(laterFinder), fixture.command(predecessor), false);
         final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionOnUnknownCustomer, laterFinder));
 
         assertThat(validation).isNull();
@@ -254,7 +359,7 @@ class CommandExportManagerMoveCommandsTest {
         fixture.exportAction.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
         fixture.exportAction.causewayConfiguration = causewayConfigurationWith(RecordingSupport.ENABLED);
 
-        fixture.moveAction.act(fixture.commands(laterNavigation), fixture.command(predecessor), false);
+        fixture.moveUpAction.act(fixture.commands(laterNavigation), fixture.command(predecessor), false);
         final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionWithUnknownParameter, laterNavigation));
 
         assertThat(validation).isNull();
@@ -278,13 +383,16 @@ class CommandExportManagerMoveCommandsTest {
         final var manager = new CommandExportManager(
                 new CommandExportManager.State(BASELINE, 50),
                 replayContext);
-        final var moveAction = new CommandExportManager_moveCommands(manager);
-        moveAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        final var moveUpAction = new CommandExportManager_moveCommandsUp(manager);
+        moveUpAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        final var moveDownAction = new CommandExportManager_moveCommandsDown(manager);
+        moveDownAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         final var exportAction = new CommandExportManager_exportSelected(manager);
         exportAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         return new Fixture(
                 replayContext,
-                moveAction,
+                moveUpAction,
+                moveDownAction,
                 exportAction);
     }
 
@@ -385,15 +493,18 @@ class CommandExportManagerMoveCommandsTest {
 
     private static class Fixture {
         private final ReplayContext replayContext;
-        final CommandExportManager_moveCommands moveAction;
+        final CommandExportManager_moveCommandsUp moveUpAction;
+        final CommandExportManager_moveCommandsDown moveDownAction;
         final CommandExportManager_exportSelected exportAction;
 
         Fixture(
                 final ReplayContext replayContext,
-                final CommandExportManager_moveCommands moveAction,
+                final CommandExportManager_moveCommandsUp moveUpAction,
+                final CommandExportManager_moveCommandsDown moveDownAction,
                 final CommandExportManager_exportSelected exportAction) {
             this.replayContext = replayContext;
-            this.moveAction = moveAction;
+            this.moveUpAction = moveUpAction;
+            this.moveDownAction = moveDownAction;
             this.exportAction = exportAction;
         }
 

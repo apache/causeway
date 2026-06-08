@@ -27,85 +27,43 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
-@Action(
-        restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commands",
-        commandPublishing = Publishing.DISABLED,
-        semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CommandExportManager_moveCommands.DomainEvent.class,
-        executionPublishing = Publishing.DISABLED
-)
-@ActionLayout(
-        associateWith = "commands", sequence = "1.2",
-        describedAs = "Moves selected Commands after another command by retimestamping them. "
-                + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
-)
-public class CommandExportManager_moveCommands {
+class CommandExportManagerMovementSupport {
 
-    private static final long MINIMUM_GAP_MILLIS = 10L;
-    private static final long SQUASH_GAP_MILLIS = 1000L;
+    static final long MINIMUM_GAP_MILLIS = 10L;
+    static final long SQUASH_GAP_MILLIS = 1000L;
 
-    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_moveCommands> {
+    enum Direction {
+        UP,
+        DOWN
     }
 
     private final CommandExportManager commandExportManager;
+    private final CausewayConfiguration causewayConfiguration;
+    private final Direction direction;
 
-    @Inject CausewayConfiguration causewayConfiguration;
-
-    public CommandExportManager_moveCommands(final CommandExportManager commandExportManager) {
+    CommandExportManagerMovementSupport(
+            final CommandExportManager commandExportManager,
+            final CausewayConfiguration causewayConfiguration,
+            final Direction direction) {
         this.commandExportManager = commandExportManager;
+        this.causewayConfiguration = causewayConfiguration;
+        this.direction = direction;
     }
 
-    @MemberSupport
-    public CommandExportManager act(
-            final List<ReplayableCommand> selected,
-            @ParameterLayout(describedAs = "Command after which the selected commands will be moved.") final ReplayableCommand target,
-            @ParameterLayout(
-                    named = "Squash timings",
-                    describedAs = "Discard original timing gaps between selected commands and place each moved command 1 second after the preceding moved command.") final boolean squashTimings) {
-        final String validation = validateAct(selected, target, squashTimings);
-        if (validation != null) {
-            throw new RecoverableException(validation);
-        }
-
-        final CommandLogEntry targetEntry = commandLogEntry(target).orElseThrow();
-        final List<CommandLogEntry> selectedEntries = selected.stream()
-                .map(this::commandLogEntry)
-                .flatMap(Optional::stream)
-                .sorted(Comparator.naturalOrder())
-                .collect(Collectors.toList());
-
-        moveAfter(selectedEntries, targetEntry, squashTimings);
-        return commandExportManager;
-    }
-
-    @MemberSupport
-    public String disableAct() {
+    String disableAct() {
         if (!isRecordingSupportEnabled()) {
             return "Command movement requires command-log recording support to be enabled";
         }
         return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
     }
 
-    @MemberSupport
-    public String validateAct(
+    String validateAct(
             final List<ReplayableCommand> selected,
-            final ReplayableCommand target,
-            final boolean squashTimings) {
+            final ReplayableCommand target) {
         if (selected == null || selected.isEmpty()) {
             return "Select at least one command to move";
         }
@@ -118,38 +76,68 @@ public class CommandExportManager_moveCommands {
             return "Cannot move commands after one of the selected commands";
         }
 
-        final Set<UUID> availableIds = interactionIds(commandExportManager.getCommands());
+        final List<ReplayableCommand> availableCommands = commandExportManager.getCommands();
+        final Set<UUID> availableIds = interactionIds(availableCommands);
         if (!availableIds.contains(target.interactionId())) {
             return "Target command is not available for export from the current baseline";
         }
         if (!availableIds.containsAll(selectedIds)) {
             return "Selected commands must be available for export from the current baseline";
         }
+        if (!interactionIds(choicesTarget(selected, availableCommands)).contains(target.interactionId())) {
+            return direction == Direction.UP
+                    ? "Target command must be before the first selected command"
+                    : "Target command must be after the last selected command";
+        }
         return null;
     }
 
-    @MemberSupport
-    public List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
-        final Set<UUID> selectedIds = interactionIds(selected);
-        return commandExportManager.getCommands().stream()
-                .filter(command -> !selectedIds.contains(command.interactionId()))
-                .collect(Collectors.toList());
+    List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
+        return choicesTarget(selected, commandExportManager.getCommands());
     }
 
-    // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-    @MemberSupport
-    public List<ReplayableCommand> choicesSelected() {
+    private List<ReplayableCommand> choicesTarget(
+            final List<ReplayableCommand> selected,
+            final List<ReplayableCommand> availableCommands) {
+        final Set<UUID> selectedIds = interactionIds(selected);
+        if (selectedIds.isEmpty()) {
+            return availableCommands;
+        }
+        final int firstSelectedIndex = firstSelectedIndex(availableCommands, selectedIds);
+        final int lastSelectedIndex = lastSelectedIndex(availableCommands, selectedIds);
+        if (firstSelectedIndex < 0 || lastSelectedIndex < 0) {
+            return availableCommands.stream()
+                    .filter(command -> !selectedIds.contains(command.interactionId()))
+                    .collect(Collectors.toList());
+        }
+        if (direction == Direction.UP) {
+            return availableCommands.subList(0, firstSelectedIndex);
+        }
+        return availableCommands.subList(lastSelectedIndex + 1, availableCommands.size());
+    }
+
+    List<ReplayableCommand> choicesSelected() {
         return commandExportManager.getCommands();
+    }
+
+    CommandExportManager move(
+            final List<ReplayableCommand> selected,
+            final ReplayableCommand target,
+            final boolean squashTimings) {
+        final CommandLogEntry targetEntry = commandLogEntry(target).orElseThrow();
+        final List<CommandLogEntry> selectedEntries = selected.stream()
+                .map(this::commandLogEntry)
+                .flatMap(Optional::stream)
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
+
+        moveAfter(selectedEntries, targetEntry, squashTimings);
+        return commandExportManager;
     }
 
     private boolean isRecordingSupportEnabled() {
         return causewayConfiguration != null
                 && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
-    }
-
-    @MemberSupport
-    public boolean defaultSquashTimings() {
-        return false;
     }
 
     private void moveAfter(
@@ -172,8 +160,7 @@ public class CommandExportManager_moveCommands {
                         : originalTimestamp.getTime() - previousOriginalTimestamp.getTime();
                 newTimestamp = addMillis(previousNewTimestamp, Math.max(originalGap, gapMillis));
             }
-            selectedEntry.setTimestamp(newTimestamp);
-            updateCommandDtoTimestamp(selectedEntry, newTimestamp);
+            setTimestamp(selectedEntry, newTimestamp);
             previousOriginalTimestamp = originalTimestamp;
             previousNewTimestamp = newTimestamp;
             nextTimestamp = addMillis(newTimestamp, gapMillis);
@@ -185,6 +172,13 @@ public class CommandExportManager_moveCommands {
             final long millis) {
         final Timestamp base = timestamp != null ? timestamp : new Timestamp(0L);
         return new Timestamp(base.getTime() + millis);
+    }
+
+    private static void setTimestamp(
+            final CommandLogEntry entry,
+            final Timestamp timestamp) {
+        entry.setTimestamp(timestamp);
+        updateCommandDtoTimestamp(entry, timestamp);
     }
 
     private static void updateCommandDtoTimestamp(
@@ -199,10 +193,31 @@ public class CommandExportManager_moveCommands {
         return command != null ? command.commandLogEntry() : Optional.empty();
     }
 
+    private static int firstSelectedIndex(
+            final List<ReplayableCommand> commands,
+            final Set<UUID> selectedIds) {
+        for (int i = 0; i < commands.size(); i++) {
+            if (selectedIds.contains(commands.get(i).interactionId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static int lastSelectedIndex(
+            final List<ReplayableCommand> commands,
+            final Set<UUID> selectedIds) {
+        for (int i = commands.size() - 1; i >= 0; i--) {
+            if (selectedIds.contains(commands.get(i).interactionId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {
         if (commands == null) {
-            return Set.of();
-        }
+            return java.util.Collections.emptySet();        }
         return commands.stream()
                 .map(ReplayableCommand::interactionId)
                 .collect(Collectors.toCollection(HashSet::new));

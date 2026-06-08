@@ -34,15 +34,22 @@ In practice this supports the existing upward workflow, but the generic action n
 
 3. Model movement direction in terms of target placement.
 
-   Upward movement places the selected block immediately after the target command using the existing timestamp algorithm.
-   Downward movement places the selected block immediately before the target command so the selected commands end up later than their prior position but still before the later target.
+   Upward movement places the selected block immediately after a target command that is before the first selected command.
+   Downward movement places the selected block immediately after a target command that is after the last selected command.
+   This makes choosing the next command after the selected block move the block down by one position rather than leaving it visually unchanged.
    The downward algorithm should preserve selected order, support squash timings, and use deterministic minimum gaps.
 
-4. Keep validation constraints symmetric.
+4. Filter target choices by movement direction.
+
+   `moveCommandsUp` should only offer targets before the first selected command because later targets would move the block down or keep it in place.
+   `moveCommandsDown` should only offer targets after the last selected command because earlier targets would move the block up or keep it in place.
+   Direct invocation validation should enforce the same directional constraint as the choices.
+
+5. Keep validation constraints symmetric.
 
    Both actions require command-log recording support to be enabled.
    Both actions operate only on active commands at or after the export baseline.
-   Both actions exclude selected commands from target choices and reject missing selection, missing target, target-in-selection, excluded commands, and commands outside the active set.
+   Both actions exclude selected commands from target choices and reject missing selection, missing target, target-in-selection, excluded commands, commands outside the active set, and targets on the wrong side of the selected block.
 
 ## Risks / Trade-offs
 

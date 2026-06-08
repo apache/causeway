@@ -28,6 +28,8 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_excludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsDown;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsUp;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
 
 class CausewayModuleExtCommandLogApplibTest {
@@ -42,9 +44,13 @@ class CausewayModuleExtCommandLogApplibTest {
                         CommandExportManager.class,
                         CommandExportManager_exportSelected.class,
                         CommandExportManager_excludeCommands.class,
+                        CommandExportManager_moveCommandsUp.class,
+                        CommandExportManager_moveCommandsDown.class,
                         ReplayableCommand_makeExportable.class);
         assertThat(imports)
                 .extracting(Class::getSimpleName)
-                .doesNotContain("CommandExportManager_makeSelectedExportable");
+                .doesNotContain(
+                        "CommandExportManager_makeSelectedExportable",
+                        "CommandExportManager_moveCommands");
     }
 }
