@@ -48,6 +48,7 @@ import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandL
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -62,6 +63,7 @@ class CommandExportManagerExportSelectedTest {
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
     private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+    private static final Bookmark CATEGORY = Bookmark.forLogicalTypeNameAndIdentifier("demo.Category", "STD");
 
     @Test
     void validate_selected_accepts_first_domain_service_target_before_invocation() {
@@ -79,6 +81,16 @@ class CommandExportManagerExportSelectedTest {
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
         final var fixture = fixtureWith(finder, actionOnFoundCustomer);
         fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation).isNull();
+    }
+
+    @Test
+    void validate_selected_accepts_reference_data_target_before_invocation() {
+        final var fixture = fixtureWith(entry(T1, CATEGORY));
+        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -124,6 +136,17 @@ class CommandExportManagerExportSelectedTest {
                 .isInstanceOf(RecoverableException.class)
                 .hasMessageContaining(CUSTOMER.toString())
                 .hasMessageContaining("is unknown");
+    }
+
+    @Test
+    void validate_selected_accepts_reference_data_reference_parameter_before_invocation() {
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "category", CATEGORY));
+        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
+
+        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
+
+        assertThat(validation).isNull();
     }
 
     @Test
@@ -261,6 +284,19 @@ class CommandExportManagerExportSelectedTest {
     }
 
     @Test
+    void default_selected_includes_reference_data_target() {
+        final var entry = entry(T1, CATEGORY, null);
+        final var fixture = fixtureWith(entry);
+        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
+
+        final var defaults = fixture.action.defaultSelected();
+
+        assertThat(defaults)
+                .extracting(ReplayableCommand::interactionId)
+                .containsExactly(entry.getInteractionId());
+    }
+
+    @Test
     void default_selected_includes_exportable_active_commands_only() {
         final var unknownCustomerAction = entry(T1, CUSTOMER, null);
         final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
@@ -393,6 +429,10 @@ class CommandExportManagerExportSelectedTest {
         when(metaModelService.lookupLogicalTypeByName(MENU_SERVICE.getLogicalTypeName()))
                 .thenReturn(Optional.of(LogicalType.eager(Customers.class, MENU_SERVICE.getLogicalTypeName())));
         return metaModelService;
+    }
+
+    private static CommandReplayReferenceDataService referenceDataServiceFor(final Bookmark referenceDataBookmark) {
+        return referenceDataBookmark::equals;
     }
 
     private static CommandLogEntry entry(

@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
@@ -48,6 +49,7 @@ class CommandExportKnownTargetValidatorTest {
 
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
     private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+    private static final Bookmark CATEGORY = Bookmark.forLogicalTypeNameAndIdentifier("demo.Category", "STD");
     private static final Bookmark ORDER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Order", "1");
 
     @Test
@@ -78,6 +80,15 @@ class CommandExportKnownTargetValidatorTest {
         final var failure = validator.validate(BASELINE, List.of(
                 action(T1, MENU_SERVICE, singletonContainerResult),
                 action(T2, CUSTOMER, null)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void accepts_reference_data_target_without_prior_result() {
+        final var validator = new CommandExportKnownTargetValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
+
+        final var failure = validator.validate(BASELINE, List.of(action(T1, CATEGORY, null)));
 
         assertThat(failure).isEmpty();
     }
@@ -175,6 +186,16 @@ class CommandExportKnownTargetValidatorTest {
     }
 
     @Test
+    void accepts_reference_data_reference_parameter_without_prior_result() {
+        final var validator = new CommandExportKnownTargetValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
+
+        final var failure = validator.validate(BASELINE, List.of(
+                actionWithReferenceParameter(T1, MENU_SERVICE, null, "category", CATEGORY)));
+
+        assertThat(failure).isEmpty();
+    }
+
+    @Test
     void rejects_unknown_reference_parameter_and_reports_command_parameter_and_bookmark() {
         final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
         final var selected = actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER);
@@ -236,6 +257,35 @@ class CommandExportKnownTargetValidatorTest {
                 actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", null)));
 
         assertThat(failure).isEmpty();
+    }
+
+    @Test
+    void reference_data_service_accepts_when_any_implementation_accepts_bookmark() {
+        final var services = List.<CommandReplayReferenceDataService>of(
+                bookmark -> false,
+                CATEGORY::equals);
+
+        final var referenceData = CommandReplayReferenceDataService.isReferenceData(services, CATEGORY);
+
+        assertThat(referenceData).isTrue();
+    }
+
+    @Test
+    void reference_data_service_rejects_when_no_implementation_accepts_bookmark() {
+        final var services = List.<CommandReplayReferenceDataService>of(
+                bookmark -> false,
+                bookmark -> MENU_SERVICE.equals(bookmark));
+
+        final var referenceData = CommandReplayReferenceDataService.isReferenceData(services, CATEGORY);
+
+        assertThat(referenceData).isFalse();
+    }
+
+    @Test
+    void reference_data_service_rejects_when_no_implementations_are_registered() {
+        final var referenceData = CommandReplayReferenceDataService.isReferenceData(List.of(), CATEGORY);
+
+        assertThat(referenceData).isFalse();
     }
 
     private static CommandLogEntry action(

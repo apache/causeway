@@ -51,6 +51,7 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 import lombok.Data;
 import lombok.Getter;
@@ -71,6 +72,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     @Inject Scratchpad scratchpad;
     @Inject MetaModelService metaModelService;
     @Inject CausewayConfiguration causewayConfiguration;
+    @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
     @Inject
     public CommandExportManager(
@@ -208,7 +210,12 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     }
 
     private CommandExportKnownTargetValidator validator() {
-        return new CommandExportKnownTargetValidator(this::isExportRoot);
+        return new CommandExportKnownTargetValidator(this::isExportRootOrReferenceData);
+    }
+
+    private boolean isExportRootOrReferenceData(final Bookmark bookmark) {
+        return isExportRoot(bookmark)
+                || CommandReplayReferenceDataService.isReferenceData(commandReplayReferenceDataServices, bookmark);
     }
 
     private boolean isExportRoot(final Bookmark bookmark) {

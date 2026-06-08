@@ -18,6 +18,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
@@ -43,6 +44,7 @@ public class CommandExportManager_exportSelected {
 
     @Inject MetaModelService metaModelService;
     @Inject CausewayConfiguration causewayConfiguration;
+    @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
     @Inject
     public CommandExportManager_exportSelected(final CommandExportManager commandExportManager) {
@@ -141,6 +143,7 @@ public class CommandExportManager_exportSelected {
     private void syncInjectedServicesToManager() {
         commandExportManager.metaModelService = metaModelService;
         commandExportManager.causewayConfiguration = causewayConfiguration;
+        commandExportManager.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
