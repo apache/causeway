@@ -206,6 +206,14 @@ ValueSemanticsProvider<T> {
     }
 
     /**
+     * Uses bootstrap CSS.
+     */
+    protected final String toLightFont(final String html) {
+        return """
+            <span class="fw-light">%s</span>""".formatted(html);
+    }
+
+    /**
      * Uses Fontawesome.
      */
     protected final String faIconAndTitle(final FontAwesomeLayers faLayers, final String titleHtml) {

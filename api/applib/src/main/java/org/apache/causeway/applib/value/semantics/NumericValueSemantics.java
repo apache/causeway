@@ -212,7 +212,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final T value) {
-        return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format, super::toMonospace));
+        return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format, super::toLightFont));
     }
 
     // -- PARSER
