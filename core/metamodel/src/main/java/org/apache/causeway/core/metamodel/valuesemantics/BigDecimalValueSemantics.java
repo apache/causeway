@@ -37,9 +37,7 @@ import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -56,12 +54,10 @@ import lombok.Setter;
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
-extends ValueSemanticsAbstract<BigDecimal>
+extends NumericValueSemantics<BigDecimal>
 implements
-    NumericValueSemantics,
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
-    Renderer<BigDecimal>,
     IdStringifier.EntityAgnostic<BigDecimal> {
 
     @Setter @Inject
@@ -105,18 +101,6 @@ implements
     @Override
     public BigDecimal destring(final @NonNull String stringified) {
         return new BigDecimal(stringified);
-    }
-
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
     }
 
     // -- PARSER
@@ -173,7 +157,7 @@ implements
         // we skip this when PARSING,
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering() || bigDecimalConfig.editing().preserveScale()) {
+        if(!usedFor.isParsing() || bigDecimalConfig.editing().preserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
             OptionalInt optionalInt = Facets.minFractionalDigits(feature);

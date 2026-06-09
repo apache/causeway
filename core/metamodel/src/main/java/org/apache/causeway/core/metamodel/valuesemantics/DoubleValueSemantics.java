@@ -29,9 +29,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.primitives._Doubles;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -44,12 +42,10 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Named("causeway.metamodel.value.DoubleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class DoubleValueSemantics
-extends ValueSemanticsAbstract<Double>
+extends NumericValueSemantics<Double>
 implements
-    NumericValueSemantics,
     DefaultsProvider<Double>,
-    Parser<Double>,
-    Renderer<Double> {
+    Parser<Double> {
 
     @Override
     public Class<Double> getCorrespondingClass() {
@@ -79,24 +75,12 @@ implements
                 decomposition, ValueWithTypeDto::getDouble, UnaryOperator.identity(), ()->null);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final Double value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final Double value) {
-        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
-    }
-
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Double value) {
         return value!=null
-                ? getNumberFormat(context)
+                ? getNumberFormat(context, FormatUsageFor.PARSING)
                     .format(value)
                 : null;
     }

@@ -29,9 +29,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.primitives._Floats;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -44,12 +42,10 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Named("causeway.metamodel.value.FloatValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
-extends ValueSemanticsAbstract<Float>
+extends NumericValueSemantics<Float>
 implements
-    NumericValueSemantics,
     DefaultsProvider<Float>,
-    Parser<Float>,
-    Renderer<Float> {
+    Parser<Float> {
 
     @Override
     public Class<Float> getCorrespondingClass() {
@@ -79,25 +75,13 @@ implements
                 decomposition, ValueWithTypeDto::getFloat, UnaryOperator.identity(), ()->null);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final Float value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final Float value) {
-        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
-    }
-
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Float value) {
         return value==null
                 ? null
-                : getNumberFormat(context)
+                : getNumberFormat(context, FormatUsageFor.PARSING)
                     .format(value);
     }
 

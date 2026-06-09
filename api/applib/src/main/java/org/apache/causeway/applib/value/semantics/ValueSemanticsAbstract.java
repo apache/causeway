@@ -56,9 +56,11 @@ ValueSemanticsProvider<T> {
 
     public enum FormatUsageFor {
         PARSING,
-        RENDERING;
+        RENDERING_AS_TEXT,
+        RENDERING_AS_HTML;
         public boolean isParsing() { return this==PARSING; }
-        public boolean isRendering() { return this==RENDERING; }
+        public boolean isRenderingAsText() { return this==RENDERING_AS_TEXT; }
+        public boolean isRenderingAsHTML() { return this==RENDERING_AS_HTML; }
     }
 
     @SuppressWarnings("unchecked")

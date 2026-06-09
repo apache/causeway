@@ -25,24 +25,61 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.commons.internal.base._Strings;
+
+import lombok.Builder;
 
 /**
  * A base for all numerical value types.
  */
-public interface NumericValueSemantics {
+public abstract class NumericValueSemantics<T>
+extends ValueSemanticsAbstract<T>
+implements Renderer<T> {
 
-    enum GroupingSeparatorPolicy {
+    @Deprecated //TODO to be replaced by GroupingSeparatorConfig
+    protected enum GroupingSeparatorPolicy {
+        @Deprecated
         ALLOW,
+        @Deprecated
         DISALLOW;
+    }
+
+    @Builder
+    public record GroupingSeparatorConfig(
+            @Nullable String titleSpecificSeparator,
+            @Nullable String htmlSpecificSeparator,
+            @Nullable String inputSpecificSeparator) {
+        public static GroupingSeparatorConfig DEFAULT = new GroupingSeparatorConfig(null, "&#8239;", null);
+    }
+
+    protected GroupingSeparatorConfig config() {
+        return GroupingSeparatorConfig.DEFAULT;
+    }
+
+    record DecimalFormatAndPostProcess(DecimalFormat format, UnaryOperator<String> postprocess) {
+        public DecimalFormatAndPostProcess {
+            format = Objects.requireNonNull(format, ()->"must specify a DecimalFormat");
+            postprocess = postprocess!=null
+                    ? postprocess
+                    : UnaryOperator.identity();
+        }
+        public String format(final double number) {
+            return postprocess.apply(format.format(number));
+        }
+        public String format(final long number) {
+            return postprocess.apply(format.format(number));
+        }
+        public String format(final Object number) {
+            return postprocess.apply(format.format(number));
+        }
     }
 
     /**
@@ -55,30 +92,34 @@ public interface NumericValueSemantics {
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
-    default DecimalFormat getNumberFormat(
-            final ValueSemanticsProvider.@Nullable Context context) {
-        return getNumberFormat(context, FormatUsageFor.RENDERING);
-    }
-
-    default DecimalFormat getNumberFormat(
+    protected DecimalFormat getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context,
             final @NonNull FormatUsageFor usedFor) {
         var format = (DecimalFormat)NumberFormat.getNumberInstance(ValueSemanticsProvider.getUserLocale(context).numberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
+
+//TODO configure from GroupingSeparatorConfig
+//        //format.setGroupingUsed(false);
+//        var decimalFormatSymbols = format.getDecimalFormatSymbols();
+//        decimalFormatSymbols.setGroupingSeparator('·');
+//        format.setDecimalFormatSymbols(decimalFormatSymbols);
+
         configureDecimalFormat(context, format, usedFor);
+
         return format;
     }
 
     /**
      * Typically overridden by BigDecimalValueSemantics to set min/max fractional digits.
      */
-    default void configureDecimalFormat(
-            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {}
+    @Deprecated //TODO missing the distinction between rendering title or html
+    protected void configureDecimalFormat(
+            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+    }
 
-
-    default Optional<BigInteger> parseInteger(
-            final ValueSemanticsProvider.@Nullable Context context,
+    protected Optional<BigInteger> parseInteger(
+            final @Nullable Context context,
             final @Nullable String text) {
         var input = _Strings.blankToNullOrTrim(text);
         if(input==null)
@@ -91,7 +132,7 @@ public interface NumericValueSemantics {
         }
     }
 
-    default Optional<BigDecimal> parseDecimal(
+    protected Optional<BigDecimal> parseDecimal(
             final @Nullable Context context,
             final @Nullable String text,
             final GroupingSeparatorPolicy groupingSeparatorPolicy) {
@@ -130,6 +171,21 @@ public interface NumericValueSemantics {
                     "Not a decimal value '%s': %s", input, e.getMessage()),
                     e);
         }
+    }
+
+    // -- RENDERER
+
+    @Override
+    public String titlePresentation(final Context context, final T value) {
+        return renderTitle(value, getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final T value) {
+        return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format, super::toMonospace));
+        //TODO use DecimalFormatAndPostProcess instead
+//        return renderHtml(value, in->
+//            toMonospace(getNumberFormat(context, FormatUsageFor.RENDERING_AS_HTML).format(in).replace("·", "&#8239;")));
     }
 
 }

@@ -34,9 +34,7 @@ import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -49,12 +47,10 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Named("causeway.metamodel.value.LongValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LongValueSemantics
-extends ValueSemanticsAbstract<Long>
+extends NumericValueSemantics<Long>
 implements
-    NumericValueSemantics,
     DefaultsProvider<Long>,
     Parser<Long>,
-    Renderer<Long>,
     IdStringifier.EntityAgnostic<Long>{
 
     @Override
@@ -97,25 +93,13 @@ implements
         return Long.parseLong(stringified);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final Long value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final Long value) {
-        return renderHtml(value, pipe(getNumberFormat(context)::format, super::toMonospace));
-    }
-
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Long value) {
         return value==null
                 ? null
-                : getNumberFormat(context)
+                : getNumberFormat(context, FormatUsageFor.PARSING)
                     .format(value);
     }
 
