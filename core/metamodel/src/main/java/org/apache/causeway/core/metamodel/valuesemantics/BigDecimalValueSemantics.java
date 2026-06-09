@@ -33,6 +33,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
@@ -40,6 +41,7 @@ import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -107,10 +109,21 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
-                                ? GroupingSeparatorPolicy.ALLOW
-                                : GroupingSeparatorPolicy.DISALLOW;
-        return parseDecimal(context, text, parsePolicy)
+        var input = _Strings.blankToNullOrTrim(text);
+        if(input==null)
+            return null;
+
+        var groupingSeparatorPolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
+            ? GroupingSeparatorPolicy.ALLOW
+            : GroupingSeparatorPolicy.DISALLOW;
+
+        if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
+            var groupingSeparatorChar = getGroupingSeparator(context);
+            if (input.contains(""+groupingSeparatorChar))
+                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
+        }
+
+        return parseDecimal(context, text)
                 .orElse(null);
     }
 

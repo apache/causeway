@@ -79,7 +79,7 @@ implements
 
     @Override
     public Double parseTextRepresentation(final Context context, final String text) {
-        return _Doubles.convertToDouble(parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
+        return _Doubles.convertToDouble(parseDecimal(context, text))
                 .orElse(null);
     }
 
@@ -97,7 +97,7 @@ implements
 
     @Override
     public Can<Double> getExamples() {
-        return Can.of(Double.MIN_VALUE, Double.MAX_VALUE);
+        return Can.of(1.0d, 0.1d, Math.PI, Double.MIN_VALUE, Double.MAX_VALUE);
     }
 
 }

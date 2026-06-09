@@ -32,6 +32,8 @@ import java.util.function.UnaryOperator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.commons.internal.base._Strings;
 
@@ -59,19 +61,46 @@ implements
             @Nullable String titleSpecificSeparator,
             @Nullable String htmlSpecificSeparator,
             @Nullable String inputSpecificSeparator) {
-        public static GroupingSeparatorConfig DEFAULT = new GroupingSeparatorConfig(null, "&#8239;", null);
+        public static GroupingSeparatorConfig DEFAULT = GroupingSeparatorConfig.builder()
+                .titleSpecificSeparator(" ") // UTF8 U+2009
+                .htmlSpecificSeparator("&#8239;")
+                .build();
     }
 
     protected GroupingSeparatorConfig config() {
         return GroupingSeparatorConfig.DEFAULT;
     }
 
-    record DecimalFormatAndPostProcess(DecimalFormat format, UnaryOperator<String> postprocess) {
-        public DecimalFormatAndPostProcess {
+    protected record DecimalFormatEx(
+            UnaryOperator<String> preprocess,
+            DecimalFormat format,
+            UnaryOperator<String> postprocess) {
+        protected DecimalFormatEx {
             format = Objects.requireNonNull(format, ()->"must specify a DecimalFormat");
+            preprocess = preprocess!=null
+                    ? preprocess
+                    : UnaryOperator.identity();
             postprocess = postprocess!=null
                     ? postprocess
                     : UnaryOperator.identity();
+        }
+        static DecimalFormatEx of(final DecimalFormat format, @Nullable final String groupingSeparator) {
+            if(StringUtils.hasLength(groupingSeparator)) {
+                format.setGroupingUsed(true);
+                var decimalFormatSymbols = format.getDecimalFormatSymbols();
+                decimalFormatSymbols.setGroupingSeparator('_');
+                format.setDecimalFormatSymbols(decimalFormatSymbols);
+                return new DecimalFormatEx(
+                        in->in.replace(groupingSeparator, "").replaceAll("\\s+", ""),
+                        format,
+                        out->out.replace("_", groupingSeparator));
+            } else {
+                format.setGroupingUsed(false);
+                return new DecimalFormatEx(
+                        in->in.replaceAll("\\s+", ""),
+                        format,
+                        UnaryOperator.identity());
+            }
         }
         public String format(final double number) {
             return postprocess.apply(format.format(number));
@@ -81,6 +110,16 @@ implements
         }
         public String format(final Object number) {
             return postprocess.apply(format.format(number));
+        }
+        public BigDecimal parse(final String rawInput) throws ParseException {
+            var position = new ParsePosition(0);
+            var input = preprocess.apply(rawInput);
+            var decimal = (BigDecimal) format.parse(input, position);
+            if (position.getErrorIndex() != -1)
+                throw new ParseException("could not parse input='" + rawInput + "'", position.getErrorIndex());
+            else if (position.getIndex() < input.length())
+                throw new ParseException("input='" + rawInput + "' was not processed completely", position.getIndex());
+            return decimal;
         }
     }
 
@@ -94,28 +133,31 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
-    protected DecimalFormat getNumberFormat(
+    private DecimalFormatEx getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context,
             final @NonNull FormatUsageFor usedFor) {
         var format = (DecimalFormat)NumberFormat.getNumberInstance(ValueSemanticsProvider.getUserLocale(context).numberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
 
-//TODO configure from GroupingSeparatorConfig
-//        //format.setGroupingUsed(false);
-//        var decimalFormatSymbols = format.getDecimalFormatSymbols();
-//        decimalFormatSymbols.setGroupingSeparator('·');
-//        format.setDecimalFormatSymbols(decimalFormatSymbols);
-
         configureDecimalFormat(context, format, usedFor);
 
-        return format;
+        return switch(usedFor) {
+            case RENDERING_AS_TEXT -> DecimalFormatEx.of(format, config().titleSpecificSeparator);
+            case RENDERING_AS_HTML -> DecimalFormatEx.of(format, config().htmlSpecificSeparator);
+            case PARSING -> {
+                format.setParseBigDecimal(true);
+                yield DecimalFormatEx.of(format, config().inputSpecificSeparator);
+            }
+        };
     }
 
     /**
-     * Typically overridden by BigDecimalValueSemantics to set min/max fractional digits.
+     * Typically overridden by custom {@link NumericValueSemantics} to set min/max fractional digits.
+     *
+     * @apiNote setting a grouping separator here has no effect, this is done in {@link DecimalFormatEx}
+     *      based on {@link GroupingSeparatorConfig}
      */
-    @Deprecated //TODO missing the distinction between rendering title or html
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
     }
@@ -127,7 +169,7 @@ implements
         if(input==null)
             return Optional.empty();
         try {
-            return parseDecimal(context, input, GroupingSeparatorPolicy.ALLOW)
+            return parseDecimal(context, input)
                     .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
@@ -136,34 +178,20 @@ implements
 
     protected Optional<BigDecimal> parseDecimal(
             final @Nullable Context context,
-            final @Nullable String text,
-            final GroupingSeparatorPolicy groupingSeparatorPolicy) {
+            final @Nullable String text) {
         var input = _Strings.blankToNullOrTrim(text);
         if(input==null)
             return Optional.empty();
 
-        if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
-            var userLocale = ValueSemanticsProvider.getUserLocale(context);
-            var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
-            var groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
-            if (input.contains(""+groupingSeparatorChar))
-                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
-        }
+        var formatEx = getNumberFormat(context, FormatUsageFor.PARSING);
 
-        var format = getNumberFormat(context, FormatUsageFor.PARSING);
-        format.setParseBigDecimal(true);
-
-        var position = new ParsePosition(0);
         try {
-            var number = (BigDecimal)format.parse(input, position);
-            if (position.getErrorIndex() != -1)
-                throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
-            else if (position.getIndex() < input.length())
-                throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
+            var number = formatEx.parse(input);
+
             // check for maxFractionDigits if required ...
-            final int maxFractionDigits = format.getMaximumFractionDigits();
+            final int maxFractionDigits = formatEx.format().getMaximumFractionDigits();
             if(maxFractionDigits>-1
-                    && number.scale()>format.getMaximumFractionDigits())
+                    && number.scale()>formatEx.format().getMaximumFractionDigits())
                 throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
                                 + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
@@ -185,9 +213,6 @@ implements
     @Override
     public String htmlPresentation(final Context context, final T value) {
         return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format, super::toMonospace));
-        //TODO use DecimalFormatAndPostProcess instead
-//        return renderHtml(value, in->
-//            toMonospace(getNumberFormat(context, FormatUsageFor.RENDERING_AS_HTML).format(in).replace("·", "&#8239;")));
     }
 
     // -- PARSER
@@ -197,6 +222,17 @@ implements
         return value!=null
             ? getNumberFormat(context, FormatUsageFor.PARSING).format(value)
             : null;
+    }
+
+    // -- UTIL
+
+    /**
+     * Returns locale based grouping separator. If no context is given, system defaults apply.
+     */
+    protected char getGroupingSeparator(@Nullable final Context context) {
+        var userLocale = ValueSemanticsProvider.getUserLocale(context);
+        var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
+        return decimalFormatSymbols.getGroupingSeparator();
     }
 
 }

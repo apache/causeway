@@ -79,7 +79,7 @@ implements
 
     @Override
     public Float parseTextRepresentation(final Context context, final String text) {
-        return _Floats.convertToFloat(parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
+        return _Floats.convertToFloat(parseDecimal(context, text))
                 .orElse(null);
     }
 

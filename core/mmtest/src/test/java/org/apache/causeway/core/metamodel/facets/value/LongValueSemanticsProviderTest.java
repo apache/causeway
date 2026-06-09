@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.core.metamodel.valuesemantics.LongValueSemantics;
@@ -44,16 +44,12 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
 
     @Test
     void invalidParse() throws Exception {
-        try {
-            value.parseTextRepresentation(null, "one");
-            fail();
-        } catch (final TextEntryParseException expected) {
-        }
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "one"));
     }
 
     @Test
-    void outputAsString() {
-        assertEquals("367,322", value.titlePresentation(null, longObj));
+    void title() {
+        assertEquals("367 322", value.titlePresentation(null, longObj));
     }
 
     @Test
@@ -64,8 +60,7 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
 
     @Test
     void parseWithBadlyFormattedEntry() throws Exception {
-        final Object parsed = value.parseTextRepresentation(null, "1,20.0");
-        assertEquals("120", parsed.toString());
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1,20.0"));
     }
 
     @Override
