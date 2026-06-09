@@ -39,6 +39,8 @@ public interface CommandReplayResultMappingRepository {
 
     List<? extends CommandReplayResultMapping> findAll();
 
+    void removeAll();
+
     default CommandReplayResultMapping createAndPersist(final Bookmark recordedBookmark, final Bookmark actualBookmark) {
         return createAndPersist(recordedBookmark, actualBookmark, null);
     }

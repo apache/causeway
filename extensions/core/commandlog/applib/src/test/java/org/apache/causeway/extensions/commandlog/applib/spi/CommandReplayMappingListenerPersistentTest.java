@@ -337,6 +337,11 @@ class CommandReplayMappingListenerPersistentTest {
         }
 
         @Override
+        public void removeAll() {
+            mappings.clear();
+        }
+
+        @Override
         public CommandReplayResultMapping createAndPersist(
                 final Bookmark recordedBookmark,
                 final Bookmark actualBookmark,

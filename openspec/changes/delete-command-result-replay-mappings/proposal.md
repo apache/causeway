@@ -8,6 +8,7 @@ A guarded delete-all action makes prototype replay maintenance safer and more di
 - Add a new command-log menu action that deletes all persisted `CommandReplayResultMapping` records.
 - Mark the new action with `SemanticsOf.IDEMPOTENT_ARE_YOU_SURE` so users must explicitly confirm the destructive operation.
 - Hide the action when no `CommandReplayResultMappingRepository` is available, matching the existing replay mapping finder actions.
+- Report the number of deleted mappings to the user using `MessageService`.
 - Reorder command export and replay menu actions with `@ActionLayout(sequence)` so `exportManager` appears first, `replayManager` second, replay mapping finders after those managers, and the new delete action last among the replay mapping actions.
 - Keep the change within the command log extension and do not introduce new dependencies.
 

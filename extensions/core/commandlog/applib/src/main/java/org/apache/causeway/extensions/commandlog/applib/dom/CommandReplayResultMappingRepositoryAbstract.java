@@ -85,6 +85,11 @@ implements CommandReplayResultMappingRepository {
         return mapping;
     }
 
+    @Override
+    public void removeAll() {
+        repositoryService().removeAll(entityClass);
+    }
+
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }

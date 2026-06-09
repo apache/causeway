@@ -4,6 +4,7 @@
 The system SHALL provide a command log menu action that deletes all persisted command replay result mappings.
 The delete action SHALL use an `ARE_YOU_SURE` action semantic.
 The delete action SHALL be idempotent so invoking it when no mappings exist leaves the system with no mappings and no error.
+The delete action SHALL report the number of deleted mappings to the user.
 The delete action SHALL hide when no command replay result mapping repository is available.
 The delete action MUST NOT delete command log entries or imported replay commands.
 
@@ -11,6 +12,7 @@ The delete action MUST NOT delete command log entries or imported replay command
 - **GIVEN** command replay result mappings are persisted
 - **WHEN** the user confirms the delete-all replay result mappings action
 - **THEN** all command replay result mappings are removed
+- **AND** the user is informed that two mappings were deleted
 - **AND** command log entries are not removed
 
 #### Scenario: Delete action is hidden without repository

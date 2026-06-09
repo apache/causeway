@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -86,6 +87,7 @@ public class CommandLogMenu {
     final Optional<CommandReplayResultMappingRepository> commandReplayResultMappingRepository;
     final ClockService clockService;
     final ReplayContext replayContext;
+    final MessageService messageService;
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -177,7 +179,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
-    @ActionLayout(cssClassFa = "fa-search", sequence="45")
+    @ActionLayout(cssClassFa = "fa-search", sequence="52")
     public class findReplayResultMappings {
         public class DomainEvent extends ActionDomainEvent<findReplayResultMappings> {
             public DomainEvent() { }
@@ -201,7 +203,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
-    @ActionLayout(cssClassFa = "fa-search", sequence="46")
+    @ActionLayout(cssClassFa = "fa-search", sequence="53")
     public class findChangedReplayResultMappings {
         public class DomainEvent extends ActionDomainEvent<findChangedReplayResultMappings> {
             public DomainEvent() { }
@@ -225,7 +227,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
-    @ActionLayout(cssClassFa = "fa-search", sequence="47")
+    @ActionLayout(cssClassFa = "fa-search", sequence="54")
     public class findReplayResultMappingByRecordedBookmark {
         public class DomainEvent extends ActionDomainEvent<findReplayResultMappingByRecordedBookmark> {
             public DomainEvent() { }
@@ -252,7 +254,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
-    @ActionLayout(cssClassFa = "fa-search", sequence="48")
+    @ActionLayout(cssClassFa = "fa-search", sequence="55")
     public class findReplayResultMappingsByActualBookmark {
         public class DomainEvent extends ActionDomainEvent<findReplayResultMappingsByActualBookmark> {
             public DomainEvent() { }
@@ -264,6 +266,31 @@ public class CommandLogMenu {
             return commandReplayResultMappingRepository
                     .map(repository -> repository.findByActualBookmark(actualBookmark))
                     .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = deleteReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+    )
+    @ActionLayout(cssClassFa = "fa-trash", sequence="56")
+    public class deleteReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<deleteReplayResultMappings> {
+            public DomainEvent() { }
+        }
+
+        @MemberSupport public void act() {
+            commandReplayResultMappingRepository.ifPresent(repository -> {
+                final var count = repository.findAll().size();
+                repository.removeAll();
+                messageService.informUser(String.format("Deleted %d command replay result mapping%s", count, count == 1 ? "" : "s"));
+            });
         }
 
         @MemberSupport public boolean hideAct() {

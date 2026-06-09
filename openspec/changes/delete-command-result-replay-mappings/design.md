@@ -36,7 +36,8 @@ That would couple the applib menu to persistence-specific classes and would not 
 ### Use `SemanticsOf.IDEMPOTENT_ARE_YOU_SURE` on the menu action
 
 The delete-all action will use an idempotent are-you-sure semantic because deleting an already-empty mapping table leaves the system in the same state but remains destructive when mappings exist.
-The action should return the menu service or otherwise leave the user in a stable location after completion.
+The action will return `void`, because returning the menu service is not a valid action result type for this service.
+The action will use `MessageService` to report how many mappings were deleted.
 
 Alternative considered: use `SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE`.
 That would also force confirmation, but the operation is naturally idempotent at the aggregate level.

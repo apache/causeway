@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.app;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,8 +32,12 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
@@ -99,6 +104,22 @@ class CommandLogMenuTest {
     }
 
     @Test
+    void delete_replay_result_mappings_removes_all_mappings() {
+        FakeRepository repository = new FakeRepository();
+        repository.createAndPersist(bookmark("1"), bookmark("2"));
+        repository.createAndPersist(bookmark("3"), bookmark("4"));
+
+        MessageService messageService = mock(MessageService.class);
+        CommandLogMenu menu = menu(Optional.of(repository), messageService);
+
+        menu.new deleteReplayResultMappings().act();
+
+        assertThat(repository.findAll()).isEmpty();
+        assertThat(repository.removeAllInvoked).isTrue();
+        verify(messageService).informUser("Deleted 2 command replay result mappings");
+    }
+
+    @Test
     void replay_result_mapping_actions_are_hidden_when_repository_is_unavailable() {
         CommandLogMenu menu = menu(Optional.empty());
 
@@ -106,14 +127,52 @@ class CommandLogMenuTest {
         assertThat(menu.new findChangedReplayResultMappings().hideAct()).isTrue();
         assertThat(menu.new findReplayResultMappingByRecordedBookmark().hideAct()).isTrue();
         assertThat(menu.new findReplayResultMappingsByActualBookmark().hideAct()).isTrue();
+        assertThat(menu.new deleteReplayResultMappings().hideAct()).isTrue();
+    }
+
+    @Test
+    void delete_replay_result_mappings_is_idempotent_are_you_sure() {
+        assertThat(actionOn(CommandLogMenu.deleteReplayResultMappings.class).semantics())
+                .isEqualTo(SemanticsOf.IDEMPOTENT_ARE_YOU_SURE);
+    }
+
+    @Test
+    void replay_workflow_actions_are_ordered_by_layout_sequence() {
+        assertThat(sequenceOf(CommandLogMenu.exportManager.class))
+                .isLessThan(sequenceOf(CommandLogMenu.replayManager.class));
+        assertThat(sequenceOf(CommandLogMenu.replayManager.class))
+                .isLessThan(sequenceOf(CommandLogMenu.findReplayResultMappings.class));
+        assertThat(sequenceOf(CommandLogMenu.findReplayResultMappings.class))
+                .isLessThan(sequenceOf(CommandLogMenu.findChangedReplayResultMappings.class));
+        assertThat(sequenceOf(CommandLogMenu.findChangedReplayResultMappings.class))
+                .isLessThan(sequenceOf(CommandLogMenu.findReplayResultMappingByRecordedBookmark.class));
+        assertThat(sequenceOf(CommandLogMenu.findReplayResultMappingByRecordedBookmark.class))
+                .isLessThan(sequenceOf(CommandLogMenu.findReplayResultMappingsByActualBookmark.class));
+        assertThat(sequenceOf(CommandLogMenu.findReplayResultMappingsByActualBookmark.class))
+                .isLessThan(sequenceOf(CommandLogMenu.deleteReplayResultMappings.class));
+    }
+
+    private static Action actionOn(final Class<?> actionClass) {
+        return actionClass.getAnnotation(Action.class);
+    }
+
+    private static int sequenceOf(final Class<?> actionClass) {
+        return Integer.parseInt(actionClass.getAnnotation(ActionLayout.class).sequence());
     }
 
     private static CommandLogMenu menu(final Optional<CommandReplayResultMappingRepository> repository) {
+        return menu(repository, mock(MessageService.class));
+    }
+
+    private static CommandLogMenu menu(
+            final Optional<CommandReplayResultMappingRepository> repository,
+            final MessageService messageService) {
         return new CommandLogMenu(
                 mock(CommandLogEntryRepository.class),
                 repository,
                 mock(ClockService.class),
-                null);
+                null,
+                messageService);
     }
 
     private static Bookmark bookmark(final String identifier) {
@@ -123,6 +182,7 @@ class CommandLogMenuTest {
     static class FakeRepository implements CommandReplayResultMappingRepository {
 
         private final Map<Bookmark, CommandReplayResultMapping> mappings = new LinkedHashMap<>();
+        private boolean removeAllInvoked;
 
         @Override
         public Optional<CommandReplayResultMapping> findByRecordedBookmark(final Bookmark recordedBookmark) {
@@ -146,6 +206,12 @@ class CommandLogMenuTest {
         @Override
         public List<? extends CommandReplayResultMapping> findAll() {
             return new ArrayList<>(mappings.values());
+        }
+
+        @Override
+        public void removeAll() {
+            removeAllInvoked = true;
+            mappings.clear();
         }
 
         @Override
