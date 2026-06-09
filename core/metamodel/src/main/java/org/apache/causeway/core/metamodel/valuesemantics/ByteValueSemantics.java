@@ -96,14 +96,6 @@ implements
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final Byte value) {
-        return value==null
-                ? null
-                : getNumberFormat(context, FormatUsageFor.PARSING)
-                    .format(value);
-    }
-
-    @Override
     public Byte parseTextRepresentation(final Context context, final String text) {
         var input = _Strings.blankToNullOrTrim(text);
         if(input==null)

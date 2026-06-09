@@ -91,14 +91,6 @@ implements
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final BigInteger value) {
-        return value==null
-                ? null
-                : getNumberFormat(context, FormatUsageFor.PARSING)
-                    .format(value);
-    }
-
-    @Override
     public BigInteger parseTextRepresentation(final Context context, final String text) {
         return parseInteger(context, text)
                 .orElse(null);

@@ -78,14 +78,6 @@ implements
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final Double value) {
-        return value!=null
-                ? getNumberFormat(context, FormatUsageFor.PARSING)
-                    .format(value)
-                : null;
-    }
-
-    @Override
     public Double parseTextRepresentation(final Context context, final String text) {
         return _Doubles.convertToDouble(parseDecimal(context, text, GroupingSeparatorPolicy.ALLOW))
                 .orElse(null);

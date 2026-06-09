@@ -106,14 +106,6 @@ implements
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return value==null
-                ? null
-                : getNumberFormat(context, PARSING)
-                    .format(value);
-    }
-
-    @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
                                 ? GroupingSeparatorPolicy.ALLOW

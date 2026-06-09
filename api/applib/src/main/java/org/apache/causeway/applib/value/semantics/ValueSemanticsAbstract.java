@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
@@ -43,7 +41,6 @@ import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
@@ -178,43 +175,6 @@ ValueSemanticsProvider<T> {
         return valuePojo!=null
                 ? onNonNull.apply(valuePojo)
                 : onNull.get();
-    }
-
-    // -- TEMPORAL RENDERING
-
-    protected DateTimeFormatter getTemporalNoZoneRenderingFormat(
-            final @Nullable Context context,
-            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
-            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
-            final @NonNull FormatStyle dateFormatStyle,
-            final @NonNull FormatStyle timeFormatStyle,
-            final @Nullable String datePattern,
-            final @Nullable String dateTimePattern) {
-
-        final DateTimeFormatter noZoneOutputFormat = switch (temporalCharacteristic) {
-            case DATE_TIME -> dateTimePattern != null
-                                ? DateTimeFormatter.ofPattern(dateTimePattern)
-                                : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
-            case DATE_ONLY -> datePattern != null
-                                ? DateTimeFormatter.ofPattern(datePattern)
-                                : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
-            case TIME_ONLY -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle);
-        };
-
-        return noZoneOutputFormat
-                .withLocale(getUserLocale(context).timeFormatLocale());
-    }
-
-    protected Optional<DateTimeFormatter> getTemporalZoneOnlyRenderingFormat(
-            final ValueSemanticsProvider.@Nullable Context context,
-            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
-            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
-
-        return switch (offsetCharacteristic) {
-            case LOCAL -> Optional.empty();
-            case OFFSET -> Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
-            case ZONED -> Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
-        };
     }
 
     // -- TRANSLATION SUPPORT

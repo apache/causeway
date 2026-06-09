@@ -42,7 +42,9 @@ import lombok.Builder;
  */
 public abstract class NumericValueSemantics<T>
 extends ValueSemanticsAbstract<T>
-implements Renderer<T> {
+implements
+    Renderer<T>,
+    Parser<T> {
 
     @Deprecated //TODO to be replaced by GroupingSeparatorConfig
     protected enum GroupingSeparatorPolicy {
@@ -186,6 +188,15 @@ implements Renderer<T> {
         //TODO use DecimalFormatAndPostProcess instead
 //        return renderHtml(value, in->
 //            toMonospace(getNumberFormat(context, FormatUsageFor.RENDERING_AS_HTML).format(in).replace("·", "&#8239;")));
+    }
+
+    // -- PARSER
+
+    @Override
+    public final String parseableTextRepresentation(final Context context, final T value) {
+        return value!=null
+            ? getNumberFormat(context, FormatUsageFor.PARSING).format(value)
+            : null;
     }
 
 }
