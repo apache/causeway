@@ -37,10 +37,10 @@ import org.springframework.util.StringUtils;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.Builder;
-
 /**
  * A base for all numerical value types.
+ *
+ * @since 4.0
  */
 public abstract class NumericValueSemantics<T>
 extends ValueSemanticsAbstract<T>
@@ -48,27 +48,33 @@ implements
     Renderer<T>,
     Parser<T> {
 
-    @Deprecated //TODO to be replaced by GroupingSeparatorConfig
-    protected enum GroupingSeparatorPolicy {
-        @Deprecated
-        ALLOW,
-        @Deprecated
-        DISALLOW;
+    public final static String NO_GROUPING = "no-grouping";
+    public final static String LOCALE_GROUPING = "locale-grouping";
+
+    /**
+     * Specifies the grouping separation behavior for parsing and rendering.
+     *
+     * @apiNote Subclasses may provide their own to customize grouping behavior.
+     */
+    public interface GroupingSeparatorProvider {
+        @Nullable String separator(@Nullable Context context, FormatUsageFor usedFor);
+
+        static GroupingSeparatorProvider NO_GROUPING = (context, usedFor) -> null;
+        static GroupingSeparatorProvider SPACED_GROUPING = (context, usedFor) -> switch(usedFor) {
+            case RENDERING_AS_TEXT -> " "; // UTF8 U+2009
+            case RENDERING_AS_HTML -> "&#8239;"; // small space
+            case PARSING -> null;
+        };
+        static GroupingSeparatorProvider LOCALE_GROUPING = (context, usedFor) -> "" + localeGroupingSeparator(context);
     }
 
-    @Builder
-    public record GroupingSeparatorConfig(
-            @Nullable String titleSpecificSeparator,
-            @Nullable String htmlSpecificSeparator,
-            @Nullable String inputSpecificSeparator) {
-        public static GroupingSeparatorConfig DEFAULT = GroupingSeparatorConfig.builder()
-                .titleSpecificSeparator(" ") // UTF8 U+2009
-                .htmlSpecificSeparator("&#8239;")
-                .build();
-    }
-
-    protected GroupingSeparatorConfig config() {
-        return GroupingSeparatorConfig.DEFAULT;
+    /**
+     * Specifies the grouping separation behavior for parsing and rendering.
+     *
+     * @apiNote Subclasses may override to customize grouping behavior.
+     */
+    protected GroupingSeparatorProvider grouping() {
+        return GroupingSeparatorProvider.SPACED_GROUPING;
     }
 
     protected record DecimalFormatEx(
@@ -114,6 +120,7 @@ implements
         public BigDecimal parse(final String rawInput) throws ParseException {
             var position = new ParsePosition(0);
             var input = preprocess.apply(rawInput);
+            format.setParseBigDecimal(true);
             var decimal = (BigDecimal) format.parse(input, position);
             if (position.getErrorIndex() != -1)
                 throw new ParseException("could not parse input='" + rawInput + "'", position.getErrorIndex());
@@ -124,14 +131,14 @@ implements
     }
 
     /**
-     * @param context - nullable in support of JUnit testing
+     * @param context nullable in support of JUnit testing
      * @return {@link NumberFormat} the default from given context's locale
-     * or else system's default locale
+     *      or else system's default locale
      *
      * @implNote the format's MaximumFractionDigits are initialized to 16, as
-     * 64 bit IEEE 754 double has 15 decimal digits of precision;
-     * this is typically overruled later by implementations of
-     * {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
+     *      64 bit IEEE 754 double has 15 decimal digits of precision;
+     *      this is typically overruled later by implementations of
+     *      {@link #configureDecimalFormat(org.apache.causeway.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
     private DecimalFormatEx getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context,
@@ -142,21 +149,14 @@ implements
 
         configureDecimalFormat(context, format, usedFor);
 
-        return switch(usedFor) {
-            case RENDERING_AS_TEXT -> DecimalFormatEx.of(format, config().titleSpecificSeparator);
-            case RENDERING_AS_HTML -> DecimalFormatEx.of(format, config().htmlSpecificSeparator);
-            case PARSING -> {
-                format.setParseBigDecimal(true);
-                yield DecimalFormatEx.of(format, config().inputSpecificSeparator);
-            }
-        };
+        return DecimalFormatEx.of(format, grouping().separator(context, usedFor));
     }
 
     /**
      * Typically overridden by custom {@link NumericValueSemantics} to set min/max fractional digits.
      *
-     * @apiNote setting a grouping separator here has no effect, this is done in {@link DecimalFormatEx}
-     *      based on {@link GroupingSeparatorConfig}
+     * @apiNote setting a grouping separator here has no effect, this is done via {@link DecimalFormatEx}
+     *      based on {@link #grouping()}
      */
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
@@ -229,10 +229,9 @@ implements
     /**
      * Returns locale based grouping separator. If no context is given, system defaults apply.
      */
-    protected char getGroupingSeparator(@Nullable final Context context) {
+    public static char localeGroupingSeparator(@Nullable final Context context) {
         var userLocale = ValueSemanticsProvider.getUserLocale(context);
-        var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
-        return decimalFormatSymbols.getGroupingSeparator();
+        return new DecimalFormatSymbols(userLocale.numberFormatLocale()).getGroupingSeparator();
     }
 
 }

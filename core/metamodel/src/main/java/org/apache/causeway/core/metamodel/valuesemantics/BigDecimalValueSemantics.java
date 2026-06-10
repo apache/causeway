@@ -113,12 +113,9 @@ implements
         if(input==null)
             return null;
 
-        var groupingSeparatorPolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
-            ? GroupingSeparatorPolicy.ALLOW
-            : GroupingSeparatorPolicy.DISALLOW;
-
-        if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
-            var groupingSeparatorChar = getGroupingSeparator(context);
+        //FIXME remove
+        if (!isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())) {
+            var groupingSeparatorChar = localeGroupingSeparator(context);
             if (input.contains(""+groupingSeparatorChar))
                 throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
         }
