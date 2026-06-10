@@ -21,14 +21,14 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -45,7 +45,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  */
 @Component
 @Named("causeway.metamodel.value.ShortValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
 extends NumericValueSemantics<Short>
 implements
@@ -124,8 +125,29 @@ implements
     @Override
     public Can<Short> getExamples() {
         return Can.of(
+                (short)0,
+                (short)1,
+                (short)2026,
                 Short.MIN_VALUE,
                 Short.MAX_VALUE);
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public class NoGrouping extends ShortValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
+    public class LocaleGrouping extends ShortValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING;
+        }
     }
 
 }

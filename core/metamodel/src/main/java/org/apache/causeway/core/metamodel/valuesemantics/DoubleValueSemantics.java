@@ -20,12 +20,12 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -40,7 +40,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  */
 @Component
 @Named("causeway.metamodel.value.DoubleValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class DoubleValueSemantics
 extends NumericValueSemantics<Double>
 implements
@@ -98,6 +99,24 @@ implements
     @Override
     public Can<Double> getExamples() {
         return Can.of(1.0d, 0.1d, Math.PI, Double.MIN_VALUE, Double.MAX_VALUE);
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public class NoGrouping extends DoubleValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
+    public class LocaleGrouping extends DoubleValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING;
+        }
     }
 
 }

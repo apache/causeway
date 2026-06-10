@@ -21,14 +21,14 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
@@ -40,7 +40,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("causeway.metamodel.value.BigIntegerValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
 extends NumericValueSemantics<BigInteger>
 implements
@@ -111,6 +112,24 @@ implements
                 BigInteger.TEN,
                 BigInteger.valueOf(123_456_789_012L)
                 );
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public class NoGrouping extends BigIntegerValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
+    public class LocaleGrouping extends BigIntegerValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING;
+        }
     }
 
 }

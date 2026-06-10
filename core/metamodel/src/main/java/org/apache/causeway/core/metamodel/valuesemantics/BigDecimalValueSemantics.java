@@ -24,15 +24,15 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -54,7 +54,8 @@ import lombok.Setter;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
 extends NumericValueSemantics<BigDecimal>
 implements
@@ -190,6 +191,24 @@ implements
                 BigDecimal.valueOf(123_456_789_012L),
                 BigDecimal.valueOf(1234567.8890f),
                 BigDecimal.valueOf(123_456_789_012L, 3));
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public class NoGrouping extends BigDecimalValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
+    public class LocaleGrouping extends BigDecimalValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING;
+        }
     }
 
 }
