@@ -1044,7 +1044,7 @@ public abstract class ObjectSpecificationAbstract
     @UtilityClass
     public static class ParentedCollectionNavigationActionUtil {
 
-        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
+        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_one_of_";
 
         private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
                 "logicalTypeName",
@@ -1218,6 +1218,8 @@ public abstract class ObjectSpecificationAbstract
     @UtilityClass
     public static class ScalarReferenceNavigationActionUtil {
 
+        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
+
         public static Stream<ObjectAction> createFor(
                 final @NonNull ObjectSpecification ownerSpec,
                 final @NonNull Stream<ObjectAssociation> associations,
@@ -1264,7 +1266,7 @@ public abstract class ObjectSpecificationAbstract
         }
 
         private static String actionIdFor(final ObjectAssociation reference) {
-            return ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + reference.getId();
+            return ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + reference.getId();
         }
 
         private static void installActionFacets(
