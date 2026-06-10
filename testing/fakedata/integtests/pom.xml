@@ -24,12 +24,12 @@ under the License.
     <parent>
         <groupId>org.apache.causeway.testing</groupId>
         <artifactId>causeway-testing-fakedata</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>causeway-testing-fakedata-integtests</artifactId>
     <name>Apache Causeway Tst - FakeData (integ tests)</name>
-
+    
     <properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -68,7 +68,7 @@ under the License.
     </build>
 
     <dependencies>
-
+    
    		<!-- PERSISTENCE -->
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
@@ -93,7 +93,7 @@ under the License.
 			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+	
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
