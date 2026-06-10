@@ -1068,6 +1068,10 @@ public abstract class ObjectSpecificationAbstract
         private static boolean isEligible(
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection) {
+            if(parentSpec != collection.getDeclaringType()) {
+                // avoid installing for subclasses
+                return false;
+            }
             if (collection.getElementType() == null) {
                 return false;
             }
@@ -1236,6 +1240,10 @@ public abstract class ObjectSpecificationAbstract
         private static boolean isEligible(
                 final ObjectSpecification ownerSpec,
                 final OneToOneAssociation reference) {
+            if(ownerSpec != reference.getDeclaringType()) {
+                // avoid installing for subclasses
+                return false;
+            }
             val referencedType = reference.getElementType();
             if (referencedType == null) {
                 return false;
