@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.commandlog.applib.dom;
+package org.apache.causeway.applib.domain;
 
 /**
  * Marker interface for domain classes whose bookmarked instances are stable replay reference data.

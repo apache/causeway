@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.RefData;
+import org.apache.causeway.applib.domain.RefData;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;

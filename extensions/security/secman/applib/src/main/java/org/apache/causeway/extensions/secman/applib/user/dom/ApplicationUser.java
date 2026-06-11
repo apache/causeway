@@ -82,7 +82,7 @@ import lombok.experimental.UtilityClass;
         layoutUiEvent = ApplicationUser.LayoutUiEvent.class
 )
 public abstract class ApplicationUser
-        implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
+        implements HasUsername, HasAtPath, Comparable<ApplicationUser>, org.apache.causeway.applib.domain.RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
