@@ -22,6 +22,8 @@ import java.util.UUID;
 
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Index;
 import javax.jdo.annotations.Indices;
@@ -71,12 +73,13 @@ import lombok.Setter;
                   + "  FROM " + CommandReplayResultMapping.FQCN + " "
                   + " WHERE actualBookmark == :actualBookmark")
 })
-@Named(org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping.LOGICAL_TYPE_NAME)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@Named(CommandReplayResultMapping.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
         entityChangePublishing = Publishing.DISABLED
 )
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor
 public class CommandReplayResultMapping
 extends org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping {
