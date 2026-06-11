@@ -254,8 +254,8 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @Test
     void synthesizes_navigation_action_with_marker_and_safe_semantics_when_enabled() {
-        assertThat(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX, is("__causeway_navigate_to_"));
-        assertThat(navigationAction.getId(), is("__causeway_navigate_to_items"));
+        assertThat(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX, is("__causeway_navigate_to_one_of_"));
+        assertThat(navigationAction.getId(), is("__causeway_navigate_to_one_of_items"));
         MatcherAssert.assertThat(navigationAction.getFacet(ParentedCollectionNavigationFacet.class), instanceOf(ParentedCollectionNavigationFacetDefault.class));
         assertThat(navigationAction.getSemantics(), is(SemanticsOf.SAFE));
         assertThat(navigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
@@ -279,7 +279,7 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @Test
     void names_navigation_action_navigate_to_while_preserving_deterministic_id() {
-        assertThat(navigationAction.getId(), is("__causeway_navigate_to_items"));
+        assertThat(navigationAction.getId(), is("__causeway_navigate_to_one_of_items"));
         assertThat(navigationAction.getCanonicalFriendlyName(), is("Navigate To"));
     }
 
@@ -333,7 +333,7 @@ class ParentedCollectionNavigationActionUtilTest {
         val homePageNavigationAction = homePageSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
 
-        assertThat(homePageNavigationAction.getId(), is("__causeway_navigate_to_items"));
+        assertThat(homePageNavigationAction.getId(), is("__causeway_navigate_to_one_of_items"));
         assertThat(homePageNavigationAction.getCanonicalFriendlyName(), is("Navigate To"));
         assertThat(homePageNavigationAction.getFacet(ParentedCollectionNavigationFacet.class),
                 instanceOf(ParentedCollectionNavigationFacetDefault.class));

@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.applib.role.man;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -38,17 +39,23 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 @Named(ApplicationRoleManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)
-public class ApplicationRoleManager {
+public class ApplicationRoleManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleManager";
+
+        final private SpecificationLoader specLoader;
+
+    @Inject
+    public ApplicationRoleManager(
+            final String mementoUnused,
+            final SpecificationLoader specLoader) {
+        this.specLoader = specLoader;
+    }
 
     @ObjectSupport public String title() {
         return "Application Role Manager";
     }
 
-    // -- INFORMAL METADATA
-
-    @Inject private SpecificationLoader specLoader;
 
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getRoleType() {
@@ -58,8 +65,10 @@ public class ApplicationRoleManager {
                 .orElse("not found");
     }
 
-    // --
+    @Override
+    public String viewModelMemento() {
+        return "1";
+    }
 
-    // behaviour provided by mixins
 
 }

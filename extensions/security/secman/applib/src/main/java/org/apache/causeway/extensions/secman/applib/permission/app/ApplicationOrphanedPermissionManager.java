@@ -23,6 +23,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -35,16 +36,23 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
  * @since 2.0 {@index}
  */
 @Named(ApplicationOrphanedPermissionManager.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
-public class ApplicationOrphanedPermissionManager {
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ApplicationOrphanedPermissionManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationOrphanedPermissionManager";
+
 
     public static abstract class CollectionDomainEvent<T>
             extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}
 
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    final ApplicationPermissionRepository applicationPermissionRepository;
+
+    @Inject
+    public ApplicationOrphanedPermissionManager(
+            final String mementoUnused,
+            final ApplicationPermissionRepository applicationPermissionRepository) {
+        this.applicationPermissionRepository = applicationPermissionRepository;
+    }
 
     @ObjectSupport public String title() {
         return "Manage Orphaned Permissions";
@@ -62,5 +70,11 @@ public class ApplicationOrphanedPermissionManager {
     public Collection<ApplicationPermission> getOrphanedPermissions() {
         return applicationPermissionRepository.findOrphaned();
     }
+
+    @Override
+    public String viewModelMemento() {
+        return "1";
+    }
+
 
 }

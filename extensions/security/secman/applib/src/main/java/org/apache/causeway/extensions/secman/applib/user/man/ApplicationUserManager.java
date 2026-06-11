@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.applib.user.man;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -38,7 +39,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 @Named(ApplicationUserManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)
-public class ApplicationUserManager {
+public class ApplicationUserManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
 
@@ -46,20 +47,29 @@ public class ApplicationUserManager {
         return "Application User Manager";
     }
 
+    @Inject
+    public ApplicationUserManager(
+            final String mementoUnused,
+            final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
+    }
+
     // -- INFORMAL METADATA
 
-    @Inject private SpecificationLoader specLoader;
+    private final SpecificationLoader specificationLoader;
 
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getUserType() {
-        return specLoader.specForLogicalTypeName(ApplicationUser.LOGICAL_TYPE_NAME)
+        return specificationLoader.specForLogicalTypeName(ApplicationUser.LOGICAL_TYPE_NAME)
                 .map(ObjectSpecification::getCorrespondingClass)
                 .map(Class::getName)
                 .orElse("not found");
     }
 
-    // --
+    @Override
+    public String viewModelMemento() {
+        return "1";
+    }
 
-    // behaviour provided by mixins
 
 }

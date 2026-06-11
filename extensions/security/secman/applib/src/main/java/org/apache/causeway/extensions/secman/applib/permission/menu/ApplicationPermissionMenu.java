@@ -77,7 +77,7 @@ public class ApplicationPermissionMenu {
         public class ActionDomainEvent extends ApplicationPermissionMenu.ActionDomainEvent<findOrphanedPermissions> {}
 
         @MemberSupport public ApplicationOrphanedPermissionManager act() {
-            return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
+            return factoryService.viewModel(ApplicationOrphanedPermissionManager.class);
         }
     }
 

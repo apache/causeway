@@ -106,7 +106,7 @@ class ScalarReferenceNavigationActionUtilTest {
         mmc.getConfiguration().getCore().getMetaModel().setFilterVisibility(false);
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         ownerSpec = mmc.getSpecificationLoader().loadSpecification(ReferenceOwner.class);
-        navigationAction = ownerSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "reference").orElseThrow();
+        navigationAction = ownerSpec.getAction(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").orElseThrow();
     }
 
     @Test
@@ -114,7 +114,7 @@ class ScalarReferenceNavigationActionUtilTest {
         val disabledMmc = newMetamodelContext();
         val disabledOwnerSpec = disabledMmc.getSpecificationLoader().loadSpecification(ReferenceOwner.class);
 
-        assertThat(disabledOwnerSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "reference").isPresent(), is(false));
+        assertThat(disabledOwnerSpec.getAction(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").isPresent(), is(false));
     }
 
     @Test
@@ -130,7 +130,7 @@ class ScalarReferenceNavigationActionUtilTest {
     void synthesizes_reference_navigation_action_for_entity_owned_reference() {
         val entityOwnerSpec = mmc.getSpecificationLoader().loadSpecification(EntityReferenceOwner.class);
         val entityNavigationAction = entityOwnerSpec.getAction(
-                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "reference").orElseThrow();
+                ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").orElseThrow();
 
         assertThat(entityNavigationAction.getId(), is("__causeway_navigate_to_reference"));
         assertThat(entityNavigationAction.getFacet(ScalarReferenceNavigationFacet.class), instanceOf(ScalarReferenceNavigationFacetDefault.class));
@@ -140,12 +140,12 @@ class ScalarReferenceNavigationActionUtilTest {
     void does_not_synthesize_reference_navigation_action_for_suppressed_owner_type() {
         val suppressedSpec = mmc.getSpecificationLoader().loadSpecification(SuppressedReferenceOwner.class);
 
-        assertThat(suppressedSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "reference").isPresent(), is(false));
+        assertThat(suppressedSpec.getAction(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").isPresent(), is(false));
     }
 
     @Test
     void does_not_synthesize_reference_navigation_action_for_scalar_value_property() {
-        assertThat(ownerSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "value").isPresent(), is(false));
+        assertThat(ownerSpec.getAction(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "value").isPresent(), is(false));
     }
 
     @Test

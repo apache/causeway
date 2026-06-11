@@ -83,7 +83,7 @@ public class ApplicationUserMenu {
         public class ActionDomainEvent extends ApplicationUserMenu.ActionDomainEvent<userManager> { }
 
         @MemberSupport public ApplicationUserManager act(){
-            return factory.viewModel(new ApplicationUserManager());
+            return factory.viewModel(ApplicationUserManager.class);
         }
 
     }
