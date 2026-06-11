@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics;
@@ -48,16 +48,18 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
 
     @Test
     void invalidParse() throws Exception {
-        try {
-            value.parseTextRepresentation(null, "one");
-            fail();
-        } catch (final TextEntryParseException expected) {
-        }
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "one"));
     }
 
     @Test
-    void titleOf() {
-        assertEquals("35,000,000", value.titlePresentation(null, Double.valueOf(35000000.0)));
+    void title() {
+        assertEquals("35 000 000.0001", value.titlePresentation(null, Double.valueOf(35000000.0001)));
+    }
+
+    @Test
+    void html() {
+        assertEquals("""
+            <span class="fw-light">35&#8239;000&#8239;000.0001</span>""", value.htmlPresentation(null, Double.valueOf(35000000.0001)));
     }
 
     @Test
@@ -68,8 +70,7 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
 
     @Test
     void parse2() throws Exception {
-        final Object newValue = value.parseTextRepresentation(null, "1,20.0");
-        assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1,20.0"));
     }
 
     @Override

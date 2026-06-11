@@ -25,6 +25,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import org.springframework.boot.test.util.TestPropertyValues;
 
 import org.apache.causeway.applib.Identifier;
@@ -85,12 +86,21 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 valueSemantics.setCausewayConfiguration(causewayConfiguration);
 
                 // when
-                DecimalFormat format = new DecimalFormat();
-                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING);
+                var format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_TEXT);
 
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(minScale);
+
+                // and when
+                format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_HTML);
+
+                // then
+                Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
+                Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(minScale);
+
             });
     }
 
@@ -111,12 +121,21 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 valueSemantics.setCausewayConfiguration(causewayConfiguration);
 
                 // when
-                DecimalFormat format = new DecimalFormat();
-                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING);
+                var format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_TEXT);
 
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(fallbackScale);
+
+                // and when
+                format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_HTML);
+
+                // then
+                Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
+                Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(fallbackScale);
+
             });
     }
 
@@ -137,12 +156,21 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 valueSemantics.setCausewayConfiguration(causewayConfiguration);
 
                 // when
-                DecimalFormat format = new DecimalFormat();
-                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING);
+                var format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_TEXT);
 
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(defaultScale);
+
+                // and when
+                format = new DecimalFormat();
+                valueSemantics.configureDecimalFormat(context, format, ValueSemanticsAbstract.FormatUsageFor.RENDERING_AS_HTML);
+
+                // then
+                Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
+                Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(defaultScale);
+
             });
     }
 

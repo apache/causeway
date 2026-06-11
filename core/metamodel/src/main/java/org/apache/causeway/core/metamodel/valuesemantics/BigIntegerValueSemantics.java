@@ -21,33 +21,32 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("causeway.metamodel.value.BigIntegerValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
-extends ValueSemanticsAbstract<BigInteger>
+extends NumericValueSemantics<BigInteger>
 implements
     DefaultsProvider<BigInteger>,
     Parser<BigInteger>,
-    Renderer<BigInteger>,
     IdStringifier.EntityAgnostic<BigInteger> {
 
     @Override
@@ -78,18 +77,6 @@ implements
                 decomposition, ValueWithTypeDto::getBigInteger, UnaryOperator.identity(), ()->null);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final BigInteger value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final BigInteger value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
-    }
-
     // -- ID STRINGIFIER
 
     @Override
@@ -105,16 +92,8 @@ implements
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final BigInteger value) {
-        return value==null
-                ? null
-                : getNumberFormat(context)
-                    .format(value);
-    }
-
-    @Override
     public BigInteger parseTextRepresentation(final Context context, final String text) {
-        return super.parseInteger(context, text)
+        return parseInteger(context, text)
                 .orElse(null);
     }
 
@@ -133,6 +112,32 @@ implements
                 BigInteger.TEN,
                 BigInteger.valueOf(123_456_789_012L)
                 );
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public static class NoGrouping extends BigIntegerValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends BigIntegerValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends BigIntegerValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
+        }
     }
 
 }

@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
@@ -204,8 +203,8 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public Parser<T> fallbackParser(final Identifier featureIdentifier) {
-        return fallbackParser(getLogicalType(), featureIdentifier);
+    public Parser<T> fallbackParser(final ObjectFeature objectFeature) {
+        return fallbackParser(getLogicalType(), objectFeature);
     }
 
     // -- RENDERER
@@ -229,8 +228,8 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public Renderer<T> fallbackRenderer(final Identifier featureIdentifier) {
-        return fallbackRenderer(getLogicalType(), featureIdentifier);
+    public Renderer<T> fallbackRenderer(final ObjectFeature objectFeature) {
+        return fallbackRenderer(getLogicalType(), objectFeature);
     }
 
     // -- TEMPORAL SUPPORT
@@ -272,22 +271,26 @@ implements ValueFacet<T> {
 
     public static <X> Parser<X> fallbackParser(
             final LogicalType valueType,
-            final Identifier featureIdentifier) {
-        return new PseudoParserWithMessage<>(String
-                .format("Could not find a parser for type %s "
-                        + "in the context of %s",
-                        valueType,
-                        featureIdentifier));
+            final ObjectFeature feature) {
+        return new PseudoParserWithMessage<>("Could not find a parser for type %s in the context of %s"
+                .formatted(
+                    valueType,
+                    feature.getFeatureIdentifier(),
+                    Facets.valueQualifier(feature)
+                        .map(" qualified with %s"::formatted)
+                        .orElse("")));
     }
 
     public static <X> Renderer<X> fallbackRenderer(
             final LogicalType valueType,
-            final Identifier featureIdentifier) {
-        return new PseudoRendererWithMessage<>(String
-                .format("Could not find a renderer for type %s "
-                        + "in the context of %s",
-                        valueType,
-                        featureIdentifier));
+            final ObjectFeature feature) {
+        return new PseudoRendererWithMessage<>("Could not find a renderer for type %s in the context of %s%s"
+                .formatted(
+                    valueType,
+                    feature.getFeatureIdentifier(),
+                    Facets.valueQualifier(feature)
+                        .map(" qualified with %s"::formatted)
+                        .orElse("")));
     }
 
     // -- HELPER

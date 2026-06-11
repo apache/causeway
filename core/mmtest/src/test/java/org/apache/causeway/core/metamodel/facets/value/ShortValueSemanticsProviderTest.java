@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.core.metamodel.valuesemantics.ShortValueSemantics;
@@ -43,12 +43,8 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
     }
 
     @Test
-    void invalidParse() throws Exception {
-        try {
-            value.parseTextRepresentation(null, "one");
-            fail();
-        } catch (final TextEntryParseException expected) {
-        }
+    void invalidParse() {
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "one"));
     }
 
     @Test
@@ -69,8 +65,7 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
 
     @Test
     void parseOfOddEntry() throws Exception {
-        final Object newValue = value.parseTextRepresentation(null, "1,20.0");
-        assertEquals(Short.valueOf((short) 120), newValue);
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1,20.0"));
     }
 
     @Override

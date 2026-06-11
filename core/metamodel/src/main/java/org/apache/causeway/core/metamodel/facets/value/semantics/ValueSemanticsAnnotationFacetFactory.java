@@ -86,7 +86,7 @@ extends FacetFactoryAbstract {
 
         // check for @ValueSemantics(provider=...)
         addFacetIfPresent(
-                ValueSemanticsSelectingFacetForAnnotation
+            ValueSemanticsSelectingFacetForAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
     }
 
@@ -96,37 +96,34 @@ extends FacetFactoryAbstract {
             final Optional<Digits> digitsIfAny){
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetAbstract.minimum(
-                        MaxTotalDigitsFacetFromValueSemanticsAnnotation
-                        .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits
-                        MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
-                        .create(digitsIfAny, facetHolder)
-                        ));
+            MaxTotalDigitsFacetAbstract.minimum(
+                MaxTotalDigitsFacetFromValueSemanticsAnnotation
+                    .create(valueSemanticsIfAny, facetHolder),
+                // support for @jakarta.validation.constraints.Digits
+                MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
+                    .create(digitsIfAny, facetHolder)));
 
         addFacetIfPresent(
-                MinIntegerDigitsFacetFromValueSemanticsAnnotation
+            MinIntegerDigitsFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetAbstract.minimum(
-                        MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-                        .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits
-                        MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                        .create(digitsIfAny, facetHolder)
-                        ));
+            MaxFractionalDigitsFacetAbstract.minimum(
+                MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+                    .create(valueSemanticsIfAny, facetHolder),
+                // support for @jakarta.validation.constraints.Digits
+                MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+                    .create(digitsIfAny, facetHolder)));
 
         addFacetIfPresent(
-                MinFractionalDigitsFacetAbstract.minimum(
-                        MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                                .create(valueSemanticsIfAny, facetHolder),
-                        // support for @jakarta.validation.constraints.Digits (if supported)
-                        getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
-                                ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                                            .create(digitsIfAny, facetHolder)
-                                : Optional.empty()
-                ));
+            MinFractionalDigitsFacetAbstract.minimum(
+                MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                    .create(valueSemanticsIfAny, facetHolder),
+                // support for @jakarta.validation.constraints.Digits (if supported)
+                getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
+                        ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+                            .create(digitsIfAny, facetHolder)
+                        : Optional.empty()));
     }
 
     private void processTemporalFormat(
@@ -134,23 +131,23 @@ extends FacetFactoryAbstract {
             final Optional<ValueSemantics> valueSemanticsIfAny){
 
         addFacetIfPresent(
-                DateFormatStyleFacetFromValueSemanticsAnnotation
+            DateFormatStyleFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
         addFacetIfPresent(
-                TimeFormatStyleFacetFromValueSemanticsAnnotation
+            TimeFormatStyleFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
         addFacetIfPresent(
-                TimeFormatPrecisionFacetFromValueSemanticsAnnotation
+            TimeFormatPrecisionFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
         addFacetIfPresent(
-                DateRenderAdjustFacetFromValueSemanticsAnnotation
+            DateRenderAdjustFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
         addFacetIfPresent(
-                TimeZoneTranslationFacetFromValueSemanticsAnnotation
+            TimeZoneTranslationFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
     }
 

@@ -19,10 +19,16 @@
 
 package org.apache.causeway.applib.value.semantics;
 
+import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -120,6 +126,22 @@ public interface ValueSemanticsProvider<T> {
 
     default <X> ValueSemanticsProvider<X> castTo(final Class<X> cls) {
         return _Casts.uncheckedCast(this);
+    }
+
+    /**
+     * @param context - nullable in support of JUnit testing
+     * @return {@link Locale} from given context or else system's default
+     */
+    static UserLocale getUserLocale(final ValueSemanticsProvider.@Nullable Context context) {
+        return Optional.ofNullable(context)
+                .map(ValueSemanticsProvider.Context::interactionContext)
+                .map(InteractionContext::getLocale)
+                .orElseGet(UserLocale::getDefault);
+    }
+
+    /** function composition */
+    default Function<T, String> pipe(final Function<T, String> toString, final UnaryOperator<String> postprocessor) {
+        return toString.andThen(postprocessor);
     }
 
     // -- CATEGORIZATION

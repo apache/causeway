@@ -24,7 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.core.metamodel.valuesemantics.BigIntegerValueSemantics;
@@ -49,17 +49,19 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
     }
 
     @Test
-    void parseInvalidString() throws Exception {
-        try {
-            value.parseTextRepresentation(null, "214xxx2342334");
-            fail();
-        } catch (final TextEntryParseException expected) {
-        }
+    void invalidParse() {
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "214xxx2342334"));
     }
 
     @Test
     void title() throws Exception {
-        assertEquals("132,199", value.titlePresentation(null, bigInt));
+        assertEquals("132 199", value.titlePresentation(null, bigInt));
+    }
+
+    @Test
+    void html() {
+        assertEquals("""
+            <span class="fw-light">132&#8239;199</span>""", value.htmlPresentation(null, bigInt));
     }
 
     @Override

@@ -21,21 +21,20 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -46,13 +45,13 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  */
 @Component
 @Named("causeway.metamodel.value.IntValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class IntValueSemantics
-extends ValueSemanticsAbstract<Integer>
+extends NumericValueSemantics<Integer>
 implements
     DefaultsProvider<Integer>,
     Parser<Integer>,
-    Renderer<Integer>,
     IdStringifier.EntityAgnostic<Integer>{
 
     @Override
@@ -95,27 +94,7 @@ implements
         return Integer.parseInt(stringified);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final Context context, final Integer value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final Context context, final Integer value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
-    }
-
     // -- PARSER
-
-    @Override
-    public String parseableTextRepresentation(final Context context, final Integer value) {
-        return value==null
-                ? null
-                : getNumberFormat(context)
-                    .format(value);
-    }
 
     @Override
     public Integer parseTextRepresentation(final Context context, final String text) {
@@ -123,7 +102,7 @@ implements
         if(input==null)
             return null;
         try {
-            return super.parseInteger(context, input)
+            return parseInteger(context, input)
                     .map(BigInteger::intValueExact)
                     .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {
@@ -145,7 +124,33 @@ implements
 
     @Override
     public Can<Integer> getExamples() {
-        return Can.of(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return Can.of(0, 1, 2026, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public static class NoGrouping extends IntValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends IntValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends IntValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
+        }
     }
 
 }

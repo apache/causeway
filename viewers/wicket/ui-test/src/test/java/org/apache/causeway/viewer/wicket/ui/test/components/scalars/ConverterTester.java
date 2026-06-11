@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
@@ -43,9 +44,11 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -87,24 +90,31 @@ public class ConverterTester<T extends Serializable> {
             final Object ...additionalSingletons) {
 
         mmc = MetaModelContext_forTesting.builder()
-                .testPropertyValues(testPropertyValues)
-                .valueSemantic(valueSemantics)
-                .singleton(new ClockService(null) {
-                    @Override public VirtualClock getClock() {
-                        return virtualClock;
-                    }
-                })
-                .singletons(Arrays.asList(additionalSingletons))
-                .interactionService(interactionService = new InteractionService_forTesting())
-                .memberExecutor(Mockito.mock(MemberExecutorService.class))
-                .build();
+            .testPropertyValues(testPropertyValues)
+            .valueSemantics(Stream
+                .concat(
+                    Stream.<ValueSemanticsProvider<?>>of(valueSemantics),
+                    // from additional singletons, lookout for value semantics providers, to be registered here
+                    _NullSafe.stream(additionalSingletons))
+                        .filter(ValueSemanticsProvider.class::isInstance)
+                        .<ValueSemanticsProvider<?>>map(ValueSemanticsProvider.class::cast)
+                .toList())
+            .singleton(new ClockService(null) {
+                @Override public VirtualClock getClock() {
+                    return virtualClock;
+                }
+            })
+            .singletons(Arrays.asList(additionalSingletons))
+            .interactionService(interactionService = new InteractionService_forTesting())
+            .memberExecutor(Mockito.mock(MemberExecutorService.class))
+            .build();
 
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
-        var reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
-        var sem = reg.streamValueSemantics(valueType).toList();
-        assertFalse(sem.isEmpty());
+        var resolver = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
+        var valSem = resolver.streamValueSemantics(valueType).toList();
+        assertFalse(valSem.isEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
         assertNotNull(mmc.getInteractionService());
     }

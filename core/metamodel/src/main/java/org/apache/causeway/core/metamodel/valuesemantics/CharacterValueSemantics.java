@@ -126,7 +126,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final Character value) {
-        return renderHtml(value, c->""+c, super::toMonospace);
+        return renderHtml(value, pipe(c->""+c, super::toMonospace));
     }
 
     // -- PARSER

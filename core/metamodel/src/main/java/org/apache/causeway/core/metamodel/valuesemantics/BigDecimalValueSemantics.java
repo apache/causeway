@@ -24,42 +24,40 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
+import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
-
 import lombok.Setter;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
-@Priority(PriorityPrecedence.LATE)
+@Primary
+//has no effect @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
-extends ValueSemanticsAbstract<BigDecimal>
+extends NumericValueSemantics<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
-    Renderer<BigDecimal>,
     IdStringifier.EntityAgnostic<BigDecimal> {
 
     @Setter @Inject
@@ -105,39 +103,15 @@ implements
         return new BigDecimal(stringified);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String titlePresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderTitle(value, getNumberFormat(context)::format);
-    }
-
-    @Override
-    public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return renderHtml(value, getNumberFormat(context)::format, super::toMonospace);
-    }
-
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return value==null
-                ? null
-                : getNumberFormat(context, PARSING)
-                    .format(value);
-    }
-
-    @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
-                                ? GroupingSeparatorPolicy.ALLOW
-                                : GroupingSeparatorPolicy.DISALLOW;
-        return super.parseDecimal(context, text, parsePolicy)
-                .orElse(null);
-    }
-
-    private boolean isUseGroupingSeparatorFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return bigDecimalConfig.editing().useGroupingSeparator() || bigDecimalConfig.display().useGroupingSeparator();
+        var input = _Strings.blankToNullOrTrim(text);
+        if(input==null)
+            return null;
+        return parseDecimal(context, text)
+            .orElse(null);
     }
 
     @Override
@@ -146,32 +120,27 @@ implements
     }
 
     @Override
-    protected void configureDecimalFormat(
+    public void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
+        if(context==null)
+            return;
+
         var specificationLoader = MetaModelContext.instanceElseFail().getSpecificationLoader();
-
-        var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
-        format.setGroupingUsed(
-                usedFor == PARSING
-                    ? bigDecimalConfig.editing().useGroupingSeparator()
-                    : bigDecimalConfig.display().useGroupingSeparator()
-        );
-
-        if(context==null) return;
-
         var feature = specificationLoader.loadFeature(context.featureIdentifier())
                 .orElse(null);
-        if(feature==null) return;
+        if(feature==null)
+            return;
 
         // evaluate any facets that provide the MaximumFractionDigits
         Facets.maxFractionalDigits(feature)
                 .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
 
+        var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
         // we skip this when PARSING,
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering() || bigDecimalConfig.editing().preserveScale()) {
+        if(!usedFor.isParsing() || bigDecimalConfig.editing().preserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
             OptionalInt optionalInt = Facets.minFractionalDigits(feature);
@@ -179,15 +148,10 @@ implements
                 format.setMinimumFractionDigits(optionalInt.getAsInt());
             } else {
                 // otherwise, apply a minScale if configured.
-                minScaleFrom(bigDecimalConfig)
-                        .ifPresent(format::setMinimumFractionDigits);
+                Optional.ofNullable(bigDecimalConfig.display().minScale())
+                    .ifPresent(format::setMinimumFractionDigits);
             }
         }
-    }
-
-    private static Optional<Integer> minScaleFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return Optional.ofNullable(bigDecimalConfig.display().minScale())
-                       .or(() -> Optional.ofNullable(bigDecimalConfig.display().minScale()));
     }
 
     @Override
@@ -202,6 +166,32 @@ implements
                 BigDecimal.valueOf(123_456_789_012L),
                 BigDecimal.valueOf(1234567.8890f),
                 BigDecimal.valueOf(123_456_789_012L, 3));
+    }
+
+    // -- GROUPING VARIANTS
+
+    @Component
+    @Qualifier(NumericValueSemantics.NO_GROUPING)
+    public static class NoGrouping extends BigDecimalValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.NO_GROUPING;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends BigDecimalValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends BigDecimalValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
+        }
     }
 
 }

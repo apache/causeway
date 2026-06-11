@@ -34,9 +34,9 @@ extends ValueSemanticsSelectingFacetAbstract {
             final FacetHolder holder) {
 
         return valueSemanticsIfAny
-        .map(ValueSemantics::provider)
-        .filter(_Strings::isNotEmpty)
-        .map(valueSemantics -> new ValueSemanticsSelectingFacetForAnnotation(valueSemantics, holder));
+            .map(ValueSemantics::provider)
+            .filter(_Strings::isNotEmpty)
+            .map(valueSemantics -> new ValueSemanticsSelectingFacetForAnnotation(valueSemantics, holder));
     }
 
     private ValueSemanticsSelectingFacetForAnnotation(final String value, final FacetHolder holder) {
