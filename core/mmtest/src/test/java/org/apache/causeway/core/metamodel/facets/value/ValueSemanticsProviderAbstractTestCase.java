@@ -45,6 +45,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
@@ -77,6 +78,7 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .testPropertyValues(TestPropertyValues.empty())
                 .interactionService(mockInteractionService)
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
 
         causewayConfiguration = metaModelContext.getConfiguration();
@@ -133,12 +135,9 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
         final T value = getSample();
         final String encoded = getValueSerializer().enstring(format, value);
 
-        switch(format) {
-        case JSON:
-            assertValueEncodesToJsonAs(value, encoded);
-            break;
-        case URL_SAFE:
-            assertTrue(_Strings.isUrlSafe(encoded));
+        switch (format) {
+        case JSON -> assertValueEncodesToJsonAs(value, encoded);
+        case URL_SAFE -> assertTrue(_Strings.isUrlSafe(encoded));
         }
 
         T decoded = getValueSerializer().destring(format, encoded);

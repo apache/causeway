@@ -48,8 +48,20 @@ implements
     Renderer<T>,
     Parser<T> {
 
+    /**
+     * No grouping separators are used for display nor editing. However, white-spaces on input are ignored.
+     */
     public final static String NO_GROUPING = "no-grouping";
-    public final static String LOCALE_GROUPING = "locale-grouping";
+    /**
+     * Locale specific grouping separators are used for display,
+     * while any non-white-space grouping separators are not allowed for input.
+     * White-spaces on input are ignored.
+     */
+    public final static String LOCALE_GROUPING_DISPLAY = "locale-grouping-display";
+    /**
+     * Uses locale specific grouping separators for display and allows grouping separators for numerical input (when editing).
+     */
+    public final static String LOCALE_GROUPING_ALL = "locale-grouping-all";
 
     /**
      * Specifies the grouping separation behavior for parsing and rendering.
@@ -63,9 +75,13 @@ implements
         static GroupingSeparatorProvider SPACED_GROUPING = (context, usedFor) -> switch(usedFor) {
             case RENDERING_AS_TEXT -> " "; // UTF8 U+2009
             case RENDERING_AS_HTML -> "&#8239;"; // small space
-            case PARSING -> null;
+            case PARSING -> " "; // UTF8 U+2009;
         };
-        static GroupingSeparatorProvider LOCALE_GROUPING = (context, usedFor) -> "" + localeGroupingSeparator(context);
+        static GroupingSeparatorProvider LOCALE_GROUPING_DISPLAY = (context, usedFor) -> switch(usedFor) {
+            case RENDERING_AS_TEXT, RENDERING_AS_HTML -> "" + localeGroupingSeparator(context);
+            case PARSING -> " "; // UTF8 U+2009;
+        };
+        static GroupingSeparatorProvider LOCALE_GROUPING_ALL = (context, usedFor) -> "" + localeGroupingSeparator(context);
     }
 
     /**
@@ -222,6 +238,10 @@ implements
      */
     protected void validateNumericalInput(@Nullable final Context context, final String input) {
         var localeGroupingSeparator = "" + localeGroupingSeparator(context);
+        var parsingGroupingSeparator = grouping().separator(context, FormatUsageFor.PARSING);
+        if(parsingGroupingSeparator.equals(localeGroupingSeparator))
+            return; // if parsing format explicitly uses the localeGroupingSeparator, then allow it
+
         if(StringUtils.hasText(localeGroupingSeparator)) { // ignores whitespace
             if (input.contains(localeGroupingSeparator))
                 throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + localeGroupingSeparator + "' grouping separator");
@@ -237,7 +257,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final T value) {
-        return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT)::format, super::toLightFont));
+        return renderTitle(value, pipe(getNumberFormat(context, FormatUsageFor.RENDERING_AS_HTML)::format, super::toLightFont));
     }
 
     // -- PARSER

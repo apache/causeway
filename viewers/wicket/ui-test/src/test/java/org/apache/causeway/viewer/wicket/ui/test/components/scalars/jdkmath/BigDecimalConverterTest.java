@@ -55,7 +55,7 @@ class BigDecimalConverterTest {
 
     private ConverterTester<BigDecimal> converterTester(final TestPropertyValues testPropertyValues) {
         return new ConverterTester<>(BigDecimal.class, testPropertyValues,
-                new BigDecimalValueSemantics(), new BigDecimalValueSemantics.LocaleGrouping());
+                new BigDecimalValueSemantics(), new BigDecimalValueSemantics.LocaleGroupingDisplay());
     }
 
     @Test
@@ -108,14 +108,14 @@ class BigDecimalConverterTest {
     void scale2_english_withThousandSeparators_allowed() {
         var converterTester = converterTester();
         converterTester.setScenario(Locale.ENGLISH, newConverter(converterTester, CustomerScale2.class));
-        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45");
+        converterTester.assertRoundtrip(bd_789123_45_scale2, "789 123.45");
     }
 
     @Test
     void scale2_english_withoutThousandSeparators() {
         var converterTester = converterTester();
         converterTester.setScenario(Locale.ENGLISH, newConverter(converterTester, CustomerScale2.class));
-        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45", "789123.45");
+        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45", "789 123.45");
     }
 
     @Test
@@ -159,7 +159,7 @@ class BigDecimalConverterTest {
     static class CustomerScale2LocaleGrouping {
         @Property @Getter @Setter
         @Digits(fraction = 2, integer = 20)
-        @ValueSemantics(provider = NumericValueSemantics.LOCALE_GROUPING)
+        @ValueSemantics(provider = NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
         private BigDecimal value;
     }
 

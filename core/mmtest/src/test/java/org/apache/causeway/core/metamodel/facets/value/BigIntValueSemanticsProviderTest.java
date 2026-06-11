@@ -58,6 +58,12 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
         assertEquals("132 199", value.titlePresentation(null, bigInt));
     }
 
+    @Test
+    void html() {
+        assertEquals("""
+            <span class="fw-light">132&#8239;199</span>""", value.htmlPresentation(null, bigInt));
+    }
+
     @Override
     protected BigInteger getSample() {
         return bigInt;

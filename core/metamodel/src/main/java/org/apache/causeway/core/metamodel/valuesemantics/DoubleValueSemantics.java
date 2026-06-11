@@ -112,10 +112,18 @@ implements
     }
 
     @Component
-    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
-    public static class LocaleGrouping extends DoubleValueSemantics {
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends DoubleValueSemantics {
         @Override protected GroupingSeparatorProvider grouping() {
-            return GroupingSeparatorProvider.LOCALE_GROUPING;
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends DoubleValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }
 

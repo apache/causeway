@@ -47,7 +47,7 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     }
 
     @Test
-    void titleOf() {
+    void title() {
         assertEquals("32.5", value.titlePresentation(null, float1));
     }
 

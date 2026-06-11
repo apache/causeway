@@ -138,10 +138,18 @@ implements
     }
 
     @Component
-    @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
-    public static class LocaleGrouping extends IntValueSemantics {
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
+    public static class LocaleGroupingDisplay extends IntValueSemantics {
         @Override protected GroupingSeparatorProvider grouping() {
-            return GroupingSeparatorProvider.LOCALE_GROUPING;
+            return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
+        }
+    }
+
+    @Component
+    @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
+    public static class LocaleGroupingAll extends IntValueSemantics {
+        @Override protected GroupingSeparatorProvider grouping() {
+            return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }
 

@@ -53,6 +53,12 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
     }
 
     @Test
+    void html() {
+        assertEquals("""
+            <span class="fw-light">367&#8239;322</span>""", value.htmlPresentation(null, longObj));
+    }
+
+    @Test
     void parse() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "120");
         assertEquals("120", parsed.toString());

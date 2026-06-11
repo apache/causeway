@@ -53,7 +53,13 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
 
     @Test
     void title() {
-        assertEquals("35 000 000", value.titlePresentation(null, Double.valueOf(35000000.0)));
+        assertEquals("35 000 000.0001", value.titlePresentation(null, Double.valueOf(35000000.0001)));
+    }
+
+    @Test
+    void html() {
+        assertEquals("""
+            <span class="fw-light">35&#8239;000&#8239;000.0001</span>""", value.htmlPresentation(null, Double.valueOf(35000000.0001)));
     }
 
     @Test

@@ -47,7 +47,7 @@ extends ValueSemanticsProviderAbstractTestCase<Integer> {
     }
 
     @Test
-    void titleString() {
+    void title() {
         assertEquals("32", value.titlePresentation(null, integer));
     }
 
