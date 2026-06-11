@@ -171,7 +171,7 @@ implements
         try {
             return parseDecimal(context, input)
                     .map(BigDecimal::toBigIntegerExact);
-        } catch (final NumberFormatException | ArithmeticException e) {
+        } catch (final ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
     }
@@ -182,6 +182,8 @@ implements
         var input = _Strings.blankToNullOrTrim(text);
         if(input==null)
             return Optional.empty();
+
+        validateNumericalInput(context, input);
 
         var formatEx = getNumberFormat(context, FormatUsageFor.PARSING);
 
@@ -200,6 +202,29 @@ implements
             throw new TextEntryParseException(String.format(
                     "Not a decimal value '%s': %s", input, e.getMessage()),
                     e);
+        }
+    }
+
+    /**
+     * The default implementation disallows appearance of the user- or system-locale specific grouping (thousands) separator
+     * in any of the numeric value inputs. Subclasses may override this behavior.
+     *
+     * <p> A common use of {@link java.math.BigDecimal} say is as a money value. In some locales (eg English), the
+     * ',' (comma) is the grouping separator while the '.' (period) acts as a
+     * decimal point, but in others (eg France, Italy, Germany) it is the other way around.
+     *
+     * <p> Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+     * in an English locale, is not rejected but instead is evaluated as the value 12_399L.  That's almost
+     * certainly not what the end-user would have expected, and results in a money value 100x too large.
+     *
+     * <p>The purpose of this validation method is to remove the confusion by simply disallowing the
+     * grouping separator from being part of the input string.
+     */
+    protected void validateNumericalInput(@Nullable final Context context, final String input) {
+        var localeGroupingSeparator = "" + localeGroupingSeparator(context);
+        if(StringUtils.hasText(localeGroupingSeparator)) { // ignores whitespace
+            if (input.contains(localeGroupingSeparator))
+                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + localeGroupingSeparator + "' grouping separator");
         }
     }
 

@@ -143,7 +143,7 @@ public interface ValueSemanticsProvider<T> {
     default Function<T, String> pipe(final Function<T, String> toString, final UnaryOperator<String> postprocessor) {
         return toString.andThen(postprocessor);
     }
-    
+
     // -- CATEGORIZATION
 
     default boolean isEnumType() {

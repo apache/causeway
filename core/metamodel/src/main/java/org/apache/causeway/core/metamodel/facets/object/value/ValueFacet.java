@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
@@ -93,11 +92,11 @@ extends
             };
     }
 
-    Parser<T> fallbackParser(Identifier featureIdentifier);
+    Parser<T> fallbackParser(ObjectFeature objectFeature);
 
     default Parser<T> selectParserForAttributeOrElseFallback(final @NonNull ObjectFeature feature) {
         return selectParserForAttribute(feature)
-                .orElseGet(()->fallbackParser(feature.getFeatureIdentifier()));
+                .orElseGet(()->fallbackParser(feature));
     }
 
     // -- RENDERER
@@ -106,7 +105,7 @@ extends
     Optional<Renderer<T>> selectDefaultRenderer();
     Optional<Renderer<T>> selectRendererForParamOrPropOrColl(@NonNull ObjectFeature param);
 
-    Renderer<T> fallbackRenderer(Identifier featureIdentifier);
+    Renderer<T> fallbackRenderer(ObjectFeature objectFeature);
 
     default Optional<Renderer<T>> selectRendererForFeature(final @Nullable ObjectFeature feature) {
         return feature==null
@@ -120,7 +119,7 @@ extends
 
     default Renderer<T> selectRendererForParamOrPropOrCollOrElseFallback(final @NonNull ObjectFeature feature) {
         return selectRendererForParamOrPropOrColl(feature)
-                .orElseGet(()->fallbackRenderer(feature.getFeatureIdentifier()));
+                .orElseGet(()->fallbackRenderer(feature));
     }
 
     // -- TEMPORAL SUPPORT

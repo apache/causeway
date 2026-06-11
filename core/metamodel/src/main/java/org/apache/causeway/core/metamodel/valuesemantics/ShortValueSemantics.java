@@ -136,7 +136,7 @@ implements
 
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
-    public class NoGrouping extends ShortValueSemantics {
+    public static class NoGrouping extends ShortValueSemantics {
         @Override protected GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
@@ -144,7 +144,7 @@ implements
 
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING)
-    public class LocaleGrouping extends ShortValueSemantics {
+    public static class LocaleGrouping extends ShortValueSemantics {
         @Override protected GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING;
         }

@@ -49,7 +49,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  */
 public abstract class ValueSemanticsAbstract<T>
 implements
-ValueSemanticsProvider<T> {
+    ValueSemanticsProvider<T> {
 
     public enum FormatUsageFor {
         PARSING,
