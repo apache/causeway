@@ -83,25 +83,30 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     }
 
     @Test
-    void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() {
+    void parseValidStringWithGroupingSeparatorIfAllowed() {
         setSemantics(value = Scenario.LOCALE_GROUPING_ALL.valueSemantics(causewayConfiguration));
 
-        BigDecimal bd = value.parseTextRepresentation(null, "123,999.01");
-        assertThat(bd).isEqualTo(new BigDecimal("123999.01").setScale(2, RoundingMode.HALF_EVEN));
+        assertThat(value.parseTextRepresentation(null, "123,999.01"))
+            .isEqualTo(new BigDecimal("123999.01").setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Test
-    void demonstrateTheRiskOfAllowingGroupingSeparatorIfConfiguredToAllow() {
-
-        // default disallows grouping separator
-        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1239,99"));
-
-        // but if we allow it...
+    void parseInvalidStringWithGroupingSeparatorIfAllowed() {
         setSemantics(value = Scenario.LOCALE_GROUPING_ALL.valueSemantics(causewayConfiguration));
 
-        //FIXME fail on invalid input like this
-        BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
-        assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
+        // valid cases should pass, that is, use separators consistently or not at all
+        assertThat(value.parseTextRepresentation(null, "1234567")).isEqualTo(new BigDecimal(1234567));
+        assertThat(value.parseTextRepresentation(null, "1234567.0")).isEqualTo(new BigDecimal(1234567).setScale(1, RoundingMode.HALF_EVEN));
+        assertThat(value.parseTextRepresentation(null, "1,234,567")).isEqualTo(new BigDecimal(1234567));
+        assertThat(value.parseTextRepresentation(null, "1,234,567.0")).isEqualTo(new BigDecimal(1234567).setScale(1, RoundingMode.HALF_EVEN));
+
+        // inconsistent use of separators
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "239,99"));
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "239,99.0"));
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1234,567"));
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1234,567.0"));
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1,234567"));
+        assertThrows(TextEntryParseException.class, ()->value.parseTextRepresentation(null, "1,234567.0"));
     }
 
     @Test

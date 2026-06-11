@@ -35,7 +35,9 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.TextUtils;
 
 /**
  * A base for all numerical value types.
@@ -239,8 +241,38 @@ implements
     protected void validateNumericalInput(@Nullable final Context context, final String input) {
         var localeGroupingSeparator = "" + localeGroupingSeparator(context);
         var parsingGroupingSeparator = grouping().separator(context, FormatUsageFor.PARSING);
-        if(parsingGroupingSeparator.equals(localeGroupingSeparator))
-            return; // if parsing format explicitly uses the localeGroupingSeparator, then allow it
+        if(parsingGroupingSeparator.equals(localeGroupingSeparator)) {
+            // if parsing format explicitly uses the localeGroupingSeparator, then allow it, unless grouping is badly placed
+
+            if(!input.contains(localeGroupingSeparator))
+                return; // no group separator used -> valid
+
+            var formatEx = getNumberFormat(context, FormatUsageFor.PARSING);
+            var integerPartInputLiteral = TextUtils.cutter(_Strings.condenseWhitespaces(input, ""))
+                    .keepBefore("" + formatEx.format.getDecimalFormatSymbols().getDecimalSeparator())
+                    .getValue();
+
+            // every chunk must exactly be 3 digits long, except for the first one which can be max 3 digits long
+            var groupedDigits = _Strings.splitThenStream(integerPartInputLiteral, parsingGroupingSeparator)
+                .collect(Can.toCan());
+
+            switch (groupedDigits.getCardinality()) {
+                case ZERO: break; // no leading digits
+                case ONE: if(groupedDigits.getFirstElseFail().length()>3)
+                    throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                    break;
+                case MULTIPLE:
+                    if(groupedDigits.getFirstElseFail().length()>3)
+                        throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                    for (String chunk : groupedDigits.subCan(1)) {
+                        if(chunk.length()!=3)
+                            throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                    }
+                    break;
+            }
+
+            return; // all tests passed -> valid
+        }
 
         if(StringUtils.hasText(localeGroupingSeparator)) { // ignores whitespace
             if (input.contains(localeGroupingSeparator))
