@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.RefData;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
