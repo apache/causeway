@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,8 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.springframework.lang.Nullable;
 
 import lombok.Value;
@@ -44,7 +47,47 @@ public final class ReplayContext {
         CommandLogEntryRepository commandLogEntryRepository;
         CommandExecutorService commandExecutorService;
         ClockService clockService;
-        
+        List<CommandReplayMappingListener> commandReplayMappingListeners;
+        SpecificationLoader specificationLoader;
+
+    public ReplayContext(
+            final RepositoryService repositoryService,
+            final InteractionService interactionService,
+            final TransactionService transactionService,
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService,
+            final ClockService clockService,
+            final List<CommandReplayMappingListener> commandReplayMappingListeners) {
+        this(
+                repositoryService,
+                interactionService,
+                transactionService,
+                commandLogEntryRepository,
+                commandExecutorService,
+                clockService,
+                commandReplayMappingListeners,
+                null);
+    }
+
+    public ReplayContext(
+            final RepositoryService repositoryService,
+            final InteractionService interactionService,
+            final TransactionService transactionService,
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService,
+            final ClockService clockService,
+            final List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final SpecificationLoader specificationLoader) {
+        this.repositoryService = repositoryService;
+        this.interactionService = interactionService;
+        this.transactionService = transactionService;
+        this.commandLogEntryRepository = commandLogEntryRepository;
+        this.commandExecutorService = commandExecutorService;
+        this.clockService = clockService;
+        this.commandReplayMappingListeners = commandReplayMappingListeners;
+        this.specificationLoader = specificationLoader;
+    }
+
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
     	return interactionId!=null
 			? commandLogEntryRepository().findByInteractionId(interactionId)

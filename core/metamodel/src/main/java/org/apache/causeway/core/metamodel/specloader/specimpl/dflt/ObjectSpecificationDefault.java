@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -74,8 +75,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ObjectSpecificationDefault
-extends ObjectSpecificationAbstract
-implements FacetHolder {
+        extends ObjectSpecificationAbstract
+        implements FacetHolder {
 
     /**
      * Lazily built by {@link #getMember(Method)}.
@@ -85,6 +86,7 @@ implements FacetHolder {
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
+    private final boolean recordingSupportEnabled;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -110,16 +112,18 @@ implements FacetHolder {
         // naturally supports attribute inheritance from the type's hierarchy
         final IntrospectionPolicy introspectionPolicy =
                 this.lookupFacet(IntrospectionPolicyFacet.class)
-                .map(introspectionPolicyFacet->
-                        introspectionPolicyFacet
-                        .getIntrospectionPolicy(mmc.getConfiguration()))
-                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
+                        .map(introspectionPolicyFacet ->
+                                introspectionPolicyFacet
+                                        .getIntrospectionPolicy(mmc.getConfiguration()))
+                        .orElseGet(() -> mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
 
         this.introspectionPolicy = introspectionPolicy;
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.columnHelper = new _MembersAsColumns(mmc);
+        this.recordingSupportEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
+                .getRecordingSupport().isEnabled();
     }
 
     @Override
@@ -131,7 +135,7 @@ implements FacetHolder {
         addNamedFacetIfRequired();
 
         // go no further if a value
-        if(this.isValue()) {
+        if (this.isValue()) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
             }
@@ -171,7 +175,7 @@ implements FacetHolder {
     protected void introspectMembers() {
 
         // yet this logic does not skip UNKNONW
-        if(this.getBeanSort().isCollection()
+        if (this.getBeanSort().isCollection()
                 || this.getBeanSort().isVetoed()
                 || this.isValue()) {
             if (log.isDebugEnabled()) {
@@ -181,10 +185,31 @@ implements FacetHolder {
         }
 
         // create associations and actions
-        replaceAssociations(createAssociations());
-        replaceActions(createActions());
+        val associations = createAssociations().collect(Can.toCan());
+        replaceAssociations(associations.stream());
+        val actions = createActions().collect(Can.toCan());
+        if (recordingSupportEnabled) {
+            val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
+                    .createFor(this, associations.stream())
+                    .collect(Can.toCan());
+            val existingActionIds = Stream.concat(actions.stream(), parentedCollectionNavigationActions.stream())
+                    .map(ObjectAction::getId)
+                    .collect(Collectors.toSet());
+            replaceActions(Stream.concat(
+                    Stream.concat(
+                            actions.stream(),
+                            parentedCollectionNavigationActions.stream()),
+                    ScalarReferenceNavigationActionUtil.createFor(this, associations.stream(), existingActionIds)));
+        } else {
+            replaceActions(actions.stream());
+        }
 
         postProcess();
+    }
+
+    @Override
+    protected boolean isRecordingSupportEnabled() {
+        return recordingSupportEnabled;
     }
 
     private void addNamedFacetIfRequired() {
@@ -227,9 +252,9 @@ implements FacetHolder {
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */
             mixinFacet()
-            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
-            .ifPresent(mixinFacetAbstract->
-                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
+                    .flatMap(mixinFacet -> _Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+                    .ifPresent(mixinFacetAbstract ->
+                            mixinFacetAbstract.initMixinSortFrom(facetedMethod));
 
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
@@ -250,11 +275,11 @@ implements FacetHolder {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         return _Strings.isEmpty(id)
-            ? Optional.empty()
-            : streamDeclaredActions(actionScopes, mixedIn)
-                .filter(action->
-                    id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                            || id.equals(action.getFeatureIdentifier().memberLogicalName())
+                ? Optional.empty()
+                : streamDeclaredActions(actionScopes, mixedIn)
+                .filter(action ->
+                        id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                        || id.equals(action.getFeatureIdentifier().memberLogicalName())
                 )
                 .findFirst();
     }
@@ -280,31 +305,31 @@ implements FacetHolder {
 
     private void cataloguePropertiesAndCollections(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
-        .forEach(field->
-            field.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(Can::stream)
-                .map(MethodFacade::asMethodElseFail) // expected regular
-                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
-                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
+                .forEach(field ->
+                        field.streamFacets(ImperativeFacet.class)
+                                .map(ImperativeFacet::getMethods)
+                                .flatMap(Can::stream)
+                                .map(MethodFacade::asMethodElseFail) // expected regular
+                                .peek(method -> _Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
+                                .forEach(imperativeFacetMethod -> onMember.accept(imperativeFacetMethod, field)));
     }
 
     private void catalogueActions(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
-        .forEach(userAction->
-            userAction.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(Can::stream)
-                .map(MethodFacade::asMethodForIntrospection)
-                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
-                .forEach(imperativeFacetMethod->
-                    onMember.accept(imperativeFacetMethod, userAction)));
+                .forEach(userAction ->
+                        userAction.streamFacets(ImperativeFacet.class)
+                                .map(ImperativeFacet::getMethods)
+                                .flatMap(Can::stream)
+                                .map(MethodFacade::asMethodForIntrospection)
+                                .peek(method -> _Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
+                                .forEach(imperativeFacetMethod ->
+                                        onMember.accept(imperativeFacetMethod, userAction)));
     }
 
     // -- ELEMENT SPECIFICATION
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
-            _Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
+            _Lazy.threadSafe(() -> lookupFacet(TypeOfFacet.class)
                     .map(typeOfFacet -> typeOfFacet.elementSpec()));
 
     @Override
@@ -313,12 +338,12 @@ implements FacetHolder {
     }
 
     // -- TABLE COLUMN RENDERING
-    
-	@Override
-	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery) {
-		return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
-	}
-    
+
+    @Override
+    public Stream<ObjectAssociation> streamAssociationsForColumnRendering(ColumnQuery columnQuery) {
+        return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
+    }
+
     @Override
     public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
         return new _MembersAsColumns(getMetaModelContext())
@@ -329,28 +354,28 @@ implements FacetHolder {
 
     private boolean isVetoedForInjection;
 
-    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
-        !isVetoedForInjection
-                && !getBeanSort().isAbstract()
-                && !getBeanSort().isValue()
-                && !getBeanSort().isEntity()
-                && !getBeanSort().isViewModel()
-                && !getBeanSort().isMixin()
-                && (getBeanSort().isManagedBeanAny()
-                        || getServiceRegistry()
-                                .lookupRegisteredBeanById(logicalType())
-                                .isPresent())
-                );
+    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(() ->
+            !isVetoedForInjection
+                    && !getBeanSort().isAbstract()
+                    && !getBeanSort().isValue()
+                    && !getBeanSort().isEntity()
+                    && !getBeanSort().isViewModel()
+                    && !getBeanSort().isMixin()
+                    && (getBeanSort().isManagedBeanAny()
+                    || getServiceRegistry()
+                    .lookupRegisteredBeanById(logicalType())
+                    .isPresent())
+    );
 
     @Override
     public boolean isInjectable() {
         return isInjectableLazy.get();
     }
 
-    private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(()->
-        Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.lookup(_ClassCache.getInstance(), getCorrespondingClass())
-            .map("true"::equals)
-            .orElse(false));
+    private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(() ->
+            Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.lookup(_ClassCache.getInstance(), getCorrespondingClass())
+                    .map("true"::equals)
+                    .orElse(false));
 
     @Override
     public boolean isDomainService() {

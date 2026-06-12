@@ -31,6 +31,7 @@ import org.approvaltests.Approvals;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -65,6 +66,17 @@ class CommandDtoUtils_toYaml_Approval_Test {
         });
     }
 
+    @Test
+    void marshals_exported_commands_with_result_metadata() {
+        String yaml = CommandDtoUtils.toYamlExport(List.of(
+                CommandDtoUtils.CommandExportDto.of(
+                        command("with-result"),
+                        Bookmark.forLogicalTypeNameAndIdentifier("demo.Invoice", "456")),
+                CommandDtoUtils.CommandExportDto.of(command("void-result"), null)));
+
+        Approvals.verify(yaml);
+    }
+
     private static CommandDto commandWithAllDateTimeParams() {
         CommandDto command = new CommandDto();
         command.setMajorVersion("2");
@@ -95,6 +107,21 @@ class CommandDtoUtils_toYaml_Approval_Test {
         String path = getClass().getSimpleName() + ".marshals_all_date_time_datatypes.approved.txt";
         InputStream stream = getClass().getResourceAsStream(path);
         return StreamUtils.copyToString(stream, StandardCharsets.UTF_8);
+    }
+
+    private static CommandDto command(final String interactionId) {
+        CommandDto command = new CommandDto();
+        command.setMajorVersion("2");
+        command.setMinorVersion("0");
+        command.setInteractionId(interactionId);
+        command.setUsername("approval-user");
+        command.setTargets(targets("demo.Customer", "123"));
+
+        ActionDto action = new ActionDto();
+        action.setLogicalMemberIdentifier("demo.Customer#noop");
+        action.setInteractionType(InteractionType.ACTION_INVOCATION);
+        command.setMember(action);
+        return command;
     }
 
     private static ActionDto actionWithAllDateTimeParams() {

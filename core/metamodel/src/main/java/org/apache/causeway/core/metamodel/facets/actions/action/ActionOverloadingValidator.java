@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -58,7 +59,12 @@ extends MetaModelValidatorAbstract {
 
         _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
                 spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{
-                    overloadedNames.add(oa.getFeatureIdentifier().memberLogicalName());
+                            final var memberLogicalName = oa.getFeatureIdentifier().memberLogicalName();
+                            if (memberLogicalName.startsWith(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX) ||
+                                memberLogicalName.startsWith(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX)) {
+                                return;
+                            }
+                            overloadedNames.add(memberLogicalName);
                 })
                 .count() // consumes the stream
                 );

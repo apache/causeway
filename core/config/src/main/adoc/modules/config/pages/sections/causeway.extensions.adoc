@@ -34,6 +34,20 @@ One reason to use this option is if you wish to provide your own implementation 
 
 
 |
+[[causeway.extensions.command-log.recording-support]]
+causeway.extensions.command-log. +
+recording-support
+
+|  DISABLED
+| Whether command-log recording support should be enabled.
+
+This is disabled by default because safe actions can be frequent and synthetic selector actions are intended for command recording and replay tooling.
+When enabled, safe action invocations can be command published and synthetic safe selector actions are created for parented collections.
+
+Accepted values are ``ENABLED`` and ``DISABLED``.
+
+
+|
 [[causeway.extensions.command-log.run-background-commands.batch-size]]
 causeway.extensions.command-log. +
 run-background-commands.batch-size

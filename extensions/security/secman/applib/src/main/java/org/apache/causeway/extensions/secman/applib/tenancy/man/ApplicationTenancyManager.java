@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.applib.tenancy.man;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -38,17 +39,23 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 @Named(ApplicationTenancyManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)
-public class ApplicationTenancyManager {
+public class ApplicationTenancyManager implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyManager";
+
+    final SpecificationLoader specLoader;
+
+    @Inject
+    public ApplicationTenancyManager(
+            final String mementoUnused,
+            final SpecificationLoader specLoader) {
+        this.specLoader = specLoader;
+    }
 
     @ObjectSupport public String title() {
         return "Application Tenancy Manager";
     }
 
-    // -- INFORMAL METADATA
-
-    @Inject private SpecificationLoader specLoader;
 
     @Property @PropertyLayout(fieldSetId = "metadata")
     public String getTenancyType() {
@@ -58,8 +65,9 @@ public class ApplicationTenancyManager {
                 .orElse("not found");
     }
 
-    // --
-
-    // behaviour provided by mixins
+    @Override
+    public String viewModelMemento() {
+        return "1";
+    }
 
 }

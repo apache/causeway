@@ -4,11 +4,11 @@
             <cpt:domainObject/>
         </bs:col>
         <bs:col span="3">
-            <cpt:fieldSet name=" " id="baseline">
-                <cpt:action id="previousHour"/>
-                <cpt:action id="changeBaseline"/>
-                <cpt:action id="nextHour"/>
-                <cpt:property id="baseline"/>
+            <cpt:fieldSet name="Control" id="control">
+                <cpt:property id="baseline">
+                    <cpt:action id="previousHour"/>
+                    <cpt:action id="nextHour"/>
+                </cpt:property>
             </cpt:fieldSet>
         </bs:col>
         <bs:col span="3">

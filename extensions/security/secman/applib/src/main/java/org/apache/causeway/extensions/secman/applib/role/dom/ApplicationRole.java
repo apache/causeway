@@ -65,7 +65,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = ApplicationRole.CssClassUiEvent.class,
         layoutUiEvent = ApplicationRole.LayoutUiEvent.class
 )
-public abstract class ApplicationRole implements Comparable<ApplicationRole> {
+public abstract class ApplicationRole implements Comparable<ApplicationRole>, org.apache.causeway.applib.domain.RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;

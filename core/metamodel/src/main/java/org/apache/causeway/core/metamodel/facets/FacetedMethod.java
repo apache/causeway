@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
@@ -74,6 +76,17 @@ extends TypedHolderAbstract {
         return new FacetedMethod(mmc, FeatureType.ACTION,
                 declaringType, methodFacade, methodFacade.resolveMethodReturn(),
                 getParameters(mmc, declaringType, methodFacade));
+    }
+
+    public static FacetedMethod createSyntheticAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String actionId,
+            final Class<?> returnType,
+            final @Nullable Class<?>[] parameterTypes,
+            final @Nullable String[] parameterNames) {
+        val methodFacade = _MethodFacades.virtual(declaringType, actionId, returnType, parameterTypes, parameterNames);
+        return createForAction(mmc, declaringType, methodFacade);
     }
 
     private static Can<FacetedMethodParameter> getParameters(

@@ -26,16 +26,42 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForScalarReferenceNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionSemanticsFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForNullScalarReferenceNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForScalarReferenceNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacetDefault;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacetDefault;
+import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -68,6 +94,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
+import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
@@ -76,6 +103,9 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
+import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectTitleContext;
@@ -86,6 +116,7 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -97,6 +128,8 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -104,8 +137,8 @@ import lombok.extern.log4j.Log4j2;
 @lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2
 public abstract class ObjectSpecificationAbstract
-extends ObjectMemberContainer
-implements ObjectSpecification {
+        extends ObjectMemberContainer
+        implements ObjectSpecification {
 
     /**
      * @implNote thread-safe
@@ -117,19 +150,19 @@ implements ObjectSpecification {
         private final Object $lock = new Object();
 
         public void addSubclass(final ObjectSpecification subclass) {
-            synchronized($lock) {
+            synchronized ($lock) {
                 classes = classes.addUnique(subclass);
             }
         }
 
         public boolean hasSubclasses() {
-            synchronized($lock) {
+            synchronized ($lock) {
                 return classes.isNotEmpty();
             }
         }
 
         public Can<ObjectSpecification> snapshot() {
-            synchronized($lock) {
+            synchronized ($lock) {
                 return classes;
             }
         }
@@ -149,18 +182,20 @@ implements ObjectSpecification {
 
     // defensive immutable lazy copy of associations
     private final _Lazy<Can<ObjectAssociation>> unmodifiableAssociations =
-            _Lazy.threadSafe(()->Can.ofCollection(associations));
+            _Lazy.threadSafe(() -> Can.ofCollection(associations));
 
     // -- ACTIONS
 
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
 
-    /** not API, used for validation */
+    /**
+     * not API, used for validation
+     */
     @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
     private final _Lazy<Can<ObjectAction>> unmodifiableActions =
-            _Lazy.threadSafe(()->Can.ofCollection(objectActions));
+            _Lazy.threadSafe(() -> Can.ofCollection(objectActions));
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
     private final ListMultimap<ActionScope, ObjectAction> objectActionsByType =
@@ -172,8 +207,7 @@ implements ObjectSpecification {
 
     // defensive immutable lazy copy of interfaces
     private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
-            _Lazy.threadSafe(()->Can.ofCollection(interfaces));
-
+            _Lazy.threadSafe(() -> Can.ofCollection(interfaces));
 
 
     private final Subclasses directSubclasses = new Subclasses();
@@ -257,52 +291,52 @@ implements ObjectSpecification {
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {
 
-        if(!isLessThan(upTo)) {
+        if (!isLessThan(upTo)) {
             return; // optimization
         }
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
 
         boolean revalidate = false;
 
         switch (introspectionState) {
-        case NOT_INTROSPECTED:
-            if(isLessThan(upTo)) {
-                introspectType();
-            }
-            if(isLessThan(upTo)) {
-                introspectFully();
-                revalidate = true;
-            }
-            // set to avoid infinite loops
-            break;
+            case NOT_INTROSPECTED:
+                if (isLessThan(upTo)) {
+                    introspectType();
+                }
+                if (isLessThan(upTo)) {
+                    introspectFully();
+                    revalidate = true;
+                }
+                // set to avoid infinite loops
+                break;
 
-        case TYPE_BEING_INTROSPECTED:
-            // nothing to do (interim state during introspectType)
-            break;
+            case TYPE_BEING_INTROSPECTED:
+                // nothing to do (interim state during introspectType)
+                break;
 
-        case TYPE_INTROSPECTED:
-            if(isLessThan(upTo)) {
-                introspectFully();
-                revalidate = true;
-            }
-            break;
+            case TYPE_INTROSPECTED:
+                if (isLessThan(upTo)) {
+                    introspectFully();
+                    revalidate = true;
+                }
+                break;
 
-        case MEMBERS_BEING_INTROSPECTED:
-            // nothing to do (interim state during introspectully)
-            break;
+            case MEMBERS_BEING_INTROSPECTED:
+                // nothing to do (interim state during introspectully)
+                break;
 
-        case FULLY_INTROSPECTED:
-            // nothing to do ... all done
-            break;
+            case FULLY_INTROSPECTED:
+                // nothing to do ... all done
+                break;
 
-        default:
-            throw _Exceptions.unexpectedCodeReach();
+            default:
+                throw _Exceptions.unexpectedCodeReach();
         }
 
-        if(revalidate) {
+        if (revalidate) {
             getSpecificationLoader().validateLater(this);
         }
     }
@@ -332,6 +366,7 @@ implements ObjectSpecification {
     }
 
     protected abstract void introspectTypeHierarchy();
+
     protected abstract void introspectMembers();
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
@@ -348,7 +383,7 @@ implements ObjectSpecification {
     }
 
     protected void updateInterfaces(final List<ObjectSpecification> interfaces) {
-        synchronized(unmodifiableInterfaces) {
+        synchronized (unmodifiableInterfaces) {
             this.interfaces.clear();
             this.interfaces.addAll(interfaces);
             unmodifiableInterfaces.clear();
@@ -386,7 +421,7 @@ implements ObjectSpecification {
 
     protected final void replaceActions(final Stream<ObjectAction> objectActions) {
         val orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
-        synchronized (unmodifiableActions){
+        synchronized (unmodifiableActions) {
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
             unmodifiableActions.clear(); // invalidate
@@ -396,8 +431,8 @@ implements ObjectSpecification {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 orderedActions.stream()
-                .filter(ObjectAction.Predicates.ofActionType(actionType))
-                .forEach(objectActionForType::add);
+                        .filter(ObjectAction.Predicates.ofActionType(actionType))
+                        .forEach(objectActionForType::add);
             }
         }
     }
@@ -424,7 +459,7 @@ implements ObjectSpecification {
     @Override
     public final Optional<MixinFacet> mixinFacet() {
         // deliberately don't memoize lookup misses, because could be too early
-        if(mixinFacet==null) {
+        if (mixinFacet == null) {
             mixinFacet = getFacet(MixinFacet.class);
         }
         return Optional.ofNullable(mixinFacet);
@@ -433,7 +468,7 @@ implements ObjectSpecification {
     @Override
     public final Optional<EntityFacet> entityFacet() {
         // deliberately don't memoize lookup misses, because could be too early
-        if(entityFacet==null) {
+        if (entityFacet == null) {
             entityFacet = getFacet(EntityFacet.class);
         }
         return Optional.ofNullable(entityFacet);
@@ -442,7 +477,7 @@ implements ObjectSpecification {
     @Override
     public final Optional<ViewModelFacet> viewmodelFacet() {
         // deliberately don't memoize lookup misses, because could be too early
-        if(viewmodelFacet==null) {
+        if (viewmodelFacet == null) {
             viewmodelFacet = getFacet(ViewModelFacet.class);
         }
         return Optional.ofNullable(viewmodelFacet);
@@ -477,7 +512,7 @@ implements ObjectSpecification {
 
     @Override
     public String getIconName(final ManagedObject domainObject) {
-        if(ManagedObjects.isSpecified(domainObject)) {
+        if (ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
         return iconFacet != null
@@ -506,12 +541,12 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference){
+    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference) {
         return lookupFacet(FaFacet.class)
                 .map(FaFacet::getSpecialization)
-                .map(either->either.fold(
-                        faStaticFacet->(FaLayersProvider)faStaticFacet,
-                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(reference)))
+                .map(either -> either.fold(
+                        faStaticFacet -> (FaLayersProvider) faStaticFacet,
+                        faImperativeFacet -> faImperativeFacet.getFaLayersProvider(reference)))
                 .map(FaLayersProvider::getLayers);
     }
 
@@ -550,11 +585,11 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated())
-            // unexpected code reach, however keep for JUnit testing
-            .orElseGet(()->String.format(
-                    "(%s has neither title- nor object-named-facet)",
-                    getFullIdentifier()));
+                .flatMap(textFacet -> textFacet.translated())
+                // unexpected code reach, however keep for JUnit testing
+                .orElseGet(() -> String.format(
+                        "(%s has neither title- nor object-named-facet)",
+                        getFullIdentifier()));
     }
 
     /**
@@ -589,7 +624,7 @@ implements ObjectSpecification {
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
 
-        synchronized(unmodifiableInterfaces) {
+        synchronized (unmodifiableInterfaces) {
 
             // lookup facet holder's facet
             val facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
@@ -597,11 +632,11 @@ implements ObjectSpecification {
             // lookup all interfaces
             val facets2 = _NullSafe.stream(interfaces())
                     .filter(_NullSafe::isPresent) // just in case
-                    .map(interfaceSpec->interfaceSpec.getFacet(facetType));
+                    .map(interfaceSpec -> interfaceSpec.getFacet(facetType));
 
             // search up the inheritance hierarchy
             val facets3 = _NullSafe.streamNullable(superclass())
-                    .map(superSpec->superSpec.getFacet(facetType));
+                    .map(superSpec -> superSpec.getFacet(facetType));
 
             val facetsCombined = _Streams.concat(facets1, facets2, facets3);
 
@@ -621,13 +656,13 @@ implements ObjectSpecification {
 
         @Override
         public boolean test(final Q facet) {
-            if(facet==null) {
+            if (facet == null) {
                 return false;
             }
-            if(!facet.getPrecedence().isFallback()) {
+            if (!facet.getPrecedence().isFallback()) {
                 return true;
             }
-            if(noopFacet == null) {
+            if (noopFacet == null) {
                 noopFacet = facet;
             }
             return false;
@@ -702,7 +737,7 @@ implements ObjectSpecification {
 
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
 
-        synchronized(unmodifiableAssociations) {
+        synchronized (unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
                     .filter(mixedIn.toFilter());
         }
@@ -712,16 +747,16 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(_Strings.isEmpty(memberId)) {
+        if (_Strings.isEmpty(memberId)) {
             return Optional.empty();
         }
 
         val objectAction = getAction(memberId);
-        if(objectAction.isPresent()) {
+        if (objectAction.isPresent()) {
             return objectAction;
         }
         val association = getAssociation(memberId);
-        if(association.isPresent()) {
+        if (association.isPresent()) {
             return association;
         }
         return Optional.empty();
@@ -731,12 +766,12 @@ implements ObjectSpecification {
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(_Strings.isEmpty(id)) {
+        if (_Strings.isEmpty(id)) {
             return Optional.empty();
         }
 
         return streamDeclaredAssociations(mixedIn)
-                .filter(objectAssociation->objectAssociation.getId().equals(id))
+                .filter(objectAssociation -> objectAssociation.getId().equals(id))
                 .findFirst();
     }
 
@@ -753,13 +788,15 @@ implements ObjectSpecification {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
+        ensureNavigationActionsForMixedInAssociations();
 
         return actionScopes.stream()
-                .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
+                .flatMap(actionScope -> stream(objectActionsByType.get(actionScope)))
                 .filter(mixedIn.toFilter());
     }
 
     // -- mixin associations (properties and collections)
+
     /**
      * Creates all mixed in properties and collections for this spec.
      */
@@ -780,29 +817,30 @@ implements ObjectSpecification {
             return Stream.empty();
         }
         val mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null) {
+        if (mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
         }
-        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
+        if (!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
         val mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
-        .filter(_SpecPredicates::isMixedInAssociation)
-        .map(ObjectActionDefault.class::cast)
-        .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder);
+                .filter(_SpecPredicates::isMixedInAssociation)
+                .map(ObjectActionDefault.class::cast)
+                .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
+                .peek(facetProcessor::processMemberOrder);
     }
 
     // -- mixin actions
+
     /**
      * Creates all mixed in actions for this spec.
      */
     private Stream<ObjectActionMixedIn> createMixedInActions() {
         return getCausewayBeanTypeRegistry().streamMixinTypes()
-            .flatMap(this::createMixedInAction);
+                .flatMap(this::createMixedInAction);
     }
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
@@ -814,15 +852,15 @@ implements ObjectSpecification {
             return Stream.empty();
         }
         val mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null) {
+        if (mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
         }
-        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
+        if (!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
         // don't mixin Object_ mixins to domain services
-        if(getBeanSort().isManagedBeanContributing()
+        if (getBeanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class)) {
             return Stream.empty();
         }
@@ -830,12 +868,12 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
-        // value types only support constructor mixins
-        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
-        .filter(_SpecPredicates::isMixedInAction)
-        .map(ObjectActionDefault.class::cast)
-        .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder);
+                // value types only support constructor mixins
+                .filter(this::whenIsValueThenIsAlsoConstructorMixin)
+                .filter(_SpecPredicates::isMixedInAction)
+                .map(ObjectActionDefault.class::cast)
+                .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
+                .peek(facetProcessor::processMemberOrder);
     }
 
     /**
@@ -909,13 +947,13 @@ implements ObjectSpecification {
                 || getBeanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
                 || getBeanSort().isValue();
-        if(!include) {
+        if (!include) {
             return;
         }
         val mixedInActions = createMixedInActions()
                 .collect(Collectors.toList());
-        if(mixedInActions.isEmpty()) {
-           return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
+        if (mixedInActions.isEmpty()) {
+            return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
         }
 
         val regularActions = _Lists.newArrayList(objectActions); // defensive copy
@@ -932,13 +970,13 @@ implements ObjectSpecification {
      * one-shot: must be no-op, if already created
      */
     private void createMixedInAssociationsAndResort() {
-        if(!isEntityOrViewModelOrAbstract()) {
+        if (!isEntityOrViewModelOrAbstract()) {
             return;
         }
         val mixedInAssociations = createMixedInAssociations()
                 .collect(Collectors.toList());
-        if(mixedInAssociations.isEmpty()) {
-           return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
+        if (mixedInAssociations.isEmpty()) {
+            return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
         }
 
         val regularAssociations = _Lists.newArrayList(associations); // defensive copy
@@ -951,13 +989,317 @@ implements ObjectSpecification {
                 mixedInAssociations.stream()));
     }
 
+    /**
+     * Mixed-in associations are appended lazily and can be materialized before or after actions.
+     * When navigation actions are enabled, make sure association mixins receive matching synthetic actions
+     * without treating ordinary mixin actions as navigation sources.
+     */
+    private void ensureNavigationActionsForMixedInAssociations() {
+        if (!isRecordingSupportEnabled()) {
+            return;
+        }
+        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
+
+        val existingActionIds = objectActions.stream()
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        val mixedInAssociationsWithoutNavigation = stream(unmodifiableAssociations.get())
+                .filter(MixedInMember.class::isInstance)
+                .filter(association -> !existingActionIds.contains(
+                        ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + association.getId()))
+                .collect(Can.toCan());
+        val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
+                .createFor(this, mixedInAssociationsWithoutNavigation.stream())
+                .collect(Can.toCan());
+        existingActionIds.addAll(parentedCollectionNavigationActions.stream()
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet()));
+        val navigationActions = Stream.concat(
+                        parentedCollectionNavigationActions.stream(),
+                        ScalarReferenceNavigationActionUtil.createFor(this, mixedInAssociationsWithoutNavigation.stream(), existingActionIds))
+                .collect(Collectors.toList());
+        if (navigationActions.isEmpty()) {
+            return;
+        }
+
+        val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+        replaceActions(Stream.concat(
+                regularActions.stream(),
+                navigationActions.stream()));
+    }
+
+    protected boolean isRecordingSupportEnabled() {
+        return false;
+    }
+
     @Getter(lazy = true)
     private final CausewayBeanTypeRegistry causewayBeanTypeRegistry =
-        getServiceRegistry()
-                .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
+            getServiceRegistry()
+                    .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
 
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =
-        getServiceRegistry().select(EntityTitleSubscriber.class);
+            getServiceRegistry().select(EntityTitleSubscriber.class);
 
+    @UtilityClass
+    public static class ParentedCollectionNavigationActionUtil {
+
+        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_one_of_";
+
+        private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
+                "logicalTypeName",
+                "id",
+                "version",
+                "objectIdentifier",
+                "datanucleusVersionLong",
+                "datanucleusVersionTimestamp");
+
+        public static Stream<ObjectAction> createFor(
+                final @NonNull ObjectSpecification parentSpec,
+                final @NonNull Stream<ObjectAssociation> associations) {
+            return associations
+                    .filter(ObjectAssociation::isOneToManyAssociation)
+                    .map(ObjectAssociation::getSpecialization)
+                    .flatMap(specialization -> specialization.right().stream())
+                    .filter(collection -> isEligible(parentSpec, collection))
+                    .map(collection -> create(parentSpec, collection));
+        }
+
+        private static boolean isEligible(
+                final ObjectSpecification parentSpec,
+                final OneToManyAssociation collection) {
+            if(parentSpec != collection.getDeclaringType()) {
+                // avoid installing for subclasses
+                return false;
+            }
+            if (collection.getElementType() == null) {
+                return false;
+            }
+            return (parentSpec.isEntity() || parentSpec.isViewModel())
+                    && !CommandRecordingSuppressed.class.isAssignableFrom(parentSpec.getCorrespondingClass())
+                    && collection.getElementType().isEntityOrViewModelOrAbstract();
+        }
+
+        private static ObjectAction create(
+                final ObjectSpecification parentSpec,
+                final OneToManyAssociation collection) {
+
+            val childSpec = collection.getElementType();
+            val filterProperties = filterPropertiesOf(parentSpec, collection);
+            val parameterTypes = parameterTypes(parentSpec, filterProperties);
+            val parameterNames = parameterNames(parentSpec, filterProperties);
+            val actionId = actionIdFor(collection);
+
+            val facetedMethod = FacetedMethod.createSyntheticAction(
+                    MetaModelContext.instanceElseFail(),
+                    parentSpec.getCorrespondingClass(),
+                    actionId,
+                    childSpec.getCorrespondingClass(),
+                    parameterTypes,
+                    parameterNames);
+
+            installActionFacets(parentSpec, collection, filterProperties, facetedMethod);
+            installParameterFacets(filterProperties, facetedMethod);
+
+            return ObjectActionDefault.forMethod(facetedMethod);
+        }
+
+        private static Can<ObjectAssociation> filterPropertiesOf(
+                final ObjectSpecification parentSpec,
+                final OneToManyAssociation collection) {
+            return collection.getElementType()
+                    .streamAssociations(MixedIn.INCLUDED)
+                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+                    .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
+                    .sorted(ObjectMember.Comparators
+                            .<ObjectAssociation>byMemberOrderSequence(false)
+                            .thenComparing(ObjectAssociation::getId))
+                    .collect(Can.toCan());
+        }
+
+        private static boolean isEligibleFilterParameterProperty(final ObjectAssociation property) {
+            if (!property.isOneToOneAssociation()) {
+                return false;
+            }
+            if (EXCLUDED_PARAMETER_PROPERTY_IDS.contains(property.getId())) {
+                return false;
+            }
+            val elementType = property.getElementType();
+            if (elementType == null) {
+                return false;
+            }
+            return isEligibleScalarParameterProperty(elementType)
+                    || isEligibleReferenceParameterProperty(property, elementType);
+        }
+
+        private static boolean isEligibleScalarParameterProperty(final ObjectSpecification elementType) {
+            if (!elementType.isValue()) {
+                return false;
+            }
+            val correspondingClass = elementType.getCorrespondingClass();
+            return correspondingClass != Blob.class
+                    && correspondingClass != Clob.class;
+        }
+
+        private static boolean isEligibleReferenceParameterProperty(
+                final ObjectAssociation property,
+                final ObjectSpecification elementType) {
+            return !elementType.isValue()
+                    && (property.containsNonFallbackFacet(PropertyChoicesFacet.class)
+                    || property.containsNonFallbackFacet(PropertyAutoCompleteFacet.class)
+                    || elementType.containsNonFallbackFacet(ChoicesFacet.class)
+                    || elementType.containsNonFallbackFacet(AutoCompleteFacet.class));
+        }
+
+        private static Class<?>[] parameterTypes(
+                final ObjectSpecification parentSpec,
+                final Can<ObjectAssociation> filterProperties) {
+            val parameterTypes = new Class<?>[filterProperties.size()];
+            for (int i = 0; i < filterProperties.size(); i++) {
+                parameterTypes[i] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
+            }
+            return parameterTypes;
+        }
+
+        private static String[] parameterNames(
+                final ObjectSpecification parentSpec,
+                final Can<ObjectAssociation> filterProperties) {
+            val parameterNames = new String[filterProperties.size()];
+            for (int i = 0; i < filterProperties.size(); i++) {
+                parameterNames[i] = filterProperties.getElseFail(i).getId();
+            }
+            return parameterNames;
+        }
+
+        private static String actionIdFor(final OneToManyAssociation collection) {
+            return ACTION_ID_PREFIX + collection.getId();
+        }
+
+        private static void installActionFacets(
+                final ObjectSpecification parentSpec,
+                final OneToManyAssociation collection,
+                final Can<ObjectAssociation> filterProperties,
+                final FacetedMethod facetedMethod) {
+            FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod));
+            FacetUtil.addFacet(new CssClassFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new FaFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionNavigation(
+                    collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
+            FacetUtil.addFacet(new ParentedCollectionNavigationFacetDefault(collection, facetedMethod));
+            FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionNavigation(collection, facetedMethod));
+            FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionNavigation(
+                    collection,
+                    filterProperties,
+                    facetedMethod));
+            FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionNavigation(
+                    parentSpec,
+                    collection.getElementType(),
+                    collection,
+                    filterProperties,
+                    facetedMethod));
+            FacetUtil.addFacetIfPresent(CommandPublishingFacetForActionAnnotation.create(
+                    Optional.empty(),
+                    MetaModelContext.instanceElseFail().getConfiguration(),
+                    MetaModelContext.instanceElseFail().getServiceInjector(),
+                    facetedMethod).map(CommandPublishingFacet.class::cast));
+        }
+
+        private static void installParameterFacets(
+                final Can<ObjectAssociation> filterProperties,
+                final FacetedMethod facetedMethod) {
+            val parameters = facetedMethod.getParameters();
+            for (int i = 0; i < filterProperties.size(); i++) {
+                val parameter = parameters.getElseFail(i);
+                FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
+                        filterProperties.getElseFail(i).getCanonicalFriendlyName(), parameter));
+                FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));
+            }
+        }
+
+    }
+
+    @UtilityClass
+    public static class ScalarReferenceNavigationActionUtil {
+
+        public static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
+
+        public static Stream<ObjectAction> createFor(
+                final @NonNull ObjectSpecification ownerSpec,
+                final @NonNull Stream<ObjectAssociation> associations,
+                final @NonNull Set<String> existingActionIds) {
+            return associations
+                    .filter(ObjectAssociation::isOneToOneAssociation)
+                    .filter(association -> !existingActionIds.contains(actionIdFor(association)))
+                    .map(ObjectAssociation::getSpecialization)
+                    .flatMap(specialization -> specialization.left().stream())
+                    .filter(reference -> isEligible(ownerSpec, reference))
+                    .map(reference -> create(ownerSpec, reference));
+        }
+
+        private static boolean isEligible(
+                final ObjectSpecification ownerSpec,
+                final OneToOneAssociation reference) {
+            if(ownerSpec != reference.getDeclaringType()) {
+                // avoid installing for subclasses
+                return false;
+            }
+            val referencedType = reference.getElementType();
+            if (referencedType == null) {
+                return false;
+            }
+            return (ownerSpec.isEntity() || ownerSpec.isViewModel())
+                    && !CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.getCorrespondingClass())
+                    && referencedType.isEntityOrViewModelOrAbstract();
+        }
+
+        private static ObjectAction create(
+                final ObjectSpecification ownerSpec,
+                final OneToOneAssociation reference) {
+
+            val referencedType = reference.getElementType();
+            val actionId = actionIdFor(reference);
+
+            val facetedMethod = FacetedMethod.createSyntheticAction(
+                    MetaModelContext.instanceElseFail(),
+                    ownerSpec.getCorrespondingClass(),
+                    actionId,
+                    referencedType.getCorrespondingClass(),
+                    new Class<?>[0],
+                    new String[0]);
+
+            installActionFacets(ownerSpec, reference, facetedMethod);
+
+            return ObjectActionDefault.forMethod(facetedMethod);
+        }
+
+        private static String actionIdFor(final ObjectAssociation reference) {
+            return ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + reference.getId();
+        }
+
+        private static void installActionFacets(
+                final ObjectSpecification ownerSpec,
+                final OneToOneAssociation reference,
+                final FacetedMethod facetedMethod) {
+            FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod));
+            FacetUtil.addFacet(new CssClassFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new FaFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new LayoutGroupFacetForScalarReferenceNavigation(
+                    reference.getId(), reference.getCanonicalFriendlyName(), facetedMethod));
+            FacetUtil.addFacet(new ScalarReferenceNavigationFacetDefault(reference, facetedMethod));
+            FacetUtil.addFacet(new DisabledFacetForNullScalarReferenceNavigation(reference, facetedMethod));
+            FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionNavigation(facetedMethod));
+            FacetUtil.addFacet(new ActionInvocationFacetForScalarReferenceNavigation(
+                    ownerSpec,
+                    reference.getElementType(),
+                    reference,
+                    facetedMethod));
+            FacetUtil.addFacetIfPresent(CommandPublishingFacetForActionAnnotation.create(
+                    Optional.empty(),
+                    MetaModelContext.instanceElseFail().getConfiguration(),
+                    MetaModelContext.instanceElseFail().getServiceInjector(),
+                    facetedMethod).map(CommandPublishingFacet.class::cast));
+        }
+
+    }
 }

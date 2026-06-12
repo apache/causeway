@@ -20,6 +20,9 @@
 
 package org.apache.causeway.extensions.commandlog.applib.integtest.model;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -28,6 +31,8 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 
 @Named("commandlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
@@ -59,6 +64,50 @@ public abstract class Counter implements Comparable<Counter> {
     public Counter bumpUsingDeclaredActionWithCommandPublishingDisabled() {
         return doBump();
     }
+
+    @Action(commandPublishing = Publishing.ENABLED)
+    public Counter scheduleBumpInBackground() {
+        backgroundService.execute(this).bumpUsingDeclaredAction();
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Counter findSelf() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE, commandPublishing = Publishing.ENABLED)
+    public Counter findSelfWithCommandPublishingEnabled() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Counter findNull() {
+        return null;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findSelfAsList() {
+        return List.of(this);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findEmptyList() {
+        return List.of();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<Counter> findSelfTwiceAsList() {
+        return List.of(this, this);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public String findNameAsScalar() {
+        return getName();
+    }
+
+    @Inject
+    private transient BackgroundService backgroundService;
 
     Counter doBump() {
         if (getNum() == null) {

@@ -91,7 +91,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
         layoutUiEvent = ApplicationPermission.LayoutUiEvent.class
 )
-public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
+public abstract class ApplicationPermission implements Comparable<ApplicationPermission>, org.apache.causeway.applib.domain.RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;

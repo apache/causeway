@@ -19,6 +19,8 @@
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,17 +33,26 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.applib.services.command.PauseCommandLoggingEvent;
+import org.apache.causeway.applib.services.command.ResumeCommandLoggingEvent;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
@@ -74,6 +85,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         counterRepository.removeAll();
         commandLogEntryRepository.removeAll();
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
 
         assertThat(counterRepository.find()).isEmpty();
 
@@ -88,6 +100,54 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
     protected abstract Counter newCounter(String name);
 
+
+    @Test
+    void replay_result_mapping_repository_and_persistent_listener() {
+        String suffix = UUID.randomUUID().toString();
+        Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "recorded-" + suffix);
+        Bookmark secondRecordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "recorded-2-" + suffix);
+        Bookmark identityResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "identity-" + suffix);
+        Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "actual-" + suffix);
+        Bookmark conflictingActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "conflicting-" + suffix);
+        UUID commandInteractionId = UUID.randomUUID();
+        CommandLogEntry replayedCommandLogEntry = mock(CommandLogEntry.class);
+        when(replayedCommandLogEntry.getInteractionId()).thenReturn(commandInteractionId);
+
+        CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
+                commandReplayResultMappingRepository, OnConflictPolicy.THROW_EXCEPTION);
+
+        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
+        listener.onReplayResult(secondRecordedResult, actualResult, null);
+        listener.onReplayResult(identityResult, identityResult, null);
+
+        assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .satisfies(mapping -> {
+                    assertThat(mapping.getActualBookmark()).isEqualTo(actualResult);
+                    assertThat(mapping.getCommandInteractionId()).isEqualTo(commandInteractionId);
+                });
+        assertThat(commandReplayResultMappingRepository.findAll())
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult));
+        assertThat(commandReplayResultMappingRepository.findChanged())
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult))
+                .noneSatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(identityResult));
+        assertThat(commandReplayResultMappingRepository.findByActualBookmark(actualResult))
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult))
+                .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(secondRecordedResult));
+        assertThat(listener.lookup(null, recordedResult)).contains(actualResult);
+
+        Assertions.assertThatThrownBy(() -> listener.onReplayResult(recordedResult, conflictingActualResult, null))
+                .isInstanceOf(IllegalStateException.class);
+        assertThat(commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult))
+                .isPresent()
+                .get()
+                .satisfies(mapping -> {
+                    assertThat(mapping.getActualBookmark()).isEqualTo(actualResult);
+                    assertThat(mapping.getCommandInteractionId()).isEqualTo(commandInteractionId);
+                });
+    }
 
     @Test
     void invoke_mixin() {
@@ -181,6 +241,153 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(mostRecentCompleted).isEmpty();
     }
 
+    @Test
+    void safe_action_command_publishing_disabled_by_default() {
+
+        // when
+        wrapperFactory.wrap(counter1).findSelf();
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
+    }
+
+    @Test
+    void safe_action_command_publishing_enabled() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        // when
+        wrapperFactory.wrap(counter1).findSelf();
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
+
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#findSelf");
+        assertThat(commandLogEntry.getCommandDto()).isNotNull();
+        assertThat(commandLogEntry.getCommandDto().getMember()).isInstanceOf(ActionDto.class);
+        assertThat(commandLogEntry.getResult()).isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+
+        val exportDto = CommandDtoUtils.CommandExportDto.of(
+                commandLogEntry.getCommandDto(),
+                commandLogEntry.getResult());
+        assertThat(exportDto.getResult().getType()).isEqualTo("commandlog.test.Counter");
+    }
+
+    @Test
+    void safe_action_with_explicit_command_publishing_is_not_duplicated() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        // when
+        wrapperFactory.wrap(counter1).findSelfWithCommandPublishingEnabled();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries).hasSize(1);
+        assertThat(entries.get(0).getLogicalMemberIdentifier())
+                .isEqualTo("commandlog.test.Counter#findSelfWithCommandPublishingEnabled");
+    }
+
+    @Test
+    void safe_action_command_publishing_logs_null_list_and_scalar_results() {
+
+        // given
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        // when
+        wrapperFactory.wrap(counter1).findNull();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfAsList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findEmptyList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findSelfTwiceAsList();
+        interactionService.nextInteraction();
+        wrapperFactory.wrap(counter1).findNameAsScalar();
+        interactionService.nextInteraction();
+
+        // then
+        List<? extends CommandLogEntry> entries = commandLogEntryRepository.findAll();
+        assertThat(entries)
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains(
+                        "commandlog.test.Counter#findNull",
+                        "commandlog.test.Counter#findSelfAsList",
+                        "commandlog.test.Counter#findEmptyList",
+                        "commandlog.test.Counter#findSelfTwiceAsList",
+                        "commandlog.test.Counter#findNameAsScalar");
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfAsList").getResult())
+                .isEqualTo(bookmarkService.bookmarkForElseFail(counter1));
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNull").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findEmptyList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findSelfTwiceAsList").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNull();
+    }
+
+    private CommandLogEntry entryFor(
+            final List<? extends CommandLogEntry> entries,
+            final String logicalMemberIdentifier) {
+        return entries.stream()
+                .filter(entry -> logicalMemberIdentifier.equals(entry.getLogicalMemberIdentifier()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+
+
+    @Test
+    void paused_command_logging_suppresses_commands_until_resumed() {
+
+        // given
+        eventBusService.post(new PauseCommandLoggingEvent(this));
+
+        // when
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+
+        // and when
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void nested_paused_command_logging_requires_matching_resumes() {
+
+        // given
+        eventBusService.post(new PauseCommandLoggingEvent(this));
+        eventBusService.post(new PauseCommandLoggingEvent(this));
+
+        // when
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+
+        // and when
+        eventBusService.post(new ResumeCommandLoggingEvent(this));
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).hasSize(1);
+    }
 
 
     @Test
@@ -477,6 +684,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     }
 
     @Inject CommandLogEntryRepository commandLogEntryRepository;
+    @Inject CommandReplayResultMappingRepository commandReplayResultMappingRepository;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
@@ -484,6 +692,8 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
+    @Inject CausewayConfiguration causewayConfiguration;
     @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    @Inject EventBusService eventBusService;
 
 }

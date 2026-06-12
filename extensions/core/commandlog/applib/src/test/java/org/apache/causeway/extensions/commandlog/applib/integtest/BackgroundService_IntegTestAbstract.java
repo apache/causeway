@@ -32,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.JobExecutionContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.springframework.transaction.annotation.Propagation;
 
@@ -41,6 +42,8 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -142,6 +145,83 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     }
 
 
+    @Test
+    void recording_support_allows_scheduling_action_then_rejects_subsequent_action_while_background_command_pending() {
+
+        // given
+        removeAllCommandLogEntriesAndCounters();
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+
+        // when
+        wrapperFactory.wrap(counter).scheduleBumpInBackground();
+        interactionService.nextInteraction();
+
+        // then the scheduling foreground action completed, and the background command is pending
+        assertThat(commandLogEntryRepository.findAll())
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains("commandlog.test.Counter#scheduleBumpInBackground");
+        assertThat(commandLogEntryRepository.findBackgroundAndNotYetStarted()).hasSize(1);
+
+        // when/then a subsequent foreground action is rejected until the background command is complete
+        assertThatThrownBy(() -> wrapperFactory.wrap(counter).bumpUsingDeclaredAction())
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Cannot continue command-log recording")
+                .hasMessageContaining("Please wait until pending background commands have executed and committed");
+    }
+
+    @Test
+    void recording_support_allows_subsequent_action_after_background_command_completes() {
+
+        // given
+        removeAllCommandLogEntriesAndCounters();
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        wrapperFactory.wrap(counter).scheduleBumpInBackground();
+        interactionService.nextInteraction();
+        assertThat(commandLogEntryRepository.findBackgroundAndNotYetStarted()).hasSize(1);
+
+        // when (simulate quartz running in the background)
+        runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findBackgroundAndNotYetStarted()).isEmpty();
+
+        // and when
+        wrapperFactory.wrap(counter).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then the subsequent foreground action completed
+        assertThat(commandLogEntryRepository.findAll())
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains("commandlog.test.Counter#bumpUsingDeclaredAction");
+    }
+
+    @Test
+    void disabled_recording_support_allows_subsequent_action_while_background_command_pending() {
+
+        // given
+        removeAllCommandLogEntriesAndCounters();
+        causewayConfiguration.getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
+
+        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        wrapperFactory.wrap(counter).scheduleBumpInBackground();
+        interactionService.nextInteraction();
+        assertThat(commandLogEntryRepository.findBackgroundAndNotYetStarted()).hasSize(1);
+
+        // when
+        wrapperFactory.wrap(counter).bumpUsingDeclaredAction();
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll())
+                .extracting(CommandLogEntry::getLogicalMemberIdentifier)
+                .contains("commandlog.test.Counter#bumpUsingDeclaredAction");
+    }
+
     @SneakyThrows
     @Test
     void using_background_service() {
@@ -225,6 +305,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         }).ifFailureFail();
     }
 
+    @Inject CausewayConfiguration causewayConfiguration;
     @Inject InteractionService interactionService;
     @Inject BackgroundService backgroundService;
     @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;

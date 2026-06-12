@@ -22,8 +22,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerPersistent;
 import org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.jdo.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.jdo.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
@@ -40,9 +43,12 @@ import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJ
 
         // @Service's
         CommandLogEntryRepository.class,
+        CommandReplayResultMappingRepository.class,
+        CommandReplayMappingListenerPersistent.BeanFactory.class,
 
         // entities
-        CommandLogEntry.class
+        CommandLogEntry.class,
+        CommandReplayResultMapping.class
 })
 public class CausewayModuleExtCommandLogPersistenceJdo {
 
@@ -57,6 +63,7 @@ public class CausewayModuleExtCommandLogPersistenceJdo {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(CommandReplayResultMapping.class);
                 deleteFrom(CommandLogEntry.class);
             }
         };

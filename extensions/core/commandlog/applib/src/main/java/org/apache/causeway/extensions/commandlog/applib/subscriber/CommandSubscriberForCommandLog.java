@@ -33,6 +33,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -62,6 +63,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
     final ClockService clockService;
+    final CommandLogPauseState commandLogPauseState;
 
     @Override
     public boolean isEnabled() {
@@ -71,27 +73,27 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onReady(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused()) {
             return;
         }
 
         val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
-        if(existingCommandLogEntryIfAny.isPresent()) {
+        if (existingCommandLogEntryIfAny.isPresent()) {
 
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
                     // this isn't really expected to happen ... we just log the fact if it does and the value is different
-                    if(log.isWarnEnabled()) {
+                    if (log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                        val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
+                        val existingCommandDtoXml = Try.call(() -> CommandDtoUtils.dtoMapper().toString(existingCommandDto))
                                 .getValue().orElse("Dto to Xml failure");
-                        val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
+                        val commandDtoXml = Try.call(() -> CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
-                        if(!existingCommandDtoXml.equals(commandDtoXml)) {
+                        if (!existingCommandDtoXml.equals(commandDtoXml)) {
                             log.warn("existing: \n{}", existingCommandDtoXml);
                             log.warn("proposed: \n{}", commandDtoXml);
                         }
@@ -105,36 +107,48 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             }
 
         } else {
+            guardAgainstPendingBackgroundCommands();
+
             val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
 
     }
 
+    private void guardAgainstPendingBackgroundCommands() {
+        if (causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport() != RecordingSupport.ENABLED) {
+            return;
+        }
+
+        val pendingBackgroundCommands = commandLogEntryRepository.findBackgroundAndNotYetStarted();
+        if (!pendingBackgroundCommands.isEmpty()) {
+            throw new IllegalStateException(String.format(
+                    "Cannot continue command-log recording while %,d background command(s) are pending execution. "
+                    + "Please wait until pending background commands have executed and committed before continuing.",
+                    pendingBackgroundCommands.size()));
+        }
+    }
+
     @Override
     public void onStarted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused()) {
             return;
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-            .ifPresent(commandLogEntry -> {
-                commandLogEntry.sync(command);
-            });
+                .ifPresent(commandLogEntry -> commandLogEntry.sync(command));
     }
 
     @Override
     public void onCompleted(final Command command) {
 
-        if (!isEnabled()) {
+        if (!isEnabled() || commandLogPauseState.isPaused()) {
             return;
         }
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
-            .ifPresent(commandLogEntry -> {
-                commandLogEntry.sync(command);
-            });
+                .ifPresent(commandLogEntry -> commandLogEntry.sync(command));
     }
 
 }

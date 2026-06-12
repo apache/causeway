@@ -82,7 +82,7 @@ public class ApplicationTenancyMenu {
         public class ActionDomainEvent extends ApplicationTenancyMenu.ActionDomainEvent<tenancyManager> { }
 
         @MemberSupport public ApplicationTenancyManager act(){
-            return factory.viewModel(new ApplicationTenancyManager());
+            return factory.viewModel(ApplicationTenancyManager.class);
         }
 
     }

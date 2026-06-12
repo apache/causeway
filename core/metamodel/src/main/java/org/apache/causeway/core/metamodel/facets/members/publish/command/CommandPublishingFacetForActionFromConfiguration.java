@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public abstract class CommandPublishingFacetForActionFromConfiguration extends CommandPublishingFacetAbstract {
@@ -56,6 +57,24 @@ public abstract class CommandPublishingFacetForActionFromConfiguration extends C
         @Override
         public boolean isEnabled() {
             return false;
+        }
+    }
+
+    static class SafeEnabledByCommandLogProperty extends CommandPublishingFacetForActionFromConfiguration {
+
+        private final CausewayConfiguration configuration;
+
+        SafeEnabledByCommandLogProperty(
+                FacetHolder holder,
+                ServiceInjector servicesInjector,
+                CausewayConfiguration configuration) {
+            super(holder, servicesInjector);
+            this.configuration = configuration;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return configuration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
         }
     }
 

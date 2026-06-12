@@ -155,25 +155,31 @@ public final class CommandDtoUtils {
     // -- YAML SUPPORT
 
     public String toYaml(final Iterable<CommandDto> commandDtos) {
-    	final var customizer = new JacksonCustomizer() {
-			@Override
-			public ObjectMapper apply(ObjectMapper mapper) {
-				JsonUtils.jaxbAnnotationSupport(mapper);
-				CommandDtoUtils.memberDtoSupport(mapper);
-				CommandDtoUtils.valueDtoSupport(mapper);
-				JsonUtils.onlyIncludeNonNull(mapper);
-				return mapper;
-			}
-		};
         final var commandDtoList = _NullSafe.stream(commandDtos)
                 .collect(Collectors.toList());
+        return toYamlList(commandDtoList, yamlCommandDtoCustomizer());
+    }
+
+    public String toYamlExport(final Iterable<CommandExportDto> commandExports) {
+        final var commandExportList = _NullSafe.stream(commandExports)
+                .collect(Collectors.toList());
+        return toYamlList(commandExportList, yamlCommandDtoCustomizer());
+    }
+
+    private String toYamlList(
+            final List<?> elements,
+            final JacksonCustomizer customizer) {
         return YamlUtils.toStringUtf8ForList(
-                commandDtoList, YamlUtils.Marshalling.MULTI_DOC,
-                customizer);
+                elements, YamlUtils.Marshalling.MULTI_DOC,
+                mapper -> {
+                    customizer.apply(mapper);
+                    JsonUtils.onlyIncludeNonNull(mapper);
+                    return mapper;
+                });
     }
 
     public List<CommandDto> fromYaml(final DataSource commandDtosYaml) {
-	    final var customizer = yamlCommandDtoCustomizer();
+        final var customizer = yamlCommandDtoCustomizer();
 
         final Try<List<CommandDto>> asList = YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, customizer);
         if (asList.isSuccess()) {
@@ -181,13 +187,93 @@ public final class CommandDtoUtils {
         }
 
         final Try<List<CommandDto>> asMultiDocument = tryReadAsMultiDocument(CommandDto.class, commandDtosYaml, customizer);
-        asMultiDocument.getFailure().ifPresent(multiDocFailure ->
-            asList.getFailure().ifPresent(multiDocFailure::addSuppressed));
+        if (asMultiDocument.isSuccess()) {
+            return asMultiDocument.getValue().orElseGet(Collections::emptyList);
+        }
 
-        return asMultiDocument
+        final Try<List<CommandExportDto>> asWrappedList = YamlUtils.tryReadAsList(CommandExportDto.class, commandDtosYaml, customizer);
+        if (asWrappedList.isSuccess()) {
+            return commandDtosFromExport(asWrappedList.getValue().orElseGet(Collections::emptyList));
+        }
+
+        final Try<List<CommandExportDto>> asWrappedMultiDocument = tryReadAsMultiDocument(
+                CommandExportDto.class, commandDtosYaml, customizer);
+        asWrappedMultiDocument.getFailure().ifPresent(wrappedMultiDocFailure -> {
+            asList.getFailure().ifPresent(wrappedMultiDocFailure::addSuppressed);
+            asMultiDocument.getFailure().ifPresent(wrappedMultiDocFailure::addSuppressed);
+            asWrappedList.getFailure().ifPresent(wrappedMultiDocFailure::addSuppressed);
+        });
+
+        return asWrappedMultiDocument
+                .mapSuccessAsNullable(CommandDtoUtils::commandDtosFromExport)
                 .ifFailureFail()
                 .getValue()
                 .orElseGet(Collections::emptyList);
+    }
+
+    public List<ImportedCommandDto> fromYamlForReplay(final DataSource commandDtosYaml) {
+        failIfYamlListRoot(commandDtosYaml);
+
+        final var customizer = yamlCommandDtoCustomizer();
+
+        final Try<List<CommandExportDto>> asWrappedMultiDocument = tryReadAsMultiDocument(
+                CommandExportDto.class, commandDtosYaml, customizer)
+                .mapSuccessAsNullable(CommandDtoUtils::requireAtLeastOneCommandExport);
+        if (asWrappedMultiDocument.isSuccess()) {
+            return importedCommandDtosFromExport(asWrappedMultiDocument.getValue().orElseGet(Collections::emptyList));
+        }
+
+        final Try<List<CommandDto>> asMultiDocument = tryReadAsMultiDocument(CommandDto.class, commandDtosYaml, customizer);
+        asMultiDocument.getFailure().ifPresent(multiDocFailure ->
+                asWrappedMultiDocument.getFailure().ifPresent(multiDocFailure::addSuppressed));
+
+        return asMultiDocument
+                .mapSuccessAsNullable(CommandDtoUtils::importedCommandDtosFromCommandDtos)
+                .ifFailureFail()
+                .getValue()
+                .orElseGet(Collections::emptyList);
+    }
+
+    private void failIfYamlListRoot(final DataSource commandDtosYaml) {
+        final String yaml = commandDtosYaml.tryReadAsStringUtf8()
+                .ifFailureFail()
+                .getValue()
+                .orElse("")
+                .stripLeading();
+        if (yaml.startsWith("- ") || yaml.startsWith("-\n")) {
+            throw new IllegalArgumentException("Command replay import requires multi-document YAML, not a YAML list");
+        }
+    }
+
+    private List<CommandExportDto> requireAtLeastOneCommandExport(final List<CommandExportDto> commandExports) {
+        if (_NullSafe.stream(commandExports).anyMatch(commandExport -> commandExport.getCommand() != null)) {
+            return commandExports;
+        }
+        throw new IllegalArgumentException("YAML does not contain any CommandExportDto documents with embedded commands");
+    }
+
+    private List<CommandDto> commandDtosFromExport(final List<CommandExportDto> commandExports) {
+        return _NullSafe.stream(commandExports)
+                .map(CommandExportDto::getCommand)
+                .filter(java.util.Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private List<ImportedCommandDto> importedCommandDtosFromExport(final List<CommandExportDto> commandExports) {
+        return _NullSafe.stream(commandExports)
+                .filter(commandExport -> commandExport.getCommand() != null)
+                .map(commandExport -> ImportedCommandDto.of(
+                        commandExport.getCommand(),
+                        Optional.ofNullable(commandExport.getResult())
+                                .map(BookmarkDto::toBookmark)
+                                .orElse(null)))
+                .collect(Collectors.toList());
+    }
+
+    private List<ImportedCommandDto> importedCommandDtosFromCommandDtos(final List<CommandDto> commandDtos) {
+        return _NullSafe.stream(commandDtos)
+                .map(commandDto -> ImportedCommandDto.of(commandDto, null))
+                .collect(Collectors.toList());
     }
 
     private JsonUtils.JacksonCustomizer yamlCommandDtoCustomizer() {
@@ -197,6 +283,105 @@ public final class CommandDtoUtils {
             CommandDtoUtils.valueDtoSupport(mapper);
             return mapper;
         };
+    }
+
+    public static class ImportedCommandDto {
+
+        private CommandDto command;
+        private Bookmark result;
+
+        public static ImportedCommandDto of(
+                final CommandDto command,
+                final Bookmark result) {
+            final var importedCommandDto = new ImportedCommandDto();
+            importedCommandDto.setCommand(command);
+            importedCommandDto.setResult(result);
+            return importedCommandDto;
+        }
+
+        public CommandDto getCommand() {
+            return command;
+        }
+
+        public void setCommand(final CommandDto command) {
+            this.command = command;
+        }
+
+        public Bookmark getResult() {
+            return result;
+        }
+
+        public void setResult(final Bookmark result) {
+            this.result = result;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CommandExportDto {
+
+        private CommandDto command;
+        private BookmarkDto result;
+
+        public static CommandExportDto of(
+                final CommandDto command,
+                final Bookmark result) {
+            final var commandExportDto = new CommandExportDto();
+            commandExportDto.setCommand(command);
+            commandExportDto.setResult(BookmarkDto.of(result));
+            return commandExportDto;
+        }
+
+        public CommandDto getCommand() {
+            return command;
+        }
+
+        public void setCommand(final CommandDto command) {
+            this.command = command;
+        }
+
+        public BookmarkDto getResult() {
+            return result;
+        }
+
+        public void setResult(final BookmarkDto result) {
+            this.result = result;
+        }
+    }
+
+    public static class BookmarkDto {
+
+        private String type;
+        private String id;
+
+        public static BookmarkDto of(final Bookmark bookmark) {
+            if (bookmark == null) {
+                return null;
+            }
+            final var bookmarkDto = new BookmarkDto();
+            bookmarkDto.setType(bookmark.getLogicalTypeName());
+            bookmarkDto.setId(bookmark.getIdentifier());
+            return bookmarkDto;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(final String type) {
+            this.type = type;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(final String id) {
+            this.id = id;
+        }
+
+        public Bookmark toBookmark() {
+            return Bookmark.forLogicalTypeNameAndIdentifier(type, id);
+        }
     }
 
     private <T> Try<List<T>> tryReadAsMultiDocument(

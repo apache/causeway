@@ -29,7 +29,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-	
+
+import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -388,32 +389,53 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     private List<CommandLogEntry> findSince(
             final Timestamp timestamp,
-            final Integer batchSize) {
+            final Integer batchSizeIfAny) {
 
-        // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
-        // XXX that's a historic workaround, should rather be fixed upstream
-        var needsTrimFix = batchSize != null && batchSize == 1;
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
+                .withParameter("timestamp", timestamp);
 
-        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
-                .withParameter("timestamp", timestamp)
-                .withRange(QueryRange.limit(
-                        needsTrimFix ? 2L : batchSize
-                ));
+        return allMatches(query, batchSizeIfAny);
+    }
 
-        final List<CommandLogEntry> commandJdos = _Casts.uncheckedCast(repositoryService().allMatches(q));
-        return needsTrimFix && commandJdos.size() > 1
-                ? commandJdos.subList(0,1)
-                : commandJdos;
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER)
+                .withParameter("from", since);
+
+        return allMatches(query, batchSizeIfAny);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundBeforeTimestamp(final Timestamp before, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE)
+                .withParameter("to", before);
+
+        return allMatches(query, batchSizeIfAny);
     }
 
     @Override
     public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED);
+        return findForegroundSinceTimestampAndCanBeExported(since, null);
     }
 
     @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.EXPORTED);
+    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, Integer batchSizeIfAny) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED, batchSizeIfAny);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundBeforeTimestampAndCanBeExported(final Timestamp before, Integer batchSizeIfAny) {
+        return findForegroundBeforeTimestampWithState(before, ReplayState.UNDEFINED, batchSizeIfAny);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since, Integer batchSizeIfAny) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.EXPORTED, batchSizeIfAny);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundBeforeTimestampAndHasBeenExported(final Timestamp before, Integer batchSizeIfAny) {
+        return findForegroundBeforeTimestampWithState(before, ReplayState.EXPORTED, batchSizeIfAny);
     }
 
     @Override
@@ -429,13 +451,22 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return findForegroundSinceTimestampWithStates(since, ReplayState.OK, ReplayState.EXCLUDED);
     }
 
-    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState) {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
-                                .withParameter("from", from)
-                                .withParameter("replayState", replayState)));
+    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
+                .withParameter("from", from)
+                .withParameter("replayState", replayState);
+
+        return allMatches(query, batchSizeIfAny);
     }
+
+    private List<CommandLogEntry> findForegroundBeforeTimestampWithState(Timestamp to, ReplayState replayState, Integer batchSizeIfAny) {
+        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE)
+                .withParameter("to", to)
+                .withParameter("replayState", replayState);
+
+        return allMatches(query, batchSizeIfAny);
+    }
+
 
     private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
         return _Casts.uncheckedCast(
@@ -460,6 +491,23 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                         .toEpochMilli())
                 : null;
     }
+
+    private List<CommandLogEntry> allMatches(NamedQuery<C> query, Integer batchSizeIfAny) {
+
+        // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
+        // XXX that's a historic workaround, should rather be fixed upstream
+        var needsTrimFix = batchSizeIfAny != null && batchSizeIfAny == 1;
+
+        if(batchSizeIfAny != null) {
+            query = query.withRange(QueryRange.limit(needsTrimFix ? 2L : batchSizeIfAny));
+        }
+
+        final List<CommandLogEntry> commandLogEntries = _Casts.uncheckedCast(repositoryService().allMatches(query));
+        return needsTrimFix && commandLogEntries.size() > 1
+                ? commandLogEntries.subList(0, 1)
+                : commandLogEntries;
+    }
+
 
     /**
      * intended for testing purposes only

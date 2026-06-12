@@ -86,7 +86,7 @@ public class ApplicationRoleMenu {
         public class ActionDomainEvent extends ApplicationRoleMenu.ActionDomainEvent<roleManager> { }
 
         @MemberSupport public ApplicationRoleManager act(){
-            return factory.viewModel(new ApplicationRoleManager());
+            return factory.viewModel(ApplicationRoleManager.class);
         }
 
     }
