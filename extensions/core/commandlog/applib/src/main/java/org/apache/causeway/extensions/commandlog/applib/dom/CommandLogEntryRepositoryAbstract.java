@@ -338,14 +338,12 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     @Override
     public C saveForReplay(final CommandDto commandToReplay) {
 
-//TODO why?
-//        if(commandToReplay.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
-//            final MapDto userData = commandToReplay.getUserData();
-//            if (userData == null )
-//                throw new IllegalStateException(String.format(
-//                        "Can only persist action DTOs with additional userData; got: \n%s",
-//                        CommandDtoUtils.dtoMapper().toString(commandToReplay)));
-//        }
+        final var interactionId = commandToReplay.getInteractionId();
+        final var byInteractionId = findByInteractionId(UUID.fromString(interactionId));
+        if(byInteractionId.isPresent()) {
+            //noinspection unchecked
+            return (C) byInteractionId.get();
+        }
 
         final C entity = factoryService.detachedEntity(commandLogEntryClass);
         entity.init(commandToReplay, ReplayState.PENDING, 0);
@@ -355,6 +353,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         persist(entity);
 
         return entity;
+
     }
 
     @Override
