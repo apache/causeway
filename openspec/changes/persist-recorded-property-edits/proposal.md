@@ -5,8 +5,8 @@ That leaves recordings incomplete even though replay support needs those propert
 
 ## What Changes
 
-- Enable command publishing for property edits when command-log recording support is `ENABLED`.
-- Persist command log entries for recorded property edits even when `@Property(commandPublishing)` is absent or defaults to `ENABLED` through the current facet evaluation path.
+- Enable command publishing for property edits when command-log recording support is configured as `ENABLED` for the application metamodel.
+- Persist command log entries for recorded property edits even when `@Property(commandPublishing)` is absent, not specified, or explicitly `DISABLED`.
 - Preserve existing suppression behavior for targets that opt out of command recording.
 - Preserve existing behavior when command-log recording support is `DISABLED`.
 
@@ -22,5 +22,5 @@ That leaves recordings incomplete even though replay support needs those propert
 
 - Affects command publishing facet evaluation for properties, especially `CommandPublishingFacet#isPublishingEnabled` and recording-support overrides.
 - Affects command-log persistence for property edit interactions and replay/export workflows that depend on complete command sequences.
-- Adds or updates regression coverage for property edits with recording support enabled, disabled, and suppressed.
+- Adds metamodel coverage and JDO/JPA command-log regression coverage for property edits with recording support enabled and disabled.
 - No new dependencies or public API removals are expected.

@@ -47,6 +47,20 @@ public abstract class CommandPublishingFacetForPropertyFromConfiguration extends
         }
     }
 
+    static class EnabledByCommandLogProperty extends CommandPublishingFacetForPropertyFromConfiguration {
+
+        EnabledByCommandLogProperty(
+                FacetHolder holder,
+                ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
     CommandPublishingFacetForPropertyFromConfiguration(
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {

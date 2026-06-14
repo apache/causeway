@@ -437,6 +437,17 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(mostRecentCompleted).isEmpty();
     }
 
+    @Test
+    void recording_support_disabled_does_not_log_property_edit_without_command_publishing_annotation() {
+
+        // when
+        wrapperFactory.wrap(counter1).setName("updated-counter-1");
+        interactionService.nextInteraction();
+
+        // then
+        assertThat(commandLogEntryRepository.findAll()).isEmpty();
+    }
+
 
     @Test
     void roundtrip_CLE_bookmarks() {
