@@ -52,6 +52,7 @@ public abstract class Counter implements Comparable<Counter> {
     public abstract Long getNum2();
     public abstract void setNum2(Long num2);
 
+    @Property(editing = Editing.ENABLED)
     public abstract String getName();
     public abstract void setName(String name);
 

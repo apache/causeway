@@ -54,7 +54,9 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventT
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
@@ -134,6 +136,12 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
+    }
+
+    private static void processCommandPublishing(
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        facetFactory.processCommandPublishing(processMethodContext, propertyIfAny);
     }
 
 
@@ -655,6 +663,59 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             });
         }
 
+    }
+
+    @TestInstance(Lifecycle.PER_CLASS)
+    static class CommandPublishing extends PropertyAnnotationFacetFactoryTest {
+
+        @Test
+        void recordingSupportEnablesUnannotatedProperty() {
+
+            class Customer {
+                @Getter @Setter private String name;
+            }
+
+            getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                processCommandPublishing(facetFactory, processMethodContext);
+
+                assertTrue(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+            });
+        }
+
+        @Test
+        void recordingSupportEnablesPropertyWithPublishingDisabled() {
+
+            class Customer {
+                @Property(commandPublishing = Publishing.DISABLED)
+                @Getter @Setter private String name;
+            }
+
+            getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                processCommandPublishing(facetFactory, processMethodContext);
+
+                assertTrue(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+            });
+        }
+
+        @Test
+        void recordingSupportDisabledPreservesUnannotatedPropertyDefault() {
+
+            class Customer {
+                @Getter @Setter private String name;
+            }
+
+            getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
+
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                processCommandPublishing(facetFactory, processMethodContext);
+
+                assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+            });
+        }
     }
 
     @TestInstance(Lifecycle.PER_CLASS)
