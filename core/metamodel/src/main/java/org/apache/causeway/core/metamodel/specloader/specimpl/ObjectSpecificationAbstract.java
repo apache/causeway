@@ -1116,6 +1116,7 @@ public abstract class ObjectSpecificationAbstract
             return childSpec
                     .streamAssociations(MixedIn.INCLUDED)
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.REFERENCES_PARENT))
                     .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
                     .sorted(columnOrderComparator(childSpec))
                     .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
