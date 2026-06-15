@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -57,10 +60,10 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
@@ -91,6 +94,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -120,7 +124,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
@@ -1109,13 +1112,43 @@ public abstract class ObjectSpecificationAbstract
         private static Can<ObjectAssociation> filterPropertiesOf(
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection) {
-            return collection.getElementType()
-                    .streamAssociationsForColumnRendering(new ColumnQuery(
-                            collection.getFeatureIdentifier(),
-                            ManagedObject.empty(parentSpec),
-                            AssociationsLookup.AVAILABLE))
+            val childSpec = collection.getElementType();
+            return childSpec
+                    .streamAssociations(MixedIn.INCLUDED)
+                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+                    .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
+                    .sorted(columnOrderComparator(childSpec))
                     .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
                     .collect(Can.toCan());
+        }
+
+        private static Comparator<ObjectAssociation> columnOrderComparator(final ObjectSpecification childSpec) {
+            return propertyIdComparator(childSpec)
+                    .<Comparator<ObjectAssociation>>map(propertyIdComparator ->
+                            Comparator.comparing(ObjectAssociation::getId, propertyIdComparator))
+                    .orElse(ObjectMember.Comparators
+                            .<ObjectAssociation>byMemberOrderSequence(false)
+                            .thenComparing(ObjectAssociation::getId));
+        }
+
+        private static Optional<Comparator<String>> propertyIdComparator(final ObjectSpecification childSpec) {
+            val gridFacet = childSpec.lookupFacet(GridFacet.class).orElse(null);
+            if(gridFacet == null) {
+                return Optional.empty();
+            }
+            val grid = gridFacet.getGrid(null);
+            if(grid == null) {
+                return Optional.empty();
+            }
+            final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
+            grid.streamPropertyLayoutData()
+                    .map(PropertyLayoutData::getId)
+                    .forEach(propertyId -> propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size()));
+
+            return Optional.of(Comparator
+                    .<String>comparingInt(propertyId ->
+                            propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
+                    .thenComparing(Comparator.naturalOrder()));
         }
 
         private static boolean isEligibleFilterParameterProperty(final ObjectAssociation property) {
