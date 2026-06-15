@@ -85,21 +85,26 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
-        //FIXME honor qualified value semantics
-        var title = mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
-        System.err.println("title: %s".formatted(title));
+
+
+        var prerenderedTitle = spec.isValue()
+            // if value type, then support translation only for enums
+            ? spec.getCorrespondingClass().isEnum()
+                ? mo.getTranslationService().translate(TranslationContext.empty(), MmValueUtils.titleStringForValueType(feature, mo))
+                : MmValueUtils.titleStringForValueType(feature, mo)
+            : mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
 
         var prerenderedHtml = spec.isValue()
             ? "<span>%s</span>".formatted(
                     MmValueUtils.htmlStringForValueType(feature, mo))
             : "<span>%s %s</span>".formatted(
                     mo.getObjectRenderService().iconToHtml(mo.getIcon(IconSize.SMALL), IconSize.SMALL),
-                    title);
+                    prerenderedTitle);
 
         return Optional.of(new ObjectMementoSingular(
                 mo.logicalType(),
                 MmHintUtils.bookmarkElseFail(mo),
-                title,
+                prerenderedTitle,
                 prerenderedHtml));
     }
     /**
