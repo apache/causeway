@@ -29,6 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * 'Collection' of {@link ManagedObject}s.
@@ -54,8 +55,8 @@ implements
     @Override
     public String getTitle() {
         return nonScalar.stream()
-                    .map(ManagedObject::getTitle)
-                    .collect(Collectors.joining(","));
+            .map(ManagedObject::getTitle)
+            .collect(Collectors.joining(","));
     }
 
     @Override
@@ -67,9 +68,9 @@ implements
     }
 
     @Override
-    public Optional<ObjectMemento> getMemento() {
+    public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
         var listOfMementos = nonScalar.stream()
-            .map(scalar->scalar.getMementoElseFail())
+            .map(mo->mo.getMementoElseFail(feature))
             .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         var memento = ObjectMemento.packed(
             logicalType(),

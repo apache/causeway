@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -32,6 +33,7 @@ import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -77,9 +79,9 @@ implements ManagedObject {
                 case TRANSIENT->{
                     var stayTransient = !entityState.isRemoved()
                         && !entityState.isAttached();
-                    if(stayTransient) yield Optional.empty();
-                    if(entityState.hasOid()) yield Optional.of(PhaseState.BOOKMARKED);
-                    if(entityState.isTransientOrRemoved()) yield Optional.of(PhaseState.REMOVED);
+                    if(stayTransient){yield Optional.empty();}
+                    if(entityState.hasOid()){yield Optional.of(PhaseState.BOOKMARKED);}
+                    if(entityState.isTransientOrRemoved()){yield Optional.of(PhaseState.REMOVED);}
                     yield Optional.empty();
                 }
                 case BOOKMARKED->entityState.isTransientOrRemoved()
@@ -112,8 +114,8 @@ implements ManagedObject {
     }
 
     @Override
-    public Optional<ObjectMemento> getMemento() {
-        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
+    public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
+        return Optional.ofNullable(ObjectMemento.singularOrEmpty(feature, this));
     }
 
     @Override

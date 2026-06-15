@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#VIEWMODEL}
@@ -57,7 +58,7 @@ implements
         this(
             objSpec,
             new TransientObjectRef<>(pojo),
-            new TransientObjectRef<TransactionId>(null),
+            new TransientObjectRef<>(null),
             null);
         bookmarkIfKnown.ifPresent(bookmarkLazy::set);
     }
@@ -77,8 +78,8 @@ implements
     }
 
     @Override
-    public Optional<ObjectMemento> getMemento() {
-        return ObjectMemento.singular(this);
+    public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
+        return ObjectMemento.singular(feature, this);
     }
 
     @Override

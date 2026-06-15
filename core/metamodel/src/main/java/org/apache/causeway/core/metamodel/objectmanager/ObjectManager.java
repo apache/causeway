@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -45,9 +46,8 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectDementifie
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Bundles all domain object state related responsibilities:<br>
@@ -112,9 +112,8 @@ public record ObjectManager(
      * Supports alias lookup.
      */
     public Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
-        if(bookmark==null) {
+        if(bookmark==null)
             return Optional.empty();
-        }
         var specLoader = getMetaModelContext().getSpecificationLoader();
         return ProtoObject.resolve(specLoader, bookmark)
                 .map(this::loadObject);
@@ -203,40 +202,37 @@ public record ObjectManager(
             final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
         if(pojo==null) {
             ObjectSpecification objectSpecification = fallbackElementType.get();
-            if (objectSpecification.isSingular()) {
+            if (objectSpecification.isSingular())
                 return ManagedObject.empty(objectSpecification);
-            }
             // best we can do?
             return ManagedObject.unspecified();
         }
-        if(pojo instanceof ManagedObject) {
+        if(pojo instanceof ManagedObject)
             // yet ignoring any bookmarking policy, assuming this is not required here
             return (ManagedObject) pojo;
-        }
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
         var spec = specForType(pojo.getClass()).orElse(null);
-        if(spec==null) {
+        if(spec==null)
             // best we can do?
             return ManagedObject.unspecified();
-        }
         return spec.isSingular()
-                ? ManagedObject.adaptSingular(spec, pojo)
-                : ManagedObject.packed(
-                        spec.explicitElementSpec().orElseGet(fallbackElementType),
-                        _NullSafe.streamAutodetect(pojo)
-                        .map(element->adapt(element))
-                        .collect(Can.toCan()));
+            ? ManagedObject.adaptSingular(spec, pojo)
+            : ManagedObject.packed(
+                    spec.explicitElementSpec().orElseGet(fallbackElementType),
+                    _NullSafe.streamAutodetect(pojo)
+                    .map(this::adapt)
+                    .collect(Can.toCan()));
     }
 
     // -- OBJECT MEMENTOS
 
-    public Optional<ObjectMemento> mementify(final @Nullable ManagedObject object) {
+    public Optional<ObjectMemento> mementify(final @Nullable ObjectFeature feature, final @Nullable ManagedObject object) {
         return Optional.ofNullable(object)
-        .flatMap(ManagedObject::getMemento);
+            .flatMap(mo->mo.getMemento(feature));
     }
 
-    public ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
-        return object.getMemento()
+    public ObjectMemento mementifyElseFail(final @Nullable ObjectFeature feature, final @NonNull ManagedObject object) {
+        return object.getMemento(feature)
                 .orElseThrow(()->
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.objSpec()));
     }
@@ -246,11 +242,10 @@ public record ObjectManager(
         var spec = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType())
                 .orElse(null);
-        if(spec==null) {
+        if(spec==null)
             return memento.isEmpty()
-                    ? ManagedObject.unspecified()
-                    : null;
-        }
+                ? ManagedObject.unspecified()
+                : null;
         return objectDementifier().handleElseFail(new MementoRecreateRequest(spec, memento));
     }
 

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
@@ -38,14 +37,10 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 public final class ManagedAction extends ManagedMember {
@@ -167,9 +162,8 @@ public final class ManagedAction extends ManagedMember {
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult))
             return ManagedObject.empty(action.getReturnType());
-        }
 
         var resultPojo = actionResult.getPojo();
         var objManager = mmc().getObjectManager();
@@ -204,34 +198,6 @@ public final class ManagedAction extends ManagedMember {
 
     private ServiceRegistry getServiceRegistry() {
         return mmc().getServiceRegistry();
-    }
-
-    // -- MEMENTO FOR ARGUMENT LIST
-
-    public MementoForArgs getMementoForArgs(final Can<ManagedObject> args) {
-        return MementoForArgs.create(
-                getMetaModel().getMetaModelContext().getObjectManager(),
-                args);
-    }
-
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class MementoForArgs implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        static MementoForArgs create(
-                final ObjectManager objectManager,
-                final Can<ManagedObject> args) {
-            return new MementoForArgs(args.map(objectManager::mementifyElseFail));
-        }
-
-        private final Can<ObjectMemento> argsMementos;
-
-        public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
-            var argTypes = actionMeta.getParameterTypes();
-            var objectManager = actionMeta.getMetaModelContext().getObjectManager();
-            return argsMementos.zipMap(argTypes, (argMemento, argSpec)->
-                objectManager.demementify(argMemento));
-        }
     }
 
 }

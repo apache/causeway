@@ -46,7 +46,7 @@ implements
                 propertyModel.getUiProperty().detach();
             }
         }
-        return pendingValue().getValue().getValue().getMemento().orElseThrow();
+        return pendingValue().getValue().getValue().getMemento(attributeModel.getMetaModel()).orElseThrow();
     }
 
     @Override
