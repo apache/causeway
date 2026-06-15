@@ -60,6 +60,7 @@ import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
@@ -119,6 +120,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
@@ -1108,12 +1110,11 @@ public abstract class ObjectSpecificationAbstract
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection) {
             return collection.getElementType()
-                    .streamAssociations(MixedIn.INCLUDED)
-                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+                    .streamAssociationsForColumnRendering(new ColumnQuery(
+                            collection.getFeatureIdentifier(),
+                            ManagedObject.empty(parentSpec),
+                            AssociationsLookup.AVAILABLE))
                     .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
-                    .sorted(ObjectMember.Comparators
-                            .<ObjectAssociation>byMemberOrderSequence(false)
-                            .thenComparing(ObjectAssociation::getId))
                     .collect(Can.toCan());
         }
 
@@ -1156,9 +1157,14 @@ public abstract class ObjectSpecificationAbstract
                 final Can<ObjectAssociation> filterProperties) {
             val parameterTypes = new Class<?>[filterProperties.size()];
             for (int i = 0; i < filterProperties.size(); i++) {
-                parameterTypes[i] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
+                parameterTypes[i] = parameterTypeFor(filterProperties.getElseFail(i));
             }
             return parameterTypes;
+        }
+
+        private static Class<?> parameterTypeFor(final ObjectAssociation filterProperty) {
+            return ClassUtils.resolvePrimitiveIfNecessary(
+                    filterProperty.getElementType().getCorrespondingClass());
         }
 
         private static String[] parameterNames(

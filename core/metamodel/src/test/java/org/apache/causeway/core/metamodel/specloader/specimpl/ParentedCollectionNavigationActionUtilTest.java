@@ -106,6 +106,8 @@ class ParentedCollectionNavigationActionUtilTest {
         @Getter
         private final Lease otherLease;
         @Getter
+        private boolean checkbox;
+        @Getter
         private BoundedReference boundedReference;
         @Getter
         private SelectableReference choicesReference;
@@ -214,10 +216,16 @@ class ParentedCollectionNavigationActionUtilTest {
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class OrderedLeaseItem {
         @Getter
-        @PropertyLayout(sequence = "2")
+        @PropertyLayout(sequence = "1")
         private String name;
         @Getter
-        @PropertyLayout(sequence = "1")
+        @PropertyLayout(sequence = "2")
+        private Blob attachment;
+        @Getter
+        @PropertyLayout(sequence = "3")
+        private boolean checkbox;
+        @Getter
+        @PropertyLayout(sequence = "4")
         private Integer sequence;
     }
 
@@ -383,8 +391,20 @@ class ParentedCollectionNavigationActionUtilTest {
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val parameters = orderedNavigationAction.getParameters();
 
-        assertThat(parameters.getElseFail(0).getId(), is("sequence"));
-        assertThat(parameters.getElseFail(1).getId(), is("name"));
+        assertThat(parameters.getElseFail(0).getId(), is("name"));
+        assertThat(parameters.getElseFail(1).getId(), is("checkbox"));
+        assertThat(parameters.getElseFail(2).getId(), is("sequence"));
+    }
+
+    @Test
+    void exposes_mandatory_boolean_child_parameter_as_optional_boxed_filter() {
+        val checkboxParameter = navigationAction.getParameters().stream()
+                .filter(parameter -> parameter.getId().equals("checkbox"))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(checkboxParameter.getElementType().getCorrespondingClass(), is(Boolean.class));
+        assertThat(checkboxParameter.isOptional(), is(true));
     }
 
     @Test
@@ -462,6 +482,56 @@ class ParentedCollectionNavigationActionUtilTest {
 
         assertThat(consent.isVetoed(), is(true));
         assertThat(consent.getReasonAsString().orElseThrow(), containsString("0 items match. Use parameters to match just one item."));
+    }
+
+    @Test
+    void unselected_boolean_filter_is_not_applied() {
+        val lease = new Lease();
+        val falseItem = new LeaseItem("same", 1, null);
+        falseItem.checkbox = false;
+        val trueItem = new LeaseItem("same", 2, null);
+        trueItem.checkbox = true;
+        lease.getItems().add(falseItem);
+        lease.getItems().add(trueItem);
+
+        val consent = validateWithCheckbox(lease, "same", null);
+
+        assertThat(consent.isVetoed(), is(true));
+        assertThat(consent.getReasonAsString().orElseThrow(), containsString("2 items match. Use parameters to match just one item."));
+    }
+
+    @Test
+    void explicit_false_boolean_filter_is_applied() {
+        val lease = new Lease();
+        val falseItem = new LeaseItem("same", 1, null);
+        falseItem.checkbox = false;
+        val trueItem = new LeaseItem("same", 2, null);
+        trueItem.checkbox = true;
+        lease.getItems().add(falseItem);
+        lease.getItems().add(trueItem);
+
+        assertThat(validateWithCheckbox(lease, "same", false).isAllowed(), is(true));
+
+        val result = invokeWithCheckbox(lease, "same", false);
+
+        assertThat(result.getPojo(), is(falseItem));
+    }
+
+    @Test
+    void explicit_true_boolean_filter_is_applied() {
+        val lease = new Lease();
+        val falseItem = new LeaseItem("same", 1, null);
+        falseItem.checkbox = false;
+        val trueItem = new LeaseItem("same", 2, null);
+        trueItem.checkbox = true;
+        lease.getItems().add(falseItem);
+        lease.getItems().add(trueItem);
+
+        assertThat(validateWithCheckbox(lease, "same", true).isAllowed(), is(true));
+
+        val result = invokeWithCheckbox(lease, "same", true);
+
+        assertThat(result.getPojo(), is(trueItem));
     }
 
     @Test
@@ -588,7 +658,7 @@ class ParentedCollectionNavigationActionUtilTest {
         val result = publishingNavigationAction.getFacet(ActionInvocationFacet.class).invoke(
                 publishingNavigationAction,
                 publishingNavigationAction.interactionHead(leaseAdapter),
-                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
+                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(result.getPojo(), is(matchingItem));
@@ -623,7 +693,7 @@ class ParentedCollectionNavigationActionUtilTest {
         publishingNavigationAction.getFacet(ActionInvocationFacet.class).invoke(
                 publishingNavigationAction,
                 publishingNavigationAction.interactionHead(leaseAdapter),
-                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null),
+                arguments(publishingNavigationAction, publishingMmc, leaseAdapter, "first", 1, null, null, null, null),
                 InteractionInitiatedBy.USER);
 
         assertThat(command.getPublishingPhase(), is(Command.CommandPublishingPhase.ONHOLD));
@@ -695,7 +765,18 @@ class ParentedCollectionNavigationActionUtilTest {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         return navigationAction.isArgumentSetValid(
                 navigationAction.interactionHead(leaseAdapter),
-                arguments(navigationAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, boundedReference, choicesReference, autocompleteReference),
+                InteractionInitiatedBy.USER);
+    }
+
+    private Consent validateWithCheckbox(
+            final Lease lease,
+            final String name,
+            final Boolean checkbox) {
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        return navigationAction.isArgumentSetValid(
+                navigationAction.interactionHead(leaseAdapter),
+                arguments(navigationAction, mmc, leaseAdapter, name, null, checkbox, null, null, null),
                 InteractionInitiatedBy.USER);
     }
 
@@ -706,7 +787,7 @@ class ParentedCollectionNavigationActionUtilTest {
         val leaseAdapter = mmc.getObjectManager().adapt(lease);
         return navigationAction.executeWithRuleChecking(
                 navigationAction.interactionHead(leaseAdapter),
-                arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null, null),
                 InteractionInitiatedBy.USER,
                 null);
     }
@@ -730,7 +811,20 @@ class ParentedCollectionNavigationActionUtilTest {
         return actionInvocationFacet.invoke(
                 navigationAction,
                 navigationAction.interactionHead(leaseAdapter),
-                arguments(navigationAction, mmc, leaseAdapter, name, sequence, boundedReference, choicesReference, autocompleteReference),
+                arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, boundedReference, choicesReference, autocompleteReference),
+                InteractionInitiatedBy.USER);
+    }
+
+    private ManagedObject invokeWithCheckbox(
+            final Lease lease,
+            final String name,
+            final Boolean checkbox) {
+        val leaseAdapter = mmc.getObjectManager().adapt(lease);
+        val actionInvocationFacet = navigationAction.getFacet(ActionInvocationFacet.class);
+        return actionInvocationFacet.invoke(
+                navigationAction,
+                navigationAction.interactionHead(leaseAdapter),
+                arguments(navigationAction, mmc, leaseAdapter, name, null, checkbox, null, null, null),
                 InteractionInitiatedBy.USER);
     }
 
@@ -738,7 +832,7 @@ class ParentedCollectionNavigationActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null);
+        return arguments(navigationAction, mmc, leaseAdapter, name, sequence, null, null, null, null);
     }
 
     private Can<ManagedObject> arguments(
@@ -746,7 +840,7 @@ class ParentedCollectionNavigationActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence) {
-        return arguments(navigationAction, context, leaseAdapter, name, sequence, null, null, null);
+        return arguments(navigationAction, context, leaseAdapter, name, sequence, null, null, null, null);
     }
 
     private Can<ManagedObject> arguments(
@@ -755,12 +849,13 @@ class ParentedCollectionNavigationActionUtilTest {
             final ManagedObject leaseAdapter,
             final String name,
             final Integer sequence,
+            final Boolean checkbox,
             final BoundedReference boundedReference,
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
         return action.getParameters().stream()
                 .map(parameter -> {
-                    val value = valueFor(parameter.getId(), name, sequence, boundedReference, choicesReference, autocompleteReference);
+                    val value = valueFor(parameter.getId(), name, sequence, checkbox, boundedReference, choicesReference, autocompleteReference);
                     return value != null
                             ? context.getObjectManager().adapt(value)
                             : ManagedObject.empty(parameter.getElementType());
@@ -772,6 +867,7 @@ class ParentedCollectionNavigationActionUtilTest {
             final String parameterId,
             final String name,
             final Integer sequence,
+            final Boolean checkbox,
             final BoundedReference boundedReference,
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
@@ -780,6 +876,8 @@ class ParentedCollectionNavigationActionUtilTest {
             return name;
         case "sequence":
             return sequence;
+        case "checkbox":
+            return checkbox;
         case "boundedReference":
             return boundedReference;
         case "choicesReference":
