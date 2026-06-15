@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
+
 import org.apache.wicket.model.IModel;
 import org.jspecify.annotations.NonNull;
 
@@ -51,7 +52,7 @@ implements IModel<ManagedObject>, HasMetaModelContext {
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject managedObject) {
         this(objectMember,
-            managedObject.getMemento().orElseThrow(),
+            managedObject.getMemento(objectMember).orElseThrow(),
             new TransientObjectRef<>(managedObject));
     }
 

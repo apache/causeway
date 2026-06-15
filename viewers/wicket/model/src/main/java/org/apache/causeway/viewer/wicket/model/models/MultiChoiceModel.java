@@ -54,8 +54,8 @@ implements
         log.debug("getObject() as unpackedValue {}", unpackedValues);
 
         var mementos = unpackedValues.stream()
-        .map(ManagedObject::getMementoElseFail)
-        .collect(Collectors.toCollection(()->new ArrayList<ObjectMemento>()));
+            .map(this::objectMemento)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         log.debug("getObject() as unpackedMemento {}", mementos);
         return mementos;
@@ -72,6 +72,12 @@ implements
     @Override
     public void detach() {
         attributeModel.detach();
+    }
+
+    // -- HELPER
+
+    private ObjectMemento objectMemento(final ManagedObject mo) {
+        return mo.getMementoElseFail(attributeModel().getMetaModel());
     }
 
 }

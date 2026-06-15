@@ -76,8 +76,8 @@ implements HasMetaModelContext, Serializable {
      */
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
         return _NullSafe.stream(ids)
-                .map(this::mementoFromId)
-                .collect(Collectors.toList());
+            .map(this::mementoFromId)
+            .collect(Collectors.toList());
     }
 
     // -- UTIL
@@ -85,7 +85,7 @@ implements HasMetaModelContext, Serializable {
     /** adapter method */
     org.wicketstuff.select2.ChoiceProvider<ObjectMemento> toSelect2ChoiceProvider() {
         var delegate = this;
-        return new org.wicketstuff.select2.ChoiceProvider<ObjectMemento>() {
+        return new org.wicketstuff.select2.ChoiceProvider<>() {
             private static final long serialVersionUID = 1L;
 
             @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
@@ -105,16 +105,20 @@ implements HasMetaModelContext, Serializable {
 
     // -- HELPER
 
+    private ObjectMemento objectMemento(final ManagedObject mo) {
+        return mo.getMementoElseFail(attributeModel().getMetaModel());
+    }
+
     private Can<ObjectMemento> queryAll() {
         return attributeModel().getChoices() // must not return detached entities
-                .map(ManagedObject::getMementoElseFail);
+                .map(this::objectMemento);
     }
 
     private Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
         var autoCompleteAdapters = Facets
                 .autoCompleteExecute(attributeModel().getElementType(), term);
         return autoCompleteAdapters
-                .map(ManagedObject::getMementoElseFail);
+                .map(this::objectMemento);
     }
 
     private Can<ObjectMemento> queryWithAutoComplete(final String term) {
@@ -123,7 +127,7 @@ implements HasMetaModelContext, Serializable {
                 ? ((UiParameter)attributeModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         var pendingArgMementos = pendingArgs
-                .map(ManagedObject::getMementoElseFail);
+                .map(this::objectMemento);
 
         if(attributeModel.isParameter()) {
             // recover any pendingArgs
@@ -136,8 +140,8 @@ implements HasMetaModelContext, Serializable {
         }
 
         return attributeModel
-                .getAutoComplete(term)
-                .map(ManagedObject::getMementoElseFail);
+            .getAutoComplete(term)
+            .map(this::objectMemento);
     }
 
     private Can<ManagedObject> reconstructPendingArgs(

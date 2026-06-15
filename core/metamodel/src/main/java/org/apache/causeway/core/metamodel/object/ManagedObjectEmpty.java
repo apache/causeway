@@ -21,9 +21,11 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#EMPTY}
@@ -49,7 +51,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     }
 
     @Override
-    public Optional<ObjectMemento> getMemento() {
+    public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
         return Optional.of(ObjectMemento.empty(objSpec().logicalType()));
     }
 

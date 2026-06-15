@@ -21,12 +21,15 @@ package org.apache.causeway.core.metamodel.object;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 public interface Bookmarkable {
 
@@ -67,9 +70,9 @@ public interface Bookmarkable {
      *  with an additional memorized object title, based on whether
      *  is supported and a {@link Bookmark} is available.
      */
-    Optional<ObjectMemento> getMemento();
-    default ObjectMemento getMementoElseFail() {
-        return getMemento()
+    Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature);
+    default ObjectMemento getMementoElseFail(final @Nullable ObjectFeature feature) {
+        return getMemento(feature)
                 .orElseThrow(()->_Exceptions.illegalState("failed to create memento for %s", this));
     }
 
@@ -83,7 +86,7 @@ public interface Bookmarkable {
         @Override default boolean isBookmarkSupported() { return false; }
         @Override default Optional<Bookmark> getBookmark() { return Optional.empty(); }
         @Override default boolean isBookmarkMemoized() { return false; }
-        @Override default Optional<ObjectMemento> getMemento() { return Optional.empty(); }
+        @Override default Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) { return Optional.empty(); }
     }
 
     static interface BookmarkRefreshable extends Bookmarkable {

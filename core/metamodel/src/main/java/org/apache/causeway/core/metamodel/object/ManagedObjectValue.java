@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -31,6 +32,7 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#VALUE}
@@ -61,8 +63,8 @@ implements ManagedObject {
     }
 
     @Override
-    public Optional<ObjectMemento> getMemento() {
-        return ObjectMemento.singular(this);
+    public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
+        return ObjectMemento.singular(feature, this);
     }
 
     @Override

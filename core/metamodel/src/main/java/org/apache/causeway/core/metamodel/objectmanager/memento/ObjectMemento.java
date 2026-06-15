@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmHintUtils;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * @since 2.0
@@ -67,6 +68,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     }
 
     static Optional<ObjectMemento> singular(
+            final @Nullable ObjectFeature feature,
             final @Nullable ManagedObject mo) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
             return Optional.empty();
@@ -83,30 +85,36 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
-        var title = mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
+        var prerenderedTitle = spec.isValue()
+            // if value type, then support translation only for enums
+            ? spec.getCorrespondingClass().isEnum()
+                ? mo.getTranslationService().translate(TranslationContext.empty(), MmValueUtils.titleStringForValueType(feature, mo))
+                : MmValueUtils.titleStringForValueType(feature, mo)
+            : mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));
 
         var prerenderedHtml = spec.isValue()
             ? "<span>%s</span>".formatted(
-                    MmValueUtils.htmlStringForValueType(null, mo)) // currently only the default value semantics is supported
+                    MmValueUtils.htmlStringForValueType(feature, mo))
             : "<span>%s %s</span>".formatted(
                     mo.getObjectRenderService().iconToHtml(mo.getIcon(IconSize.SMALL), IconSize.SMALL),
-                    title);
+                    prerenderedTitle);
 
-        return Optional.ofNullable(new ObjectMementoSingular(
+        return Optional.of(new ObjectMementoSingular(
                 mo.logicalType(),
                 MmHintUtils.bookmarkElseFail(mo),
-                title,
+                prerenderedTitle,
                 prerenderedHtml));
     }
     /**
      * returns null for null
      */
     @Nullable static ObjectMemento singularOrEmpty(
-            final @Nullable ManagedObject adapter) {
-        MmAssertionUtils.assertPojoIsScalar(adapter);
-        return singular(adapter)
-            .orElseGet(()->ManagedObjects.isSpecified(adapter)
-                    ? ObjectMemento.empty(adapter.logicalType())
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject mo) {
+        MmAssertionUtils.assertPojoIsScalar(mo);
+        return singular(feature, mo)
+            .orElseGet(()->ManagedObjects.isSpecified(mo)
+                    ? ObjectMemento.empty(mo.logicalType())
                     : null);
     }
     static ObjectMemento packed(

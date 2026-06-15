@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -31,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -55,25 +55,39 @@ public class MmValueUtils {
 
     // -- RENDERER
 
+    public String titleStringForValueType(
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject mo) {
+        return render(feature, mo, Renderer::titlePresentation);
+    }
+
     public String htmlStringForValueType(
             final @Nullable ObjectFeature feature,
-            final @Nullable ManagedObject adapter) {
+            final @Nullable ManagedObject mo) {
+        return render(feature, mo, Renderer::htmlPresentation);
+    }
 
-        if(!ManagedObjects.isSpecified(adapter)) return "";
+    private interface RenderingFun {
+        String render(Renderer<Object> renderer, ValueSemanticsProvider.Context context, Object pojo);
+    }
 
-        var spec = adapter.objSpec();
+    private String render(
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject mo,
+            final RenderingFun renderingFun) {
+        if(!ManagedObjects.isSpecified(mo)) return "";
+
+        var spec = mo.objSpec();
         var valueFacet = spec.valueFacet().orElse(null);
-        if(valueFacet==null) {
-            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
-        }
+        if(valueFacet==null)
+            return "missing ValueFacet %s".formatted(spec.getCorrespondingClass());
 
         @SuppressWarnings("unchecked")
         var renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
-        if(renderer==null) {
-            return String.format("missing Renderer %s", spec.getCorrespondingClass());
-        }
+        if(renderer==null)
+            return "missing Renderer %s".formatted(spec.getCorrespondingClass());
 
-        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
+        return renderingFun.render(renderer, valueFacet.createValueSemanticsContext(feature), mo.getPojo());
     }
 
     // -- TEMPORAL SUPPORT
