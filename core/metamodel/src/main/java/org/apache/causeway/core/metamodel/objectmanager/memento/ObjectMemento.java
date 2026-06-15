@@ -85,8 +85,6 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
-
-
         var prerenderedTitle = spec.isValue()
             // if value type, then support translation only for enums
             ? spec.getCorrespondingClass().isEnum()
