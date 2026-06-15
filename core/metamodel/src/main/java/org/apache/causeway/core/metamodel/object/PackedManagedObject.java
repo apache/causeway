@@ -70,7 +70,7 @@ implements
     @Override
     public Optional<ObjectMemento> getMemento(final @Nullable ObjectFeature feature) {
         var listOfMementos = nonScalar.stream()
-            .map(mo->mo.getMementoElseFail(feature))
+            .map(scalar->scalar.getMementoElseFail(feature))
             .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         var memento = ObjectMemento.packed(
             logicalType(),
