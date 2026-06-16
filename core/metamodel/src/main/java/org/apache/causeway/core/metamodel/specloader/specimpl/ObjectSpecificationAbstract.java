@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -60,7 +57,6 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -94,7 +90,6 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -1118,38 +1113,11 @@ public abstract class ObjectSpecificationAbstract
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.REFERENCES_PARENT))
                     .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
-                    .sorted(columnOrderComparator(childSpec))
+                    .sorted(ObjectMember.Comparators
+                            .<ObjectAssociation>byMemberOrderSequence(false)
+                            .thenComparing(ObjectAssociation::getId))
                     .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
                     .collect(Can.toCan());
-        }
-
-        private static Comparator<ObjectAssociation> columnOrderComparator(final ObjectSpecification childSpec) {
-            return propertyIdComparator(childSpec)
-                    .<Comparator<ObjectAssociation>>map(propertyIdComparator ->
-                            Comparator.comparing(ObjectAssociation::getId, propertyIdComparator))
-                    .orElse(ObjectMember.Comparators
-                            .<ObjectAssociation>byMemberOrderSequence(false)
-                            .thenComparing(ObjectAssociation::getId));
-        }
-
-        private static Optional<Comparator<String>> propertyIdComparator(final ObjectSpecification childSpec) {
-            val gridFacet = childSpec.lookupFacet(GridFacet.class).orElse(null);
-            if(gridFacet == null) {
-                return Optional.empty();
-            }
-            val grid = gridFacet.getGrid(null);
-            if(grid == null) {
-                return Optional.empty();
-            }
-            final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
-            grid.streamPropertyLayoutData()
-                    .map(PropertyLayoutData::getId)
-                    .forEach(propertyId -> propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size()));
-
-            return Optional.of(Comparator
-                    .<String>comparingInt(propertyId ->
-                            propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
-                    .thenComparing(Comparator.naturalOrder()));
         }
 
         private static boolean isEligibleFilterParameterProperty(final ObjectAssociation property) {
