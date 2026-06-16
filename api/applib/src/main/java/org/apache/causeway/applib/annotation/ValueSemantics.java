@@ -24,6 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
@@ -67,10 +68,22 @@ public @interface ValueSemantics {
     // -- NUMBER CONSTRAINTS
 
     /**
-     * If associated with a {@link Number}, the maximum number of total digits accepted for
-     * this number.<br>
-     * Can be omitted, if {@link Column#precision()} is used.<br>
-     * default = {@code 65}
+     * If associated with {@link BigDecimal}, {@link BigInteger},
+     * or any Java integer type (long, int, short, byte),
+     * the maximum number of total digits accepted for input (editing).
+     *
+     * <p> But input is not constrained for double/float, since those
+     * types have fixed intrinsic precision and their bit representation does not
+     * directly correspond to decimal digits. Further more, double/float may support
+     * scientific notation for input (as well as display), where the notion of 'total digits' is
+     * no longer viable.
+     *
+     * <p> When {@link Column#precision()} {@code >0} is used,
+     * while {@link ValueSemantics} is not used,
+     * then {@link Column#precision()} is undersood as an alias for this annotation attribute.
+     *
+     * <p> default = {@code 65}
+     *
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#precision()
      */
@@ -78,18 +91,37 @@ public @interface ValueSemantics {
         default 65;
 
     /**
-     * If associated with a {@link Number}, the minimum number of integer digits required for
-     * this number.<br>
-     * default = {@code 1}
+     * If associated with any Java number type {@link BigDecimal}, {@link BigInteger},
+     * long, int, short, byte, double or float,
+     * the minimum number of integer digits required for
+     * input (editing).
+     *
+     * <p> For double/float specifically, requires their decimal representation, to satisfy this requirement.
+     * Those types may support scientific notation for input (as well as display), where the notion of 'integer digits'
+     * is still viable.
+     *
+     * <p> default = {@code 1}
      */
     int minIntegerDigits()
         default 1;
 
     /**
-     * If associated with a {@link BigDecimal}, the maximum number of fractional digits accepted
-     * for this number.<br>
-     * Can be omitted, if {@link Column#scale()} is used.<br>
-     * default = {@code 30}
+     * If associated with any non-integer {@link Number} type,
+     * the maximum number of fractional decimal digits displayed.
+     *
+     * <p> If associated with a {@link BigDecimal} specifically,
+     * also governs the maximum number of fractional digits accepted for input (editing).
+     *
+     * <p> But input is not constrained for double/float, since those
+     * types have fixed intrinsic precision and their bit representation does not
+     * directly correspond to decimal digits.
+     *
+     * <p> When {@link Column#scale()} {@code >0} is used on a {@link BigDecimal},
+     * while {@link ValueSemantics} is not used,
+     * then {@link Column#scale()} is undersood as an alias for this annotation attribute.
+     *
+     * <p> default = {@code 30}
+     *
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#scale()
      */
@@ -97,9 +129,10 @@ public @interface ValueSemantics {
         default 30;
 
     /**
-     * If associated with a {@link BigDecimal}, the minimum number of fractional digits
-     * required for this number.<br>
-     * default = {@code 0}
+     * If associated with any non-integer {@link Number} type,
+     * the minimum number of fractional digits displayed.
+     *
+     * <p> default = {@code 0}
      */
     int minFractionalDigits()
         default 0;
@@ -133,8 +166,10 @@ public @interface ValueSemantics {
      * If associated with a temporal value,
      * that has time-zone or time-offset information,
      * the rendering mode, as to whether to transform the rendered value
-     * to the user's local/current time-zone or not.<br>
-     * default = {@link TimeZoneTranslation#TO_LOCAL_TIMEZONE}
+     * to the user's local/current time-zone or not.
+     *
+     * <p>default = {@link TimeZoneTranslation#TO_LOCAL_TIMEZONE}
+     *
      * @see TimeZoneTranslation
      */
     TimeZoneTranslation timeZoneTranslation()
@@ -151,14 +186,10 @@ public @interface ValueSemantics {
      * after the actually stored date.
      * For negative <i>n</i> its days before respectively.
      *
-     * <p>
-     * This is intended to be used so that an exclusive end date of an interval
+     * <p>This is intended to be used so that an exclusive end date of an interval
      * can be rendered as 1 day before the actual value stored.
-     * </p>
      *
-     * <p>
-     * For example:
-     * </p>
+     * <p> For example:
      * <pre>
      * public LocalDate getStartDate() { ... }
      *
@@ -166,11 +197,9 @@ public @interface ValueSemantics {
      * public LocalDate getEndDate() { ... }
      * </pre>
      *
-     * <p>
-     * Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
+     * <p>Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
      * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
      * In the domain object, itself, however, the value stored is 1-jun-2013.
-     * </p>
      */
     int dateRenderAdjustDays()
         default 0;

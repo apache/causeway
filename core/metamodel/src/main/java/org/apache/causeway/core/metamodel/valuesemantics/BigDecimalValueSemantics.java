@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
 import jakarta.inject.Inject;
@@ -121,37 +120,35 @@ implements
 
     @Override
     public void configureDecimalFormat(
-            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
-
+            final ValueSemanticsProvider.Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
         if(context==null)
             return;
 
-        var specificationLoader = MetaModelContext.instanceElseFail().getSpecificationLoader();
-        var feature = specificationLoader.loadFeature(context.featureIdentifier())
-                .orElse(null);
+        var feature = MetaModelContext.instanceElseFail().getSpecificationLoader()
+            .loadFeature(context.featureIdentifier())
+            .orElse(null);
         if(feature==null)
             return;
 
         // evaluate any facets that provide the MaximumFractionDigits
         Facets.maxFractionalDigits(feature)
-                .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
+                .ifPresent(format::setMaximumFractionDigits);
 
         var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
-        // we skip this when PARSING,
-        // because we want to firstly parse any number value into a BigDecimal,
-        // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(!usedFor.isParsing() || bigDecimalConfig.editing().preserveScale()) {
+        if(!usedFor.isParsing()
+                || bigDecimalConfig.editing().preserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
-            OptionalInt optionalInt = Facets.minFractionalDigits(feature);
-            if (optionalInt.isPresent()) {
-                format.setMinimumFractionDigits(optionalInt.getAsInt());
-            } else {
-                // otherwise, apply a minScale if configured.
-                Optional.ofNullable(bigDecimalConfig.display().minScale())
-                    .ifPresent(format::setMinimumFractionDigits);
-            }
+            Facets.minFractionalDigits(feature)
+            .ifPresentOrElse(
+                    format::setMinimumFractionDigits,
+                    ()->{
+                        // otherwise, apply a minScale if configured.
+                        Optional.ofNullable(bigDecimalConfig.display().minScale())
+                        .ifPresent(format::setMinimumFractionDigits);
+                    });
         }
+
     }
 
     @Override

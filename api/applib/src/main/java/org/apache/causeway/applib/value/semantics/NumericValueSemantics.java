@@ -177,7 +177,9 @@ implements
      *      based on {@link #grouping()}
      */
     protected void configureDecimalFormat(
-            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+            final ValueSemanticsProvider.@Nullable Context context,
+            final DecimalFormat format,
+            final FormatUsageFor usedFor) {
     }
 
     protected Optional<BigInteger> parseInteger(
