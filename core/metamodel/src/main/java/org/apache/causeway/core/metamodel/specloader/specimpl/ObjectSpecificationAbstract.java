@@ -1107,13 +1107,16 @@ public abstract class ObjectSpecificationAbstract
         private static Can<ObjectAssociation> filterPropertiesOf(
                 final ObjectSpecification parentSpec,
                 final OneToManyAssociation collection) {
-            return collection.getElementType()
+            val childSpec = collection.getElementType();
+            return childSpec
                     .streamAssociations(MixedIn.INCLUDED)
                     .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
-                    .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
+                    .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.REFERENCES_PARENT))
+                    .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
                     .sorted(ObjectMember.Comparators
                             .<ObjectAssociation>byMemberOrderSequence(false)
                             .thenComparing(ObjectAssociation::getId))
+                    .filter(ParentedCollectionNavigationActionUtil::isEligibleFilterParameterProperty)
                     .collect(Can.toCan());
         }
 
@@ -1156,9 +1159,14 @@ public abstract class ObjectSpecificationAbstract
                 final Can<ObjectAssociation> filterProperties) {
             val parameterTypes = new Class<?>[filterProperties.size()];
             for (int i = 0; i < filterProperties.size(); i++) {
-                parameterTypes[i] = filterProperties.getElseFail(i).getElementType().getCorrespondingClass();
+                parameterTypes[i] = parameterTypeFor(filterProperties.getElseFail(i));
             }
             return parameterTypes;
+        }
+
+        private static Class<?> parameterTypeFor(final ObjectAssociation filterProperty) {
+            return ClassUtils.resolvePrimitiveIfNecessary(
+                    filterProperty.getElementType().getCorrespondingClass());
         }
 
         private static String[] parameterNames(
