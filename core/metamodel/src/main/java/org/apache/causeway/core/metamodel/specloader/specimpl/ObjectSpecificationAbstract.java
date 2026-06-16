@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacet
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.FaFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForScalarReferenceNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutOrderFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacetDefault;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacetDefault;
@@ -1193,6 +1194,7 @@ public abstract class ObjectSpecificationAbstract
             FacetUtil.addFacet(new FaFacetForParentedCollectionNavigation(facetedMethod));
             FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionNavigation(
                     collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
+            FacetUtil.addFacet(new LayoutOrderFacetForParentedCollectionNavigation(collection, facetedMethod));
             FacetUtil.addFacet(new ParentedCollectionNavigationFacetDefault(collection, facetedMethod));
             FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionNavigation(collection, facetedMethod));
             FacetUtil.addFacet(new ActionSemanticsFacetForParentedCollectionNavigation(facetedMethod));
