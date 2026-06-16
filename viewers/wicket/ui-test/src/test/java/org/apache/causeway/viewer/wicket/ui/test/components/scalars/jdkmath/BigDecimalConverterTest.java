@@ -66,10 +66,11 @@ class BigDecimalConverterTest {
     }
 
     @Test
-    void scale4_english() {
+    void scaleNone_english() {
         var converterTester = converterTester();
-        converterTester.setScenario(Locale.ENGLISH, newConverter(converterTester, CustomerScale4.class));
-        converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.45");    // the 2nd value is the bigdecimal as rendered for parsing; by default we do not preserve fractional digits/scale
+        converterTester.setScenario(Locale.ENGLISH, newConverter(converterTester, CustomerScaleNone.class));
+        // the 2nd value is the BigDecimal as given as UI input; by default we do not preserve fractional digits/scale
+        converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.45");
     }
 
     @Test
@@ -78,6 +79,7 @@ class BigDecimalConverterTest {
             "causeway.valueTypes.bigDecimal.editing.preserveScale=true"));
         converterTester.setScenario(Locale.ENGLISH, newConverter(converterTester, CustomerScale4.class));
         converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.4500");
+        converterTester.assertRoundtrip(bd_123_45_scale4, "123.45", "123.4500"); // also supports padding of zeros
     }
 
     @Test
@@ -166,7 +168,8 @@ class BigDecimalConverterTest {
     @DomainObject
     static class CustomerScale4 {
         @Property @Getter @Setter
-        @Digits(fraction = 4, integer = 20)
+        //@Digits(fraction = 4, integer = 20) //FIXME there is also Column ... use a parameterized test
+        @ValueSemantics(minFractionalDigits = 4)
         private BigDecimal value;
     }
 

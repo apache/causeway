@@ -175,12 +175,10 @@ public class ConverterTester<T extends Serializable> {
                 assertTemporalEquals(
                         (java.util.Date)value, (java.util.Date)parsedValue);
             } else {
-                assertEquals(
-                        value, parsedValue);
+                assertEquals(value, parsedValue);
             }
 
-            assertEquals(
-                    expectedText, scenario.converter.convertToString(value, LOCALE_NOT_USED));
+            assertEquals(expectedText, scenario.converter.convertToString(value, LOCALE_NOT_USED));
         });
     }
 

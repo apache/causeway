@@ -31,9 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -48,11 +46,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
-extends NumericValueSemantics<Short>
-implements
-    DefaultsProvider<Short>,
-    Parser<Short>,
-    IdStringifier.EntityAgnostic<Short> {
+extends NumericValueSemanticsAbstract<Short>
+implements IdStringifier.EntityAgnostic<Short> {
 
     @Override
     public Class<Short> getCorrespondingClass() {
@@ -67,6 +62,11 @@ implements
     @Override
     public Short getDefaultValue() {
         return Short.valueOf((short) 0);
+    }
+
+    @Override
+    protected boolean isIntegerOnly() {
+        return true;
     }
 
     // -- COMPOSER
@@ -137,7 +137,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends ShortValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -145,7 +145,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends ShortValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -153,7 +153,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends ShortValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }

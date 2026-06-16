@@ -65,7 +65,7 @@ public @interface ValueSemantics {
     String provider()
         default "";
 
-    // -- NUMBER CONSTRAINTS
+    // -- DIGIT CONSTRAINTS
 
     /**
      * If associated with {@link BigDecimal}, {@link BigInteger},

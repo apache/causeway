@@ -26,9 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.primitives._Floats;
@@ -43,10 +41,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
-extends NumericValueSemantics<Float>
-implements
-    DefaultsProvider<Float>,
-    Parser<Float> {
+extends NumericValueSemanticsAbstract<Float> {
 
     @Override
     public Class<Float> getCorrespondingClass() {
@@ -61,6 +56,11 @@ implements
     @Override
     public Float getDefaultValue() {
         return 0.f;
+    }
+
+    @Override
+    protected boolean isIntegerOnly() {
+        return false;
     }
 
     // -- COMPOSER
@@ -106,7 +106,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends FloatValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -114,7 +114,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends FloatValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -122,7 +122,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends FloatValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }
