@@ -44,6 +44,7 @@ import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
 import org.apache.causeway.applib.annotation.Bounding;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -60,6 +61,8 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
@@ -68,6 +71,8 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
@@ -210,6 +215,7 @@ class ParentedCollectionNavigationActionUtilTest {
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class OrderedLease {
         @Getter
+        @CollectionLayout(sequence = "7")
         private final List<OrderedLeaseItem> items = new ArrayList<>();
     }
 
@@ -394,6 +400,23 @@ class ParentedCollectionNavigationActionUtilTest {
         assertThat(parameters.getElseFail(0).getId(), is("name"));
         assertThat(parameters.getElseFail(1).getId(), is("checkbox"));
         assertThat(parameters.getElseFail(2).getId(), is("sequence"));
+    }
+
+    @Test
+    void derives_navigation_action_member_order_from_associated_collection_lazily() {
+        val orderedMmc = newMetamodelContext();
+        orderedMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
+        val orderedLeaseSpec = orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class);
+        val orderedNavigationAction = orderedLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+        val layoutOrderFacet = orderedNavigationAction.getFacet(LayoutOrderFacet.class);
+        val collection = orderedLeaseSpec.getCollectionElseFail("items");
+
+        assertThat(layoutOrderFacet.getSequence(), is("7"));
+
+        FacetUtil.addFacet(LayoutOrderFacetForLayoutXml.create(42, collection, Facet.Precedence.HIGH, null));
+
+        assertThat(layoutOrderFacet.getSequence(), is("42"));
     }
 
     @Test

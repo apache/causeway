@@ -65,6 +65,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.OidDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant.Role;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -274,6 +275,23 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .map(CommandRecord::commandDto)
                 .map(CommandDto::getTimestamp)
                 .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime);
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "3.0",
+            fieldSetId = "details",
+            hidden = Where.OBJECT_FORMS,
+            describedAs = "Target of the command")
+    public String getTarget() {
+        return commandRecord()
+                .map(CommandRecord::commandDto)
+                .map(CommandDto::getTargets)
+                .map(OidsDto::getOid)   // returns a list of OidDto's, in fact
+                .flatMap(oidDtoList -> Optional.ofNullable(oidDtoList.isEmpty() ? null : oidDtoList.get(0)))
+                .map(Bookmark::forOidDto)
+                .map(Bookmark::stringify)
+                .orElse(null);
     }
 
     @Property

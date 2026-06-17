@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.command;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -88,6 +90,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static final Pattern ID_PARSER =
             Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
+
+    private static final String PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX = "__causeway_navigate_to_one_of_";
 
     @Inject final BookmarkService bookmarkService;
     @Inject final SudoService sudoService;
@@ -202,7 +206,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
             // it will switch the targetAdapter to be the mixedInAdapter transparently
-            val argAdapters = argAdaptersFor(actionDto);
+            val argAdapters = argAdaptersFor(actionDto, objectAction);
 
             val interactionHead = objectAction.interactionHead(targetAdapter);
 
@@ -353,12 +357,46 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 //               name.equalsIgnoreCase("token");
 //    }
 
+    Can<ManagedObject> argAdaptersFor(final ActionDto actionDto, final ObjectAction objectAction) {
+        if(objectAction.getId().startsWith(PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX)) {
+            return argAdaptersForParentedCollectionNavigation(actionDto, objectAction);
+        }
+        return argAdaptersFor(actionDto);
+    }
+
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
         IndexedFunction<ParamDto, ManagedObject> paramDtoManagedObjectIndexedFunction = (i, paramDto) ->
                 valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased(paramDtoManagedObjectIndexedFunction)).collect(Can.toCan());
+    }
+
+    private Can<ManagedObject> argAdaptersForParentedCollectionNavigation(
+            final ActionDto actionDto,
+            final ObjectAction objectAction) {
+        // Synthetic navigate-to-one actions derive optional filters from collection columns.
+        // Older command DTOs can therefore contain fewer parameters, or parameters in a previous order.
+        // Align by stable parameter id/friendly name and pad missing filters as empty/unselected.
+        val paramDtoByName = new HashMap<String, ParamDto>();
+        val paramDtos = streamParamDtosFrom(actionDto).collect(Can.toCan());
+        paramDtos.stream()
+                .filter(paramDto -> paramDto.getName() != null)
+                .forEach(paramDto -> paramDtoByName.putIfAbsent(paramDto.getName(), paramDto));
+
+        val actionParameters = objectAction.getParameters();
+        val argAdapters = new ArrayList<ManagedObject>(actionParameters.size());
+        for(int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
+            val actionParameter = actionParameters.getElseFail(paramNum);
+            val paramDto = Optional.ofNullable(paramDtoByName.get(actionParameter.getId()))
+                    .orElseGet(() -> paramDtoByName.get(actionParameter.getCanonicalFriendlyName()));
+            if(paramDto != null) {
+                argAdapters.add(valueMarshaller.recoverParameterFrom(actionParameter.getFeatureIdentifier(), paramDto));
+                continue;
+            }
+            argAdapters.add(ManagedObject.empty(actionParameter.getElementType()));
+        }
+        return Can.ofCollection(argAdapters);
     }
 
     private static Stream<ParamDto> streamParamDtosFrom(final ActionDto actionDto) {
