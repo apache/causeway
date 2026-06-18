@@ -28,8 +28,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 class CommandExportManagerMovementSupport {
 
@@ -184,8 +186,11 @@ class CommandExportManagerMovementSupport {
     private static void updateCommandDtoTimestamp(
             final CommandLogEntry entry,
             final Timestamp timestamp) {
-        if (entry.getCommandDto() != null) {
-            entry.getCommandDto().setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
+        final var commandDto = entry.getCommandDto();
+        if (commandDto != null) {
+            var commandDtoCopy = CommandDtoUtils.copy(commandDto);
+            commandDtoCopy.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
+            entry.setCommandDto(commandDtoCopy);
         }
     }
 
