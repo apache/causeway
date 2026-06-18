@@ -66,7 +66,7 @@ public final class CommandManagerReplay
         this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
 
-    CommandManagerReplay(
+    public CommandManagerReplay(
             final State state,
             final ReplayContext replayContext) {
         super(state, replayContext);
