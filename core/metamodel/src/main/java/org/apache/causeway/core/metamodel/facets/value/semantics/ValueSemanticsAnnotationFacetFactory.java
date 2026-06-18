@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
@@ -44,30 +43,29 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        var valueSemanticsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        ValueSemantics.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
+        var valueSemanticsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    ValueSemantics.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @jakarta.validation.constraints.Digits
-        var digitsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Digits.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
+        var digitsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Digits.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
 
-        processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processMethodContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        var valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
-
+        var valueSemanticsOpt = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
         // support for @jakarta.validation.constraints.Digits
-        var digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
+        var digitsOpt = processParameterContext.synthesizeOnParameter(Digits.class);
 
-        processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processParameterContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     // -- HELPER
@@ -98,12 +96,8 @@ extends FacetFactoryAbstract {
 
         // max total digits
         addFacetIfPresent(
-            MaxTotalDigitsFacet.strongestConstraint(
-                MaxTotalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsOpt, facetHolder),
-                // support for @jakarta.validation.constraints.Digits
-                MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
-                    .create(digitsOpt, facetHolder)));
+            MaxTotalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, facetHolder));
 
         // max integer digits
         addFacetIfPresent(

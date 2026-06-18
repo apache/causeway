@@ -100,7 +100,7 @@ public interface JsonValueConverter {
             @Override
             public OptionalInt maxTotalDigits(final @Nullable ManagedObject value) {
                 return streamFacetHolders(value)
-                    .map(Facets::maxTotalDigits)
+                    .map(Facets::maxTotalDigitsInferred)
                     .findFirst()
                     .orElseGet(OptionalInt::empty);
             }

@@ -68,8 +68,10 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -252,6 +254,20 @@ public final class Facets {
 
     // -- VALUE SEMANTICS
 
+    public OptionalInt maxIntegerDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxIntegerDigitsFacet.class)
+                .map(MaxIntegerDigitsFacet::maxIntegerDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt minIntegerDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MinIntegerDigitsFacet.class)
+                .map(MinIntegerDigitsFacet::minIntegerDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
+
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
             .map(MinFractionalDigitsFacet::minFractionalDigits)
@@ -268,22 +284,46 @@ public final class Facets {
             .orElseGet(OptionalInt::empty);
     }
 
-    public OptionalInt maxLength(final FacetHolder facetHolder) {
-        return facetHolder
-            .lookupFacet(MaxLengthFacet.class)
-            .map(MaxLengthFacet::value)
-            .map(OptionalInt::of)
-            .orElseGet(OptionalInt::empty);
+    /**
+     * Does not consult the combination of maxIntegerDigits and maxFractionalDigits.
+     */
+    public OptionalInt maxTotalDigitsExplicit(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
+                .map(MaxTotalDigitsFacet::maxTotalDigits)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
 
-    public OptionalInt maxTotalDigits(final FacetHolder facetHolder) {
-        return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
-            .map(MaxTotalDigitsFacet::maxTotalDigits)
-            .map(OptionalInt::of)
-            .orElseGet(OptionalInt::empty);
+    /**
+     * Consults all available constraints, in contrast to {@link #maxTotalDigits(FacetHolder)}
+     */
+    public OptionalInt maxTotalDigitsInferred(final FacetHolder facetHolder) {
+        var maxInt = maxIntegerDigits(facetHolder);
+        if(!maxInt.isPresent())
+            return maxTotalDigitsExplicit(facetHolder);
+
+        var maxFrac = maxFractionalDigits(facetHolder);
+        if(!maxFrac.isPresent())
+            return maxTotalDigitsExplicit(facetHolder);
+
+        int inferredMaxTot = maxInt.getAsInt() + maxFrac.getAsInt();
+
+        var maxTot = maxTotalDigitsExplicit(facetHolder);
+        if(!maxTot.isPresent())
+            return OptionalInt.of(inferredMaxTot);
+
+        return OptionalInt.of(Math.min(maxTot.getAsInt(), inferredMaxTot));
     }
 
     // --
+
+    public OptionalInt maxLength(final FacetHolder facetHolder) {
+        return facetHolder
+                .lookupFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::value)
+                .map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
+    }
 
     public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(MixinFacet.class);

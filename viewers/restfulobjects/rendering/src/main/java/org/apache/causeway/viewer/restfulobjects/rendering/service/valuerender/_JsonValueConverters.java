@@ -80,9 +80,8 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.STRING){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
+                if (repr.isString())
                     return repr.asString();
-                }
                 return null;
             }
             @Override
@@ -102,9 +101,8 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.BOOLEAN){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isBoolean()) {
+                if (repr.isBoolean())
                     return repr.asBoolean();
-                }
                 return null;
             }
             @Override
@@ -124,18 +122,14 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.BYTE){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().byteValue();
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return (byte)(int)repr.asInt();
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return (byte)(long)repr.asLong();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().byteValue();
-                }
                 return null;
             }
             @Override
@@ -155,18 +149,14 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.SHORT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().shortValue();
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return (short)(int)repr.asInt();
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return (short)(long)repr.asLong();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().shortValue();
-                }
                 return null;
             }
             @Override
@@ -186,18 +176,14 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.INT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return repr.asInt();
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return repr.asLong().intValue();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().intValue();
-                }
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().intValue();
-                }
                 return null;
             }
             @Override
@@ -217,26 +203,21 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.LONG){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return repr.asLong();
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return repr.asLong();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().longValue();
-                }
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().longValue();
-                }
                 return null;
             }
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof Long) {
-                    final Long l = (Long) obj;
+                if(obj instanceof final Long l) {
                     repr.mapPutLongNullable("value", l);
                 } else {
                     repr.mapPut("value", obj);
@@ -249,29 +230,23 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.FLOAT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isDecimal()) {
+                if (repr.isDecimal())
                     return repr.asDouble().floatValue();
-                }
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().floatValue();
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return repr.asLong().floatValue();
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return repr.asInt().floatValue();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().floatValue();
-                }
                 return null;
             }
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof Float) {
-                    final Float f = (Float) obj;
+                if(obj instanceof final Float f) {
                     repr.mapPutFloatNullable("value", f);
                 } else {
                     repr.mapPut("value", obj);
@@ -284,32 +259,25 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.DOUBLE){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isDecimal()) {
+                if (repr.isDecimal())
                     return repr.asDouble();
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return repr.asLong().doubleValue();
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return repr.asInt().doubleValue();
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger().doubleValue();
-                }
-                if (repr.isBigDecimal()) {
+                if (repr.isBigDecimal())
                     return repr.asBigDecimal().doubleValue();
-                }
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return repr.asNumber().doubleValue();
-                }
                 return null;
             }
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof Double) {
-                    final Double d = (Double) obj;
+                if(obj instanceof final Double d) {
                     repr.mapPutDoubleNullable("value", d);
                 } else {
                     repr.mapPut("value", obj);
@@ -324,9 +292,8 @@ final class _JsonValueConverters {
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
                     final String str = repr.asString();
-                    if(str != null && str.length()>0) {
+                    if(str != null && str.length()>0)
                         return str.charAt(0);
-                    }
                 }
                 // in case a char literal was provided
                 if(repr.isInt()) {
@@ -342,8 +309,7 @@ final class _JsonValueConverters {
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof Character) {
-                    final Character c = (Character) obj;
+                if(obj instanceof final Character c) {
                     repr.mapPutCharNullable("value", c);
                 } else {
                     repr.mapPut("value", obj);
@@ -356,29 +322,23 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.BIGINTEGER){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
+                if (repr.isString())
                     return new BigInteger(repr.asString());
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return repr.asBigInteger(format);
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return BigInteger.valueOf(repr.asLong());
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return BigInteger.valueOf(repr.asInt());
-                }
-                if (repr.isNumber()) {
+                if (repr.isNumber())
                     return BigInteger.valueOf(repr.asNumber().longValue());
-                }
                 return null;
             }
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof BigInteger) {
-                    final BigInteger bi = (BigInteger) obj;
+                if(obj instanceof final BigInteger bi) {
                     repr.mapPutBigInteger("value", bi);
                     // custom format if constrained
                     context.maxTotalDigits(objectAdapter)
@@ -399,40 +359,33 @@ final class _JsonValueConverters {
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.BIGDECIMAL){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
+                if (repr.isString())
                     return new BigDecimal(repr.asString());
-                }
-                if (repr.isBigDecimal()) {
+                if (repr.isBigDecimal())
                     return repr.asBigDecimal(format);
-                }
-                if (repr.isBigInteger()) {
+                if (repr.isBigInteger())
                     return new BigDecimal(repr.asBigInteger());
-                }
-                if (repr.isDecimal()) {
+                if (repr.isDecimal())
                     return BigDecimal.valueOf(repr.asDouble());
-                }
-                if (repr.isLong()) {
+                if (repr.isLong())
                     return BigDecimal.valueOf(repr.asLong());
-                }
-                if (repr.isInt()) {
+                if (repr.isInt())
                     return BigDecimal.valueOf(repr.asInt());
-                }
                 return null;
             }
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof BigDecimal) {
-                    final BigDecimal bd = (BigDecimal) obj;
+                if(obj instanceof BigDecimal bd) {
                     repr.mapPutBigDecimal("value", bd);
 
                     // custom format if constrained
                     final int totalDigits = context.maxTotalDigits(objectAdapter).orElse(-1);
                     final int scale = context.maxFractionalDigits(objectAdapter).orElse(-1);
-                    if(totalDigits>-1
-                            && scale>-1) {
-                        var formatOverride = String.format("big-decimal(%d,%d)", totalDigits, scale);
+                    if(totalDigits > -1
+                            && scale > -1) {
+                        var formatOverride = "big-decimal(%d,%d)".formatted(totalDigits, scale);
                         repr.putFormat(formatOverride);
                     } else {
                         repr.putFormat(format);
@@ -477,8 +430,7 @@ final class _JsonValueConverters {
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof java.sql.Timestamp) {
-                    final java.sql.Timestamp date = (java.sql.Timestamp) obj;
+                if(obj instanceof final java.sql.Timestamp date) {
                     final long millisStr = date.getTime();
                     repr.mapPutLong("value", millisStr);
                 } else {
