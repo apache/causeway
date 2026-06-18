@@ -16,32 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 
-record MaxTotalDigitsFacetFromJpaColumnAnnotation(
-        int maxTotalDigits,
+record MinFractionalDigitsFacetFromJakartaDigitsAnnotation(
+        int minFractionalDigits,
         FacetHolder facetHolder)
-implements MaxTotalDigitsFacet {
+implements MinFractionalDigitsFacet {
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> columnOpt,
+    static Optional<MinFractionalDigitsFacet> create(
+            final Optional<Digits> digitsIfAny,
             final FacetHolder holder) {
-        return columnOpt
-            .filter(column->column.precision()>0)
-            .map(column->
-                new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                        column.precision(), holder));
+        return digitsIfAny
+            .map(digits-> new MinFractionalDigitsFacetFromJakartaDigitsAnnotation(digits.fraction(), holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
+    @Override public Class<? extends Facet> facetType() { return MinFractionalDigitsFacet.class; }
     @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

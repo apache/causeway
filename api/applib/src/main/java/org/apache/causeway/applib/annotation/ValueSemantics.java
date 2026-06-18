@@ -82,13 +82,13 @@ public @interface ValueSemantics {
      * while {@link ValueSemantics} is not used,
      * then {@link Column#precision()} is undersood as an alias for this annotation attribute.
      *
-     * <p> default = {@code 65}
+     * <p> default = {@code 0} understood as unlimited
      *
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#precision()
      */
     int maxTotalDigits()
-        default 65;
+        default 0;
 
     /**
      * If associated with any Java number type {@link BigDecimal}, {@link BigInteger},
@@ -100,7 +100,7 @@ public @interface ValueSemantics {
      * Those types may support scientific notation for input (as well as display), where the notion of 'integer digits'
      * is still viable.
      *
-     * <p> default = {@code 0} understood as unconstraint
+     * <p> default = {@code 0} understood as unlimited
      */
     int maxIntegerDigits()
         default 0;
@@ -135,13 +135,13 @@ public @interface ValueSemantics {
      * while {@link ValueSemantics} is not used,
      * then {@link Column#scale()} is undersood as an alias for this annotation attribute.
      *
-     * <p> default = {@code 30}
+     * <p> default = {@code -1} understood as unlimited
      *
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#scale()
      */
     int maxFractionalDigits()
-        default 30;
+        default -1;
 
     /**
      * If associated with any non-integer {@link Number} type,

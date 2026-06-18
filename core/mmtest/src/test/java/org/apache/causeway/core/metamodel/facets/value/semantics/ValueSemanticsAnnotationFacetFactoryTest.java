@@ -36,6 +36,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
@@ -60,6 +61,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().process(processMethodContext);
             // then
             assertMaxTotalDigits(facetedMethod, 5);
+            assertDefaultMaxIntegerDigits(facetedMethod);
             assertDefaultMinIntegerDigits(facetedMethod);
             assertDefaultMaxFractionalDigits(facetedMethod);
             assertDefaultMinFractionalDigits(facetedMethod);
@@ -80,6 +82,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().processParams(processParameterContext);
             // then
             assertMaxTotalDigits(facetedMethodParameter, 5);
+            assertDefaultMaxIntegerDigits(facetedMethodParameter);
             assertDefaultMinIntegerDigits(facetedMethodParameter);
             assertDefaultMaxFractionalDigits(facetedMethodParameter);
             assertDefaultMinFractionalDigits(facetedMethodParameter);
@@ -92,7 +95,7 @@ extends FacetFactoryTestAbstract {
     void minIntegerPickedUpOnProperty() {
         // given
         class Order {
-            @ValueSemantics(minIntegerDigits = 5)
+            @ValueSemantics(minIntegerDigits = 5, maxIntegerDigits = 6)
             public BigDecimal getCost() { return null; }
         }
         propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
@@ -100,6 +103,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().process(processMethodContext);
             // then
             assertDefaultMaxTotalDigits(facetedMethod);
+            assertMaxIntegerDigits(facetedMethod, 6);
             assertMinIntegerDigits(facetedMethod, 5);
             assertDefaultMaxFractionalDigits(facetedMethod);
             assertDefaultMinFractionalDigits(facetedMethod);
@@ -112,7 +116,7 @@ extends FacetFactoryTestAbstract {
         @SuppressWarnings("unused")
         class Order {
             public void updateCost(
-                    @ValueSemantics(minIntegerDigits = 5)
+                    @ValueSemantics(minIntegerDigits = 5, maxIntegerDigits = 6)
                     final BigDecimal cost) { }
         }
         parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
@@ -120,6 +124,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().processParams(processParameterContext);
             // then
             assertDefaultMaxTotalDigits(facetedMethodParameter);
+            assertMaxIntegerDigits(facetedMethodParameter, 6);
             assertMinIntegerDigits(facetedMethodParameter, 5);
             assertDefaultMaxFractionalDigits(facetedMethodParameter);
             assertDefaultMinFractionalDigits(facetedMethodParameter);
@@ -140,6 +145,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().process(processMethodContext);
             // then
             assertDefaultMaxTotalDigits(facetedMethod);
+            assertDefaultMaxIntegerDigits(facetedMethod);
             assertDefaultMinIntegerDigits(facetedMethod);
             assertMaxFractionalDigits(facetedMethod, 5);
             assertDefaultMinFractionalDigits(facetedMethod);
@@ -160,6 +166,7 @@ extends FacetFactoryTestAbstract {
             newFacetFactory().processParams(processParameterContext);
             // then
             assertDefaultMaxTotalDigits(facetedMethodParameter);
+            assertDefaultMaxIntegerDigits(facetedMethodParameter);
             assertDefaultMinIntegerDigits(facetedMethodParameter);
             assertMaxFractionalDigits(facetedMethodParameter, 5);
             assertDefaultMinFractionalDigits(facetedMethodParameter);
@@ -374,7 +381,11 @@ extends FacetFactoryTestAbstract {
     }
 
     private void assertDefaultMaxTotalDigits(final FacetHolder facetedMethod) {
-        assertMaxTotalDigits(facetedMethod, 65);
+        assertMaxTotalDigits(facetedMethod, 0);
+    }
+
+    private void assertDefaultMaxIntegerDigits(final FacetHolder facetedMethod) {
+        assertMaxIntegerDigits(facetedMethod, 0);
     }
 
     private void assertDefaultMinIntegerDigits(final FacetHolder facetedMethod) {
@@ -382,7 +393,7 @@ extends FacetFactoryTestAbstract {
     }
 
     private void assertDefaultMaxFractionalDigits(final FacetHolder facetedMethod) {
-        assertMaxFractionalDigits(facetedMethod, 30);
+        assertMaxFractionalDigits(facetedMethod, -1);
     }
 
     private void assertDefaultMinFractionalDigits(final FacetHolder facetedMethod) {
@@ -391,73 +402,90 @@ extends FacetFactoryTestAbstract {
 
     private void assertMaxTotalDigits(
             final FacetHolder facetedMethod, final int maxTotalDigits) {
-        final MaxTotalDigitsFacet facet = facetedMethod.getFacet(MaxTotalDigitsFacet.class);
+        final MaxTotalDigitsFacet facet = facetedMethod.lookupFacet(MaxTotalDigitsFacet.class).orElse(null);
+        if(facet==null && maxTotalDigits==0)
+            return; // absence of the facet is semantically equal to maxTotalDigits=0
         assertNotNull(facet);
-        assertThat(facet.getMaxTotalDigits(), is(maxTotalDigits));
+        assertThat(facet.maxTotalDigits(), is(maxTotalDigits));
+    }
+
+    private void assertMaxIntegerDigits(
+            final FacetHolder facetedMethod, final int maxIntegerDigits) {
+        final MaxIntegerDigitsFacet facet = facetedMethod.lookupFacet(MaxIntegerDigitsFacet.class).orElse(null);
+        if(facet==null && maxIntegerDigits==0)
+            return; // absence of the facet is semantically equal to maxIntegerDigits=0
+        assertNotNull(facet);
+        assertThat(facet.maxIntegerDigits(), is(maxIntegerDigits));
     }
 
     private void assertMinIntegerDigits(
             final FacetHolder facetedMethod, final int minIntegerDigits) {
-        final MinIntegerDigitsFacet facet = facetedMethod.getFacet(MinIntegerDigitsFacet.class);
+        final MinIntegerDigitsFacet facet = facetedMethod.lookupFacet(MinIntegerDigitsFacet.class).orElse(null);
+        if(facet==null && minIntegerDigits==1)
+            return; // absence of the facet is semantically equal to minIntegerDigits=1
         assertNotNull(facet);
         assertThat(facet.minIntegerDigits(), is(minIntegerDigits));
     }
 
     private void assertMaxFractionalDigits(
             final FacetHolder facetedMethod, final int maxFractionalDigits) {
-        final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
+        final MaxFractionalDigitsFacet facet = facetedMethod.lookupFacet(MaxFractionalDigitsFacet.class).orElse(null);
+        if(facet==null && maxFractionalDigits==-1)
+            return; // absence of the facet is semantically equal to maxFractionalDigits=-1
         assertNotNull(facet);
-        assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
+        assertThat(facet.maxFractionalDigits(), is(maxFractionalDigits));
     }
 
     private void assertMinFractionalDigits(
             final FacetHolder facetedMethod, final int minFractionalDigits) {
-        final MinFractionalDigitsFacet facet = facetedMethod.getFacet(MinFractionalDigitsFacet.class);
+        final MinFractionalDigitsFacet facet = facetedMethod.lookupFacet(MinFractionalDigitsFacet.class).orElse(null);
+        if(facet==null && minFractionalDigits==0)
+            return; // absence of the facet is semantically equal to minFractionalDigits=0
         assertNotNull(facet);
-        assertThat(facet.getMinFractionalDigits(), is(minFractionalDigits));
+        assertThat(facet.minFractionalDigits(), is(minFractionalDigits));
     }
 
     private void assertDigitsFacets(
             final FacetHolder facetedMethod, final int maxTotalDigits, final int maxFractionalDigits) {
         if(maxTotalDigits>=0) {
-            final MaxTotalDigitsFacet facet = facetedMethod.getFacet(MaxTotalDigitsFacet.class);
+            final MaxTotalDigitsFacet facet = facetedMethod.lookupFacet(MaxTotalDigitsFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation);
-            assertThat(facet.getMaxTotalDigits(), is(maxTotalDigits));
+            assertThat(facet.maxTotalDigits(), is(maxTotalDigits));
         }
 
         if(maxFractionalDigits>=0) {
-            final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
+            final MaxFractionalDigitsFacet facet = facetedMethod.lookupFacet(MaxFractionalDigitsFacet.class).orElse(null);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation);
-            assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
+            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJakartaDigitsAnnotation);
+            assertThat(facet.maxFractionalDigits(), is(maxFractionalDigits));
         }
     }
 
     private void assertDateRenderAdjustDays(
             final FacetedMethod facetedMethod, final int adjustDays) {
-        final DateRenderAdjustFacet facet = facetedMethod.getFacet(DateRenderAdjustFacet.class);
+        final DateRenderAdjustFacet facet = facetedMethod.lookupFacet(DateRenderAdjustFacet.class).orElse(null);
         assertNotNull(facet);
         assertThat(facet.getDateRenderAdjustDays(), is(adjustDays));
     }
 
     private void assertDateFormatStyle(
             final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
-        final DateFormatStyleFacet facet = facetedMethod.getFacet(DateFormatStyleFacet.class);
+        final DateFormatStyleFacet facet = facetedMethod.lookupFacet(DateFormatStyleFacet.class).orElse(null);
         assertNotNull(facet);
         assertThat(facet.getDateFormatStyle(), is(formatStyle));
     }
 
     private void assertTimeFormatStyle(
             final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
-        final TimeFormatStyleFacet facet = facetedMethod.getFacet(TimeFormatStyleFacet.class);
+        final TimeFormatStyleFacet facet = facetedMethod.lookupFacet(TimeFormatStyleFacet.class).orElse(null);
         assertNotNull(facet);
         assertThat(facet.getTimeFormatStyle(), is(formatStyle));
     }
 
     private void assertTimeZoneTranslation(
             final FacetedMethod facetedMethod, final TimeZoneTranslation timeZoneTranslation) {
-        final TimeZoneTranslationFacet facet = facetedMethod.getFacet(TimeZoneTranslationFacet.class);
+        final TimeZoneTranslationFacet facet = facetedMethod.lookupFacet(TimeZoneTranslationFacet.class).orElse(null);
         assertNotNull(facet);
         assertThat(facet.getTimeZoneTranslation(), is(timeZoneTranslation));
     }

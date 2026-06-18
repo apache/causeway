@@ -254,7 +254,7 @@ public final class Facets {
 
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
-            .map(MinFractionalDigitsFacet::getMinFractionalDigits)
+            .map(MinFractionalDigitsFacet::minFractionalDigits)
             .filter(digits->digits>-1)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
@@ -262,7 +262,7 @@ public final class Facets {
 
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
-            .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+            .map(MaxFractionalDigitsFacet::maxFractionalDigits)
             .filter(digits->digits>-1)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
@@ -278,7 +278,7 @@ public final class Facets {
 
     public OptionalInt maxTotalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
-            .map(MaxTotalDigitsFacet::getMaxTotalDigits)
+            .map(MaxTotalDigitsFacet::maxTotalDigits)
             .map(OptionalInt::of)
             .orElseGet(OptionalInt::empty);
     }

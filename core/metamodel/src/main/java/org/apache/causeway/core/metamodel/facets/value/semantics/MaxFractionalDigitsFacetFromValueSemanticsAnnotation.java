@@ -21,25 +21,25 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+record MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+        int maxFractionalDigits,
+        FacetHolder facetHolder)
+implements MaxFractionalDigitsFacet {
 
-    public static Optional<MaxFractionalDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+    static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<ValueSemantics> digitsOpt,
             final FacetHolder holder) {
-
-        return digitsIfAny
+        return digitsOpt
+            .filter(digits->digits.maxFractionalDigits()>-1)
             .map(digits->new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
                     digits.maxFractionalDigits(), holder));
-   }
+    }
 
-   private MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
-           final int maxFractionalDigits, final FacetHolder holder) {
-       super(maxFractionalDigits, holder);
-   }
+    @Override public Class<? extends Facet> facetType() { return MaxFractionalDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

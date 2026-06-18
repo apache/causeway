@@ -22,24 +22,23 @@ import java.util.Optional;
 
 import jakarta.validation.constraints.Digits;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+record MaxFractionalDigitsFacetFromJakartaDigitsAnnotation(
+        int maxFractionalDigits,
+        FacetHolder facetHolder)
+implements MaxFractionalDigitsFacet {
 
-     public static Optional<MaxFractionalDigitsFacet> create(
-             final Optional<Digits> digitsIfAny,
-             final FacetHolder holder) {
-
-         return digitsIfAny
-             .map(digits-> new MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
+    static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<Digits> digitsOpt,
+            final FacetHolder holder) {
+        return digitsOpt
+            .map(digits-> new MaxFractionalDigitsFacetFromJakartaDigitsAnnotation(digits.fraction(), holder));
     }
 
-    private MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(
-            final int fraction, final FacetHolder holder) {
-        super(fraction, holder);
-    }
+    @Override public Class<? extends Facet> facetType() { return MaxFractionalDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

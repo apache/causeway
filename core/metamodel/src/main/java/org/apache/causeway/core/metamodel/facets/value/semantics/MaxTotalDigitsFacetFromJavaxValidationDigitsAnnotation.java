@@ -22,27 +22,30 @@ import java.util.Optional;
 
 import jakarta.validation.constraints.Digits;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
-extends MaxTotalDigitsFacetAbstract {
+//TODO remove
+@Deprecated // this is an inferred facet, no longer required since max integer digits and max fractional digits have their own facets which always need to be satisfied
+record MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
+        int maxTotalDigits,
+        FacetHolder facetHolder)
+implements MaxTotalDigitsFacet {
 
-    public static Optional<MaxTotalDigitsFacet> create(
+    @Deprecated
+    static Optional<MaxTotalDigitsFacet> create(
             final Optional<Digits> digitsIfAny,
             final FacetHolder holder) {
-
         return digitsIfAny
-        .map(digits->{
-            return new MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
-                    digits.integer() + digits.fraction(), holder);
-        });
-   }
+            .filter(digits->digits.integer()>0 && digits.fraction()>0) //TODO does not apply when float/double !!
+            .map(digits->new MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
+                    digits.integer() + digits.fraction(), holder));
+    }
 
-   private MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
-           final int maxTotalDigits, final FacetHolder holder) {
-       super(maxTotalDigits, holder);
-   }
+    @Deprecated
+    @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
+    @Deprecated
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

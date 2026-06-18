@@ -16,32 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.persistence.Column;
-
+import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 
-record MaxTotalDigitsFacetFromJpaColumnAnnotation(
-        int maxTotalDigits,
+record MaxIntegerDigitsFacetFromValueSemanticsAnnotation(
+        int maxIntegerDigits,
         FacetHolder facetHolder)
-implements MaxTotalDigitsFacet {
+implements MaxIntegerDigitsFacet {
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> columnOpt,
+    public static Optional<MaxIntegerDigitsFacet> create(
+            final Optional<ValueSemantics> valueSemanticsOpt,
             final FacetHolder holder) {
-        return columnOpt
-            .filter(column->column.precision()>0)
-            .map(column->
-                new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                        column.precision(), holder));
+        return valueSemanticsOpt
+            .filter(valueSemantics->valueSemantics.maxIntegerDigits()>0)
+            .map(valueSemantics->
+                new MaxIntegerDigitsFacetFromValueSemanticsAnnotation(valueSemantics.maxIntegerDigits(), holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
+    @Override public Class<? extends Facet> facetType() { return MaxIntegerDigitsFacet.class; }
     @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

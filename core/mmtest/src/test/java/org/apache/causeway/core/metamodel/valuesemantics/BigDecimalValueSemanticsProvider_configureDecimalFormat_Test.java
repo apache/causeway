@@ -31,10 +31,10 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.ConfigurationTester;
@@ -69,6 +69,20 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         valueSemantics = new BigDecimalValueSemantics();
     }
 
+    static record MaxFractionalDigitsFacetDummy(
+            int maxFractionalDigits,
+            FacetHolder facetHolder) implements MaxFractionalDigitsFacet {
+        @Override public Class<? extends Facet> facetType() { return MaxFractionalDigitsFacet.class; }
+        @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    }
+
+    static record MinFractionalDigitsFacetDummy(
+            int minFractionalDigits,
+            FacetHolder facetHolder) implements MinFractionalDigitsFacet {
+        @Override public Class<? extends Facet> facetType() { return MinFractionalDigitsFacet.class; }
+        @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    }
+
     @Test
     void max_and_min_facets_set() {
 
@@ -77,9 +91,9 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
         // expecting
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MaxFractionalDigitsFacet.class))
-                .thenReturn(Optional.of(new MaxFractionalDigitsFacetAbstract(maxScale, mockObjectFeature) {}));
+                .thenReturn(Optional.of(new MaxFractionalDigitsFacetDummy(maxScale, mockObjectFeature)));
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
-               .thenReturn(Optional.of(new MinFractionalDigitsFacetAbstract(minScale, mockObjectFeature) {}));
+               .thenReturn(Optional.of(new MinFractionalDigitsFacetDummy(minScale, mockObjectFeature)));
 
         new ConfigurationTester(TestPropertyValues.of("causeway.valueTypes.bigDecimal.display.minScale="))
             .test(causewayConfiguration->{
@@ -100,7 +114,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(minScale);
-
             });
     }
 
@@ -112,7 +125,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
         // expecting
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MaxFractionalDigitsFacet.class))
-                .thenReturn(Optional.of(new MaxFractionalDigitsFacetAbstract(maxScale, mockObjectFeature) {}));
+                .thenReturn(Optional.of(new MaxFractionalDigitsFacetDummy(maxScale, mockObjectFeature)));
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
@@ -135,7 +148,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(fallbackScale);
-
             });
     }
 
@@ -147,7 +159,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
         // expecting
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MaxFractionalDigitsFacet.class))
-                .thenReturn(Optional.of(new MaxFractionalDigitsFacetAbstract(maxScale, mockObjectFeature) {}));
+                .thenReturn(Optional.of(new MaxFractionalDigitsFacetDummy(maxScale, mockObjectFeature)));
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
@@ -170,7 +182,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
                 // then
                 Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
                 Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(defaultScale);
-
             });
     }
 
