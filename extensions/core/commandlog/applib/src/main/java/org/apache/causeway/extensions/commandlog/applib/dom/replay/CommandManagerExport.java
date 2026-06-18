@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
-
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -43,17 +40,13 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
-import lombok.Data;
 import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
@@ -61,15 +54,13 @@ import lombok.Getter;
 @Named(CommandManagerExport.LOGICAL_TYPE_NAME)
 public final class CommandManagerExport
         extends CommandManagerAbstract
-        implements ViewModel, ReplayableCommandParticipantTracker {
+        implements ReplayableCommandParticipantTracker {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
     static final String SCRATCHPAD_KEY = LOGICAL_TYPE_NAME + "#current";
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
-
-    ReplayContext replayContext;
 
 
     @Inject
@@ -79,27 +70,15 @@ public final class CommandManagerExport
         this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
 
-    public CommandManagerExport(
+    CommandManagerExport(
             final State state,
             final ReplayContext replayContext) {
-        this.baseline = state.timestamp;
-        this.limit = state.limit;
-        this.replayContext = replayContext;
+        super(state, replayContext);
     }
 
     @ObjectSupport public String title() {
         return "Command Export Manager";
     }
-
-    @Property
-    @PropertyLayout(describedAs = "Only commands after this timestamp are available")
-    @Getter
-    private java.sql.Timestamp baseline;
-
-    @Property
-    @PropertyLayout(describedAs = "Number of commands per page")
-    @Getter
-    private int limit;
 
     @Override
     @Programmatic
@@ -107,6 +86,7 @@ public final class CommandManagerExport
         return new CommandManagerExport(new State(baseline, this.limit), replayContext);
     }
 
+    @Override
     @Programmatic
     public CommandManagerExport withLimit(final int limit) {
         return new CommandManagerExport(new State(this.baseline, limit), replayContext);
@@ -274,52 +254,10 @@ public final class CommandManagerExport
                 .map(CommandManagerExport.class::cast);
     }
 
-    // -- VM STATE
-
-    @Override
-    public String viewModelMemento() {
-        return new State(baseline, limit).toMemento();
-    }
 
     // -- HELPER
     private CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
-    }
-
-    @Data
-    public static class State {
-        private static final String DELIMITER = "--";
-
-        private final Timestamp timestamp;
-        private final int limit;
-
-        public static State parseMemento(final String memento, final State fallback) {
-            if (memento == null || memento.isEmpty()) {
-                return fallback;
-            }
-            try {
-                final String[] parts = memento.split(DELIMITER, -1);
-                if (parts.length != 2) {
-                    return fallback;
-                }
-
-                final Timestamp fallbackTimestamp = fallback != null
-                        ? fallback.timestamp
-                        : Timestamp.from(Instant.now());
-                final int fallbackLimit = fallback != null ? fallback.limit : 0;
-
-                final Timestamp timestamp = fromString(parts[0], fallbackTimestamp);
-                final int limit = parts[1].isBlank() ? fallbackLimit : Integer.parseInt(parts[1]);
-
-                return new State(timestamp, limit);
-            } catch (Exception e) {
-                return fallback;
-            }
-        }
-
-        public String toMemento() {
-            return TimestampMarshallUtil.toString(timestamp) + DELIMITER + limit;
-        }
     }
 
 }
