@@ -59,7 +59,9 @@ import lombok.Getter;
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
 @Named(CommandManagerExport.LOGICAL_TYPE_NAME)
-public final class CommandManagerExport implements ViewModel, HasBaseline, CommandRecordingSuppressed {
+public final class CommandManagerExport
+        extends CommandManagerAbstract
+        implements ViewModel, ReplayableCommandParticipantTracker {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
     static final String SCRATCHPAD_KEY = LOGICAL_TYPE_NAME + "#current";

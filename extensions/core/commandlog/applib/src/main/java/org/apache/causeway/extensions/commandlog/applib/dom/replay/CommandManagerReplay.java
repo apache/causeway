@@ -50,7 +50,9 @@ import lombok.Getter;
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid circle-play")
 @Named(CommandManagerReplay.LOGICAL_TYPE_NAME)
-public final class CommandManagerReplay implements ViewModel, HasBaseline, CommandRecordingSuppressed {
+public final class CommandManagerReplay
+        extends CommandManagerAbstract
+        implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
