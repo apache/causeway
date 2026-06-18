@@ -65,8 +65,8 @@ implements IdStringifier.EntityAgnostic<Byte> {
     }
 
     @Override
-    protected boolean isIntegerOnly() {
-        return true;
+    protected boolean isFloatingPoint() {
+        return false;
     }
 
     // -- COMPOSER

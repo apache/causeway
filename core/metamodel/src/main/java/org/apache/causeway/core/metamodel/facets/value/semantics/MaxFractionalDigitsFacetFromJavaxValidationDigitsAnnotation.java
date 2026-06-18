@@ -34,7 +34,7 @@ extends MaxFractionalDigitsFacetAbstract {
              final FacetHolder holder) {
 
          return digitsIfAny
-         .map(digits-> new MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
+             .map(digits-> new MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
     }
 
     private MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(

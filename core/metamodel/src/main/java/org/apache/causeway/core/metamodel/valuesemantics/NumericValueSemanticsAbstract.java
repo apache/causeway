@@ -76,10 +76,10 @@ implements
     // -- IMPL DETAILS
 
     /**
-     * Whether underlying number type cannot represent floating point numbers. That is,
-     * never has fractional digits.
+     * Whether underlying number type can represent floating point numbers. That is,
+     * can have fractional digits.
      */
-    protected abstract boolean isIntegerOnly();
+    protected abstract boolean isFloatingPoint();
 
     /**
      * Can be overridden by custom {@link NumericValueSemantics} to modify the {@link DecimalFormat}.
@@ -99,14 +99,14 @@ implements
         if(feature==null)
             return;
 
-        if(!isIntegerOnly()) {
-            // lookup meta-model for any facets that provide the MaximumFractionDigits
+        if(isFloatingPoint()) {
+            // lookup meta-model for any facets that provide the MaximumFractionDigits;
             // applies to display and input alike
             // @see ValueSemantics#maxFractionalDigits
             Facets.maxFractionalDigits(feature)
                 .ifPresent(format::setMaximumFractionDigits);
 
-            // lookup meta-model for any facets that provide the MinimumFractionDigits
+            // lookup meta-model for any facets that provide the MinimumFractionDigits;
             // applies to display and input prompting alike,
             // but should not be enforced on UI input, as can always pad with zeros)
             // @see ValueSemantics#minFractionalDigits
@@ -168,22 +168,22 @@ implements
     }
 
     /**
-     * The default implementation disallows appearance of the user- or system-locale specific grouping (thousands) separator
-     * in any of the numeric value inputs. Subclasses may override this behavior.
+     * Conditionally disallows the user- or system-locale specific grouping (thousands) separator
+     * (being part of the input string) or at least validates, that the grouping is correctly placed.
      *
      * <p> A common use of {@link java.math.BigDecimal} say is as a money value. In some locales (eg English), the
      * ',' (comma) is the grouping separator while the '.' (period) acts as a
      * decimal point, but in others (eg France, Italy, Germany) it is the other way around.
      *
-     * <p> Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+     * <p> Motivation: A string such as "123,99", when parsed (by {@link java.text.DecimalFormat})
      * in an English locale, is not rejected but instead is evaluated as the value 12_399L.  That's almost
      * certainly not what the end-user would have expected, and results in a money value 100x too large.
      *
-     * <p>This validation method conditionally disallows the
-     * grouping separator (being part of the input string) or
-     * at least validates, that the grouping is correctly placed.
+     * <p> Hence we disallow grouped input, unless explicitly enabled via provider qualifier 'locale-grouping-all'.
      */
-    protected void validateNumericalInput(@Nullable final Context context, final String input) {
+    protected void validateNumericalInput(
+            final ValueSemanticsProvider.@Nullable Context context,
+            final String input) {
         var localeGroupingSeparator = "" + NumericValueSemantics.localeGroupingSeparator(context);
         var parsingGroupingSeparator = grouping().separator(context, FormatUsageFor.PARSING);
         if(parsingGroupingSeparator.equals(localeGroupingSeparator)) {
@@ -204,14 +204,14 @@ implements
             switch (groupedDigits.getCardinality()) {
                 case ZERO: break; // no leading digits
                 case ONE: if(groupedDigits.getFirstElseFail().length()>3)
-                    throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                    throw parseExceptionForInconstentGrouping(localeGroupingSeparator, input);
                     break;
                 case MULTIPLE:
                     if(groupedDigits.getFirstElseFail().length()>3)
-                        throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                        throw parseExceptionForInconstentGrouping(localeGroupingSeparator, input);
                     for (String chunk : groupedDigits.subCan(1)) {
                         if(chunk.length()!=3)
-                            throw new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
+                            throw parseExceptionForInconstentGrouping(localeGroupingSeparator, input);
                     }
                     break;
             }
@@ -221,7 +221,7 @@ implements
 
         if(StringUtils.hasText(localeGroupingSeparator)) { // ignores whitespace
             if (input.contains(localeGroupingSeparator))
-                throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + localeGroupingSeparator + "' grouping separator");
+                throw parseExceptionForGroupingNotAllowed(localeGroupingSeparator, input);
         }
     }
 
@@ -281,7 +281,6 @@ implements
     }
 
     /**
-     * @param context nullable in support of JUnit testing
      * @return {@link NumberFormat} the default from given context's locale
      *      or else system's default locale
      */
@@ -293,6 +292,13 @@ implements
         format.setMaximumFractionDigits(340);
         configureDecimalFormat(context, format, usedFor);
         return DecimalFormatEx.of(format, grouping().separator(context, usedFor));
+    }
+
+    private static TextEntryParseException parseExceptionForGroupingNotAllowed(final String localeGroupingSeparator, final String input) {
+        return new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + localeGroupingSeparator + "' grouping separator");
+    }
+    private static TextEntryParseException parseExceptionForInconstentGrouping(final String localeGroupingSeparator, final String input) {
+        return new TextEntryParseException("Invalid value '" + input + "'; inconsistent use of the '" + localeGroupingSeparator + "' grouping separator");
     }
 
 }

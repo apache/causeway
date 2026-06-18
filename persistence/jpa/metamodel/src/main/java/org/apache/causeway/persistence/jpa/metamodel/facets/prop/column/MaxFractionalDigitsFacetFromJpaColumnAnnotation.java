@@ -32,10 +32,9 @@ extends MaxFractionalDigitsFacetAbstract {
      public static Optional<MaxFractionalDigitsFacet> create(
              final Optional<Column> columnIfAny,
              final FacetHolder holder) {
-
          return columnIfAny
-                 .filter(column->column.scale()>=0)
-                 .map(column-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
+             .filter(column->column.scale()>=0)
+             .map(column-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
     }
 
     private MaxFractionalDigitsFacetFromJpaColumnAnnotation(

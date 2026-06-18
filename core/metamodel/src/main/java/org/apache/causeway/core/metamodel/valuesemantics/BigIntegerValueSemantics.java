@@ -60,8 +60,8 @@ implements IdStringifier.EntityAgnostic<BigInteger> {
     }
 
     @Override
-    protected boolean isIntegerOnly() {
-        return true;
+    protected boolean isFloatingPoint() {
+        return false;
     }
 
     // -- COMPOSER

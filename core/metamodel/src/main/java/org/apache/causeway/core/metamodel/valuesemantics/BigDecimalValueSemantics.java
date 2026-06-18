@@ -71,8 +71,8 @@ implements IdStringifier.EntityAgnostic<BigDecimal> {
     }
 
     @Override
-    protected boolean isIntegerOnly() {
-        return false;
+    protected boolean isFloatingPoint() {
+        return true;
     }
 
     // -- COMPOSER

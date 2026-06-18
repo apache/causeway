@@ -93,6 +93,21 @@ public @interface ValueSemantics {
     /**
      * If associated with any Java number type {@link BigDecimal}, {@link BigInteger},
      * long, int, short, byte, double or float,
+     * the maximum number of integer digits required for
+     * input (editing).
+     *
+     * <p> For double/float specifically, requires their decimal representation, to satisfy this requirement.
+     * Those types may support scientific notation for input (as well as display), where the notion of 'integer digits'
+     * is still viable.
+     *
+     * <p> default = {@code 0} understood as unconstraint
+     */
+    int maxIntegerDigits()
+        default 0;
+
+    /**
+     * If associated with any Java number type {@link BigDecimal}, {@link BigInteger},
+     * long, int, short, byte, double or float,
      * the minimum number of integer digits required for
      * input (editing).
      *

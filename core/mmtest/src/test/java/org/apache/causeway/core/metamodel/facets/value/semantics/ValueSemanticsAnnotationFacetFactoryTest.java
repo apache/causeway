@@ -400,7 +400,7 @@ extends FacetFactoryTestAbstract {
             final FacetHolder facetedMethod, final int minIntegerDigits) {
         final MinIntegerDigitsFacet facet = facetedMethod.getFacet(MinIntegerDigitsFacet.class);
         assertNotNull(facet);
-        assertThat(facet.getMinIntegerDigits(), is(minIntegerDigits));
+        assertThat(facet.minIntegerDigits(), is(minIntegerDigits));
     }
 
     private void assertMaxFractionalDigits(

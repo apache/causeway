@@ -59,8 +59,8 @@ extends NumericValueSemanticsAbstract<Float> {
     }
 
     @Override
-    protected boolean isIntegerOnly() {
-        return false;
+    protected boolean isFloatingPoint() {
+        return true;
     }
 
     // -- COMPOSER

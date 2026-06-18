@@ -33,10 +33,8 @@ extends MaxFractionalDigitsFacetAbstract {
             final FacetHolder holder) {
 
         return digitsIfAny
-        .map(digits->{
-            return new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
-                    digits.maxFractionalDigits(), holder);
-        });
+            .map(digits->new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+                    digits.maxFractionalDigits(), holder));
    }
 
    private MaxFractionalDigitsFacetFromValueSemanticsAnnotation(

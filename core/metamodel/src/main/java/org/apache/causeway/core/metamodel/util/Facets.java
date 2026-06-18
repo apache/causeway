@@ -40,7 +40,6 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
@@ -226,7 +225,7 @@ public final class Facets {
     }
     public Predicate<ObjectFeature> hiddenWhereNotMatches(final Predicate<Where> matcher) {
         return hiddenWhereMatches(matcher)
-                .negate();
+            .negate();
     }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
@@ -251,6 +250,8 @@ public final class Facets {
         return "label-" + labelAt(feature).name().toLowerCase();
     }
 
+    // -- VALUE SEMANTICS
+
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
             .map(MinFractionalDigitsFacet::getMinFractionalDigits)
@@ -264,13 +265,6 @@ public final class Facets {
             .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
             .filter(digits->digits>-1)
             .map(OptionalInt::of)
-            .orElseGet(OptionalInt::empty);
-    }
-
-    public OptionalInt maxFractionalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
-        return _NullSafe.stream(facetHolders)
-            .map(Facets::maxFractionalDigits)
-            .findFirst()
             .orElseGet(OptionalInt::empty);
     }
 
@@ -289,12 +283,7 @@ public final class Facets {
             .orElseGet(OptionalInt::empty);
     }
 
-    public OptionalInt maxTotalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
-        return _NullSafe.stream(facetHolders)
-            .map(Facets::maxTotalDigits)
-            .findFirst()
-            .orElseGet(OptionalInt::empty);
-    }
+    // --
 
     public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(MixinFacet.class);
@@ -378,8 +367,7 @@ public final class Facets {
     // -- VALUE FACET
 
     public static Predicate<ObjectSpecification> valueTypeMatches(final Predicate<Class<?>> typeMatcher) {
-        return spec->
-            spec.valueFacet()
+        return spec->spec.valueFacet()
             .map(ValueFacet::getLogicalType)
             .map(LogicalType::correspondingClass)
             .map(typeMatcher::test)
@@ -436,8 +424,8 @@ public final class Facets {
      */
     public Optional<String> valueQualifier(@NonNull final ObjectFeature feature) {
         return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
-                .map(ValueSemanticsSelectingFacet::value)
-                .map(_Strings::emptyToNull);
+            .map(ValueSemanticsSelectingFacet::value)
+            .map(_Strings::emptyToNull);
     }
 
     @SuppressWarnings("unchecked")
