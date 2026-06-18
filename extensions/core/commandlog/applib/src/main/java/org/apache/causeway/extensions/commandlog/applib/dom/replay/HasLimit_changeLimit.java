@@ -7,7 +7,7 @@ import org.apache.causeway.applib.annotation.*;
 @Action(
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerExport_changeLimit.DomainEvent.class,
+        domainEvent = HasLimit_changeLimit.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -15,23 +15,23 @@ import org.apache.causeway.applib.annotation.*;
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT
 )
 @RequiredArgsConstructor
-public class CommandManagerExport_changeLimit {
+public class HasLimit_changeLimit {
 
     public static int MAX_LIMIT = 100;
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_changeLimit> { }
+    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<HasLimit_changeLimit> { }
 
-    private final CommandManagerExport commandExportManager;
+    private final HasLimit hasLimit;
 
     @MemberSupport
-    public CommandManagerExport act(int newLimit) {
-        return commandExportManager.withLimit(newLimit);
+    public HasLimit act(int newLimit) {
+        return hasLimit.withLimit(newLimit);
     }
 
 
     @MemberSupport
     public int defaultNewLimit() {
-        return commandExportManager.getLimit();
+        return hasLimit.getLimit();
     }
 
     @MemberSupport

@@ -42,7 +42,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandReplayResultMapping_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_deleteCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_nextPage;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_previousPage;
@@ -120,7 +120,7 @@ import org.springframework.context.annotation.Import;
         CommandManagerExport_unexcludeCommands.class,
         CommandManagerExport_previousPage.class,
         CommandManagerExport_nextPage.class,
-        CommandManagerExport_changeLimit.class,
+        HasLimit_changeLimit.class,
         CommandManagerReplay_importCommands.class,
         CommandManagerReplay_replayOrRetryNext.class,
         CommandManagerReplay_replayOrRetrySelected.class,

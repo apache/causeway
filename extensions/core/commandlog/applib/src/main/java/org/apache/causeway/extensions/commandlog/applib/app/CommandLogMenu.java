@@ -50,8 +50,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerAbstract;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
@@ -315,7 +316,7 @@ public class CommandLogMenu {
                 @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
                 final java.sql.Timestamp since
                 ) {
-            return new CommandManagerExport(new CommandManagerExport.State(since, CommandManagerExport_changeLimit.MAX_LIMIT), replayContext);
+            return new CommandManagerExport(stateFor(since), replayContext);
         }
 
         @MemberSupport public java.sql.Timestamp defaultSince() {
@@ -345,7 +346,7 @@ public class CommandLogMenu {
                 final Blob commandsYaml
         ) {
             final var now = clockService.getClock().nowAsJavaSqlTimestamp();
-            final var commandReplayManager = new CommandManagerReplay(now, replayContext);
+            final var commandReplayManager = new CommandManagerReplay(stateFor(now), replayContext);
             return Optional.ofNullable(commandsYaml)
                     .map(yaml -> importCommands(commandReplayManager).act(yaml, true))
                     .orElse(commandReplayManager);
@@ -354,6 +355,10 @@ public class CommandLogMenu {
         private CommandManagerReplay_importCommands importCommands(CommandManagerReplay commandReplayManager) {
             return factoryService.mixin(CommandManagerReplay_importCommands.class, commandReplayManager);
         }
+    }
+
+    private static CommandManagerAbstract.@NonNull State stateFor(Timestamp timestamp) {
+        return new CommandManagerAbstract.State(timestamp, HasLimit_changeLimit.MAX_LIMIT);
     }
 
     private static @NonNull Timestamp truncatedTo(Timestamp now, ChronoUnit chronoUnit) {

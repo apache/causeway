@@ -70,7 +70,7 @@ public final class CommandManagerExport
         this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
 
-    CommandManagerExport(
+    public CommandManagerExport(
             final State state,
             final ReplayContext replayContext) {
         super(state, replayContext);
