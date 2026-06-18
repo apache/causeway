@@ -55,7 +55,7 @@ import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-class CommandExportManagerMoveCommandsTest {
+class CommandManagerExportMoveCommandsTest {
 
     private static final Timestamp BASELINE = timestamp("2026-06-07T10:00:00Z");
     private static final Timestamp BEFORE_BASELINE = timestamp("2026-06-07T09:59:59Z");
@@ -380,14 +380,14 @@ class CommandExportManagerMoveCommandsTest {
         }
 
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
-        final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50),
+        final var manager = new CommandManagerExport(
+                new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
-        final var moveUpAction = new CommandExportManager_moveCommandsUp(manager);
+        final var moveUpAction = new CommandManagerExport_moveCommandsUp(manager);
         moveUpAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
-        final var moveDownAction = new CommandExportManager_moveCommandsDown(manager);
+        final var moveDownAction = new CommandManagerExport_moveCommandsDown(manager);
         moveDownAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
-        final var exportAction = new CommandExportManager_exportSelected(manager);
+        final var exportAction = new CommandManagerExport_exportSelected(manager);
         exportAction.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         return new Fixture(
                 replayContext,
@@ -493,15 +493,15 @@ class CommandExportManagerMoveCommandsTest {
 
     private static class Fixture {
         private final ReplayContext replayContext;
-        final CommandExportManager_moveCommandsUp moveUpAction;
-        final CommandExportManager_moveCommandsDown moveDownAction;
-        final CommandExportManager_exportSelected exportAction;
+        final CommandManagerExport_moveCommandsUp moveUpAction;
+        final CommandManagerExport_moveCommandsDown moveDownAction;
+        final CommandManagerExport_exportSelected exportAction;
 
         Fixture(
                 final ReplayContext replayContext,
-                final CommandExportManager_moveCommandsUp moveUpAction,
-                final CommandExportManager_moveCommandsDown moveDownAction,
-                final CommandExportManager_exportSelected exportAction) {
+                final CommandManagerExport_moveCommandsUp moveUpAction,
+                final CommandManagerExport_moveCommandsDown moveDownAction,
+                final CommandManagerExport_exportSelected exportAction) {
             this.replayContext = replayContext;
             this.moveUpAction = moveUpAction;
             this.moveDownAction = moveDownAction;

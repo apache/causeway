@@ -46,7 +46,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-class CommandExportManagerCommandsTest {
+class CommandManagerExportCommandsTest {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
@@ -127,21 +127,21 @@ class CommandExportManagerCommandsTest {
         final var repository = repositoryReturning(List.of(), List.of(exported, excluded));
         final var manager = manager(repository);
 
-        final var commands = manager.commands(CommandExportManager.Direction.PREVIOUS);
+        final var commands = manager.commands(CommandManagerExport.Direction.PREVIOUS);
 
         assertThat(interactionIds(commands))
                 .containsExactly(exported.getInteractionId(), excluded.getInteractionId());
     }
 
-    private static CommandExportManager manager(final CommandLogEntryRepository repository) {
+    private static CommandManagerExport manager(final CommandLogEntryRepository repository) {
         return manager(repository, null);
     }
 
-    private static CommandExportManager manager(
+    private static CommandManagerExport manager(
             final CommandLogEntryRepository repository,
             final SpecificationLoader specificationLoader) {
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of(), specificationLoader);
-        return new CommandExportManager(new CommandExportManager.State(BASELINE, 50), replayContext);
+        return new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
     }
 
     private static CommandLogEntryRepository repositoryReturning(

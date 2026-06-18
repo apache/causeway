@@ -57,7 +57,7 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-class CommandExportManagerExportSelectedTest {
+class CommandExportManagerSelectedTestExport {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
@@ -360,8 +360,8 @@ class CommandExportManagerExportSelectedTest {
             final CommandLogEntry... entries) {
         final var repository = repositoryWith(entries);
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
-        final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50),
+        final var manager = new CommandManagerExport(
+                new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
         manager.scratchpad = scratchpad();
         manager.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
@@ -375,10 +375,10 @@ class CommandExportManagerExportSelectedTest {
         final var repository = repositoryWith(entries);
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
 
-        final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50),
+        final var manager = new CommandManagerExport(
+                new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
-        final var action = new CommandExportManager_exportSelected(manager);
+        final var action = new CommandManagerExport_exportSelected(manager);
         action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         final var replayableCommands = java.util.Arrays.stream(entries)
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
@@ -514,11 +514,11 @@ class CommandExportManagerExportSelectedTest {
     }
 
     private static class Fixture {
-        final CommandExportManager_exportSelected action;
+        final CommandManagerExport_exportSelected action;
         final List<ReplayableCommand> replayableCommands;
 
         Fixture(
-                final CommandExportManager_exportSelected action,
+                final CommandManagerExport_exportSelected action,
                 final List<ReplayableCommand> replayableCommands) {
             this.action = action;
             this.replayableCommands = replayableCommands;

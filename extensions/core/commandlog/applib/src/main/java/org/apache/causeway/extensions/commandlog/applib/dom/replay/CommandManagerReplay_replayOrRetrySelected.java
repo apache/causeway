@@ -12,7 +12,7 @@ import org.apache.causeway.applib.annotation.*;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandReplayManager_replayOrRetrySelected.DomainEvent.class,
+        domainEvent = CommandManagerReplay_replayOrRetrySelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -24,14 +24,14 @@ import org.apache.causeway.applib.annotation.*;
                 + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
                 + "The command, that caused the failure, gets marked FAILED.")
 @RequiredArgsConstructor
-public class CommandReplayManager_replayOrRetrySelected {
+public class CommandManagerReplay_replayOrRetrySelected {
 
-    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_replayOrRetrySelected> { }
+    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_replayOrRetrySelected> { }
 
-    private final CommandReplayManager commandReplayManager;
+    private final CommandManagerReplay commandReplayManager;
 
     @MemberSupport
-    public CommandReplayManager act(final List<ReplayableCommand> selected) {
+    public CommandManagerReplay act(final List<ReplayableCommand> selected) {
         if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
             return commandReplayManager;
         }

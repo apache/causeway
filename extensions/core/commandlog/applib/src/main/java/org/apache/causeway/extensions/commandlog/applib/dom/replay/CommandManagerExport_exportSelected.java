@@ -25,7 +25,7 @@ import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferen
         choicesFrom = "commands",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandExportManager_exportSelected.DomainEvent.class,
+        domainEvent = CommandManagerExport_exportSelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -35,19 +35,19 @@ import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferen
         describedAs = "Exports selected Commands as zipped DTOs for import later. "
                 + "Refresh the page to see changed states."
 )
-public class CommandExportManager_exportSelected {
+public class CommandManagerExport_exportSelected {
 
-    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_exportSelected> {
+    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_exportSelected> {
     }
 
-    private final CommandExportManager commandExportManager;
+    private final CommandManagerExport commandExportManager;
 
     @Inject MetaModelService metaModelService;
     @Inject CausewayConfiguration causewayConfiguration;
     @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
     @Inject
-    public CommandExportManager_exportSelected(final CommandExportManager commandExportManager) {
+    public CommandManagerExport_exportSelected(final CommandManagerExport commandExportManager) {
         this.commandExportManager = commandExportManager;
     }
 

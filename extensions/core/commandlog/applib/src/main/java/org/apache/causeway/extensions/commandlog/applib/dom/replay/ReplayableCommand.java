@@ -113,7 +113,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return recordRef;
     }
 
-    private final CommandExportManager commandExportManager;
+    private final CommandManagerExport commandExportManager;
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
@@ -198,7 +198,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final ReplayContext replayContext,
             final Scratchpad scratchpad) {
         this(interactionId, replayContext, new ObjectReference<>(null),
-                CommandExportManager.currentExportManager(scratchpad).orElse(null));
+                CommandManagerExport.currentExportManager(scratchpad).orElse(null));
     }
 
     ReplayableCommand(
@@ -212,7 +212,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final UUID interactionId,
             final ReplayContext replayContext,
             final ObjectReference<CommandRecord> recordRef,
-            final CommandExportManager commandExportManager) {
+            final CommandManagerExport commandExportManager) {
         this.interactionId = interactionId;
         this.replayContext = replayContext;
         this.recordRef = recordRef;

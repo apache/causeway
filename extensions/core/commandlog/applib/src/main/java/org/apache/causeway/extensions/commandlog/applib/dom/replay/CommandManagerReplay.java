@@ -43,15 +43,14 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
-import org.eclipse.persistence.sessions.coordination.CommandManager;
 import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid circle-play")
-@Named(CommandReplayManager.LOGICAL_TYPE_NAME)
-public final class CommandReplayManager implements ViewModel, HasBaseline, CommandRecordingSuppressed {
+@Named(CommandManagerReplay.LOGICAL_TYPE_NAME)
+public final class CommandManagerReplay implements ViewModel, HasBaseline, CommandRecordingSuppressed {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
@@ -65,13 +64,13 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
     }
 
     @Inject
-    public CommandReplayManager(
+    public CommandManagerReplay(
             final String memento,
             final ReplayContext replayContext) {
         this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
     }
 
-    public CommandReplayManager(
+    public CommandManagerReplay(
             final java.sql.Timestamp baseline,
             final ReplayContext replayContext) {
         this.baseline = baseline;
@@ -90,8 +89,8 @@ public final class CommandReplayManager implements ViewModel, HasBaseline, Comma
 
     @Override
     @Programmatic
-    public CommandReplayManager withBaseline(Timestamp baseline) {
-        return new CommandReplayManager(baseline, replayContext);
+    public CommandManagerReplay withBaseline(Timestamp baseline) {
+        return new CommandManagerReplay(baseline, replayContext);
     }
 
 

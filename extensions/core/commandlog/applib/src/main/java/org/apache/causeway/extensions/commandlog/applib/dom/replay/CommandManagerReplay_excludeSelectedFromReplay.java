@@ -11,7 +11,7 @@ import org.apache.causeway.applib.annotation.*;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandReplayManager_excludeSelectedFromReplay.DomainEvent.class,
+        domainEvent = CommandManagerReplay_excludeSelectedFromReplay.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -20,14 +20,14 @@ import org.apache.causeway.applib.annotation.*;
         describedAs = "Marks selected Commands to be EXCLUDED from replay"
 )
 @RequiredArgsConstructor
-public class CommandReplayManager_excludeSelectedFromReplay {
+public class CommandManagerReplay_excludeSelectedFromReplay {
 
-    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_excludeSelectedFromReplay> { }
+    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_excludeSelectedFromReplay> { }
 
-    private final CommandReplayManager commandReplayManager;
+    private final CommandManagerReplay commandReplayManager;
 
     @MemberSupport
-    public CommandReplayManager act(final List<ReplayableCommand> selected) {
+    public CommandManagerReplay act(final List<ReplayableCommand> selected) {
         selected.stream()
                 .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
         return commandReplayManager;

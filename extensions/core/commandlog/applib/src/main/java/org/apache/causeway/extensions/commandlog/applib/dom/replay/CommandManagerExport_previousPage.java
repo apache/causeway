@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.*;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager.Direction.*;
+import static org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport.Direction.*;
 
 @Action(
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandExportManager_previousPage.DomainEvent.class,
+        domainEvent = CommandManagerExport_previousPage.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -19,14 +19,14 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
         describedAs = "Move backwards to previous page of commands"
 )
 @RequiredArgsConstructor
-public class CommandExportManager_previousPage {
+public class CommandManagerExport_previousPage {
 
-    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_previousPage> { }
+    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_previousPage> { }
 
-    private final CommandExportManager commandExportManager;
+    private final CommandManagerExport commandExportManager;
 
     @MemberSupport
-    public CommandExportManager act() {
+    public CommandManagerExport act() {
         final var commands = commandExportManager.commands(PREVIOUS);   // returns descending, latest (youngest) first
         final var size = commands.size();
         if (size == 0) {
@@ -43,7 +43,7 @@ public class CommandExportManager_previousPage {
         return size == 0 ? "No commands" : null;
     }
 
-    private CommandExportManager commandExportManager(final ReplayableCommand replayableCommand) {
+    private CommandManagerExport commandExportManager(final ReplayableCommand replayableCommand) {
         final var timestamp = replayableCommand.getTimestamp().toInstant();
         final var baselineMinus5Millis = HasBaseline.addMillis(timestamp, -5);
         return commandExportManager.withBaseline(baselineMinus5Millis);

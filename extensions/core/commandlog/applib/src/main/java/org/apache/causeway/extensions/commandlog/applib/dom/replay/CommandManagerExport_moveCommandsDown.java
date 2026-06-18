@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
         choicesFrom = "commands",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CommandExportManager_moveCommandsDown.DomainEvent.class,
+        domainEvent = CommandManagerExport_moveCommandsDown.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -46,21 +46,21 @@ import org.apache.causeway.core.config.CausewayConfiguration;
         describedAs = "Moves selected Commands downward after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
-public class CommandExportManager_moveCommandsDown {
+public class CommandManagerExport_moveCommandsDown {
 
-    public static class DomainEvent extends CommandExportManager.ActionDomainEvent<CommandExportManager_moveCommandsDown> {
+    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_moveCommandsDown> {
     }
 
-    private final CommandExportManager commandExportManager;
+    private final CommandManagerExport commandExportManager;
 
     @Inject CausewayConfiguration causewayConfiguration;
 
-    public CommandExportManager_moveCommandsDown(final CommandExportManager commandExportManager) {
+    public CommandManagerExport_moveCommandsDown(final CommandManagerExport commandExportManager) {
         this.commandExportManager = commandExportManager;
     }
 
     @MemberSupport
-    public CommandExportManager act(
+    public CommandManagerExport act(
             final List<ReplayableCommand> selected,
             @ParameterLayout(describedAs = "Command after which the selected commands will be moved.") final ReplayableCommand target,
             @ParameterLayout(
@@ -102,10 +102,10 @@ public class CommandExportManager_moveCommandsDown {
         return false;
     }
 
-    private CommandExportManagerMovementSupport movementSupport() {
-        return new CommandExportManagerMovementSupport(
+    private CommandManagerExportMovementSupport movementSupport() {
+        return new CommandManagerExportMovementSupport(
                 commandExportManager,
                 causewayConfiguration,
-                CommandExportManagerMovementSupport.Direction.DOWN);
+                CommandManagerExportMovementSupport.Direction.DOWN);
     }
 }

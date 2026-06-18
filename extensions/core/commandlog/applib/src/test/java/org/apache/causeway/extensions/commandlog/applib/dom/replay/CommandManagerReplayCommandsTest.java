@@ -58,7 +58,7 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-class CommandReplayManagerCommandsTest {
+class CommandManagerReplayCommandsTest {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
@@ -114,7 +114,7 @@ class CommandReplayManagerCommandsTest {
         final var commandExecutorService = commandExecutorSettingPendingBackground(pendingBackgroundCommands);
         final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
 
-        new CommandReplayManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+        new CommandManagerReplay_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
 
         verify(commandExecutorService, times(1)).executeCommand(
                 eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
@@ -130,7 +130,7 @@ class CommandReplayManagerCommandsTest {
         final var commandExecutorService = commandExecutorReturningSuccess();
         final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
 
-        new CommandReplayManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+        new CommandManagerReplay_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
 
         verify(commandExecutorService, times(2)).executeCommand(
                 eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
@@ -143,9 +143,9 @@ class CommandReplayManagerCommandsTest {
         when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        assertThat(new CommandReplayManager_replayOrRetrySelected(manager).disableAct())
+        assertThat(new CommandManagerReplay_replayOrRetrySelected(manager).disableAct())
                 .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
-        assertThat(new CommandReplayManager_replayOrRetryNext(manager).disableAct())
+        assertThat(new CommandManagerReplay_replayOrRetryNext(manager).disableAct())
                 .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
     }
 
@@ -156,23 +156,23 @@ class CommandReplayManagerCommandsTest {
         when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of());
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        assertThat(new CommandReplayManager_replayOrRetryNext(manager).disableAct()).isNull();
+        assertThat(new CommandManagerReplay_replayOrRetryNext(manager).disableAct()).isNull();
     }
 
-    private static CommandReplayManager manager(
+    private static CommandManagerReplay manager(
             final CommandLogEntryRepository repository,
             final SpecificationLoader specificationLoader) {
         return manager(repository, null, null, specificationLoader);
     }
 
-    private static CommandReplayManager manager(
+    private static CommandManagerReplay manager(
             final CommandLogEntryRepository repository,
             final TransactionService transactionService,
             final CommandExecutorService commandExecutorService,
             final SpecificationLoader specificationLoader) {
         final var replayContext = new ReplayContext(
                 null, null, transactionService, repository, commandExecutorService, null, List.of(), specificationLoader);
-        return new CommandReplayManager(BASELINE, replayContext);
+        return new CommandManagerReplay(BASELINE, replayContext);
     }
 
     private static TransactionService transactionServiceExecutingCallable() {

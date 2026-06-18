@@ -50,10 +50,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
@@ -311,11 +311,11 @@ public class CommandLogMenu {
             public DomainEvent() { }
         }
 
-        @MemberSupport public CommandExportManager act(
+        @MemberSupport public CommandManagerExport act(
                 @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
                 final java.sql.Timestamp since
                 ) {
-            return new CommandExportManager(new CommandExportManager.State(since, CommandExportManager_changeLimit.MAX_LIMIT), replayContext);
+            return new CommandManagerExport(new CommandManagerExport.State(since, CommandManagerExport_changeLimit.MAX_LIMIT), replayContext);
         }
 
         @MemberSupport public java.sql.Timestamp defaultSince() {
@@ -337,7 +337,7 @@ public class CommandLogMenu {
             public DomainEvent() { }
         }
 
-        @MemberSupport public CommandReplayManager act(
+        @MemberSupport public CommandManagerReplay act(
                 @Parameter(
                         optionality = Optionality.OPTIONAL,
                         fileAccept = ".yml,.yaml"
@@ -345,14 +345,14 @@ public class CommandLogMenu {
                 final Blob commandsYaml
         ) {
             final var now = clockService.getClock().nowAsJavaSqlTimestamp();
-            final var commandReplayManager = new CommandReplayManager(now, replayContext);
+            final var commandReplayManager = new CommandManagerReplay(now, replayContext);
             return Optional.ofNullable(commandsYaml)
                     .map(yaml -> importCommands(commandReplayManager).act(yaml, true))
                     .orElse(commandReplayManager);
         }
 
-        private CommandReplayManager_importCommands importCommands(CommandReplayManager commandReplayManager) {
-            return factoryService.mixin(CommandReplayManager_importCommands.class, commandReplayManager);
+        private CommandManagerReplay_importCommands importCommands(CommandManagerReplay commandReplayManager) {
+            return factoryService.mixin(CommandManagerReplay_importCommands.class, commandReplayManager);
         }
     }
 

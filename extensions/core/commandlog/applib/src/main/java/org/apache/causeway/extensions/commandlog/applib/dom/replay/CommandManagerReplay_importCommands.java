@@ -20,7 +20,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
         restrictTo = RestrictTo.PROTOTYPING,
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandReplayManager_importCommands.DomainEvent.class,
+        domainEvent = CommandManagerReplay_importCommands.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -29,14 +29,14 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
         describedAs = "Imports commands from yaml format, then persists them with a replayState of PENDING."
 )
 @RequiredArgsConstructor
-public class CommandReplayManager_importCommands {
+public class CommandManagerReplay_importCommands {
 
-    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_importCommands> {
+    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_importCommands> {
     }
 
-    private final CommandReplayManager commandReplayManager;
+    private final CommandManagerReplay commandReplayManager;
 
-    public CommandReplayManager act(
+    public CommandManagerReplay act(
             @Parameter(fileAccept = ".yml,.yaml") final Blob commandsYaml,
             @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top") final boolean moveBaselineToOldest) {
         var yamlDs = commandsYaml.asDataSource();
@@ -53,10 +53,10 @@ public class CommandReplayManager_importCommands {
                 .filter(x -> moveBaselineToOldest)
                 .map(CommandDtoUtils.ImportedCommandDto::getCommand)
                 .map(CommandDto::getTimestamp)
-                .map(CommandReplayManager_importCommands::toJavaSqlTimestamp)
+                .map(CommandManagerReplay_importCommands::toJavaSqlTimestamp)
                 .sorted()
                 .findFirst()
-                .map(timestamp -> new CommandReplayManager(timestamp, commandReplayManager.replayContext))
+                .map(timestamp -> new CommandManagerReplay(timestamp, commandReplayManager.replayContext))
                 .orElse(commandReplayManager);
     }
 
