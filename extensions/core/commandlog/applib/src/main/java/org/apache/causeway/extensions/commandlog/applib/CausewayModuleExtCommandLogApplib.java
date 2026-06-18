@@ -18,11 +18,16 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import java.util.List;
+
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
@@ -69,6 +74,7 @@ import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJo
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataServiceForRefData;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
@@ -191,11 +197,20 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
             final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final Scratchpad scratchpad,
+            final MetaModelService metaModelService,
+            final CausewayConfiguration causewayConfiguration,
+            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
-                commandReplayMappingListeners, specificationLoader);
+                commandReplayMappingListeners,
+                scratchpad,
+                metaModelService,
+                causewayConfiguration,
+                commandReplayReferenceDataServices,
+                specificationLoader);
     }
 
 }

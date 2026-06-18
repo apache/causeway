@@ -106,7 +106,6 @@ public class CommandManagerExport_exportSelected {
 
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
-        syncInjectedServicesToManager();
         return commandExportManager.getCommands().stream()
                 .filter(command -> Boolean.TRUE.equals(command.getExportable()))
                 .collect(Collectors.toList());
@@ -136,14 +135,7 @@ public class CommandManagerExport_exportSelected {
 
     private Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> selectedCommandLogEntries) {
-        syncInjectedServicesToManager();
         return commandExportManager.validateKnownTargets(selectedCommandLogEntries);
-    }
-
-    private void syncInjectedServicesToManager() {
-        commandExportManager.metaModelService = metaModelService;
-        commandExportManager.causewayConfiguration = causewayConfiguration;
-        commandExportManager.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
