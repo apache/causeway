@@ -51,31 +51,25 @@ import lombok.Getter;
 @DomainObjectLayout(cssClassFa = "solid circle-play")
 @Named(CommandManagerReplay.LOGICAL_TYPE_NAME)
 public final class CommandManagerReplay
-        extends CommandManagerAbstract
-        implements ViewModel {
+        extends CommandManagerAbstract {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-    ReplayContext replayContext;
-    ReplayContext replayContext() {
-        return replayContext;
-    }
 
     @Inject
     public CommandManagerReplay(
             final String memento,
             final ReplayContext replayContext) {
-        this(fromString(memento, replayContext.clockService().getClock().nowAsJavaSqlTimestamp()),  replayContext);
+        this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
 
-    public CommandManagerReplay(
-            final java.sql.Timestamp baseline,
+    CommandManagerReplay(
+            final State state,
             final ReplayContext replayContext) {
-        this.baseline = baseline;
-        this.replayContext = replayContext;
+        super(state, replayContext);
     }
 
     @ObjectSupport public String title() {
@@ -83,15 +77,16 @@ public final class CommandManagerReplay
     }
 
 
-    @Property
-    @PropertyLayout(describedAs = "Only commands after this baseline are listed for replay")
-    @Getter
-    private java.sql.Timestamp baseline;
+    @Override
+    @Programmatic
+    public CommandManagerReplay withBaseline(final Timestamp baseline) {
+        return new CommandManagerReplay(new State(baseline, this.limit), replayContext);
+    }
 
     @Override
     @Programmatic
-    public CommandManagerReplay withBaseline(Timestamp baseline) {
-        return new CommandManagerReplay(baseline, replayContext);
+    public CommandManagerReplay withLimit(final int limit) {
+        return new CommandManagerReplay(new State(this.baseline, limit), replayContext);
     }
 
 
@@ -135,13 +130,6 @@ public final class CommandManagerReplay
             .collect(Collectors.toList());
     }
 
-
-    // -- VM STATE
-
-    @Override
-    public String viewModelMemento() {
-        return TimestampMarshallUtil.toString(this.baseline);
-    }
 
     // -- HELPER
     private boolean isReplayable(final CommandLogEntry entry) {

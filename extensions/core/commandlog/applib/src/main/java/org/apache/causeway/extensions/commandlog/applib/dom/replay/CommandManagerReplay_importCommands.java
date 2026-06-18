@@ -56,7 +56,7 @@ public class CommandManagerReplay_importCommands {
                 .map(CommandManagerReplay_importCommands::toJavaSqlTimestamp)
                 .sorted()
                 .findFirst()
-                .map(timestamp -> new CommandManagerReplay(timestamp, commandReplayManager.replayContext))
+                .map(timestamp -> new CommandManagerReplay(new CommandManagerAbstract.State(timestamp, commandReplayManager.getLimit()), commandReplayManager.replayContext()))
                 .orElse(commandReplayManager);
     }
 
