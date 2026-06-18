@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cmd:commandDto xmlns:com="https://causeway.apache.org/schema/common" xmlns:cmd="https://causeway.apache.org/schema/cmd">
+    <cmd:majorVersion>2</cmd:majorVersion>
+    <cmd:minorVersion>0</cmd:minorVersion>
+    <cmd:interactionId>08c210e1-55c0-4c45-83db-491f6581e621</cmd:interactionId>
+    <cmd:timestamp>2026-04-21T09:43:58.169Z</cmd:timestamp>
+    <cmd:username>estatio-admin</cmd:username>
+    <cmd:targets>
+        <com:oid type="outgoing.invoiceforlease.InvoiceForLease" id="419264"/>
+    </cmd:targets>
+    <cmd:member xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cmd:actionDto" interactionType="action_invocation">
+        <cmd:logicalMemberIdentifier>outgoing.invoiceforlease.InvoiceForLease#approve</cmd:logicalMemberIdentifier>
+    </cmd:member>
+</cmd:commandDto>

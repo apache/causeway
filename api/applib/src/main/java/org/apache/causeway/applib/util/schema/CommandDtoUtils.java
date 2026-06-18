@@ -19,12 +19,18 @@
 package org.apache.causeway.applib.util.schema;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -283,6 +289,29 @@ public final class CommandDtoUtils {
             CommandDtoUtils.valueDtoSupport(mapper);
             return mapper;
         };
+    }
+
+    public static CommandDto copy(final CommandDto commandDto) {
+        if (commandDto == null) {
+            return null;
+        }
+        try {
+            final JAXBContext jaxbContext = JaxbUtils.jaxbContextFor(CommandDto.class);
+
+            // create marshaller and unmarshaller per-call (they are NOT thread-safe)
+            final Marshaller marshaller = jaxbContext.createMarshaller();
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            final StringWriter sw = new StringWriter();
+            marshaller.marshal(commandDto, sw);
+
+            final String xml = sw.toString();
+            try (final StringReader sr = new StringReader(xml)) {
+                return (CommandDto) unmarshaller.unmarshal(sr);
+            }
+        } catch (JAXBException e) {
+            throw new RuntimeException("Failed to deep-copy CommandDto", e);
+        }
     }
 
     public static class ImportedCommandDto {
