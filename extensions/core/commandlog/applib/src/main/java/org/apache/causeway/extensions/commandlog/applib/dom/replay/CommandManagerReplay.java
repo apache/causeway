@@ -58,7 +58,6 @@ public final class CommandManagerReplay implements ViewModel, HasBaseline, Comma
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
     ReplayContext replayContext;
-
     ReplayContext replayContext() {
         return replayContext;
     }

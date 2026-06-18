@@ -69,10 +69,6 @@ public final class CommandManagerExport implements ViewModel, HasBaseline, Comma
 
     ReplayContext replayContext;
 
-    @Inject Scratchpad scratchpad;
-    @Inject MetaModelService metaModelService;
-    @Inject CausewayConfiguration causewayConfiguration;
-    @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
     @Inject
     public CommandManagerExport(
@@ -208,8 +204,8 @@ public final class CommandManagerExport implements ViewModel, HasBaseline, Comma
     }
 
     private boolean isRecordingSupportEnabled() {
-        return causewayConfiguration != null
-                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+        return replayContext.causewayConfiguration() != null
+                && replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private CommandExportKnownTargetValidator validator() {
@@ -218,12 +214,12 @@ public final class CommandManagerExport implements ViewModel, HasBaseline, Comma
 
     private boolean isExportRootOrReferenceData(final Bookmark bookmark) {
         return isExportRoot(bookmark)
-                || CommandReplayReferenceDataService.isReferenceData(commandReplayReferenceDataServices, bookmark);
+                || CommandReplayReferenceDataService.isReferenceData(replayContext.commandReplayReferenceDataServices(), bookmark);
     }
 
     private boolean isExportRoot(final Bookmark bookmark) {
-        return metaModelService != null
-                && metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+        return replayContext.metaModelService() != null
+                && replayContext.metaModelService().lookupLogicalTypeByName(bookmark.getLogicalTypeName())
                 .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
                 .orElse(false);
     }
@@ -241,11 +237,11 @@ public final class CommandManagerExport implements ViewModel, HasBaseline, Comma
     }
 
     private ReplayableCommand replayableCommandInExportManagerContext(final CommandLogEntry entry) {
-        return scratchpad != null
+        return replayContext.scratchpad() != null
                 ? new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext,
-                        scratchpad)
+                        replayContext.scratchpad())
                 : new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext,
@@ -264,8 +260,8 @@ public final class CommandManagerExport implements ViewModel, HasBaseline, Comma
     }
 
     private void putCurrentExportManagerOnScratchpad() {
-        if (scratchpad != null) {
-            scratchpad.put(SCRATCHPAD_KEY, this);
+        if (replayContext.scratchpad() != null) {
+            replayContext.scratchpad().put(SCRATCHPAD_KEY, this);
         }
     }
 

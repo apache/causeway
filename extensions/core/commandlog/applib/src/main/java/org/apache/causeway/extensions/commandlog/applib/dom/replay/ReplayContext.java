@@ -25,16 +25,23 @@ import java.util.UUID;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
+
 import org.springframework.lang.Nullable;
 
 import lombok.Value;
 import lombok.experimental.Accessors;
+
+import javax.inject.Inject;
 
 /**
  * Bundles dependencies for the replay logic.
@@ -48,7 +55,12 @@ public final class ReplayContext {
         CommandExecutorService commandExecutorService;
         ClockService clockService;
         List<CommandReplayMappingListener> commandReplayMappingListeners;
-        SpecificationLoader specificationLoader;
+        Scratchpad scratchpad;
+        MetaModelService metaModelService;
+        CausewayConfiguration causewayConfiguration;
+        List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
+
+    SpecificationLoader specificationLoader;
 
     public ReplayContext(
             final RepositoryService repositoryService,
@@ -57,7 +69,11 @@ public final class ReplayContext {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final List<CommandReplayMappingListener> commandReplayMappingListeners) {
+            final List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final Scratchpad scratchpad,
+            final MetaModelService metaModelService,
+            final CausewayConfiguration causewayConfiguration,
+            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices) {
         this(
                 repositoryService,
                 interactionService,
@@ -66,6 +82,10 @@ public final class ReplayContext {
                 commandExecutorService,
                 clockService,
                 commandReplayMappingListeners,
+                scratchpad,
+                metaModelService,
+                causewayConfiguration,
+                commandReplayReferenceDataServices,
                 null);
     }
 
@@ -77,6 +97,10 @@ public final class ReplayContext {
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
             final List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final Scratchpad scratchpad,
+            final MetaModelService metaModelService,
+            final CausewayConfiguration causewayConfiguration,
+            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader) {
         this.repositoryService = repositoryService;
         this.interactionService = interactionService;
@@ -85,6 +109,10 @@ public final class ReplayContext {
         this.commandExecutorService = commandExecutorService;
         this.clockService = clockService;
         this.commandReplayMappingListeners = commandReplayMappingListeners;
+        this.scratchpad = scratchpad;
+        this.metaModelService = metaModelService;
+        this.causewayConfiguration = causewayConfiguration;
+        this.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
         this.specificationLoader = specificationLoader;
     }
 
@@ -93,5 +121,5 @@ public final class ReplayContext {
 			? commandLogEntryRepository().findByInteractionId(interactionId)
 			: Optional.empty();
     }
-        
+
 }

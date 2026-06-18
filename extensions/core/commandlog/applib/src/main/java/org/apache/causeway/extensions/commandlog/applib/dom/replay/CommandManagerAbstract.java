@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.sql.Timestamp;
+
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 
 public abstract class CommandManagerAbstract implements HasBaseline, CommandRecordingSuppressed {
-
 
 }
