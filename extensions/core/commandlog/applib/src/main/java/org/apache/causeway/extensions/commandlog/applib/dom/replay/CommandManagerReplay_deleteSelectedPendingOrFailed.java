@@ -8,24 +8,25 @@ import org.apache.causeway.applib.annotation.*;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "succeededOrExcluded",
-        semantics = SemanticsOf.IDEMPOTENT,
-        domainEvent = CommandReplayManager_deleteSelectedSucceededOrExcluded.DomainEvent.class,
+        choicesFrom = "pendingOrFailed",
+        semantics = SemanticsOf.NON_IDEMPOTENT,
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = CommandManagerReplay_deleteSelectedPendingOrFailed.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "succeededOrExcluded",
-        named = "Delete Selected",
+        associateWith = "pendingOrFailed", sequence = "1.4",
+        cssClass = "btn-danger",
         describedAs = "Deletes selected Commands (cannot be undone)"
 )
 @RequiredArgsConstructor
-public class CommandReplayManager_deleteSelectedSucceededOrExcluded {
+public class CommandManagerReplay_deleteSelectedPendingOrFailed {
 
-    public static class DomainEvent extends CommandReplayManager.ActionDomainEvent<CommandReplayManager_deleteSelectedSucceededOrExcluded> { }
+    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_deleteSelectedPendingOrFailed> { }
 
-    private final CommandReplayManager commandReplayManager;
+    private final CommandManagerReplay commandReplayManager;
 
-    public CommandReplayManager act(final List<ReplayableCommand> selected) {
+    public CommandManagerReplay act(final List<ReplayableCommand> selected) {
         selected.stream()
                 .forEach(ReplayableCommand::deleteObj); // filtered on its own responsibility
         return commandReplayManager;
@@ -33,7 +34,7 @@ public class CommandReplayManager_deleteSelectedSucceededOrExcluded {
 
     @MemberSupport
     public String disableAct() {
-        return commandReplayManager.getSucceededOrExcluded().isEmpty() ? "No commands in collection" : null;
+        return commandReplayManager.getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -44,6 +45,7 @@ public class CommandReplayManager_deleteSelectedSucceededOrExcluded {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandReplayManager.getSucceededOrExcluded();
+        return commandReplayManager.getPendingOrFailed();
     }
+
 }

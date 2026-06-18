@@ -36,26 +36,26 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandReplayResultMapping_delete;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_deleteCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_nextPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_previousPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetryNext;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_deleteCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_nextPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_previousPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_excludeCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsDown;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsUp;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_unexcludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_excludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_exportSelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsDown;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsUp;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_unexcludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedPendingOrFailed;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedSucceededOrExcluded;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_excludeSelectedFromReplay;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetrySelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_deleteSelectedPendingOrFailed;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_deleteSelectedSucceededOrExcluded;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_excludeSelectedFromReplay;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_replayOrRetrySelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
@@ -84,8 +84,8 @@ import org.springframework.context.annotation.Import;
         CommandLogMenu.class,
 
         // viewmodels
-        CommandExportManager.class,
-        CommandReplayManager.class,
+        CommandManagerExport.class,
+        CommandManagerReplay.class,
 
         // mixins
         HasInteractionId_commandLogEntry.class,
@@ -106,21 +106,21 @@ import org.springframework.context.annotation.Import;
         HasBaseline_previousHour.class,
         HasBaseline_previousHour.class,
         HasBaseline_nextHour.class,
-        CommandExportManager_exportSelected.class,
-        CommandExportManager_excludeCommands.class,
-        CommandExportManager_moveCommandsUp.class,
-        CommandExportManager_moveCommandsDown.class,
-        CommandExportManager_deleteCommands.class,
-        CommandExportManager_unexcludeCommands.class,
-        CommandExportManager_previousPage.class,
-        CommandExportManager_nextPage.class,
-        CommandExportManager_changeLimit.class,
-        CommandReplayManager_importCommands.class,
-        CommandReplayManager_replayOrRetryNext.class,
-        CommandReplayManager_replayOrRetrySelected.class,
-        CommandReplayManager_excludeSelectedFromReplay.class,
-        CommandReplayManager_deleteSelectedSucceededOrExcluded.class,
-        CommandReplayManager_deleteSelectedPendingOrFailed.class,
+        CommandManagerExport_exportSelected.class,
+        CommandManagerExport_excludeCommands.class,
+        CommandManagerExport_moveCommandsUp.class,
+        CommandManagerExport_moveCommandsDown.class,
+        CommandManagerExport_deleteCommands.class,
+        CommandManagerExport_unexcludeCommands.class,
+        CommandManagerExport_previousPage.class,
+        CommandManagerExport_nextPage.class,
+        CommandManagerExport_changeLimit.class,
+        CommandManagerReplay_importCommands.class,
+        CommandManagerReplay_replayOrRetryNext.class,
+        CommandManagerReplay_replayOrRetrySelected.class,
+        CommandManagerReplay_excludeSelectedFromReplay.class,
+        CommandManagerReplay_deleteSelectedSucceededOrExcluded.class,
+        CommandManagerReplay_deleteSelectedPendingOrFailed.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,

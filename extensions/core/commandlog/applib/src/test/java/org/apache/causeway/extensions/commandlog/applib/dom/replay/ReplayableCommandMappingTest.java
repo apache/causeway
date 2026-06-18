@@ -77,8 +77,8 @@ class ReplayableCommandMappingTest {
 
     @Test
     void command_log_replay_helpers_suppress_command_recording() {
-        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandReplayManager.class);
-        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandExportManager.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandManagerReplay.class);
+        assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandManagerExport.class);
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommand.class);
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(ReplayableCommandParticipant.class);
         assertThat(CommandRecordingSuppressed.class).isAssignableFrom(CommandLogEntry.class);

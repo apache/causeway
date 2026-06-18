@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager.State;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport.State;
 import org.junit.jupiter.api.Test;
 
-class CommandExportManagerStateTest {
+class CommandManagerExportStateTest {
 
     @Test
     void roundtrip_toMemento_and_parseMemento() {

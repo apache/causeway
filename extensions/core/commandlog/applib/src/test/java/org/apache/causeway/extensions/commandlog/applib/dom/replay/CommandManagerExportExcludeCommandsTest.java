@@ -50,7 +50,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-class CommandExportManagerExcludeCommandsTest {
+class CommandManagerExportExcludeCommandsTest {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
@@ -154,10 +154,10 @@ class CommandExportManagerExcludeCommandsTest {
         }
 
         final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
-        final var manager = new CommandExportManager(
-                new CommandExportManager.State(BASELINE, 50),
+        final var manager = new CommandManagerExport(
+                new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
-        final var action = new CommandExportManager_excludeCommands(manager);
+        final var action = new CommandManagerExport_excludeCommands(manager);
         action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         return new Fixture(repository, replayContext, manager, action);
     }
@@ -210,14 +210,14 @@ class CommandExportManagerExcludeCommandsTest {
     private static class Fixture {
         final CommandLogEntryRepository repository;
         private final ReplayContext replayContext;
-        final CommandExportManager manager;
-        final CommandExportManager_excludeCommands action;
+        final CommandManagerExport manager;
+        final CommandManagerExport_excludeCommands action;
 
         Fixture(
                 final CommandLogEntryRepository repository,
                 final ReplayContext replayContext,
-                final CommandExportManager manager,
-                final CommandExportManager_excludeCommands action) {
+                final CommandManagerExport manager,
+                final CommandManagerExport_excludeCommands action) {
             this.repository = repository;
             this.replayContext = replayContext;
             this.manager = manager;

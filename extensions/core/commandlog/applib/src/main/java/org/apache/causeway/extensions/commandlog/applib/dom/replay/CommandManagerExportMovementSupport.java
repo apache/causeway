@@ -31,9 +31,8 @@ import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-class CommandExportManagerMovementSupport {
+class CommandManagerExportMovementSupport {
 
     static final long MINIMUM_GAP_MILLIS = 10L;
     static final long SQUASH_GAP_MILLIS = 1000L;
@@ -43,12 +42,12 @@ class CommandExportManagerMovementSupport {
         DOWN
     }
 
-    private final CommandExportManager commandExportManager;
+    private final CommandManagerExport commandExportManager;
     private final CausewayConfiguration causewayConfiguration;
     private final Direction direction;
 
-    CommandExportManagerMovementSupport(
-            final CommandExportManager commandExportManager,
+    CommandManagerExportMovementSupport(
+            final CommandManagerExport commandExportManager,
             final CausewayConfiguration causewayConfiguration,
             final Direction direction) {
         this.commandExportManager = commandExportManager;
@@ -122,7 +121,7 @@ class CommandExportManagerMovementSupport {
         return commandExportManager.getCommands();
     }
 
-    CommandExportManager move(
+    CommandManagerExport move(
             final List<ReplayableCommand> selected,
             final ReplayableCommand target,
             final boolean squashTimings) {

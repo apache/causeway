@@ -58,8 +58,8 @@ import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
-@Named(CommandExportManager.LOGICAL_TYPE_NAME)
-public final class CommandExportManager implements ViewModel, HasBaseline, CommandRecordingSuppressed {
+@Named(CommandManagerExport.LOGICAL_TYPE_NAME)
+public final class CommandManagerExport implements ViewModel, HasBaseline, CommandRecordingSuppressed {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
     static final String SCRATCHPAD_KEY = LOGICAL_TYPE_NAME + "#current";
@@ -75,13 +75,13 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
     @Inject
-    public CommandExportManager(
+    public CommandManagerExport(
             final String memento,
             final ReplayContext replayContext) {
         this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
 
-    public CommandExportManager(
+    public CommandManagerExport(
             final State state,
             final ReplayContext replayContext) {
         this.baseline = state.timestamp;
@@ -105,13 +105,13 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
 
     @Override
     @Programmatic
-    public CommandExportManager withBaseline(final Timestamp baseline) {
-        return new CommandExportManager(new State(baseline, this.limit), replayContext);
+    public CommandManagerExport withBaseline(final Timestamp baseline) {
+        return new CommandManagerExport(new State(baseline, this.limit), replayContext);
     }
 
     @Programmatic
-    public CommandExportManager withLimit(final int limit) {
-        return new CommandExportManager(new State(this.baseline, limit), replayContext);
+    public CommandManagerExport withLimit(final int limit) {
+        return new CommandManagerExport(new State(this.baseline, limit), replayContext);
     }
 
     // -- COMMANDS
@@ -135,7 +135,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     )
     public List<ReplayableCommand> getExcludedCommands() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
-                .filter(CommandExportManager::isExcludedCommand)
+                .filter(CommandManagerExport::isExcludedCommand)
                 .filter(this::isReplayable)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
@@ -231,7 +231,7 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
     @Programmatic
     List<CommandLogEntry> activeCommandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
-                .filter(CommandExportManager::isActiveCommand)
+                .filter(CommandManagerExport::isActiveCommand)
                 .filter(this::isReplayable)
                 .collect(Collectors.toList());
     }
@@ -269,11 +269,11 @@ public final class CommandExportManager implements ViewModel, HasBaseline, Comma
         }
     }
 
-    static Optional<CommandExportManager> currentExportManager(final Scratchpad scratchpad) {
+    static Optional<CommandManagerExport> currentExportManager(final Scratchpad scratchpad) {
         return Optional.ofNullable(scratchpad)
                 .map(sp -> sp.get(SCRATCHPAD_KEY))
-                .filter(CommandExportManager.class::isInstance)
-                .map(CommandExportManager.class::cast);
+                .filter(CommandManagerExport.class::isInstance)
+                .map(CommandManagerExport.class::cast);
     }
 
     // -- VM STATE

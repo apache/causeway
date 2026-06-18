@@ -25,11 +25,11 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_excludeCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsDown;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsUp;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_exportSelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_excludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsDown;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsUp;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
 
 class CausewayModuleExtCommandLogApplibTest {
@@ -41,11 +41,11 @@ class CausewayModuleExtCommandLogApplibTest {
 
         assertThat(imports)
                 .contains(
-                        CommandExportManager.class,
-                        CommandExportManager_exportSelected.class,
-                        CommandExportManager_excludeCommands.class,
-                        CommandExportManager_moveCommandsUp.class,
-                        CommandExportManager_moveCommandsDown.class,
+                        CommandManagerExport.class,
+                        CommandManagerExport_exportSelected.class,
+                        CommandManagerExport_excludeCommands.class,
+                        CommandManagerExport_moveCommandsUp.class,
+                        CommandManagerExport_moveCommandsDown.class,
                         ReplayableCommand_makeExportable.class);
         assertThat(imports)
                 .extracting(Class::getSimpleName)

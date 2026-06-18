@@ -39,7 +39,7 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-class CommandReplayManager_importCommandsTest {
+class CommandManager_Replay_importCommandsTest {
 
     @Test
     void imports_command_export_result_as_command_log_result() {
@@ -53,7 +53,7 @@ class CommandReplayManager_importCommandsTest {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.saveForReplay(any(CommandDto.class))).thenReturn(commandLogEntry);
 
-        CommandReplayManager_importCommands importCommands = new CommandReplayManager_importCommands(null);
+        CommandManagerReplay_importCommands importCommands = new CommandManagerReplay_importCommands(null);
         importCommands.commandLogEntryRepository = commandLogEntryRepository;
 
         importCommands.act(commandsYaml, false);
