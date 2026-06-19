@@ -115,7 +115,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     private final ObjectReference<CommandRecord> recordRef;
 
 
-    private final CommandManagerExport commandExportManager;
+    private final ReplayableCommandParticipantTracker replayableCommandParticipantTracker;
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".ReplayableCommand";
 
@@ -181,26 +181,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         this(UUID.fromString(memento), replayContext);
     }
 
-    @Inject
-    public ReplayableCommand(
-            final String memento,
-            final ReplayContext replayContext,
-            final Scratchpad scratchpad) {
-        this(UUID.fromString(memento), replayContext, scratchpad);
-    }
-
     ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext) {
-        this(interactionId, replayContext, new ObjectReference<>(null), null);
-    }
-
-    ReplayableCommand(
-            final UUID interactionId,
-            final ReplayContext replayContext,
-            final Scratchpad scratchpad) {
         this(interactionId, replayContext, new ObjectReference<>(null),
-                CommandManagerExport.currentExportManager(scratchpad).orElse(null));
+                ReplayableCommandParticipantTracker.current(replayContext.scratchpad()).orElse(null));
     }
 
     ReplayableCommand(
@@ -214,11 +199,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final UUID interactionId,
             final ReplayContext replayContext,
             final ObjectReference<CommandRecord> recordRef,
-            final CommandManagerExport commandExportManager) {
+            final ReplayableCommandParticipantTracker replayableCommandParticipantTracker) {
         this.interactionId = interactionId;
         this.replayContext = replayContext;
         this.recordRef = recordRef;
-        this.commandExportManager = commandExportManager;
+        this.replayableCommandParticipantTracker = replayableCommandParticipantTracker;
     }
 
     @ObjectSupport
@@ -343,13 +328,13 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             describedAs = "Whether this command uses only known participants as target or action params.  This determines whether the command is exportable/replayable in context of all commands since a baseline.",
             hidden = Where.OBJECT_FORMS
     )
-    public Boolean isKnownParticipants() {
-        if (commandExportManager == null) {
-            return null;
+    public boolean isKnownParticipants() {
+        if (replayableCommandParticipantTracker == null) {
+            return false;
         }
         return commandLogEntry()
-                .map(commandExportManager::isKnownParticipants)
-                .orElse(null);
+                .map(replayableCommandParticipantTracker::isKnownParticipants)
+                .orElse(false);
     }
 
     @Property
