@@ -69,9 +69,9 @@ class CommandManager_unexcludeCommands_Test {
         final var excluded = entry(ReplayState.EXCLUDED);
         final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(excluded), excluded);
 
-        assertThat(fixture.action.validateAct(List.of()))
+        assertThat(fixture.action.validateSelected(List.of()))
                 .isEqualTo("Select at least one command to restore");
-        assertThat(fixture.action.validateAct(null))
+        assertThat(fixture.action.validateSelected(null))
                 .isEqualTo("Select at least one command to restore");
     }
 
@@ -81,7 +81,7 @@ class CommandManager_unexcludeCommands_Test {
         final var excluded = entry(ReplayState.EXCLUDED);
         final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(active, excluded), active, excluded);
 
-        assertThat(fixture.action.validateAct(fixture.commands(active)))
+        assertThat(fixture.action.validateSelected(fixture.commands(active)))
                 .isEqualTo("Selected commands must be excluded commands from the current baseline");
     }
 

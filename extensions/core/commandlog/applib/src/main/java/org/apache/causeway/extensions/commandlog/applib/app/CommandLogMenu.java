@@ -175,6 +175,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -199,6 +200,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findChangedReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -223,6 +225,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappingByRecordedBookmark.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -250,6 +253,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappingsByActualBookmark.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -276,6 +280,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = deleteReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
     )
     @ActionLayout(cssClassFa = "fa-trash", sequence="56")
