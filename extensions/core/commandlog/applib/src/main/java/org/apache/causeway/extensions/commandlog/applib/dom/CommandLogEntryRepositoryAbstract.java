@@ -397,14 +397,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return allMatches(query, batchSizeIfAny);
     }
 
-    private List<CommandLogEntry> findForegroundBeforeTimestampWithState(Timestamp to, ReplayState replayState, Integer batchSizeIfAny) {
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE)
-                .withParameter("to", to)
-                .withParameter("replayState", replayState);
-
-        return allMatches(query, batchSizeIfAny);
-    }
-
 
     private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
         return _Casts.uncheckedCast(

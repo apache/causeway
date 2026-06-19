@@ -1,5 +1,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +17,6 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
@@ -31,6 +32,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
         cssClass = "btn-secondary",
         describedAs = "Restores selected excluded Commands to the active export sequence by setting their replay state to UNDEFINED."
 )
+@RequiredArgsConstructor
 public class CommandManagerExport_unexcludeCommands {
 
     public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_unexcludeCommands> {
@@ -38,11 +40,7 @@ public class CommandManagerExport_unexcludeCommands {
 
     private final CommandManagerExport commandExportManager;
 
-    @Inject CausewayConfiguration causewayConfiguration;
-
-    public CommandManagerExport_unexcludeCommands(final CommandManagerExport commandExportManager) {
-        this.commandExportManager = commandExportManager;
-    }
+    @Inject ReplayContext replayContext;
 
     @MemberSupport
     public CommandManagerExport act(final List<ReplayableCommand> selected) {
@@ -60,7 +58,7 @@ public class CommandManagerExport_unexcludeCommands {
 
     @MemberSupport
     public String disableAct() {
-        if (!isRecordingSupportEnabled()) {
+        if (!replayContext.isRecordingSupportEnabled()) {
             return "Command restoration requires command-log recording support to be enabled";
         }
         return commandExportManager.getExcludedCommands().isEmpty() ? "No excluded commands in collection" : null;
@@ -68,7 +66,7 @@ public class CommandManagerExport_unexcludeCommands {
 
     @MemberSupport
     public String validateAct(final List<ReplayableCommand> selected) {
-        if (!isRecordingSupportEnabled()) {
+        if (!replayContext.isRecordingSupportEnabled()) {
             return "Command restoration requires command-log recording support to be enabled";
         }
         final String selectedValidation = validateSelected(selected);
@@ -92,11 +90,6 @@ public class CommandManagerExport_unexcludeCommands {
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
         return commandExportManager.getExcludedCommands();
-    }
-
-    private boolean isRecordingSupportEnabled() {
-        return causewayConfiguration != null
-                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {

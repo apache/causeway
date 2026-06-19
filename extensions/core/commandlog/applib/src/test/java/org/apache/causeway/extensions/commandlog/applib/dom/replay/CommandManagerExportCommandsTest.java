@@ -31,6 +31,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
+
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.Identifier;
@@ -52,11 +54,12 @@ class CommandManagerExportCommandsTest {
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
     @Test
-    void commands_collection_includes_undefined_and_exported_replay_states_since_baseline() {
+    void commands_collection_includes_undefined_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
+        final var exported = entry(ReplayState.UNDEFINED);
         final var repository = repositoryReturning(List.of(undefined, exported), List.of());
-        final var manager = manager(repository);
+        final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.getCommands();
 
@@ -67,28 +70,35 @@ class CommandManagerExportCommandsTest {
     @Test
     void commands_collection_omits_excluded_and_replay_execution_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
+        final var undefined2 = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
         final var pending = entry(ReplayState.PENDING);
         final var ok = entry(ReplayState.OK);
         final var failed = entry(ReplayState.FAILED);
-        final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending, ok, failed), List.of());
-        final var manager = manager(repository);
+
+        final var repository = repositoryReturning(List.of(undefined, undefined2, excluded, pending, ok, failed), List.of());
+
+        final var replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(repository)
+                .scratchpad(new ScratchpadDefault())
+                .build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.getCommands();
 
         assertThat(interactionIds(commands))
-                .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
+                .containsExactly(undefined.getInteractionId(), undefined2.getInteractionId(), ok.getInteractionId());
     }
 
     @Test
     void excluded_commands_collection_includes_only_excluded_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
-        final var exported = entry(ReplayState.EXPORTED);
+        final var exported = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
         final var pending = entry(ReplayState.PENDING);
         final var repository = repositoryReturning(List.of(undefined, exported, excluded, pending), List.of());
-        final var manager = manager(repository);
+        final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.getExcludedCommands();
 
@@ -100,7 +110,9 @@ class CommandManagerExportCommandsTest {
     void commands_collection_includes_safe_action_with_single_result() {
         final var safeAction = safeActionEntry(ReplayState.UNDEFINED, RESULT);
         final var repository = repositoryReturning(List.of(safeAction), List.of());
-        final var manager = manager(repository, safeActionSpecificationLoader());
+        final SpecificationLoader specificationLoader = safeActionSpecificationLoader();
+        final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(specificationLoader).build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.getCommands();
 
@@ -112,7 +124,9 @@ class CommandManagerExportCommandsTest {
     void commands_collection_omits_safe_action_without_result_but_entry_remains_available_from_repository() {
         final var safeAction = safeActionEntry(ReplayState.UNDEFINED, null);
         final var repository = repositoryReturning(List.of(safeAction), List.of());
-        final var manager = manager(repository, safeActionSpecificationLoader());
+        final SpecificationLoader specificationLoader = safeActionSpecificationLoader();
+        final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(specificationLoader).build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.getCommands();
 
@@ -123,25 +137,15 @@ class CommandManagerExportCommandsTest {
     @Test
     void previous_page_uses_unified_unfiltered_query() {
         final var excluded = entry(ReplayState.EXCLUDED);
-        final var exported = entry(ReplayState.EXPORTED);
+        final var exported = entry(ReplayState.UNDEFINED);
         final var repository = repositoryReturning(List.of(), List.of(exported, excluded));
-        final var manager = manager(repository);
+        final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
+        final var manager = new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
 
         final var commands = manager.commands(CommandManagerExport.Direction.PREVIOUS);
 
         assertThat(interactionIds(commands))
                 .containsExactly(exported.getInteractionId(), excluded.getInteractionId());
-    }
-
-    private static CommandManagerExport manager(final CommandLogEntryRepository repository) {
-        return manager(repository, null);
-    }
-
-    private static CommandManagerExport manager(
-            final CommandLogEntryRepository repository,
-            final SpecificationLoader specificationLoader) {
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of(), specificationLoader);
-        return new CommandManagerExport(new CommandManagerExport.State(BASELINE, 50), replayContext);
     }
 
     private static CommandLogEntryRepository repositoryReturning(

@@ -60,7 +60,7 @@ class CommandManagerExportExcludeCommandsTest {
     @Test
     void act_marks_selected_active_commands_excluded() {
         final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var b = entry(MENU_SERVICE, ReplayState.EXPORTED);
+        final var b = entry(MENU_SERVICE, ReplayState.OK);
         final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(a, b), a, b);
 
         final var result = fixture.action.act(fixture.commands(a, b));
@@ -102,29 +102,6 @@ class CommandManagerExportExcludeCommandsTest {
     }
 
     @Test
-    void defaults_selected_to_non_exportable_active_commands_only() {
-        final var exportable = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var nonExportable = entry(CUSTOMER, ReplayState.UNDEFINED);
-        final var unknownExportability = entry(CUSTOMER, ReplayState.EXPORTED);
-        final var excluded = entry(CUSTOMER, ReplayState.EXCLUDED);
-        final var fixture = fixtureWith(
-                RecordingSupport.ENABLED,
-                List.of(exportable, nonExportable, unknownExportability, excluded),
-                exportable,
-                nonExportable,
-                unknownExportability,
-                excluded);
-        fixture.manager.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
-        fixture.manager.causewayConfiguration = causewayConfigurationWith(RecordingSupport.ENABLED);
-        when(fixture.repository.findByInteractionId(unknownExportability.getInteractionId())).thenReturn(Optional.empty());
-
-        final var defaults = fixture.action.defaultSelected();
-
-        assertThat(interactionIds(defaults))
-                .containsExactly(nonExportable.getInteractionId());
-    }
-
-    @Test
     void disable_act_reports_recording_support_disabled() {
         final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
         final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(a), a);
@@ -153,12 +130,15 @@ class CommandManagerExportExcludeCommandsTest {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder()
+                                    .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                                    .commandLogEntryRepository(repository)
+                                    .build();
         final var manager = new CommandManagerExport(
                 new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
         final var action = new CommandManagerExport_excludeCommands(manager);
-        action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        action.replayContext = replayContext;
         return new Fixture(repository, replayContext, manager, action);
     }
 

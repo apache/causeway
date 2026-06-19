@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.Identifier;
@@ -47,7 +46,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
@@ -439,8 +437,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private boolean isDomainService(final Bookmark bookmark) {
-        return bookmarkService != null
-                && Optional.ofNullable(bookmarkService.lookup(bookmark))
+        final var bookmarkService = replayContext.bookmarkService();
+        return Optional.ofNullable(bookmarkService.lookup(bookmark))
                 .flatMap(x -> x)
                 .map(Object::getClass)
                 .map(cls -> cls.isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
@@ -462,8 +460,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 parameterName,
                 recordedBookmark,
                 actualBookmark,
-                bookmarkService,
-                replayContext);
+                replayContext
+        );
     }
 
     private Optional<Bookmark> findActualBookmark(
@@ -809,8 +807,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             final CommandLogEntry commandLogEntry) {
         listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
     }
-
-    @Inject BookmarkService bookmarkService;
 
     @UtilityClass
     static class Util {

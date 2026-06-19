@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib;
 
 import java.util.List;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -201,7 +202,8 @@ public class CausewayModuleExtCommandLogApplib {
             final MetaModelService metaModelService,
             final CausewayConfiguration causewayConfiguration,
             final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
-            final SpecificationLoader specificationLoader) {
+            final SpecificationLoader specificationLoader,
+            final BookmarkService bookmarkService) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
@@ -210,7 +212,8 @@ public class CausewayModuleExtCommandLogApplib {
                 metaModelService,
                 causewayConfiguration,
                 commandReplayReferenceDataServices,
-                specificationLoader);
+                specificationLoader,
+                bookmarkService);
     }
 
 }

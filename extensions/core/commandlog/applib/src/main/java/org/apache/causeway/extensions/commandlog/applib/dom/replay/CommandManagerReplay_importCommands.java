@@ -36,6 +36,8 @@ public class CommandManagerReplay_importCommands {
 
     private final CommandManagerReplay commandReplayManager;
 
+    @Inject ReplayContext replayContext;
+
     public CommandManagerReplay act(
             @Parameter(fileAccept = ".yml,.yaml") final Blob commandsYaml,
             @ParameterLayout(describedAs = "Change the baseline to the timestamp of the oldest, so that they are listed at top") final boolean moveBaselineToOldest) {
@@ -43,7 +45,7 @@ public class CommandManagerReplay_importCommands {
 
         final List<CommandDtoUtils.ImportedCommandDto> importedCommandDtos = CommandDtoUtils.fromYamlForReplay(yamlDs);
         importedCommandDtos.forEach(importedCommandDto -> {
-            final CommandLogEntry commandLogEntry = commandLogEntryRepository.saveForReplay(importedCommandDto.getCommand());
+            final CommandLogEntry commandLogEntry = replayContext.commandLogEntryRepository().saveForReplay(importedCommandDto.getCommand());
             if (importedCommandDto.getResult() != null) {
                 commandLogEntry.setResult(importedCommandDto.getResult());
             }
@@ -70,7 +72,5 @@ public class CommandManagerReplay_importCommands {
         Instant instant = xgc.toGregorianCalendar().toZonedDateTime().toInstant();
         return Timestamp.from(instant);
     }
-
-    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
 }

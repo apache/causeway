@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -38,6 +40,8 @@ import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferen
 
 import org.springframework.lang.Nullable;
 
+import lombok.Builder;
+import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
@@ -48,20 +52,22 @@ import javax.inject.Inject;
  */
 @Value @Accessors(fluent = true)
 public final class ReplayContext {
-        RepositoryService repositoryService;
-        InteractionService interactionService;
-        TransactionService transactionService;
-        CommandLogEntryRepository commandLogEntryRepository;
-        CommandExecutorService commandExecutorService;
-        ClockService clockService;
-        List<CommandReplayMappingListener> commandReplayMappingListeners;
-        Scratchpad scratchpad;
-        MetaModelService metaModelService;
-        CausewayConfiguration causewayConfiguration;
-        List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
 
+    RepositoryService repositoryService;
+    InteractionService interactionService;
+    TransactionService transactionService;
+    CommandLogEntryRepository commandLogEntryRepository;
+    CommandExecutorService commandExecutorService;
+    ClockService clockService;
+    List<CommandReplayMappingListener> commandReplayMappingListeners;
+    Scratchpad scratchpad;
+    MetaModelService metaModelService;
+    CausewayConfiguration causewayConfiguration;
+    List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
     SpecificationLoader specificationLoader;
+    BookmarkService bookmarkService;
 
+    @Builder
     public ReplayContext(
             final RepositoryService repositoryService,
             final InteractionService interactionService,
@@ -69,39 +75,13 @@ public final class ReplayContext {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final List<CommandReplayMappingListener> commandReplayMappingListeners,
+            final @Singular("commandReplayMappingListener") List<CommandReplayMappingListener> commandReplayMappingListeners,
             final Scratchpad scratchpad,
             final MetaModelService metaModelService,
             final CausewayConfiguration causewayConfiguration,
-            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices) {
-        this(
-                repositoryService,
-                interactionService,
-                transactionService,
-                commandLogEntryRepository,
-                commandExecutorService,
-                clockService,
-                commandReplayMappingListeners,
-                scratchpad,
-                metaModelService,
-                causewayConfiguration,
-                commandReplayReferenceDataServices,
-                null);
-    }
-
-    public ReplayContext(
-            final RepositoryService repositoryService,
-            final InteractionService interactionService,
-            final TransactionService transactionService,
-            final CommandLogEntryRepository commandLogEntryRepository,
-            final CommandExecutorService commandExecutorService,
-            final ClockService clockService,
-            final List<CommandReplayMappingListener> commandReplayMappingListeners,
-            final Scratchpad scratchpad,
-            final MetaModelService metaModelService,
-            final CausewayConfiguration causewayConfiguration,
-            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
-            final SpecificationLoader specificationLoader) {
+            final @Singular("commandReplayReferenceDataService") List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
+            final SpecificationLoader specificationLoader,
+            final BookmarkService bookmarkService) {
         this.repositoryService = repositoryService;
         this.interactionService = interactionService;
         this.transactionService = transactionService;
@@ -114,6 +94,7 @@ public final class ReplayContext {
         this.causewayConfiguration = causewayConfiguration;
         this.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
         this.specificationLoader = specificationLoader;
+        this.bookmarkService = bookmarkService;
     }
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
@@ -122,4 +103,8 @@ public final class ReplayContext {
 			: Optional.empty();
     }
 
+    @Programmatic
+    public boolean isRecordingSupportEnabled() {
+        return causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+    }
 }

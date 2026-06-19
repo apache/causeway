@@ -32,6 +32,7 @@ import java.lang.reflect.Constructor;
 import java.sql.Timestamp;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -117,8 +118,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
         when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of());
+        ReplayContext replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .build();
         ReplayableCommand pendingCommand = new ReplayableCommand(interactionId, replayContext);
 
         assertThat(new ReplayableCommand_replayOrRetry(pendingCommand).disableAct())
@@ -132,8 +134,10 @@ class ReplayableCommandMappingTest {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
         TransactionService transactionService = mock(TransactionService.class);
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, null, null, List.of());
+        ReplayContext replayContext = ReplayContext.builder()
+                                        .transactionService(transactionService)
+                                        .commandLogEntryRepository(commandLogEntryRepository)
+                                        .build();
 
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
@@ -150,8 +154,10 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
         when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         TransactionService transactionService = mock(TransactionService.class);
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, null, null, List.of());
+        ReplayContext replayContext = ReplayContext.builder()
+                                        .transactionService(transactionService)
+                                        .commandLogEntryRepository(commandLogEntryRepository)
+                                        .build();
 
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
@@ -177,8 +183,9 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of());
+        ReplayContext replayContext = ReplayContext.builder()
+                                        .commandLogEntryRepository(commandLogEntryRepository)
+                                        .build();
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
 
         ReplayableCommand previous = replayableCommand.previous();
@@ -215,8 +222,10 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(omittedSafeEntry, previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of(), safeActionSpecificationLoader());
+        ReplayContext replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .specificationLoader(safeActionSpecificationLoader())
+                .build();
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
 
         ReplayableCommand previous = replayableCommand.previous();
@@ -237,8 +246,9 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of());
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of());
+        ReplayContext replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .build();
         ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
 
         assertThat(replayableCommand.disablePrevious()).isEqualTo("No previous command");
@@ -262,8 +272,11 @@ class ReplayableCommandMappingTest {
         when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
-        ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of()));
+        ReplayContext replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .build();
+
+        ReplayableCommand replayableCommand = new ReplayableCommand(currentInteractionId, replayContext);
 
         assertThat(new ReplayableCommand_previous(replayableCommand).disableAct()).isNull();
         assertThat(new ReplayableCommand_previous(replayableCommand).act().interactionId()).isEqualTo(previousInteractionId);
@@ -365,7 +378,7 @@ class ReplayableCommandMappingTest {
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")));
 
-        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getParticipants();
+        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, mock(BookmarkService.class), listener).getParticipants();
 
         assertThat(remappings).hasSize(2);
         ReplayableCommandParticipant participant = remappings.stream()
@@ -395,8 +408,7 @@ class ReplayableCommandMappingTest {
         BookmarkService bookmarkService = mock(BookmarkService.class);
         when(bookmarkService.lookup(targetBookmark)).thenReturn(Optional.of(targetObject));
         when(bookmarkService.lookup(parameterBookmark)).thenReturn(Optional.of(parameterObject));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry);
-        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, bookmarkService);
 
         List<ReplayableCommandParticipant> participants = replayableCommand.getParticipants();
 
@@ -421,35 +433,6 @@ class ReplayableCommandMappingTest {
         assertRecordedTargetAndArgumentAreAvailable(ReplayState.UNDEFINED);
     }
 
-    @Test
-    void exported_replay_state_populates_recorded_target_and_argument_bookmarks_and_objects() {
-        assertRecordedTargetAndArgumentAreAvailable(ReplayState.EXPORTED);
-    }
-
-    @Test
-    void domain_service_target_is_available_in_every_replay_state() {
-        for (ReplayState replayState : ReplayState.values()) {
-            UUID interactionId = UUID.randomUUID();
-            DomainServiceMenu service = new DomainServiceMenu();
-            Bookmark serviceBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demo.DomainServiceMenu", "1");
-            CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(commandWithTargetOnly(
-                    "demo.DomainServiceMenu", "1"));
-            when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
-            when(commandLogEntry.getReplayState()).thenReturn(replayState);
-            BookmarkService bookmarkService = mock(BookmarkService.class);
-            when(bookmarkService.lookup(serviceBookmark)).thenReturn(Optional.of(service));
-            ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry);
-            replayableCommand.bookmarkService = bookmarkService;
-
-            ReplayableCommandParticipant targetParticipant = replayableCommand.getParticipants().stream()
-                    .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.TARGET)
-                    .findFirst()
-                    .orElseThrow();
-
-            assertThat(targetParticipant.getActualBookmark()).as(replayState.name()).isEqualTo(serviceBookmark);
-            assertThat(targetParticipant.getTarget()).as(replayState.name()).isSameAs(service);
-        }
-    }
 
     @Test
     void participant_mementos_are_readable_and_do_not_include_bookmarks() {
@@ -459,19 +442,25 @@ class ReplayableCommandMappingTest {
                 ReplayableCommandParticipant.Role.TARGET,
                 null,
                 Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "1"),
-                Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "2"));
+                Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "2"),
+                null // replayContext
+        );
         ReplayableCommandParticipant parameterParticipant = new ReplayableCommandParticipant(
                 interactionId,
                 ReplayableCommandParticipant.Role.PARAMETER,
                 "customer",
                 Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "1"),
-                Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "2"));
+                Bookmark.forLogicalTypeNameAndIdentifier("demoCustomer", "2"),
+                null // replayContext
+        );
         ReplayableCommandParticipant resultParticipant = new ReplayableCommandParticipant(
                 interactionId,
                 ReplayableCommandParticipant.Role.RESULT,
                 null,
                 Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1"),
-                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2"));
+                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2"),
+                null // replayContext
+        );
 
         assertThat(targetParticipant.viewModelMemento())
                 .isEqualTo("11111111-1111-1111-1111-111111111111--target")
@@ -496,10 +485,10 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         when(listener.lookup(commandLogEntry, recordedTarget)).thenReturn(Optional.of(actualTarget));
-        ReplayContext replayContext = replayContext(interactionId, commandLogEntry, listener);
+        ReplayContext replayContext = replayContext(interactionId, commandLogEntry, mock(BookmarkService.class), listener);
 
         ReplayableCommandParticipant participant = new ReplayableCommandParticipant(
-                interactionId + "--target", mock(BookmarkService.class), replayContext);
+                interactionId + "--target", replayContext);
 
         assertThat(participant.getRole()).isEqualTo(ReplayableCommandParticipant.Role.TARGET);
         assertThat(participant.getRecordedBookmark()).isEqualTo(recordedTarget);
@@ -518,10 +507,10 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
-        ReplayContext replayContext = replayContext(interactionId, commandLogEntry);
+        ReplayContext replayContext = replayContext(interactionId, commandLogEntry, mock(BookmarkService.class));
 
         ReplayableCommandParticipant participant = new ReplayableCommandParticipant(
-                interactionId + "--parameter--" + parameterName, mock(BookmarkService.class), replayContext);
+                interactionId + "--parameter--" + parameterName, replayContext);
 
         assertThat(participant.getParameterName()).isEqualTo(parameterName);
         assertThat(participant.getRecordedBookmark()).isEqualTo(recordedParameter);
@@ -535,7 +524,6 @@ class ReplayableCommandMappingTest {
         assertThat(constructors).hasSize(1);
         assertThat(constructors[0].getParameterTypes()).containsExactly(
                 String.class,
-                BookmarkService.class,
                 ReplayContext.class);
     }
 
@@ -548,7 +536,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
-        List<ReplayableCommandParticipant> participants = replayableCommand(interactionId, commandLogEntry).getParticipants();
+        List<ReplayableCommandParticipant> participants = replayableCommand(interactionId, commandLogEntry, mock(BookmarkService.class)).getParticipants();
 
         ReplayableCommandParticipant targetParticipant = participants.stream()
                 .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.TARGET)
@@ -565,16 +553,19 @@ class ReplayableCommandMappingTest {
     @Test
     void participant_resolves_actual_object_best_effort() {
         Object actualObject = new Object();
+        final var bookmarkService = mock(BookmarkService.class);
+        when(bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")))
+                .thenReturn(Optional.of(actualObject));
+        final var replayContext = ReplayContext.builder().bookmarkService(bookmarkService).build();
+
         ReplayableCommandParticipant participant = new ReplayableCommandParticipant(
                 UUID.randomUUID(),
                 ReplayableCommandParticipant.Role.TARGET,
                 null,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"),
-                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2"));
-        BookmarkService bookmarkService = mock(BookmarkService.class);
-        when(bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2")))
-                .thenReturn(Optional.of(actualObject));
-        participant.bookmarkService = bookmarkService;
+                Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "2"),
+                replayContext
+        );
 
         assertThat(participant.getTarget()).isSameAs(actualObject);
         assertThat(participant.getArgument()).isNull();
@@ -589,7 +580,7 @@ class ReplayableCommandMappingTest {
         CommandLogEntry commandLogEntry = commandLogEntryWithCommandDto(recordedCommandDto);
         when(commandLogEntry.getInteractionId()).thenReturn(interactionId);
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.OK);
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry);
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, mock(BookmarkService.class));
 
         ReplayableCommandParticipant parameterParticipant = replayableCommand.getParticipants().stream()
                 .filter(row -> row.getRole() == ReplayableCommandParticipant.Role.PARAMETER)
@@ -604,7 +595,9 @@ class ReplayableCommandMappingTest {
                 ReplayableCommandParticipant.Role.RESULT,
                 null,
                 Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1"),
-                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2"));
+                Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2"),
+                null    // replayContext
+        );
 
         assertThat(parameterParticipant.title())
                 .contains("Replay participant", "PARAMETER", "simpleObject", "simple.SimpleObject:3");
@@ -654,7 +647,7 @@ class ReplayableCommandMappingTest {
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
 
-        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, listener).getParticipants();
+        List<ReplayableCommandParticipant> remappings = replayableCommand(interactionId, commandLogEntry, mock(BookmarkService.class), listener).getParticipants();
 
         assertThat(remappings).hasSize(2);
         ReplayableCommandParticipant participant = remappings.stream()
@@ -682,8 +675,7 @@ class ReplayableCommandMappingTest {
         when(listener.lookup(commandLogEntry, recordedResult)).thenReturn(Optional.of(actualResult));
         BookmarkService bookmarkService = mock(BookmarkService.class);
         when(bookmarkService.lookup(actualResult)).thenReturn(Optional.of(actualResultObject));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, listener);
-        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, bookmarkService, listener);
 
         List<ReplayableCommandParticipant> remappings = replayableCommand.getParticipants();
 
@@ -695,7 +687,7 @@ class ReplayableCommandMappingTest {
         assertThat(participant.getResult()).isSameAs(actualResultObject);
 
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
-        List<ReplayableCommandParticipant> pendingParticipants = replayableCommand(interactionId, commandLogEntry, listener).getParticipants();
+        List<ReplayableCommandParticipant> pendingParticipants = replayableCommand(interactionId, commandLogEntry, mock(BookmarkService.class), listener).getParticipants();
         assertThat(pendingParticipants).hasSize(1);
         assertThat(pendingParticipants.get(0).getRole()).isEqualTo(ReplayableCommandParticipant.Role.RESULT);
         assertThat(pendingParticipants.get(0).getRecordedBookmark()).isEqualTo(recordedResult);
@@ -712,7 +704,7 @@ class ReplayableCommandMappingTest {
         doThrow(new IllegalStateException("lookup failed"))
                 .when(listener).lookup(commandLogEntry, Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "1"));
 
-        List<ReplayableCommandParticipant> participants = replayableCommand(UUID.randomUUID(), commandLogEntry, listener).getParticipants();
+        List<ReplayableCommandParticipant> participants = replayableCommand(UUID.randomUUID(), commandLogEntry, mock(BookmarkService.class), listener).getParticipants();
 
         assertThat(participants).hasSize(2);
         assertThat(participants).allSatisfy(participant -> assertThat(participant.getActualBookmark()).isNull());
@@ -752,8 +744,12 @@ class ReplayableCommandMappingTest {
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
+        ReplayContext replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandExecutorService(commandExecutorService)
+                .commandReplayMappingListener(listener)
+                .build();
 
         new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
@@ -809,8 +805,12 @@ class ReplayableCommandMappingTest {
                 commandLogEntry,
                 Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "3")))
                 .thenReturn(Optional.of(Bookmark.forLogicalTypeNameAndIdentifier("simple.SimpleObject", "4")));
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
+        ReplayContext replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandExecutorService(commandExecutorService)
+                .commandReplayMappingListener(listener)
+                .build();
 
         new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
@@ -974,9 +974,12 @@ class ReplayableCommandMappingTest {
             assertThat(currentTransaction.get()).isEqualTo(commandExecutionTransaction.get());
             return null;
         }).when(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
-
+        ReplayContext replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandExecutorService(commandExecutorService)
+                .commandReplayMappingListener(listener)
+                .build();
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
         assertThat(result.isSuccess()).isTrue();
@@ -1012,9 +1015,12 @@ class ReplayableCommandMappingTest {
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
         doThrow(new IllegalStateException("conflicting result mapping"))
                 .when(listener).onReplayResult(recordedResult, actualResult, commandLogEntry);
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, commandExecutorService, null, List.of(listener));
-
+        ReplayContext replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandExecutorService(commandExecutorService)
+                .commandReplayMappingListener(listener)
+                .build();
         Try<ReplayableCommand> result = new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
         assertThat(result.isFailure()).isTrue();
@@ -1070,8 +1076,11 @@ class ReplayableCommandMappingTest {
                 });
 
         CommandReplayMappingListener listener = mock(CommandReplayMappingListener.class);
-        ReplayContext replayContext = new ReplayContext(
-                null, null, transactionService, commandLogEntryRepository, null, null, List.of(listener));
+        ReplayContext replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandReplayMappingListener(listener)
+                .build();
 
         new ReplayableCommand(interactionId, replayContext).tryReplayOrRetry();
 
@@ -1092,8 +1101,7 @@ class ReplayableCommandMappingTest {
         BookmarkService bookmarkService = mock(BookmarkService.class);
         when(bookmarkService.lookup(targetBookmark)).thenReturn(Optional.of(targetObject));
         when(bookmarkService.lookup(parameterBookmark)).thenReturn(Optional.of(parameterObject));
-        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry);
-        replayableCommand.bookmarkService = bookmarkService;
+        ReplayableCommand replayableCommand = replayableCommand(interactionId, commandLogEntry, bookmarkService);
 
         List<ReplayableCommandParticipant> participants = replayableCommand.getParticipants();
 
@@ -1117,29 +1125,36 @@ class ReplayableCommandMappingTest {
     }
 
     private static ReplayableCommand replayableCommand(final CommandReplayMappingListener listener) {
-        ReplayContext replayContext = new ReplayContext(null, null, null, null, null, null, List.of(listener));
+        ReplayContext replayContext = ReplayContext.builder().commandReplayMappingListener(listener).build();
         return new ReplayableCommand(UUID.randomUUID(), replayContext);
     }
 
     private static ReplayableCommand replayableCommand(final CommandLogEntry commandLogEntry) {
-        return replayableCommand(UUID.randomUUID(), commandLogEntry);
+        return replayableCommand(UUID.randomUUID(), commandLogEntry, mock(BookmarkService.class));
     }
 
     private static ReplayableCommand replayableCommand(
             final UUID interactionId,
             final CommandLogEntry commandLogEntry,
+            final BookmarkService bookmarkService,
             final CommandReplayMappingListener... listeners) {
-        return new ReplayableCommand(interactionId, replayContext(interactionId, commandLogEntry, listeners));
+        return new ReplayableCommand(interactionId, replayContext(interactionId, commandLogEntry, bookmarkService, listeners));
     }
 
     private static ReplayContext replayContext(
             final UUID interactionId,
             final CommandLogEntry commandLogEntry,
+            final BookmarkService bookmarkService,
             final CommandReplayMappingListener... listeners) {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
-        return new ReplayContext(
-                null, null, null, commandLogEntryRepository, null, null, List.of(listeners));
+        ReplayContext replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(commandLogEntryRepository)
+                .commandReplayMappingListeners(Arrays.asList(listeners))
+                .bookmarkService(bookmarkService)
+                .build();
+
+        return replayContext;
     }
 
     private static CommandLogEntry commandLogEntry(

@@ -1,6 +1,8 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 
+import lombok.RequiredArgsConstructor;
+
 import java.time.Instant;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.List;
@@ -11,14 +13,10 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
@@ -35,21 +33,13 @@ import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferen
         describedAs = "Exports selected Commands as zipped DTOs for import later. "
                 + "Refresh the page to see changed states."
 )
+@RequiredArgsConstructor
 public class CommandManagerExport_exportSelected {
 
     public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_exportSelected> {
     }
 
     private final CommandManagerExport commandExportManager;
-
-    @Inject MetaModelService metaModelService;
-    @Inject CausewayConfiguration causewayConfiguration;
-    @Inject List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
-
-    @Inject
-    public CommandManagerExport_exportSelected(final CommandManagerExport commandExportManager) {
-        this.commandExportManager = commandExportManager;
-    }
 
     @MemberSupport
     public Clob act(
@@ -81,12 +71,7 @@ public class CommandManagerExport_exportSelected {
                 : "";
         final var filename = filenamePrefix + timestamp;
 
-        var clob = Clob.of(filename, NamedWithMimeType.CommonMimeType.YAML, yaml);
-
-        // do this last once we have successfully created the Clob
-        selectedCommandLogEntries.forEach(c -> c.setReplayState(ReplayState.EXPORTED));
-
-        return clob;
+        return Clob.of(filename, NamedWithMimeType.CommonMimeType.YAML, yaml);
     }
 
     @MemberSupport
@@ -107,7 +92,7 @@ public class CommandManagerExport_exportSelected {
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
         return commandExportManager.getCommands().stream()
-                .filter(command -> Boolean.TRUE.equals(command.isKnownParticipants()))
+                .filter(ReplayableCommand::isKnownParticipants)
                 .collect(Collectors.toList());
     }
 
