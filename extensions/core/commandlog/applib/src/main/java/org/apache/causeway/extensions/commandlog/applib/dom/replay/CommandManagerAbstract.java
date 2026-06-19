@@ -27,10 +27,12 @@ import java.time.Instant;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
@@ -77,6 +79,29 @@ public abstract class CommandManagerAbstract implements ViewModel, HasBaseline, 
     }
 
 
+    CommandKnownParticipantsValidator validator() {
+        return new CommandKnownParticipantsValidator(this::isDomainServiceOrReferenceData);
+    }
+
+    private boolean isDomainServiceOrReferenceData(final Bookmark bookmark) {
+        return isDomainService(bookmark)
+                || CommandReplayReferenceDataService.isReferenceData(replayContext.commandReplayReferenceDataServices(), bookmark);
+    }
+
+    private boolean isDomainService(final Bookmark bookmark) {
+        final var metaModelService = replayContext.metaModelService();
+        final var specificationLoader = replayContext.specificationLoader();
+        if (metaModelService == null || specificationLoader == null) {
+            // shouldn't happen, except perhaps in unit testing?
+            return false;
+        }
+        return metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+                .flatMap(specificationLoader::specForLogicalType)
+                .map(ObjectSpecification::isDomainService)
+                .orElse(false);
+    }
+
+
     @Data
     public static class State {
         private static final String DELIMITER = "--";
@@ -117,4 +142,5 @@ public abstract class CommandManagerAbstract implements ViewModel, HasBaseline, 
             return TimestampMarshallUtil.toString(timestamp) + DELIMITER + limit;
         }
     }
+
 }

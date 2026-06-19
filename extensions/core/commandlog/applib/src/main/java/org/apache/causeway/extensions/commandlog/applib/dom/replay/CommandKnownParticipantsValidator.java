@@ -22,7 +22,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -35,22 +34,22 @@ import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 /**
- * Validates that an exported command sequence can reach every selected action target and reference parameter
- * from a root service or from a previously recorded result in the same baseline-bounded export sequence.
+ * Validates that in a sequence of commands, every action target or reference parameter argument is either
+ * a root service, is refdata, or is a previously recorded result in the same baseline-bounded export sequence.
  */
-final class CommandExportKnownTargetValidator {
+final class CommandKnownParticipantsValidator {
 
     private final Predicate<Bookmark> exportRootPredicate;
 
-    CommandExportKnownTargetValidator(final Predicate<Bookmark> exportRootPredicate) {
+    CommandKnownParticipantsValidator(final Predicate<Bookmark> exportRootPredicate) {
         this.exportRootPredicate = exportRootPredicate;
     }
 
     Optional<Failure> validate(
             final Timestamp baseline,
-            final List<CommandLogEntry> selectedCommandLogEntries) {
+            final List<CommandLogEntry> commandLogEntries) {
         final Set<Bookmark> knownTargets = new HashSet<>();
-        for (final CommandLogEntry entry : selectedCommandLogEntries) {
+        for (final CommandLogEntry entry : commandLogEntries) {
             if (isBeforeBaseline(baseline, entry)) {
                 continue;
             }
@@ -100,14 +99,12 @@ final class CommandExportKnownTargetValidator {
                 .stream()
                 .flatMap(oidsDto -> oidsDto.getOid().stream())
                 .map(Bookmark::forOidDto)
-                .filter(Objects::nonNull)
                 .map(Participant::target)
                 .forEach(participants::add);
         if (participants.isEmpty() && entry.getTarget() != null) {
             participants.add(Participant.target(entry.getTarget()));
         }
-        referenceParametersFor(entry)
-                .forEach(participants::add);
+        participants.addAll(referenceParametersFor(entry));
         return participants;
     }
 
@@ -124,7 +121,7 @@ final class CommandExportKnownTargetValidator {
                 .map(ActionDto::getParameters)
                 .stream()
                 .flatMap(paramsDto -> paramsDto.getParameter().stream())
-                .filter(CommandExportKnownTargetValidator::isReferenceParameter)
+                .filter(CommandKnownParticipantsValidator::isReferenceParameter)
                 .forEach(parameter -> participants.add(Participant.parameter(
                         parameterName(parameter, participants.size()),
                         Bookmark.forOidDto(parameter.getReference()))));

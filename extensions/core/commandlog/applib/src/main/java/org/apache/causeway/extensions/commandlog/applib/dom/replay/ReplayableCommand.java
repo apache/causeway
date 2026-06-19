@@ -50,7 +50,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -112,7 +111,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
 
-    private final ObjectReference<CommandRecord> recordRef;
+    private final ObjectReference<CommandRecord> recordRef = new ObjectReference<>(null);
 
 
     private final ReplayableCommandParticipantTracker replayableCommandParticipantTracker;
@@ -184,26 +183,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext) {
-        this(interactionId, replayContext, new ObjectReference<>(null),
-                ReplayableCommandParticipantTracker.current(replayContext.scratchpad()).orElse(null));
-    }
-
-    ReplayableCommand(
-            final UUID interactionId,
-            final ReplayContext replayContext,
-            final ObjectReference<CommandRecord> recordRef) {
-        this(interactionId, replayContext, recordRef, null);
-    }
-
-    ReplayableCommand(
-            final UUID interactionId,
-            final ReplayContext replayContext,
-            final ObjectReference<CommandRecord> recordRef,
-            final ReplayableCommandParticipantTracker replayableCommandParticipantTracker) {
         this.interactionId = interactionId;
         this.replayContext = replayContext;
-        this.recordRef = recordRef;
-        this.replayableCommandParticipantTracker = replayableCommandParticipantTracker;
+        this.replayableCommandParticipantTracker = ReplayableCommandParticipantTracker.current(replayContext.scratchpad()).orElse(null);
     }
 
     @ObjectSupport

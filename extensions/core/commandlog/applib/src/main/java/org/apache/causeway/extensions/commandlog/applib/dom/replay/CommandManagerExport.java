@@ -40,7 +40,6 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
@@ -50,7 +49,6 @@ public final class CommandManagerExport
         implements ReplayableCommandParticipantTracker {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
-    static final String SCRATCHPAD_KEY = LOGICAL_TYPE_NAME + "#current";
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
@@ -91,7 +89,7 @@ public final class CommandManagerExport
         ReplayableCommandParticipantTracker.putTrackerOnScratchpad(this, replayContext.scratchpad());
         return activeCommandLogEntries().stream()
                 .filter(this::isDoOp)
-                .map(this::replayableCommandInExportManagerContext)
+                .map(this::replayableCommandFor)
                 .collect(Collectors.toList());
     }
 
@@ -136,7 +134,7 @@ public final class CommandManagerExport
     }
 
     @Programmatic
-    Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
+    Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> selectedCommandLogEntries) {
         return isRecordingSupportEnabled()
                 ? validator().validate(baseline, selectedCommandLogEntries)
@@ -180,22 +178,6 @@ public final class CommandManagerExport
                 && replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
-    private CommandExportKnownTargetValidator validator() {
-        return new CommandExportKnownTargetValidator(this::isExportRootOrReferenceData);
-    }
-
-    private boolean isExportRootOrReferenceData(final Bookmark bookmark) {
-        return isExportRoot(bookmark)
-                || CommandReplayReferenceDataService.isReferenceData(replayContext.commandReplayReferenceDataServices(), bookmark);
-    }
-
-    private boolean isExportRoot(final Bookmark bookmark) {
-        return replayContext.metaModelService() != null
-                && replayContext.metaModelService().lookupLogicalTypeByName(bookmark.getLogicalTypeName())
-                .map(logicalType -> logicalType.correspondingClass().isAnnotationPresent(org.apache.causeway.applib.annotation.DomainService.class))
-                .orElse(false);
-    }
-
     @Programmatic
     List<CommandLogEntry> activeCommandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
@@ -208,16 +190,10 @@ public final class CommandManagerExport
         return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
     }
 
-    private ReplayableCommand replayableCommandInExportManagerContext(final CommandLogEntry entry) {
-        return replayContext.scratchpad() != null
-                ? new ReplayableCommand(
-                        entry.getInteractionId(),
-                        replayContext)
-                : new ReplayableCommand(
-                        entry.getInteractionId(),
-                        replayContext,
-                        new org.apache.causeway.commons.internal.base._Refs.ObjectReference<>(null),
-                        this);
+    private ReplayableCommand replayableCommandFor(final CommandLogEntry entry) {
+        return new ReplayableCommand(
+                entry.getInteractionId(),
+                replayContext);
     }
 
     private static boolean isActiveCommand(final CommandLogEntry entry) {

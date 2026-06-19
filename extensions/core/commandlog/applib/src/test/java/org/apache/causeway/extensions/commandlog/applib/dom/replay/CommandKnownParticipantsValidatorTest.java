@@ -40,7 +40,7 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-class CommandExportKnownTargetValidatorTest {
+class CommandKnownParticipantsValidatorTest {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp BEFORE_BASELINE = Timestamp.from(Instant.parse("2026-06-07T09:59:59Z"));
@@ -54,7 +54,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_root_menu_service_target() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(action(T1, MENU_SERVICE, null)));
 
@@ -63,7 +63,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_target_returned_by_earlier_selected_command() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(T1, MENU_SERVICE, CUSTOMER),
@@ -74,7 +74,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_target_returned_by_earlier_singleton_container_command() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var singletonContainerResult = CUSTOMER;
         final var failure = validator.validate(BASELINE, List.of(
@@ -86,7 +86,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_reference_data_target_without_prior_result() {
-        final var validator = new CommandExportKnownTargetValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
+        final var validator = new CommandKnownParticipantsValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
 
         final var failure = validator.validate(BASELINE, List.of(action(T1, CATEGORY, null)));
 
@@ -95,7 +95,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void rejects_unknown_non_root_target_and_reports_command_and_bookmark() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
         final var selected = action(T1, CUSTOMER, null);
 
         final var failure = validator.validate(BASELINE, List.of(selected));
@@ -110,7 +110,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void ignores_result_before_baseline_when_validating_later_target() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(BEFORE_BASELINE, MENU_SERVICE, CUSTOMER),
@@ -122,7 +122,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void does_not_treat_locally_resolvable_object_as_root() {
-        final var validator = new CommandExportKnownTargetValidator(__ -> false);
+        final var validator = new CommandKnownParticipantsValidator(__ -> false);
 
         final var failure = validator.validate(BASELINE, List.of(action(T1, CUSTOMER, null)));
 
@@ -131,7 +131,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void later_result_does_not_validate_earlier_target() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(T1, CUSTOMER, null),
@@ -143,7 +143,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void safe_action_without_result_does_not_establish_unrelated_target() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(T1, MENU_SERVICE, null),
@@ -155,7 +155,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void property_commands_with_known_targets_establish_result_as_later_known_target() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 property(T1, MENU_SERVICE, CUSTOMER),
@@ -166,7 +166,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_reference_parameter_returned_by_earlier_selected_command() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(T1, MENU_SERVICE, CUSTOMER),
@@ -177,7 +177,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_reference_parameter_that_is_root_menu_service() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 actionWithReferenceParameter(T1, MENU_SERVICE, null, "menu", MENU_SERVICE)));
@@ -187,7 +187,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void accepts_reference_data_reference_parameter_without_prior_result() {
-        final var validator = new CommandExportKnownTargetValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
+        final var validator = new CommandKnownParticipantsValidator(bookmark -> MENU_SERVICE.equals(bookmark) || CATEGORY.equals(bookmark));
 
         final var failure = validator.validate(BASELINE, List.of(
                 actionWithReferenceParameter(T1, MENU_SERVICE, null, "category", CATEGORY)));
@@ -197,7 +197,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void rejects_unknown_reference_parameter_and_reports_command_parameter_and_bookmark() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
         final var selected = actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER);
 
         final var failure = validator.validate(BASELINE, List.of(selected));
@@ -213,7 +213,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void later_result_does_not_validate_earlier_reference_parameter() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER),
@@ -227,7 +227,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void result_before_baseline_does_not_validate_reference_parameter() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 action(BEFORE_BASELINE, MENU_SERVICE, CUSTOMER),
@@ -241,7 +241,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void ignores_scalar_parameters_for_export_path_validation() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 actionWithScalarParameter(T1, MENU_SERVICE, null, "name")));
@@ -251,7 +251,7 @@ class CommandExportKnownTargetValidatorTest {
 
     @Test
     void ignores_reference_parameters_without_reference_bookmark() {
-        final var validator = new CommandExportKnownTargetValidator(MENU_SERVICE::equals);
+        final var validator = new CommandKnownParticipantsValidator(MENU_SERVICE::equals);
 
         final var failure = validator.validate(BASELINE, List.of(
                 actionWithReferenceParameter(T1, MENU_SERVICE, null, "customer", null)));

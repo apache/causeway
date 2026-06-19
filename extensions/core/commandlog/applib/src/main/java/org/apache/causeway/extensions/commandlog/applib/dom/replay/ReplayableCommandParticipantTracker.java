@@ -15,15 +15,17 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
  */
 public interface ReplayableCommandParticipantTracker {
 
+    String SCRATCHPAD_KEY = CommandManagerExport.LOGICAL_TYPE_NAME + "#current";
+
     static void putTrackerOnScratchpad(ReplayableCommandParticipantTracker value, Scratchpad scratchpad) {
         if (scratchpad != null) {
-            scratchpad.put(CommandManagerExport.SCRATCHPAD_KEY, value);
+            scratchpad.put(SCRATCHPAD_KEY, value);
         }
     }
 
     static Optional<ReplayableCommandParticipantTracker> current(final Scratchpad scratchpad) {
         return Optional.ofNullable(scratchpad)
-                .map(sp -> sp.get(CommandManagerExport.SCRATCHPAD_KEY))
+                .map(sp -> sp.get(SCRATCHPAD_KEY))
                 .filter(ReplayableCommandParticipantTracker.class::isInstance)
                 .map(ReplayableCommandParticipantTracker.class::cast);
     }
