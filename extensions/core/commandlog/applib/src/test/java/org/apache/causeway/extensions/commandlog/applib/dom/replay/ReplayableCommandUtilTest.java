@@ -31,19 +31,17 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-class ReplayableCommandEligibilityTest {
+class ReplayableCommandUtilTest {
 
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
@@ -51,7 +49,7 @@ class ReplayableCommandEligibilityTest {
     void state_changing_property_command_remains_replayable_without_result() {
         final var entry = propertyEntry(null);
 
-        final var replayable = ReplayableCommandEligibility.isReplayable(entry, safeActionSpecificationLoader());
+        final var replayable = ReplayableCommand.Util.isDoOp(entry, safeActionSpecificationLoader());
 
         assertThat(replayable).isTrue();
     }
@@ -60,7 +58,7 @@ class ReplayableCommandEligibilityTest {
     void safe_action_with_single_result_is_replayable() {
         final var entry = actionEntry(RESULT);
 
-        final var replayable = ReplayableCommandEligibility.isReplayable(entry, safeActionSpecificationLoader());
+        final var replayable = ReplayableCommand.Util.isDoOp(entry, safeActionSpecificationLoader());
 
         assertThat(replayable).isTrue();
     }
@@ -69,7 +67,7 @@ class ReplayableCommandEligibilityTest {
     void safe_action_without_result_is_not_replayable_and_is_not_mutated() {
         final var entry = actionEntry(null);
 
-        final var replayable = ReplayableCommandEligibility.isReplayable(entry, safeActionSpecificationLoader());
+        final var replayable = ReplayableCommand.Util.isDoOp(entry, safeActionSpecificationLoader());
 
         assertThat(replayable).isFalse();
         verify(entry, never()).setReplayState(any());
@@ -80,7 +78,7 @@ class ReplayableCommandEligibilityTest {
     void non_safe_action_without_result_remains_replayable() {
         final var entry = actionEntry(null);
 
-        final var replayable = ReplayableCommandEligibility.isReplayable(entry, nonSafeActionSpecificationLoader());
+        final var replayable = ReplayableCommand.Util.isDoOp(entry, nonSafeActionSpecificationLoader());
 
         assertThat(replayable).isTrue();
     }
@@ -90,7 +88,7 @@ class ReplayableCommandEligibilityTest {
         final var entry = actionEntry(null);
         final var specificationLoader = mock(SpecificationLoader.class);
 
-        final var replayable = ReplayableCommandEligibility.isReplayable(entry, specificationLoader);
+        final var replayable = ReplayableCommand.Util.isDoOp(entry, specificationLoader);
 
         assertThat(replayable).isTrue();
     }

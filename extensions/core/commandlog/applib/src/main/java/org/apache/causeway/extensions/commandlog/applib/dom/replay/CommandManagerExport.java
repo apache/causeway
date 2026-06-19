@@ -29,16 +29,12 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -46,8 +42,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
-
-import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
@@ -76,10 +70,6 @@ public final class CommandManagerExport
         super(state, replayContext);
     }
 
-    @ObjectSupport public String title() {
-        return "Command Export Manager";
-    }
-
     @Override
     @Programmatic
     public CommandManagerExport withBaseline(final Timestamp baseline) {
@@ -101,7 +91,7 @@ public final class CommandManagerExport
     public List<ReplayableCommand> getCommands() {
         putCurrentExportManagerOnScratchpad();
         return activeCommandLogEntries().stream()
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .map(this::replayableCommandInExportManagerContext)
                 .collect(Collectors.toList());
     }
@@ -114,7 +104,7 @@ public final class CommandManagerExport
     public List<ReplayableCommand> getExcludedCommands() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .filter(CommandManagerExport::isExcludedCommand)
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext))
@@ -124,7 +114,7 @@ public final class CommandManagerExport
     @Programmatic
     public List<ReplayableCommand> getCommandsPrevious() {
         return commandLogEntryRepository().findForegroundBeforeTimestamp(baseline, limit).stream()
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext))
@@ -210,12 +200,12 @@ public final class CommandManagerExport
     List<CommandLogEntry> activeCommandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .filter(CommandManagerExport::isActiveCommand)
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .collect(Collectors.toList());
     }
 
-    private boolean isReplayable(final CommandLogEntry entry) {
-        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
+    private boolean isDoOp(final CommandLogEntry entry) {
+        return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
     }
 
     private ReplayableCommand replayableCommandInExportManagerContext(final CommandLogEntry entry) {

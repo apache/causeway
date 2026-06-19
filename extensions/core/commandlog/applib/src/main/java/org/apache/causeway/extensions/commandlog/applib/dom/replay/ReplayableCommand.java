@@ -31,6 +31,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -42,6 +43,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -56,6 +58,9 @@ import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.YamlUtils;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
@@ -76,6 +81,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import lombok.Value;
 import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -662,7 +668,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return replayContext.commandLogEntryRepository()
                 .findForegroundBeforeTimestamp(timestamp, null)
                 .stream()
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .findFirst();
     }
 
@@ -671,12 +677,12 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .findForegroundSinceTimestamp(timestamp, null)
                 .stream()
                 .filter(entry -> !interactionId.equals(entry.getInteractionId()))
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .findFirst();
     }
 
-    private boolean isReplayable(final CommandLogEntry entry) {
-        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
+    private boolean isDoOp(final CommandLogEntry entry) {
+        return Util.isDoOp(entry, replayContext.specificationLoader());
     }
 
     // -- HELPER
@@ -865,4 +871,51 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     @Inject BookmarkService bookmarkService;
+
+    @UtilityClass
+    static class Util {
+
+        boolean isDoOp(
+                final CommandLogEntry entry,
+                final SpecificationLoader specificationLoader) {
+            if (entry == null) {
+                return false;
+            }
+            if (!isSafeAction(entry, specificationLoader)) {
+                return true;
+            }
+            return entry.getResult() != null;
+        }
+
+        private boolean isSafeAction(
+                final CommandLogEntry entry,
+                final SpecificationLoader specificationLoader) {
+            if (specificationLoader == null
+                    || entry.getCommandDto() == null
+                    || !(entry.getCommandDto().getMember() instanceof ActionDto)) {
+                return false;
+            }
+            return Optional.ofNullable(entry.getLogicalMemberIdentifier())
+                    .flatMap(logicalMemberIdentifier -> safeActionSemantics(specificationLoader, logicalMemberIdentifier))
+                    .orElse(false);
+        }
+
+        private Optional<Boolean> safeActionSemantics(
+                final SpecificationLoader specificationLoader,
+                final String logicalMemberIdentifier) {
+            try {
+                final var identifier = IdentifierUtil.memberIdentifierFor(
+                        specificationLoader,
+                        Identifier.Type.ACTION,
+                        logicalMemberIdentifier);
+                return specificationLoader.loadFeature(identifier)
+                        .filter(ObjectAction.class::isInstance)
+                        .map(ObjectAction.class::cast)
+                        .map(ObjectAction::getSemantics)
+                        .map(SemanticsOf::isSafeInNature);
+            } catch (final RuntimeException ex) {
+                return Optional.empty();
+            }
+        }
+    }
 }
