@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.*;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport.Direction.*;
-
 @Action(
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerExport_previousPage.DomainEvent.class,
+        domainEvent = CommandManager_previousPage.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -19,34 +17,35 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
         describedAs = "Move backwards to previous page of commands"
 )
 @RequiredArgsConstructor
-public class CommandManagerExport_previousPage {
+public class CommandManager_previousPage {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_previousPage> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_previousPage> { }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
     @MemberSupport
-    public CommandManagerExport act() {
-        final var commands = commandExportManager.commands(PREVIOUS);   // returns descending, latest (youngest) first
+    public CommandManager act() {
+        final var commands = commandManager.getCommandsForExport();   // returns descending, latest (youngest) first
         final var size = commands.size();
         if (size == 0) {
-            return commandExportManager;
+            return commandManager;
         }
         final var earliestReplayable = commands.get(size - 1);
-        return commandExportManager(earliestReplayable);
+        return commandManager(earliestReplayable);
     }
 
     @MemberSupport
     public String disableAct() {
-        final var commands = commandExportManager.commands(PREVIOUS);
+        final var commands = commandManager.getCommandsForExport();
         final var size = commands.size();
         return size == 0 ? "No commands" : null;
     }
 
-    private CommandManagerExport commandExportManager(final ReplayableCommand replayableCommand) {
+    private CommandManager commandManager(final ReplayableCommand replayableCommand) {
         final var timestamp = replayableCommand.getTimestamp().toInstant();
         final var baselineMinus5Millis = HasBaseline.addMillis(timestamp, -5);
-        return commandExportManager.withBaseline(baselineMinus5Millis);
+        return commandManager.
+                withBaseline(baselineMinus5Millis);
     }
 
 }

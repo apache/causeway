@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -59,9 +57,7 @@ public class ReplayableCommand_unexcludeTR {
     }
 
     public List<ReplayState> choices0Act() {
-        return Arrays.stream(ReplayState.values())
-                .filter(x -> x != ReplayState.EXCLUDED)
-                .collect(Collectors.toList());
+        return ReplayState.nonExcluded();
     }
 
     @MemberSupport

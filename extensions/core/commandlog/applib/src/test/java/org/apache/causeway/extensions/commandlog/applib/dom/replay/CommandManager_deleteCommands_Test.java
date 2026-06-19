@@ -43,7 +43,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-class CommandManagerExportDeleteCommandsTest {
+class CommandManager_deleteCommands_Test {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
@@ -132,10 +132,8 @@ class CommandManagerExportDeleteCommandsTest {
 
         final var repositoryService = mock(RepositoryService.class);
         final var replayContext = ReplayContext.builder().repositoryService(repositoryService).commandLogEntryRepository(repository).build();
-        final var manager = new CommandManagerExport(
-                new CommandManagerExport.State(BASELINE, 50),
-                replayContext);
-        final var action = new CommandManagerExport_deleteCommands(manager);
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+        final var action = new CommandManager_deleteCommands(manager);
         return new Fixture(repositoryService, replayContext, manager, action);
     }
 
@@ -167,14 +165,14 @@ class CommandManagerExportDeleteCommandsTest {
     private static class Fixture {
         final RepositoryService repositoryService;
         private final ReplayContext replayContext;
-        final CommandManagerExport manager;
-        final CommandManagerExport_deleteCommands action;
+        final CommandManager manager;
+        final CommandManager_deleteCommands action;
 
         Fixture(
                 final RepositoryService repositoryService,
                 final ReplayContext replayContext,
-                final CommandManagerExport manager,
-                final CommandManagerExport_deleteCommands action) {
+                final CommandManager manager,
+                final CommandManager_deleteCommands action) {
             this.repositoryService = repositoryService;
             this.replayContext = replayContext;
             this.manager = manager;

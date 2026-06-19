@@ -138,9 +138,7 @@ class CommandLogMenuTest {
 
     @Test
     void replay_workflow_actions_are_ordered_by_layout_sequence() {
-        assertThat(sequenceOf(CommandLogMenu.exportManager.class))
-                .isLessThan(sequenceOf(CommandLogMenu.replayManager.class));
-        assertThat(sequenceOf(CommandLogMenu.replayManager.class))
+        assertThat(sequenceOf(CommandLogMenu.commandManager.class))
                 .isLessThan(sequenceOf(CommandLogMenu.findReplayResultMappings.class));
         assertThat(sequenceOf(CommandLogMenu.findReplayResultMappings.class))
                 .isLessThan(sequenceOf(CommandLogMenu.findChangedReplayResultMappings.class));

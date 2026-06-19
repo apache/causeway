@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerAbstract.State;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager.State;
 import org.junit.jupiter.api.Test;
 
-class CommandManagerExportStateTest {
+class CommandManager_state_Test {
 
     @Test
     void roundtrip_toMemento_and_parseMemento() {
@@ -34,7 +34,7 @@ class CommandManagerExportStateTest {
         final var state = new State(timestamp, 25);
 
         final String memento = state.toMemento();
-        final State parsed = CommandManagerAbstract.State.parseMemento(memento, null);
+        final State parsed = CommandManager.State.parseMemento(memento, null);
 
         assertThat(memento).isEqualTo(TimestampMarshallUtil.toString(timestamp) + "--25");
         assertThat(parsed).isNotNull();
@@ -46,7 +46,7 @@ class CommandManagerExportStateTest {
     void parseMemento_null_returns_fallback() {
         final State fallback = fallbackState();
 
-        final State parsed = CommandManagerAbstract.State.parseMemento(null, fallback);
+        final State parsed = CommandManager.State.parseMemento(null, fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
@@ -55,7 +55,7 @@ class CommandManagerExportStateTest {
     void parseMemento_empty_returns_fallback() {
         final State fallback = fallbackState();
 
-        final State parsed = CommandManagerAbstract.State.parseMemento("", fallback);
+        final State parsed = CommandManager.State.parseMemento("", fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
@@ -64,7 +64,7 @@ class CommandManagerExportStateTest {
     void parseMemento_invalid_part_count_returns_fallback() {
         final State fallback = fallbackState();
 
-        final State parsed = CommandManagerAbstract.State.parseMemento("timestamp--limit--mode", fallback);
+        final State parsed = CommandManager.State.parseMemento("timestamp--limit--mode", fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
@@ -75,7 +75,7 @@ class CommandManagerExportStateTest {
         final Timestamp timestamp = Timestamp.from(Instant.parse("2026-06-01T00:00:00.000Z"));
         final String memento = TimestampMarshallUtil.toString(timestamp) + "--";
 
-        final State parsed = CommandManagerAbstract.State.parseMemento(memento, fallback);
+        final State parsed = CommandManager.State.parseMemento(memento, fallback);
 
         assertThat(parsed).isNotNull();
         assertThat(parsed.getTimestamp()).isEqualTo(timestamp);
@@ -87,7 +87,7 @@ class CommandManagerExportStateTest {
         final State fallback = fallbackState();
         final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "--abc";
 
-        final State parsed = CommandManagerAbstract.State.parseMemento(memento, fallback);
+        final State parsed = CommandManager.State.parseMemento(memento, fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
@@ -96,7 +96,7 @@ class CommandManagerExportStateTest {
     void parseMemento_invalid_timestamp_uses_fallback_timestamp() {
         final State fallback = fallbackState();
 
-        final State parsed = CommandManagerAbstract.State.parseMemento("not-a-timestamp--10", fallback);
+        final State parsed = CommandManager.State.parseMemento("not-a-timestamp--10", fallback);
 
         assertThat(parsed).isNotNull();
         assertThat(parsed.getTimestamp()).isEqualTo(fallback.getTimestamp());
@@ -108,14 +108,14 @@ class CommandManagerExportStateTest {
         final State fallback = fallbackState();
         final String memento = TimestampMarshallUtil.toString(fallback.getTimestamp()) + "|10";
 
-        final State parsed = CommandManagerAbstract.State.parseMemento(memento, fallback);
+        final State parsed = CommandManager.State.parseMemento(memento, fallback);
 
         assertThat(parsed).isSameAs(fallback);
     }
 
     @Test
     void parseMemento_invalid_and_null_fallback_returns_null() {
-        final State parsed = CommandManagerAbstract.State.parseMemento("not-two-parts", null);
+        final State parsed = CommandManager.State.parseMemento("not-two-parts", null);
 
         assertThat(parsed).isNull();
     }

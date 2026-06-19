@@ -19,7 +19,7 @@ public class HasLimit_changeLimit {
 
     public static int MAX_LIMIT = 100;
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<HasLimit_changeLimit> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<HasLimit_changeLimit> { }
 
     private final HasLimit hasLimit;
 

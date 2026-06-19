@@ -29,37 +29,28 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
-class CommandManagerExportMovementSupport {
+class CommandManagerMovementSupport {
 
     static final long MINIMUM_GAP_MILLIS = 10L;
     static final long SQUASH_GAP_MILLIS = 1000L;
 
-    enum Direction {
-        UP,
-        DOWN
-    }
-
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
     private final ReplayContext replayContext;
-    private final Direction direction;
 
-    CommandManagerExportMovementSupport(
-            final CommandManagerExport commandExportManager,
-            final ReplayContext replayContext,
-            final Direction direction) {
-        this.commandExportManager = commandExportManager;
+    CommandManagerMovementSupport(
+            final CommandManager commandManager,
+            final ReplayContext replayContext) {
+        this.commandManager = commandManager;
         this.replayContext = replayContext;
-        this.direction = direction;
     }
 
     String disableAct() {
         if (!isRecordingSupportEnabled()) {
             return "Command movement requires command-log recording support to be enabled";
         }
-        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
     }
 
     String validateAct(
@@ -77,7 +68,7 @@ class CommandManagerExportMovementSupport {
             return "Cannot move commands after one of the selected commands";
         }
 
-        final List<ReplayableCommand> availableCommands = commandExportManager.getCommands();
+        final List<ReplayableCommand> availableCommands = commandManager.getCommandsForExport();
         final Set<UUID> availableIds = interactionIds(availableCommands);
         if (!availableIds.contains(target.interactionId())) {
             return "Target command is not available for export from the current baseline";
@@ -85,16 +76,11 @@ class CommandManagerExportMovementSupport {
         if (!availableIds.containsAll(selectedIds)) {
             return "Selected commands must be available for export from the current baseline";
         }
-        if (!interactionIds(choicesTarget(selected, availableCommands)).contains(target.interactionId())) {
-            return direction == Direction.UP
-                    ? "Target command must be before the first selected command"
-                    : "Target command must be after the last selected command";
-        }
         return null;
     }
 
     List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
-        return choicesTarget(selected, commandExportManager.getCommands());
+        return choicesTarget(selected, commandManager.getCommandsForExport());
     }
 
     private List<ReplayableCommand> choicesTarget(
@@ -111,17 +97,14 @@ class CommandManagerExportMovementSupport {
                     .filter(command -> !selectedIds.contains(command.interactionId()))
                     .collect(Collectors.toList());
         }
-        if (direction == Direction.UP) {
-            return availableCommands.subList(0, firstSelectedIndex);
-        }
         return availableCommands.subList(lastSelectedIndex + 1, availableCommands.size());
     }
 
     List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getCommands();
+        return commandManager.getCommandsForExport();
     }
 
-    CommandManagerExport move(
+    CommandManager move(
             final List<ReplayableCommand> selected,
             final ReplayableCommand target,
             final boolean squashTimings) {
@@ -133,7 +116,7 @@ class CommandManagerExportMovementSupport {
                 .collect(Collectors.toList());
 
         moveAfter(selectedEntries, targetEntry, squashTimings);
-        return commandExportManager;
+        return commandManager;
     }
 
     private boolean isRecordingSupportEnabled() {
