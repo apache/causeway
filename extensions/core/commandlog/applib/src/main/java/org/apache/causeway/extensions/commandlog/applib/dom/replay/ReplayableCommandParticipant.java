@@ -35,7 +35,6 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -62,9 +61,7 @@ public final class ReplayableCommandParticipant implements ViewModel, CommandRec
     private final String parameterName;
     private final Bookmark recordedBookmark;
     private final Bookmark actualBookmark;
-
-    BookmarkService bookmarkService;
-    ReplayContext replayContext;
+    private final ReplayContext replayContext;
 
     ReplayableCommandParticipant(
             final UUID owningInteractionId,
@@ -72,39 +69,17 @@ public final class ReplayableCommandParticipant implements ViewModel, CommandRec
             final String parameterName,
             final Bookmark recordedBookmark,
             final Bookmark actualBookmark,
-            final BookmarkService bookmarkService,
             final ReplayContext replayContext) {
         this.owningInteractionId = owningInteractionId;
         this.role = role;
         this.parameterName = parameterName;
         this.recordedBookmark = recordedBookmark;
         this.actualBookmark = actualBookmark;
-        this.bookmarkService = bookmarkService;
         this.replayContext = replayContext;
-    }
-
-    ReplayableCommandParticipant(
-            final UUID owningInteractionId,
-            final Role role,
-            final String parameterName,
-            final Bookmark recordedBookmark,
-            final Bookmark actualBookmark,
-            final BookmarkService bookmarkService) {
-        this(owningInteractionId, role, parameterName, recordedBookmark, actualBookmark, bookmarkService, null);
-    }
-
-    ReplayableCommandParticipant(
-            final UUID owningInteractionId,
-            final Role role,
-            final String parameterName,
-            final Bookmark recordedBookmark,
-            final Bookmark actualBookmark) {
-        this(owningInteractionId, role, parameterName, recordedBookmark, actualBookmark, null);
     }
 
     public ReplayableCommandParticipant(
             final String memento,
-            final BookmarkService bookmarkService,
             final ReplayContext replayContext) {
         final Memento parsedMemento = Memento.parse(memento);
         final Optional<ReplayableCommandParticipant> derivedParticipant = parsedMemento
@@ -118,7 +93,6 @@ public final class ReplayableCommandParticipant implements ViewModel, CommandRec
         this.actualBookmark = derivedParticipant
                 .map(ReplayableCommandParticipant::getActualBookmark)
                 .orElse(null);
-        this.bookmarkService = bookmarkService;
         this.replayContext = replayContext;
     }
 
@@ -237,8 +211,8 @@ public final class ReplayableCommandParticipant implements ViewModel, CommandRec
 
     @Programmatic
     Optional<Object> lookupActualObject() {
-        return bookmarkService != null && actualBookmark != null
-                ? bookmarkService.lookup(actualBookmark)
+        return actualBookmark != null
+                ? replayContext.bookmarkService().lookup(actualBookmark)
                 : Optional.empty();
     }
 

@@ -54,7 +54,7 @@ class CommandManager_Replay_importCommandsTest {
         when(commandLogEntryRepository.saveForReplay(any(CommandDto.class))).thenReturn(commandLogEntry);
 
         CommandManagerReplay_importCommands importCommands = new CommandManagerReplay_importCommands(null);
-        importCommands.commandLogEntryRepository = commandLogEntryRepository;
+        importCommands.replayContext = ReplayContext.builder().commandLogEntryRepository(commandLogEntryRepository).build();
 
         importCommands.act(commandsYaml, false);
 

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
         describedAs = "Moves selected Commands downward after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
+@RequiredArgsConstructor
 public class CommandManagerExport_moveCommandsDown {
 
     public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_moveCommandsDown> {
@@ -53,11 +56,7 @@ public class CommandManagerExport_moveCommandsDown {
 
     private final CommandManagerExport commandExportManager;
 
-    @Inject CausewayConfiguration causewayConfiguration;
-
-    public CommandManagerExport_moveCommandsDown(final CommandManagerExport commandExportManager) {
-        this.commandExportManager = commandExportManager;
-    }
+    @Inject ReplayContext replayContext;
 
     @MemberSupport
     public CommandManagerExport act(
@@ -105,7 +104,7 @@ public class CommandManagerExport_moveCommandsDown {
     private CommandManagerExportMovementSupport movementSupport() {
         return new CommandManagerExportMovementSupport(
                 commandExportManager,
-                causewayConfiguration,
+                replayContext,
                 CommandManagerExportMovementSupport.Direction.DOWN);
     }
 }

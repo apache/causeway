@@ -43,15 +43,15 @@ class CommandManagerExportMovementSupport {
     }
 
     private final CommandManagerExport commandExportManager;
-    private final CausewayConfiguration causewayConfiguration;
+    private final ReplayContext replayContext;
     private final Direction direction;
 
     CommandManagerExportMovementSupport(
             final CommandManagerExport commandExportManager,
-            final CausewayConfiguration causewayConfiguration,
+            final ReplayContext replayContext,
             final Direction direction) {
         this.commandExportManager = commandExportManager;
-        this.causewayConfiguration = causewayConfiguration;
+        this.replayContext = replayContext;
         this.direction = direction;
     }
 
@@ -137,8 +137,7 @@ class CommandManagerExportMovementSupport {
     }
 
     private boolean isRecordingSupportEnabled() {
-        return causewayConfiguration != null
-                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+        return replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private void moveAfter(

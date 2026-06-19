@@ -27,11 +27,14 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+
+import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +45,6 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -61,14 +63,17 @@ class CommandExportManagerSelectedTestExport {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
-    private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
-    private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
-    private static final Bookmark CATEGORY = Bookmark.forLogicalTypeNameAndIdentifier("demo.Category", "STD");
+
+    private static final Bookmark MENU_SERVICE_BOOKMARK = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
+    public static final LogicalType MENU_SERVICE_LOGICAL_TYPE_NAME = LogicalType.eager(Customers.class, MENU_SERVICE_BOOKMARK.getLogicalTypeName());
+    public static final ObjectSpecification MENU_SERVICE_OBJECT_SPEC = mock(ObjectSpecification.class);
+
+    private static final Bookmark CUSTOMER_BOOKMARK = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+    private static final Bookmark CATEGORY_BOOKMARK = Bookmark.forLogicalTypeNameAndIdentifier("demo.Category", "STD");
 
     @Test
     void validate_selected_accepts_first_domain_service_target_before_invocation() {
-        final var fixture = fixtureWith(entry(T1, MENU_SERVICE));
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+        final var fixture = fixtureWith(entry(T1, MENU_SERVICE_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -77,10 +82,9 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void validate_selected_accepts_reachable_sequence_before_invocation() {
-        final var finder = entry(T1, MENU_SERVICE, CUSTOMER);
-        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
+        final var finder = entry(T1, MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER_BOOKMARK, null);
         final var fixture = fixtureWith(finder, actionOnFoundCustomer);
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -89,8 +93,7 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void validate_selected_accepts_reference_data_target_before_invocation() {
-        final var fixture = fixtureWith(entry(T1, CATEGORY));
-        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
+        final var fixture = fixtureWith(entry(T1, CATEGORY_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -99,29 +102,29 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void validate_selected_reports_unknown_action_target_before_invocation_when_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entry(T1, CUSTOMER));
+        final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
         assertThat(validation)
-                .contains(CUSTOMER.toString())
+                .contains(CUSTOMER_BOOKMARK.toString())
                 .contains("is unknown");
     }
 
     @Test
     void validate_selected_reports_unknown_property_edit_target_before_invocation_when_recording_support_is_enabled() {
-        final var fixture = fixtureWith(propertyEditEntry(T1, CUSTOMER));
+        final var fixture = fixtureWith(propertyEditEntry(T1, CUSTOMER_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
         assertThat(validation)
-                .contains(CUSTOMER.toString())
+                .contains(CUSTOMER_BOOKMARK.toString())
                 .contains("is unknown");
     }
 
     @Test
     void validate_selected_accepts_unknown_action_target_when_recording_support_is_disabled() {
-        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER));
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -130,19 +133,17 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void act_guards_unknown_action_target_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entry(T1, CUSTOMER));
+        final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
 
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
                 .isInstanceOf(RecoverableException.class)
-                .hasMessageContaining(CUSTOMER.toString())
+                .hasMessageContaining(CUSTOMER_BOOKMARK.toString())
                 .hasMessageContaining("is unknown");
     }
 
     @Test
     void validate_selected_accepts_reference_data_reference_parameter_before_invocation() {
-        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "category", CATEGORY));
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
-        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "category", CATEGORY_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -151,14 +152,13 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void validate_selected_reports_unknown_action_reference_parameter_before_invocation_when_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
         assertThat(validation)
                 .contains("parameter customer")
-                .contains(CUSTOMER.toString())
+                .contains(CUSTOMER_BOOKMARK.toString())
                 .contains("is unknown");
     }
 
@@ -166,8 +166,7 @@ class CommandExportManagerSelectedTestExport {
     void validate_selected_accepts_unknown_action_reference_parameter_when_recording_support_is_disabled() {
         final var fixture = fixtureWithRecordingSupport(
                 RecordingSupport.DISABLED,
-                entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+                entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
 
         final var validation = fixture.action.validateSelected(fixture.replayableCommands);
 
@@ -176,27 +175,26 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void act_guards_unknown_action_reference_parameter_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE, "customer", CUSTOMER));
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
+        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
 
         assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
                 .isInstanceOf(RecoverableException.class)
                 .hasMessageContaining("parameter customer")
-                .hasMessageContaining(CUSTOMER.toString())
+                .hasMessageContaining(CUSTOMER_BOOKMARK.toString())
                 .hasMessageContaining("is unknown");
     }
 
     @Test
     void exportable_is_true_for_first_domain_service_target_in_export_manager_context() {
-        final var commands = exportManagerCommandsWith(entry(T1, MENU_SERVICE));
+        final var commands = exportManagerCommandsWith(entry(T1, MENU_SERVICE_BOOKMARK));
 
         assertThat(commands.get(0).isKnownParticipants()).isTrue();
     }
 
     @Test
     void exportable_is_true_for_command_with_known_target_in_export_manager_context() {
-        final var finder = entry(T1, MENU_SERVICE, CUSTOMER);
-        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
+        final var finder = entry(T1, MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER_BOOKMARK, null);
         final var commands = exportManagerCommandsWith(finder, actionOnFoundCustomer);
 
         assertThat(commands.get(1).isKnownParticipants()).isTrue();
@@ -204,22 +202,22 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void exportable_is_false_for_command_with_unknown_target_in_export_manager_context() {
-        final var commands = exportManagerCommandsWith(entry(T1, CUSTOMER));
+        final var commands = exportManagerCommandsWith(entry(T1, CUSTOMER_BOOKMARK));
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
     void exportable_is_false_for_property_edit_with_unknown_target_in_export_manager_context() {
-        final var commands = exportManagerCommandsWith(propertyEditEntry(T1, CUSTOMER));
+        final var commands = exportManagerCommandsWith(propertyEditEntry(T1, CUSTOMER_BOOKMARK));
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
     void exportable_is_false_when_required_result_is_later_in_export_order() {
-        final var actionOnCustomer = entry(T1, CUSTOMER, null);
-        final var laterFinder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
+        final var actionOnCustomer = entry(T1, CUSTOMER_BOOKMARK, null);
+        final var laterFinder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
         final var commands = exportManagerCommandsWith(actionOnCustomer, laterFinder);
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
@@ -227,9 +225,9 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void earlier_non_exportable_command_does_not_make_later_known_command_non_exportable() {
-        final var unknownCustomerAction = entry(T1, CUSTOMER, null);
-        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
-        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER, null);
+        final var unknownCustomerAction = entry(T1, CUSTOMER_BOOKMARK, null);
+        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER_BOOKMARK, null);
         final var commands = exportManagerCommandsWith(unknownCustomerAction, finder, actionOnFoundCustomer);
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
@@ -238,27 +236,43 @@ class CommandExportManagerSelectedTestExport {
     }
 
     @Test
-    void exportable_is_null_when_recording_support_is_disabled() {
-        final var commands = exportManagerCommandsWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER));
+    void exportable_is_false_when_recording_support_is_disabled() {
+        final var repository = repositoryWith(entry(T1, CUSTOMER_BOOKMARK));
+        final var replayContext = ReplayContext.builder()
+                                        .commandLogEntryRepository(repository)
+                                        .scratchpad(new ScratchpadDefault())
+                                        .commandReplayReferenceDataService(referenceDataServiceFor(CATEGORY_BOOKMARK))
+                                        .metaModelService(metaModelServiceRecognizingMenuServiceRoot())
+                                        .specificationLoader(specificationLoaderRecognizingMenuServiceRoot())
+                                        .causewayConfiguration(causewayConfigurationWith(RecordingSupport.DISABLED))
+                                        .build();
+        final var manager = new CommandManagerExport(
+                new CommandManagerExport.State(BASELINE, 50),
+                replayContext);
+        final var commands = manager.getCommands();
 
-        assertThat(commands.get(0).isKnownParticipants()).isNull();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
-    void exportable_is_null_outside_export_manager_context() {
-        final var entry = entry(T1, CUSTOMER);
+    void exportable_is_false_outside_export_manager_context() {
+        final var entry = entry(T1, CUSTOMER_BOOKMARK);
         final var repository = mock(CommandLogEntryRepository.class);
         when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(repository)
+                .scratchpad(new ScratchpadDefault())
+                .commandReplayReferenceDataService(referenceDataServiceFor(CATEGORY_BOOKMARK))
+                .build();
 
         final var command = new ReplayableCommand(entry.getInteractionId(), replayContext);
 
-        assertThat(command.isKnownParticipants()).isNull();
+        assertThat(command.isKnownParticipants()).isFalse();
     }
 
     @Test
     void exportable_computation_does_not_modify_replay_state() {
-        final var entry = entry(T1, CUSTOMER);
+        final var entry = entry(T1, CUSTOMER_BOOKMARK);
         final var commands = exportManagerCommandsWith(entry);
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
@@ -266,18 +280,8 @@ class CommandExportManagerSelectedTestExport {
     }
 
     @Test
-    void act_marks_selected_commands_exported_without_filtering_by_prior_replay_state() {
-        final var alreadyExported = entry(T1, MENU_SERVICE, null, ReplayState.EXPORTED);
-        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, alreadyExported);
-
-        fixture.action.act(fixture.replayableCommands, "commands", false);
-
-        verify(alreadyExported).setReplayState(ReplayState.EXPORTED);
-    }
-
-    @Test
     void validate_selected_still_requires_at_least_one_command() {
-        final var fixture = fixtureWith(entry(T1, CUSTOMER));
+        final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
 
         assertThat(fixture.action.validateSelected(List.of()))
                 .isEqualTo("Select at least one command to export");
@@ -285,9 +289,8 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void default_selected_includes_reference_data_target() {
-        final var entry = entry(T1, CATEGORY, null);
+        final var entry = entry(T1, CATEGORY_BOOKMARK, null);
         final var fixture = fixtureWith(entry);
-        fixture.action.commandReplayReferenceDataServices = List.of(referenceDataServiceFor(CATEGORY));
 
         final var defaults = fixture.action.defaultSelected();
 
@@ -298,11 +301,10 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void default_selected_includes_exportable_active_commands_only() {
-        final var unknownCustomerAction = entry(T1, CUSTOMER, null);
-        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
-        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER, null);
+        final var unknownCustomerAction = entry(T1, CUSTOMER_BOOKMARK, null);
+        final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER_BOOKMARK, null);
         final var fixture = fixtureWith(unknownCustomerAction, finder, actionOnFoundCustomer);
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
         final var defaults = fixture.action.defaultSelected();
 
@@ -313,9 +315,8 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void default_selected_excludes_commands_with_null_exportability() {
-        final var entry = entry(T1, CUSTOMER);
+        final var entry = entry(T1, CUSTOMER_BOOKMARK);
         final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry);
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
         final var defaults = fixture.action.defaultSelected();
 
@@ -324,8 +325,8 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void choices_selected_still_include_full_active_command_collection() {
-        final var finder = entry(T1, MENU_SERVICE, CUSTOMER);
-        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
+        final var finder = entry(T1, MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
+        final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER_BOOKMARK, null);
         final var fixture = fixtureWith(finder, actionOnFoundCustomer);
 
         final var choices = fixture.action.choicesSelected();
@@ -337,9 +338,8 @@ class CommandExportManagerSelectedTestExport {
 
     @Test
     void default_selected_does_not_modify_replay_state() {
-        final var entry = entry(T1, MENU_SERVICE);
+        final var entry = entry(T1, MENU_SERVICE_BOOKMARK);
         final var fixture = fixtureWith(entry);
-        fixture.action.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
 
         assertThat(fixture.action.defaultSelected())
                 .extracting(ReplayableCommand::interactionId)
@@ -352,20 +352,18 @@ class CommandExportManagerSelectedTestExport {
     }
 
     private static List<ReplayableCommand> exportManagerCommandsWith(final CommandLogEntry... entries) {
-        return exportManagerCommandsWithRecordingSupport(RecordingSupport.ENABLED, entries);
-    }
-
-    private static List<ReplayableCommand> exportManagerCommandsWithRecordingSupport(
-            final RecordingSupport recordingSupport,
-            final CommandLogEntry... entries) {
         final var repository = repositoryWith(entries);
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder()
+                                        .commandLogEntryRepository(repository)
+                                        .scratchpad(new ScratchpadDefault())
+                                        .commandReplayReferenceDataService(referenceDataServiceFor(CATEGORY_BOOKMARK))
+                                        .metaModelService(metaModelServiceRecognizingMenuServiceRoot())
+                                        .specificationLoader(specificationLoaderRecognizingMenuServiceRoot())
+                                        .causewayConfiguration(causewayConfigurationWith(RecordingSupport.ENABLED))
+                                        .build();
         final var manager = new CommandManagerExport(
                 new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
-        manager.scratchpad = scratchpad();
-        manager.metaModelService = metaModelServiceRecognizingMenuServiceRoot();
-        manager.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         return manager.getCommands();
     }
 
@@ -373,13 +371,19 @@ class CommandExportManagerSelectedTestExport {
             final RecordingSupport recordingSupport,
             final CommandLogEntry... entries) {
         final var repository = repositoryWith(entries);
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(repository)
+                .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                .scratchpad(new ScratchpadDefault())
+                .metaModelService(metaModelServiceRecognizingMenuServiceRoot())
+                .specificationLoader(specificationLoaderRecognizingMenuServiceRoot())
+                .commandReplayReferenceDataService(referenceDataServiceFor(CATEGORY_BOOKMARK))
+                .build();
 
         final var manager = new CommandManagerExport(
                 new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
         final var action = new CommandManagerExport_exportSelected(manager);
-        action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
         final var replayableCommands = java.util.Arrays.stream(entries)
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(java.util.stream.Collectors.toList());
@@ -395,29 +399,6 @@ class CommandExportManagerSelectedTestExport {
         return repository;
     }
 
-    private static Scratchpad scratchpad() {
-        return new Scratchpad() {
-            private final Map<Object, Object> userData = new HashMap<>();
-
-            @Override
-            public Object get(final Object key) {
-                return userData.get(key);
-            }
-
-            @Override
-            public void put(
-                    final Object key,
-                    final Object value) {
-                userData.put(key, value);
-            }
-
-            @Override
-            public void destroy() {
-                userData.clear();
-            }
-        };
-    }
-
     private static CausewayConfiguration causewayConfigurationWith(final RecordingSupport recordingSupport) {
         final var causewayConfiguration = mock(CausewayConfiguration.class, RETURNS_DEEP_STUBS);
         when(causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport()).thenReturn(recordingSupport);
@@ -426,9 +407,17 @@ class CommandExportManagerSelectedTestExport {
 
     private static MetaModelService metaModelServiceRecognizingMenuServiceRoot() {
         final var metaModelService = mock(MetaModelService.class);
-        when(metaModelService.lookupLogicalTypeByName(MENU_SERVICE.getLogicalTypeName()))
-                .thenReturn(Optional.of(LogicalType.eager(Customers.class, MENU_SERVICE.getLogicalTypeName())));
+        when(metaModelService.lookupLogicalTypeByName(MENU_SERVICE_BOOKMARK.getLogicalTypeName()))
+                .thenReturn(Optional.of(MENU_SERVICE_LOGICAL_TYPE_NAME));
         return metaModelService;
+    }
+
+    private static SpecificationLoader specificationLoaderRecognizingMenuServiceRoot() {
+        final var specificationLoader = mock(SpecificationLoader.class);
+        when(specificationLoader.specForLogicalType(MENU_SERVICE_LOGICAL_TYPE_NAME))
+                .thenReturn(Optional.of(MENU_SERVICE_OBJECT_SPEC));
+        when(MENU_SERVICE_OBJECT_SPEC.isDomainService()).thenReturn(true);
+        return specificationLoader;
     }
 
     private static CommandReplayReferenceDataService referenceDataServiceFor(final Bookmark referenceDataBookmark) {

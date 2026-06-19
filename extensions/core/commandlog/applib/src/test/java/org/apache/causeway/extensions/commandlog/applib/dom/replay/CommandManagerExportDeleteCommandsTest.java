@@ -131,7 +131,7 @@ class CommandManagerExportDeleteCommandsTest {
         }
 
         final var repositoryService = mock(RepositoryService.class);
-        final var replayContext = new ReplayContext(repositoryService, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder().repositoryService(repositoryService).commandLogEntryRepository(repository).build();
         final var manager = new CommandManagerExport(
                 new CommandManagerExport.State(BASELINE, 50),
                 replayContext);

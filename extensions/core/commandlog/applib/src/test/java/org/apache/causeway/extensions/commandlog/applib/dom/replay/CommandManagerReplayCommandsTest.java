@@ -170,9 +170,13 @@ class CommandManagerReplayCommandsTest {
             final TransactionService transactionService,
             final CommandExecutorService commandExecutorService,
             final SpecificationLoader specificationLoader) {
-        final var replayContext = new ReplayContext(
-                null, null, transactionService, repository, commandExecutorService, null, List.of(), specificationLoader);
-        return new CommandManagerReplay(BASELINE, replayContext);
+        final var replayContext = ReplayContext.builder()
+                .transactionService(transactionService)
+                .commandLogEntryRepository(repository)
+                .commandExecutorService(commandExecutorService)
+                .specificationLoader(specificationLoader)
+                .build();
+        return new CommandManagerReplay(new CommandManagerAbstract.State(BASELINE, 50), replayContext);
     }
 
     private static TransactionService transactionServiceExecutingCallable() {

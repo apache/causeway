@@ -136,12 +136,16 @@ class CommandManagerExportUnexcludeCommandsTest {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
-        final var replayContext = new ReplayContext(null, null, null, repository, null, null, List.of());
+        final var replayContext = ReplayContext.builder()
+                .commandLogEntryRepository(repository)
+                .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                .build();
+
         final var manager = new CommandManagerExport(
                 new CommandManagerExport.State(BASELINE, 50),
                 replayContext);
         final var action = new CommandManagerExport_unexcludeCommands(manager);
-        action.causewayConfiguration = causewayConfigurationWith(recordingSupport);
+        action.replayContext = replayContext;
         return new Fixture(replayContext, manager, action);
     }
 

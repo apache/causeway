@@ -15,7 +15,6 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
@@ -39,7 +38,7 @@ public class CommandManagerExport_excludeCommands {
 
     private final CommandManagerExport commandExportManager;
 
-    @Inject CausewayConfiguration causewayConfiguration;
+    @Inject ReplayContext replayContext;
 
     public CommandManagerExport_excludeCommands(final CommandManagerExport commandExportManager) {
         this.commandExportManager = commandExportManager;
@@ -61,7 +60,7 @@ public class CommandManagerExport_excludeCommands {
 
     @MemberSupport
     public String disableAct() {
-        if (!isRecordingSupportEnabled()) {
+        if (!replayContext.isRecordingSupportEnabled()) {
             return "Command exclusion requires command-log recording support to be enabled";
         }
         return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
@@ -69,7 +68,7 @@ public class CommandManagerExport_excludeCommands {
 
     @MemberSupport
     public String validateAct(final List<ReplayableCommand> selected) {
-        if (!isRecordingSupportEnabled()) {
+        if (!replayContext.isRecordingSupportEnabled()) {
             return "Command exclusion requires command-log recording support to be enabled";
         }
         final String selectedValidation = validateSelected(selected);
@@ -92,7 +91,7 @@ public class CommandManagerExport_excludeCommands {
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
         return commandExportManager.getCommands().stream()
-                .filter(command -> Boolean.FALSE.equals(command.isKnownParticipants()))
+                .filter(command -> !command.isKnownParticipants())
                 .collect(Collectors.toList());
     }
 
@@ -100,11 +99,6 @@ public class CommandManagerExport_excludeCommands {
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
         return commandExportManager.getCommands();
-    }
-
-    private boolean isRecordingSupportEnabled() {
-        return causewayConfiguration != null
-                && causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport().isEnabled();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {
