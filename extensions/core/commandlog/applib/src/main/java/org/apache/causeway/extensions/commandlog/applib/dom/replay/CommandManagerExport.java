@@ -36,7 +36,6 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -89,7 +88,7 @@ public final class CommandManagerExport
             describedAs = "Commands since the baseline"
     )
     public List<ReplayableCommand> getCommands() {
-        putCurrentExportManagerOnScratchpad();
+        ReplayableCommandParticipantTracker.putTrackerOnScratchpad(this, replayContext.scratchpad());
         return activeCommandLogEntries().stream()
                 .filter(this::isDoOp)
                 .map(this::replayableCommandInExportManagerContext)
@@ -144,10 +143,11 @@ public final class CommandManagerExport
                 : Optional.empty();
     }
 
+    @Override
     @Programmatic
-    Boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
+    public boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
         if (commandLogEntry == null || !isRecordingSupportEnabled()) {
-            return null;
+            return false;
         }
         return validator().validateParticipants(commandLogEntry, knownParticipantsAsOf(commandLogEntry.getInteractionId())).isEmpty();
     }
@@ -212,8 +212,7 @@ public final class CommandManagerExport
         return replayContext.scratchpad() != null
                 ? new ReplayableCommand(
                         entry.getInteractionId(),
-                        replayContext,
-                        replayContext.scratchpad())
+                        replayContext)
                 : new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext,
@@ -229,19 +228,6 @@ public final class CommandManagerExport
 
     private static boolean isExcludedCommand(final CommandLogEntry entry) {
         return entry != null && entry.getReplayState() == ReplayState.EXCLUDED;
-    }
-
-    private void putCurrentExportManagerOnScratchpad() {
-        if (replayContext.scratchpad() != null) {
-            replayContext.scratchpad().put(SCRATCHPAD_KEY, this);
-        }
-    }
-
-    static Optional<CommandManagerExport> currentExportManager(final Scratchpad scratchpad) {
-        return Optional.ofNullable(scratchpad)
-                .map(sp -> sp.get(SCRATCHPAD_KEY))
-                .filter(CommandManagerExport.class::isInstance)
-                .map(CommandManagerExport.class::cast);
     }
 
 
