@@ -45,8 +45,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 @DomainObjectLayout(cssClassFa = "solid share-from-square")
 @Named(CommandManagerExport.LOGICAL_TYPE_NAME)
 public final class CommandManagerExport
-        extends CommandManagerAbstract
-        implements ReplayableCommandParticipantTracker {
+        extends CommandManagerAbstract {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
 
@@ -87,7 +86,7 @@ public final class CommandManagerExport
     )
     public List<ReplayableCommand> getCommands() {
         ReplayableCommandParticipantTracker.putTrackerOnScratchpad(this, replayContext.scratchpad());
-        return activeCommandLogEntries().stream()
+        return commandLogEntries().stream()
                 .filter(this::isDoOp)
                 .map(this::replayableCommandFor)
                 .collect(Collectors.toList());
@@ -133,53 +132,9 @@ public final class CommandManagerExport
         }
     }
 
-    @Programmatic
-    Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
-            final List<CommandLogEntry> selectedCommandLogEntries) {
-        return isRecordingSupportEnabled()
-                ? validator().validate(baseline, selectedCommandLogEntries)
-                : Optional.empty();
-    }
-
-    @Override
-    @Programmatic
-    public boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
-        if (commandLogEntry == null || !isRecordingSupportEnabled()) {
-            return false;
-        }
-        return validator().validateParticipants(commandLogEntry, knownParticipantsAsOf(commandLogEntry.getInteractionId())).isEmpty();
-    }
 
     @Programmatic
-    Set<Bookmark> knownParticipantsAsOf(final UUID interactionId) {
-        final Set<Bookmark> knownParticipants = new HashSet<>();
-        for (final CommandLogEntry entry : activeCommandLogEntries().stream()
-                .sorted()
-                .collect(Collectors.toList())) {
-            if (sameInteractionId(entry, interactionId)) {
-                return knownParticipants;
-            }
-            Optional.ofNullable(entry.getResult())
-                    .ifPresent(knownParticipants::add);
-        }
-        return knownParticipants;
-    }
-
-    private static boolean sameInteractionId(
-            final CommandLogEntry entry,
-            final UUID interactionId) {
-        return entry != null
-                && interactionId != null
-                && interactionId.equals(entry.getInteractionId());
-    }
-
-    private boolean isRecordingSupportEnabled() {
-        return replayContext.causewayConfiguration() != null
-                && replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
-    }
-
-    @Programmatic
-    List<CommandLogEntry> activeCommandLogEntries() {
+    List<CommandLogEntry> commandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
                 .filter(CommandManagerExport::isActiveCommand)
                 .filter(this::isDoOp)
@@ -188,12 +143,6 @@ public final class CommandManagerExport
 
     private boolean isDoOp(final CommandLogEntry entry) {
         return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
-    }
-
-    private ReplayableCommand replayableCommandFor(final CommandLogEntry entry) {
-        return new ReplayableCommand(
-                entry.getInteractionId(),
-                replayContext);
     }
 
     private static boolean isActiveCommand(final CommandLogEntry entry) {

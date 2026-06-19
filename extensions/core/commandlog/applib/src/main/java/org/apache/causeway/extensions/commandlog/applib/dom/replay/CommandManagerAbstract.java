@@ -24,20 +24,29 @@ import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
 @RequiredArgsConstructor
-public abstract class CommandManagerAbstract implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed {
+public abstract class CommandManagerAbstract
+        implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed, ReplayableCommandParticipantTracker {
 
     final ReplayContext replayContext;
 
@@ -78,6 +87,62 @@ public abstract class CommandManagerAbstract implements ViewModel, HasBaseline, 
         return new State(baseline, limit).toMemento();
     }
 
+    @Programmatic
+    Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
+            final List<CommandLogEntry> commandLogEntries) {
+        return isRecordingSupportEnabled()
+                ? validator().validate(baseline, commandLogEntries)
+                : Optional.empty();
+    }
+
+    @Override
+    @Programmatic
+    public boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
+        if (commandLogEntry == null || !isRecordingSupportEnabled()) {
+            return false;
+        }
+        return validator().validateParticipants(commandLogEntry, knownParticipantsAsOf(commandLogEntry.getInteractionId())).isEmpty();
+    }
+
+    @Programmatic
+    Set<Bookmark> knownParticipantsAsOf(final UUID interactionId) {
+        final Set<Bookmark> knownParticipants = new HashSet<>();
+        for (final CommandLogEntry entry : commandLogEntries().stream()
+                .sorted()   // by timestamp
+                .collect(Collectors.toList())) {
+            if (sameInteractionId(entry, interactionId)) {
+                return knownParticipants;
+            }
+            Optional.ofNullable(entry.getResult())
+                    .ifPresent(knownParticipants::add);
+        }
+        return knownParticipants;
+    }
+
+    private static boolean sameInteractionId(
+            final CommandLogEntry entry,
+            final UUID interactionId) {
+        return entry != null
+                && interactionId != null
+                && interactionId.equals(entry.getInteractionId());
+    }
+
+    ReplayableCommand replayableCommandFor(final CommandLogEntry entry) {
+        return new ReplayableCommand(
+                entry.getInteractionId(),
+                replayContext);
+    }
+
+    /**
+     * The sequence of {@link CommandLogEntry}s to be evaluated, specifically with respect to having known participants.
+     */
+    @Programmatic
+    abstract List<CommandLogEntry> commandLogEntries();
+
+    private boolean isRecordingSupportEnabled() {
+        return replayContext.causewayConfiguration() != null
+                && replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+    }
 
     CommandKnownParticipantsValidator validator() {
         return new CommandKnownParticipantsValidator(this::isDomainServiceOrReferenceData);

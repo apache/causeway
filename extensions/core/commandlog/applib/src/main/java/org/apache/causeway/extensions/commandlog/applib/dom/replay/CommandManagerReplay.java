@@ -89,8 +89,7 @@ public final class CommandManagerReplay
     }
 
     @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
-        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
-                .filter(this::isDoOp)
+        return commandLogEntries().stream()
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext));
@@ -98,6 +97,14 @@ public final class CommandManagerReplay
 
     long sizePendingOrFailed() {
         return streamPendingOrFailed().count();
+    }
+
+    @Override
+    @NonNull List<CommandLogEntry> commandLogEntries() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline)
+                .stream()
+                .filter(this::isDoOp)
+                .collect(Collectors.toList());
     }
 
 
