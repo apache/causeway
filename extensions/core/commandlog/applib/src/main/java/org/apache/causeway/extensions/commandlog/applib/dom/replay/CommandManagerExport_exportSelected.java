@@ -117,7 +117,7 @@ public class CommandManagerExport_exportSelected {
             return "Select at least one command to export";
         }
         return validateKnownTargets(selectedCommandLogEntries(selected))
-                .map(CommandExportKnownTargetValidator.Failure::message)
+                .map(CommandKnownParticipantsValidator.Failure::message)
                 .orElse(null);
     }
 
@@ -133,7 +133,7 @@ public class CommandManagerExport_exportSelected {
                 .collect(Collectors.toList());
     }
 
-    private Optional<CommandExportKnownTargetValidator.Failure> validateKnownTargets(
+    private Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> selectedCommandLogEntries) {
         return commandExportManager.validateKnownTargets(selectedCommandLogEntries);
     }
