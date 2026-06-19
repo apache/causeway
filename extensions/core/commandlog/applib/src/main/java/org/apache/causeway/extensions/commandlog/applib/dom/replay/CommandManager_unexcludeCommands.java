@@ -44,7 +44,7 @@ public class CommandManager_unexcludeCommands {
 
     @MemberSupport
     public CommandManager act(final List<ReplayableCommand> selected, final ReplayState replayState) {
-        final String validation = validateAct(selected);
+        final String validation = validateSelected(selected);
         if (validation != null) {
             throw new RecoverableException(validation);
         }
@@ -70,13 +70,9 @@ public class CommandManager_unexcludeCommands {
     }
 
     @MemberSupport
-    public String validateAct(final List<ReplayableCommand> selected) {
-        if (!replayContext.isRecordingSupportEnabled()) {
-            return "Command restoration requires command-log recording support to be enabled";
-        }
-        final String selectedValidation = validateSelected(selected);
-        if (selectedValidation != null) {
-            return selectedValidation;
+    public String validateSelected(final List<ReplayableCommand> selected) {
+        if (selected == null || selected.isEmpty()) {
+            return "Select at least one command to restore";
         }
         final Set<UUID> excludedIds = interactionIds(commandManager.getExcludedCommands());
         final Set<UUID> selectedIds = interactionIds(selected);
@@ -84,11 +80,6 @@ public class CommandManager_unexcludeCommands {
             return "Selected commands must be excluded commands from the current baseline";
         }
         return null;
-    }
-
-    @MemberSupport
-    public String validateSelected(final List<ReplayableCommand> selected) {
-        return selected == null || selected.isEmpty() ? "Select at least one command to restore" : null;
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
