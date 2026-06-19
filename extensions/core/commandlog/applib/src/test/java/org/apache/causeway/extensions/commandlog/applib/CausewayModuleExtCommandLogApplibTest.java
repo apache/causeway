@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_excludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsDown;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport_moveCommandsUp;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_unexclude;
 
 class CausewayModuleExtCommandLogApplibTest {
 
@@ -46,7 +46,7 @@ class CausewayModuleExtCommandLogApplibTest {
                         CommandManagerExport_excludeCommands.class,
                         CommandManagerExport_moveCommandsUp.class,
                         CommandManagerExport_moveCommandsDown.class,
-                        ReplayableCommand_makeExportable.class);
+                        ReplayableCommand_unexclude.class);
         assertThat(imports)
                 .extracting(Class::getSimpleName)
                 .doesNotContain(

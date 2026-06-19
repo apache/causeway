@@ -138,8 +138,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             switch (replayState) {
                 case UNDEFINED:
                     return "solid terminal .col-indigo";
-                case EXPORTED:
-                    return "solid terminal .col-indigo, solid circle-arrow-right .ov-size-80 .ov-right-45 .ov-bottom-45 .col-dodgerblue";
                 case PENDING:
                     return "solid terminal .col-indigo, solid circle-pause       .ov-size-80 .ov-right-45 .ov-bottom-45 .col-gold";
                 case OK:
@@ -158,8 +156,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             switch (replayState) {
                 case UNDEFINED:
                     return "";
-                case EXPORTED:
-                    return "exported";
                 case PENDING:
                     return "pending";
                 case OK:
@@ -432,7 +428,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             return findActualBookmark(commandLogEntry, recordedBookmark)
                     .or(() -> commandLogEntry.getReplayState() == ReplayState.OK
                             || commandLogEntry.getReplayState() == ReplayState.UNDEFINED
-                            || commandLogEntry.getReplayState() == ReplayState.EXPORTED
                             ? Optional.of(recordedBookmark)
                             : Optional.empty());
         }
@@ -497,47 +492,29 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     // -- ACTIONS
 
 
-    ReplayableCommand makeExportable() {
-        if (disableMakeExportable() != null) {
+    ReplayableCommand unexclude(ReplayState replayState) {
+        if(getReplayState() != ReplayState.EXCLUDED) {
             return this; // safeguard when called programmatically
         }
         commandLogEntry()
-                .filter(commandLogEntry -> ReplayState.isExported(commandLogEntry.getReplayState()))
                 .ifPresent(commandLogEntry -> {
-                    commandLogEntry.setReplayState(ReplayState.UNDEFINED);
+                    commandLogEntry.setReplayState(replayState);
                     invalidateCachedRecord();
                 });
         return this;
     }
 
-    String disableMakeExportable() {
-        return commandRecord()
-                .map(rec -> ReplayState.isExported(rec.replayState()))
-                .orElse(false)
-                ? null
-                : "Cannot make exportable, if not EXPORTED";
-    }
 
-
-    ReplayableCommand excludeFromReplay() {
-        if (disableExcludeFromReplay() != null) {
+    ReplayableCommand exclude() {
+        if (getReplayState() == ReplayState.EXCLUDED) {
             return ReplayableCommand.this; // safeguard when called programmatically
         }
         commandLogEntry()
-                .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
                 .ifPresent(commandLogEntry -> {
                     commandLogEntry.setReplayState(ReplayState.EXCLUDED);
                     invalidateCachedRecord();
                 });
         return ReplayableCommand.this;
-    }
-
-    String disableExcludeFromReplay() {
-        return commandRecord()
-                .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
-                .orElse(false)
-                ? null
-                : "Cannot mark for exclusion, if neither PENDING nor FAILED";
     }
 
 

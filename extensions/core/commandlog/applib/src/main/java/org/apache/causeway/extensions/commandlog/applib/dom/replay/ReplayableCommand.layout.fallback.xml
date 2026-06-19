@@ -43,8 +43,8 @@
             <cpt:fieldSet name="Control" id="control">
                 <cpt:property id="replayState">
                     <cpt:action id="replayOrRetry"/>
-                    <cpt:action id="exportable"/>
                 </cpt:property>
+                <cpt:property id="knownParticipants"/>
                 <cpt:property id="hasResult"/>
             </cpt:fieldSet>
         </bs:col>
