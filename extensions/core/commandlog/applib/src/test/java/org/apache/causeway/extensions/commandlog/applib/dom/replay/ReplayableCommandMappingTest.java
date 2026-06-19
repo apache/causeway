@@ -856,7 +856,7 @@ class ReplayableCommandMappingTest {
     void has_result_property_is_ordered_before_exportability_in_tables() throws Exception {
         PropertyLayout hasResultLayout = ReplayableCommand.class.getMethod("getHasResult")
                 .getAnnotation(PropertyLayout.class);
-        PropertyLayout exportableLayout = ReplayableCommand.class.getMethod("getExportable")
+        PropertyLayout exportableLayout = ReplayableCommand.class.getMethod("isKnownParticipants")
                 .getAnnotation(PropertyLayout.class);
 
         assertThat(hasResultLayout.sequence()).isEqualTo("4.1");

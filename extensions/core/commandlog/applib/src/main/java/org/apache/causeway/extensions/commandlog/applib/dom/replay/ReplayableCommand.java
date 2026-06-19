@@ -114,10 +114,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
     private final ObjectReference<CommandRecord> recordRef;
 
-    @Programmatic
-    public ObjectReference<CommandRecord> recordRef() {
-        return recordRef;
-    }
 
     private final CommandManagerExport commandExportManager;
 
@@ -344,15 +340,15 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "4.2",
             fieldSetId = "details",
-            describedAs = "Whether this command is exportable from the current command export manager context.",
+            describedAs = "Whether this command uses only known participants as target or action params.  This determines whether the command is exportable/replayable in context of all commands since a baseline.",
             hidden = Where.OBJECT_FORMS
     )
-    public Boolean getExportable() {
+    public Boolean isKnownParticipants() {
         if (commandExportManager == null) {
             return null;
         }
         return commandLogEntry()
-                .map(commandExportManager::isExportable)
+                .map(commandExportManager::isKnownParticipants)
                 .orElse(null);
     }
 
