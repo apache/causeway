@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
-
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,24 +26,17 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import org.jspecify.annotations.NonNull;
-
-import lombok.Getter;
 
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid circle-play")
@@ -70,10 +61,6 @@ public final class CommandManagerReplay
             final State state,
             final ReplayContext replayContext) {
         super(state, replayContext);
-    }
-
-    @ObjectSupport public String title() {
-        return "Command Replay Manager";
     }
 
 
@@ -103,7 +90,7 @@ public final class CommandManagerReplay
 
     @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
         return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline).stream()
-                .filter(this::isReplayable)
+                .filter(this::isDoOp)
                 .map(entry -> new ReplayableCommand(
                         entry.getInteractionId(),
                         replayContext));
@@ -123,7 +110,7 @@ public final class CommandManagerReplay
     )
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
-            .filter(this::isReplayable)
+            .filter(this::isDoOp)
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -132,8 +119,8 @@ public final class CommandManagerReplay
 
 
     // -- HELPER
-    private boolean isReplayable(final CommandLogEntry entry) {
-        return ReplayableCommandEligibility.isReplayable(entry, replayContext.specificationLoader());
+    private boolean isDoOp(final CommandLogEntry entry) {
+        return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
     }
 
     private CommandLogEntryRepository commandLogEntryRepository() {

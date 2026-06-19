@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -57,6 +58,14 @@ public abstract class CommandManagerAbstract implements ViewModel, HasBaseline, 
         this.baseline = state.timestamp;
         this.limit = state.limit;
         this.replayContext = replayContext;
+    }
+
+
+    @ObjectSupport
+    public String title() {
+        return this instanceof CommandManagerExport
+                ? "Command Export Manager"
+                : "Command Replay Manager";
     }
 
 
