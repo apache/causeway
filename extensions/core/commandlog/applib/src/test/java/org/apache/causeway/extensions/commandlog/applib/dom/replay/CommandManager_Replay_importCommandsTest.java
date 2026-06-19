@@ -53,7 +53,7 @@ class CommandManager_Replay_importCommandsTest {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
         when(commandLogEntryRepository.saveForReplay(any(CommandDto.class))).thenReturn(commandLogEntry);
 
-        CommandManagerReplay_importCommands importCommands = new CommandManagerReplay_importCommands(null);
+        CommandManager_importCommands importCommands = new CommandManager_importCommands(null);
         importCommands.replayContext = ReplayContext.builder().commandLogEntryRepository(commandLogEntryRepository).build();
 
         importCommands.act(commandsYaml, false);

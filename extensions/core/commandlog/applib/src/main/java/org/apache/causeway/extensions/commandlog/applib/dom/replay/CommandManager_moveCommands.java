@@ -32,34 +32,32 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.core.config.CausewayConfiguration;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
         choicesFrom = "commands",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CommandManagerExport_moveCommandsUp.DomainEvent.class,
+        domainEvent = CommandManager_moveCommands.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commands", sequence = "1.2",
-        cssClassFa = "angles-up",
+        associateWith = "commandsToExport", sequence = "1.2",
         describedAs = "Moves selected Commands upward after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )
 @RequiredArgsConstructor
-public class CommandManagerExport_moveCommandsUp {
+public class CommandManager_moveCommands {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_moveCommandsUp> {
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_moveCommands> {
     }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
     @Inject ReplayContext replayContext;
 
     @MemberSupport
-    public CommandManagerExport act(
+    public CommandManager act(
             final List<ReplayableCommand> selected,
             @ParameterLayout(describedAs = "Command after which the selected commands will be moved.") final ReplayableCommand target,
             @ParameterLayout(
@@ -101,10 +99,9 @@ public class CommandManagerExport_moveCommandsUp {
         return false;
     }
 
-    private CommandManagerExportMovementSupport movementSupport() {
-        return new CommandManagerExportMovementSupport(
-                commandExportManager,
-                replayContext,
-                CommandManagerExportMovementSupport.Direction.UP);
+    private CommandManagerMovementSupport movementSupport() {
+        return new CommandManagerMovementSupport(
+                commandManager,
+                replayContext);
     }
 }

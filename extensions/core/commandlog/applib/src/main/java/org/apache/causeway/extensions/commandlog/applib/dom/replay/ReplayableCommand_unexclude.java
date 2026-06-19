@@ -53,9 +53,7 @@ public class ReplayableCommand_unexclude {
     }
 
     public List<ReplayState> choices0Act() {
-        return Arrays.stream(ReplayState.values())
-                .filter(x -> x != ReplayState.EXCLUDED)
-                .collect(Collectors.toList());
+        return ReplayState.nonExcluded();
     }
 
     @MemberSupport

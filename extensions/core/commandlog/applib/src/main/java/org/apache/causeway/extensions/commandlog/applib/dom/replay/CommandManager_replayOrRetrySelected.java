@@ -12,7 +12,7 @@ import org.apache.causeway.applib.annotation.*;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerReplay_replayOrRetrySelected.DomainEvent.class,
+        domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -24,16 +24,16 @@ import org.apache.causeway.applib.annotation.*;
                 + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
                 + "The command, that caused the failure, gets marked FAILED.")
 @RequiredArgsConstructor
-public class CommandManagerReplay_replayOrRetrySelected {
+public class CommandManager_replayOrRetrySelected {
 
-    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_replayOrRetrySelected> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetrySelected> { }
 
-    private final CommandManagerReplay commandReplayManager;
+    private final CommandManager commandManager;
 
     @MemberSupport
-    public CommandManagerReplay act(final List<ReplayableCommand> selected) {
-        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
-            return commandReplayManager;
+    public CommandManager act(final List<ReplayableCommand> selected) {
+        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandManager.replayContext())) {
+            return commandManager;
         }
 
         var replayables = selected.stream()
@@ -42,21 +42,21 @@ public class CommandManagerReplay_replayOrRetrySelected {
         for (var replayableCommand : replayables) {
             var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
             if (tryReplayOrRetry.isFailure()
-                    || ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
-                return commandReplayManager; // stop further execution
+                    || ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandManager.replayContext())) {
+                return commandManager; // stop further execution
             }
         }
-        return commandReplayManager;
+        return commandManager;
     }
 
 
     @MemberSupport
     public String disableAct() {
-        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandReplayManager.replayContext());
+        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandManager.replayContext());
         if (pendingBackgroundCommandsReason != null) {
             return pendingBackgroundCommandsReason;
         }
-        return commandReplayManager.getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -67,6 +67,6 @@ public class CommandManagerReplay_replayOrRetrySelected {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandReplayManager.getPendingOrFailed();
+        return commandManager.getPendingOrFailed();
     }
 }

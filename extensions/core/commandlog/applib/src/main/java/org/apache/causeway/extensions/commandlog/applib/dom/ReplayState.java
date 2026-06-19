@@ -20,6 +20,12 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.lang.Nullable;
 
 /**
@@ -58,12 +64,26 @@ public enum ReplayState {
 
     private final String title;
 
+    public static @NonNull List<ReplayState> nonExcluded() {
+        return Arrays.stream(values())
+                .filter(x -> x != EXCLUDED)
+                .collect(Collectors.toList());
+    }
+
     public boolean isFailed() {
         return this == FAILED;
     }
 
-    public boolean isExportable() {
+    public boolean isRecordedOk() {
         return this == ReplayState.UNDEFINED;
+    }
+
+    public boolean isExcluded() {
+        return this == ReplayState.EXCLUDED;
+    }
+
+    public boolean isNotExcluded() {
+        return !isExcluded();
     }
 
     public boolean isPendingOrFailed() {

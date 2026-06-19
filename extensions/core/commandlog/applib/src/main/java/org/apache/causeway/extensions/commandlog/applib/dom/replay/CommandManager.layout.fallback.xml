@@ -43,16 +43,51 @@
     </bs:row>
     <bs:row>
         <bs:col span="12">
-            <bs:row>
-                <bs:col span="12" size="MD">
-                    <cpt:collection defaultView="table" paged="100" id="commands"/>
-                </bs:col>
-            </bs:row>
-            <bs:row>
-                <bs:col span="12" size="MD">
-                    <cpt:collection defaultView="table" paged="100" id="excludedCommands"/>
-                </bs:col>
-            </bs:row>
+            <bs:tabGroup>
+                <bs:tab name="Record/Replay">
+                    <bs:row>
+                        <bs:col span="12">
+                            <bs:row>
+                                <bs:col span="12" size="MD">
+                                    <cpt:collection defaultView="table" paged="15" id="pendingOrFailed">
+                                        <cpt:action id="importCommands"/>
+                                        <cpt:action id="replayOrRetryNext"/>
+                                        <cpt:action id="replayOrRetrySelected"/>
+                                    </cpt:collection>
+                                </bs:col>
+                            </bs:row>
+                            <bs:row>
+                                <bs:col span="12" size="MD">
+                                    <cpt:collection defaultView="table" paged="15" id="recordedOrReplayed"/>
+                                </bs:col>
+                            </bs:row>
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+                <bs:tab name="Export">
+                    <bs:row>
+                        <bs:col span="12">
+                            <bs:row>
+                                <bs:col span="12" size="MD">
+                                    <cpt:collection defaultView="table" paged="15" id="commandsForExport">
+                                        <cpt:action id="exportSelected"/>
+                                        <cpt:action id="moveCommands"/>
+                                        <cpt:action id="excludeCommands"/>
+                                    </cpt:collection>
+                                </bs:col>
+                            </bs:row>
+                            <bs:row>
+                                <bs:col span="12" size="MD">
+                                    <cpt:collection defaultView="hidden" paged="15" id="excludedCommands">
+                                        <cpt:action id="unexcludeCommands"/>
+                                        <cpt:action id="deleteCommands"/>
+                                    </cpt:collection>
+                                </bs:col>
+                            </bs:row>
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+            </bs:tabGroup>
         </bs:col>
     </bs:row>
     <bs:row>

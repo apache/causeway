@@ -59,7 +59,7 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-class CommandExportManagerSelectedTestExport {
+class CommandManager_known_participants_Test {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
@@ -246,10 +246,8 @@ class CommandExportManagerSelectedTestExport {
                                         .specificationLoader(specificationLoaderRecognizingMenuServiceRoot())
                                         .causewayConfiguration(causewayConfigurationWith(RecordingSupport.DISABLED))
                                         .build();
-        final var manager = new CommandManagerExport(
-                new CommandManagerExport.State(BASELINE, 50),
-                replayContext);
-        final var commands = manager.getCommands();
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+        final var commands = manager.getCommandsForExport();
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
@@ -361,10 +359,8 @@ class CommandExportManagerSelectedTestExport {
                                         .specificationLoader(specificationLoaderRecognizingMenuServiceRoot())
                                         .causewayConfiguration(causewayConfigurationWith(RecordingSupport.ENABLED))
                                         .build();
-        final var manager = new CommandManagerExport(
-                new CommandManagerExport.State(BASELINE, 50),
-                replayContext);
-        return manager.getCommands();
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+        return manager.getCommandsForExport();
     }
 
     private static Fixture fixtureWithRecordingSupport(
@@ -380,10 +376,8 @@ class CommandExportManagerSelectedTestExport {
                 .commandReplayReferenceDataService(referenceDataServiceFor(CATEGORY_BOOKMARK))
                 .build();
 
-        final var manager = new CommandManagerExport(
-                new CommandManagerExport.State(BASELINE, 50),
-                replayContext);
-        final var action = new CommandManagerExport_exportSelected(manager);
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+        final var action = new CommandManager_exportSelected(manager);
         final var replayableCommands = java.util.Arrays.stream(entries)
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(java.util.stream.Collectors.toList());
@@ -503,11 +497,11 @@ class CommandExportManagerSelectedTestExport {
     }
 
     private static class Fixture {
-        final CommandManagerExport_exportSelected action;
+        final CommandManager_exportSelected action;
         final List<ReplayableCommand> replayableCommands;
 
         Fixture(
-                final CommandManagerExport_exportSelected action,
+                final CommandManager_exportSelected action,
                 final List<ReplayableCommand> replayableCommands) {
             this.action = action;
             this.replayableCommands = replayableCommands;

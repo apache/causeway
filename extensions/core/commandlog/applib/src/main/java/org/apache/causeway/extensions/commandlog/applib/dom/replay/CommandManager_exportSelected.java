@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
@@ -20,26 +18,26 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commands",
+        choicesFrom = "commandsForExport",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerExport_exportSelected.DomainEvent.class,
+        domainEvent = CommandManager_exportSelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commands", sequence = "1.1",
+        associateWith = "commandsToExport", sequence = "1.1",
         cssClassFa = "solid share-from-square",
         cssClass = "btn-primary",
         describedAs = "Exports selected Commands as zipped DTOs for import later. "
                 + "Refresh the page to see changed states."
 )
 @RequiredArgsConstructor
-public class CommandManagerExport_exportSelected {
+public class CommandManager_exportSelected {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_exportSelected> {
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_exportSelected> {
     }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
     @MemberSupport
     public Clob act(
@@ -76,7 +74,7 @@ public class CommandManagerExport_exportSelected {
 
     @MemberSupport
     public String disableAct() {
-        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -91,7 +89,7 @@ public class CommandManagerExport_exportSelected {
 
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
-        return commandExportManager.getCommands().stream()
+        return commandManager.getCommandsForExport().stream()
                 .filter(ReplayableCommand::isKnownParticipants)
                 .collect(Collectors.toList());
     }
@@ -120,12 +118,12 @@ public class CommandManagerExport_exportSelected {
 
     private Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> selectedCommandLogEntries) {
-        return commandExportManager.validateKnownTargets(selectedCommandLogEntries);
+        return commandManager.validateKnownTargets(selectedCommandLogEntries);
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getCommands();
+        return commandManager.getCommandsForExport();
     }
 }

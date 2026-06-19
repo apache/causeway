@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.*;
 
-import static org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerExport.Direction.*;
-
 @Action(
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerExport_nextPage.DomainEvent.class,
+        domainEvent = CommandManager_nextPage.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -19,37 +17,37 @@ import static org.apache.causeway.extensions.commandlog.applib.dom.replay.Comman
         describedAs = "Move forward to next page of commands"
 )
 @RequiredArgsConstructor
-public class CommandManagerExport_nextPage {
+public class CommandManager_nextPage {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_nextPage> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_nextPage> { }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
     @MemberSupport
-    public CommandManagerExport act() {
-        final var commands = commandExportManager.commands(NEXT);
+    public CommandManager act() {
+        final var commands = commandManager.getCommandsForExport();
         final var size = commands.size();
         if (size == 0) {
-            return commandExportManager;
+            return commandManager;
         }
         final var lastReplayable = commands.get(size - 1);
-        return commandExportManager(lastReplayable);
+        return commandManager(lastReplayable);
     }
 
     @MemberSupport
     public String disableAct() {
-        final var commands = commandExportManager.commands(NEXT);
+        final var commands = commandManager.getCommandsForExport();
         final var size = commands.size();
         if (size == 0) {
             return "Empty";
         }
         final var lastReplayable = commands.get(size - 1);
-        return commandExportManager(lastReplayable).commands(NEXT).isEmpty() ? "No more commands" : null;
+        return commandManager(lastReplayable).getCommandsForExport().isEmpty() ? "No more commands" : null;
     }
 
-    private CommandManagerExport commandExportManager(final ReplayableCommand replayableCommand) {
+    private CommandManager commandManager(final ReplayableCommand replayableCommand) {
         final var timestamp = replayableCommand.getTimestamp().toInstant();
         final var baselinePlus5Millis = HasBaseline.addMillis(timestamp, 5);
-        return commandExportManager.withBaseline(baselinePlus5Millis);
+        return commandManager.withBaseline(baselinePlus5Millis);
     }
 }

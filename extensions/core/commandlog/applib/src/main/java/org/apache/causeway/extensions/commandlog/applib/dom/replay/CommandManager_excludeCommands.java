@@ -19,33 +19,32 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commands",
+        choicesFrom = "commandsToExport",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CommandManagerExport_excludeCommands.DomainEvent.class,
+        domainEvent = CommandManager_excludeCommands.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commands", sequence = "1.3",
+        associateWith = "commandsToExport", sequence = "1.3",
         cssClass = "btn-secondary",
-        describedAs = "Marks selected active Commands as EXCLUDED so they are omitted from export, exportability, and movement. "
-                + "Non-exportable commands are selected by default."
+        describedAs = "Marks selected Commands as EXCLUDED from either export or replay."
 )
-public class CommandManagerExport_excludeCommands {
+public class CommandManager_excludeCommands {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_excludeCommands> {
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_excludeCommands> {
     }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
     @Inject ReplayContext replayContext;
 
-    public CommandManagerExport_excludeCommands(final CommandManagerExport commandExportManager) {
-        this.commandExportManager = commandExportManager;
+    public CommandManager_excludeCommands(final CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @MemberSupport
-    public CommandManagerExport act(final List<ReplayableCommand> selected) {
+    public CommandManager act(final List<ReplayableCommand> selected) {
         final String validation = validateAct(selected);
         if (validation != null) {
             throw new RecoverableException(validation);
@@ -55,7 +54,7 @@ public class CommandManagerExport_excludeCommands {
                 .map(ReplayableCommand::commandLogEntry)
                 .flatMap(java.util.Optional::stream)
                 .forEach(commandLogEntry -> commandLogEntry.setReplayState(ReplayState.EXCLUDED));
-        return commandExportManager;
+        return commandManager;
     }
 
     @MemberSupport
@@ -63,7 +62,7 @@ public class CommandManagerExport_excludeCommands {
         if (!replayContext.isRecordingSupportEnabled()) {
             return "Command exclusion requires command-log recording support to be enabled";
         }
-        return commandExportManager.getCommands().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -75,7 +74,7 @@ public class CommandManagerExport_excludeCommands {
         if (selectedValidation != null) {
             return selectedValidation;
         }
-        final Set<UUID> activeIds = interactionIds(commandExportManager.getCommands());
+        final Set<UUID> activeIds = interactionIds(commandManager.getCommandsForExport());
         final Set<UUID> selectedIds = interactionIds(selected);
         if (!activeIds.containsAll(selectedIds)) {
             return "Selected commands must be active commands from the current baseline";
@@ -90,7 +89,7 @@ public class CommandManagerExport_excludeCommands {
 
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
-        return commandExportManager.getCommands().stream()
+        return commandManager.getCommandsForExport().stream()
                 .filter(command -> !command.isKnownParticipants())
                 .collect(Collectors.toList());
     }
@@ -98,7 +97,7 @@ public class CommandManagerExport_excludeCommands {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getCommands();
+        return commandManager.getCommandsForExport();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {

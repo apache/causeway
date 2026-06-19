@@ -30,40 +30,50 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
+
+import org.jspecify.annotations.NonNull;
 
 import static org.apache.causeway.extensions.commandlog.applib.dom.replay.TimestampMarshallUtil.fromString;
 
+@DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
+@DomainObjectLayout(cssClassFa = "solid share-from-square")
+@Named(CommandManager.LOGICAL_TYPE_NAME)
 @RequiredArgsConstructor
-public abstract class CommandManagerAbstract
+public class CommandManager
         implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed, ReplayableCommandParticipantTracker {
 
-    final ReplayContext replayContext;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandManager";
 
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
+    final ReplayContext replayContext;
     ReplayContext replayContext() {
         return replayContext;
     }
 
-    @Property
-    @PropertyLayout(describedAs = "Only commands after this timestamp are available")
-    @Getter java.sql.Timestamp baseline;
-
-    @Property
-    @PropertyLayout(describedAs = "Number of commands per page")
-    @Getter int limit;
-
-
-    CommandManagerAbstract(
+    public CommandManager(
             final State state,
             final ReplayContext replayContext) {
         this.baseline = state.timestamp;
@@ -72,25 +82,152 @@ public abstract class CommandManagerAbstract
     }
 
 
-    @ObjectSupport
-    public String title() {
-        return this instanceof CommandManagerExport
-                ? "Command Export Manager"
-                : "Command Replay Manager";
+    @Inject
+    public CommandManager(
+            final String memento,
+            final ReplayContext replayContext) {
+        this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
     }
-
-
-    // -- VM STATE
 
     @Override
     public String viewModelMemento() {
         return new State(baseline, limit).toMemento();
     }
 
+
+    @ObjectSupport
+    public String title() {
+        return "Command Manager";
+    }
+
+
+
+    @Property
+    @PropertyLayout(describedAs = "Only commands after this timestamp are available")
+    @Getter java.sql.Timestamp baseline;
+
+    @Override
+    @Programmatic
+    public CommandManager withBaseline(final Timestamp baseline) {
+        return new CommandManager(new State(baseline, this.limit), replayContext);
+    }
+
+
+
+    @Property
+    @PropertyLayout(describedAs = "Number of commands per page")
+    @Getter int limit;
+
+    @Override
+    @Programmatic
+    public CommandManager withLimit(final int limit) {
+        return new CommandManager(new State(this.baseline, limit), replayContext);
+    }
+
+
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Commands since the baseline (except those that have been excluded)."
+    )
+    public List<ReplayableCommand> getCommandsForExport() {
+        ReplayableCommandParticipantTracker.putTrackerOnScratchpad(this, replayContext.scratchpad());
+        return commandLogEntries().stream()
+                .filter(this::isDoOp)
+                .map(this::replayableCommandFor)
+                .collect(Collectors.toList());
+    }
+
+
+    @Collection
+    @CollectionLayout(
+            sequence = "2",
+            describedAs = "Commands since the baseline that have been excluded"
+    )
+    public List<ReplayableCommand> getExcludedCommands() {
+        return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .filter(CommandManager::isExcludedCommand)
+                .filter(this::isDoOp)
+                .map(entry -> new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext))
+                .collect(Collectors.toList());
+    }
+
+    // -- PENDING OR FAILED
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that can be either replayed (if PENDING) or retried (if FAILED)"
+    )
+    public List<ReplayableCommand> getPendingOrFailed() {
+        return streamPendingOrFailed()
+                .collect(Collectors.toList());
+    }
+
+    @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
+        return commandLogEntries().stream()
+                .map(entry -> new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext));
+    }
+
+    long sizePendingOrFailed() {
+        return streamPendingOrFailed().count();
+    }
+
+
+
+    // -- OK OR EXCLUDE
+
+    @Collection
+    @CollectionLayout(
+            describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
+                    + "or marked to be excluded from replay (replayState=EXCLUDE)"
+    )
+    public List<ReplayableCommand> getSucceededOrExcluded() {
+        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
+                .filter(this::isDoOp)
+                .map(entry->new ReplayableCommand(
+                        entry.getInteractionId(),
+                        replayContext))
+                .collect(Collectors.toList());
+    }
+
+
+
+    /**
+     * The sequence of {@link CommandLogEntry}s to be evaluated, specifically with respect to having known participants.
+     */
+    @Programmatic
+    List<CommandLogEntry> commandLogEntries() {
+        return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .filter(this::isDoOp)
+                .filter(entry -> entry.getReplayState().isNotExcluded())
+                .collect(Collectors.toList());
+    }
+
+
+    // -- HELPERS
+
+    private boolean isDoOp(final CommandLogEntry entry) {
+        return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
+    }
+
+    private static boolean isExcludedCommand(final CommandLogEntry entry) {
+        return entry != null && entry.getReplayState().isExcluded();
+    }
+
+
+    private CommandLogEntryRepository commandLogEntryRepository() {
+        return replayContext.commandLogEntryRepository();
+    }
+
+
     @Programmatic
     Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
             final List<CommandLogEntry> commandLogEntries) {
-        return isRecordingSupportEnabled()
+        return replayContext.isRecordingSupportEnabled()
                 ? validator().validate(baseline, commandLogEntries)
                 : Optional.empty();
     }
@@ -98,7 +235,7 @@ public abstract class CommandManagerAbstract
     @Override
     @Programmatic
     public boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
-        if (commandLogEntry == null || !isRecordingSupportEnabled()) {
+        if (commandLogEntry == null || !replayContext.isRecordingSupportEnabled()) {
             return false;
         }
         return validator().validateParticipants(commandLogEntry, knownParticipantsAsOf(commandLogEntry.getInteractionId())).isEmpty();
@@ -133,37 +270,13 @@ public abstract class CommandManagerAbstract
                 replayContext);
     }
 
-    /**
-     * The sequence of {@link CommandLogEntry}s to be evaluated, specifically with respect to having known participants.
-     */
-    @Programmatic
-    abstract List<CommandLogEntry> commandLogEntries();
-
-    private boolean isRecordingSupportEnabled() {
-        return replayContext.causewayConfiguration() != null
-                && replayContext.causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
-    }
-
     CommandKnownParticipantsValidator validator() {
         return new CommandKnownParticipantsValidator(this::isDomainServiceOrReferenceData);
     }
 
     private boolean isDomainServiceOrReferenceData(final Bookmark bookmark) {
-        return isDomainService(bookmark)
+        return replayContext.isDomainService(bookmark)
                 || CommandReplayReferenceDataService.isReferenceData(replayContext.commandReplayReferenceDataServices(), bookmark);
-    }
-
-    private boolean isDomainService(final Bookmark bookmark) {
-        final var metaModelService = replayContext.metaModelService();
-        final var specificationLoader = replayContext.specificationLoader();
-        if (metaModelService == null || specificationLoader == null) {
-            // shouldn't happen, except perhaps in unit testing?
-            return false;
-        }
-        return metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
-                .flatMap(specificationLoader::specForLogicalType)
-                .map(ObjectSpecification::isDomainService)
-                .orElse(false);
     }
 
 

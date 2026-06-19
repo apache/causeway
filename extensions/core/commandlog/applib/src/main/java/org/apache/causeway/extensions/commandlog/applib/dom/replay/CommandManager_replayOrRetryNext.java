@@ -9,7 +9,7 @@ import org.apache.causeway.applib.annotation.*;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManagerReplay_replayOrRetrySelected.DomainEvent.class,
+        domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -18,30 +18,30 @@ import org.apache.causeway.applib.annotation.*;
         cssClass = "btn-primary",
         describedAs = "Executes the oldest command.")
 @RequiredArgsConstructor
-public class CommandManagerReplay_replayOrRetryNext {
+public class CommandManager_replayOrRetryNext {
 
-    public static class DomainEvent extends CommandManagerReplay.ActionDomainEvent<CommandManagerReplay_replayOrRetrySelected> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetrySelected> { }
 
-    private final CommandManagerReplay commandReplayManager;
+    private final CommandManager commandManager;
 
     @MemberSupport
-    public CommandManagerReplay act() {
-        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandReplayManager.replayContext())) {
-            return commandReplayManager;
+    public CommandManager act() {
+        if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandManager.replayContext())) {
+            return commandManager;
         }
 
-        var nextIfAny = commandReplayManager.streamPendingOrFailed().findFirst();
+        var nextIfAny = commandManager.streamPendingOrFailed().findFirst();
         // should always be present, due to our guard
         nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
-        return commandReplayManager;
+        return commandManager;
     }
 
     @MemberSupport
     public String disableAct() {
-        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandReplayManager.replayContext());
+        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandManager.replayContext());
         if (pendingBackgroundCommandsReason != null) {
             return pendingBackgroundCommandsReason;
         }
-        return commandReplayManager.sizePendingOrFailed() == 0 ? "No commands in collection" : null;
+        return commandManager.sizePendingOrFailed() == 0 ? "No commands in collection" : null;
     }
 }

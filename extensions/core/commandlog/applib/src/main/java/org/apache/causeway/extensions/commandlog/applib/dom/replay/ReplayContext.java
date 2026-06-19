@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
@@ -32,6 +33,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
@@ -44,8 +46,6 @@ import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
-
-import javax.inject.Inject;
 
 /**
  * Bundles dependencies for the replay logic.
@@ -106,5 +106,18 @@ public final class ReplayContext {
     @Programmatic
     public boolean isRecordingSupportEnabled() {
         return causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+    }
+
+    boolean isDomainService(final Bookmark bookmark) {
+        final var metaModelService = metaModelService();
+        final var specificationLoader = specificationLoader();
+        if (metaModelService == null || specificationLoader == null) {
+            // shouldn't happen, except perhaps in unit testing?
+            return false;
+        }
+        return metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+                .flatMap(specificationLoader::specForLogicalType)
+                .map(ObjectSpecification::isDomainService)
+                .orElse(false);
     }
 }

@@ -1,10 +1,14 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -13,56 +17,68 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
         choicesFrom = "excludedCommands",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
-        domainEvent = CommandManagerExport_deleteCommands.DomainEvent.class,
+        domainEvent = CommandManager_unexcludeCommands.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "excludedCommands", sequence = "1.2",
-        cssClass = "btn-danger",
-        describedAs = "Permanently deletes selected excluded Command Log Entries. This cannot be undone."
+        associateWith = "excludedCommands", sequence = "1.1",
+        cssClass = "btn-secondary",
+        describedAs = "Restores selected excluded Commands so that they can be exported or replayed."
 )
-public class CommandManagerExport_deleteCommands {
+@RequiredArgsConstructor
+public class CommandManager_unexcludeCommands {
 
-    public static class DomainEvent extends CommandManagerExport.ActionDomainEvent<CommandManagerExport_deleteCommands> {
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_unexcludeCommands> {
     }
 
-    private final CommandManagerExport commandExportManager;
+    private final CommandManager commandManager;
 
-    public CommandManagerExport_deleteCommands(final CommandManagerExport commandExportManager) {
-        this.commandExportManager = commandExportManager;
-    }
+    @Inject ReplayContext replayContext;
 
     @MemberSupport
-    public CommandManagerExport act(final List<ReplayableCommand> selected) {
+    public CommandManager act(final List<ReplayableCommand> selected, final ReplayState replayState) {
         final String validation = validateAct(selected);
         if (validation != null) {
             throw new RecoverableException(validation);
         }
 
-        selected.forEach(ReplayableCommand::deleteObj);
-        return commandExportManager;
+        selected.stream()
+                .map(ReplayableCommand::commandLogEntry)
+                .flatMap(java.util.Optional::stream)
+                .forEach(commandLogEntry -> commandLogEntry.setReplayState(replayState));
+        return commandManager;
+    }
+
+    @MemberSupport
+    public List<ReplayState> choicesReplayState() {
+        return ReplayState.nonExcluded();
     }
 
     @MemberSupport
     public String disableAct() {
-        return commandExportManager.getExcludedCommands().isEmpty()
-                ? "No excluded commands in collection"
-                : null;
+        if (!replayContext.isRecordingSupportEnabled()) {
+            return "Command restoration requires command-log recording support to be enabled";
+        }
+        return commandManager.getExcludedCommands().isEmpty() ? "No excluded commands in collection" : null;
     }
 
     @MemberSupport
     public String validateAct(final List<ReplayableCommand> selected) {
+        if (!replayContext.isRecordingSupportEnabled()) {
+            return "Command restoration requires command-log recording support to be enabled";
+        }
         final String selectedValidation = validateSelected(selected);
         if (selectedValidation != null) {
             return selectedValidation;
         }
-        final Set<UUID> excludedIds = interactionIds(commandExportManager.getExcludedCommands());
+        final Set<UUID> excludedIds = interactionIds(commandManager.getExcludedCommands());
         final Set<UUID> selectedIds = interactionIds(selected);
         if (!excludedIds.containsAll(selectedIds)) {
             return "Selected commands must be excluded commands from the current baseline";
@@ -72,13 +88,13 @@ public class CommandManagerExport_deleteCommands {
 
     @MemberSupport
     public String validateSelected(final List<ReplayableCommand> selected) {
-        return selected == null || selected.isEmpty() ? "Select at least one command to delete" : null;
+        return selected == null || selected.isEmpty() ? "Select at least one command to restore" : null;
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandExportManager.getExcludedCommands();
+        return commandManager.getExcludedCommands();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {

@@ -32,15 +32,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Named;
-
 import org.junit.jupiter.api.Test;
 
-import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -50,74 +45,85 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-class CommandManagerExportExcludeCommandsTest {
+class CommandManager_unexcludeCommands_Test {
 
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
-    private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
     @Test
-    void act_marks_selected_active_commands_excluded() {
-        final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var b = entry(MENU_SERVICE, ReplayState.OK);
+    void act_marks_selected_excluded_commands_undefined() {
+        final var a = entry(ReplayState.EXCLUDED);
+        final var b = entry(ReplayState.EXCLUDED);
         final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(a, b), a, b);
 
-        final var result = fixture.action.act(fixture.commands(a, b));
+        final var result = fixture.action.act(fixture.commands(a, b), ReplayState.UNDEFINED);
 
         assertThat(result).isSameAs(fixture.manager);
-        verify(a).setReplayState(ReplayState.EXCLUDED);
-        verify(b).setReplayState(ReplayState.EXCLUDED);
+        verify(a).setReplayState(ReplayState.UNDEFINED);
+        verify(b).setReplayState(ReplayState.UNDEFINED);
     }
 
     @Test
     void validates_empty_or_null_selection() {
-        final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(a), a);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(excluded), excluded);
 
         assertThat(fixture.action.validateAct(List.of()))
-                .isEqualTo("Select at least one command to exclude");
+                .isEqualTo("Select at least one command to restore");
         assertThat(fixture.action.validateAct(null))
-                .isEqualTo("Select at least one command to exclude");
+                .isEqualTo("Select at least one command to restore");
     }
 
     @Test
-    void validates_stale_or_outside_active_collection_selection() {
-        final var active = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var excluded = entry(MENU_SERVICE, ReplayState.EXCLUDED);
+    void validates_stale_or_outside_excluded_collection_selection() {
+        final var active = entry(ReplayState.UNDEFINED);
+        final var excluded = entry(ReplayState.EXCLUDED);
         final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(active, excluded), active, excluded);
 
-        assertThat(fixture.action.validateAct(fixture.commands(excluded)))
-                .isEqualTo("Selected commands must be active commands from the current baseline");
+        assertThat(fixture.action.validateAct(fixture.commands(active)))
+                .isEqualTo("Selected commands must be excluded commands from the current baseline");
+    }
+
+    @Test
+    void choices_selected_come_from_excluded_commands_collection() {
+        final var active = entry(ReplayState.UNDEFINED);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(active, excluded), active, excluded);
+
+        final var choices = fixture.action.choicesSelected();
+
+        assertThat(interactionIds(choices))
+                .containsExactly(excluded.getInteractionId());
     }
 
     @Test
     void act_guards_validation_when_ui_is_bypassed() {
-        final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(a), a);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(RecordingSupport.ENABLED, List.of(excluded), excluded);
 
-        assertThatThrownBy(() -> fixture.action.act(List.of()))
+        assertThatThrownBy(() -> fixture.action.act(List.of(),  ReplayState.UNDEFINED))
                 .isInstanceOf(RecoverableException.class)
-                .hasMessage("Select at least one command to exclude");
+                .hasMessage("Select at least one command to restore");
     }
 
     @Test
     void disable_act_reports_recording_support_disabled() {
-        final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(a), a);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(excluded), excluded);
 
         assertThat(fixture.action.disableAct())
-                .isEqualTo("Command exclusion requires command-log recording support to be enabled");
+                .isEqualTo("Command restoration requires command-log recording support to be enabled");
     }
 
     @Test
     void direct_invocation_is_guarded_when_recording_support_disabled() {
-        final var a = entry(MENU_SERVICE, ReplayState.UNDEFINED);
-        final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(a), a);
+        final var excluded = entry(ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(excluded), excluded);
 
-        assertThatThrownBy(() -> fixture.action.act(fixture.commands(a)))
+        assertThatThrownBy(() -> fixture.action.act(fixture.commands(excluded),  ReplayState.UNDEFINED))
                 .isInstanceOf(RecoverableException.class)
-                .hasMessage("Command exclusion requires command-log recording support to be enabled");
+                .hasMessage("Command restoration requires command-log recording support to be enabled");
     }
 
     private static Fixture fixtureWith(
@@ -131,32 +137,29 @@ class CommandManagerExportExcludeCommandsTest {
         }
 
         final var replayContext = ReplayContext.builder()
-                                    .causewayConfiguration(causewayConfigurationWith(recordingSupport))
-                                    .commandLogEntryRepository(repository)
-                                    .build();
-        final var manager = new CommandManagerExport(
-                new CommandManagerExport.State(BASELINE, 50),
-                replayContext);
-        final var action = new CommandManagerExport_excludeCommands(manager);
+                .commandLogEntryRepository(repository)
+                .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                .build();
+
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+        final var action = new CommandManager_unexcludeCommands(manager);
         action.replayContext = replayContext;
-        return new Fixture(repository, replayContext, manager, action);
+        return new Fixture(replayContext, manager, action);
     }
 
-    private static CommandLogEntry entry(
-            final Bookmark target,
-            final ReplayState replayState) {
+    private static CommandLogEntry entry(final ReplayState replayState) {
         final var commandDto = new CommandDto();
         final var actionDto = new ActionDto();
-        actionDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#act");
+        actionDto.setLogicalMemberIdentifier(MENU_SERVICE.getLogicalTypeName() + "#act");
         commandDto.setMember(actionDto);
         commandDto.setTargets(new OidsDto());
-        commandDto.getTargets().getOid().add(target.toOidDto());
+        commandDto.getTargets().getOid().add(MENU_SERVICE.toOidDto());
 
         final var entry = mock(CommandLogEntry.class);
         final var interactionId = UUID.randomUUID();
         when(entry.getInteractionId()).thenReturn(interactionId);
         when(entry.getTimestamp()).thenReturn(T1);
-        when(entry.getTarget()).thenReturn(target);
+        when(entry.getTarget()).thenReturn(MENU_SERVICE);
         when(entry.getCommandDto()).thenReturn(commandDto);
         when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
         when(entry.getReplayState()).thenReturn(replayState);
@@ -169,36 +172,21 @@ class CommandManagerExportExcludeCommandsTest {
         return causewayConfiguration;
     }
 
-    private static MetaModelService metaModelServiceRecognizingMenuServiceRoot() {
-        final var metaModelService = mock(MetaModelService.class);
-        when(metaModelService.lookupLogicalTypeByName(MENU_SERVICE.getLogicalTypeName()))
-                .thenReturn(Optional.of(LogicalType.eager(Customers.class, MENU_SERVICE.getLogicalTypeName())));
-        return metaModelService;
-    }
-
     private static List<UUID> interactionIds(final List<ReplayableCommand> commands) {
         return commands.stream()
                 .map(ReplayableCommand::interactionId)
                 .collect(Collectors.toList());
     }
 
-    @DomainService
-    @Named("demo.Customers")
-    private static class Customers {
-    }
-
     private static class Fixture {
-        final CommandLogEntryRepository repository;
         private final ReplayContext replayContext;
-        final CommandManagerExport manager;
-        final CommandManagerExport_excludeCommands action;
+        final CommandManager manager;
+        final CommandManager_unexcludeCommands action;
 
         Fixture(
-                final CommandLogEntryRepository repository,
                 final ReplayContext replayContext,
-                final CommandManagerExport manager,
-                final CommandManagerExport_excludeCommands action) {
-            this.repository = repository;
+                final CommandManager manager,
+                final CommandManager_unexcludeCommands action) {
             this.replayContext = replayContext;
             this.manager = manager;
             this.action = action;
