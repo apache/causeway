@@ -63,8 +63,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManagerReplay_replayOrRetrySelected;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exclude;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_unexclude;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_previous;
@@ -101,12 +101,12 @@ import org.springframework.context.annotation.Import;
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
         CommandReplayResultMapping_delete.class,
-        ReplayableCommand_makeExportable.class,
+        ReplayableCommand_unexclude.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_replayOrRetry.class,
         ReplayableCommand_previous.class,
         ReplayableCommand_next.class,
-        ReplayableCommand_excludeFromReplay.class,
+        ReplayableCommand_exclude.class,
         ReplayableCommand_delete.class,
         HasBaseline_changeBaseline.class,
         HasBaseline_previousHour.class,

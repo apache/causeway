@@ -29,7 +29,7 @@ public class CommandManagerReplay_excludeSelectedFromReplay {
     @MemberSupport
     public CommandManagerReplay act(final List<ReplayableCommand> selected) {
         selected.stream()
-                .forEach(ReplayableCommand::excludeFromReplay); // filtered on its own responsibility
+                .forEach(ReplayableCommand::exclude); // filtered on its own responsibility
         return commandReplayManager;
     }
 

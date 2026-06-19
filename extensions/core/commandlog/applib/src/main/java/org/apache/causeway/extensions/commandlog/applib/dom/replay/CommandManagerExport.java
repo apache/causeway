@@ -19,11 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -35,7 +31,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -136,7 +131,7 @@ public final class CommandManagerExport
     @Programmatic
     List<CommandLogEntry> commandLogEntries() {
         return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
-                .filter(CommandManagerExport::isActiveCommand)
+                .filter(CommandManagerExport::wasExecutedOk)
                 .filter(this::isDoOp)
                 .collect(Collectors.toList());
     }
@@ -145,10 +140,11 @@ public final class CommandManagerExport
         return ReplayableCommand.Util.isDoOp(entry, replayContext.specificationLoader());
     }
 
-    private static boolean isActiveCommand(final CommandLogEntry entry) {
+    private static boolean wasExecutedOk(final CommandLogEntry entry) {
         return entry != null
                 && (entry.getReplayState() == ReplayState.UNDEFINED
-                || entry.getReplayState() == ReplayState.EXPORTED);
+                || entry.getReplayState() == ReplayState.OK
+        );
     }
 
     private static boolean isExcludedCommand(final CommandLogEntry entry) {

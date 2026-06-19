@@ -20,35 +20,46 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_excludeFromReplay.DomainEvent.class,
+        domainEvent = ReplayableCommand_unexclude.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
-        sequence = "2.2",
         associateWith = "replayState",
-        describedAs = "Marks Command to be EXCLUDED from replay."
+        sequence = "2.1",
+        describedAs = "Unexcludes command, indicating the desired state"
 )
 @RequiredArgsConstructor
-public class ReplayableCommand_excludeFromReplay {
+public class ReplayableCommand_unexclude {
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_excludeFromReplay> {
-    }
+    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_unexclude> { }
 
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
-    public ReplayableCommand act() {
-        return replayableCommand.excludeFromReplay();
+    public ReplayableCommand act(final ReplayState replayState) {
+        return replayableCommand.unexclude(replayState);
+    }
+
+    public List<ReplayState> choices0Act() {
+        return Arrays.stream(ReplayState.values())
+                .filter(x -> x != ReplayState.EXCLUDED)
+                .collect(Collectors.toList());
     }
 
     @MemberSupport
-    private String disableAct() {
-        return replayableCommand.disableExcludeFromReplay();
+    public boolean hideAct() {
+        return replayableCommand.getReplayState() == ReplayState.EXCLUDED;
     }
 }

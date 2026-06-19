@@ -21,35 +21,34 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_makeExportable.DomainEvent.class,
+        domainEvent = ReplayableCommand_exclude.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        //hidden = Where.NOWHERE, // show in tables //TODO NPE bug
+        sequence = "2.2",
         associateWith = "replayState",
-        sequence = "2.1",
-        describedAs = "Makes Command exportable (again)"
+        describedAs = "Marks Command to be EXCLUDED from replay."
 )
 @RequiredArgsConstructor
-public class ReplayableCommand_makeExportable {
+public class ReplayableCommand_exclude {
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_makeExportable> {
+    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_exclude> {
     }
 
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
     public ReplayableCommand act() {
-        return replayableCommand.makeExportable();
+        return replayableCommand.exclude();
     }
 
     @MemberSupport
-    public String disableAct() {
-        return replayableCommand.disableMakeExportable();
+    private boolean hideAct() {
+        return replayableCommand.getReplayState() == ReplayState.EXCLUDED;
     }
 }

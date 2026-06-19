@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.lang.Nullable;
 
 /**
@@ -25,35 +27,36 @@ import org.springframework.lang.Nullable;
  *
  * @since 2.x {@index}
  */
+@RequiredArgsConstructor
 public enum ReplayState {
     /**
-     * As used on primary system, indicating an initial state.
+     * Default state used when a command is executed.  In the context of regression testing, this can be thought of
+     * as a recorded command on the current version of the application.
      */
-    UNDEFINED,
+    UNDEFINED("Recorded OK"),
     /**
-     * Marks a {@link CommandLogEntry} as exported, so command export tooling can show it has already been exported.
+     * When replaying (on either reference/current version of the application or on the candidate version),
+     * indicates that the command has been imported but not yet been replayed.
      */
-    EXPORTED,
+    PENDING("Pending"),
     /**
-     * For use on secondary system, indicates that the command has not yet been replayed.
+     * When replaying (on either reference/current version of the application or on the candidate version),
+     * indicates that the command has been imported and replayed successfully.
      */
-    PENDING,
+    OK("Replayed OK"),
     /**
-     * For use on secondary system, indicates that the command has been replayed ok
+     * When replaying (on either reference/current version of the application or on the candidate version),
+     * indicates that the command has been imported but the attempt to replay it failed.
      */
-    OK,
+    FAILED("Replay FAILED"),
     /**
-     * For use on secondary system, indicates that the command has been replayed but encountered an error
+     * Allows a command (either recorded or replayed) to be excluded from the current set.  This can be used to exclude
+     * a command from being exported for replay, or to exclude a command imported from being replayed.
      */
-    FAILED,
-    /**
-     * For use on secondary system, indicates that the command should not be replayed.
-     */
-    EXCLUDED;
+    EXCLUDED("Excluded"),
+    ;
 
-    public boolean isExported() {
-        return this == EXPORTED;
-    }
+    private final String title;
 
     public boolean isFailed() {
         return this == FAILED;
@@ -76,10 +79,6 @@ public enum ReplayState {
 
     // -- NULL SAFE
 
-    public static boolean isExportable(final @Nullable ReplayState replayState) {
-        return replayState == null || replayState.isExportable();
-    }
-
     public static boolean isPendingOrFailed(final @Nullable ReplayState replayState) {
         return replayState != null && replayState.isPendingOrFailed();
     }
@@ -92,9 +91,6 @@ public enum ReplayState {
         return replayState == ReplayState.OK || replayState == ReplayState.EXCLUDED;
     }
 
-    public static boolean isExported(final ReplayState replayState) {
-        return replayState != null && replayState.isExported();
-    }
 
 }
 
