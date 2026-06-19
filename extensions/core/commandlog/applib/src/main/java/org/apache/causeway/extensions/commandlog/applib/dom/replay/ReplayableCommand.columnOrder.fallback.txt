@@ -4,4 +4,4 @@ target
 member
 replayState
 hasResult
-exportable
+knownParticipants

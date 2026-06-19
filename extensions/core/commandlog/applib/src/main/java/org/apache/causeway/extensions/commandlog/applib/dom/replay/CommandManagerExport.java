@@ -145,7 +145,7 @@ public final class CommandManagerExport
     }
 
     @Programmatic
-    Boolean isExportable(final CommandLogEntry commandLogEntry) {
+    Boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
         if (commandLogEntry == null || !isRecordingSupportEnabled()) {
             return null;
         }

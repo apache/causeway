@@ -107,7 +107,7 @@ public class CommandManagerExport_exportSelected {
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
         return commandExportManager.getCommands().stream()
-                .filter(command -> Boolean.TRUE.equals(command.getExportable()))
+                .filter(command -> Boolean.TRUE.equals(command.isKnownParticipants()))
                 .collect(Collectors.toList());
     }
 

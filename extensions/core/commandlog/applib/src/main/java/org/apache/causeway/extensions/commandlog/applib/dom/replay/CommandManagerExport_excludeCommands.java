@@ -92,7 +92,7 @@ public class CommandManagerExport_excludeCommands {
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
         return commandExportManager.getCommands().stream()
-                .filter(command -> Boolean.FALSE.equals(command.getExportable()))
+                .filter(command -> Boolean.FALSE.equals(command.isKnownParticipants()))
                 .collect(Collectors.toList());
     }
 

@@ -190,7 +190,7 @@ class CommandExportManagerSelectedTestExport {
     void exportable_is_true_for_first_domain_service_target_in_export_manager_context() {
         final var commands = exportManagerCommandsWith(entry(T1, MENU_SERVICE));
 
-        assertThat(commands.get(0).getExportable()).isTrue();
+        assertThat(commands.get(0).isKnownParticipants()).isTrue();
     }
 
     @Test
@@ -199,21 +199,21 @@ class CommandExportManagerSelectedTestExport {
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER, null);
         final var commands = exportManagerCommandsWith(finder, actionOnFoundCustomer);
 
-        assertThat(commands.get(1).getExportable()).isTrue();
+        assertThat(commands.get(1).isKnownParticipants()).isTrue();
     }
 
     @Test
     void exportable_is_false_for_command_with_unknown_target_in_export_manager_context() {
         final var commands = exportManagerCommandsWith(entry(T1, CUSTOMER));
 
-        assertThat(commands.get(0).getExportable()).isFalse();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
     void exportable_is_false_for_property_edit_with_unknown_target_in_export_manager_context() {
         final var commands = exportManagerCommandsWith(propertyEditEntry(T1, CUSTOMER));
 
-        assertThat(commands.get(0).getExportable()).isFalse();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
@@ -222,7 +222,7 @@ class CommandExportManagerSelectedTestExport {
         final var laterFinder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE, CUSTOMER);
         final var commands = exportManagerCommandsWith(actionOnCustomer, laterFinder);
 
-        assertThat(commands.get(0).getExportable()).isFalse();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
 
     @Test
@@ -232,16 +232,16 @@ class CommandExportManagerSelectedTestExport {
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER, null);
         final var commands = exportManagerCommandsWith(unknownCustomerAction, finder, actionOnFoundCustomer);
 
-        assertThat(commands.get(0).getExportable()).isFalse();
-        assertThat(commands.get(1).getExportable()).isTrue();
-        assertThat(commands.get(2).getExportable()).isTrue();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
+        assertThat(commands.get(1).isKnownParticipants()).isTrue();
+        assertThat(commands.get(2).isKnownParticipants()).isTrue();
     }
 
     @Test
     void exportable_is_null_when_recording_support_is_disabled() {
         final var commands = exportManagerCommandsWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER));
 
-        assertThat(commands.get(0).getExportable()).isNull();
+        assertThat(commands.get(0).isKnownParticipants()).isNull();
     }
 
     @Test
@@ -253,7 +253,7 @@ class CommandExportManagerSelectedTestExport {
 
         final var command = new ReplayableCommand(entry.getInteractionId(), replayContext);
 
-        assertThat(command.getExportable()).isNull();
+        assertThat(command.isKnownParticipants()).isNull();
     }
 
     @Test
@@ -261,7 +261,7 @@ class CommandExportManagerSelectedTestExport {
         final var entry = entry(T1, CUSTOMER);
         final var commands = exportManagerCommandsWith(entry);
 
-        assertThat(commands.get(0).getExportable()).isFalse();
+        assertThat(commands.get(0).isKnownParticipants()).isFalse();
         verify(entry, org.mockito.Mockito.never()).setReplayState(org.mockito.Mockito.any());
     }
 
