@@ -220,36 +220,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-    /**
-     * Intended to support the replay of commands on a secondary instance of
-     * the application.
-     *
-     * This finder returns all (completed) {@link CommandLogEntry}s started after
-     * the command with the specified interactionId.  The number of commands
-     * returned can be limited so that they can be applied in batches.
-     *
-     * If the provided interactionId is null, then only a single
-     * {@link CommandLogEntry command} is returned.  This is intended to support
-     * the case when the secondary does not yet have any
-     * {@link CommandLogEntry command}s replicated.  In practice this is unlikely;
-     * typically we expect that the secondary will be set up to run against a
-     * copy of the primary instance's DB (restored from a backup), in which
-     * case there will already be a {@link CommandLogEntry command} representing the
-     * current high water mark on the secondary system.
-     *
-     * If the interactionId is not null but the corresponding
-     * {@link CommandLogEntry command} is not found, then <tt>null</tt> is returned.
-     * In the replay scenario the caller will probably interpret this as an
-     * error because it means that the high water mark on the secondary is
-     * inaccurate, referring to a non-existent {@link CommandLogEntry command} on
-     * the primary.
-     *
-     * @param interactionId - the identifier of the {@link CommandLogEntry command} being
-     *                   the replay HWM (using {@link #findMostRecentReplayed()} on the
-     *                   secondary), or null if no HWM was found there.
-     * @param batchSize - to restrict the number returned (so that replay
-     *                   commands can be batched).
-     */
     @Override
     public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
         if(interactionId == null) {
@@ -368,17 +338,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     // --
 
-    @Override
-    public List<CommandLogEntry> findCommandsOnPrimaryElseFail(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException {
-
-        final List<CommandLogEntry> commands = findSince(interactionId, batchSize);
-        if(commands == null) {
-            throw new NotFoundException(interactionId);
-        }
-        return commands;
-    }
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
         var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
@@ -413,28 +372,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
     @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
-        return findForegroundSinceTimestampAndCanBeExported(since, null);
-    }
-
-    @Override
     public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, Integer batchSizeIfAny) {
         return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundBeforeTimestampAndCanBeExported(final Timestamp before, Integer batchSizeIfAny) {
-        return findForegroundBeforeTimestampWithState(before, ReplayState.UNDEFINED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since, Integer batchSizeIfAny) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.EXPORTED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundBeforeTimestampAndHasBeenExported(final Timestamp before, Integer batchSizeIfAny) {
-        return findForegroundBeforeTimestampWithState(before, ReplayState.EXPORTED, batchSizeIfAny);
     }
 
     @Override

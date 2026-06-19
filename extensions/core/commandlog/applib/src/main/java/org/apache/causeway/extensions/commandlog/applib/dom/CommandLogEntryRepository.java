@@ -91,34 +91,14 @@ public interface CommandLogEntryRepository {
 
 
     /**
-     * Intended to support the replay of commands on a secondary instance of
-     * the application.
+     * Intended to support the replay of commands for regression testing on a reference or candidate version of the application.
      *
+     * <p>
      * This finder returns all (completed) {@link CommandLogEntry}s started after
      * the command with the specified interactionId.  The number of commands
      * returned can be limited so that they can be applied in batches.
+     * </p>
      *
-     * If the provided interactionId is null, then only a single
-     * {@link CommandLogEntry command} is returned.  This is intended to support
-     * the case when the secondary does not yet have any
-     * {@link CommandLogEntry command}s replicated.  In practice this is unlikely;
-     * typically we expect that the secondary will be set up to run against a
-     * copy of the primary instance's DB (restored from a backup), in which
-     * case there will already be a {@link CommandLogEntry command} representing the
-     * current high water mark on the secondary system.
-     *
-     * If the interactionId is not null but the corresponding
-     * {@link CommandLogEntry command} is not found, then <tt>null</tt> is returned.
-     * In the replay scenario the caller will probably interpret this as an
-     * error because it means that the high water mark on the secondary is
-     * inaccurate, referring to a non-existent {@link CommandLogEntry command} on
-     * the primary.
-     *
-     * @param interactionId - the identifier of the {@link CommandLogEntry command} being
-     *                   the replay HWM (using {@link #findMostRecentReplayed()} on the
-     *                   secondary), or null if no HWM was found there.
-     * @param batchSize - to restrict the number returned (so that replay
-     *                   commands can be batched).
      */
     List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
 
@@ -130,21 +110,8 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findForegroundBeforeTimestamp(final Timestamp before, final Integer limitIfAny);
 
-    default List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
-        return findForegroundSinceTimestampAndCanBeExported(since, null);
-    }
-
     List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, final Integer limitIfAny);
 
-    List<CommandLogEntry> findForegroundBeforeTimestampAndCanBeExported(final Timestamp before, final Integer limitIfAny);
-
-    default List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since) {
-        return findForegroundSinceTimestampAndHasBeenExported(since, null);
-    }
-
-    List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since, final Integer limitIfAny);
-
-    List<CommandLogEntry> findForegroundBeforeTimestampAndHasBeenExported(final Timestamp before, final Integer limitIfAny);
 
     /**
      * Command Replay feature: Can replay or retry.
@@ -155,7 +122,6 @@ public interface CommandLogEntryRepository {
      * Command Replay feature: Cannot replay or retry.
      */
     List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since);
-
 
 
     /**
@@ -219,11 +185,6 @@ public interface CommandLogEntryRepository {
     void truncateLog();
 
     // --
-
-
-    List<CommandLogEntry> findCommandsOnPrimaryElseFail(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException;
 
 
     /**
