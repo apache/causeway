@@ -371,32 +371,29 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return allMatches(query, batchSizeIfAny);
     }
 
-    @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, Integer batchSizeIfAny) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED, batchSizeIfAny);
-    }
 
     @Override
     public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(final Timestamp since) {
         return findForegroundSinceTimestampWithStates(since, ReplayState.PENDING, ReplayState.FAILED);
     }
 
-    /**
-     * Command Replay feature: Cannot replay or retry.
-     */
     @Override
-    public List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(final Timestamp since) {
-        return findForegroundSinceTimestampWithStates(since, ReplayState.OK, ReplayState.EXCLUDED);
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayUndefinedOrOk(final Timestamp since) {
+        return findForegroundSinceTimestampWithStates(since, ReplayState.UNDEFINED, ReplayState.OK);
     }
 
-    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState, Integer batchSizeIfAny) {
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
-                .withParameter("from", from)
-                .withParameter("replayState", replayState);
-
-        return allMatches(query, batchSizeIfAny);
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(final Timestamp since) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.EXCLUDED);
     }
 
+    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState1) {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
+                                .withParameter("from", from)
+                                .withParameter("replayState1", replayState1)));
+    }
 
     private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
         return _Casts.uncheckedCast(

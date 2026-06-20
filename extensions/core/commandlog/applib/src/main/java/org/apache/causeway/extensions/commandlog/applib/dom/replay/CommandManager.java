@@ -145,12 +145,10 @@ public class CommandManager
             describedAs = "Commands since the baseline that have been excluded"
     )
     public List<ReplayableCommand> getExcludedCommands() {
-        return commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
-                .filter(CommandManager::isExcludedCommand)
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayExcluded(baseline)
+                .stream()
                 .filter(this::isDoOp)
-                .map(entry -> new ReplayableCommand(
-                        entry.getInteractionId(),
-                        replayContext))
+                .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(Collectors.toList());
     }
 
@@ -166,8 +164,8 @@ public class CommandManager
     }
 
     @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
-        return commandLogEntries().stream()
-                .filter(x -> x.getReplayState().isPendingOrFailed())
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline)
+                .stream()
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext));
     }
 
@@ -181,15 +179,13 @@ public class CommandManager
 
     @Collection
     @CollectionLayout(
-            describedAs = "Imported Commands that were either replayed with success (replayState=OK) "
-                    + "or marked to be excluded from replay (replayState=EXCLUDE)"
+            describedAs = "Commands that have been executed successfully, " +
+                    "either directly as a recording or imported and replayed."
     )
-    public List<ReplayableCommand> getSucceededOrExcluded() {
-        return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
+    public List<ReplayableCommand> getRecordedOrReplayed() {
+        return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayUndefinedOrOk(baseline).stream()
                 .filter(this::isDoOp)
-                .map(entry->new ReplayableCommand(
-                        entry.getInteractionId(),
-                        replayContext))
+                .map(entry->new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(Collectors.toList());
     }
 
@@ -264,9 +260,7 @@ public class CommandManager
     }
 
     ReplayableCommand replayableCommandFor(final CommandLogEntry entry) {
-        return new ReplayableCommand(
-                entry.getInteractionId(),
-                replayContext);
+        return new ReplayableCommand(entry.getInteractionId(), replayContext);
     }
 
     CommandKnownParticipantsValidator validator() {
