@@ -79,13 +79,6 @@ import lombok.Setter;
                   + " WHERE cl.target = :target "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
     @NamedQuery(
-            name  = Nq.FIND_RECENT_BY_TARGET_OR_RESULT,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.target = :targetOrResult "
-                  + "    OR cl.result = :targetOrResult "
-                  + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
-    @NamedQuery(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
@@ -159,27 +152,6 @@ import lombok.Setter;
                         + "  FROM CommandLogEntry cl "
                         + " WHERE cl.completedAt is null "
                         + " ORDER BY cl.timestamp DESC"),
-        @NamedQuery(
-                name  = Nq.FIND_COMPLETED,
-                query = "SELECT cl "
-                        + "  FROM CommandLogEntry cl "
-                        + " WHERE cl.completedAt is not null "
-                        + " ORDER BY cl.timestamp DESC"),
-    @NamedQuery(
-            name  = Nq.FIND_FIRST,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.startedAt   is not null "
-                  + "   AND cl.completedAt is not null "
-                  + " ORDER BY cl.timestamp ASC"), // programmatic LIMIT 1
-    @NamedQuery(
-            name  = Nq.FIND_SINCE,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.timestamp > :timestamp "
-                  + "   AND cl.startedAt is not null "
-                  + "   AND cl.completedAt is not null "
-                  + " ORDER BY cl.timestamp ASC"),
     @NamedQuery(
             name  = Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED,
             query = "SELECT cl "
@@ -194,13 +166,6 @@ import lombok.Setter;
                   + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.BACKGROUND "
                   + "   AND cl.target    = :target "
                   + " ORDER BY cl.timestamp DESC"),
-    @NamedQuery(
-            name  = Nq.FIND_MOST_RECENT_REPLAYED,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE (cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK"
-                  + " OR cl.replayState = org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED) "
-                  + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,
             query = "SELECT cl "

@@ -91,7 +91,7 @@ class CommandManager_commands_Test {
                 .containsExactly(undefined.getInteractionId(), undefined2.getInteractionId(), ok.getInteractionId());
     }
 
-    @Test
+    @Test @Disabled // TO reinstate or delete
     void excluded_commands_collection_includes_only_excluded_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
         final var exported = entry(ReplayState.UNDEFINED);

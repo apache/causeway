@@ -43,16 +43,6 @@ import lombok.Getter;
  */
 public interface CommandLogEntryRepository {
 
-    class NotFoundException extends RecoverableException {
-        private static final long serialVersionUID = 1L;
-        @Getter
-        private final UUID interactionId;
-        public NotFoundException(final UUID interactionId) {
-            super("Command not found");
-            this.interactionId = interactionId;
-        }
-    }
-
     CommandLogEntry createEntryAndPersist(
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
 
@@ -67,8 +57,6 @@ public interface CommandLogEntryRepository {
             final @Nullable LocalDate to);
 
     List<CommandLogEntry> findCurrent();
-
-    List<CommandLogEntry> findCompleted();
 
 
     List<CommandLogEntry> findByTargetAndFromAndTo(
@@ -87,20 +75,6 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findRecentByTarget(final Bookmark target);
 
-    List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult);
-
-
-    /**
-     * Intended to support the replay of commands for regression testing on a reference or candidate version of the application.
-     *
-     * <p>
-     * This finder returns all (completed) {@link CommandLogEntry}s started after
-     * the command with the specified interactionId.  The number of commands
-     * returned can be limited so that they can be applied in batches.
-     * </p>
-     *
-     */
-    List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize);
 
     default List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since) {
         return findForegroundSinceTimestamp(since, null);
@@ -112,10 +86,16 @@ public interface CommandLogEntryRepository {
 
 
     /**
-     * Command Replay feature: Can replay or retry.
+     * To support Command Replay.
      */
     List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
+    /**
+     * To support Command Replay.
+     */
     List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayUndefinedOrOk(Timestamp since);
+    /**
+     * To support Command Replay.
+     */
     List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since);
 
 
@@ -133,17 +113,6 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target);
 
-
-    /**
-     * The most recent replayed command previously replicated from primary to
-     * secondary.
-     *
-     * <p>
-     * This should always exist except for the very first times
-     * (after restored the prod DB to secondary).
-     * </p>
-     */
-    Optional<CommandLogEntry> findMostRecentReplayed();
 
     /**
      * The most recent completed command, as queried on the

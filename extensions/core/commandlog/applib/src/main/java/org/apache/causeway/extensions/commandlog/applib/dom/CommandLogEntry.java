@@ -136,9 +136,7 @@ public abstract class CommandLogEntry
         public static final String FIND_BY_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByInteractionId";
         public static final String FIND_BY_PARENT_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByParentInteractionId";
         public static final String FIND_CURRENT = LOGICAL_TYPE_NAME + ".findCurrent";
-        public static final String FIND_COMPLETED = LOGICAL_TYPE_NAME + ".findCompleted";
         public static final String FIND_RECENT_BY_TARGET = LOGICAL_TYPE_NAME + ".findRecentByTarget";
-        public static final String FIND_RECENT_BY_TARGET_OR_RESULT = LOGICAL_TYPE_NAME + ".findRecentByTargetOrResult";
         public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBetween";
         public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampAfter";
         public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBefore";
@@ -149,20 +147,6 @@ public abstract class CommandLogEntry
         public static final String FIND = LOGICAL_TYPE_NAME + ".find";
         public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
         public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
-        public static final String FIND_FIRST = LOGICAL_TYPE_NAME + ".findFirst";
-        public static final String FIND_SINCE = LOGICAL_TYPE_NAME + ".findSince";
-        /**
-         * The most recent (replayed) command previously replicated from primary to secondary.
-         *
-         * <p>
-         * This should always exist except for the very first times (after restored the prod DB to secondary).
-         * </p>
-         */
-        public static final String FIND_MOST_RECENT_REPLAYED = LOGICAL_TYPE_NAME + ".findMostRecentReplayed";
-        /**
-         * The most recent completed command, as queried on the secondary, corresponding to the last command run on
-         * primary before the production database was restored to the secondary.
-         */
         public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER
                 = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfter";

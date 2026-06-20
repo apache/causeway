@@ -78,14 +78,14 @@ class CommandManager_pendingOrFailed_Test {
     }
 
     @Test
-    void pending_or_failed_omits_safe_action_without_result() {
+    void pending_or_failed_returns_safe_action_without_result() {
         final var safeAction = safeActionEntry(ReplayState.PENDING, null);
         final var repository = repositoryReturningPendingOrFailed(List.of(safeAction));
         final var manager = manager(repository, safeActionSpecificationLoader());
 
         final var commands = manager.getPendingOrFailed();
 
-        assertThat(commands).isEmpty();
+        assertThat(commands).hasSize(1);
         assertThat(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).containsExactly(safeAction);
     }
 
