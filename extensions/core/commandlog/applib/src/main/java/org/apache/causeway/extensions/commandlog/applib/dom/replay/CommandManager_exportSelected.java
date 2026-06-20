@@ -18,7 +18,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commandsForExport",
+        choicesFrom = "commandsInSequence",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         domainEvent = CommandManager_exportSelected.DomainEvent.class,
@@ -74,7 +74,7 @@ public class CommandManager_exportSelected {
 
     @MemberSupport
     public String disableAct() {
-        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsInSequence().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -89,7 +89,7 @@ public class CommandManager_exportSelected {
 
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
-        return commandManager.getCommandsForExport().stream()
+        return commandManager.getCommandsInSequence().stream()
                 .filter(ReplayableCommand::isKnownParticipants)
                 .collect(Collectors.toList());
     }
@@ -124,6 +124,6 @@ public class CommandManager_exportSelected {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandManager.getCommandsForExport();
+        return commandManager.getCommandsInSequence();
     }
 }

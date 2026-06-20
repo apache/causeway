@@ -51,7 +51,7 @@ public class CommandManager_deleteCommands {
 
     @MemberSupport
     public String disableAct() {
-        return commandManager.getExcludedCommands().isEmpty()
+        return commandManager.getExcluded().isEmpty()
                 ? "No excluded commands in collection"
                 : null;
     }
@@ -62,7 +62,7 @@ public class CommandManager_deleteCommands {
         if (selectedValidation != null) {
             return selectedValidation;
         }
-        final Set<UUID> excludedIds = interactionIds(commandManager.getExcludedCommands());
+        final Set<UUID> excludedIds = interactionIds(commandManager.getExcluded());
         final Set<UUID> selectedIds = interactionIds(selected);
         if (!excludedIds.containsAll(selectedIds)) {
             return "Selected commands must be excluded commands from the current baseline";
@@ -78,7 +78,7 @@ public class CommandManager_deleteCommands {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandManager.getExcludedCommands();
+        return commandManager.getExcluded();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {

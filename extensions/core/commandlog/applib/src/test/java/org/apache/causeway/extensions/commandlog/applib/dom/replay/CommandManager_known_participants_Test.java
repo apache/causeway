@@ -247,7 +247,7 @@ class CommandManager_known_participants_Test {
                                         .causewayConfiguration(causewayConfigurationWith(RecordingSupport.DISABLED))
                                         .build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(commands.get(0).isKnownParticipants()).isFalse();
     }
@@ -360,7 +360,7 @@ class CommandManager_known_participants_Test {
                                         .causewayConfiguration(causewayConfigurationWith(RecordingSupport.ENABLED))
                                         .build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
-        return manager.getCommandsForExport();
+        return manager.getCommandsInSequence();
     }
 
     private static Fixture fixtureWithRecordingSupport(

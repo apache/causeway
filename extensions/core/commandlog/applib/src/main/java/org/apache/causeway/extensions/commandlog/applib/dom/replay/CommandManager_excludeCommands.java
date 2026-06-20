@@ -19,7 +19,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commandsForExport",
+        choicesFrom = "commandsInSequence",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
         domainEvent = CommandManager_excludeCommands.DomainEvent.class,
@@ -62,7 +62,7 @@ public class CommandManager_excludeCommands {
         if (!replayContext.isRecordingSupportEnabled()) {
             return "Command exclusion requires command-log recording support to be enabled";
         }
-        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsInSequence().isEmpty() ? "No commands in collection" : null;
     }
 
     @MemberSupport
@@ -74,7 +74,7 @@ public class CommandManager_excludeCommands {
         if (selectedValidation != null) {
             return selectedValidation;
         }
-        final Set<UUID> activeIds = interactionIds(commandManager.getCommandsForExport());
+        final Set<UUID> activeIds = interactionIds(commandManager.getCommandsInSequence());
         final Set<UUID> selectedIds = interactionIds(selected);
         if (!activeIds.containsAll(selectedIds)) {
             return "Selected commands must be active commands from the current baseline";
@@ -89,7 +89,7 @@ public class CommandManager_excludeCommands {
 
     @MemberSupport
     public List<ReplayableCommand> defaultSelected() {
-        return commandManager.getCommandsForExport().stream()
+        return commandManager.getCommandsInSequence().stream()
                 .filter(command -> !command.isKnownParticipants())
                 .collect(Collectors.toList());
     }
@@ -97,7 +97,7 @@ public class CommandManager_excludeCommands {
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
     @MemberSupport
     public List<ReplayableCommand> choicesSelected() {
-        return commandManager.getCommandsForExport();
+        return commandManager.getCommandsInSequence();
     }
 
     private static Set<UUID> interactionIds(final List<ReplayableCommand> commands) {

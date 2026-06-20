@@ -62,7 +62,7 @@ class CommandManager_commands_Test {
         final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
                 .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
@@ -85,7 +85,7 @@ class CommandManager_commands_Test {
                 .build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
                 .containsExactly(undefined.getInteractionId(), undefined2.getInteractionId(), ok.getInteractionId());
@@ -101,7 +101,7 @@ class CommandManager_commands_Test {
         final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getExcludedCommands();
+        final var commands = manager.getExcluded();
 
         assertThat(interactionIds(commands))
                 .containsExactly(excluded.getInteractionId());
@@ -115,7 +115,7 @@ class CommandManager_commands_Test {
         final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(specificationLoader).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
                 .containsExactly(safeAction.getInteractionId());
@@ -129,7 +129,7 @@ class CommandManager_commands_Test {
         final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(specificationLoader).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(commands).isEmpty();
         assertThat(repository.findForegroundSinceTimestamp(BASELINE, 50)).containsExactly(safeAction);
@@ -143,7 +143,7 @@ class CommandManager_commands_Test {
         final var replayContext = ReplayContext.builder().commandLogEntryRepository(repository).specificationLoader(null).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
-        final var commands = manager.getCommandsForExport();
+        final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
                 .containsExactly(exported.getInteractionId(), excluded.getInteractionId());
