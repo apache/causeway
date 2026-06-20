@@ -134,14 +134,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     }
 
     @Override
-    public List<CommandLogEntry> findCompleted() {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_COMPLETED))
-        );
-    }
-
-    @Override
     public List<CommandLogEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final @Nullable LocalDate from,
@@ -209,38 +201,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-    @Override
-    public List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult) {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET_OR_RESULT)
-                            .withParameter("targetOrResult", targetOrResult)
-                            .withLimit(30L)
-                    )
-        );
-    }
-
-    @Override
-    public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
-        if(interactionId == null) {
-            return findFirst();
-        }
-        final C from = findByInteractionIdElseNull(interactionId);
-        if(from == null) {
-            return Collections.emptyList();
-        }
-        return findSince(from.getTimestamp(), batchSize);
-    }
-
-    private List<CommandLogEntry> findFirst() {
-        Optional<CommandLogEntry> firstCommandIfAny =
-                _Casts.uncheckedCast(repositoryService().firstMatch(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FIRST)));
-        return firstCommandIfAny
-                .map(Collections::singletonList)
-                .orElse(Collections.emptyList());
-    }
-
     /**
      * Returns any persisted commands that have not yet started.
      *
@@ -269,22 +229,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-    /**
-     * The most recent replayed command previously replicated from primary to
-     * secondary.
-     *
-     * <p>
-     * This should always exist except for the very first times
-     * (after restored the prod DB to secondary).
-     * </p>
-     */
-    @Override
-    public Optional<CommandLogEntry> findMostRecentReplayed() {
-        return _Casts.uncheckedCast(
-                repositoryService().firstMatch(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_REPLAYED))
-        );
-    }
 
     /**
      * The most recent completed command, as queried on the
@@ -338,23 +282,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     // --
 
-
-    private C findByInteractionIdElseNull(final UUID interactionId) {
-        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                .withParameter("interactionId", interactionId);
-        return repositoryService().uniqueMatch(q).orElse(null);
-    }
-
-    private List<CommandLogEntry> findSince(
-            final Timestamp timestamp,
-            final Integer batchSizeIfAny) {
-
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
-                .withParameter("timestamp", timestamp);
-
-        return allMatches(query, batchSizeIfAny);
-    }
-
     @Override
     public List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since, Integer batchSizeIfAny) {
         var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER)
@@ -392,7 +319,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                 repositoryService().allMatches(
                         Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
                                 .withParameter("from", from)
-                                .withParameter("replayState1", replayState1)));
+                                .withParameter("replayState", replayState1)));
     }
 
     private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
