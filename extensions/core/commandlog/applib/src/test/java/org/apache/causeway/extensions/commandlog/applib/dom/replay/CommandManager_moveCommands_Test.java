@@ -171,8 +171,8 @@ class CommandManager_moveCommands_Test {
 
         fixture.moveAction.act(fixture.commands(b, c), fixture.command(a), false);
 
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.510Z"));
-        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.760Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
         assertThat(a.getTimestamp()).isEqualTo(T0);
     }
 
@@ -203,8 +203,8 @@ class CommandManager_moveCommands_Test {
 
         fixture.moveAction.act(fixture.commands(b, c), fixture.command(a), false);
 
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.510Z"));
-        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:00.520Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
     }
 
     @Test
@@ -274,8 +274,8 @@ class CommandManager_moveCommands_Test {
 
         fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
 
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.260Z"));
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06.000Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:07.000Z"));
         assertThat(c.getTimestamp()).isEqualTo(T5);
     }
 
@@ -306,8 +306,8 @@ class CommandManager_moveCommands_Test {
 
         fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
 
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.020Z"));
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06.000Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:07.000Z"));
     }
 
     @Test
