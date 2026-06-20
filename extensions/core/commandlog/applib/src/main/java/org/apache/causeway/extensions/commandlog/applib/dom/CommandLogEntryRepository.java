@@ -110,18 +110,13 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findForegroundBeforeTimestamp(final Timestamp before, final Integer limitIfAny);
 
-    List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, final Integer limitIfAny);
-
 
     /**
      * Command Replay feature: Can replay or retry.
      */
     List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
-
-    /**
-     * Command Replay feature: Cannot replay or retry.
-     */
-    List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(Timestamp since);
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayUndefinedOrOk(Timestamp since);
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since);
 
 
     /**
