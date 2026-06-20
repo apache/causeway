@@ -19,7 +19,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commandsToExport",
+        choicesFrom = "commandsForExport",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
         domainEvent = CommandManager_excludeCommands.DomainEvent.class,

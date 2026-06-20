@@ -167,9 +167,8 @@ public class CommandManager
 
     @NonNull Stream<ReplayableCommand> streamPendingOrFailed() {
         return commandLogEntries().stream()
-                .map(entry -> new ReplayableCommand(
-                        entry.getInteractionId(),
-                        replayContext));
+                .filter(x -> x.getReplayState().isPendingOrFailed())
+                .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext));
     }
 
     long sizePendingOrFailed() {

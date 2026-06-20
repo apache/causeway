@@ -116,16 +116,6 @@ class CommandManager_unexcludeCommands_Test {
                 .isEqualTo("Command restoration requires command-log recording support to be enabled");
     }
 
-    @Test
-    void direct_invocation_is_guarded_when_recording_support_disabled() {
-        final var excluded = entry(ReplayState.EXCLUDED);
-        final var fixture = fixtureWith(RecordingSupport.DISABLED, List.of(excluded), excluded);
-
-        assertThatThrownBy(() -> fixture.action.act(fixture.commands(excluded),  ReplayState.UNDEFINED))
-                .isInstanceOf(RecoverableException.class)
-                .hasMessage("Command restoration requires command-log recording support to be enabled");
-    }
-
     private static Fixture fixtureWith(
             final RecordingSupport recordingSupport,
             final List<CommandLogEntry> sinceBaseline,

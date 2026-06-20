@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -79,29 +80,26 @@ class CommandManagerMovementSupport {
         return null;
     }
 
+    List<ReplayableCommand> choicesSelected() {
+        return commandManager.getCommandsForExport();
+    }
+
     List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
         return choicesTarget(selected, commandManager.getCommandsForExport());
     }
 
     private List<ReplayableCommand> choicesTarget(
             final List<ReplayableCommand> selected,
-            final List<ReplayableCommand> availableCommands) {
+            final List<ReplayableCommand> allCommands) {
         final Set<UUID> selectedIds = interactionIds(selected);
         if (selectedIds.isEmpty()) {
-            return availableCommands;
+            return allCommands;
         }
-        final int firstSelectedIndex = firstSelectedIndex(availableCommands, selectedIds);
-        final int lastSelectedIndex = lastSelectedIndex(availableCommands, selectedIds);
-        if (firstSelectedIndex < 0 || lastSelectedIndex < 0) {
-            return availableCommands.stream()
-                    .filter(command -> !selectedIds.contains(command.interactionId()))
-                    .collect(Collectors.toList());
-        }
-        return availableCommands.subList(lastSelectedIndex + 1, availableCommands.size());
-    }
-
-    List<ReplayableCommand> choicesSelected() {
-        return commandManager.getCommandsForExport();
+        final Set<UUID> availableIds = interactionIds(allCommands);
+        availableIds.removeAll(selectedIds);
+        return allCommands.stream()
+                .filter(x -> availableIds.contains(x.getInteractionId()))
+                .collect(Collectors.toList());
     }
 
     CommandManager move(
