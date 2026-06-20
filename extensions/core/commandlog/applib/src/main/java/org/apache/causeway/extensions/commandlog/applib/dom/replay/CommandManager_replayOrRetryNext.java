@@ -46,7 +46,7 @@ public class CommandManager_replayOrRetryNext {
      * because we need to check isKnownParticipants
      */
     private @NonNull Optional<ReplayableCommand> commandInSequence(Optional<ReplayableCommand> nextIfAny) {
-        final var allCommands = commandManager.getCommandsForExport();
+        final var allCommands = commandManager.getCommandsInSequence();
         return nextIfAny.stream()
                 .flatMap(next -> allCommands.stream().filter(command -> command.getInteractionId().equals(next.getInteractionId())))
                 .findFirst();

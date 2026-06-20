@@ -25,7 +25,7 @@ public class CommandManager_previousPage {
 
     @MemberSupport
     public CommandManager act() {
-        final var commands = commandManager.getCommandsForExport();   // returns descending, latest (youngest) first
+        final var commands = commandManager.getCommandsInSequence();   // returns descending, latest (youngest) first
         final var size = commands.size();
         if (size == 0) {
             return commandManager;
@@ -36,7 +36,7 @@ public class CommandManager_previousPage {
 
     @MemberSupport
     public String disableAct() {
-        final var commands = commandManager.getCommandsForExport();
+        final var commands = commandManager.getCommandsInSequence();
         final var size = commands.size();
         return size == 0 ? "No commands" : null;
     }

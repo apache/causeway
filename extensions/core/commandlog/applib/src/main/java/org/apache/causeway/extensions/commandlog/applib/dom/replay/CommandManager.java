@@ -130,7 +130,7 @@ public class CommandManager
     @CollectionLayout(
             describedAs = "Commands since the baseline (except those that have been excluded)."
     )
-    public List<ReplayableCommand> getCommandsForExport() {
+    public List<ReplayableCommand> getCommandsInSequence() {
         ReplayableCommandParticipantTracker.putTrackerOnScratchpad(this, replayContext.scratchpad());
         return commandLogEntries().stream()
                 .filter(this::isDoOp)
@@ -144,7 +144,7 @@ public class CommandManager
             sequence = "2",
             describedAs = "Commands since the baseline that have been excluded"
     )
-    public List<ReplayableCommand> getExcludedCommands() {
+    public List<ReplayableCommand> getExcluded() {
         return commandLogEntryRepository().findForegroundSinceTimestampAndWithReplayExcluded(baseline)
                 .stream()
                 .filter(this::isDoOp)

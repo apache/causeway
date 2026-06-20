@@ -35,7 +35,7 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
-        choicesFrom = "commandsForExport",
+        choicesFrom = "commandsInSequence",
         commandPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.NON_IDEMPOTENT,
         domainEvent = CommandManager_moveCommands.DomainEvent.class,

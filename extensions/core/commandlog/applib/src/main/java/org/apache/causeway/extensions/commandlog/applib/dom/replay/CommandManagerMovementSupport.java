@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +33,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 class CommandManagerMovementSupport {
 
-    static final long MINIMUM_GAP_MILLIS = 10L;
+    static final long MINIMUM_GAP_MILLIS = 1000L;
     static final long SQUASH_GAP_MILLIS = 1000L;
 
     private final CommandManager commandManager;
@@ -51,7 +50,7 @@ class CommandManagerMovementSupport {
         if (!isRecordingSupportEnabled()) {
             return "Command movement requires command-log recording support to be enabled";
         }
-        return commandManager.getCommandsForExport().isEmpty() ? "No commands in collection" : null;
+        return commandManager.getCommandsInSequence().isEmpty() ? "No commands in collection" : null;
     }
 
     String validateAct(
@@ -69,7 +68,7 @@ class CommandManagerMovementSupport {
             return "Cannot move commands after one of the selected commands";
         }
 
-        final List<ReplayableCommand> availableCommands = commandManager.getCommandsForExport();
+        final List<ReplayableCommand> availableCommands = commandManager.getCommandsInSequence();
         final Set<UUID> availableIds = interactionIds(availableCommands);
         if (!availableIds.contains(target.interactionId())) {
             return "Target command is not available for export from the current baseline";
@@ -81,11 +80,11 @@ class CommandManagerMovementSupport {
     }
 
     List<ReplayableCommand> choicesSelected() {
-        return commandManager.getCommandsForExport();
+        return commandManager.getCommandsInSequence();
     }
 
     List<ReplayableCommand> choicesTarget(final List<ReplayableCommand> selected) {
-        return choicesTarget(selected, commandManager.getCommandsForExport());
+        return choicesTarget(selected, commandManager.getCommandsInSequence());
     }
 
     private List<ReplayableCommand> choicesTarget(

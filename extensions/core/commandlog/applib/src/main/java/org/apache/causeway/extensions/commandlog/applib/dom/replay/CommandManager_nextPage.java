@@ -25,7 +25,7 @@ public class CommandManager_nextPage {
 
     @MemberSupport
     public CommandManager act() {
-        final var commands = commandManager.getCommandsForExport();
+        final var commands = commandManager.getCommandsInSequence();
         final var size = commands.size();
         if (size == 0) {
             return commandManager;
@@ -36,13 +36,13 @@ public class CommandManager_nextPage {
 
     @MemberSupport
     public String disableAct() {
-        final var commands = commandManager.getCommandsForExport();
+        final var commands = commandManager.getCommandsInSequence();
         final var size = commands.size();
         if (size == 0) {
             return "Empty";
         }
         final var lastReplayable = commands.get(size - 1);
-        return commandManager(lastReplayable).getCommandsForExport().isEmpty() ? "No more commands" : null;
+        return commandManager(lastReplayable).getCommandsInSequence().isEmpty() ? "No more commands" : null;
     }
 
     private CommandManager commandManager(final ReplayableCommand replayableCommand) {
