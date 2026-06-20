@@ -185,8 +185,11 @@ public abstract class CommandLogEntry
         setStartedAt(command.getStartedAt());
         setCompletedAt(command.getCompletedAt());
 
+        setResult(command.getResult());
+        setException(command.getException());
+
         if (isReplayOrRetryEnabled(getReplayState())) {
-            // we DON'T overwrite the recorded result/exception if we're replaying.
+            // we DON'T overwrite remained if we're replaying.
             return;
         }
 
@@ -198,8 +201,6 @@ public abstract class CommandLogEntry
         setTarget(command.getTarget());
         setLogicalMemberIdentifier(command.getLogicalMemberIdentifier());
 
-        setResult(command.getResult());
-        setException(command.getException());
     }
 
 

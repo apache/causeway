@@ -55,8 +55,8 @@ class CommandLogEntrySyncTest {
 
         verify(commandLogEntry).setStartedAt(STARTED_AT);
         verify(commandLogEntry).setCompletedAt(COMPLETED_AT);
-        verify(commandLogEntry, never()).setResult(RESULT);
-        verify(commandLogEntry, never()).setException((Throwable) null);
+        verify(commandLogEntry).setResult(RESULT);
+        verify(commandLogEntry).setException((Throwable) null);
     }
 
     @Test
