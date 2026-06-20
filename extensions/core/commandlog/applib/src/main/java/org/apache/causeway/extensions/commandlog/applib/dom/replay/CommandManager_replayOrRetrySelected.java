@@ -10,7 +10,7 @@ import org.apache.causeway.applib.annotation.*;
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
         choicesFrom = "pendingOrFailed",
-        semantics = SemanticsOf.NON_IDEMPOTENT,
+        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
         commandPublishing = Publishing.DISABLED,
         domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
@@ -19,10 +19,8 @@ import org.apache.causeway.applib.annotation.*;
         associateWith = "pendingOrFailed", sequence = "1.2",
         cssClass = "btn-secondary",
         cssClassFa = "solid forward",
-        describedAs = "Executes the list of commands in sequence, after having sorted them by their timestamp. "
-                + "If any of the given commands fails, "
-                + "its surrounding transaction is rolled back, but any successful commands so far are marked OK). "
-                + "The command, that caused the failure, gets marked FAILED.")
+        describedAs = "Executes the list of commands in sequence, each in their own transaction.  Note that there is no checking of the 'knownParticipants', so review first."
+)
 @RequiredArgsConstructor
 public class CommandManager_replayOrRetrySelected {
 

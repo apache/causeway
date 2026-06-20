@@ -214,7 +214,7 @@ public class CommandManager
     }
 
 
-    private CommandLogEntryRepository commandLogEntryRepository() {
+    CommandLogEntryRepository commandLogEntryRepository() {
         return replayContext.commandLogEntryRepository();
     }
 

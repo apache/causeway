@@ -2,7 +2,11 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.annotation.*;
+
+import org.jspecify.annotations.NonNull;
 
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
@@ -31,17 +35,43 @@ public class CommandManager_replayOrRetryNext {
         }
 
         var nextIfAny = commandManager.streamPendingOrFailed().findFirst();
-        // should always be present, due to our guard
-        nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
+        commandInSequence(nextIfAny)
+                .filter(ReplayableCommand::isKnownParticipants)
+                .ifPresent(ReplayableCommand::tryReplayOrRetry);
         return commandManager;
+    }
+
+    /**
+     * We lookup the command found in the context of the commands for export,
+     * because we need to check isKnownParticipants
+     */
+    private @NonNull Optional<ReplayableCommand> commandInSequence(Optional<ReplayableCommand> nextIfAny) {
+        final var allCommands = commandManager.getCommandsForExport();
+        return nextIfAny.stream()
+                .flatMap(next -> allCommands.stream().filter(command -> command.getInteractionId().equals(next.getInteractionId())))
+                .findFirst();
     }
 
     @MemberSupport
     public String disableAct() {
-        var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandManager.replayContext());
+        final var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandManager.replayContext());
         if (pendingBackgroundCommandsReason != null) {
             return pendingBackgroundCommandsReason;
         }
-        return commandManager.sizePendingOrFailed() == 0 ? "No commands in collection" : null;
+        final var nextIfAny = commandManager.streamPendingOrFailed().findFirst();
+        if(nextIfAny.isEmpty()) {
+            return "No commands to execute";
+        }
+        final var commandInSequenceIfAny = commandInSequence(nextIfAny);
+        if(commandInSequenceIfAny.isEmpty()) {
+            // shouldn't happen
+            return "Unable to find command in sequence (in order to check its known participants)";
+        }
+        if (commandInSequenceIfAny
+                .filter(ReplayableCommand::isKnownParticipants)
+                .isEmpty()) {
+            return "Unknown participants (target and/or action args)";
+        }
+        return null;
     }
 }
