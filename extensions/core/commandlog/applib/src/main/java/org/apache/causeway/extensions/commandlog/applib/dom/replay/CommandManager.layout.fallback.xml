@@ -69,7 +69,7 @@
                         <bs:col span="12">
                             <bs:row>
                                 <bs:col span="12" size="MD">
-                                    <cpt:collection defaultView="table" paged="15" id="commandsInSequence">
+                                    <cpt:collection defaultView="table" paged="100" id="commandsInSequence">
                                         <cpt:action id="exportSelected"/>
                                         <cpt:action id="moveCommands"/>
                                         <cpt:action id="excludeCommands"/>
@@ -78,7 +78,7 @@
                             </bs:row>
                             <bs:row>
                                 <bs:col span="12" size="MD">
-                                    <cpt:collection defaultView="hidden" paged="15" id="excluded">
+                                    <cpt:collection defaultView="table" paged="15" id="excluded">
                                         <cpt:action id="unexcludeCommands"/>
                                         <cpt:action id="deleteCommands"/>
                                     </cpt:collection>

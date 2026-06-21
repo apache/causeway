@@ -52,12 +52,13 @@ public class ReplayableCommand_unexclude {
         return replayableCommand.unexclude(replayState);
     }
 
+    @MemberSupport
     public List<ReplayState> choices0Act() {
         return ReplayState.nonExcluded();
     }
 
     @MemberSupport
     public boolean hideAct() {
-        return replayableCommand.getReplayState() == ReplayState.EXCLUDED;
+        return replayableCommand.getReplayState().isNotExcluded();
     }
 }

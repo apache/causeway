@@ -1,6 +1,6 @@
 #interactionId
 timestamp
-target
+targetAbbreviated
 member
 replayState
 hasResult

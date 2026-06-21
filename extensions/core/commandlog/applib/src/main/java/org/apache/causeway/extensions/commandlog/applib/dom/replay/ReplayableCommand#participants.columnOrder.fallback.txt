@@ -1,8 +1,0 @@
-#replayableCommand
-role
-parameterName
-#recordedBookmark
-target
-argument
-result
-#actualBookmark

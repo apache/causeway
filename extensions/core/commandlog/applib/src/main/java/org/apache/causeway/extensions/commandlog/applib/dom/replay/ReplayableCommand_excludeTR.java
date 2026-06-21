@@ -57,15 +57,17 @@ public class ReplayableCommand_excludeTR {
         return replayableCommand.exclude();
     }
 
+    @MemberSupport
     public ReplayState default0Act() {
         return ReplayState.EXCLUDED;
     };
+    @MemberSupport
     public String disable0Act() {
         return "Exclude the command";
     };
 
     @MemberSupport
     private boolean hideAct() {
-        return replayableCommand.getReplayState() == ReplayState.EXCLUDED;
+        return replayableCommand.getReplayState().isExcluded();
     }
 }
