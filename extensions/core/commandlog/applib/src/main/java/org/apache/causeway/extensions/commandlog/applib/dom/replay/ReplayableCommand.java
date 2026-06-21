@@ -262,7 +262,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private static @NonNull String abbreviatedIfRequired(String x) {
-        final var abbreviateIfLongerThan = 50;
+        final var abbreviateIfLongerThan = 80;
         return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
     }
 

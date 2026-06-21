@@ -3,5 +3,5 @@ timestamp
 targetAbbreviated
 member
 replayState
-hasResult
-knownParticipants
+#hasResult
+#knownParticipants
