@@ -74,6 +74,8 @@ import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.transaction.annotation.Propagation;
 
 import lombok.Value;
@@ -189,12 +191,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private String targetTitlePrefix() {
-        return commandRecord()
-                .map(CommandRecord::commandDto)
-                .map(CommandDto::getTargets)
-                .filter(targets -> !targets.getOid().isEmpty())
-                .map(targets -> targets.getOid().get(0))
-                .map(target -> target.getType() + ":" + target.getId())
+        return targetBookmarkIfAny()
                 .orElse("");
     }
 
@@ -244,18 +241,41 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @PropertyLayout(
             sequence = "3.0",
             fieldSetId = "details",
-            hidden = Where.OBJECT_FORMS,
+            hidden = Where.PARENTED_TABLES,
             describedAs = "Target of the command")
     public String getTarget() {
+        return targetBookmarkIfAny()
+                .orElse(null);
+    }
+
+    @Property
+    @PropertyLayout(
+            named = "Target",
+            sequence = "3.0",
+            fieldSetId = "details",
+            hidden = Where.OBJECT_FORMS,
+            describedAs = "Target of the command")
+    public String getTargetAbbreviated() {
+        return targetBookmarkIfAny()
+                .map(ReplayableCommand::abbreviatedIfRequired)
+                .orElse(null);
+    }
+
+    private static @NonNull String abbreviatedIfRequired(String x) {
+        final var abbreviateIfLongerThan = 50;
+        return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
+    }
+
+    private @NonNull Optional<String> targetBookmarkIfAny() {
         return commandRecord()
                 .map(CommandRecord::commandDto)
                 .map(CommandDto::getTargets)
                 .map(OidsDto::getOid)   // returns a list of OidDto's, in fact
                 .flatMap(oidDtoList -> Optional.ofNullable(oidDtoList.isEmpty() ? null : oidDtoList.get(0)))
                 .map(Bookmark::forOidDto)
-                .map(Bookmark::stringify)
-                .orElse(null);
+                .map(Bookmark::stringify);
     }
+
 
     @Property
     @PropertyLayout(

@@ -49,6 +49,6 @@ public class ReplayableCommand_exclude {
 
     @MemberSupport
     private boolean hideAct() {
-        return replayableCommand.getReplayState() == ReplayState.EXCLUDED;
+        return replayableCommand.getReplayState().isExcluded();
     }
 }
