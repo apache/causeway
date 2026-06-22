@@ -39,8 +39,9 @@ When no background commands are pending, existing replay manager disablement rul
 - **THEN** the action is disabled
 - **AND** the disablement message instructs the replay user to wait for pending background commands to complete before continuing replay
 
-#### Scenario: Replay next remains enabled after background work completes
+#### Scenario: Replay next no longer reports background wait after background work completes
 - **GIVEN** previously pending background commands have executed and committed
-- **AND** there is at least one pending or failed command eligible for replay
+- **AND** there is at least one pending or failed command available for replay review
 - **WHEN** the framework evaluates a replay manager action that replays the next eligible command
-- **THEN** the action is not disabled because of background command completion
+- **THEN** the action is not disabled with the pending-background-commands message
+- **AND** any remaining disablement comes from the existing replay eligibility rules

@@ -1,63 +1,68 @@
 # command-export-manager-command-list Specification
 
 ## Purpose
-TBD - created by archiving change simplify-command-export-manager-commands. Update Purpose after archive.
+Define the command manager collections used to review recorded commands, export command DTOs, and replay imported commands.
+
 ## Requirements
-### Requirement: Export manager shows one baseline-bounded command collection
-The export manager SHALL expose a collection named `commands`.
-The `commands` collection SHALL contain replayable foreground command log entries at or after the export manager baseline whose replay state is `UNDEFINED` or `EXPORTED`.
-The `commands` collection MUST exclude command log entries whose replay state is `EXCLUDED`.
-The `commands` collection MUST exclude command log entries whose replay state is a replay execution state such as `PENDING`, `OK`, or `FAILED`.
-The `commands` collection MUST exclude safe action command log entries that do not have a single stored result bookmark.
-The `commands` collection SHALL be ordered by the command ordering used for command export and command movement.
+### Requirement: Export manager shows a baseline-bounded command sequence
+The export manager SHALL expose a collection named `commandsInSequence`.
+The `commandsInSequence` collection SHALL contain replayable foreground command log entries at or after the export manager baseline except entries whose replay state is `EXCLUDED`.
+The `commandsInSequence` collection MAY include entries whose replay state is `UNDEFINED`, `PENDING`, `OK`, or `FAILED`.
+The `commandsInSequence` collection MUST exclude command log entries whose replay state is `EXCLUDED`.
+The `commandsInSequence` collection MUST exclude safe action command log entries that do not have a stored result bookmark.
+The `commandsInSequence` collection SHALL be ordered by the command ordering used for command export, replay review, and command movement.
 The export manager MUST NOT expose separate mode-filtered collections for not-yet-exported commands and exported commands.
 
-#### Scenario: Active command list includes undefined and exported states
+#### Scenario: Command sequence includes non-excluded replay states
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline has replay state `UNDEFINED`
-- **AND** command `B` at or after the baseline has replay state `EXPORTED`
-- **WHEN** the user views the export manager commands collection
+- **AND** command `B` at or after the baseline has replay state `PENDING`
+- **AND** command `C` at or after the baseline has replay state `OK`
+- **AND** command `D` at or after the baseline has replay state `FAILED`
+- **WHEN** the user views the export manager command sequence
 - **THEN** command `A` is included
 - **AND** command `B` is included
+- **AND** command `C` is included
+- **AND** command `D` is included
 
-#### Scenario: Excluded command is removed from active command list
+#### Scenario: Excluded command is removed from command sequence
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline has replay state `EXCLUDED`
-- **WHEN** the user views the export manager commands collection
+- **WHEN** the user views the export manager command sequence
 - **THEN** command `A` is not included
 
 #### Scenario: Commands before baseline are excluded
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` is before the baseline
 - **AND** command `B` is at or after the baseline
-- **WHEN** the user views the export manager commands collection
+- **WHEN** the user views the export manager command sequence
 - **THEN** command `A` is not included
 - **AND** command `B` is included
 
-#### Scenario: Safe action without result is omitted from export manager commands
+#### Scenario: Safe action without result is omitted from command sequence
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline represents a logged safe action with no result bookmark
-- **WHEN** the user views the export manager commands collection
+- **WHEN** the user views the export manager command sequence
 - **THEN** command `A` is not included
 - **AND** the underlying command log entry for command `A` remains persisted
 
-#### Scenario: Safe action with single result remains in export manager commands
+#### Scenario: Safe action with a result remains in command sequence
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline represents a logged safe action with result bookmark `demoCustomer:1`
-- **WHEN** the user views the export manager commands collection
+- **WHEN** the user views the export manager command sequence
 - **THEN** command `A` is included
 
-### Requirement: Export manager removes mode switching
-The export manager SHALL use a single command-list mode.
+### Requirement: Export manager removes command-list mode switching
+The export manager SHALL use a single baseline-bounded command sequence for export-related actions.
 The export manager MUST NOT expose a mode property that switches between exported and not-yet-exported commands.
 The export manager MUST NOT expose a toggle action for switching between exported and not-yet-exported command lists.
-The export manager view-model memento SHALL store the baseline and page limit needed for the unified command list.
+The export manager view-model memento SHALL store the baseline and page limit needed for the command sequence.
 The export manager view-model memento MUST NOT store a command-list mode.
 
 #### Scenario: Export manager page has no toggle mode action
 - **WHEN** the user views the export manager
 - **THEN** there is no action to toggle between exported and not-yet-exported commands
-- **AND** the commands collection remains visible as the single command list
+- **AND** the `commandsInSequence` collection remains visible as the command sequence
 
 #### Scenario: Memento stores only unified list state
 - **GIVEN** an export manager has a baseline and page limit
@@ -66,46 +71,50 @@ The export manager view-model memento MUST NOT store a command-list mode.
 - **AND** the memento contains the page limit
 - **AND** the memento does not contain a command-list mode
 
-### Requirement: Exported replay state remains visible and updated
-The export manager commands collection SHALL display each command's replay state.
-When selected commands are exported successfully, the export manager SHALL set those command log entries to replay state `EXPORTED`.
-A command whose replay state is `EXPORTED` MUST remain eligible to appear in the commands collection.
-Exporting selected commands MUST NOT remove those commands from the commands collection merely because their replay state changed.
+### Requirement: Export sequence creates YAML for commands with known participants without changing replay state
+The export manager SHALL provide an `exportSequence` action associated with the `commandsInSequence` collection.
+The `exportSequence` action SHALL export all commands in `commandsInSequence` whose known-participants property is `true`.
+The `exportSequence` action SHALL include each exported command DTO and recorded result bookmark in the YAML export.
+The `exportSequence` action SHALL be disabled when no command in `commandsInSequence` has known participants.
+Exporting the sequence MUST NOT change exported command log entries' replay states.
+Exporting the sequence MUST NOT remove those commands from `commandsInSequence` merely because they were exported.
 
-#### Scenario: Export updates replay state without removing command
+#### Scenario: Export sequence creates YAML and leaves replay state unchanged
 - **GIVEN** an export manager baseline is set
-- **AND** command `A` is in the commands collection with replay state `UNDEFINED`
-- **WHEN** the user exports command `A`
-- **THEN** command `A` has replay state `EXPORTED`
-- **AND** command `A` remains eligible for the commands collection
+- **AND** command `A` is in `commandsInSequence` with replay state `UNDEFINED`
+- **AND** command `A` has known participants
+- **WHEN** the user exports the sequence
+- **THEN** the YAML export contains command `A`'s DTO
+- **AND** command `A` still has replay state `UNDEFINED`
+- **AND** command `A` remains eligible for `commandsInSequence`
 
-#### Scenario: Replay state column distinguishes already exported commands
+#### Scenario: Replay state column remains visible
 - **GIVEN** an export manager baseline is set
-- **AND** command `A` in the commands collection has replay state `UNDEFINED`
-- **AND** command `B` in the commands collection has replay state `EXPORTED`
-- **WHEN** the user views the commands collection
+- **AND** command `A` in `commandsInSequence` has replay state `UNDEFINED`
+- **AND** command `B` in `commandsInSequence` has replay state `OK`
+- **WHEN** the user views the command sequence
 - **THEN** the replay state for command `A` is visible
 - **AND** the replay state for command `B` is visible
 
 ### Requirement: Export manager shows excluded commands separately
-The export manager SHALL expose a collection named `excludedCommands` below the `commands` collection.
-The `excludedCommands` collection SHALL contain foreground command log entries at or after the export manager baseline whose replay state is `EXCLUDED`.
-The `excludedCommands` collection MUST exclude command log entries whose replay state is not `EXCLUDED`.
-The `excludedCommands` collection SHALL be ordered by the same command ordering used for the active `commands` collection.
-Excluded commands MUST NOT appear in both `commands` and `excludedCommands` at the same time.
+The export manager SHALL expose a collection named `excluded` below the `commandsInSequence` collection.
+The `excluded` collection SHALL contain foreground command log entries at or after the export manager baseline whose replay state is `EXCLUDED`.
+The `excluded` collection MUST exclude command log entries whose replay state is not `EXCLUDED`.
+The `excluded` collection SHALL be ordered by the same command ordering used for `commandsInSequence`.
+Excluded commands MUST NOT appear in both `commandsInSequence` and `excluded` at the same time.
 
-#### Scenario: Excluded command appears in excluded commands collection
+#### Scenario: Excluded command appears in excluded collection
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline has replay state `EXCLUDED`
-- **WHEN** the user views the export manager excluded commands collection
+- **WHEN** the user views the export manager excluded collection
 - **THEN** command `A` is included
-- **AND** command `A` is not included in the active commands collection
+- **AND** command `A` is not included in `commandsInSequence`
 
-#### Scenario: Active commands do not appear in excluded commands collection
+#### Scenario: Non-excluded commands do not appear in excluded collection
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` at or after the baseline has replay state `UNDEFINED`
-- **AND** command `B` at or after the baseline has replay state `EXPORTED`
-- **WHEN** the user views the export manager excluded commands collection
+- **AND** command `B` at or after the baseline has replay state `OK`
+- **WHEN** the user views the export manager excluded collection
 - **THEN** command `A` is not included
 - **AND** command `B` is not included
 
@@ -113,47 +122,68 @@ Excluded commands MUST NOT appear in both `commands` and `excludedCommands` at t
 - **GIVEN** an export manager baseline is set
 - **AND** command `A` before the baseline has replay state `EXCLUDED`
 - **AND** command `B` at or after the baseline has replay state `EXCLUDED`
-- **WHEN** the user views the export manager excluded commands collection
+- **WHEN** the user views the export manager excluded collection
 - **THEN** command `A` is not included
 - **AND** command `B` is included
 
-### Requirement: Export selected defaults to exportable commands
-The export manager SHALL default the `exportSelected` action's selected commands to active commands whose exportability property is `true`.
-The export manager MUST NOT default commands whose exportability property is `false` or `null` into the `exportSelected` selected commands.
-The `exportSelected` action choices SHALL remain the active `commands` collection so users can override the default selection.
-Default selection MUST NOT change command replay state.
+### Requirement: Export manager shows replay work separately
+The export manager SHALL expose a collection named `pendingOrFailed` for imported commands that can be replayed or retried.
+The `pendingOrFailed` collection SHALL contain foreground command log entries at or after the baseline whose replay state is `PENDING` or `FAILED`.
+The `pendingOrFailed` collection SHALL use the repository's pending-or-failed replay-state query directly.
+The `pendingOrFailed` collection MAY include safe action command log entries even when they do not have a result bookmark.
+The export manager SHALL expose a collection named `recordedOrReplayed` for foreground command log entries whose replay state is `UNDEFINED` or `OK`.
+The `recordedOrReplayed` collection MUST exclude safe action command log entries that do not have a stored result bookmark.
 
-#### Scenario: Export action selects exportable active commands by default
+#### Scenario: Pending and failed commands appear in pending-or-failed collection
 - **GIVEN** an export manager baseline is set
-- **AND** command `A` in the active commands collection has exportability `true`
-- **AND** command `B` in the active commands collection has exportability `false`
-- **WHEN** the system provides defaults for the `exportSelected` selected commands
-- **THEN** command `A` is selected by default
-- **AND** command `B` is not selected by default
+- **AND** command `A` at or after the baseline has replay state `PENDING`
+- **AND** command `B` at or after the baseline has replay state `FAILED`
+- **WHEN** the user views the `pendingOrFailed` collection
+- **THEN** command `A` is included
+- **AND** command `B` is included
 
-#### Scenario: Export action choices still include active commands
+#### Scenario: Safe action without result can remain pending replay work
 - **GIVEN** an export manager baseline is set
-- **AND** command `A` is in the active commands collection
-- **AND** command `B` is in the active commands collection
-- **WHEN** the system provides choices for the `exportSelected` selected commands
-- **THEN** command `A` is available as a choice
-- **AND** command `B` is available as a choice
+- **AND** command `A` at or after the baseline represents an imported safe action with replay state `PENDING`
+- **AND** command `A` has no result bookmark
+- **WHEN** the user views the `pendingOrFailed` collection
+- **THEN** command `A` is included
 
-#### Scenario: Default selection does not mark commands exported
+#### Scenario: Recorded and replayed commands appear in recorded-or-replayed collection
 - **GIVEN** an export manager baseline is set
-- **AND** command `A` in the active commands collection has replay state `UNDEFINED`
-- **AND** command `A` has exportability `true`
-- **WHEN** the system provides defaults for the `exportSelected` selected commands
+- **AND** command `A` at or after the baseline has replay state `UNDEFINED`
+- **AND** command `B` at or after the baseline has replay state `OK`
+- **WHEN** the user views the `recordedOrReplayed` collection
+- **THEN** command `A` is included
+- **AND** command `B` is included
+
+### Requirement: Export sequence uses known participants as its implicit selection
+The export manager SHALL treat `commandsInSequence` entries whose known-participants property is `true` as the implicit export sequence.
+The export manager MUST NOT export commands whose known-participants property is `false` from `exportSequence`.
+Computing or exporting the implicit sequence MUST NOT change command replay state.
+
+#### Scenario: Export sequence uses commands with known participants
+- **GIVEN** an export manager baseline is set
+- **AND** command `A` in `commandsInSequence` has known participants
+- **AND** command `B` in `commandsInSequence` has unknown participants
+- **WHEN** the user exports the sequence
+- **THEN** command `A` is included in the export
+- **AND** command `B` is not included in the export
+
+#### Scenario: Implicit selection does not change replay state
+- **GIVEN** an export manager baseline is set
+- **AND** command `A` in `commandsInSequence` has replay state `UNDEFINED`
+- **AND** command `A` has known participants
+- **WHEN** the system computes the implicit export sequence
 - **THEN** command `A` still has replay state `UNDEFINED`
 
 ### Requirement: Export manager omits obsolete make-selected-exportable action
-The export manager MUST NOT expose a `makeSelectedExportable` collection action for the active `commands` collection.
-The export manager SHALL rely on current export, exclusion, unexclusion, movement, and row-level exportability behavior instead of the obsolete make-selected-exportable workflow.
-Removing the obsolete collection action MUST NOT remove the active `commands` collection or its row-level exportability state.
+The export manager MUST NOT expose a `makeSelectedExportable` collection action for `commandsInSequence`.
+The export manager SHALL rely on current export, exclusion, restoration, movement, and known-participants behavior instead of the obsolete make-selected-exportable workflow.
+Removing the obsolete collection action MUST NOT remove `commandsInSequence` or each replayable command's known-participants state.
 
 #### Scenario: Export manager page has no make selected exportable action
-- **WHEN** the user views the export manager commands collection
+- **WHEN** the user views the export manager command sequence
 - **THEN** there is no collection action named `makeSelectedExportable`
-- **AND** the active `commands` collection remains visible
-- **AND** command exportability state remains available on each replayable command when export-manager context supports it
-
+- **AND** the `commandsInSequence` collection remains visible
+- **AND** known-participants state remains available on each replayable command when export-manager context supports it

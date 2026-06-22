@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
@@ -52,7 +51,7 @@ class CommandManager_unexcludeCommands_Test {
     private static final Timestamp T1 = Timestamp.from(Instant.parse("2026-06-07T10:00:01Z"));
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
 
-    @Test @Disabled // TODO: fix or delete
+    @Test
     void act_marks_selected_excluded_commands_undefined() {
         final var a = entry(ReplayState.EXCLUDED);
         final var b = entry(ReplayState.EXCLUDED);
@@ -86,7 +85,7 @@ class CommandManager_unexcludeCommands_Test {
                 .isEqualTo("Selected commands must be excluded commands from the current baseline");
     }
 
-    @Test @Disabled // TODO: fix or delete
+    @Test
     void choices_selected_come_from_excluded_commands_collection() {
         final var active = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
@@ -122,7 +121,11 @@ class CommandManager_unexcludeCommands_Test {
             final List<CommandLogEntry> sinceBaseline,
             final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
+        final var excludedSinceBaseline = sinceBaseline.stream()
+                .filter(entry -> entry.getReplayState().isExcluded())
+                .collect(Collectors.toList());
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(sinceBaseline);
+        when(repository.findForegroundSinceTimestampAndWithReplayExcluded(BASELINE)).thenReturn(excludedSinceBaseline);
         for (final CommandLogEntry entry : entries) {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }

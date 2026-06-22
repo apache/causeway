@@ -138,6 +138,11 @@ public class CommandManager
                 .collect(Collectors.toList());
     }
 
+    @Programmatic
+    public Stream<ReplayableCommand> streamCommandsInSequence() {
+        return getCommandsInSequence().stream();
+    }
+
 
     @Collection
     @CollectionLayout(

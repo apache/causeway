@@ -104,9 +104,9 @@ A command's replay state MUST NOT by itself make the command unavailable as an e
 - **WHEN** a selected later action command targets bookmark `demoCustomer:1`
 - **THEN** the export manager accepts the later command for export
 
-#### Scenario: Exported earlier result validates later selected target
+#### Scenario: Replayed earlier result validates later selected target
 - **GIVEN** an export manager baseline is set
-- **AND** a selected command with replay state `EXPORTED` has result bookmark `demoCustomer:1`
+- **AND** a selected command with replay state `OK` has result bookmark `demoCustomer:1`
 - **AND** that selected command appears earlier in export order and at or after the baseline
 - **WHEN** a selected later action command targets bookmark `demoCustomer:1`
 - **THEN** the export manager accepts the later command for export
@@ -217,73 +217,73 @@ The system MUST NOT block additional commands while recording merely because the
 - **WHEN** the export manager validates the selected command sequence
 - **THEN** the scalar parameter does not need to be known as an export target
 
-### Requirement: Exportability indicator uses export validation context
-When command-log recording support is `ENABLED`, the exportability property for replayable commands in the export manager SHALL use the same known target and known reference-parameter rules as the export action.
-When command-log recording support is `DISABLED`, the exportability property SHALL be `null` because exportability is undefined without command-log recording support.
-The exportability property SHALL evaluate target and reference-parameter knowledge using the export manager baseline and current command export ordering.
-The exportability property SHALL treat only commands earlier than or equal to the evaluated command as available for validating that command.
-The exportability property SHALL treat application-declared replay reference data as known for the evaluated command even when no earlier command produced that bookmark.
-The exportability property MUST NOT require the user to invoke export before receiving this validation feedback.
+### Requirement: Known-participants indicator uses export validation context
+When command-log recording support is `ENABLED`, the known-participants property for replayable commands in the command manager SHALL use the same known target and known reference-parameter rules as the export action.
+When command-log recording support is `DISABLED`, the known-participants property SHALL be `false` because participant knowledge is not evaluated without recording support.
+The known-participants property SHALL evaluate target and reference-parameter knowledge using the export manager baseline and current command ordering.
+The known-participants property SHALL treat only commands earlier than the evaluated command as available for validating that command.
+The known-participants property SHALL treat application-declared replay reference data as known for the evaluated command even when no earlier command produced that bookmark.
+The known-participants property MUST NOT require the user to invoke export before receiving this validation feedback.
 
-#### Scenario: Earlier result makes current command exportable
+#### Scenario: Earlier result makes current command known
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** an earlier command at or after the baseline has result bookmark `demoCustomer:1`
 - **AND** a later replayable action command targets bookmark `demoCustomer:1`
-- **WHEN** the system computes exportability for the later replayable command in the export manager commands collection
-- **THEN** the replayable command exportability property is `true`
+- **WHEN** the system computes known participants for the later replayable command in the command manager sequence
+- **THEN** the replayable command known-participants property is `true`
 
-#### Scenario: Reference-data target makes current command exportable
+#### Scenario: Reference-data target makes current command known
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command targets bookmark `demoCategory:STD`
 - **AND** a registered replay reference-data SPI implementation classifies `demoCategory:STD` as reference data
 - **AND** no earlier command at or after the baseline has result bookmark `demoCategory:STD`
-- **WHEN** the system computes exportability for the replayable command in the export manager commands collection
-- **THEN** the replayable command exportability property is `true`
+- **WHEN** the system computes known participants for the replayable command in the command manager sequence
+- **THEN** the replayable command known-participants property is `true`
 
-#### Scenario: Reference-data parameter makes current command exportable
+#### Scenario: Reference-data parameter makes current command known
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command has reference parameter `category` with bookmark `demoCategory:STD`
 - **AND** a registered replay reference-data SPI implementation classifies `demoCategory:STD` as reference data
 - **AND** no earlier command at or after the baseline has result bookmark `demoCategory:STD`
-- **WHEN** the system computes exportability for the replayable command in the export manager commands collection
-- **THEN** the replayable command exportability property is `true`
+- **WHEN** the system computes known participants for the replayable command in the command manager sequence
+- **THEN** the replayable command known-participants property is `true`
 
-#### Scenario: Unknown target makes current command non-exportable
+#### Scenario: Unknown target makes current command unknown
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command targets bookmark `demoCustomer:1`
 - **AND** the target bookmark `demoCustomer:1` is not a menu service root
 - **AND** no registered replay reference-data SPI implementation classifies `demoCustomer:1` as reference data
 - **AND** no earlier command at or after the baseline has result bookmark `demoCustomer:1`
-- **WHEN** the system computes exportability for the replayable command in the export manager commands collection
-- **THEN** the replayable command exportability property is `false`
+- **WHEN** the system computes known participants for the replayable command in the command manager sequence
+- **THEN** the replayable command known-participants property is `false`
 
-#### Scenario: Later result does not make current command exportable
+#### Scenario: Later result does not make current command known
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command targets bookmark `demoCustomer:1`
 - **AND** a later command in export order has result bookmark `demoCustomer:1`
-- **WHEN** the system computes exportability for the replayable action command in the export manager commands collection
-- **THEN** the replayable command exportability property is `false`
+- **WHEN** the system computes known participants for the replayable action command in the command manager sequence
+- **THEN** the replayable command known-participants property is `false`
 
-#### Scenario: Earlier invalid command does not poison later command exportability
+#### Scenario: Earlier invalid command does not poison later command known-participants state
 - **GIVEN** command-log recording support is `ENABLED`
 - **AND** an export manager baseline is set
-- **AND** an earlier replayable action command is not exportable because it targets unknown bookmark `demoCustomer:1`
+- **AND** an earlier replayable action command has unknown participants because it targets unknown bookmark `demoCustomer:1`
 - **AND** a following finder command returns bookmark `demoCustomer:1`
 - **AND** a later replayable action command targets bookmark `demoCustomer:1`
-- **WHEN** the system computes exportability for the later replayable action command in the export manager commands collection
-- **THEN** the later replayable command exportability property is `true`
+- **WHEN** the system computes known participants for the later replayable action command in the command manager sequence
+- **THEN** the later replayable command known-participants property is `true`
 
-#### Scenario: Disabled recording support makes exportability undefined
+#### Scenario: Disabled recording support makes known-participants false
 - **GIVEN** command-log recording support is `DISABLED`
 - **AND** an export manager baseline is set
 - **AND** a replayable action command targets bookmark `demoCustomer:1`
-- **WHEN** the system computes exportability for the replayable command
-- **THEN** the replayable command exportability property is `null`
+- **WHEN** the system computes known participants for the replayable command
+- **THEN** the replayable command known-participants property is `false`
 
 ### Requirement: First export command requires an export root target
 When command-log recording support is `ENABLED`, the first selected command in an export sequence SHALL be valid when its target is an export root or application-declared replay reference data.

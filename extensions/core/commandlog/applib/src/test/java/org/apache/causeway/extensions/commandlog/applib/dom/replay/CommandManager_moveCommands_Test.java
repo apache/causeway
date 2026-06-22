@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +35,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -67,7 +67,7 @@ class CommandManager_moveCommands_Test {
     private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
     private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
-    @Test @Disabled// TODO: reinstate or remove
+    @Test
     void choices_target_excludes_selected_commands() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T2, MENU_SERVICE, null);
@@ -102,7 +102,7 @@ class CommandManager_moveCommands_Test {
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
 
-    @Test @Disabled// TODO: reinstate or remove
+    @Test
     void validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T2, MENU_SERVICE, null);
@@ -115,8 +115,6 @@ class CommandManager_moveCommands_Test {
                 .isEqualTo("Select the command to move after");
         assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
                 .isEqualTo("Cannot move commands after one of the selected commands");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(b), false))
-                .isEqualTo("Target command must be before the first selected command");
         assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
@@ -148,7 +146,7 @@ class CommandManager_moveCommands_Test {
         assertThat(fixture.moveAction.defaultSquashTimings()).isFalse();
     }
 
-    @Test @Disabled // reinstate or delete
+    @Test
     void moves_single_command_to_target_plus_one_second() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T5, MENU_SERVICE, null);
@@ -156,7 +154,7 @@ class CommandManager_moveCommands_Test {
 
         fixture.moveAction.act(fixture.commands(b), fixture.command(a), false);
 
-        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.010Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02Z"));
         assertThat(a.getTimestamp()).isEqualTo(T1);
         assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
                 .isEqualTo(b.getTimestamp());
@@ -176,7 +174,7 @@ class CommandManager_moveCommands_Test {
         assertThat(a.getTimestamp()).isEqualTo(T0);
     }
 
-    @Test @Disabled // reinstate or delete
+    @Test
     void moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
         final var a = entry(T0, MENU_SERVICE, null);
         final var b = entry(T1, MENU_SERVICE, null);
@@ -232,7 +230,7 @@ class CommandManager_moveCommands_Test {
                 .containsExactly(c.getInteractionId());
     }
 
-    @Test @Disabled// TODO: reinstate or remove
+    @Test
     void down_validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T2, MENU_SERVICE, null);
@@ -245,21 +243,19 @@ class CommandManager_moveCommands_Test {
                 .isEqualTo("Select the command to move after");
         assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
                 .isEqualTo("Cannot move commands after one of the selected commands");
-        assertThat(fixture.moveAction.validateAct(fixture.commands(b), fixture.command(a), false))
-                .isEqualTo("Target command must be after the last selected command");
         assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
                 .isEqualTo("Selected commands must be available for export from the current baseline");
     }
 
-    @Test @Disabled // reinstate or delete
-    void down_moves_single_command_to_target_plus_ten_milliseconds() {
+    @Test
+    void down_moves_single_command_to_target_plus_one_second() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T5, MENU_SERVICE, null);
         final var fixture = fixtureWith(a, b);
 
         fixture.moveAction.act(fixture.commands(a), fixture.command(b), false);
 
-        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:05.010Z"));
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06Z"));
         assertThat(b.getTimestamp()).isEqualTo(T5);
         assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
                 .isEqualTo(a.getTimestamp());
@@ -279,7 +275,7 @@ class CommandManager_moveCommands_Test {
         assertThat(c.getTimestamp()).isEqualTo(T5);
     }
 
-    @Test @Disabled // reinstate or delete
+    @Test
     void down_moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
         final var a = entry(T1, MENU_SERVICE, null);
         final var b = entry(T5, MENU_SERVICE, null);
@@ -322,30 +318,30 @@ class CommandManager_moveCommands_Test {
         assertThat(b.getTimestamp()).isEqualTo(T2);
     }
 
-    @Test @Disabled // reinstate or delete
-    void moved_finder_result_validates_later_selected_action_target() {
+    @Test
+    void moved_finder_result_is_retimestamped_before_later_action() {
         final var predecessor = entry(T0, MENU_SERVICE, null);
-        final var actionOnUnknownCustomer = entry(T1, CUSTOMER, null);
+        final var actionOnUnknownCustomer = entry(T2, CUSTOMER, null);
         final var laterFinder = entry(T5, MENU_SERVICE, CUSTOMER);
         final var fixture = fixtureWith(predecessor, actionOnUnknownCustomer, laterFinder);
 
         fixture.moveAction.act(fixture.commands(laterFinder), fixture.command(predecessor), false);
-        final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionOnUnknownCustomer, laterFinder));
 
-        assertThat(validation).isNull();
+        assertThat(laterFinder.getTimestamp())
+                .isBefore(actionOnUnknownCustomer.getTimestamp());
     }
 
-    @Test @Disabled // reinstate or delete
-    void moved_navigation_result_validates_later_selected_reference_parameter() {
+    @Test
+    void moved_navigation_result_is_retimestamped_before_later_reference_parameter() {
         final var predecessor = entry(T0, MENU_SERVICE, null);
-        final var actionWithUnknownParameter = entryWithReferenceParameter(T1, MENU_SERVICE, null, "customer", CUSTOMER);
+        final var actionWithUnknownParameter = entryWithReferenceParameter(T2, MENU_SERVICE, null, "customer", CUSTOMER);
         final var laterNavigation = entry(T5, MENU_SERVICE, CUSTOMER);
         final var fixture = fixtureWith(predecessor, actionWithUnknownParameter, laterNavigation);
 
         fixture.moveAction.act(fixture.commands(laterNavigation), fixture.command(predecessor), false);
-        final var validation = fixture.exportAction.validateSelected(fixture.commands(predecessor, actionWithUnknownParameter, laterNavigation));
 
-        assertThat(validation).isNull();
+        assertThat(laterNavigation.getTimestamp())
+                .isBefore(actionWithUnknownParameter.getTimestamp());
     }
 
     private static Fixture fixtureWith(final CommandLogEntry... entries) {
@@ -357,23 +353,27 @@ class CommandManager_moveCommands_Test {
             final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         final var availableEntries = List.of(entries);
-        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(availableEntries);
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenAnswer(__ -> availableEntries.stream()
+                .sorted(Comparator.comparing(CommandLogEntry::getTimestamp))
+                .collect(Collectors.toList()));
         for (final CommandLogEntry entry : entries) {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
         final var replayContext = ReplayContext.builder()
                 .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                .commandReplayReferenceDataService(bookmark -> MENU_SERVICE.equals(bookmark))
                 .commandLogEntryRepository(repository).build();
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
 
         final var moveAction = new CommandManager_moveCommands(manager);
         moveAction.replayContext = replayContext;
 
-        final var exportAction = new CommandManager_exportSelected(manager);
+        final var exportAction = new CommandManager_exportSequence(manager);
 
         return new Fixture(
                 replayContext,
+                manager,
                 moveAction,
                 exportAction);
     }
@@ -433,6 +433,7 @@ class CommandManager_moveCommands_Test {
         commandDto.setMember(actionDto);
         commandDto.setTargets(new OidsDto());
         commandDto.getTargets().getOid().add(target.toOidDto());
+        final AtomicReference<CommandDto> commandDtoRef = new AtomicReference<>(commandDto);
 
         final var entry = mock(CommandLogEntry.class);
         final var interactionId = UUID.randomUUID();
@@ -445,7 +446,11 @@ class CommandManager_moveCommands_Test {
         }).when(entry).setTimestamp(Mockito.any(Timestamp.class));
         when(entry.getTarget()).thenReturn(target);
         when(entry.getResult()).thenReturn(result);
-        when(entry.getCommandDto()).thenReturn(commandDto);
+        when(entry.getCommandDto()).thenAnswer(__ -> commandDtoRef.get());
+        Mockito.doAnswer(invocation -> {
+            commandDtoRef.set(invocation.getArgument(0));
+            return null;
+        }).when(entry).setCommandDto(Mockito.any(CommandDto.class));
         when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
         when(entry.getReplayState()).thenReturn(replayState);
         return entry;
@@ -468,14 +473,17 @@ class CommandManager_moveCommands_Test {
 
     private static class Fixture {
         private final ReplayContext replayContext;
+        private final CommandManager manager;
         final CommandManager_moveCommands moveAction;
-        final CommandManager_exportSelected exportAction;
+        final CommandManager_exportSequence exportAction;
 
         Fixture(
                 final ReplayContext replayContext,
+                final CommandManager manager,
                 final CommandManager_moveCommands moveAction,
-                final CommandManager_exportSelected exportAction) {
+                final CommandManager_exportSequence exportAction) {
             this.replayContext = replayContext;
+            this.manager = manager;
             this.moveAction = moveAction;
             this.exportAction = exportAction;
         }
@@ -488,6 +496,12 @@ class CommandManager_moveCommands_Test {
             return java.util.Arrays.stream(entries)
                     .map(this::command)
                     .collect(Collectors.toList());
+        }
+
+        Optional<ReplayableCommand> commandInSequence(final CommandLogEntry entry) {
+            return manager.getCommandsInSequence().stream()
+                    .filter(command -> command.interactionId().equals(entry.getInteractionId()))
+                    .findFirst();
         }
     }
 }

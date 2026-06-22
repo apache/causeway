@@ -9,7 +9,6 @@ The replay-or-retry action SHALL be enabled when the replay state is `PENDING` a
 The replay-or-retry action SHALL be enabled when the replay state is `OK` and no background commands are pending execution.
 The replay-or-retry action SHALL be enabled when the replay state is `FAILED` and no background commands are pending execution.
 The replay-or-retry action MUST be disabled when the replay state is `UNDEFINED`.
-The replay-or-retry action MUST be disabled when the replay state is `EXPORTED`.
 The replay-or-retry action MUST be disabled when the replay state is `EXCLUDED`.
 The replay-or-retry action MUST be disabled when at least one background command remains pending execution.
 If invocation is attempted while the replay-or-retry action is disabled, the system MUST NOT replay the command.
@@ -34,11 +33,6 @@ If invocation is attempted while the replay-or-retry action is disabled, the sys
 
 #### Scenario: Newly recorded command cannot be replayed
 - **GIVEN** a replayable command has replay state `UNDEFINED`
-- **WHEN** the framework evaluates the replay-or-retry action
-- **THEN** the replay-or-retry action is disabled
-
-#### Scenario: Exported command cannot be replayed from the command view
-- **GIVEN** a replayable command has replay state `EXPORTED`
 - **WHEN** the framework evaluates the replay-or-retry action
 - **THEN** the replay-or-retry action is disabled
 

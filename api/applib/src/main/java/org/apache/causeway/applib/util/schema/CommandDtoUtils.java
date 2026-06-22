@@ -90,6 +90,13 @@ public final class CommandDtoUtils {
         return dtoMapper.get();
     }
 
+    private _Lazy<DtoMapper<CommandExportDto>> exportDtoMapper = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(CommandExportDto.class));
+
+    public DtoMapper<CommandExportDto> exportDtoMapper() {
+        return exportDtoMapper.get();
+    }
+
     public OidsDto targetsFor(final CommandDto dto) {
         OidsDto targets = dto.getTargets();
         if(targets == null) {

@@ -59,13 +59,13 @@ public final class ReplayContext {
     CommandLogEntryRepository commandLogEntryRepository;
     CommandExecutorService commandExecutorService;
     ClockService clockService;
-    List<CommandReplayMappingListener> commandReplayMappingListeners;
     Scratchpad scratchpad;
     MetaModelService metaModelService;
     CausewayConfiguration causewayConfiguration;
     List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
     SpecificationLoader specificationLoader;
     BookmarkService bookmarkService;
+    ResultRemappingService resultRemappingService;
 
     @Builder
     public ReplayContext(
@@ -75,12 +75,12 @@ public final class ReplayContext {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final @Singular("commandReplayMappingListener") List<CommandReplayMappingListener> commandReplayMappingListeners,
             final Scratchpad scratchpad,
             final MetaModelService metaModelService,
             final CausewayConfiguration causewayConfiguration,
             final @Singular("commandReplayReferenceDataService") List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader,
+            final ResultRemappingService resultRemappingService,
             final BookmarkService bookmarkService) {
         this.repositoryService = repositoryService;
         this.interactionService = interactionService;
@@ -88,13 +88,13 @@ public final class ReplayContext {
         this.commandLogEntryRepository = commandLogEntryRepository;
         this.commandExecutorService = commandExecutorService;
         this.clockService = clockService;
-        this.commandReplayMappingListeners = commandReplayMappingListeners;
         this.scratchpad = scratchpad;
         this.metaModelService = metaModelService;
         this.causewayConfiguration = causewayConfiguration;
         this.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
-        this.specificationLoader = specificationLoader;
         this.bookmarkService = bookmarkService;
+        this.resultRemappingService = resultRemappingService;
+        this.specificationLoader = specificationLoader;
     }
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {

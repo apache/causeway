@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -41,7 +40,6 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
@@ -72,116 +70,75 @@ class CommandManager_known_participants_Test {
     private static final Bookmark CATEGORY_BOOKMARK = Bookmark.forLogicalTypeNameAndIdentifier("demo.Category", "STD");
 
     @Test
-    void validate_selected_accepts_first_domain_service_target_before_invocation() {
+    void export_sequence_is_enabled_for_first_domain_service_target() {
         final var fixture = fixtureWith(entry(T1, MENU_SERVICE_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
+        assertThat(fixture.action.disableAct()).isNull();
     }
 
     @Test
-    void validate_selected_accepts_reachable_sequence_before_invocation() {
+    void export_sequence_is_enabled_for_reachable_sequence() {
         final var finder = entry(T1, MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER_BOOKMARK, null);
         final var fixture = fixtureWith(finder, actionOnFoundCustomer);
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
+        assertThat(fixture.action.disableAct()).isNull();
     }
 
     @Test
-    void validate_selected_accepts_reference_data_target_before_invocation() {
+    void export_sequence_is_enabled_for_reference_data_target() {
         final var fixture = fixtureWith(entry(T1, CATEGORY_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
+        assertThat(fixture.action.disableAct()).isNull();
     }
 
     @Test
-    void validate_selected_reports_unknown_action_target_before_invocation_when_recording_support_is_enabled() {
+    void export_sequence_is_disabled_for_unknown_action_target_when_recording_support_is_enabled() {
         final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation)
-                .contains(CUSTOMER_BOOKMARK.toString())
-                .contains("is unknown");
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void validate_selected_reports_unknown_property_edit_target_before_invocation_when_recording_support_is_enabled() {
+    void export_sequence_is_disabled_for_unknown_property_edit_target_when_recording_support_is_enabled() {
         final var fixture = fixtureWith(propertyEditEntry(T1, CUSTOMER_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation)
-                .contains(CUSTOMER_BOOKMARK.toString())
-                .contains("is unknown");
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void validate_selected_accepts_unknown_action_target_when_recording_support_is_disabled() {
+    void export_sequence_is_disabled_when_recording_support_is_disabled() {
         final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry(T1, CUSTOMER_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void act_guards_unknown_action_target_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
-
-        assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
-                .isInstanceOf(RecoverableException.class)
-                .hasMessageContaining(CUSTOMER_BOOKMARK.toString())
-                .hasMessageContaining("is unknown");
-    }
-
-    @Test
-    void validate_selected_accepts_reference_data_reference_parameter_before_invocation() {
+    void export_sequence_is_enabled_for_reference_data_reference_parameter() {
         final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "category", CATEGORY_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
+        assertThat(fixture.action.disableAct()).isNull();
     }
 
     @Test
-    void validate_selected_reports_unknown_action_reference_parameter_before_invocation_when_recording_support_is_enabled() {
+    void export_sequence_is_disabled_for_unknown_action_reference_parameter_when_recording_support_is_enabled() {
         final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation)
-                .contains("parameter customer")
-                .contains(CUSTOMER_BOOKMARK.toString())
-                .contains("is unknown");
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void validate_selected_accepts_unknown_action_reference_parameter_when_recording_support_is_disabled() {
+    void export_sequence_is_disabled_for_unknown_action_reference_parameter_when_recording_support_is_disabled() {
         final var fixture = fixtureWithRecordingSupport(
                 RecordingSupport.DISABLED,
                 entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
 
-        final var validation = fixture.action.validateSelected(fixture.replayableCommands);
-
-        assertThat(validation).isNull();
-    }
-
-    @Test
-    void act_guards_unknown_action_reference_parameter_when_ui_validation_is_bypassed_and_recording_support_is_enabled() {
-        final var fixture = fixtureWith(entryWithReferenceParameter(T1, MENU_SERVICE_BOOKMARK, "customer", CUSTOMER_BOOKMARK));
-
-        assertThatThrownBy(() -> fixture.action.act(fixture.replayableCommands, "commands", false))
-                .isInstanceOf(RecoverableException.class)
-                .hasMessageContaining("parameter customer")
-                .hasMessageContaining(CUSTOMER_BOOKMARK.toString())
-                .hasMessageContaining("is unknown");
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
@@ -278,70 +235,58 @@ class CommandManager_known_participants_Test {
     }
 
     @Test
-    void validate_selected_still_requires_at_least_one_command() {
+    void export_sequence_disable_act_requires_at_least_one_command_with_known_participants() {
         final var fixture = fixtureWith(entry(T1, CUSTOMER_BOOKMARK));
 
-        assertThat(fixture.action.validateSelected(List.of()))
-                .isEqualTo("Select at least one command to export");
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void default_selected_includes_reference_data_target() {
-        final var entry = entry(T1, CATEGORY_BOOKMARK, null);
-        final var fixture = fixtureWith(entry);
+    void export_sequence_is_enabled_for_reference_data_target_in_sequence() {
+        final var fixture = fixtureWith(entry(T1, CATEGORY_BOOKMARK, null));
 
-        final var defaults = fixture.action.defaultSelected();
-
-        assertThat(defaults)
-                .extracting(ReplayableCommand::interactionId)
-                .containsExactly(entry.getInteractionId());
+        assertThat(fixture.action.disableAct()).isNull();
     }
 
     @Test
-    void default_selected_includes_exportable_active_commands_only() {
+    void command_sequence_marks_only_known_participant_commands_as_known() {
         final var unknownCustomerAction = entry(T1, CUSTOMER_BOOKMARK, null);
         final var finder = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:03Z")), CUSTOMER_BOOKMARK, null);
-        final var fixture = fixtureWith(unknownCustomerAction, finder, actionOnFoundCustomer);
+        final var commands = exportManagerCommandsWith(unknownCustomerAction, finder, actionOnFoundCustomer);
 
-        final var defaults = fixture.action.defaultSelected();
-
-        assertThat(defaults)
-                .extracting(ReplayableCommand::interactionId)
-                .containsExactly(finder.getInteractionId(), actionOnFoundCustomer.getInteractionId());
+        assertThat(commands)
+                .extracting(ReplayableCommand::isKnownParticipants)
+                .containsExactly(false, true, true);
     }
 
     @Test
-    void default_selected_excludes_commands_with_null_exportability() {
+    void export_sequence_is_disabled_when_recording_support_makes_known_participants_false() {
         final var entry = entry(T1, CUSTOMER_BOOKMARK);
         final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, entry);
 
-        final var defaults = fixture.action.defaultSelected();
-
-        assertThat(defaults).isEmpty();
+        assertThat(fixture.action.disableAct())
+                .isEqualTo("No commands (with known participants) in this sequence.");
     }
 
     @Test
-    void choices_selected_still_include_full_active_command_collection() {
+    void fixture_exposes_full_command_sequence_for_review() {
         final var finder = entry(T1, MENU_SERVICE_BOOKMARK, CUSTOMER_BOOKMARK);
         final var actionOnFoundCustomer = entry(Timestamp.from(Instant.parse("2026-06-07T10:00:02Z")), CUSTOMER_BOOKMARK, null);
         final var fixture = fixtureWith(finder, actionOnFoundCustomer);
 
-        final var choices = fixture.action.choicesSelected();
-
-        assertThat(choices)
+        assertThat(fixture.replayableCommands)
                 .extracting(ReplayableCommand::interactionId)
                 .containsExactly(finder.getInteractionId(), actionOnFoundCustomer.getInteractionId());
     }
 
     @Test
-    void default_selected_does_not_modify_replay_state() {
+    void export_sequence_disablement_does_not_modify_replay_state() {
         final var entry = entry(T1, MENU_SERVICE_BOOKMARK);
         final var fixture = fixtureWith(entry);
 
-        assertThat(fixture.action.defaultSelected())
-                .extracting(ReplayableCommand::interactionId)
-                .containsExactly(entry.getInteractionId());
+        assertThat(fixture.action.disableAct()).isNull();
         verify(entry, org.mockito.Mockito.never()).setReplayState(org.mockito.Mockito.any());
     }
 
@@ -377,7 +322,7 @@ class CommandManager_known_participants_Test {
                 .build();
 
         final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
-        final var action = new CommandManager_exportSelected(manager);
+        final var action = new CommandManager_exportSequence(manager);
         final var replayableCommands = java.util.Arrays.stream(entries)
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext))
                 .collect(java.util.stream.Collectors.toList());
@@ -497,11 +442,11 @@ class CommandManager_known_participants_Test {
     }
 
     private static class Fixture {
-        final CommandManager_exportSelected action;
+        final CommandManager_exportSequence action;
         final List<ReplayableCommand> replayableCommands;
 
         Fixture(
-                final CommandManager_exportSelected action,
+                final CommandManager_exportSequence action,
                 final List<ReplayableCommand> replayableCommands) {
             this.action = action;
             this.replayableCommands = replayableCommands;
