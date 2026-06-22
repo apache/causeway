@@ -194,7 +194,26 @@ public class ResultRemappingService {
 
 
     private static CommandDtoUtils.CommandExportDto copyCommandExportDto(final CommandDtoUtils.CommandExportDto commandExportDto) {
-        return Try.call(() -> CommandDtoUtils.exportDtoMapper().read(CommandDtoUtils.exportDtoMapper().toString(commandExportDto)))
+
+        return Try.call(() -> {
+                    final var commandExportDtoCopy = new CommandDtoUtils.CommandExportDto();
+
+                    // command
+                    final var commandDtoCopy = copyCommandDto(commandExportDto.getCommand());
+                    commandExportDtoCopy.setCommand(commandDtoCopy);
+
+                    // result
+                    final CommandDtoUtils.BookmarkDto result = commandExportDto.getResult();
+                    if(result != null) {
+                        final CommandDtoUtils.BookmarkDto resultCopy = new CommandDtoUtils.BookmarkDto();
+                        resultCopy.setType(result.getType());
+                        resultCopy.setId(result.getId());
+
+                        commandExportDto.setResult(resultCopy);
+                    }
+
+                    return commandExportDtoCopy;
+                })
                 .ifFailureFail()
                 .getValue()
                 .orElse(commandExportDto);
