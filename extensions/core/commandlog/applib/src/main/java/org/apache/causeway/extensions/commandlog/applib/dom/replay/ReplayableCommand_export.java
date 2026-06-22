@@ -73,9 +73,6 @@ public class ReplayableCommand_export {
 
     @MemberSupport
     public String disableAct() {
-        if (!replayableCommand.isKnownParticipants()) {
-            return "Participants are not known.";
-        }
         if (replayableCommand.commandLogEntry().isEmpty()) {
             return "Underlying CommandLogEntry not found.";
         }
