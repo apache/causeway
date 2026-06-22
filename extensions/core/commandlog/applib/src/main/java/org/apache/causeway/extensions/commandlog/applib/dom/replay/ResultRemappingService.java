@@ -155,7 +155,7 @@ public class ResultRemappingService {
     static void copyBookmarkToOidDto(
             final Bookmark bookmark,
             final OidDto oidDto) {
-        if(bookmark == null) {
+        if(bookmark == null || oidDto == null) {
             return;
         }
         oidDto.setType(bookmark.getLogicalTypeName());
@@ -165,7 +165,7 @@ public class ResultRemappingService {
     static void copyBookmarkToBookmarkDto(
             final Bookmark bookmark,
             final CommandDtoUtils.BookmarkDto bookmarkDto) {
-        if(bookmark == null) {
+        if(bookmark == null || bookmarkDto == null) {
             return;
         }
         bookmarkDto.setType(bookmark.getLogicalTypeName());
@@ -181,23 +181,25 @@ public class ResultRemappingService {
      * @return
      */
     @Programmatic
-    public CommandDtoUtils.CommandExportDto remapped(final CommandDtoUtils.CommandExportDto commandExportDto) {
-        final var commandExportDtoCopy = new CommandDtoUtils.CommandExportDto();
+    public CommandDtoUtils.CommandExportDto remapped(
+            final CommandDtoUtils.CommandExportDto commandExportDto
+    ) {
+        final var commandExportDtoCopy = copyCommandExportDto(commandExportDto);
 
-        // commandDto
-        updateTargetsAndReferenceParametersWithActual(commandExportDtoCopy);
-        commandExportDto.setCommand(commandExportDtoCopy.getCommand());
+        updateTargetsAndReferenceParametersWithActual(commandExportDtoCopy.getCommand());
+        updateTargetWithActual(commandExportDtoCopy.getResult());
 
-        // result
-        final var resultBookmarkDto = commandExportDto.getResult();
-        updateTargetWithActual(resultBookmarkDto);
-        commandExportDto.setResult(resultBookmarkDto);
         return commandExportDtoCopy;
     }
 
-    private void updateTargetsAndReferenceParametersWithActual(CommandDtoUtils.CommandExportDto commandExportDto) {
-        updateTargetsAndReferenceParametersWithActual(commandExportDto.getCommand());
+
+    private static CommandDtoUtils.CommandExportDto copyCommandExportDto(final CommandDtoUtils.CommandExportDto commandExportDto) {
+        return Try.call(() -> CommandDtoUtils.exportDtoMapper().read(CommandDtoUtils.exportDtoMapper().toString(commandExportDto)))
+                .ifFailureFail()
+                .getValue()
+                .orElse(commandExportDto);
     }
+
 
 
     @Programmatic
