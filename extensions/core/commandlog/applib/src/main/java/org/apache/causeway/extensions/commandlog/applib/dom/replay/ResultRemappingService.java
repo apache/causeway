@@ -63,6 +63,9 @@ public class ResultRemappingService {
 
     private void updateTargetsWithActual(
             final CommandDto commandDto) {
+        if(commandDto == null) {
+            return;
+        }
         Optional.ofNullable(commandDto.getTargets())
                 .stream()
                 .flatMap(targets -> targets.getOid().stream())
@@ -117,7 +120,7 @@ public class ResultRemappingService {
      * @param commandDto - updated in-situ
      */
     private void updateReferenceParametersWithActual(final CommandDto commandDto) {
-        if (!(commandDto.getMember() instanceof ActionDto)) {
+        if (commandDto == null || !(commandDto.getMember() instanceof ActionDto)) {
             return;
         }
         Optional.ofNullable(((ActionDto) commandDto.getMember()).getParameters())
@@ -127,7 +130,7 @@ public class ResultRemappingService {
     }
 
     private void updateReferenceParameterWithActual(final ParamDto parameter) {
-        if (parameter.getType() != ValueType.REFERENCE || parameter.getReference() == null) {
+        if (parameter == null || parameter.getType() != ValueType.REFERENCE || parameter.getReference() == null) {
             return;
         }
         final Bookmark recordedReference = Bookmark.forOidDto(parameter.getReference());
@@ -152,6 +155,9 @@ public class ResultRemappingService {
     static void copyBookmarkToOidDto(
             final Bookmark bookmark,
             final OidDto oidDto) {
+        if(bookmark == null) {
+            return;
+        }
         oidDto.setType(bookmark.getLogicalTypeName());
         oidDto.setId(bookmark.getIdentifier());
     }
@@ -159,6 +165,9 @@ public class ResultRemappingService {
     static void copyBookmarkToBookmarkDto(
             final Bookmark bookmark,
             final CommandDtoUtils.BookmarkDto bookmarkDto) {
+        if(bookmark == null) {
+            return;
+        }
         bookmarkDto.setType(bookmark.getLogicalTypeName());
         bookmarkDto.setId(bookmark.getIdentifier());
     }
