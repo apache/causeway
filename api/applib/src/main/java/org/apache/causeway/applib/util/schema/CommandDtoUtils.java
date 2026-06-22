@@ -31,6 +31,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -88,13 +92,6 @@ public final class CommandDtoUtils {
 
     public DtoMapper<CommandDto> dtoMapper() {
         return dtoMapper.get();
-    }
-
-    private _Lazy<DtoMapper<CommandExportDto>> exportDtoMapper = _Lazy.threadSafe(
-            ()->JaxbUtils.mapperFor(CommandExportDto.class));
-
-    public DtoMapper<CommandExportDto> exportDtoMapper() {
-        return exportDtoMapper.get();
     }
 
     public OidsDto targetsFor(final CommandDto dto) {
