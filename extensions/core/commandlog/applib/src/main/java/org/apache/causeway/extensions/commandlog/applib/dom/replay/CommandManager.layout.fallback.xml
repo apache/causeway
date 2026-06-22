@@ -2,6 +2,7 @@
     <bs:row>
         <bs:col span="6" unreferencedActions="true">
             <cpt:domainObject/>
+            <cpt:action id="importCommands"/>
         </bs:col>
         <bs:col span="3">
             <cpt:fieldSet name="Control" id="control">
@@ -50,7 +51,6 @@
                             <bs:row>
                                 <bs:col span="12" size="MD">
                                     <cpt:collection defaultView="table" paged="15" id="pendingOrFailed">
-                                        <cpt:action id="importCommands"/>
                                         <cpt:action id="replayOrRetryNext"/>
                                         <cpt:action id="replayOrRetrySelected"/>
                                     </cpt:collection>
