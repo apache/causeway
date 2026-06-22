@@ -19,9 +19,9 @@
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 /**
  * Looks up replay command inputs before execution and listens for replay result bookmark observations.
@@ -33,12 +33,10 @@ public interface CommandReplayMappingListener {
     /**
      * Optionally looks up a recorded command target or reference-valued action parameter bookmark before replay execution.
      *
-     * @param commandLogEntry the command log entry being replayed
      * @param recordedBookmark the target or reference parameter bookmark recorded in the imported command DTO
      * @return replacement bookmark, or empty to keep the recorded bookmark
      */
     default Optional<Bookmark> lookup(
-            final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
         return Optional.empty();
     }
@@ -47,12 +45,12 @@ public interface CommandReplayMappingListener {
      * Notifies that replay observed an actual result bookmark for a command whose imported command log entry had a recorded result bookmark.
      *
      * @param recordedResult the result bookmark recorded during import
-     * @param actualResult the result bookmark produced by replay execution
-     * @param commandLogEntry the replayed command log entry
+     * @param actualResult   the result bookmark produced by replay execution
+     * @param interactionId
      */
     default void onReplayResult(
             Bookmark recordedResult,
             Bookmark actualResult,
-            CommandLogEntry commandLogEntry) {}
+            UUID interactionId) {}
 
 }

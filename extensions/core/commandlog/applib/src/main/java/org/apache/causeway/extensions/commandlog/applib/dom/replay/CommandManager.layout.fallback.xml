@@ -70,7 +70,7 @@
                             <bs:row>
                                 <bs:col span="12" size="MD">
                                     <cpt:collection defaultView="table" paged="100" id="commandsInSequence">
-                                        <cpt:action id="exportSelected"/>
+                                        <cpt:action id="exportSequence"/>
                                         <cpt:action id="moveCommands"/>
                                         <cpt:action id="excludeCommands"/>
                                     </cpt:collection>

@@ -31,7 +31,6 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -56,7 +55,6 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
 
     @Override
     public Optional<Bookmark> lookup(
-            final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
         return Optional.ofNullable(mappingByRecordedBookmark.get(recordedBookmark))
                 .map(Mapping::getActualBookmark);
@@ -66,12 +64,12 @@ public class CommandReplayMappingListenerInMemory implements CommandReplayMappin
     public void onReplayResult(
             final Bookmark recordedResult,
             final Bookmark actualResult,
-            final CommandLogEntry commandLogEntry) {
+            final UUID interactionId) {
         final Mapping existingMapping = mappingByRecordedBookmark.get(recordedResult);
         if(existingMapping == null) {
             mappingByRecordedBookmark.put(recordedResult, new Mapping(
                     actualResult,
-                    commandLogEntry != null ? commandLogEntry.getInteractionId() : null));
+                    interactionId));
             return;
         }
         final Bookmark existingActualResult = existingMapping.getActualBookmark();

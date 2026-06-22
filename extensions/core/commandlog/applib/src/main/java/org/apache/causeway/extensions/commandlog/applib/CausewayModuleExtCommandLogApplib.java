@@ -51,7 +51,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_excludeCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSequence;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_unexcludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
@@ -65,10 +65,10 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCom
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_previous;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_replayOrRetry;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ResultRemappingService;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataServiceForRefData;
@@ -107,7 +107,7 @@ import org.springframework.context.annotation.Import;
         HasBaseline_previousHour.class,
         HasBaseline_previousHour.class,
         HasBaseline_nextHour.class,
-        CommandManager_exportSelected.class,
+        CommandManager_exportSequence.class,
         CommandManager_excludeCommands.class,
         CommandManager_moveCommands.class,
         CommandManager_deleteCommands.class,
@@ -130,6 +130,7 @@ import org.springframework.context.annotation.Import;
         CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+        ResultRemappingService.class,
 
         BackgroundCommandsJobControl.class,
 
@@ -187,23 +188,24 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners,
             final Scratchpad scratchpad,
             final MetaModelService metaModelService,
             final CausewayConfiguration causewayConfiguration,
             final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader,
-            final BookmarkService bookmarkService) {
+            final BookmarkService bookmarkService,
+            final ResultRemappingService resultRemappingService) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
-                commandReplayMappingListeners,
                 scratchpad,
                 metaModelService,
                 causewayConfiguration,
                 commandReplayReferenceDataServices,
                 specificationLoader,
-                bookmarkService);
+                resultRemappingService,
+                bookmarkService
+                );
     }
 
 }

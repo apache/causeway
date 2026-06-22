@@ -117,7 +117,7 @@ The validation message SHALL identify the command that failed validation.
 
 #### Scenario: Export sequence uses earlier result as later target
 - **GIVEN** an export manager baseline is set
-- **AND** an exportable command at or after the baseline has result bookmark `demoCustomer:1`
+- **AND** an earlier selected command at or after the baseline has result bookmark `demoCustomer:1`
 - **AND** a later selected action command targets bookmark `demoCustomer:1`
 - **WHEN** the commands are exported
 - **THEN** the exported YAML preserves both commands in replay order

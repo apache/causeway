@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,7 +30,6 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.ReplayResultMapping.OnConflictPolicy;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 
@@ -55,7 +55,6 @@ public class CommandReplayMappingListenerPersistent implements CommandReplayMapp
 
     @Override
     public Optional<Bookmark> lookup(
-            final CommandLogEntry commandLogEntry,
             final Bookmark recordedBookmark) {
         return commandReplayResultMappingRepository.findByRecordedBookmark(recordedBookmark)
                 .map(CommandReplayResultMapping::getActualBookmark);
@@ -65,14 +64,14 @@ public class CommandReplayMappingListenerPersistent implements CommandReplayMapp
     public void onReplayResult(
             final Bookmark recordedResult,
             final Bookmark actualResult,
-            final CommandLogEntry commandLogEntry) {
+            final UUID interactionId) {
         final Optional<CommandReplayResultMapping> existingMappingIfAny =
                 commandReplayResultMappingRepository.findByRecordedBookmark(recordedResult);
         if(existingMappingIfAny.isEmpty()) {
             commandReplayResultMappingRepository.createAndPersist(
                     recordedResult,
                     actualResult,
-                    commandLogEntry != null ? commandLogEntry.getInteractionId() : null);
+                    interactionId);
             return;
         }
         final Bookmark existingActualResult = existingMappingIfAny.get().getActualBookmark();

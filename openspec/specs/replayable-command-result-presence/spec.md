@@ -26,18 +26,18 @@ The `hasResult` property MUST NOT change the command replay state.
 - **WHEN** the system reads the `hasResult` property
 - **THEN** the property is `true`
 
-### Requirement: Result presence is visible before exportability in tables
-The replayable command table layout SHALL display `hasResult` before the exportability property.
-The `hasResult` table placement SHALL apply when the exportability property is available.
-The `hasResult` table placement SHALL apply when the exportability property is hidden or null.
+### Requirement: Result presence is visible before known-participants in tables
+The replayable command table layout SHALL display `hasResult` before the known-participants property.
+The `hasResult` table placement SHALL apply when the known-participants property is available.
+The `hasResult` table placement SHALL apply when the known-participants property is hidden.
 
-#### Scenario: Result presence precedes exportability in export manager table
-- **GIVEN** a replayable command is rendered in the command export manager commands table
+#### Scenario: Result presence precedes known-participants in command manager table
+- **GIVEN** a replayable command is rendered in the command manager sequence table
 - **WHEN** the table columns are ordered
-- **THEN** the `hasResult` column appears before the exportability column
+- **THEN** the `hasResult` column appears before the known-participants column
 
 #### Scenario: Result presence remains visible outside export manager context
-- **GIVEN** a replayable command is rendered outside command export manager context
+- **GIVEN** a replayable command is rendered outside command manager context
 - **WHEN** the table columns are ordered
 - **THEN** the `hasResult` column remains eligible for display
 

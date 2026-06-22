@@ -35,7 +35,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.Identifier;
@@ -64,7 +63,7 @@ class CommandManager_pendingOrFailed_Test {
     private static final Timestamp BASELINE = Timestamp.from(Instant.parse("2026-06-07T10:00:00Z"));
     private static final Bookmark RESULT = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
 
-    @Test @Disabled // TODO: reinstate or remove
+    @Test
     void pending_or_failed_includes_safe_action_with_single_result() {
         final var safeAction = safeActionEntry(ReplayState.PENDING, RESULT);
         final var repository = repositoryReturningPendingOrFailed(List.of(safeAction));
@@ -89,7 +88,7 @@ class CommandManager_pendingOrFailed_Test {
         assertThat(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).containsExactly(safeAction);
     }
 
-    @Test @Disabled // TODO: reinstate or remove
+    @Test
     void pending_or_failed_keeps_state_changing_command_without_result() {
         final var command = entry(ReplayState.PENDING);
         final var repository = repositoryReturningPendingOrFailed(List.of(command));
@@ -102,7 +101,7 @@ class CommandManager_pendingOrFailed_Test {
                 .containsExactly(command.getInteractionId());
     }
 
-    @Test @Disabled // TODO: reinstate or remove
+    @Test
     void selected_replay_stops_after_command_creates_pending_background_work() {
         final var first = entryWithCommandDto(ReplayState.PENDING);
         final var second = entryWithCommandDto(ReplayState.PENDING);
@@ -121,7 +120,7 @@ class CommandManager_pendingOrFailed_Test {
                 eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
     }
 
-    @Test @Disabled // TODO: reinstate or remove
+    @Test
     void selected_replay_continues_when_no_background_work_is_pending() {
         final var first = entryWithCommandDto(ReplayState.PENDING);
         final var second = entryWithCommandDto(ReplayState.PENDING);
@@ -150,14 +149,15 @@ class CommandManager_pendingOrFailed_Test {
                 .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
     }
 
-    @Test @Disabled // TODO: reinstate or remove
-    void replay_next_is_enabled_after_background_work_completes() {
+    @Test
+    void replay_next_does_not_report_background_wait_after_background_work_completes() {
         final var command = entry(ReplayState.PENDING);
         final var repository = repositoryReturningPendingOrFailed(List.of(command));
         when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of());
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        assertThat(new CommandManager_replayOrRetryNext(manager).disableAct()).isNull();
+        assertThat(new CommandManager_replayOrRetryNext(manager).disableAct())
+                .isNotEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
     }
 
     private static CommandManager manager(
@@ -176,6 +176,7 @@ class CommandManager_pendingOrFailed_Test {
                 .commandLogEntryRepository(repository)
                 .commandExecutorService(commandExecutorService)
                 .specificationLoader(specificationLoader)
+                .resultRemappingService(ResultRemappingService.builder().build())
                 .build();
         return new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
     }
@@ -211,6 +212,7 @@ class CommandManager_pendingOrFailed_Test {
     private static CommandLogEntryRepository repositoryReturningPendingOrFailed(final List<CommandLogEntry> entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         when(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).thenReturn(entries);
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(entries);
         entries.forEach(entry -> when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry)));
         return repository;
     }

@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.spi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,24 +45,22 @@ class CommandReplayMappingListenerInMemoryTest {
     @Test
     void records_result_mapping_and_returns_it_from_lookup() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, null);
 
-        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(recordedResult)).contains(actualResult);
     }
 
     @Test
     void records_command_interaction_id_when_creating_mapping() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
         UUID commandInteractionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-        CommandLogEntry commandLogEntry = commandLogEntry(commandInteractionId);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandInteractionId);
 
         assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(commandInteractionId);
     }
@@ -74,8 +73,8 @@ class CommandReplayMappingListenerInMemoryTest {
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(firstCommandInteractionId));
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry(secondCommandInteractionId));
+        listener.onReplayResult(recordedResult, actualResult, firstCommandInteractionId);
+        listener.onReplayResult(recordedResult, actualResult, secondCommandInteractionId);
 
         assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(firstCommandInteractionId);
     }
@@ -89,8 +88,8 @@ class CommandReplayMappingListenerInMemoryTest {
         Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry(firstCommandInteractionId));
-        listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry(secondCommandInteractionId));
+        listener.onReplayResult(recordedResult, firstActualResult, firstCommandInteractionId);
+        listener.onReplayResult(recordedResult, secondActualResult, secondCommandInteractionId);
 
         assertThat(listener.getMapping(recordedResult).getCommandInteractionId()).isEqualTo(firstCommandInteractionId);
     }
@@ -98,66 +97,61 @@ class CommandReplayMappingListenerInMemoryTest {
     @Test
     void equal_recorded_and_actual_bookmark_is_recorded() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
 
-        listener.onReplayResult(recordedResult, recordedResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, recordedResult, null);
 
-        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(recordedResult);
+        assertThat(listener.lookup(recordedResult)).contains(recordedResult);
     }
 
     @Test
     void repeated_recorded_bookmark_mapping_with_same_actual_bookmark_is_idempotent() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark actualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
 
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
-        listener.onReplayResult(recordedResult, actualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, null);
+        listener.onReplayResult(recordedResult, actualResult, null);
 
-        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(recordedResult)).contains(actualResult);
     }
 
     @Test
     void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_rejected_by_default() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, firstActualResult, null);
 
-        assertThatThrownBy(() -> listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry))
+        assertThatThrownBy(() -> listener.onReplayResult(recordedResult, secondActualResult, null))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("demoInvoice:1")
                 .hasMessageContaining("demoInvoice:2")
                 .hasMessageContaining("demoInvoice:3");
-        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
+        assertThat(listener.lookup(recordedResult)).contains(firstActualResult);
     }
 
     @Test
     void repeated_recorded_bookmark_mapping_with_different_actual_bookmark_is_logged_and_ignored_when_configured() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory(OnConflictPolicy.LOG_AND_CONTINUE);
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
         Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
         Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-        listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry);
-        listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry);
+        listener.onReplayResult(recordedResult, firstActualResult, null);
+        listener.onReplayResult(recordedResult, secondActualResult, null);
 
-        assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
+        assertThat(listener.lookup(recordedResult)).contains(firstActualResult);
     }
 
     @Test
     void unmapped_bookmark_returns_no_replacement() {
         CommandReplayMappingListenerInMemory listener = new CommandReplayMappingListenerInMemory();
-        CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
         Bookmark recordedBookmark = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
 
-        assertThat(listener.lookup(commandLogEntry, recordedBookmark)).isEmpty();
+        assertThat(listener.lookup(recordedBookmark)).isEmpty();
     }
 
     @Test
@@ -204,15 +198,14 @@ class CommandReplayMappingListenerInMemoryTest {
                 LogAndContinueCausewayConfigurationForTest.class,
                 CommandReplayMappingListenerInMemory.BeanFactory.class)) {
             CommandReplayMappingListener listener = context.getBean(CommandReplayMappingListener.class);
-            CommandLogEntry commandLogEntry = mock(CommandLogEntry.class);
             Bookmark recordedResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "1");
             Bookmark firstActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "2");
             Bookmark secondActualResult = Bookmark.forLogicalTypeNameAndIdentifier("demoInvoice", "3");
 
-            listener.onReplayResult(recordedResult, firstActualResult, commandLogEntry);
-            listener.onReplayResult(recordedResult, secondActualResult, commandLogEntry);
+            listener.onReplayResult(recordedResult, firstActualResult, null);
+            listener.onReplayResult(recordedResult, secondActualResult, null);
 
-            assertThat(listener.lookup(commandLogEntry, recordedResult)).contains(firstActualResult);
+            assertThat(listener.lookup(recordedResult)).contains(firstActualResult);
         }
     }
 

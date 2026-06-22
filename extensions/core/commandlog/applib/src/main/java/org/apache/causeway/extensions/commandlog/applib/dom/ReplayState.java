@@ -111,6 +111,8 @@ public enum ReplayState {
         return replayState == ReplayState.OK || replayState == ReplayState.EXCLUDED;
     }
 
-
+    public boolean isExecutedOk() {
+        return this == ReplayState.UNDEFINED || this == ReplayState.OK;
+    }
 }
 

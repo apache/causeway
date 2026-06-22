@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.Identifier;
@@ -68,8 +67,8 @@ class CommandManager_commands_Test {
                 .containsExactly(undefined.getInteractionId(), exported.getInteractionId());
     }
 
-    @Test @Disabled// TODO: reinstate or remove
-    void commands_collection_omits_excluded_and_replay_execution_states_since_baseline() {
+    @Test
+    void commands_collection_omits_only_excluded_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
         final var undefined2 = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
@@ -88,10 +87,15 @@ class CommandManager_commands_Test {
         final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
-                .containsExactly(undefined.getInteractionId(), undefined2.getInteractionId(), ok.getInteractionId());
+                .containsExactly(
+                        undefined.getInteractionId(),
+                        undefined2.getInteractionId(),
+                        pending.getInteractionId(),
+                        ok.getInteractionId(),
+                        failed.getInteractionId());
     }
 
-    @Test @Disabled // TO reinstate or delete
+    @Test
     void excluded_commands_collection_includes_only_excluded_replay_states_since_baseline() {
         final var undefined = entry(ReplayState.UNDEFINED);
         final var exported = entry(ReplayState.UNDEFINED);
@@ -135,8 +139,8 @@ class CommandManager_commands_Test {
         assertThat(repository.findForegroundSinceTimestamp(BASELINE, 50)).containsExactly(safeAction);
     }
 
-    @Test @Disabled// TODO: reinstate or remove
-    void previous_page_uses_unified_unfiltered_query() {
+    @Test
+    void commands_collection_uses_current_page_query_only() {
         final var excluded = entry(ReplayState.EXCLUDED);
         final var exported = entry(ReplayState.UNDEFINED);
         final var repository = repositoryReturning(List.of(), List.of(exported, excluded));
@@ -146,15 +150,19 @@ class CommandManager_commands_Test {
         final var commands = manager.getCommandsInSequence();
 
         assertThat(interactionIds(commands))
-                .containsExactly(exported.getInteractionId(), excluded.getInteractionId());
+                .isEmpty();
     }
 
     private static CommandLogEntryRepository repositoryReturning(
             final List<CommandLogEntry> next,
             final List<CommandLogEntry> previous) {
         final var repository = mock(CommandLogEntryRepository.class);
+        final var excluded = next.stream()
+                .filter(entry -> entry.getReplayState().isExcluded())
+                .collect(Collectors.toList());
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(next);
         when(repository.findForegroundBeforeTimestamp(BASELINE, 50)).thenReturn(previous);
+        when(repository.findForegroundSinceTimestampAndWithReplayExcluded(BASELINE)).thenReturn(excluded);
         java.util.stream.Stream.concat(next.stream(), previous.stream())
                 .forEach(entry -> when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry)));
         return repository;

@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
@@ -74,7 +73,7 @@ class CommandManager_deleteCommands_Test {
                 .isEqualTo("Select at least one command to delete");
     }
 
-    @Test @Disabled // TODO: fix or delete
+    @Test
     void validates_stale_or_outside_excluded_collection_selection() {
         final var active = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
@@ -110,7 +109,7 @@ class CommandManager_deleteCommands_Test {
         assertThat(fixture.action.disableAct()).isNull();
     }
 
-    @Test @Disabled // TODO: fix or delete
+    @Test
     void choices_selected_come_from_excluded_commands_collection() {
         final var active = entry(ReplayState.UNDEFINED);
         final var excluded = entry(ReplayState.EXCLUDED);
@@ -126,7 +125,10 @@ class CommandManager_deleteCommands_Test {
             final List<CommandLogEntry> sinceBaseline,
             final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
-        when(repository.findForegroundSinceTimestampAndWithReplayExcluded(BASELINE)).thenReturn(sinceBaseline);
+        final var excludedSinceBaseline = sinceBaseline.stream()
+                .filter(entry -> entry.getReplayState().isExcluded())
+                .collect(Collectors.toList());
+        when(repository.findForegroundSinceTimestampAndWithReplayExcluded(BASELINE)).thenReturn(excludedSinceBaseline);
         for (final CommandLogEntry entry : entries) {
             when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
