@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
@@ -39,6 +44,34 @@ extends Facet {
     /**
      * eg. as provided by {@link ValueSemantics#minFractionalDigits()}
      */
-    int getMinFractionalDigits();
+    int minFractionalDigits();
+
+    @Override
+    default boolean semanticEquals(final @NonNull Facet facet) {
+        return facet instanceof MinFractionalDigitsFacet other
+            ? this.minFractionalDigits() == other.minFractionalDigits()
+            : false;
+    }
+
+    @Override
+    default void visitAttributes(final BiConsumer<String, Object> visitor) {
+        Facet.super.visitAttributes(visitor);
+        visitor.accept("minFractionalDigits", String.valueOf(minFractionalDigits()));
+    }
+
+    /**
+     * The stronger constraint wins. If equal, first argument wins over second.
+     */
+    static Optional<MinFractionalDigitsFacet> strongestConstraint(
+            final Optional<MinFractionalDigitsFacet> a,
+            final Optional<MinFractionalDigitsFacet> b) {
+        if(b.isEmpty())
+            return a;
+        if(a.isEmpty())
+            return b;
+        return a.get().minFractionalDigits() <= b.get().minFractionalDigits()
+            ? a
+            : b;
+    }
 
 }

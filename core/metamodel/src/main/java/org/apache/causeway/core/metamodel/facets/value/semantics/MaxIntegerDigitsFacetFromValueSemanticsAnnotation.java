@@ -20,26 +20,26 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.validation.constraints.Digits;
-
+import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 
-public class MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-extends MinFractionalDigitsFacetAbstract {
+record MaxIntegerDigitsFacetFromValueSemanticsAnnotation(
+        int maxIntegerDigits,
+        FacetHolder facetHolder)
+implements MaxIntegerDigitsFacet {
 
-     public static Optional<MinFractionalDigitsFacet> create(
-             final Optional<Digits> digitsIfAny,
-             final FacetHolder holder) {
-
-         return digitsIfAny
-         .map(digits-> new MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
+    public static Optional<MaxIntegerDigitsFacet> create(
+            final Optional<ValueSemantics> valueSemanticsOpt,
+            final FacetHolder holder) {
+        return valueSemanticsOpt
+            .filter(valueSemantics->valueSemantics.maxIntegerDigits()>0)
+            .map(valueSemantics->
+                new MaxIntegerDigitsFacetFromValueSemanticsAnnotation(valueSemantics.maxIntegerDigits(), holder));
     }
 
-    private MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(
-            final int fraction, final FacetHolder holder) {
-        super(fraction, holder);
-    }
+    @Override public Class<? extends Facet> facetType() { return MaxIntegerDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

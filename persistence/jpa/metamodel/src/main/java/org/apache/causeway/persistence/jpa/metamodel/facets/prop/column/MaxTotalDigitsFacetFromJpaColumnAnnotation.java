@@ -22,27 +22,26 @@ import java.util.Optional;
 
 import jakarta.persistence.Column;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetFromJpaColumnAnnotation
-extends MaxTotalDigitsFacetAbstract {
+record MaxTotalDigitsFacetFromJpaColumnAnnotation(
+        int maxTotalDigits,
+        FacetHolder facetHolder)
+implements MaxTotalDigitsFacet {
 
     public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Column> columnIfAny,
+            final Optional<Column> columnOpt,
             final FacetHolder holder) {
-
-        return columnIfAny
-                .filter(column->column.precision()>0)
-                .map(column->
-                    new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                            column.precision(), holder));
+        return columnOpt
+            .filter(column->column.precision()>0)
+            .map(column->
+                new MaxTotalDigitsFacetFromJpaColumnAnnotation(
+                        column.precision(), holder));
     }
 
-    private MaxTotalDigitsFacetFromJpaColumnAnnotation(
-            final int precision, final FacetHolder holder) {
-        super(precision, holder);
-    }
+    @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }

@@ -22,25 +22,24 @@ import java.util.Optional;
 
 import jakarta.persistence.Column;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MinFractionalDigitsFacetFromJpaColumnAnnotation
-extends MinFractionalDigitsFacetAbstract {
+record MinFractionalDigitsFacetFromJpaColumnAnnotation(
+        int minFractionalDigits,
+        FacetHolder facetHolder)
+implements MinFractionalDigitsFacet {
 
-     public static Optional<MinFractionalDigitsFacet> create(
-             final Optional<Column> columnIfAny,
-             final FacetHolder holder) {
-
-         return columnIfAny
-         .filter(column->column.scale()>=0)
-         .map(column-> new MinFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
+    static Optional<MinFractionalDigitsFacet> create(
+            final Optional<Column> columnOpt,
+            final FacetHolder holder) {
+        return columnOpt
+            .filter(column->column.scale()>=0)
+            .map(column-> new MinFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
     }
 
-    private MinFractionalDigitsFacetFromJpaColumnAnnotation(
-            final int scale, final FacetHolder holder) {
-        super(scale, holder);
-    }
+    @Override public Class<? extends Facet> facetType() { return MinFractionalDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }

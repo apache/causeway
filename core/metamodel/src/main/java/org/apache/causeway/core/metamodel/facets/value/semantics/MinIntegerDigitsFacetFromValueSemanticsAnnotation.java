@@ -21,27 +21,25 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacetAbstract;
 
-public class MinIntegerDigitsFacetFromValueSemanticsAnnotation
-extends MinIntegerDigitsFacetAbstract {
+record MinIntegerDigitsFacetFromValueSemanticsAnnotation(
+        int minIntegerDigits,
+        FacetHolder facetHolder)
+implements MinIntegerDigitsFacet {
 
     public static Optional<MinIntegerDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+            final Optional<ValueSemantics> valueSemanticsOpt,
             final FacetHolder holder) {
-
-        return digitsIfAny
-        .map(digits->{
-            return new MinIntegerDigitsFacetFromValueSemanticsAnnotation(
-                    digits.minIntegerDigits(), holder);
-        });
+        return valueSemanticsOpt
+            .filter(valueSemantics->valueSemantics.minIntegerDigits()>1)
+            .map(valueSemantics->
+                new MinIntegerDigitsFacetFromValueSemanticsAnnotation(valueSemantics.minIntegerDigits(), holder));
    }
 
-   private MinIntegerDigitsFacetFromValueSemanticsAnnotation(
-           final int minIntegerDigits, final FacetHolder holder) {
-       super(minIntegerDigits, holder);
-   }
+    @Override public Class<? extends Facet> facetType() { return MinIntegerDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 }

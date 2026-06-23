@@ -43,7 +43,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class DoubleValueSemantics
-extends NumericValueSemantics<Double>
+extends NumericValueSemanticsAbstract<Double>
 implements
     DefaultsProvider<Double>,
     Parser<Double> {
@@ -61,6 +61,11 @@ implements
     @Override
     public Double getDefaultValue() {
         return 0.;
+    }
+
+    @Override
+    protected boolean isFloatingPoint() {
+        return true;
     }
 
     // -- COMPOSER
@@ -106,7 +111,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends DoubleValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -114,7 +119,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends DoubleValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -122,7 +127,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends DoubleValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }

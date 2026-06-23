@@ -30,9 +30,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -43,11 +41,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
-extends NumericValueSemantics<BigInteger>
-implements
-    DefaultsProvider<BigInteger>,
-    Parser<BigInteger>,
-    IdStringifier.EntityAgnostic<BigInteger> {
+extends NumericValueSemanticsAbstract<BigInteger>
+implements IdStringifier.EntityAgnostic<BigInteger> {
 
     @Override
     public Class<BigInteger> getCorrespondingClass() {
@@ -62,6 +57,11 @@ implements
     @Override
     public BigInteger getDefaultValue() {
         return BigInteger.ZERO;
+    }
+
+    @Override
+    protected boolean isFloatingPoint() {
+        return false;
     }
 
     // -- COMPOSER
@@ -119,7 +119,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends BigIntegerValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -127,7 +127,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends BigIntegerValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -135,7 +135,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends BigIntegerValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }

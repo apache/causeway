@@ -18,13 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.commons;
 
+import java.math.BigInteger;
 import java.util.Map;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -103,9 +105,8 @@ public final class ClassUtil {
      * specified param type, or has a no-arg constructor.
      */
     public Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
-        if (classCandidateName == null) {
+        if (classCandidateName == null)
             return null;
-        }
         Class<?> classCandidate = null;
         try {
             classCandidate = _Context.loadClass(classCandidateName);
@@ -117,9 +118,8 @@ public final class ClassUtil {
 
     public boolean directlyImplements(final Class<?> cls, final Class<?> interfaceType) {
         for (final Class<?> directlyImplementedInterface : cls.getInterfaces()) {
-            if (directlyImplementedInterface == interfaceType) {
+            if (directlyImplementedInterface == interfaceType)
                 return true;
-            }
         }
         return false;
     }
@@ -127,9 +127,8 @@ public final class ClassUtil {
     public Class<?> forNameElseFail(final String fullName) {
         _Strings.requireNonEmpty(fullName, "Full Name");
         final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
-        if (builtIn != null) {
+        if (builtIn != null)
             return builtIn;
-        }
         try {
             return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {
@@ -138,13 +137,11 @@ public final class ClassUtil {
     }
 
     public Class<?> forNameElseNull(final String fullName) {
-        if (_Strings.isNullOrEmpty(fullName)) {
+        if (_Strings.isNullOrEmpty(fullName))
             return null;
-        }
         var primitiveClass = primitiveByName.get(fullName);
-        if(primitiveClass!=null) {
+        if(primitiveClass!=null)
             return primitiveClass;
-        }
         try {
             return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {
@@ -160,10 +157,21 @@ public final class ClassUtil {
      */
     public String getCanonicalName_friendlyToInnerClasses(final @NonNull Class<?> cls) {
         var name = cls.getCanonicalName();
-        if(name==null) {
+        if(name==null)
             return cls.getName().replace("$", ".$").replace("..", ".");
-        }
         return name;
+    }
+
+    public boolean isJavaBuiltInInteger(final Class<?> cls) {
+        return cls.equals(int.class)
+                || cls.equals(Integer.class)
+                || cls.equals(long.class)
+                || cls.equals(Long.class)
+                || cls.equals(byte.class)
+                || cls.equals(Byte.class)
+                || cls.equals(short.class)
+                || cls.equals(Short.class)
+                || cls.equals(BigInteger.class);
     }
 
 }

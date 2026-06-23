@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
 import jakarta.inject.Inject;
@@ -34,16 +33,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
@@ -54,11 +49,8 @@ import lombok.Setter;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
-extends NumericValueSemantics<BigDecimal>
-implements
-    DefaultsProvider<BigDecimal>,
-    Parser<BigDecimal>,
-    IdStringifier.EntityAgnostic<BigDecimal> {
+extends NumericValueSemanticsAbstract<BigDecimal>
+implements IdStringifier.EntityAgnostic<BigDecimal> {
 
     @Setter @Inject
     private CausewayConfiguration causewayConfiguration;
@@ -76,6 +68,11 @@ implements
     @Override
     public BigDecimal getDefaultValue() {
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    protected boolean isFloatingPoint() {
+        return true;
     }
 
     // -- COMPOSER
@@ -120,34 +117,16 @@ implements
     }
 
     @Override
-    public void configureDecimalFormat(
-            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+    protected void configureDecimalFormat(
+            final ValueSemanticsProvider.Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        if(context==null)
-            return;
-
-        var specificationLoader = MetaModelContext.instanceElseFail().getSpecificationLoader();
-        var feature = specificationLoader.loadFeature(context.featureIdentifier())
-                .orElse(null);
-        if(feature==null)
-            return;
-
-        // evaluate any facets that provide the MaximumFractionDigits
-        Facets.maxFractionalDigits(feature)
-                .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
+        super.configureDecimalFormat(context, format, usedFor);
 
         var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
-        // we skip this when PARSING,
-        // because we want to firstly parse any number value into a BigDecimal,
-        // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(!usedFor.isParsing() || bigDecimalConfig.editing().preserveScale()) {
-
-            // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
-            OptionalInt optionalInt = Facets.minFractionalDigits(feature);
-            if (optionalInt.isPresent()) {
-                format.setMinimumFractionDigits(optionalInt.getAsInt());
-            } else {
-                // otherwise, apply a minScale if configured.
+        if(!usedFor.isParsing()
+                || bigDecimalConfig.editing().preserveScale()) {
+            if(format.getMinimumFractionDigits()==0) {
+                // apply a minScale if configured.
                 Optional.ofNullable(bigDecimalConfig.display().minScale())
                     .ifPresent(format::setMinimumFractionDigits);
             }
@@ -173,7 +152,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends BigDecimalValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -181,7 +160,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends BigDecimalValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -189,7 +168,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends BigDecimalValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }

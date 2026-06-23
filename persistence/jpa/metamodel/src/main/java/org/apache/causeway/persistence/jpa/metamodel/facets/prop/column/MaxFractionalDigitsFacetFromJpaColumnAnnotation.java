@@ -22,25 +22,24 @@ import java.util.Optional;
 
 import jakarta.persistence.Column;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJpaColumnAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+record MaxFractionalDigitsFacetFromJpaColumnAnnotation(
+        int maxFractionalDigits,
+        FacetHolder facetHolder)
+implements MaxFractionalDigitsFacet {
 
-     public static Optional<MaxFractionalDigitsFacet> create(
-             final Optional<Column> columnIfAny,
-             final FacetHolder holder) {
-
-         return columnIfAny
-                 .filter(column->column.scale()>=0)
-                 .map(column-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), holder));
+    static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<Column> columnIfAny,
+            final FacetHolder facetHolder) {
+        return columnIfAny
+            .filter(column->column.scale()>=0)
+            .map(column-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(column.scale(), facetHolder));
     }
 
-    private MaxFractionalDigitsFacetFromJpaColumnAnnotation(
-            final int scale, final FacetHolder holder) {
-        super(scale, holder);
-    }
+    @Override public Class<? extends Facet> facetType() { return MaxFractionalDigitsFacet.class; }
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }

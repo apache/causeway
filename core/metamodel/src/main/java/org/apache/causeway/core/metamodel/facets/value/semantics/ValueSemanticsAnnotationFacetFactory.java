@@ -24,13 +24,14 @@ import jakarta.inject.Inject;
 import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 public class ValueSemanticsAnnotationFacetFactory
@@ -43,87 +44,98 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        var valueSemanticsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        ValueSemantics.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
+        var valueSemanticsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    ValueSemantics.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @jakarta.validation.constraints.Digits
-        var digitsIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Digits.class,
-                        () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
+        var digitsOpt = processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Digits.class,
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
 
-        processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processMethodContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        var valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
-
+        var valueSemanticsOpt = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
         // support for @jakarta.validation.constraints.Digits
-        var digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
+        var digitsOpt = processParameterContext.synthesizeOnParameter(Digits.class);
 
-        processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
+        processAll(processParameterContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     // -- HELPER
 
     private void processAll(
             final TypedFacetHolder facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny,
-            final Optional<Digits> digitsIfAny) {
-        processProvider(facetHolder, valueSemanticsIfAny);
-        processDigits(facetHolder, valueSemanticsIfAny, digitsIfAny);
-        processTemporalFormat(facetHolder, valueSemanticsIfAny);
+            final Optional<ValueSemantics> valueSemanticsOpt,
+            final Optional<Digits> digitsOpt) {
+        processProvider(facetHolder, valueSemanticsOpt);
+        processDigits(facetHolder, valueSemanticsOpt, digitsOpt);
+        processTemporalFormat(facetHolder, valueSemanticsOpt);
     }
 
     private void processProvider(
             final TypedFacetHolder facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny) {
+            final Optional<ValueSemantics> valueSemanticsOpt) {
 
         // check for @ValueSemantics(provider=...)
         addFacetIfPresent(
             ValueSemanticsSelectingFacetForAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+                .create(valueSemanticsOpt, facetHolder));
     }
 
     private void processDigits(
             final TypedFacetHolder facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny,
-            final Optional<Digits> digitsIfAny){
+            final Optional<ValueSemantics> valueSemanticsOpt,
+            final Optional<Digits> digitsOpt){
 
+        // max total digits
         addFacetIfPresent(
-            MaxTotalDigitsFacetAbstract.minimum(
-                MaxTotalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsIfAny, facetHolder),
-                // support for @jakarta.validation.constraints.Digits
-                MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
-                    .create(digitsIfAny, facetHolder)));
+            MaxTotalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, facetHolder));
 
+        // max integer digits
+        addFacetIfPresent(
+            MaxIntegerDigitsFacet.strongestConstraint(
+                MaxIntegerDigitsFacetFromValueSemanticsAnnotation
+                    .create(valueSemanticsOpt, facetHolder),
+                // support for @jakarta.validation.constraints.Digits
+                MaxIntegerDigitsFacetFromJakartaDigitsAnnotation
+                    .create(digitsOpt, facetHolder)));
+
+        // min integer digits
         addFacetIfPresent(
             MinIntegerDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+                .create(valueSemanticsOpt, facetHolder));
 
+        if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))
+            return; // skip fractional facets
+
+        // max fractional digits
         addFacetIfPresent(
-            MaxFractionalDigitsFacetAbstract.minimum(
+            MaxFractionalDigitsFacet.strongestConstraint(
                 MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsIfAny, facetHolder),
+                    .create(valueSemanticsOpt, facetHolder),
                 // support for @jakarta.validation.constraints.Digits
-                MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                    .create(digitsIfAny, facetHolder)));
+                MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
+                    .create(digitsOpt, facetHolder)));
 
+        // min fractional digits
         addFacetIfPresent(
-            MinFractionalDigitsFacetAbstract.minimum(
+            MinFractionalDigitsFacet.strongestConstraint(
                 MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsIfAny, facetHolder),
-                // support for @jakarta.validation.constraints.Digits (if supported)
+                    .create(valueSemanticsOpt, facetHolder),
+                // support for @jakarta.validation.constraints.Digits (if enabled)
                 getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
-                        ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
-                            .create(digitsIfAny, facetHolder)
-                        : Optional.empty()));
+                    ? MinFractionalDigitsFacetFromJakartaDigitsAnnotation
+                        .create(digitsOpt, facetHolder)
+                    : Optional.empty()));
     }
 
     private void processTemporalFormat(

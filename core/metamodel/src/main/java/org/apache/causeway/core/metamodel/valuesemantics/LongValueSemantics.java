@@ -31,9 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.NumericValueSemantics;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -48,11 +46,8 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 @Primary
 //has no effect @Priority(PriorityPrecedence.LATE)
 public class LongValueSemantics
-extends NumericValueSemantics<Long>
-implements
-    DefaultsProvider<Long>,
-    Parser<Long>,
-    IdStringifier.EntityAgnostic<Long>{
+extends NumericValueSemanticsAbstract<Long>
+implements IdStringifier.EntityAgnostic<Long> {
 
     @Override
     public Class<Long> getCorrespondingClass() {
@@ -67,6 +62,11 @@ implements
     @Override
     public Long getDefaultValue() {
         return 0L;
+    }
+
+    @Override
+    protected boolean isFloatingPoint() {
+        return false;
     }
 
     // -- COMPOSER
@@ -132,7 +132,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.NO_GROUPING)
     public static class NoGrouping extends LongValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.NO_GROUPING;
         }
     }
@@ -140,7 +140,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_DISPLAY)
     public static class LocaleGroupingDisplay extends LongValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_DISPLAY;
         }
     }
@@ -148,7 +148,7 @@ implements
     @Component
     @Qualifier(NumericValueSemantics.LOCALE_GROUPING_ALL)
     public static class LocaleGroupingAll extends LongValueSemantics {
-        @Override protected GroupingSeparatorProvider grouping() {
+        @Override public GroupingSeparatorProvider grouping() {
             return GroupingSeparatorProvider.LOCALE_GROUPING_ALL;
         }
     }
