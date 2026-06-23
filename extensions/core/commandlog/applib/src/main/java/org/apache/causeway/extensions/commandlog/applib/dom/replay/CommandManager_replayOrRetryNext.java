@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
+        domainEvent = CommandManager_replayOrRetryMultiple.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
@@ -24,7 +24,7 @@ import org.jspecify.annotations.NonNull;
 @RequiredArgsConstructor
 public class CommandManager_replayOrRetryNext {
 
-    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetrySelected> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetryMultiple> { }
 
     private final CommandManager commandManager;
 

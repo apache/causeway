@@ -91,7 +91,7 @@ public class ReplayableCommand_export {
 
     @MemberSupport
     public boolean defaultRemapResults() {
-        return true;
+        return false;
     }
 
     private CommandDtoUtils.CommandExportDto remapResults(CommandDtoUtils.CommandExportDto commandExportDto) {

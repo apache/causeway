@@ -52,7 +52,7 @@
                                 <bs:col span="12" size="MD">
                                     <cpt:collection defaultView="table" paged="15" id="pendingOrFailed">
                                         <cpt:action id="replayOrRetryNext"/>
-                                        <cpt:action id="replayOrRetrySelected"/>
+                                        <cpt:action id="replayOrRetryMultiple"/>
                                     </cpt:collection>
                                 </bs:col>
                             </bs:row>
