@@ -339,13 +339,9 @@ implements MemberExecutorService {
     private void setCommandResultIfEntityScalar(
             final Command command,
             final ManagedObject resultAdapter) {
-        val entityState = resultAdapter.getEntityState();
-        if (!(entityState.isPersistable() || entityState.hasOid())) {
-            return;
-        }
+        final var entityState = resultAdapter.getEntityState();
         if(entityState.isPersistable()) {
-            if(entityState.isHollow()
-                    || entityState.isDetached()) {
+            if(entityState.isHollow() || entityState.isDetached()) {
                 // ensure that any still-to-be-persisted adapters get persisted to DB.
                 getTransactionService().flushTransaction();
             }
