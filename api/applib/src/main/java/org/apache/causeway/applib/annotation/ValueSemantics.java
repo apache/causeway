@@ -79,7 +79,7 @@ public @interface ValueSemantics {
      * no longer viable.
      *
      * <p> When {@link Column#precision()} {@code >0} is used,
-     * while {@link ValueSemantics} is not used,
+     * while {@link ValueSemantics#maxTotalDigits()} is not used (<=0),
      * then {@link Column#precision()} is undersood as an alias for this annotation attribute.
      *
      * <p> default = {@code 0} understood as unlimited
@@ -100,7 +100,11 @@ public @interface ValueSemantics {
      * Those types may support scientific notation for input (as well as display), where the notion of 'integer digits'
      * is still viable.
      *
+     * <p> {@link Digits#integer()} can be used as a replacement. If both are used, the stronger constraint applies.
+     *
      * <p> default = {@code 0} understood as unlimited
+     *
+     * @see Digits#integer()
      */
     int maxIntegerDigits()
         default 0;
@@ -131,13 +135,16 @@ public @interface ValueSemantics {
      * types have fixed intrinsic precision and their bit representation does not
      * directly correspond to decimal digits.
      *
+     * <p> {@link Digits#fraction()} can be used as a replacement. If both are used, the stronger constraint applies.
+     *
      * <p> When {@link Column#scale()} {@code >0} is used on a {@link BigDecimal},
-     * while {@link ValueSemantics} is not used,
+     * while {@link ValueSemantics#maxFractionalDigits()} is not used (<0),
      * then {@link Column#scale()} is undersood as an alias for this annotation attribute.
      *
      * <p> default = {@code -1} understood as unlimited
      *
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
+     * @see Digits#fraction()
      * @see Column#scale()
      */
     int maxFractionalDigits()
