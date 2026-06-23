@@ -56,7 +56,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetrySelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryMultiple;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exclude;
@@ -119,7 +119,7 @@ import org.springframework.context.annotation.Import;
         HasLimit_changeLimit.class,
         CommandManager_importCommands.class,
         CommandManager_replayOrRetryNext.class,
-        CommandManager_replayOrRetrySelected.class,
+        CommandManager_replayOrRetryMultiple.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,

@@ -2,7 +2,6 @@ package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.*;
@@ -12,30 +11,52 @@ import org.apache.causeway.applib.annotation.*;
         choicesFrom = "pendingOrFailed",
         semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
+        domainEvent = CommandManager_replayOrRetryMultiple.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
         associateWith = "pendingOrFailed", sequence = "1.2",
         cssClass = "btn-secondary",
         cssClassFa = "solid forward",
-        describedAs = "Executes the list of commands in sequence, each in their own transaction.  Note that there is no checking of the 'knownParticipants', so review first."
+        describedAs = "Executes multiple commands in sequence, each in their own transaction.  Note that 'knownParticipants' is not checked, so review first."
 )
 @RequiredArgsConstructor
-public class CommandManager_replayOrRetrySelected {
+public class CommandManager_replayOrRetryMultiple {
 
-    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetrySelected> { }
+    public static class DomainEvent extends CommandManager.ActionDomainEvent<CommandManager_replayOrRetryMultiple> { }
 
     private final CommandManager commandManager;
 
+
+    public enum Limit {
+        FIVE(5),
+        TEN(10),
+        TWENTY(20),
+        FORTY(40),
+        ALL(Integer.MAX_VALUE),
+        ;
+        private final int limit;
+        Limit(int limit) {
+            this.limit = limit;
+        }
+        public String title() {
+            return this == ALL ? "All" : ("" + limit);
+        }
+
+        public long limit() {
+            return limit;
+        }
+    }
+
     @MemberSupport
-    public CommandManager act(final List<ReplayableCommand> selected) {
+    public CommandManager act(final Limit limit) {
         if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(commandManager.replayContext())) {
             return commandManager;
         }
 
-        var replayables = selected.stream()
+        var replayables = commandManager.getPendingOrFailed().stream()
                 .sorted()
+                .limit(limit.limit())
                 .collect(Collectors.toList());
         for (var replayableCommand : replayables) {
             var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
@@ -47,7 +68,6 @@ public class CommandManager_replayOrRetrySelected {
         return commandManager;
     }
 
-
     @MemberSupport
     public String disableAct() {
         var pendingBackgroundCommandsReason = ReplayPendingBackgroundCommands.disableReason(commandManager.replayContext());
@@ -58,13 +78,7 @@ public class CommandManager_replayOrRetrySelected {
     }
 
     @MemberSupport
-    public String validateSelected(final List<ReplayableCommand> selected) {
-        return selected != null && selected.isEmpty() ? "Select at least one command" : null;
-    }
-
-    // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet
-    @MemberSupport
-    public List<ReplayableCommand> choicesSelected() {
-        return commandManager.getPendingOrFailed();
+    public Limit defaultLimit() {
+        return Limit.TEN;
     }
 }

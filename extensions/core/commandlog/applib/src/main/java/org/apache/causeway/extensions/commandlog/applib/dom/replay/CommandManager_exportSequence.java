@@ -42,7 +42,8 @@ public class CommandManager_exportSequence {
     @MemberSupport
     public Clob act(
             @ParameterLayout(describedAs = "File name for the exported file.") final String filenamePrefix,
-            @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name.") final boolean filenameTimestamp) {
+            @ParameterLayout(describedAs = "Whether to add a timestamp suffix to the exported file's name.") final boolean filenameTimestamp,
+            @ParameterLayout(describedAs = "Whether to remap recording results with actuals.") final boolean remapResults) {
 
         List<CommandLogEntry> selectedCommandLogEntries =
                 commandManager.streamCommandsInSequence()
@@ -58,7 +59,7 @@ public class CommandManager_exportSequence {
                         .map(entry -> CommandDtoUtils.CommandExportDto.of(
                                 entry.getCommandDto(),
                                 entry.getResult()))
-                        .map(this::remapResults)
+                        .map(commandExportDto -> remapResults ? remapResults(commandExportDto) : commandExportDto)
                         .collect(Collectors.toList()));
 
         final var firstReplayableCommand =
@@ -92,6 +93,11 @@ public class CommandManager_exportSequence {
     @MemberSupport
     public boolean defaultFilenameTimestamp() {
         return true;
+    }
+
+    @MemberSupport
+    public boolean defaultRemapResults() {
+        return false;
     }
 
     private CommandDtoUtils.CommandExportDto remapResults(CommandDtoUtils.CommandExportDto commandExportDto) {

@@ -114,7 +114,7 @@ class CommandManager_pendingOrFailed_Test {
         final var commandExecutorService = commandExecutorSettingPendingBackground(pendingBackgroundCommands);
         final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
 
-        new CommandManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+        new CommandManager_replayOrRetryMultiple(manager).act(manager.getPendingOrFailed());
 
         verify(commandExecutorService, times(1)).executeCommand(
                 eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
@@ -130,7 +130,7 @@ class CommandManager_pendingOrFailed_Test {
         final var commandExecutorService = commandExecutorReturningSuccess();
         final var manager = manager(repository, transactionService, commandExecutorService, safeActionSpecificationLoader());
 
-        new CommandManager_replayOrRetrySelected(manager).act(manager.getPendingOrFailed());
+        new CommandManager_replayOrRetryMultiple(manager).act(manager.getPendingOrFailed());
 
         verify(commandExecutorService, times(2)).executeCommand(
                 eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class));
@@ -143,7 +143,7 @@ class CommandManager_pendingOrFailed_Test {
         when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         final var manager = manager(repository, safeActionSpecificationLoader());
 
-        assertThat(new CommandManager_replayOrRetrySelected(manager).disableAct())
+        assertThat(new CommandManager_replayOrRetryMultiple(manager).disableAct())
                 .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
         assertThat(new CommandManager_replayOrRetryNext(manager).disableAct())
                 .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
