@@ -10,7 +10,7 @@ import org.apache.causeway.applib.annotation.*;
 @Action(
         restrictTo = RestrictTo.PROTOTYPING,
         choicesFrom = "pendingOrFailed",
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
+        semantics = SemanticsOf.NON_IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         domainEvent = CommandManager_replayOrRetrySelected.DomainEvent.class,
         executionPublishing = Publishing.DISABLED
