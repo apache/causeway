@@ -67,7 +67,7 @@ extends Facet {
     /**
      * The stronger constraint wins. If equal, first argument wins over second.
      */
-    public static Optional<MaxFractionalDigitsFacet> strongestConstraint(
+    static Optional<MaxFractionalDigitsFacet> strongestConstraint(
             final Optional<MaxFractionalDigitsFacet> a,
             final Optional<MaxFractionalDigitsFacet> b) {
         if(b.isEmpty())

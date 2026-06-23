@@ -24,6 +24,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -113,6 +114,10 @@ extends FacetFactoryAbstract {
             MinIntegerDigitsFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsOpt, facetHolder));
 
+        if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))
+            return; // skip fractional facets
+
+        // max fractional digits
         addFacetIfPresent(
             MaxFractionalDigitsFacet.strongestConstraint(
                 MaxFractionalDigitsFacetFromValueSemanticsAnnotation
@@ -121,6 +126,7 @@ extends FacetFactoryAbstract {
                 MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
                     .create(digitsOpt, facetHolder)));
 
+        // min fractional digits
         addFacetIfPresent(
             MinFractionalDigitsFacet.strongestConstraint(
                 MinFractionalDigitsFacetFromValueSemanticsAnnotation

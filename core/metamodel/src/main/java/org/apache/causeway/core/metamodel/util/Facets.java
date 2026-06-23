@@ -268,6 +268,7 @@ public final class Facets {
                 .orElseGet(OptionalInt::empty);
     }
 
+    /** expected empty for all integer types */
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
             .map(MinFractionalDigitsFacet::minFractionalDigits)
@@ -276,6 +277,7 @@ public final class Facets {
             .orElseGet(OptionalInt::empty);
     }
 
+    /** expected empty for all integer types */
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
             .map(MaxFractionalDigitsFacet::maxFractionalDigits)
@@ -295,7 +297,7 @@ public final class Facets {
     }
 
     /**
-     * Consults all available constraints, in contrast to {@link #maxTotalDigits(FacetHolder)}
+     * Consults all available constraints, in contrast to {@link #maxTotalDigitsExplicit(FacetHolder)}
      */
     public OptionalInt maxTotalDigitsInferred(final FacetHolder facetHolder) {
         var maxInt = maxIntegerDigits(facetHolder);
