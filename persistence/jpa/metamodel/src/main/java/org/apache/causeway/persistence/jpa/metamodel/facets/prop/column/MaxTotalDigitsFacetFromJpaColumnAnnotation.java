@@ -42,6 +42,6 @@ implements MaxTotalDigitsFacet {
     }
 
     @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    @Override public Precedence precedence() { return Precedence.LOW; } // LOW so can be overridden via @ValueSemantics
 
 }
