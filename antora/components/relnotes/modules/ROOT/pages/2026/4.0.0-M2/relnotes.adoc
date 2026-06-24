@@ -13,16 +13,11 @@ Notable changes in this release:
 
 - Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408] 
 - By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs). 
-The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes). 
-A minimum of 16 bytes is required, we recommend 32. (eg. `-13,4,0, ...`) 
+The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as _Base64_ encoded byte array, like e.g.
+`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=` 
+A minimum of 16 bytes is required, we recommend 32. 
 https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
 +
-[IMPORTANT]
-====
-*UPDATE* as of May 27th 2026 (at time of writing, its unclear which release will see this first)
-+
-Parsing environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes) is no longer supported, we replaced that with a _Base64_ encoded byte array, like e.g.
-`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=`
 [source,java]
 .32 byte HMAC Generator
 ----
@@ -33,9 +28,10 @@ SecureRandom.getInstanceStrong().nextBytes(secret);
 var hmacBase64 = _Bytes.stringifyUtf8Base64(secret);
 System.out.println(hmacBase64);
 ----
-====
 
 - [Programming Model] Support for Property Clear Methods was removed https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
+
+- [Programming Model] Support for `ValueSemanticsProvider` registration via _Spring_ factory methods.
 
 ⭐ New Features
 
@@ -43,6 +39,7 @@ System.out.println(hmacBase64);
 https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - Pickup Webjar Version Strings automatically from Classpath https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948]
 - [Wicket Viewer] Select2 with Object Icons https://issues.apache.org/jira/browse/CAUSEWAY-3904[CAUSEWAY-3904]
+- Built-in _Value Semantics_ for various number grouping separation styles, changing the default grouping character to a narrow space https://issues.apache.org/jira/browse/CAUSEWAY-4006[CAUSEWAY-4006]
 
 🐞 Bug Fixes
 
