@@ -329,7 +329,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(entryFor(entries, "commandlog.test.Counter#findNull").getResult()).isNull();
         assertThat(entryFor(entries, "commandlog.test.Counter#findEmptyList").getResult()).isNull();
         assertThat(entryFor(entries, "commandlog.test.Counter#findSelfTwiceAsList").getResult()).isNull();
-        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNotNull();
     }
 
     private CommandLogEntry entryFor(
