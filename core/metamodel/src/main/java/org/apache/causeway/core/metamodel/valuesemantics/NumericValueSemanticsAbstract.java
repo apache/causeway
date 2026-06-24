@@ -69,7 +69,7 @@ implements
     @Override
     public final String parseableTextRepresentation(final Context context, final T value) {
         return value!=null
-            ? getNumberFormat(context, FormatUsageFor.PARSING).format(value)
+            ? getNumberFormat(context, FormatUsageFor.RENDERING_AS_TEXT).format(value)
             : null;
     }
 
@@ -99,6 +99,20 @@ implements
         if(feature==null)
             return;
 
+        // lookup meta-model for any facets that provide the MaximumIntegerDigits;
+        // applies only to input (we don't want to remove most significant digits when rendering)
+        // @see ValueSemantics#maxIntegerDigits
+        if(usedFor.isParsing()) {
+            Facets.maxIntegerDigits(feature)
+                .ifPresent(format::setMaximumIntegerDigits);
+        }
+
+        // lookup meta-model for any facets that provide the MinimumIntegerDigits;
+        // applies to display and input prompting alike,
+        // @see ValueSemantics#minIntegerDigits
+        Facets.minIntegerDigits(feature)
+            .ifPresent(format::setMinimumIntegerDigits);
+
         if(isFloatingPoint()) {
             // lookup meta-model for any facets that provide the MaximumFractionDigits;
             // applies to display and input alike
@@ -112,15 +126,6 @@ implements
             // @see ValueSemantics#minFractionalDigits
             Facets.minFractionalDigits(feature)
                 .ifPresent(format::setMinimumFractionDigits);
-        }
-
-        switch (usedFor) {
-            case RENDERING_AS_TEXT, RENDERING_AS_HTML -> {
-
-            }
-            case PARSING -> {
-
-            }
         }
     }
 
@@ -151,20 +156,42 @@ implements
 
         try {
             var number = formatEx.parse(input);
+            int integerDigitCount = integerDigitCount(number);
+            int fractionDigitCount = fractionDigitCount(number);
 
-            // check for maxFractionDigits if required ...
-            final int maxFractionDigits = formatEx.format().getMaximumFractionDigits();
-            if(maxFractionDigits>-1
-                    && number.scale()>formatEx.format().getMaximumFractionDigits())
+            // check for maxIntegerDigits
+            if(integerDigitCount > formatEx.maxIntegerDigits())
+                throw new TextEntryParseException(String.format(
+                    "No more than %d integer digits (digits before the decimal separator) can be entered, "
+                            + "got %d in '%s'.", formatEx.maxIntegerDigits(), integerDigitCount, input));
+
+            // check for minIntegerDigits
+            if(integerDigitCount < formatEx.minIntegerDigits())
+                throw new TextEntryParseException(String.format(
+                    "A minimum of %d integer digits (digits before the decimal separator) must be entered, "
+                            + "got %d in '%s'.", formatEx.minIntegerDigits(), integerDigitCount, input));
+
+            // check for maxFractionDigits
+            if(fractionDigitCount>formatEx.maxFractionDigits())
                 throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
-                                + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
+                                + "got %d in '%s'.", formatEx.maxFractionDigits(), fractionDigitCount, input));
             return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
                     "Not a decimal value '%s': %s", input, e.getMessage()),
                     e);
         }
+    }
+
+    static int fractionDigitCount(final BigDecimal number) {
+        return number.scale()>=0
+            ? number.scale()
+            : 0;
+    }
+
+    static int integerDigitCount(final BigDecimal number) {
+        return number.toBigInteger().abs().toString().length();
     }
 
     /**
@@ -278,6 +305,10 @@ implements
                 throw new ParseException("input='" + rawInput + "' was not processed completely", position.getIndex());
             return decimal;
         }
+        public int maxIntegerDigits() { return format.getMaximumIntegerDigits(); }
+        public int minIntegerDigits() { return format.getMinimumIntegerDigits(); }
+        public int maxFractionDigits() { return format.getMaximumFractionDigits(); }
+        public int minFractionDigits() { return format.getMinimumFractionDigits(); }
     }
 
     /**
