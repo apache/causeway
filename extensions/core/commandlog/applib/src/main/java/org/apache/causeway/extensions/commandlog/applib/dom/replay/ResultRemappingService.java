@@ -209,7 +209,7 @@ public class ResultRemappingService {
                         resultCopy.setType(result.getType());
                         resultCopy.setId(result.getId());
 
-                        commandExportDto.setResult(resultCopy);
+                        commandExportDtoCopy.setResult(resultCopy);
                     }
 
                     return commandExportDtoCopy;
