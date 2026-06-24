@@ -128,6 +128,9 @@ implements ActionInvocationFacet {
     private void setCommandResultIfBookmarkable(
             final Command command,
             final ManagedObject resultAdapter) {
+        if(command == null || resultAdapter == null) {
+            return;
+        }
         resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }

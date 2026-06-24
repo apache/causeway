@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
