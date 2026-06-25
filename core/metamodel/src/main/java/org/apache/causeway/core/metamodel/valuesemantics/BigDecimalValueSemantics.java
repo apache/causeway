@@ -122,11 +122,10 @@ implements IdStringifier.EntityAgnostic<BigDecimal> {
 
         super.configureDecimalFormat(context, format, usedFor);
 
-        var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
-        if(!usedFor.isParsing()
-                || bigDecimalConfig.editing().preserveScale()) {
+        if(!usedFor.isParsing()) {
+            var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
+            // apply a minScale as fallback, if configured.
             if(format.getMinimumFractionDigits()==0) {
-                // apply a minScale if configured.
                 Optional.ofNullable(bigDecimalConfig.display().minScale())
                     .ifPresent(format::setMinimumFractionDigits);
             }

@@ -3388,42 +3388,24 @@ public record CausewayConfiguration(
              *
              * <p>If this flag is set, then the {@link Digits#fraction()} annotation or the JPA equivalent {@link Column#scale()}) should be used for the
              * <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
-             * </p>
              *
-             * <p>
-             * What this means in practice is that a numeric values will be rendered to the same number of fractional
+             * <p>What this means in practice is that numeric values will be rendered to the same number of fractional
              * digits, irrespective of whether they are whole numbers or fractional.  For example, with a scale of 2,
              * then '123.4532' will be rendered as '123.45', while '123' will be rendered
              * as '123.00'.
-             * </p>
              *
-             * <p>
-             *If this flag is NOT set, or if it is set but there is no annotation, then the {@link Display#minScale} config
+             * <p>If this flag is NOT set, or if it is set but there is no annotation, then the {@link Display#minScale} config
              * property is used as a fallback.
-             * </p>
              *
-             * <p>
-             * If there is no fallback, then it means that a big decimal such as '123.00' will be presented as
+             * <p>If there is no fallback, then it means that a big decimal such as '123.00' will be presented as
              * just '123' (that is, the shortest possible textual representation).
-             * </p>
              */
             @DefaultValue("true")
             boolean useScaleForMinFractionalFacet,
 
             @DefaultValue
-            Editing editing,
-            @DefaultValue
             Display display
             ) {
-
-            public record Editing(
-                /**
-                 * When a BigDecimal is presented for editing, whether it should enforce the scale, possibly meaning
-                 * trailing '0's to pad).  This is probably appropriate for BigDecimals that represent a money amount.
-                 */
-                @DefaultValue("false")
-                boolean preserveScale) {
-            }
 
             public record Display(
                 /**
