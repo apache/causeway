@@ -997,7 +997,9 @@ public abstract class ObjectSpecificationAbstract
      * without treating ordinary mixin actions as navigation sources.
      */
     private void ensureNavigationActionsForMixedInAssociations() {
-        if (!isRecordingSupportEnabled()) {
+        if (!isRecordingSupportEnabled()
+                || isNavigationActionPostProcessing()) {
+            // in POST_PROCESS mode, synthesis is performed once by SynthesizeNavigationActionsPostProcessor
             return;
         }
         // one-shot: synthesize navigation actions at most once per spec.
@@ -1006,29 +1008,46 @@ public abstract class ObjectSpecificationAbstract
         // childSpec.streamAssociations), whose own post-processing re-enters this method.
         // With a cyclic collection graph (A.coll<B>, B.coll<A>, parent/child trees, ...) that
         // would otherwise recurse forever and blow the stack.
-        navigationActionAdder.trigger(this::doEnsureNavigationActionsForMixedInAssociations);
+        navigationActionAdder.trigger(() -> addNavigationActions(
+                stream(unmodifiableAssociations.get())
+                        .filter(MixedInMember.class::isInstance)));
     }
 
-    private void doEnsureNavigationActionsForMixedInAssociations() {
+    /**
+     * Synthesizes navigation actions for <i>all</i> parented collections (own and mixed-in), once per spec.
+     * <p>
+     * Invoked by {@code SynthesizeNavigationActionsPostProcessor} when the
+     * {@code POST_PROCESS} navigation-action-synthesis strategy is selected; a no-op under the
+     * (default) inline strategy, which synthesizes actions during introspection instead.
+     */
+    public void synthesizeNavigationActions() {
+        if (!isRecordingSupportEnabled()
+                || !isNavigationActionPostProcessing()) {
+            return;
+        }
+        navigationActionAdder.trigger(() -> addNavigationActions(
+                streamAssociations(MixedIn.INCLUDED)));
+    }
+
+    private void addNavigationActions(final Stream<ObjectAssociation> candidateAssociations) {
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
 
         val existingActionIds = objectActions.stream()
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet());
-        val mixedInAssociationsWithoutNavigation = stream(unmodifiableAssociations.get())
-                .filter(MixedInMember.class::isInstance)
+        val associationsWithoutNavigation = candidateAssociations
                 .filter(association -> !existingActionIds.contains(
                         ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + association.getId()))
                 .collect(Can.toCan());
         val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
-                .createFor(this, mixedInAssociationsWithoutNavigation.stream())
+                .createFor(this, associationsWithoutNavigation.stream())
                 .collect(Can.toCan());
         existingActionIds.addAll(parentedCollectionNavigationActions.stream()
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet()));
         val navigationActions = Stream.concat(
                         parentedCollectionNavigationActions.stream(),
-                        ScalarReferenceNavigationActionUtil.createFor(this, mixedInAssociationsWithoutNavigation.stream(), existingActionIds))
+                        ScalarReferenceNavigationActionUtil.createFor(this, associationsWithoutNavigation.stream(), existingActionIds))
                 .collect(Collectors.toList());
         if (navigationActions.isEmpty()) {
             return;
@@ -1041,6 +1060,14 @@ public abstract class ObjectSpecificationAbstract
     }
 
     protected boolean isRecordingSupportEnabled() {
+        return false;
+    }
+
+    /**
+     * Whether navigation-action synthesis is deferred to the post-processing phase (the {@code POST_PROCESS}
+     * strategy) rather than performed inline during introspection.  Defaults to {@code false} (inline).
+     */
+    protected boolean isNavigationActionPostProcessing() {
         return false;
     }
 
