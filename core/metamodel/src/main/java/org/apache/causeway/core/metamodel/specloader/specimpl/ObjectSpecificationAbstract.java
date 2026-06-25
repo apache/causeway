@@ -1008,8 +1008,11 @@ public abstract class ObjectSpecificationAbstract
         // childSpec.streamAssociations), whose own post-processing re-enters this method.
         // With a cyclic collection graph (A.coll<B>, B.coll<A>, parent/child trees, ...) that
         // would otherwise recurse forever and blow the stack.
+        // Source candidates via streamDeclaredAssociations (not the unmodifiableAssociations snapshot):
+        // it materializes mixed-in associations first, so a cyclic graph cannot leave us reading a stale
+        // snapshot that omits the very mixed-in collection we need.
         navigationActionAdder.trigger(() -> addNavigationActions(
-                stream(unmodifiableAssociations.get())
+                streamDeclaredAssociations(MixedIn.INCLUDED)
                         .filter(MixedInMember.class::isInstance)));
     }
 
