@@ -28,11 +28,13 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.approvaltests.Approvals;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.util.StreamUtils;
 
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -44,8 +46,8 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 
 /**
- * @implNote potential issues with ISO-8601 format equivalence of 
- * 		{@code 2026-07-01T08:15:30.000+00:00 == 2026-07-01T08:15:30.000Z}, 
+ * @implNote potential issues with ISO-8601 format equivalence of
+ * 		{@code 2026-07-01T08:15:30.000+00:00 == 2026-07-01T08:15:30.000Z},
  * 		tests might fail, because tests expect one or the other in a hardcoded way
  */
 class CommandDtoUtils_toYaml_Approval_Test {
@@ -65,7 +67,7 @@ class CommandDtoUtils_toYaml_Approval_Test {
         withDefaultTimeZone("Europe/Paris", () -> {
             String yaml = CommandDtoUtils.toMultiDocYaml(List.of(commandWithAllDateTimeParams()));
             try {
-                Assertions.assertThat(yaml).isEqualTo(readApprovalSnapshot());
+                assertEquals(TextUtils.readLines(readApprovalSnapshot()), TextUtils.readLines(yaml));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -168,5 +170,5 @@ class CommandDtoUtils_toYaml_Approval_Test {
             throw new RuntimeException("Failed to initialize DatatypeFactory", ex);
         }
     }
-	
+
 }
