@@ -43,6 +43,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class NumericValueSemanticsAbstract<T>
@@ -93,8 +94,7 @@ implements
             final FormatUsageFor usedFor) {
         if(context==null)
             return;
-        var feature = MetaModelContext.instanceElseFail().getSpecificationLoader()
-            .loadFeature(context.featureIdentifier())
+        var feature = feature(context)
             .orElse(null);
         if(feature==null)
             return;
@@ -127,6 +127,11 @@ implements
             Facets.minFractionalDigits(feature)
                 .ifPresent(format::setMinimumFractionDigits);
         }
+    }
+
+    private Optional<ObjectFeature> feature(final ValueSemanticsProvider.@Nullable Context context) {
+        return MetaModelContext.instanceElseFail().getSpecificationLoader()
+            .loadFeature(context.featureIdentifier());
     }
 
     protected Optional<BigInteger> parseInteger(
@@ -176,6 +181,23 @@ implements
                 throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
                                 + "got %d in '%s'.", formatEx.maxFractionDigits(), fractionDigitCount, input));
+
+            // lookup meta-model for any facets that provide the TotalDigits
+            // @see ValueSemantics#maxTotalDigits
+            {
+                int maxTotalDigitsExplicit = feature(context)
+                    .map(Facets::maxTotalDigitsExplicit)
+                    .map(it->it.orElse(-1))
+                    .orElse(-1);
+                int totalDigitCount = integerDigitCount + fractionDigitCount;
+                if(maxTotalDigitsExplicit>0
+                    && totalDigitCount > maxTotalDigitsExplicit) {
+                        throw new TextEntryParseException(String.format(
+                            "No more than %d digits can be entered in total, "
+                                    + "got %d in '%s'.", maxTotalDigitsExplicit, totalDigitCount, input));
+                }
+            }
+
             return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
@@ -252,6 +274,20 @@ implements
         }
     }
 
+    /**
+     * @return {@link NumberFormat} the default from given context's locale
+     *      or else system's default locale
+     */
+    protected DecimalFormatEx getNumberFormat(
+        final ValueSemanticsProvider.@Nullable Context context,
+        final @NonNull FormatUsageFor usedFor) {
+        var format = NumericValueSemantics.localeDecimalFormat(context);
+        // prime as unconstraint
+        format.setMaximumFractionDigits(340);
+        configureDecimalFormat(context, format, usedFor);
+        return DecimalFormatEx.of(format, grouping().separator(context, usedFor));
+    }
+
     // -- HELPER
 
     protected record DecimalFormatEx(
@@ -309,20 +345,6 @@ implements
         public int minIntegerDigits() { return format.getMinimumIntegerDigits(); }
         public int maxFractionDigits() { return format.getMaximumFractionDigits(); }
         public int minFractionDigits() { return format.getMinimumFractionDigits(); }
-    }
-
-    /**
-     * @return {@link NumberFormat} the default from given context's locale
-     *      or else system's default locale
-     */
-    protected DecimalFormatEx getNumberFormat(
-            final ValueSemanticsProvider.@Nullable Context context,
-            final @NonNull FormatUsageFor usedFor) {
-        var format = NumericValueSemantics.localeDecimalFormat(context);
-        // prime as unconstraint
-        format.setMaximumFractionDigits(340);
-        configureDecimalFormat(context, format, usedFor);
-        return DecimalFormatEx.of(format, grouping().separator(context, usedFor));
     }
 
     private static TextEntryParseException parseExceptionForGroupingNotAllowed(final String localeGroupingSeparator, final String input) {
