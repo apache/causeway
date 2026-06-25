@@ -29,6 +29,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -36,7 +37,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 
@@ -64,6 +64,7 @@ public final class ReplayContext {
     CausewayConfiguration causewayConfiguration;
     List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
     SpecificationLoader specificationLoader;
+    QueryResultsCache queryResultsCache;
     BookmarkService bookmarkService;
     ResultRemappingService resultRemappingService;
 
@@ -81,7 +82,8 @@ public final class ReplayContext {
             final @Singular("commandReplayReferenceDataService") List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader,
             final ResultRemappingService resultRemappingService,
-            final BookmarkService bookmarkService) {
+            final BookmarkService bookmarkService,
+            final QueryResultsCache queryResultsCache) {
         this.repositoryService = repositoryService;
         this.interactionService = interactionService;
         this.transactionService = transactionService;
@@ -95,11 +97,12 @@ public final class ReplayContext {
         this.bookmarkService = bookmarkService;
         this.resultRemappingService = resultRemappingService;
         this.specificationLoader = specificationLoader;
+        this.queryResultsCache = queryResultsCache;
     }
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
     	return interactionId!=null
-			? commandLogEntryRepository().findByInteractionId(interactionId)
+			? commandLogEntryRepository().findByInteractionIdCached(interactionId)
 			: Optional.empty();
     }
 
@@ -109,6 +112,17 @@ public final class ReplayContext {
     }
 
     boolean isDomainService(final Bookmark bookmark) {
+        if(queryResultsCache == null) {
+            // unit testing
+            return doIsDomainService(bookmark);
+        }
+        return queryResultsCache.execute(
+                () -> doIsDomainService(bookmark),
+                getClass(), "isDomainService",
+                bookmark);
+    }
+
+    private boolean doIsDomainService(Bookmark bookmark) {
         final var metaModelService = metaModelService();
         final var specificationLoader = specificationLoader();
         if (metaModelService == null || specificationLoader == null) {

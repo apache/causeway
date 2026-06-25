@@ -115,7 +115,7 @@ class ReplayableCommandMappingTest {
         UUID interactionId = UUID.randomUUID();
         CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.PENDING);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
         when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         ReplayContext replayContext = ReplayContext.builder()
                 .commandLogEntryRepository(commandLogEntryRepository)
@@ -131,7 +131,7 @@ class ReplayableCommandMappingTest {
         UUID interactionId = UUID.randomUUID();
         CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.UNDEFINED);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
         TransactionService transactionService = mock(TransactionService.class);
         ReplayContext replayContext = ReplayContext.builder()
                                         .transactionService(transactionService)
@@ -150,7 +150,7 @@ class ReplayableCommandMappingTest {
         UUID interactionId = UUID.randomUUID();
         CommandLogEntry commandLogEntry = commandLogEntryWithReplayState(ReplayState.PENDING);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
         when(commandLogEntryRepository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
         TransactionService transactionService = mock(TransactionService.class);
         ReplayContext replayContext = ReplayContext.builder()
@@ -177,9 +177,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry currentEntry = commandLogEntry(currentInteractionId, currentTimestamp);
         CommandLogEntry nextEntry = commandLogEntry(nextInteractionId, nextTimestamp);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
-        when(commandLogEntryRepository.findByInteractionId(previousInteractionId)).thenReturn(Optional.of(previousEntry));
-        when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(currentInteractionId)).thenReturn(Optional.of(currentEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(previousInteractionId)).thenReturn(Optional.of(previousEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(nextInteractionId)).thenReturn(Optional.of(nextEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
         ReplayContext replayContext = ReplayContext.builder()
@@ -216,9 +216,9 @@ class ReplayableCommandMappingTest {
         CommandLogEntry currentEntry = commandLogEntry(currentInteractionId, currentTimestamp);
         CommandLogEntry nextEntry = commandLogEntry(nextInteractionId, nextTimestamp);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
-        when(commandLogEntryRepository.findByInteractionId(previousInteractionId)).thenReturn(Optional.of(previousEntry));
-        when(commandLogEntryRepository.findByInteractionId(nextInteractionId)).thenReturn(Optional.of(nextEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(currentInteractionId)).thenReturn(Optional.of(currentEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(previousInteractionId)).thenReturn(Optional.of(previousEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(nextInteractionId)).thenReturn(Optional.of(nextEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(omittedSafeEntry, previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
         ReplayContext replayContext = ReplayContext.builder()
@@ -268,7 +268,7 @@ class ReplayableCommandMappingTest {
         CommandLogEntry currentEntry = commandLogEntry(currentInteractionId, currentTimestamp);
         CommandLogEntry nextEntry = commandLogEntry(nextInteractionId, nextTimestamp);
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(currentInteractionId)).thenReturn(Optional.of(currentEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(currentInteractionId)).thenReturn(Optional.of(currentEntry));
         when(commandLogEntryRepository.findForegroundBeforeTimestamp(currentTimestamp, null)).thenReturn(List.of(previousEntry));
         when(commandLogEntryRepository.findForegroundSinceTimestamp(currentTimestamp, null)).thenReturn(List.of(currentEntry, nextEntry));
         ReplayContext replayContext = ReplayContext.builder()
@@ -716,7 +716,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
 
         TransactionService transactionService = mock(TransactionService.class);
         when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
@@ -773,7 +773,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
 
         TransactionService transactionService = mock(TransactionService.class);
         when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
@@ -934,7 +934,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
 
         AtomicInteger transactionSequence = new AtomicInteger();
         AtomicInteger currentTransaction = new AtomicInteger(-1);
@@ -987,7 +987,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
 
         TransactionService transactionService = mock(TransactionService.class);
         when(transactionService.callTransactional(any(Propagation.class), any(Callable.class)))
@@ -1050,7 +1050,7 @@ class ReplayableCommandMappingTest {
         when(commandLogEntry.getReplayState()).thenReturn(ReplayState.PENDING);
 
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
 
         TransactionService transactionService = mock(TransactionService.class);
         AtomicInteger transactionCall = new AtomicInteger();
@@ -1136,7 +1136,7 @@ class ReplayableCommandMappingTest {
             final BookmarkService bookmarkService,
             final CommandReplayMappingListener... listeners) {
         CommandLogEntryRepository commandLogEntryRepository = mock(CommandLogEntryRepository.class);
-        when(commandLogEntryRepository.findByInteractionId(interactionId)).thenReturn(Optional.of(commandLogEntry));
+        when(commandLogEntryRepository.findByInteractionIdCached(interactionId)).thenReturn(Optional.of(commandLogEntry));
         ReplayContext replayContext = ReplayContext.builder()
                 .commandLogEntryRepository(commandLogEntryRepository)
                 .resultRemappingService(ResultRemappingService.builder().commandReplayMappingListeners(Arrays.asList(listeners)).build())

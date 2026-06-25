@@ -213,7 +213,7 @@ class CommandManager_known_participants_Test {
     void exportable_is_false_outside_export_manager_context() {
         final var entry = entry(T1, CUSTOMER_BOOKMARK);
         final var repository = mock(CommandLogEntryRepository.class);
-        when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+        when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry));
         final var replayContext = ReplayContext.builder()
                 .commandLogEntryRepository(repository)
                 .scratchpad(new ScratchpadDefault())
@@ -332,7 +332,7 @@ class CommandManager_known_participants_Test {
     private static CommandLogEntryRepository repositoryWith(final CommandLogEntry... entries) {
         final var repository = mock(CommandLogEntryRepository.class);
         for (final CommandLogEntry entry : entries) {
-            when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+            when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(List.of(entries));
         return repository;

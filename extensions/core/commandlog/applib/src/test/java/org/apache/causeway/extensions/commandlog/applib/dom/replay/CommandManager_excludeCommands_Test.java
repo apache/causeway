@@ -127,7 +127,7 @@ class CommandManager_excludeCommands_Test {
         final var repository = mock(CommandLogEntryRepository.class);
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(sinceBaseline);
         for (final CommandLogEntry entry : entries) {
-            when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+            when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
         final var replayContext = ReplayContext.builder()

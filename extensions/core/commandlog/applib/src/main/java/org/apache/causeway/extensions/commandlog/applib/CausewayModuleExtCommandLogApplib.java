@@ -25,6 +25,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -196,7 +197,8 @@ public class CausewayModuleExtCommandLogApplib {
             final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
             final SpecificationLoader specificationLoader,
             final BookmarkService bookmarkService,
-            final ResultRemappingService resultRemappingService) {
+            final ResultRemappingService resultRemappingService,
+            final QueryResultsCache queryResultsCache) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
@@ -206,8 +208,9 @@ public class CausewayModuleExtCommandLogApplib {
                 commandReplayReferenceDataServices,
                 specificationLoader,
                 resultRemappingService,
-                bookmarkService
-                );
+                bookmarkService,
+                queryResultsCache
+        );
     }
 
 }
