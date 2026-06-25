@@ -315,7 +315,7 @@ implements
      * @return {@link NumberFormat} the default from given context's locale
      *      or else system's default locale
      */
-    private DecimalFormatEx getNumberFormat(
+    protected DecimalFormatEx getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context,
             final @NonNull FormatUsageFor usedFor) {
         var format = NumericValueSemantics.localeDecimalFormat(context);

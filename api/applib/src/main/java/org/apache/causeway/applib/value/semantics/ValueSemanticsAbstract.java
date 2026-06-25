@@ -51,9 +51,20 @@ public abstract class ValueSemanticsAbstract<T>
 implements
     ValueSemanticsProvider<T> {
 
+    /**
+     * Specifies the context within which a format is used.
+     *
+     * <p> The distinction between PARSING and RENDERING_AS_TEXT is motivated by
+     * cases where the PARSING format is more relaxed than the RENDERING_AS_TEXT format.
+     * <br> e.g. parsing may remove any white-spaces from user input, when some white space is used as grouping
+     * separator for number-type values
+     */
     public enum FormatUsageFor {
+        /** used for parsing the user input */
         PARSING,
+        /** used for formatting the UI input prompt */
         RENDERING_AS_TEXT,
+        /** used for formatting the HTML representation */
         RENDERING_AS_HTML;
         public boolean isParsing() { return this==PARSING; }
         public boolean isRenderingAsText() { return this==RENDERING_AS_TEXT; }
