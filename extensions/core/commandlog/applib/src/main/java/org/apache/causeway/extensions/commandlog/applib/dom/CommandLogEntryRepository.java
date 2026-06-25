@@ -46,6 +46,7 @@ public interface CommandLogEntryRepository {
     CommandLogEntry createEntryAndPersist(
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn);
 
+    Optional<CommandLogEntry> findByInteractionIdCached(final UUID interactionId);
     Optional<CommandLogEntry> findByInteractionId(final UUID interactionId);
 
     List<CommandLogEntry> findByParent(final CommandLogEntry parent);

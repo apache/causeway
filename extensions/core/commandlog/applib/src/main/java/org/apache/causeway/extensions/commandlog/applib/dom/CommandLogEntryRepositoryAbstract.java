@@ -36,6 +36,7 @@ import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -52,6 +53,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject QueryResultsCache queryResultsCache;
 
     private final Class<C> commandLogEntryClass;
 
@@ -73,6 +75,18 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         c.setExecuteIn(executeIn);
         persist(c);
         return c;
+    }
+
+    @Override
+    public Optional<CommandLogEntry> findByInteractionIdCached(final UUID interactionId) {
+        if(queryResultsCache == null) {
+            // unit testing
+            return findByInteractionId(interactionId);
+        }
+        return queryResultsCache.execute(
+                () -> findByInteractionId(interactionId),
+                getClass(), "findByInteractionIdCached",
+                interactionId);
     }
 
     @Override

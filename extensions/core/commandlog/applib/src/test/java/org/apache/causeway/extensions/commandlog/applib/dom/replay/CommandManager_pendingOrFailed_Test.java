@@ -213,7 +213,7 @@ class CommandManager_pendingOrFailed_Test {
         final var repository = mock(CommandLogEntryRepository.class);
         when(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(BASELINE)).thenReturn(entries);
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(entries);
-        entries.forEach(entry -> when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry)));
+        entries.forEach(entry -> when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry)));
         return repository;
     }
 

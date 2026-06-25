@@ -127,7 +127,7 @@ class CommandManager_unexcludeCommands_Test {
         when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenReturn(sinceBaseline);
         when(repository.findForegroundSinceTimestampAndWithReplayExcluded(BASELINE)).thenReturn(excludedSinceBaseline);
         for (final CommandLogEntry entry : entries) {
-            when(repository.findByInteractionId(entry.getInteractionId())).thenReturn(Optional.of(entry));
+            when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry));
         }
 
         final var replayContext = ReplayContext.builder()
