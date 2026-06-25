@@ -939,6 +939,7 @@ public abstract class ObjectSpecificationAbstract
 
     private final _Oneshot mixedInActionAdder = new _Oneshot();
     private final _Oneshot mixedInAssociationAdder = new _Oneshot();
+    private final _Oneshot navigationActionAdder = new _Oneshot();
 
     /**
      * one-shot: must be no-op, if already created
@@ -999,6 +1000,16 @@ public abstract class ObjectSpecificationAbstract
         if (!isRecordingSupportEnabled()) {
             return;
         }
+        // one-shot: synthesize navigation actions at most once per spec.
+        // Guards against unbounded re-entrancy: creating a navigation action forces full
+        // introspection of the collection's element type (via filterPropertiesOf ->
+        // childSpec.streamAssociations), whose own post-processing re-enters this method.
+        // With a cyclic collection graph (A.coll<B>, B.coll<A>, parent/child trees, ...) that
+        // would otherwise recurse forever and blow the stack.
+        navigationActionAdder.trigger(this::doEnsureNavigationActionsForMixedInAssociations);
+    }
+
+    private void doEnsureNavigationActionsForMixedInAssociations() {
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
 
         val existingActionIds = objectActions.stream()
