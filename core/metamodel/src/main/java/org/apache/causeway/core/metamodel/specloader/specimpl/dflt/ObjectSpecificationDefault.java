@@ -87,6 +87,7 @@ public class ObjectSpecificationDefault
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
     private final boolean recordingSupportEnabled;
+    private final boolean navigationActionPostProcessing;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -124,6 +125,8 @@ public class ObjectSpecificationDefault
         this.columnHelper = new _MembersAsColumns(mmc);
         this.recordingSupportEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
                 .getRecordingSupport().isEnabled();
+        this.navigationActionPostProcessing = mmc.getConfiguration().getExtensions().getCommandLog()
+                .getNavigationActionSynthesis().isPostProcess();
     }
 
     @Override
@@ -188,7 +191,10 @@ public class ObjectSpecificationDefault
         val associations = createAssociations().collect(Can.toCan());
         replaceAssociations(associations.stream());
         val actions = createActions().collect(Can.toCan());
-        if (recordingSupportEnabled) {
+        if (recordingSupportEnabled && !navigationActionPostProcessing) {
+            // inline strategy: synthesize navigation actions for own collections eagerly here;
+            // mixed-in collections are handled lazily by ensureNavigationActionsForMixedInAssociations().
+            // (POST_PROCESS strategy defers all synthesis to SynthesizeNavigationActionsPostProcessor.)
             val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
                     .createFor(this, associations.stream())
                     .collect(Can.toCan());
@@ -210,6 +216,11 @@ public class ObjectSpecificationDefault
     @Override
     protected boolean isRecordingSupportEnabled() {
         return recordingSupportEnabled;
+    }
+
+    @Override
+    protected boolean isNavigationActionPostProcessing() {
+        return navigationActionPostProcessing;
     }
 
     private void addNamedFacetIfRequired() {
