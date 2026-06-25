@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.postprocessors.members.navigation;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -31,10 +30,12 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificatio
  * references) once per type, during the post-processing phase.
  *
  * <p>
- * Active only when command-log recording support is enabled <i>and</i> the
- * {@link CommandLog.NavigationActionSynthesis#POST_PROCESS POST_PROCESS} synthesis strategy is selected
- * (see {@code causeway.extensions.command-log.navigation-action-synthesis}).  Under the default inline
- * strategy this post-processor is disabled and synthesis happens during introspection instead.
+ * Active only when command-log recording support is enabled <i>and</i> the {@code POST_PROCESS} synthesis
+ * strategy is selected (see {@code causeway.extensions.command-log.navigation-action-synthesis}).  This
+ * gating is performed per-type inside {@link ObjectSpecificationAbstract#synthesizeNavigationActions()}
+ * (read live from configuration), rather than via {@link #isEnabled()}, so that it behaves correctly
+ * regardless of when the post-processor pipeline is initialized relative to configuration.  Under the
+ * default inline strategy this is a no-op and synthesis happens during introspection instead.
  *
  * <p>
  * Performing synthesis here (rather than from the lazy {@code streamDeclaredActions} path) keeps it out of
@@ -47,14 +48,6 @@ extends MetaModelPostProcessorAbstract {
     @Inject
     public SynthesizeNavigationActionsPostProcessor(final MetaModelContext mmc) {
         super(mmc);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        final CommandLog commandLog = getMetaModelContext().getConfiguration()
-                .getExtensions().getCommandLog();
-        return commandLog.getRecordingSupport().isEnabled()
-                && commandLog.getNavigationActionSynthesis().isPostProcess();
     }
 
     @Override
