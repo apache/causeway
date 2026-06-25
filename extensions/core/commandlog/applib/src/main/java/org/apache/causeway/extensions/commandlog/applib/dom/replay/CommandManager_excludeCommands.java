@@ -26,7 +26,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commandsToExport", sequence = "1.3",
+        associateWith = "commandsInSequence", sequence = "1.3",
         cssClass = "btn-secondary",
         describedAs = "Marks selected Commands as EXCLUDED from either export or replay."
 )
@@ -85,13 +85,6 @@ public class CommandManager_excludeCommands {
     @MemberSupport
     public String validateSelected(final List<ReplayableCommand> selected) {
         return selected == null || selected.isEmpty() ? "Select at least one command to exclude" : null;
-    }
-
-    @MemberSupport
-    public List<ReplayableCommand> defaultSelected() {
-        return commandManager.getCommandsInSequence().stream()
-                .filter(command -> !command.isKnownParticipants())
-                .collect(Collectors.toList());
     }
 
     // TODO: shouldn't be required because of 'choicesFrom', but in v2 there seems to be a MM validation error due to a missing choicesFacet

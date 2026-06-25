@@ -42,7 +42,7 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commandsToExport", sequence = "1.2",
+        associateWith = "commandsInSequence", sequence = "1.2",
         describedAs = "Moves selected Commands upward after another command by retimestamping them. "
                 + "The first moved command is placed after the target; subsequent moved commands either preserve their original timing gaps or, when requested, are squashed to 1 second increments."
 )

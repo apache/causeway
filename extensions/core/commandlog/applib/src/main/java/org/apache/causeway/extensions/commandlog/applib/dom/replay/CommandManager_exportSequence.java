@@ -26,7 +26,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        associateWith = "commandsToExport", sequence = "1.1",
+        associateWith = "commandsInSequence", sequence = "1.1",
         cssClassFa = "solid share-from-square",
         cssClass = "btn-primary",
         describedAs = "Exports all Commands in the sequence, applying result remappings if available. "
