@@ -130,8 +130,10 @@ implements
     }
 
     private Optional<ObjectFeature> feature(final ValueSemanticsProvider.@Nullable Context context) {
-        return MetaModelContext.instanceElseFail().getSpecificationLoader()
-            .loadFeature(context.featureIdentifier());
+        return context!=null
+            ? MetaModelContext.instanceElseFail().getSpecificationLoader()
+                .loadFeature(context.featureIdentifier())
+            : Optional.empty();
     }
 
     protected Optional<BigInteger> parseInteger(
