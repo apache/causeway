@@ -21,8 +21,7 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -33,7 +32,6 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.NavigationActionSynthesis;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
@@ -47,16 +45,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Verifies that the {@code POST_PROCESS} navigation-action-synthesis strategy produces the same synthetic
- * navigation actions as the (default) {@code INLINE} strategy, for own and mixed-in parented collections,
- * including across a cyclic collection graph.
+ * Verifies that {@link SynthesizeNavigationActionsPostProcessor} synthesizes the synthetic navigation
+ * actions for own and mixed-in parented collections (including across a cyclic collection graph) when
+ * command-log recording-support is enabled.
  *
  * <p>
  * The unit-test harness ({@link MetaModelContext_forTesting} + direct {@code loadSpecification}) does not run
  * the post-processing sweep (that only happens via {@code SpecificationLoader#createMetaModel()} at boot), so
- * under {@code POST_PROCESS} the synthesizing post-processor is invoked here exactly as the production sweep
- * would invoke it ({@link SynthesizeNavigationActionsPostProcessor#postProcessObject(ObjectSpecification)}).
- * The end-to-end StackOverflow regression on a cyclic graph is better covered by a full-boot integration test.
+ * the post-processor is invoked here exactly as the production sweep would invoke it
+ * ({@link SynthesizeNavigationActionsPostProcessor#postProcessObject(ObjectSpecification)}).  The end-to-end
+ * boot behaviour (and the StackOverflow regression on a cyclic graph) is covered by
+ * {@code RecordingNavigation_IntegTest}.
  */
 class SynthesizeNavigationActionsPostProcessorTest {
 
@@ -114,78 +113,58 @@ class SynthesizeNavigationActionsPostProcessorTest {
         }
     }
 
-    @ParameterizedTest
-    @EnumSource(NavigationActionSynthesis.class)
-    void synthesizes_navigation_action_for_own_collection(final NavigationActionSynthesis strategy) {
-        val mmc = newMetamodelContext(strategy);
+    @Test
+    void synthesizes_navigation_action_for_own_collection() {
+        val mmc = newMetamodelContext();
 
-        val parentSpec = mmc.getSpecificationLoader().loadSpecification(NavParent.class);
-        synthesizeIfPostProcess(mmc, strategy, parentSpec);
+        val parentSpec = synthesize(mmc, NavParent.class);
 
         assertTrue(parentSpec.getAction(PREFIX + "children").isPresent(),
-                () -> "expected own-collection navigation action under strategy " + strategy);
+                "expected own-collection navigation action");
     }
 
-    @ParameterizedTest
-    @EnumSource(NavigationActionSynthesis.class)
-    void synthesizes_navigation_action_for_mixed_in_collection(final NavigationActionSynthesis strategy) {
-        val mmc = newMetamodelContext(strategy, NavParent_mixedChildren.class);
+    @Test
+    void synthesizes_navigation_action_for_mixed_in_collection() {
+        val mmc = newMetamodelContext(NavParent_mixedChildren.class);
 
-        val parentSpec = mmc.getSpecificationLoader().loadSpecification(NavParent.class);
-        synthesizeIfPostProcess(mmc, strategy, parentSpec);
+        val parentSpec = synthesize(mmc, NavParent.class);
 
         assertTrue(parentSpec.getAction(PREFIX + "mixedChildren").isPresent(),
-                () -> "expected mixed-in-collection navigation action under strategy " + strategy);
+                "expected mixed-in-collection navigation action");
     }
 
-    @ParameterizedTest
-    @EnumSource(NavigationActionSynthesis.class)
-    void synthesizes_navigation_actions_across_cyclic_collection_graph(final NavigationActionSynthesis strategy) {
-        val mmc = newMetamodelContext(strategy, CycleA_bs.class, CycleB_as.class);
-
-        val specA = mmc.getSpecificationLoader().loadSpecification(CycleA.class);
-        val specB = mmc.getSpecificationLoader().loadSpecification(CycleB.class);
+    @Test
+    void synthesizes_navigation_actions_across_cyclic_collection_graph() {
+        val mmc = newMetamodelContext(CycleA_bs.class, CycleB_as.class);
 
         // synthesis reads the *other* type's associations; must terminate and not throw
-        assertDoesNotThrow(() -> synthesizeIfPostProcess(mmc, strategy, specA, specB),
-                () -> "navigation-action synthesis failed on cyclic graph under strategy " + strategy);
+        val specA = assertDoesNotThrow(() -> synthesize(mmc, CycleA.class),
+                "navigation-action synthesis failed on cyclic graph");
+        val specB = assertDoesNotThrow(() -> synthesize(mmc, CycleB.class),
+                "navigation-action synthesis failed on cyclic graph");
 
         assertTrue(specA.getAction(PREFIX + "bs").isPresent(),
-                () -> "expected navigation action on CycleA under strategy " + strategy);
+                "expected navigation action on CycleA");
         assertTrue(specB.getAction(PREFIX + "as").isPresent(),
-                () -> "expected navigation action on CycleB under strategy " + strategy);
+                "expected navigation action on CycleB");
     }
 
     // -- HELPER
 
-    /**
-     * Under INLINE, synthesis already happened during introspection / first action access; this is a no-op.
-     * Under POST_PROCESS, invoke the synthesizing post-processor as the production post-process sweep would.
-     */
-    private void synthesizeIfPostProcess(
-            final MetaModelContext_forTesting mmc,
-            final NavigationActionSynthesis strategy,
-            final ObjectSpecification... specs) {
-        if (!strategy.isPostProcess()) {
-            return;
-        }
-        val postProcessor = new SynthesizeNavigationActionsPostProcessor(mmc);
-        for (val spec : specs) {
-            postProcessor.postProcessObject(spec);
-        }
+    /** Loads the spec and invokes the synthesizing post-processor on it (as the production sweep would). */
+    private ObjectSpecification synthesize(final MetaModelContext_forTesting mmc, final Class<?> type) {
+        val spec = mmc.getSpecificationLoader().loadSpecification(type);
+        new SynthesizeNavigationActionsPostProcessor(mmc).postProcessObject(spec);
+        return spec;
     }
 
-    private MetaModelContext_forTesting newMetamodelContext(
-            final NavigationActionSynthesis strategy,
-            final Class<?>... mixinTypes) {
+    private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {
         val mmc = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .causewayBeanTypeRegistry(new CausewayBeanTypeRegistryDefault(Can.ofArray(mixinTypes)
                         .map(mixinType -> CausewayBeanMetaData.notManaged(BeanSort.MIXIN, mixinType))))
                 .build();
-        val commandLog = mmc.getConfiguration().getExtensions().getCommandLog();
-        commandLog.setRecordingSupport(RecordingSupport.ENABLED);
-        commandLog.setNavigationActionSynthesis(strategy);
+        mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
         return mmc;
     }
 

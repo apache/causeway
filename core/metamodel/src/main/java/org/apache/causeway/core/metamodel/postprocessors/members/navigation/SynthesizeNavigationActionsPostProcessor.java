@@ -30,12 +30,11 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificatio
  * references) once per type, during the post-processing phase.
  *
  * <p>
- * Active only when command-log recording support is enabled <i>and</i> the {@code POST_PROCESS} synthesis
- * strategy is selected (see {@code causeway.extensions.command-log.navigation-action-synthesis}).  This
- * gating is performed per-type inside {@link ObjectSpecificationAbstract#synthesizeNavigationActions()}
- * (read live from configuration), rather than via {@link #isEnabled()}, so that it behaves correctly
- * regardless of when the post-processor pipeline is initialized relative to configuration.  Under the
- * default inline strategy this is a no-op and synthesis happens during introspection instead.
+ * Active only when command-log recording-support is enabled (see
+ * {@code causeway.extensions.command-log.recording-support}); a no-op otherwise.  The gating is performed
+ * per-type inside {@link ObjectSpecificationAbstract#synthesizeNavigationActions()} (read live from
+ * configuration), rather than via {@link #isEnabled()}, so that it behaves correctly regardless of when the
+ * post-processor pipeline is initialized relative to configuration.
  *
  * <p>
  * Performing synthesis here (rather than from the lazy {@code streamDeclaredActions} path) keeps it out of

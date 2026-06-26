@@ -21,12 +21,17 @@ package org.apache.causeway.testdomain.domainmodel;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.causeway.testdomain.conf.Configuration_headless;
+import org.apache.causeway.testdomain.domainmodel.recordingnav.Configuration_usingRecordingNavigation;
 import org.apache.causeway.testdomain.domainmodel.recordingnav.RecNavCycleA;
 import org.apache.causeway.testdomain.domainmodel.recordingnav.RecNavCycleB;
 import org.apache.causeway.testdomain.domainmodel.recordingnav.RecNavParent;
@@ -39,16 +44,27 @@ import lombok.val;
  * referencing each other via mixed-in parented collections (a cycle).
  *
  * <p>
- * Simply reaching the test body proves the metamodel was created without recursing without bound during
- * boot — the CAUSEWAY-4039 StackOverflow regression (which occurred while synthesizing the synthetic
- * navigation/"selector" actions for parented collections).  The assertions additionally confirm that the
- * navigation actions are in fact synthesized.
- *
- * <p>
- * Concrete subclasses select the navigation-action-synthesis strategy (INLINE / POST_PROCESS) via
- * {@code @SpringBootTest} properties.
+ * Reaching the test body proves the metamodel was created without recursing without bound during boot - the
+ * CAUSEWAY-4039 StackOverflow regression, which occurred while synthesizing the synthetic navigation
+ * ("selector") actions for parented collections. The assertions further confirm the navigation actions are
+ * synthesized (for own and mixed-in/cyclic collections) by SynthesizeNavigationActionsPostProcessor during
+ * the post-processing phase.
  */
-abstract class RecordingNavigation_IntegTestAbstract extends CausewayIntegrationTestAbstract {
+@SpringBootTest(
+        classes = {
+                Configuration_headless.class,
+                Configuration_usingRecordingNavigation.class,
+        },
+        properties = {
+                "causeway.core.meta-model.introspector.mode=FULL",
+                "causeway.core.meta-model.validator.explicit-object-type=FALSE",
+                "causeway.extensions.command-log.recording-support=ENABLED",
+        })
+@TestPropertySource({
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel,
+})
+class RecordingNavigation_IntegTest extends CausewayIntegrationTestAbstract {
 
     private static final String PREFIX =
             ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX;

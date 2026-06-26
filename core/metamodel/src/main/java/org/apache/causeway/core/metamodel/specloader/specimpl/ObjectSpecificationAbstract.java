@@ -117,7 +117,6 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -789,7 +788,6 @@ public abstract class ObjectSpecificationAbstract
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
-        ensureNavigationActionsForMixedInAssociations();
 
         return actionScopes.stream()
                 .flatMap(actionScope -> stream(objectActionsByType.get(actionScope)))
@@ -992,42 +990,18 @@ public abstract class ObjectSpecificationAbstract
     }
 
     /**
-     * Mixed-in associations are appended lazily and can be materialized before or after actions.
-     * When navigation actions are enabled, make sure association mixins receive matching synthetic actions
-     * without treating ordinary mixin actions as navigation sources.
-     */
-    private void ensureNavigationActionsForMixedInAssociations() {
-        if (!isRecordingSupportEnabled()
-                || isNavigationActionPostProcessing()) {
-            // in POST_PROCESS mode, synthesis is performed once by SynthesizeNavigationActionsPostProcessor
-            return;
-        }
-        // one-shot: synthesize navigation actions at most once per spec.
-        // Guards against unbounded re-entrancy: creating a navigation action forces full
-        // introspection of the collection's element type (via filterPropertiesOf ->
-        // childSpec.streamAssociations), whose own post-processing re-enters this method.
-        // With a cyclic collection graph (A.coll<B>, B.coll<A>, parent/child trees, ...) that
-        // would otherwise recurse forever and blow the stack.
-        // Source candidates via streamDeclaredAssociations (not the unmodifiableAssociations snapshot):
-        // it materializes mixed-in associations first, so a cyclic graph cannot leave us reading a stale
-        // snapshot that omits the very mixed-in collection we need.
-        navigationActionAdder.trigger(() -> addNavigationActions(
-                streamDeclaredAssociations(MixedIn.INCLUDED)
-                        .filter(MixedInMember.class::isInstance)));
-    }
-
-    /**
-     * Synthesizes navigation actions for <i>all</i> parented collections (own and mixed-in), once per spec.
+     * Synthesizes the synthetic navigation ("selector") actions for <i>all</i> parented collections (own and
+     * mixed-in) and scalar references, once per spec.
      * <p>
-     * Invoked by {@code SynthesizeNavigationActionsPostProcessor} when the
-     * {@code POST_PROCESS} navigation-action-synthesis strategy is selected; a no-op under the
-     * (default) inline strategy, which synthesizes actions during introspection instead.
+     * Invoked once per type by {@code SynthesizeNavigationActionsPostProcessor} during the post-processing
+     * phase (so element types are already introspected and synthesis cannot recurse via the lazy
+     * action-streaming path).  A no-op unless command-log recording-support is enabled.
      */
     public void synthesizeNavigationActions() {
-        if (!isRecordingSupportEnabled()
-                || !isNavigationActionPostProcessing()) {
+        if (!isRecordingSupportEnabled()) {
             return;
         }
+        // one-shot: synthesize at most once per spec.
         navigationActionAdder.trigger(() -> addNavigationActions(
                 streamAssociations(MixedIn.INCLUDED)));
     }
@@ -1063,14 +1037,6 @@ public abstract class ObjectSpecificationAbstract
     }
 
     protected boolean isRecordingSupportEnabled() {
-        return false;
-    }
-
-    /**
-     * Whether navigation-action synthesis is deferred to the post-processing phase (the {@code POST_PROCESS}
-     * strategy) rather than performed inline during introspection.  Defaults to {@code false} (inline).
-     */
-    protected boolean isNavigationActionPostProcessing() {
         return false;
     }
 
