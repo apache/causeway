@@ -22,7 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Domain module for the navigation-action-synthesis integration tests: a small set of view models with
+ * Domain module for the navigation-action synthesis integration test: a small set of view models with
  * parented collections, including two that reference each other via mixed-in collections (a cycle).
  */
 @Configuration

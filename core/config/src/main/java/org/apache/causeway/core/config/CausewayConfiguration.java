@@ -4011,44 +4011,6 @@ public class CausewayConfiguration {
                 }
             }
 
-            /**
-             * How the synthetic navigation ("selector") actions for parented collections and scalar references
-             * are synthesized into the metamodel, when {@link #getRecordingSupport() recording-support} is enabled.
-             *
-             * <p>
-             *     External property: {@code causeway.extensions.command-log.navigation-action-synthesis}.
-             *     Accepted values are {@code INLINE} and {@code POST_PROCESS}.
-             * </p>
-             */
-            private NavigationActionSynthesis navigationActionSynthesis = NavigationActionSynthesis.INLINE;
-
-            public enum NavigationActionSynthesis {
-                /**
-                 * Synthesize navigation actions inline during introspection: eagerly for a type's own
-                 * parented collections, and lazily (on first access) for those contributed by mixins.
-                 *
-                 * <p>
-                 *     This is the original strategy.  It is guarded against re-entrancy, but still forces full
-                 *     introspection of collection element types from the lazy action-streaming path, so a cyclic
-                 *     collection graph results in deep (if now bounded) recursion during metamodel loading.
-                 * </p>
-                 */
-                INLINE,
-                /**
-                 * Synthesize navigation actions in a dedicated metamodel post-processor, once per type,
-                 * covering both own and mixed-in parented collections.
-                 *
-                 * <p>
-                 *     This keeps navigation-action synthesis out of the lazy {@code streamDeclaredActions} path,
-                 *     so it no longer forces re-entrant element-type introspection during ordinary action access.
-                 * </p>
-                 */
-                POST_PROCESS;
-
-                public boolean isInline() { return this == INLINE; }
-                public boolean isPostProcess() { return this == POST_PROCESS; }
-            }
-
             private final ReplayResultMapping replayResultMapping = new ReplayResultMapping();
             @Data
             public static class ReplayResultMapping {

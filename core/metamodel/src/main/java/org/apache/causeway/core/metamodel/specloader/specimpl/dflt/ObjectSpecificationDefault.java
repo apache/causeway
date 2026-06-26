@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -87,7 +86,6 @@ public class ObjectSpecificationDefault
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
     private final boolean recordingSupportEnabled;
-    private final boolean navigationActionPostProcessing;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -125,8 +123,6 @@ public class ObjectSpecificationDefault
         this.columnHelper = new _MembersAsColumns(mmc);
         this.recordingSupportEnabled = mmc.getConfiguration().getExtensions().getCommandLog()
                 .getRecordingSupport().isEnabled();
-        this.navigationActionPostProcessing = mmc.getConfiguration().getExtensions().getCommandLog()
-                .getNavigationActionSynthesis().isPostProcess();
     }
 
     @Override
@@ -191,36 +187,17 @@ public class ObjectSpecificationDefault
         val associations = createAssociations().collect(Can.toCan());
         replaceAssociations(associations.stream());
         val actions = createActions().collect(Can.toCan());
-        if (recordingSupportEnabled && !navigationActionPostProcessing) {
-            // inline strategy: synthesize navigation actions for own collections eagerly here;
-            // mixed-in collections are handled lazily by ensureNavigationActionsForMixedInAssociations().
-            // (POST_PROCESS strategy defers all synthesis to SynthesizeNavigationActionsPostProcessor.)
-            val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
-                    .createFor(this, associations.stream())
-                    .collect(Can.toCan());
-            val existingActionIds = Stream.concat(actions.stream(), parentedCollectionNavigationActions.stream())
-                    .map(ObjectAction::getId)
-                    .collect(Collectors.toSet());
-            replaceActions(Stream.concat(
-                    Stream.concat(
-                            actions.stream(),
-                            parentedCollectionNavigationActions.stream()),
-                    ScalarReferenceNavigationActionUtil.createFor(this, associations.stream(), existingActionIds)));
-        } else {
-            replaceActions(actions.stream());
-        }
+        replaceActions(actions.stream());
 
+        // note: synthetic navigation ("selector") actions for parented collections / scalar references
+        // (when command-log recording-support is enabled) are added once per type during post-processing,
+        // by SynthesizeNavigationActionsPostProcessor.
         postProcess();
     }
 
     @Override
     protected boolean isRecordingSupportEnabled() {
         return recordingSupportEnabled;
-    }
-
-    @Override
-    protected boolean isNavigationActionPostProcessing() {
-        return navigationActionPostProcessing;
     }
 
     private void addNamedFacetIfRequired() {
