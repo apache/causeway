@@ -62,7 +62,7 @@ import lombok.Setter;
 import lombok.val;
 
 class CollectionAnnotationFacetFactoryTest
-extends FacetFactoryTestAbstract {
+        extends FacetFactoryTestAbstract {
 
     CollectionAnnotationFacetFactory facetFactory;
 
@@ -106,8 +106,15 @@ extends FacetFactoryTestAbstract {
         private void assertHasCollectionDomainEventFacet(
                 final FacetedMethod facetedMethod,
                 final EventTypeOrigin eventTypeOrigin,
-                final Class<? extends CollectionDomainEvent<?,?>> eventType) {
-            val domainEventFacet = facetedMethod.lookupFacet(CollectionDomainEventFacet.class).orElseThrow();
+                final Class<? extends CollectionDomainEvent<?, ?>> eventType) {
+            assertHasCollectionDomainEventFacet(facetedMethod.getFacetHolder(), eventTypeOrigin, eventType);
+        }
+
+        private void assertHasCollectionDomainEventFacet(
+                final FacetHolder facetHolder,
+                final EventTypeOrigin eventTypeOrigin,
+                final Class<? extends CollectionDomainEvent<?, ?>> eventType) {
+            val domainEventFacet = facetHolder.lookupFacet(CollectionDomainEventFacet.class).orElseThrow();
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
         }
@@ -119,11 +126,13 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                @Getter @Setter private List<Order> orders;
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
 
                 // when
@@ -142,13 +151,17 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
+                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {
+                }
+
                 @Collection(domainEvent = OrdersShowingDomainEvent.class)
-                @Getter @Setter private List<Order> orders;
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
 
                 // when
@@ -168,13 +181,17 @@ extends FacetFactoryTestAbstract {
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent.class)
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
+                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {
+                }
+
                 @Collection
-                @Getter @Setter private List<Order> orders;
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
 
                 // when
@@ -194,14 +211,20 @@ extends FacetFactoryTestAbstract {
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
-                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}
+                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {
+                }
+
+                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {
+                }
+
                 @Collection(domainEvent = OrdersShowingDomainEvent2.class)
-                @Getter @Setter private List<Order> orders;
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
 
                 // when
@@ -221,29 +244,36 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
-                @Getter @Setter private List<Order> orders;
+                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {
+                }
+
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
-            @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll")
+            @DomainObject(nature = Nature.MIXIN, mixinMethod = "coll")
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_orders {
                 final Customer mixee;
+
                 @Collection(domainEvent = Customer.OrdersShowingDomainEvent.class)
-                public List<Order> coll() { return Collections.emptyList(); }
+                public List<Order> coll() {
+                    return Collections.emptyList();
+                }
             }
 
             collectionScenarioMixedIn(Customer.class, Customer_orders.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then
-                assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent.class);
-            });
+                        // then
+                        assertHasCollectionDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent.class);
+                    });
         }
 
         @Test
@@ -254,29 +284,36 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
-                @Getter @Setter private List<Order> orders;
+                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {
+                }
+
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
             @Collection(domainEvent = Customer.OrdersShowingDomainEvent.class)
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_orders {
                 final Customer mixee;
+
                 @MemberSupport
-                public List<Order> coll() { return Collections.emptyList(); }
+                public List<Order> coll() {
+                    return Collections.emptyList();
+                }
             }
 
             collectionScenarioMixedIn(Customer.class, Customer_orders.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then
-                assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent.class);
-            });
+                        // then
+                        assertHasCollectionDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent.class);
+                    });
         }
 
         @Test
@@ -288,29 +325,38 @@ extends FacetFactoryTestAbstract {
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent.class)
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
-                @Getter @Setter private List<Order> orders;
+                class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {
+                }
+
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
             @Collection
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_orders {
                 final Customer mixee;
+
                 @MemberSupport
-                public List<Order> coll() { return Collections.emptyList(); }
+                public List<Order> coll() {
+                    return Collections.emptyList();
+                }
             }
 
             collectionScenarioMixedIn(Customer.class, Customer_orders.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then
-                assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_OBJECT, Customer.OrdersShowingDomainEvent.class);
-            });
+                        // then
+                        assertHasCollectionDomainEventFacet(mixedInColl.getFacetHolder(),
+                                EventTypeOrigin.ANNOTATED_OBJECT, Customer.OrdersShowingDomainEvent.class);
+                        assertHasCollectionDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.DEFAULT, CollectionDomainEvent.Default.class);
+                    });
         }
 
         @Test
@@ -322,30 +368,39 @@ extends FacetFactoryTestAbstract {
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
-                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}
-                @Getter @Setter private List<Order> orders;
+                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {
+                }
+
+                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {
+                }
+
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
             @Collection(domainEvent = Customer.OrdersShowingDomainEvent2.class)
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_orders {
                 final Customer mixee;
+
                 @MemberSupport
-                public List<Order> coll() { return Collections.emptyList(); }
+                public List<Order> coll() {
+                    return Collections.emptyList();
+                }
             }
 
             collectionScenarioMixedIn(Customer.class, Customer_orders.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then - the mixed-in annotation should win
-                assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent2.class);
-            });
+                        // then - the mixed-in annotation should win
+                        assertHasCollectionDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent2.class);
+                    });
         }
 
         @Test
@@ -357,30 +412,39 @@ extends FacetFactoryTestAbstract {
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
             @SuppressWarnings("unused")
             class Customer {
-                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
-                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}
-                @Getter @Setter private List<Order> orders;
+                class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {
+                }
+
+                class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {
+                }
+
+                @Getter
+                @Setter
+                private List<Order> orders;
             }
-            @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll")
+            @DomainObject(nature = Nature.MIXIN, mixinMethod = "coll")
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_orders {
                 final Customer mixee;
+
                 @Collection(domainEvent = Customer.OrdersShowingDomainEvent2.class)
-                public List<Order> coll() { return Collections.emptyList(); }
+                public List<Order> coll() {
+                    return Collections.emptyList();
+                }
             }
 
             collectionScenarioMixedIn(Customer.class, Customer_orders.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInColl) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then - the mixed-in annotation should win
-                assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent2.class);
-            });
+                        // then - the mixed-in annotation should win
+                        assertHasCollectionDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.OrdersShowingDomainEvent2.class);
+                    });
         }
 
 
@@ -397,12 +461,16 @@ extends FacetFactoryTestAbstract {
             @SuppressWarnings("unused")
             class Customer {
                 @Collection(typeOf = Order.class)
-                public List<Order> getOrders() { return null; }
-                public void setOrders(final List<Order> orders) {}
+                public List<Order> getOrders() {
+                    return null;
+                }
+
+                public void setOrders(final List<Order> orders) {
+                }
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processTypeOf(facetFactory, processMethodContext);
                 // then
@@ -420,12 +488,16 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                public Order[] getOrders() { return null; }
-                public void setOrders(final Order[] orders) {}
+                public Order[] getOrders() {
+                    return null;
+                }
+
+                public void setOrders(final Order[] orders) {
+                }
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 
@@ -445,12 +517,16 @@ extends FacetFactoryTestAbstract {
             }
             @SuppressWarnings("unused")
             class Customer {
-                public java.util.Collection<Order> getOrders() { return null; }
-                public void setOrders(final java.util.Collection<Order> orders) {}
+                public java.util.Collection<Order> getOrders() {
+                    return null;
+                }
+
+                public void setOrders(final java.util.Collection<Order> orders) {
+                }
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 

@@ -36,6 +36,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
@@ -64,6 +65,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
@@ -91,6 +93,15 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class Lease {
+        @Getter
+        private final List<LeaseItem> items = new ArrayList<>();
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL, actionDomainEvent = LeaseWithActionDomainEvent.LeaseActionDomainEvent.class)
+    static class LeaseWithActionDomainEvent {
+        static class LeaseActionDomainEvent extends ActionDomainEvent<LeaseWithActionDomainEvent> {
+        }
+
         @Getter
         private final List<LeaseItem> items = new ArrayList<>();
     }
@@ -307,6 +318,17 @@ class ParentedCollectionNavigationActionUtilTest {
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
         assertThat(navigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+    }
+
+    @Test
+    void synthesized_navigation_action_does_not_expose_owner_action_domain_event_default() {
+        val annotatedLeaseSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(LeaseWithActionDomainEvent.class));
+        val annotatedNavigationAction = annotatedLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+
+        assertThat(annotatedNavigationAction.getFacet(ActionDomainEventFacet.class), is((ActionDomainEventFacet) null));
+        assertThat(annotatedNavigationAction.getSemantics(), is(SemanticsOf.SAFE));
+        assertThat(annotatedNavigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
 
     @Test
@@ -905,20 +927,20 @@ class ParentedCollectionNavigationActionUtilTest {
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
         switch (parameterId) {
-        case "name":
-            return name;
-        case "sequence":
-            return sequence;
-        case "checkbox":
-            return checkbox;
-        case "boundedReference":
-            return boundedReference;
-        case "choicesReference":
-            return choicesReference;
-        case "autocompleteReference":
-            return autocompleteReference;
-        default:
-            return null;
+            case "name":
+                return name;
+            case "sequence":
+                return sequence;
+            case "checkbox":
+                return checkbox;
+            case "boundedReference":
+                return boundedReference;
+            case "choicesReference":
+                return choicesReference;
+            case "autocompleteReference":
+                return autocompleteReference;
+            default:
+                return null;
         }
     }
 

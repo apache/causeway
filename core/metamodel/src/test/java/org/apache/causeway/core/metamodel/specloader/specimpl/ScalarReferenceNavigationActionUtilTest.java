@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
 import org.hamcrest.MatcherAssert;
@@ -41,6 +42,7 @@ import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandL
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForScalarReferenceNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionNavigation;
@@ -78,6 +80,18 @@ class ScalarReferenceNavigationActionUtilTest {
 
     @DomainObject(nature = Nature.ENTITY)
     static class EntityReferenceOwner {
+        private ReferencedObject reference;
+
+        public ReferencedObject getReference() {
+            return reference;
+        }
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL, actionDomainEvent = ReferenceOwnerWithActionDomainEvent.ReferenceActionDomainEvent.class)
+    static class ReferenceOwnerWithActionDomainEvent {
+        static class ReferenceActionDomainEvent extends ActionDomainEvent<ReferenceOwnerWithActionDomainEvent> {
+        }
+
         private ReferencedObject reference;
 
         public ReferencedObject getReference() {
@@ -143,6 +157,17 @@ class ScalarReferenceNavigationActionUtilTest {
         val suppressedSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(SuppressedReferenceOwner.class));
 
         assertThat(suppressedSpec.getAction(ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").isPresent(), is(false));
+    }
+
+    @Test
+    void synthesized_reference_navigation_action_does_not_expose_owner_action_domain_event_default() {
+        val annotatedOwnerSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(ReferenceOwnerWithActionDomainEvent.class));
+        val annotatedNavigationAction = annotatedOwnerSpec.getAction(
+                ObjectSpecificationAbstract.ScalarReferenceNavigationActionUtil.ACTION_ID_PREFIX + "reference").orElseThrow();
+
+        assertThat(annotatedNavigationAction.getFacet(ActionDomainEventFacet.class), is((ActionDomainEventFacet) null));
+        assertThat(annotatedNavigationAction.getSemantics(), is(SemanticsOf.SAFE));
+        assertThat(annotatedNavigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
     }
 
     @Test
