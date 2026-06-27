@@ -30,6 +30,7 @@ import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -38,6 +39,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -47,8 +49,8 @@ import java.util.Optional;
 
 @Log4j2
 public class ObjectActionMixedIn
-extends ObjectActionDefault
-implements MixedInMember {
+        extends ObjectActionDefault
+        implements MixedInMember {
 
     // -- FACTORIES
 
@@ -96,11 +98,11 @@ implements MixedInMember {
             final ObjectSpecification mixeeSpec) {
 
         super(Identifier.actionIdentifier(
-                    LogicalType.eager(
-                            mixeeSpec.getCorrespondingClass(),
-                            mixeeSpec.logicalTypeName()),
-                    _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
-                    mixinAction.getFacetedMethod().getFeatureIdentifier().memberParameterClassNames()),
+                        LogicalType.eager(
+                                mixeeSpec.getCorrespondingClass(),
+                                mixeeSpec.logicalTypeName()),
+                        _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
+                        mixinAction.getFacetedMethod().getFeatureIdentifier().memberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false, false);
 
         this.facetHolder = FacetHolder.layered(
@@ -115,7 +117,7 @@ implements MixedInMember {
         val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
-        if(!isExplicitlyNamed) {
+        if (!isExplicitlyNamed) {
             val memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
             this.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
@@ -177,10 +179,10 @@ implements MixedInMember {
         _Assert.assertEquals(target.objSpec(), head.getTarget().objSpec(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
-        if(!interactionInitiatedBy.isPassThrough()) {
+        if (!interactionInitiatedBy.isPassThrough()) {
             setupCommand(head, argumentAdapters);
 
-            if(log.isInfoEnabled()) {
+            if (log.isInfoEnabled()) {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
@@ -192,9 +194,16 @@ implements MixedInMember {
             }
         }
 
-        return mixinAction.executeInternal(
+        return hasLocalActionInvocationFacet()
+                ? this.executeInternal(head, argumentAdapters, interactionInitiatedBy)
+                : mixinAction.executeInternal(
                 head, argumentAdapters,
                 interactionInitiatedBy);
+    }
+
+    private boolean hasLocalActionInvocationFacet() {
+        return this.getFacet(ActionInvocationFacet.class)
+                != mixinAction.getFacet(ActionInvocationFacet.class);
     }
 
 
@@ -203,7 +212,7 @@ implements MixedInMember {
         return getSpecificationLoader().loadSpecification(mixinType);
     }
 
-    @Getter(lazy=true, onMethod_ = {@Override})
+    @Getter(lazy = true, onMethod_ = {@Override})
     private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     // -- HELPER

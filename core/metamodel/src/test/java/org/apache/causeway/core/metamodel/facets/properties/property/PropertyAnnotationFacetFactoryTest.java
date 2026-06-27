@@ -198,12 +198,10 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         private void assertHasPropertyDomainEventFacet(
                 final FacetedMethod facetedMethod,
                 final EventTypeOrigin eventTypeOrigin,
-                final Class<? extends PropertyDomainEvent<?,?>> eventType) {
-            val domainEventFacet = facetedMethod.lookupFacet(PropertyDomainEventFacet.class).orElseThrow();
-            assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
-            assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
+                final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
+            assertHasPropertyDomainEventFacet(facetedMethod.getFacetHolder(), eventTypeOrigin, eventType);
 
-            if(facetedMethod.getMethod().getName().equals("prop")) {
+            if (facetedMethod.getMethod().getName().equals("prop")) {
                 return; // skip further checks, when in a mixed-in scenario
             }
 
@@ -224,15 +222,26 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
         }
 
+        private void assertHasPropertyDomainEventFacet(
+                final FacetHolder facetHolder,
+                final EventTypeOrigin eventTypeOrigin,
+                final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
+            val domainEventFacet = facetHolder.lookupFacet(PropertyDomainEventFacet.class).orElseThrow();
+            assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
+            assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
+        }
+
         @Test
         void withPropertyDomainEvent_fallingBackToDefault() {
 
             class Customer {
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
                 addClearFacet(facetedMethod);
@@ -250,13 +259,17 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         void withPropertyDomainEvent_annotatedOnMethod() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
+                }
+
                 @Property(domainEvent = NamedChangedDomainEvent.class)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
                 addClearFacet(facetedMethod);
@@ -275,13 +288,17 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent.class)
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
+                }
+
                 @Property
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
                 addClearFacet(facetedMethod);
@@ -300,14 +317,20 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
             class Customer {
-                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
-                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {
+                }
+
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {
+                }
+
                 @Property(domainEvent = NamedChangedDomainEvent2.class)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
                 addClearFacet(facetedMethod);
@@ -327,29 +350,33 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             // given
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
+                }
             }
-            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
+            @DomainObject(nature = Nature.MIXIN, mixinMethod = "prop")
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
+
                 @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
-                public String prop() { return "mixed-in name"; }
+                public String prop() {
+                    return "mixed-in name";
+                }
             }
 
             propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
+                        // then
+                        assertHasPropertyDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
 
-            });
+                    });
         }
 
         @Test
@@ -358,29 +385,33 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             // given
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
+                }
             }
             @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
+
                 @MemberSupport
-                public String prop() { return "mixed-in name"; }
+                public String prop() {
+                    return "mixed-in name";
+                }
             }
 
             propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
+                        // then
+                        assertHasPropertyDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
 
-            });
+                    });
         }
 
         @Test
@@ -390,29 +421,35 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent.class)
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
+                }
             }
             @Property
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
+
                 @MemberSupport
-                public String prop() { return "mixed-in name"; }
+                public String prop() {
+                    return "mixed-in name";
+                }
             }
 
             propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_OBJECT, Customer.NamedChangedDomainEvent.class);
+                        // then
+                        assertHasPropertyDomainEventFacet(mixedInProp.getFacetHolder(),
+                                EventTypeOrigin.ANNOTATED_OBJECT, Customer.NamedChangedDomainEvent.class);
+                        assertHasPropertyDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.DEFAULT, PropertyDomainEvent.Default.class);
 
-            });
+                    });
         }
 
         @Test
@@ -422,30 +459,36 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
             class Customer {
-                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
-                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {
+                }
+
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {
+                }
             }
             @Property(domainEvent = Customer.NamedChangedDomainEvent2.class)
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
+
                 @MemberSupport
-                public String prop() { return "mixed-in name"; }
+                public String prop() {
+                    return "mixed-in name";
+                }
             }
 
             propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
-                // then - the mixed-in annotation should win
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
+                        // then - the mixed-in annotation should win
+                        assertHasPropertyDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
 
-            });
+                    });
         }
 
         @Test
@@ -455,30 +498,36 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
             class Customer {
-                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
-                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {
+                }
+
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {
+                }
             }
-            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
+            @DomainObject(nature = Nature.MIXIN, mixinMethod = "prop")
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
+
                 @Property(domainEvent = Customer.NamedChangedDomainEvent2.class)
-                public String prop() { return "mixed-in name"; }
+                public String prop() {
+                    return "mixed-in name";
+                }
             }
 
             propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp) -> {
 
-                // when
-                processDomainEvent(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+                        // when
+                        processDomainEvent(facetFactory, processMethodContext);
+                        postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
-                // then - the mixed-in annotation should win
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
+                        // then - the mixed-in annotation should win
+                        assertHasPropertyDomainEventFacet(facetedMethod,
+                                EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
 
-            });
+                    });
         }
 
     }
@@ -493,8 +542,12 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the name property")
-                public String getName() { return null; }
-                public void setName(final String name) {}
+                public String getName() {
+                    return null;
+                }
+
+                public void setName(final String name) {
+                }
             }
 
             assertDisabledFacetOn(Customer.class, "name",
@@ -508,7 +561,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the name property")
-                @Getter @Setter
+                @Getter
+                @Setter
                 private String name;
             }
 
@@ -524,9 +578,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the subscribed property"
-                        )
-                public boolean isSubscribed() { return true; }
-                public void setSubscribed(final boolean b) {}
+                )
+                public boolean isSubscribed() {
+                    return true;
+                }
+
+                public void setSubscribed(final boolean b) {
+                }
             }
 
             assertDisabledFacetOn(Customer.class, "subscribed",
@@ -540,8 +598,9 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the subscribed property"
-                        )
-                @Getter @Setter
+                )
+                @Getter
+                @Setter
                 private boolean subscribed;
             }
 
@@ -556,6 +615,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                     editingDisabledReason = "a")
             boolean isReadWriteProperty();
+
             void setReadWriteProperty(boolean c);
         }
 
@@ -563,7 +623,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             @Property(
                     editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
                     editingDisabledReason = "b")
-            @Getter @Setter
+            @Getter
+            @Setter
             private boolean readWriteProperty;
         }
 
@@ -577,7 +638,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         private void assertDisabledFacetOn(final Class<?> declaringClass, final String propertyName, final String expectedDisabledReason) {
 
             // given
-            propertyScenario(declaringClass, propertyName, (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(declaringClass, propertyName, (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processEditing(facetFactory, processMethodContext);
                 // then
@@ -600,11 +661,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(maxLength = 30)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processMaxLength(facetFactory, processMethodContext);
 
@@ -641,12 +704,14 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             class Customer {
                 @Property(
                         mustSatisfy = {NotTooHot.class, NotTooCold.class}
-                        )
-                @Getter @Setter private String name;
+                )
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processMustSatisfy(facetFactory, processMethodContext);
 
@@ -672,12 +737,14 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         void recordingSupportEnablesUnannotatedProperty() {
 
             class Customer {
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 processCommandPublishing(facetFactory, processMethodContext);
 
                 assertTrue(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
@@ -689,12 +756,14 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(commandPublishing = Publishing.DISABLED)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
 
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 processCommandPublishing(facetFactory, processMethodContext);
 
                 assertTrue(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
@@ -705,12 +774,14 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         void recordingSupportDisabledPreservesUnannotatedPropertyDefault() {
 
             class Customer {
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
 
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 processCommandPublishing(facetFactory, processMethodContext);
 
                 assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
@@ -726,11 +797,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(entityChangePublishing = Publishing.DISABLED)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
@@ -746,11 +819,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
@@ -769,11 +844,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(snapshot = Snapshot.EXCLUDED)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processSnapshot(facetFactory, processMethodContext);
                 // then
@@ -792,11 +869,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(optionality = Optionality.OPTIONAL)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
@@ -811,11 +890,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(optionality = Optionality.MANDATORY)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
@@ -830,11 +911,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(optionality = Optionality.DEFAULT)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
@@ -848,11 +931,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property()
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
@@ -873,11 +958,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 @Property(
                         regexPattern = "[123].*",
                         regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE)
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processRegEx(facetFactory, processMethodContext);
                 // then
@@ -894,11 +981,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property()
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processRegEx(facetFactory, processMethodContext);
                 // then
@@ -912,11 +1001,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(regexPattern = "")
-                @Getter @Setter private String name;
+                @Getter
+                @Setter
+                private String name;
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processRegEx(facetFactory, processMethodContext);
 
@@ -931,12 +1022,17 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
             class Customer {
                 @Property(regexPattern = "[abc].*")
-                public int getName() {return 0; }
-                @SuppressWarnings("unused") public void setName(final int name) { }
+                public int getName() {
+                    return 0;
+                }
+
+                @SuppressWarnings("unused")
+                public void setName(final int name) {
+                }
             }
 
             // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
                 // when
                 processRegEx(facetFactory, processMethodContext);
 

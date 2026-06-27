@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -37,6 +38,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
@@ -44,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 class ActionAnnotationFacetFactoryTest_domainEvent
-extends ActionAnnotationFacetFactoryTest {
+        extends ActionAnnotationFacetFactoryTest {
 
     private void processDomainEvent(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -56,13 +58,21 @@ extends ActionAnnotationFacetFactoryTest {
             final FacetedMethod facetedMethod,
             final EventTypeOrigin eventTypeOrigin,
             final Class<? extends ActionDomainEvent<?>> eventType) {
+        assertHasActionDomainEventFacet(facetedMethod.getFacetHolder(), eventTypeOrigin, eventType);
+    }
 
-        val domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+    private void assertHasActionDomainEventFacet(
+            final FacetHolder facetHolder,
+            final EventTypeOrigin eventTypeOrigin,
+            final Class<? extends ActionDomainEvent<?>> eventType) {
+
+        val domainEventFacet = facetHolder.getFacet(ActionDomainEventFacet.class);
         assertNotNull(domainEventFacet);
         assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
+        assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
         assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
 
-        val invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+        val invocationFacet = facetHolder.getFacet(ActionInvocationFacet.class);
         assertNotNull(invocationFacet);
         assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
         val invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
@@ -75,11 +85,12 @@ extends ActionAnnotationFacetFactoryTest {
 
         @SuppressWarnings("unused")
         class Customer {
-            public void someAction() {}
+            public void someAction() {
+            }
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             processDomainEvent(facetFactory, processMethodContext);
 
@@ -96,13 +107,16 @@ extends ActionAnnotationFacetFactoryTest {
     @Test
     void withActionDomainEvent_annotatedOnMethod() {
         class Customer {
-            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {
+            }
+
             @Action(domainEvent = SomeActionDomainEvent.class)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             processDomainEvent(facetFactory, processMethodContext);
 
@@ -120,13 +134,16 @@ extends ActionAnnotationFacetFactoryTest {
 
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent.class)
         class Customer {
-            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {
+            }
+
             @Action
-            public void someAction() {}
+            public void someAction() {
+            }
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             processDomainEvent(facetFactory, processMethodContext);
 
@@ -144,14 +161,19 @@ extends ActionAnnotationFacetFactoryTest {
 
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent1.class)
         class Customer {
-            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {}
-            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {
+            }
+
+            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {
+            }
+
             @Action(domainEvent = SomeActionDomainEvent2.class)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             processDomainEvent(facetFactory, processMethodContext);
 
@@ -170,29 +192,32 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {
+            }
         }
-        @DomainObject(nature=Nature.MIXIN, mixinMethod = "act")
+        @DomainObject(nature = Nature.MIXIN, mixinMethod = "act")
         @RequiredArgsConstructor
         @SuppressWarnings("unused")
         class Customer_someAction {
             final Customer mixee;
+
             @Action(domainEvent = Customer.SomeActionDomainEvent.class)
-            public void act() { }
+            public void act() {
+            }
         }
 
         actionScenarioMixedIn(Customer.class, Customer_someAction.class,
-                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct)->{
+                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct) -> {
 
-            // when
-            processDomainEvent(facetFactory, processMethodContext);
-            postProcessor.postProcessAction(mixeeSpec, mixedInAct);
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
-                    EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent.class);
+                    // then
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent.class);
 
-        });
+                });
     }
 
     @Test
@@ -201,61 +226,115 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {
+            }
         }
         @Action(domainEvent = Customer.SomeActionDomainEvent.class)
         @RequiredArgsConstructor
         @SuppressWarnings("unused")
         class Customer_someAction {
             final Customer mixee;
+
             @MemberSupport
-            public void act() { }
+            public void act() {
+            }
         }
 
         actionScenarioMixedIn(Customer.class, Customer_someAction.class,
-                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct)->{
+                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct) -> {
 
-            // when
-            processDomainEvent(facetFactory, processMethodContext);
-            postProcessor.postProcessAction(mixeeSpec, mixedInAct);
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
-                    EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent.class);
+                    // then
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent.class);
 
-        });
+                });
     }
 
-    @Test //TODO[CAUSEWAY-3409]
+    @Test
+        //TODO[CAUSEWAY-3409]
     void withActionDomainEvent_mixedIn_annotatedOnMixeeType() {
         val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent.class)
         class Customer {
-            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent extends ActionDomainEvent<Customer> {
+            }
         }
         @Action
         @RequiredArgsConstructor
         @SuppressWarnings("unused")
         class Customer_someAction {
             final Customer mixee;
+
             @MemberSupport
-            public void act() { }
+            public void act() {
+            }
         }
 
         actionScenarioMixedIn(Customer.class, Customer_someAction.class,
-                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct)->{
+                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct) -> {
 
-            // when
-            processDomainEvent(facetFactory, processMethodContext);
-            postProcessor.postProcessAction(mixeeSpec, mixedInAct);
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
-                    EventTypeOrigin.ANNOTATED_OBJECT, Customer.SomeActionDomainEvent.class);
+                    // then
+                    assertHasActionDomainEventFacet(mixedInAct.getFacetHolder(),
+                            EventTypeOrigin.ANNOTATED_OBJECT, Customer.SomeActionDomainEvent.class);
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.DEFAULT, ActionDomainEvent.Default.class);
 
-        });
+                });
+    }
+
+    @Test
+    void withActionDomainEvent_mixedIn_annotatedOnOneMixeeType_doesNotPolluteAnotherMixee() {
+        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+        // given
+        @DomainObject(actionDomainEvent = AnnotatedCustomer.SomeActionDomainEvent.class)
+        class AnnotatedCustomer {
+            class SomeActionDomainEvent extends ActionDomainEvent<AnnotatedCustomer> {
+            }
+        }
+        class PlainCustomer {
+        }
+        @Action
+        @RequiredArgsConstructor
+        @SuppressWarnings("unused")
+        class Object_recentChanges {
+            final Object mixee;
+
+            @MemberSupport
+            public void act() {
+            }
+        }
+
+        actionScenarioMixedIn(AnnotatedCustomer.class, Object_recentChanges.class,
+                (processMethodContext, annotatedSpec, facetedMethod, annotatedMixedInAct) -> {
+
+                    val plainSpec = getSpecificationLoader().loadSpecification(PlainCustomer.class);
+                    val plainMixedInAct = ObjectActionMixedIn.forTesting.forMixinMain(
+                            plainSpec, Object_recentChanges.class, "act", facetedMethod);
+
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(annotatedSpec, annotatedMixedInAct);
+                    postProcessor.postProcessAction(plainSpec, plainMixedInAct);
+
+                    // then
+                    assertHasActionDomainEventFacet(annotatedMixedInAct.getFacetHolder(),
+                            EventTypeOrigin.ANNOTATED_OBJECT, AnnotatedCustomer.SomeActionDomainEvent.class);
+                    assertHasActionDomainEventFacet(plainMixedInAct.getFacetHolder(),
+                            EventTypeOrigin.DEFAULT, ActionDomainEvent.Default.class);
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.DEFAULT, ActionDomainEvent.Default.class);
+                });
     }
 
     @Test
@@ -265,30 +344,35 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent1.class)
         class Customer {
-            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {}
-            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {
+            }
+
+            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {
+            }
         }
         @Action(domainEvent = Customer.SomeActionDomainEvent2.class)
         @RequiredArgsConstructor
         @SuppressWarnings("unused")
         class Customer_someAction {
             final Customer mixee;
+
             @MemberSupport
-            public void act() { }
+            public void act() {
+            }
         }
 
         actionScenarioMixedIn(Customer.class, Customer_someAction.class,
-                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct)->{
+                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct) -> {
 
-            // when
-            processDomainEvent(facetFactory, processMethodContext);
-            postProcessor.postProcessAction(mixeeSpec, mixedInAct);
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
-                    EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent2.class);
+                    // then
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent2.class);
 
-        });
+                });
     }
 
     @Test
@@ -298,30 +382,35 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent1.class)
         class Customer {
-            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {}
-            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {}
+            class SomeActionDomainEvent1 extends ActionDomainEvent<Customer> {
+            }
+
+            class SomeActionDomainEvent2 extends ActionDomainEvent<Customer> {
+            }
         }
-        @DomainObject(nature=Nature.MIXIN, mixinMethod = "act")
+        @DomainObject(nature = Nature.MIXIN, mixinMethod = "act")
         @RequiredArgsConstructor
         @SuppressWarnings("unused")
         class Customer_someAction {
             final Customer mixee;
+
             @Action(domainEvent = Customer.SomeActionDomainEvent2.class)
-            public void act() { }
+            public void act() {
+            }
         }
 
         actionScenarioMixedIn(Customer.class, Customer_someAction.class,
-                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct)->{
+                (processMethodContext, mixeeSpec, facetedMethod, mixedInAct) -> {
 
-            // when
-            processDomainEvent(facetFactory, processMethodContext);
-            postProcessor.postProcessAction(mixeeSpec, mixedInAct);
+                    // when
+                    processDomainEvent(facetFactory, processMethodContext);
+                    postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
-                    EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent2.class);
+                    // then
+                    assertHasActionDomainEventFacet(facetedMethod,
+                            EventTypeOrigin.ANNOTATED_MEMBER, Customer.SomeActionDomainEvent2.class);
 
-        });
+                });
     }
 
 }

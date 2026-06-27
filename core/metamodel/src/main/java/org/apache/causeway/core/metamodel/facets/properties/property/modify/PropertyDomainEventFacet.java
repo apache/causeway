@@ -50,11 +50,11 @@ import lombok.NonNull;
 import lombok.val;
 
 public class PropertyDomainEventFacet
-extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
-implements
-    HidingInteractionAdvisor,
-    DisablingInteractionAdvisor,
-    ValidatingInteractionAdvisor {
+        extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
+        implements
+        HidingInteractionAdvisor,
+        DisablingInteractionAdvisor,
+        ValidatingInteractionAdvisor {
 
     // -- FACET TYPE
 
@@ -66,6 +66,7 @@ implements
 
     /**
      * Inspect {@link Property#domainEvent()} if present, else use the default event type.
+     *
      * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
      */
     public static PropertyDomainEventFacet create(
@@ -79,7 +80,7 @@ implements
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
                 .map(domainEvent -> new PropertyDomainEventFacet(domainEvent,
                         EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, facetHolder))
-                .orElseGet(()->{
+                .orElseGet(() -> {
 
                     /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
                     val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
@@ -87,14 +88,26 @@ implements
 
                     return typeFromDomainObject != null
                             ? new PropertyDomainEventFacet(
-                                    typeFromDomainObject.getEventType(),
-                                    EventTypeOrigin.ANNOTATED_OBJECT, getterFacet, facetHolder)
+                            typeFromDomainObject.getEventType(),
+                            EventTypeOrigin.ANNOTATED_OBJECT, getterFacet, facetHolder)
                             : new PropertyDomainEventFacet(
-                                    PropertyDomainEvent.Default.class,
-                                    EventTypeOrigin.DEFAULT, getterFacet, facetHolder);
+                            PropertyDomainEvent.Default.class,
+                            EventTypeOrigin.DEFAULT, getterFacet, facetHolder);
                 });
 
         return propertyDomainEventFacet;
+    }
+
+    public static Optional<PropertyDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        Optional.empty(),
+                        facetHolder));
     }
 
     // -- CONSTRUCTION
@@ -123,18 +136,34 @@ implements
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
+    private static class ObjectTypeSpecific extends PropertyDomainEventFacet {
+
+        protected ObjectTypeSpecific(
+                final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final Optional<PropertyOrCollectionAccessorFacet> getterFacet,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, getterFacet, holder);
+        }
+
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
-        if(!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
+        if (!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
         mixeeSpec
-        .lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
-        .ifPresent(facetOnMixee->
-                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
+                .lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .ifPresent(facetOnMixee ->
+                        super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
     }
 
     @Override
     public String hides(final VisibilityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if (!isPostable()) return null; // bale out
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -150,7 +179,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        if(!isPostable()) return Optional.empty(); // bale out
+        if (!isPostable()) return Optional.empty(); // bale out
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -167,21 +196,21 @@ implements
                     : event.getDisabledReason();
 
             return Optional.ofNullable(reasonString)
-                .map(VetoReason::explicit);
+                    .map(VetoReason::explicit);
         }
         return Optional.empty();
     }
 
     @Override
     public String invalidates(final ValidityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if (!isPostable()) return null; // bale out
 
-        if(getterFacetIfAny == null) {
+        if (getterFacetIfAny == null) {
             return null;
         }
 
         // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) {
+        if (!(ic instanceof ProposedHolder)) {
             return null;
         }
         final ProposedHolder ph = (ProposedHolder) ic;
@@ -198,7 +227,7 @@ implements
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
+            if (reasonTranslatable != null) {
                 return reasonTranslatable.translate(translationService, translationContext);
             }
             return event.getInvalidityReason();

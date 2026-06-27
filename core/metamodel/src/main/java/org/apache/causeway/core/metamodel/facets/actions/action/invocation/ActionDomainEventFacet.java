@@ -50,11 +50,11 @@ import lombok.NonNull;
 import lombok.val;
 
 public class ActionDomainEventFacet
-extends DomainEventFacetAbstract<ActionDomainEvent<?>>
-implements
-    HidingInteractionAdvisor,
-    DisablingInteractionAdvisor,
-    ValidatingInteractionAdvisor {
+        extends DomainEventFacetAbstract<ActionDomainEvent<?>>
+        implements
+        HidingInteractionAdvisor,
+        DisablingInteractionAdvisor,
+        ValidatingInteractionAdvisor {
 
     // -- FACET TYPE
 
@@ -71,28 +71,39 @@ implements
             final @NonNull Optional<Action> actionIfAny,
             /** only used to lookup {@link ActionDomainEventDefaultFacetForDomainObjectAnnotation} */
             final @NonNull ObjectSpecification typeSpec,
-            final @NonNull FacetHolder facetHolder){
+            final @NonNull FacetHolder facetHolder) {
 
         val actionDomainEventFacet =
                 actionIfAny
-                .map(Action::domainEvent)
-                .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
-                .map(domainEvent ->
-                        new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
-                .orElseGet(()->{
+                        .map(Action::domainEvent)
+                        .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
+                        .map(domainEvent ->
+                                new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
+                        .orElseGet(() -> {
 
-                    val typeFromDomainObject = typeSpec
-                            .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                            val typeFromDomainObject = typeSpec
+                                    .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
-                    return typeFromDomainObject != null
-                            ? new ActionDomainEventFacet(
+                            return typeFromDomainObject != null
+                                    ? new ActionDomainEventFacet(
                                     typeFromDomainObject.getEventType(),
                                     EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
-                            : new ActionDomainEventFacet(
+                                    : new ActionDomainEventFacet(
                                     ActionDomainEvent.Default.class,
                                     EventTypeOrigin.DEFAULT, facetHolder);
-                });
+                        });
         return actionDomainEventFacet;
+    }
+
+    public static Optional<ActionDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        facetHolder));
     }
 
     // -- CONSTRUCTION
@@ -114,18 +125,33 @@ implements
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
+    private static class ObjectTypeSpecific extends ActionDomainEventFacet {
+
+        protected ObjectTypeSpecific(
+                final Class<? extends ActionDomainEvent<?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, holder);
+        }
+
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
-        if(!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
+        if (!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
         mixeeSpec
-        .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
-        .ifPresent(facetOnMixee->
-                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
+                .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .ifPresent(facetOnMixee ->
+                        super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
     }
 
     @Override
     public String hides(final VisibilityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if (!isPostable()) return null; // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -146,7 +172,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        if(!isPostable()) return Optional.empty(); // bale out
+        if (!isPostable()) return Optional.empty(); // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -165,7 +191,7 @@ implements
                     ? reasonTranslatable.translate(translationService, translationContext)
                     : event.getDisabledReason();
 
-            if(reasonString!=null) {
+            if (reasonString != null) {
                 return VetoReason.explicit(reasonString).toOptional();
             }
         }
@@ -174,10 +200,10 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if (!isPostable()) return null; // bale out
 
-        _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
-            String.format("expecting an action context but got %s", ic.getIdentifier()));
+        _Assert.assertTrue(ic instanceof ActionValidityContext, () ->
+                String.format("expecting an action context but got %s", ic.getIdentifier()));
 
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
@@ -189,7 +215,7 @@ implements
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
+            if (reasonTranslatable != null) {
                 return reasonTranslatable.translate(translationService, translationContext);
             }
             return event.getInvalidityReason();
@@ -201,7 +227,7 @@ implements
     // -- HELPER
 
     private static ObjectAction actionFrom(final InteractionContext ic) {
-        if(!(ic instanceof ActionInteractionContext)) {
+        if (!(ic instanceof ActionInteractionContext)) {
             throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
