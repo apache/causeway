@@ -743,7 +743,8 @@ public abstract class CommandLogEntry
             setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK);
         } else {
             setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED);
-            setReplayStateFailureReason(_Strings.trimmed(analysis, 255));
+            setReplayStateFailureReason(_Strings.trimmed(analysis, ReplayStateFailureReason.MAX_LENGTH));
+            setException(analysis);
         }
 
     }

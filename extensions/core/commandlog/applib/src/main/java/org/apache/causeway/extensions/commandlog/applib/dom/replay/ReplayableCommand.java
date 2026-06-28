@@ -48,6 +48,9 @@ import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.services.wrapper.DisabledException;
+import org.apache.causeway.applib.services.wrapper.HiddenException;
+import org.apache.causeway.applib.services.wrapper.InvalidException;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -630,13 +633,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                             .valueAsNullableElseFail();
                     onReplaySuccess(actualResult);
                     return actualResult;
-                });
-
-        tryResultBookmark.ifFailure(ex -> replayContext.transactionService()
-                .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                })
+                .mapFailureToSuccess(ex -> {
                     onReplayError(ex);
                     return null;
-                }));
+                });
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
         invalidateCachedRecord();
@@ -672,7 +673,17 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
      */
     private void onReplayError(final Throwable ex) {
         commandLogEntry() // refetch from persistence
-                .ifPresent(entry -> entry.saveAnalysis(ex.toString()));
+                .ifPresent(entry -> {
+                    String prefix = "";
+                    if(ex instanceof HiddenException) {
+                        prefix = "Disabled: ";
+                    } else if(ex instanceof DisabledException) {
+                        prefix = "Disabled: ";
+                    } else if(ex instanceof InvalidException) {
+                        prefix = "Invalid: ";
+                    }
+                    entry.saveAnalysis(prefix + ex.getMessage());
+                });
     }
 
     /**
