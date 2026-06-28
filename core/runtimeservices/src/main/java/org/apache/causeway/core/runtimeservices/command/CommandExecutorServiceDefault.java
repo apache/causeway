@@ -227,29 +227,28 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             val argAdapters = argAdaptersFor(actionDto, objectAction);
 
             val interactionHead = objectAction.interactionHead(targetAdapter);
-            final var headTarget = interactionHead.getTarget(); // takes into account whether regular or mixin
 
             final var interactionAdvisorPolicy = getInteractionAdvisorPolicy();
             switch(interactionAdvisorPolicy) {
                 case CHECK:
-                    final var visibility = objectAction.isVisible(headTarget, interactionInitiatedBy, Where.ANYWHERE);
+                    final var visibility = objectAction.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
                     if(visibility.isVetoed()) {
-                        throw new HiddenException(new ActionVisibilityEvent(headTarget.getPojo(), objectAction.getFeatureIdentifier()));
+                        throw new HiddenException(new ActionVisibilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier()));
                     }
-                    final var usability = objectAction.isUsable(headTarget, interactionInitiatedBy, Where.ANYWHERE);
+                    final var usability = objectAction.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
                     if(usability.isVetoed()) {
-                        throw new DisabledException(new ActionUsabilityEvent(headTarget.getPojo(), objectAction.getFeatureIdentifier()));
+                        throw new DisabledException(new ActionUsabilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier()));
                     }
                     // this checks each arg individually, then all of them as a set.
                     final var argumentsValidity = objectAction.isArgumentSetValid(interactionHead, argAdapters, interactionInitiatedBy);
                     if(argumentsValidity.isVetoed()) {
                         // ActionInvocationEvent is somewhat odd as the underlying event, but it is what WrapperFactory does...
-                        throw new InvalidException(new ActionInvocationEvent(headTarget.getPojo(), objectAction.getFeatureIdentifier(), argAdapters.stream().map(ManagedObject::getPojo).toArray()));
+                        throw new InvalidException(new ActionInvocationEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier(), argAdapters.stream().map(ManagedObject::getPojo).toArray()));
                     }
                     break;
                 case CHECK_BUT_IGNORE:
-                    final var visibleIgnored = objectAction.isVisible(headTarget, interactionInitiatedBy, Where.ANYWHERE);
-                    final var usableIgnored = objectAction.isUsable(headTarget, interactionInitiatedBy, Where.ANYWHERE);
+                    final var visibleIgnored = objectAction.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    final var usableIgnored = objectAction.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
                     final var argumentSetValidIgnored = objectAction.isArgumentSetValid(interactionHead, argAdapters, interactionInitiatedBy);
                     break;
                 case NO_CHECK:
