@@ -28,16 +28,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
@@ -46,6 +50,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheControl;
@@ -125,6 +130,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
 
         final CommandDto commandDto;
         final ReplayState replayState;
+        final String replayStateFailureReason;
+        final Bookmark target;
 
         boolean canReplayOrRetry() {
             return replayState.isReplayOrRetryEnabled();
@@ -213,7 +220,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @Property
     @PropertyLayout(
             sequence = "1.1",
-            fieldSetId = "details",
+            fieldSetId = "identity",
             describedAs = "UUID of the original (replayable) Command")
     public UUID getInteractionId() {
         return interactionId;
@@ -222,7 +229,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @Property
     @PropertyLayout(
             sequence = "1.2",
-            fieldSetId = "details",
+            fieldSetId = "identity",
             describedAs = "Timestamp of the original (replayable) Command")
     public ZonedDateTime getTimestamp() {
         return getTimestampIfAny()
@@ -237,10 +244,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .map(JavaTimeXMLGregorianCalendarMarshalling::toZonedDateTime);
     }
 
+
     @Property
     @PropertyLayout(
-            sequence = "3.0",
-            fieldSetId = "details",
+            sequence = "2.1",
+            fieldSetId = "target",
             hidden = Where.PARENTED_TABLES,
             describedAs = "Target of the command")
     public String getTarget() {
@@ -251,8 +259,8 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     @Property
     @PropertyLayout(
             named = "Target",
-            sequence = "3.0",
-            fieldSetId = "details",
+            sequence = "2.2",
+            fieldSetId = "target",
             hidden = Where.OBJECT_FORMS,
             describedAs = "Target of the command")
     public String getTargetAbbreviated() {
@@ -261,26 +269,33 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .orElse(null);
     }
 
-    private static @NonNull String abbreviatedIfRequired(String x) {
-        final var abbreviateIfLongerThan = 80;
-        return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
-    }
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+            associateWith = "target",
+            position = ActionLayout.Position.PANEL
+    )
+    public class openTarget {
 
-    private @NonNull Optional<String> targetBookmarkIfAny() {
-        return commandRecord()
-                .map(CommandRecord::commandDto)
-                .map(CommandDto::getTargets)
-                .map(OidsDto::getOid)   // returns a list of OidDto's, in fact
-                .flatMap(oidDtoList -> Optional.ofNullable(oidDtoList.isEmpty() ? null : oidDtoList.get(0)))
-                .map(Bookmark::forOidDto)
-                .map(Bookmark::stringify);
-    }
+        @MemberSupport public Object act() {
+            return targetIfAny().orElse(null);
+        }
 
+        @MemberSupport public String disableAct() {
+            return targetIfAny().isEmpty() ? null : "Cannot access target";
+        }
+
+        private @NonNull Optional<Object> targetIfAny() {
+            return targetBookmarkIfAny()
+                    .flatMap(Bookmark::parse)
+                    .flatMap(bookmark -> bookmarkService.lookup(bookmark));
+        }
+        @Inject BookmarkService bookmarkService;
+    }
 
     @Property
     @PropertyLayout(
-            sequence = "3.1",
-            fieldSetId = "details",
+            sequence = "2.3",
+            fieldSetId = "target",
             describedAs = "Replayable Action or Property, that was executed as captured by the original Command")
     public String getMember() {
         return commandRecord()
@@ -292,35 +307,11 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .orElse(null);
     }
 
-    @Property
-    @PropertyLayout(
-            sequence = "4",
-            fieldSetId = "details",
-            describedAs = "Replay State of the original (replayable) Command. "
-                    + "When imported initially is PENDING. "
-                    + "Then after replay its either OK or FAILED. "
-                    + "Can be manually set to EXCLUDED, which marks it to be ignored for replay.")
-    public ReplayState getReplayState() {
-        return commandRecord()
-                .map(CommandRecord::replayState)
-                .orElse(null);
-    }
 
     @Property
     @PropertyLayout(
-            sequence = "4.1",
-            fieldSetId = "details",
-            describedAs = "Whether this command stores a result bookmark.")
-    public boolean getHasResult() {
-        return commandLogEntry()
-                .map(CommandLogEntry::getResult)
-                .isPresent();
-    }
-
-    @Property
-    @PropertyLayout(
-            sequence = "4.2",
-            fieldSetId = "details",
+            sequence = "2.4",
+            fieldSetId = "target",
             describedAs = "Whether this command uses only known participants as target or action params.  This determines whether the command is exportable/replayable in context of all commands since a baseline.",
             hidden = Where.OBJECT_FORMS
     )
@@ -332,6 +323,57 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .map(replayableCommandParticipantTracker::isKnownParticipants)
                 .orElse(false);
     }
+
+
+
+    @Property
+    @PropertyLayout(
+            sequence = "3.1",
+            fieldSetId = "control",
+            describedAs = "Replay State of the original (replayable) Command. "
+                    + "When imported initially is PENDING. "
+                    + "Then after replay its either OK or FAILED. "
+                    + "Can be manually set to EXCLUDED, which marks it to be ignored for replay.")
+    public ReplayState getReplayState() {
+        return commandRecord()
+                .map(CommandRecord::replayState)
+                .orElse(null);
+    }
+
+
+    @Property
+    @PropertyLayout(
+            sequence = "4.1",
+            fieldSetId = "Result",
+            describedAs = "Whether this command stores a result bookmark.")
+    public boolean getHasResult() {
+        return commandLogEntry()
+                .map(CommandLogEntry::getResult)
+                .isPresent();
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "4.2",
+            fieldSetId = "results")
+    public String getReplayStateFailureReason() {
+        return commandRecord()
+                .map(CommandRecord::replayStateFailureReason)
+                .orElse(null);
+    }
+
+
+    private static @NonNull String abbreviatedIfRequired(String x) {
+        final var abbreviateIfLongerThan = 80;
+        return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
+    }
+
+    private @NonNull Optional<String> targetBookmarkIfAny() {
+        return commandRecord()
+                .map(CommandRecord::target)
+                .map(Bookmark::stringify);
+    }
+
 
     @Property
     @PropertyLayout(
@@ -663,7 +705,10 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                         .filter(commandLogEntry -> commandLogEntry.getReplayState() != null)
                         .map(commandLogEntry -> new CommandRecord(
                                 commandLogEntry.getCommandDto(),
-                                commandLogEntry.getReplayState()))
+                                commandLogEntry.getReplayState(),
+                                commandLogEntry.getReplayStateFailureReason(),
+                                commandLogEntry.getTarget()
+                                ))
                         .orElse(null)));
     }
 

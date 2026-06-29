@@ -35,12 +35,20 @@
                                     <cpt:fieldSet name="Metadata" id="metadata">
                                         <cpt:property id="logicalTypeName"/>
                                         <cpt:property id="interactionId"/>
-                                        <cpt:property id="member"/>
                                     </cpt:fieldSet>
                                 </bs:col>
                             </bs:row>
                         </bs:tab>
                     </bs:tabGroup>
+                </bs:col>
+            </bs:row>
+            <bs:row>
+                <bs:col span="12">
+                    <cpt:fieldSet name="Target">
+                        <cpt:action id="openTarget"/>
+                        <cpt:property id="target"/>
+                        <cpt:property id="member"/>
+                    </cpt:fieldSet>
                 </bs:col>
             </bs:row>
             <bs:row>
@@ -56,9 +64,9 @@
             </bs:row>
             <bs:row>
                 <bs:col span="12">
-                    <cpt:fieldSet name="Target">
-                        <cpt:property id="target"/>
+                    <cpt:fieldSet name="Result" id="result">
                         <cpt:property id="hasResult"/>
+                        <cpt:property id="replayStateFailureReason"/>
                     </cpt:fieldSet>
                 </bs:col>
             </bs:row>
