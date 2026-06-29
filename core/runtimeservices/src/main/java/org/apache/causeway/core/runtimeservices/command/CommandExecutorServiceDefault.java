@@ -233,17 +233,20 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 case CHECK:
                     final var visibility = objectAction.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
                     if(visibility.isVetoed()) {
-                        throw new HiddenException(new ActionVisibilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier()));
+                        final var interactionEvent = new ActionVisibilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier());
+                        throw new HiddenException(visibility.getReasonAsString().orElse(null), interactionEvent);
                     }
                     final var usability = objectAction.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
                     if(usability.isVetoed()) {
-                        throw new DisabledException(new ActionUsabilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier()));
+                        final var interactionEvent = new ActionUsabilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier());
+                        throw new DisabledException(usability.getReasonAsString().orElse(null), interactionEvent);
                     }
                     // this checks each arg individually, then all of them as a set.
                     final var argumentsValidity = objectAction.isArgumentSetValid(interactionHead, argAdapters, interactionInitiatedBy);
                     if(argumentsValidity.isVetoed()) {
                         // ActionInvocationEvent is somewhat odd as the underlying event, but it is what WrapperFactory does...
-                        throw new InvalidException(new ActionInvocationEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier(), argAdapters.stream().map(ManagedObject::getPojo).toArray()));
+                        final var interactionEvent = new ActionInvocationEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier(), argAdapters.stream().map(ManagedObject::getPojo).toArray());
+                        throw new InvalidException(argumentsValidity.getReasonAsString().orElse(null), interactionEvent);
                     }
                     break;
                 case CHECK_BUT_IGNORE:

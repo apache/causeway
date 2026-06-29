@@ -36,6 +36,10 @@ public class HiddenException extends InteractionException {
         super(interactionEvent);
     }
 
+    public HiddenException(final String message, final InteractionEvent interactionEvent) {
+        super(message, interactionEvent);
+    }
+
     @Override
     public VisibilityEvent getInteractionEvent() {
         return (VisibilityEvent) super.getInteractionEvent();

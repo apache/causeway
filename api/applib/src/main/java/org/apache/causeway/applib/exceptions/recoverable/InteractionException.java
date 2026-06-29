@@ -29,7 +29,11 @@ public abstract class InteractionException extends RecoverableException {
     private final InteractionEvent interactionEvent;
 
     public InteractionException(final InteractionEvent interactionEvent) {
-        super(interactionEvent.getReason());
+        this(interactionEvent.getReason(), interactionEvent);
+    }
+
+    public InteractionException(final String message, final InteractionEvent interactionEvent) {
+        super(message != null ? message : interactionEvent.getReason());
         this.interactionEvent = interactionEvent;
     }
 

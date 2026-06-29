@@ -48,6 +48,7 @@ import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheControl;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
@@ -625,7 +626,9 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
+        final var queryResultsCache = replayContext.queryResultsCache();
         var tryResultBookmark = replayContext.transactionService().callTransactional(Propagation.REQUIRES_NEW, () -> {
+                    queryResultsCache.onTransactionEnded(); // clear the cache
                     final Bookmark actualResult = replayContext.commandExecutorService()
                             // calls transactionService which uses its own try to potentially mark _this_ transaction for rollback.
                             .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
@@ -637,6 +640,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .mapFailureToSuccess(ex -> {
                     // use a new transaction to record the failure.
                     replayContext.transactionService().runTransactional(Propagation.REQUIRES_NEW, () -> {
+                        queryResultsCache.onTransactionEnded(); // clear the cache
                         onReplayError(ex);
                     });
                     return null;
