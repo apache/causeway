@@ -625,8 +625,18 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
-        var tryResultBookmark = replayContext.transactionService()
-                .callTransactional(Propagation.REQUIRES_NEW, () -> {
+        var tryTryResultBookmark = replayContext.transactionService()
+                .callTransactional(Propagation.REQUIRES_NEW, () -> tryReplayCaptureOutcome(commandDto)
+            );
+
+        // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
+        invalidateCachedRecord();
+
+        return tryTryResultBookmark.valueAsNullableElseFail();
+    }
+
+    private Try<Bookmark> tryReplayCaptureOutcome(CommandDto commandDto) {
+        return Try.call(() -> {
                     final Bookmark actualResult = replayContext.commandExecutorService()
                             .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
                             // if we have a replay failure, this throws, which will roll back the surrounding transaction
@@ -638,11 +648,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                     onReplayError(ex);
                     return null;
                 });
-
-        // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
-        invalidateCachedRecord();
-
-        return tryResultBookmark;
     }
 
     private void invalidateCachedRecord() {
