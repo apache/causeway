@@ -625,29 +625,27 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
-        var tryTryResultBookmark = replayContext.transactionService()
-                .callTransactional(Propagation.REQUIRES_NEW, () -> tryReplayCaptureOutcome(commandDto)
-            );
-
-        // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
-        invalidateCachedRecord();
-
-        return tryTryResultBookmark.valueAsNullableElseFail();
-    }
-
-    private Try<Bookmark> tryReplayCaptureOutcome(CommandDto commandDto) {
-        return Try.call(() -> {
+        var tryResultBookmark = replayContext.transactionService().callTransactional(Propagation.REQUIRES_NEW, () -> {
                     final Bookmark actualResult = replayContext.commandExecutorService()
+                            // calls transactionService which uses its own try to potentially mark _this_ transaction for rollback.
                             .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
-                            // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                            // if we have a replay failure, this throws, which will also roll back the surrounding transaction
                             .valueAsNullableElseFail();
                     onReplaySuccess(actualResult);
                     return actualResult;
                 })
                 .mapFailureToSuccess(ex -> {
-                    onReplayError(ex);
+                    // use a new transaction to record the failure.
+                    replayContext.transactionService().runTransactional(Propagation.REQUIRES_NEW, () -> {
+                        onReplayError(ex);
+                    });
                     return null;
                 });
+
+        // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
+        invalidateCachedRecord();
+
+        return tryResultBookmark;
     }
 
     private void invalidateCachedRecord() {

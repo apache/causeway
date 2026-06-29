@@ -1040,7 +1040,7 @@ class ReplayableCommandMappingTest {
         verify(listener, never()).onReplayResult(any(), any(), any());
     }
 
-    @Test @Disabled // TODO: CAUSEWAY-4042 ... reinstate?
+    @Test // @Disabled // TODO: CAUSEWAY-4042 ... reinstate?
     void does_not_notify_listener_when_replay_fails() throws Exception {
         UUID interactionId = UUID.randomUUID();
         CommandDto commandDto = new CommandDto();
