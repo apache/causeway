@@ -75,7 +75,7 @@ identified
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.22.0</commons-io.version>
 
-        <cucumber.version>7.34.3</cucumber.version>
+        <cucumber.version>7.34.4</cucumber.version>
 
         <datasource-proxy-spring-boot-starter.version>2.0.1</datasource-proxy-spring-boot-starter.version>
 
