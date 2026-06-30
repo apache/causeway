@@ -59,6 +59,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_p
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryMultiple;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exclude;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_export;
@@ -98,6 +99,7 @@ import org.springframework.context.annotation.Import;
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
         CommandReplayResultMapping_delete.class,
+        ReplayableCommand.openTarget.class,
         ReplayableCommand_unexclude.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_replayOrRetry.class,
@@ -167,22 +169,6 @@ public class CausewayModuleExtCommandLogApplib {
 
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> { }
-
-    public static final String NAMESPACE_REPLAY_PRIMARY = "causeway.ext.commandReplayPrimary";
-    public static final String NAMESPACE_REPLAY_SECONDARY = "causeway.ext.commandReplaySecondary";
-
-    public static final String SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL =
-            NAMESPACE_REPLAY_PRIMARY + ".CommandRetrievalOnPrimaryService";
-
-    public static void honorSystemEnvironment() {
-        if("true".equalsIgnoreCase(System.getenv("PRIMARY"))) {
-            SpringProfileUtil.removeActiveProfile("commandreplay-secondary"); // just in case
-            SpringProfileUtil.addActiveProfile("commandreplay-primary");
-        } else if("true".equalsIgnoreCase(System.getenv("SECONDARY"))) {
-            SpringProfileUtil.removeActiveProfile("commandreplay-primary"); // just in case
-            SpringProfileUtil.addActiveProfile("commandreplay-secondary");
-        }
-    }
 
     @Bean ReplayContext replayContext(
             final RepositoryService repositoryService,
