@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.domain.RefData;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.ViewModel;
@@ -123,7 +125,7 @@ public class ApplicationFeatureChoices {
     public static class AppFeat
     implements
         Comparable<AppFeat>,
-        ViewModel {
+        ViewModel, RefData {
 
         public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
 
