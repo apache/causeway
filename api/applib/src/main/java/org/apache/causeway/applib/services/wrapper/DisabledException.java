@@ -26,7 +26,7 @@ import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
 /**
  * Superclass of exceptions which indicate an attempt to interact with a class
  * member that is disabled.
- * 
+ *
  * @since 1.x {@index}
  */
 public class DisabledException extends InteractionException {
@@ -35,6 +35,10 @@ public class DisabledException extends InteractionException {
 
     public DisabledException(final InteractionEvent interactionEvent) {
         super(interactionEvent);
+    }
+
+    public DisabledException(final String message, final InteractionEvent interactionEvent) {
+        super(message, interactionEvent);
     }
 
     @Override

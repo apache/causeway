@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -188,22 +187,11 @@ public class ObjectSpecificationDefault
         val associations = createAssociations().collect(Can.toCan());
         replaceAssociations(associations.stream());
         val actions = createActions().collect(Can.toCan());
-        if (recordingSupportEnabled) {
-            val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
-                    .createFor(this, associations.stream())
-                    .collect(Can.toCan());
-            val existingActionIds = Stream.concat(actions.stream(), parentedCollectionNavigationActions.stream())
-                    .map(ObjectAction::getId)
-                    .collect(Collectors.toSet());
-            replaceActions(Stream.concat(
-                    Stream.concat(
-                            actions.stream(),
-                            parentedCollectionNavigationActions.stream()),
-                    ScalarReferenceNavigationActionUtil.createFor(this, associations.stream(), existingActionIds)));
-        } else {
-            replaceActions(actions.stream());
-        }
+        replaceActions(actions.stream());
 
+        // note: synthetic navigation ("selector") actions for parented collections / scalar references
+        // (when command-log recording-support is enabled) are added once per type during post-processing,
+        // by SynthesizeNavigationActionsPostProcessor.
         postProcess();
     }
 

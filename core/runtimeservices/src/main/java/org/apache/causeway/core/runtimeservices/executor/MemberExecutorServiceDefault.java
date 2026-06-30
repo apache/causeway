@@ -339,23 +339,21 @@ implements MemberExecutorService {
     private void setCommandResultIfEntityScalar(
             final Command command,
             final ManagedObject resultAdapter) {
-        val entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable()) {
-            return;
+        final var entityState = resultAdapter.getEntityState();
+        if(entityState.isPersistable()) {
+            if(entityState.isHollow() || entityState.isDetached()) {
+                // ensure that any still-to-be-persisted adapters get persisted to DB.
+                getTransactionService().flushTransaction();
+            }
+            // re-evaluate
+            if(!resultAdapter.getEntityState().hasOid()) {
+                log.warn("was unable to get a bookmark for the command result, "
+                        + "which is an entity: {}", resultAdapter);
+                return;
+            }
         }
-        if(entityState.isHollow()
-                || entityState.isDetached()) {
-            // ensure that any still-to-be-persisted adapters get persisted to DB.
-            getTransactionService().flushTransaction();
-        }
-        // re-evaluate
-        if(!resultAdapter.getEntityState().hasOid()) {
-            log.warn("was unable to get a bookmark for the command result, "
-                    + "which is an entity: {}", resultAdapter);
-            return;
-        }
-        val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
-        command.updater().setResult(Try.success(bookmark));
+        resultAdapter.getBookmark()
+                .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }
 
     private ManagedObject resultFilteredHonoringVisibility(

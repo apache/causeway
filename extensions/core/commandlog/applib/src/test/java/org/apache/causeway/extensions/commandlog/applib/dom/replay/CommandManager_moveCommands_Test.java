@@ -1,0 +1,507 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.extensions.commandlog.applib.dom.replay;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+import javax.inject.Named;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
+import org.apache.causeway.schema.cmd.v2.ParamsDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
+import org.apache.causeway.schema.common.v2.ValueType;
+
+class CommandManager_moveCommands_Test {
+
+    private static final Timestamp BASELINE = timestamp("2026-06-07T10:00:00Z");
+    private static final Timestamp BEFORE_BASELINE = timestamp("2026-06-07T09:59:59Z");
+    private static final Timestamp T0 = timestamp("2026-06-07T10:00:00.500Z");
+    private static final Timestamp T1 = timestamp("2026-06-07T10:00:01Z");
+    private static final Timestamp T1_250 = timestamp("2026-06-07T10:00:01.250Z");
+    private static final Timestamp T2 = timestamp("2026-06-07T10:00:02Z");
+    private static final Timestamp T5 = timestamp("2026-06-07T10:00:05Z");
+
+    private static final Bookmark MENU_SERVICE = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customers", "1");
+    private static final Bookmark CUSTOMER = Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1");
+
+    @Test
+    void choices_target_excludes_selected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        final var choices = fixture.moveAction.choicesTarget(fixture.commands(b, c));
+
+        assertThat(interactionIds(choices))
+                .containsExactly(a.getInteractionId());
+    }
+
+    @Test
+    void choices_target_excludes_excluded_commands() {
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.UNDEFINED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.EXCLUDED);
+        final var fixture = fixtureWith(a, b);
+
+        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a));
+
+        assertThat(interactionIds(choices))
+                .isEmpty();
+    }
+
+    @Test
+    void validates_excluded_commands_are_outside_active_collection() {
+        final var a = entry(T1, MENU_SERVICE, null, ReplayState.EXCLUDED);
+        final var b = entry(T2, MENU_SERVICE, null, ReplayState.UNDEFINED);
+        final var fixture = fixtureWith(a, b);
+
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(b), false))
+                .isEqualTo("Selected commands must be available for export from the current baseline");
+    }
+
+    @Test
+    void validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var beforeBaseline = entry(BEFORE_BASELINE, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        assertThat(fixture.moveAction.validateAct(List.of(), fixture.command(b), false))
+                .isEqualTo("Select at least one command to move");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), null, false))
+                .isEqualTo("Select the command to move after");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
+                .isEqualTo("Cannot move commands after one of the selected commands");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
+                .isEqualTo("Selected commands must be available for export from the current baseline");
+    }
+
+    @Test
+    void act_guards_validation_when_ui_is_bypassed() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a);
+
+        assertThatThrownBy(() -> fixture.moveAction.act(List.of(), fixture.command(a), false))
+                .isInstanceOf(RecoverableException.class)
+                .hasMessage("Select at least one command to move");
+    }
+
+    @Test
+    void disable_act_reports_recording_support_disabled() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWithRecordingSupport(RecordingSupport.DISABLED, a);
+
+        assertThat(fixture.moveAction.disableAct())
+                .isEqualTo("Command movement requires command-log recording support to be enabled");
+    }
+
+    @Test
+    void default_squash_timings_is_false() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a);
+
+        assertThat(fixture.moveAction.defaultSquashTimings()).isFalse();
+    }
+
+    @Test
+    void moves_single_command_to_target_plus_one_second() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        fixture.moveAction.act(fixture.commands(b), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T1);
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
+    }
+
+    @Test
+    void moves_multiple_commands_preserving_original_internal_gaps() {
+        final var a = entry(T0, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T1_250, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(b, c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T0);
+    }
+
+    @Test
+    void moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
+        final var a = entry(T0, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(b, c), fixture.command(a), true);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
+        assertThat(a.getTimestamp()).isEqualTo(T0);
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(c.getCommandDto().getTimestamp()))
+                .isEqualTo(c.getTimestamp());
+    }
+
+    @Test
+    void moves_multiple_commands_with_minimum_gap_when_original_gap_is_not_positive() {
+        final var a = entry(T0, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T1, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(b, c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:01.500Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:02.500Z"));
+    }
+
+    @Test
+    void does_not_retimestamp_unselected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(c), fixture.command(a), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(T2);
+    }
+
+    @Test
+    void down_choices_target_excludes_selected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        final var choices = fixture.moveAction.choicesTarget(fixture.commands(a, b));
+
+        assertThat(interactionIds(choices))
+                .containsExactly(c.getInteractionId());
+    }
+
+    @Test
+    void down_validates_empty_selection_missing_target_selected_target_and_outside_baseline() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var beforeBaseline = entry(BEFORE_BASELINE, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        assertThat(fixture.moveAction.validateAct(List.of(), fixture.command(b), false))
+                .isEqualTo("Select at least one command to move");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), null, false))
+                .isEqualTo("Select the command to move after");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(a), fixture.command(a), false))
+                .isEqualTo("Cannot move commands after one of the selected commands");
+        assertThat(fixture.moveAction.validateAct(fixture.commands(beforeBaseline), fixture.command(b), false))
+                .isEqualTo("Selected commands must be available for export from the current baseline");
+    }
+
+    @Test
+    void down_moves_single_command_to_target_plus_one_second() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b);
+
+        fixture.moveAction.act(fixture.commands(a), fixture.command(b), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06Z"));
+        assertThat(b.getTimestamp()).isEqualTo(T5);
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
+                .isEqualTo(a.getTimestamp());
+    }
+
+    @Test
+    void down_moves_multiple_commands_preserving_original_internal_gaps() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T1_250, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06.000Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:07.000Z"));
+        assertThat(c.getTimestamp()).isEqualTo(T5);
+    }
+
+    @Test
+    void down_moves_multiple_commands_squashing_original_internal_gaps_to_one_second_apart() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T5, MENU_SERVICE, null);
+        final var c = entry(timestamp("2026-06-07T10:00:20Z"), MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), true);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:21Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:22Z"));
+        assertThat(c.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:20Z"));
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(a.getCommandDto().getTimestamp()))
+                .isEqualTo(a.getTimestamp());
+        assertThat(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(b.getCommandDto().getTimestamp()))
+                .isEqualTo(b.getTimestamp());
+    }
+
+    @Test
+    void down_moves_multiple_commands_with_minimum_gap_when_original_gap_is_not_positive() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T1, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(a, b), fixture.command(c), false);
+
+        assertThat(a.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:06.000Z"));
+        assertThat(b.getTimestamp()).isEqualTo(timestamp("2026-06-07T10:00:07.000Z"));
+    }
+
+    @Test
+    void down_does_not_retimestamp_unselected_commands() {
+        final var a = entry(T1, MENU_SERVICE, null);
+        final var b = entry(T2, MENU_SERVICE, null);
+        final var c = entry(T5, MENU_SERVICE, null);
+        final var fixture = fixtureWith(a, b, c);
+
+        fixture.moveAction.act(fixture.commands(a), fixture.command(c), false);
+
+        assertThat(b.getTimestamp()).isEqualTo(T2);
+    }
+
+    @Test
+    void moved_finder_result_is_retimestamped_before_later_action() {
+        final var predecessor = entry(T0, MENU_SERVICE, null);
+        final var actionOnUnknownCustomer = entry(T2, CUSTOMER, null);
+        final var laterFinder = entry(T5, MENU_SERVICE, CUSTOMER);
+        final var fixture = fixtureWith(predecessor, actionOnUnknownCustomer, laterFinder);
+
+        fixture.moveAction.act(fixture.commands(laterFinder), fixture.command(predecessor), false);
+
+        assertThat(laterFinder.getTimestamp())
+                .isBefore(actionOnUnknownCustomer.getTimestamp());
+    }
+
+    @Test
+    void moved_navigation_result_is_retimestamped_before_later_reference_parameter() {
+        final var predecessor = entry(T0, MENU_SERVICE, null);
+        final var actionWithUnknownParameter = entryWithReferenceParameter(T2, MENU_SERVICE, null, "customer", CUSTOMER);
+        final var laterNavigation = entry(T5, MENU_SERVICE, CUSTOMER);
+        final var fixture = fixtureWith(predecessor, actionWithUnknownParameter, laterNavigation);
+
+        fixture.moveAction.act(fixture.commands(laterNavigation), fixture.command(predecessor), false);
+
+        assertThat(laterNavigation.getTimestamp())
+                .isBefore(actionWithUnknownParameter.getTimestamp());
+    }
+
+    private static Fixture fixtureWith(final CommandLogEntry... entries) {
+        return fixtureWithRecordingSupport(RecordingSupport.ENABLED, entries);
+    }
+
+    private static Fixture fixtureWithRecordingSupport(
+            final RecordingSupport recordingSupport,
+            final CommandLogEntry... entries) {
+        final var repository = mock(CommandLogEntryRepository.class);
+        final var availableEntries = List.of(entries);
+        when(repository.findForegroundSinceTimestamp(BASELINE, 50)).thenAnswer(__ -> availableEntries.stream()
+                .sorted(Comparator.comparing(CommandLogEntry::getTimestamp))
+                .collect(Collectors.toList()));
+        for (final CommandLogEntry entry : entries) {
+            when(repository.findByInteractionIdCached(entry.getInteractionId())).thenReturn(Optional.of(entry));
+        }
+
+        final var replayContext = ReplayContext.builder()
+                .causewayConfiguration(causewayConfigurationWith(recordingSupport))
+                .commandReplayReferenceDataService(bookmark -> MENU_SERVICE.equals(bookmark))
+                .commandLogEntryRepository(repository).build();
+        final var manager = new CommandManager(new CommandManager.State(BASELINE, 50), replayContext);
+
+        final var moveAction = new CommandManager_moveCommands(manager);
+        moveAction.replayContext = replayContext;
+
+        final var exportAction = new CommandManager_exportSequence(manager);
+
+        return new Fixture(
+                replayContext,
+                manager,
+                moveAction,
+                exportAction);
+    }
+
+    private static CausewayConfiguration causewayConfigurationWith(final RecordingSupport recordingSupport) {
+        final var causewayConfiguration = mock(CausewayConfiguration.class, RETURNS_DEEP_STUBS);
+        when(causewayConfiguration.getExtensions().getCommandLog().getRecordingSupport()).thenReturn(recordingSupport);
+        return causewayConfiguration;
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result) {
+        return entry(timestamp, target, result, ReplayState.UNDEFINED);
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final ReplayState replayState) {
+        return entry(timestamp, target, result, replayState, actionDtoFor(target));
+    }
+
+    private static CommandLogEntry entryWithReferenceParameter(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final String parameterName,
+            final Bookmark parameterBookmark) {
+        final var actionDto = actionDtoFor(target);
+        actionDto.setParameters(new ParamsDto());
+        final var parameter = new ParamDto();
+        parameter.setName(parameterName);
+        parameter.setType(ValueType.REFERENCE);
+        parameter.setReference(parameterBookmark.toOidDto());
+        actionDto.getParameters().getParameter().add(parameter);
+        return entry(timestamp, target, result, ReplayState.UNDEFINED, actionDto);
+    }
+
+    private static ActionDto actionDtoFor(final Bookmark target) {
+        final var actionDto = new ActionDto();
+        actionDto.setLogicalMemberIdentifier(target.getLogicalTypeName() + "#act");
+        return actionDto;
+    }
+
+    private static CommandLogEntry entry(
+            final Timestamp timestamp,
+            final Bookmark target,
+            final Bookmark result,
+            final ReplayState replayState,
+            final ActionDto actionDto) {
+        final AtomicReference<Timestamp> timestampRef = new AtomicReference<>(timestamp);
+        final var commandDto = new CommandDto();
+        commandDto.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(timestamp));
+        commandDto.setMember(actionDto);
+        commandDto.setTargets(new OidsDto());
+        commandDto.getTargets().getOid().add(target.toOidDto());
+        final AtomicReference<CommandDto> commandDtoRef = new AtomicReference<>(commandDto);
+
+        final var entry = mock(CommandLogEntry.class);
+        final var interactionId = UUID.randomUUID();
+        when(entry.getInteractionId()).thenReturn(interactionId);
+        when(entry.getTimestamp()).thenAnswer(__ -> timestampRef.get());
+        Mockito.doCallRealMethod().when(entry).compareTo(Mockito.any(CommandLogEntry.class));
+        Mockito.doAnswer(invocation -> {
+            timestampRef.set(invocation.getArgument(0));
+            return null;
+        }).when(entry).setTimestamp(Mockito.any(Timestamp.class));
+        when(entry.getTarget()).thenReturn(target);
+        when(entry.getResult()).thenReturn(result);
+        when(entry.getCommandDto()).thenAnswer(__ -> commandDtoRef.get());
+        Mockito.doAnswer(invocation -> {
+            commandDtoRef.set(invocation.getArgument(0));
+            return null;
+        }).when(entry).setCommandDto(Mockito.any(CommandDto.class));
+        when(entry.getLogicalMemberIdentifier()).thenReturn(actionDto.getLogicalMemberIdentifier());
+        when(entry.getReplayState()).thenReturn(replayState);
+        return entry;
+    }
+
+    private static Timestamp timestamp(final String instant) {
+        return Timestamp.from(Instant.parse(instant));
+    }
+
+    private static List<UUID> interactionIds(final List<ReplayableCommand> commands) {
+        return commands.stream()
+                .map(ReplayableCommand::interactionId)
+                .collect(Collectors.toList());
+    }
+
+    @DomainService
+    @Named("demo.Customers")
+    private static class Customers {
+    }
+
+    private static class Fixture {
+        private final ReplayContext replayContext;
+        private final CommandManager manager;
+        final CommandManager_moveCommands moveAction;
+        final CommandManager_exportSequence exportAction;
+
+        Fixture(
+                final ReplayContext replayContext,
+                final CommandManager manager,
+                final CommandManager_moveCommands moveAction,
+                final CommandManager_exportSequence exportAction) {
+            this.replayContext = replayContext;
+            this.manager = manager;
+            this.moveAction = moveAction;
+            this.exportAction = exportAction;
+        }
+
+        ReplayableCommand command(final CommandLogEntry entry) {
+            return new ReplayableCommand(entry.getInteractionId(), replayContext);
+        }
+
+        List<ReplayableCommand> commands(final CommandLogEntry... entries) {
+            return java.util.Arrays.stream(entries)
+                    .map(this::command)
+                    .collect(Collectors.toList());
+        }
+
+        Optional<ReplayableCommand> commandInSequence(final CommandLogEntry entry) {
+            return manager.getCommandsInSequence().stream()
+                    .filter(command -> command.interactionId().equals(entry.getInteractionId()))
+                    .findFirst();
+        }
+    }
+}

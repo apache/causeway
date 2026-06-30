@@ -98,7 +98,7 @@ implements ActionInvocationFacet {
             throw new RecoverableException(validationMessage);
         }
         val singleMatch = matchResult.singleMatch();
-        setCommandResultIfBookmarkable(command, singleMatch, interactionInitiatedBy);
+        setCommandResultIfBookmarkable(command, singleMatch);
         return singleMatch;
     }
 
@@ -127,16 +127,11 @@ implements ActionInvocationFacet {
 
     private void setCommandResultIfBookmarkable(
             final Command command,
-            final ManagedObject result,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        if(command == null || interactionInitiatedBy.isPassThrough() || command.getResult() != null) {
+            final ManagedObject resultAdapter) {
+        if(command == null || resultAdapter == null) {
             return;
         }
-        val entityState = result.getEntityState();
-        if(!entityState.isPersistable() || !entityState.hasOid()) {
-            return;
-        }
-        result.getBookmark()
+        resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }
 

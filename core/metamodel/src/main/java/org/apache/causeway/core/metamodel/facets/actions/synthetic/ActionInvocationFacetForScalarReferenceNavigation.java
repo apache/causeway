@@ -86,7 +86,7 @@ public class ActionInvocationFacetForScalarReferenceNavigation
         if (DisabledFacetForNullScalarReferenceNavigation.isNullReference(referencedObject)) {
             throw new RecoverableException(DisabledFacetForNullScalarReferenceNavigation.REASON);
         }
-        setCommandResultIfBookmarkable(command, referencedObject, interactionInitiatedBy);
+        setCommandResultIfBookmarkable(command, referencedObject);
         return referencedObject;
     }
 
@@ -115,16 +115,11 @@ public class ActionInvocationFacetForScalarReferenceNavigation
 
     private void setCommandResultIfBookmarkable(
             final Command command,
-            final ManagedObject result,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        if (command == null || interactionInitiatedBy.isPassThrough() || command.getResult() != null) {
+            final ManagedObject resultAdapter) {
+        if(command == null || resultAdapter == null) {
             return;
         }
-        val entityState = result.getEntityState();
-        if (!entityState.isPersistable() || !entityState.hasOid()) {
-            return;
-        }
-        result.getBookmark()
+        resultAdapter.getBookmark()
                 .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }
 

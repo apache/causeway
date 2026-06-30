@@ -116,8 +116,8 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         CommandReplayMappingListenerPersistent listener = new CommandReplayMappingListenerPersistent(
                 commandReplayResultMappingRepository, OnConflictPolicy.THROW_EXCEPTION);
 
-        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
-        listener.onReplayResult(recordedResult, actualResult, replayedCommandLogEntry);
+        listener.onReplayResult(recordedResult, actualResult, commandInteractionId);
+        listener.onReplayResult(recordedResult, actualResult, commandInteractionId);
         listener.onReplayResult(secondRecordedResult, actualResult, null);
         listener.onReplayResult(identityResult, identityResult, null);
 
@@ -136,7 +136,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(commandReplayResultMappingRepository.findByActualBookmark(actualResult))
                 .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(recordedResult))
                 .anySatisfy(mapping -> assertThat(mapping.getRecordedBookmark()).isEqualTo(secondRecordedResult));
-        assertThat(listener.lookup(null, recordedResult)).contains(actualResult);
+        assertThat(listener.lookup(recordedResult)).contains(actualResult);
 
         Assertions.assertThatThrownBy(() -> listener.onReplayResult(recordedResult, conflictingActualResult, null))
                 .isInstanceOf(IllegalStateException.class);
@@ -329,7 +329,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(entryFor(entries, "commandlog.test.Counter#findNull").getResult()).isNull();
         assertThat(entryFor(entries, "commandlog.test.Counter#findEmptyList").getResult()).isNull();
         assertThat(entryFor(entries, "commandlog.test.Counter#findSelfTwiceAsList").getResult()).isNull();
-        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNull();
+        assertThat(entryFor(entries, "commandlog.test.Counter#findNameAsScalar").getResult()).isNotNull();
     }
 
     private CommandLogEntry entryFor(
@@ -646,52 +646,11 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         Assertions.assertThat(byParent).isEmpty();
 
         // when
-        List<? extends CommandLogEntry> completed = commandLogEntryRepository.findCompleted();
-
-        // then
-        Assertions.assertThat(completed).hasSize(4);
-        Assertions.assertThat(completed.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
-
-        // when
         List<? extends CommandLogEntry> current = commandLogEntryRepository.findCurrent();
 
         // then // TODO: would need more sophistication in fixtures to test
         Assertions.assertThat(current).isEmpty();
 
-        // when
-        List<? extends CommandLogEntry> since = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 3);
-
-        // then
-        Assertions.assertThat(since).hasSize(2);
-        Assertions.assertThat(since.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest first
-
-        // when
-        List<? extends CommandLogEntry> sinceWithBatchSize1 = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 1);
-
-        // then
-        Assertions.assertThat(sinceWithBatchSize1).hasSize(1);
-        Assertions.assertThat(sinceWithBatchSize1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest fist
-
-        // when
-        Optional<? extends CommandLogEntry> mostRecentReplayedIfAny = commandLogEntryRepository.findMostRecentReplayed();
-
-        // then
-        Assertions.assertThat(mostRecentReplayedIfAny).isEmpty();
-
-        if (causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
-
-            // fails in JPA; possibly need to get the agent working for dirty tracking.
-
-            // given
-            commandTarget1User1.setReplayState(ReplayState.OK);
-
-            // when
-            Optional<? extends CommandLogEntry> mostRecentReplayedIfAny2 = commandLogEntryRepository.findMostRecentReplayed();
-
-            // then
-            Assertions.assertThat(mostRecentReplayedIfAny2).isPresent();
-            Assertions.assertThat(mostRecentReplayedIfAny2.get().getInteractionId()).isEqualTo(commandTarget1User1Id);
-        }
     }
 
     @Inject CommandLogEntryRepository commandLogEntryRepository;

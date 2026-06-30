@@ -1,78 +1,77 @@
 # replayable-command-participant-availability Specification
 
 ## Purpose
-TBD - created by archiving change improve-replayable-command-navigation. Update Purpose after archive.
+Define when replayable command participant rows expose locally resolved target, argument, and result objects.
+
 ## Requirements
-### Requirement: Recorded command target participants are available for record review
-A replayable command participant with role `TARGET` SHALL expose its target object when the owning command's replay state is `UNDEFINED` and the recorded target bookmark resolves locally.
-A replayable command participant with role `TARGET` SHALL expose its target object when the owning command's replay state is `EXPORTED` and the recorded target bookmark resolves locally.
+### Requirement: Target participants expose locally resolved target objects
+A replayable command participant with role `TARGET` SHALL expose its target object when its actual bookmark resolves locally.
 A replayable command participant with role `TARGET` MUST remain optional and SHALL expose no target object when the applicable bookmark cannot be resolved locally.
+This target availability SHALL be independent of the owning command's replay state.
 This target availability MUST NOT change the command replay state.
 
 #### Scenario: Undefined command target is available
 - **GIVEN** a replayable command has replay state `UNDEFINED`
-- **AND** its target participant has recorded bookmark `demoCustomer:1`
+- **AND** its target participant has actual bookmark `demoCustomer:1`
 - **AND** bookmark `demoCustomer:1` resolves locally
 - **WHEN** the system reads the participant target property
 - **THEN** the target object for `demoCustomer:1` is returned
 
-#### Scenario: Exported command target is available
-- **GIVEN** a replayable command has replay state `EXPORTED`
-- **AND** its target participant has recorded bookmark `demoCustomer:1`
+#### Scenario: Pending command target is available
+- **GIVEN** a replayable command has replay state `PENDING`
+- **AND** its target participant has actual bookmark `demoCustomer:1`
 - **AND** bookmark `demoCustomer:1` resolves locally
 - **WHEN** the system reads the participant target property
 - **THEN** the target object for `demoCustomer:1` is returned
 
-#### Scenario: Unresolvable recorded target remains absent
+#### Scenario: Unresolvable target remains absent
 - **GIVEN** a replayable command has replay state `UNDEFINED`
-- **AND** its target participant has recorded bookmark `demoCustomer:1`
+- **AND** its target participant has actual bookmark `demoCustomer:1`
 - **AND** bookmark `demoCustomer:1` does not resolve locally
 - **WHEN** the system reads the participant target property
 - **THEN** no target object is returned
 
-### Requirement: Domain service target participants are available in every replay state
-A replayable command participant with role `TARGET` SHALL expose its target object when the recorded target bookmark identifies a domain service and resolves locally.
-This rule SHALL apply regardless of the owning command's replay state.
-This rule MUST NOT enable replay or export by itself.
-
-#### Scenario: Domain service target is available for pending replay
-- **GIVEN** a replayable command has replay state `PENDING`
-- **AND** its target participant has a recorded bookmark for a domain service
-- **AND** that domain service bookmark resolves locally
-- **WHEN** the system reads the participant target property
-- **THEN** the domain service target object is returned
-
-#### Scenario: Domain service target is available for failed replay
-- **GIVEN** a replayable command has replay state `FAILED`
-- **AND** its target participant has a recorded bookmark for a domain service
-- **AND** that domain service bookmark resolves locally
-- **WHEN** the system reads the participant target property
-- **THEN** the domain service target object is returned
-
-### Requirement: Recorded command reference arguments are available for record review
-A replayable command participant with role `PARAMETER` SHALL expose its argument object when the owning command's replay state is `UNDEFINED` and the recorded reference-parameter bookmark resolves locally.
-A replayable command participant with role `PARAMETER` SHALL expose its argument object when the owning command's replay state is `EXPORTED` and the recorded reference-parameter bookmark resolves locally.
+### Requirement: Reference argument participants expose locally resolved argument objects
+A replayable command participant with role `PARAMETER` SHALL expose its argument object when its actual bookmark resolves locally.
 A replayable command participant with role `PARAMETER` MUST remain optional and SHALL expose no argument object when the applicable bookmark cannot be resolved locally.
+This argument availability SHALL be independent of the owning command's replay state.
 This argument availability MUST NOT change the command replay state.
 
 #### Scenario: Undefined command reference argument is available
 - **GIVEN** a replayable command has replay state `UNDEFINED`
 - **AND** its parameter participant is named `customer`
-- **AND** the participant recorded bookmark `demoCustomer:1` resolves locally
+- **AND** the participant actual bookmark `demoCustomer:1` resolves locally
 - **WHEN** the system reads the participant argument property
 - **THEN** the argument object for `demoCustomer:1` is returned
 
-#### Scenario: Exported command reference argument is available
-- **GIVEN** a replayable command has replay state `EXPORTED`
+#### Scenario: Failed command reference argument is available
+- **GIVEN** a replayable command has replay state `FAILED`
 - **AND** its parameter participant is named `customer`
-- **AND** the participant recorded bookmark `demoCustomer:1` resolves locally
+- **AND** the participant actual bookmark `demoCustomer:1` resolves locally
 - **WHEN** the system reads the participant argument property
 - **THEN** the argument object for `demoCustomer:1` is returned
 
 #### Scenario: Unresolvable recorded argument remains absent
-- **GIVEN** a replayable command has replay state `EXPORTED`
+- **GIVEN** a replayable command has replay state `OK`
 - **AND** its parameter participant is named `customer`
-- **AND** the participant recorded bookmark `demoCustomer:1` does not resolve locally
+- **AND** the participant actual bookmark `demoCustomer:1` does not resolve locally
 - **WHEN** the system reads the participant argument property
 - **THEN** no argument object is returned
 
+### Requirement: Result participants expose locally resolved result objects
+A replayable command participant with role `RESULT` SHALL expose its result object when its actual bookmark resolves locally.
+A replayable command participant with role `RESULT` MUST remain optional and SHALL expose no result object when the applicable bookmark cannot be resolved locally.
+This result availability SHALL be independent of the owning command's replay state.
+This result availability MUST NOT change the command replay state.
+
+#### Scenario: Result participant is available
+- **GIVEN** a replayable command has a result participant
+- **AND** the participant actual bookmark `demoCustomer:1` resolves locally
+- **WHEN** the system reads the participant result property
+- **THEN** the result object for `demoCustomer:1` is returned
+
+#### Scenario: Unresolvable result remains absent
+- **GIVEN** a replayable command has a result participant
+- **AND** the participant actual bookmark `demoCustomer:1` does not resolve locally
+- **WHEN** the system reads the participant result property
+- **THEN** no result object is returned

@@ -36,6 +36,10 @@ public class InvalidException extends InteractionException {
         super(interactionEvent);
     }
 
+    public InvalidException(final String message, final InteractionEvent interactionEvent) {
+        super(message, interactionEvent);
+    }
+
     @Override
     public ValidityEvent getInteractionEvent() {
         return (ValidityEvent) super.getInteractionEvent();

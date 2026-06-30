@@ -36,6 +36,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
@@ -64,6 +65,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
@@ -91,6 +93,15 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     static class Lease {
+        @Getter
+        private final List<LeaseItem> items = new ArrayList<>();
+    }
+
+    @DomainObject(nature = Nature.VIEW_MODEL, actionDomainEvent = LeaseWithActionDomainEvent.LeaseActionDomainEvent.class)
+    static class LeaseWithActionDomainEvent {
+        static class LeaseActionDomainEvent extends ActionDomainEvent<LeaseWithActionDomainEvent> {
+        }
+
         @Getter
         private final List<LeaseItem> items = new ArrayList<>();
     }
@@ -254,14 +265,14 @@ class ParentedCollectionNavigationActionUtilTest {
     void setUp() {
         mmc = newMetamodelContext();
         mmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        leaseSpec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
+        leaseSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(Lease.class));
         navigationAction = leaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
     }
 
     @Test
     void does_not_synthesize_navigation_action_unless_enabled() {
         val disabledMmc = newMetamodelContext();
-        val disabledLeaseSpec = disabledMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val disabledLeaseSpec = withNavigationActions(disabledMmc.getSpecificationLoader().loadSpecification(Lease.class));
 
         assertThat(disabledLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
@@ -277,7 +288,7 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @Test
     void does_not_synthesize_navigation_action_for_suppressed_owner_type() {
-        val suppressedLeaseSpec = mmc.getSpecificationLoader().loadSpecification(SuppressedLease.class);
+        val suppressedLeaseSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(SuppressedLease.class));
 
         assertThat(suppressedLeaseSpec.getAction(ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").isPresent(), is(false));
     }
@@ -310,10 +321,21 @@ class ParentedCollectionNavigationActionUtilTest {
     }
 
     @Test
+    void synthesized_navigation_action_does_not_expose_owner_action_domain_event_default() {
+        val annotatedLeaseSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(LeaseWithActionDomainEvent.class));
+        val annotatedNavigationAction = annotatedLeaseSpec.getAction(
+                ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
+
+        assertThat(annotatedNavigationAction.getFacet(ActionDomainEventFacet.class), is((ActionDomainEventFacet) null));
+        assertThat(annotatedNavigationAction.getSemantics(), is(SemanticsOf.SAFE));
+        assertThat(annotatedNavigationAction.getFacet(CommandPublishingFacet.class).isEnabled(), is(true));
+    }
+
+    @Test
     void synthesizes_navigation_action_for_mixed_in_collection_when_enabled() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
         mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val mixinLeaseSpec = withNavigationActions(mixinMmc.getSpecificationLoader().loadSpecification(Lease.class));
 
         val mixinNavigationAction = mixinLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "mixinItems").orElseThrow();
@@ -332,7 +354,7 @@ class ParentedCollectionNavigationActionUtilTest {
     void synthesizes_navigation_action_for_mixed_in_collection_when_associations_are_loaded_first() {
         val mixinMmc = newMetamodelContext(Lease_mixinItems.class);
         mixinMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val mixinLeaseSpec = mixinMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val mixinLeaseSpec = withNavigationActions(mixinMmc.getSpecificationLoader().loadSpecification(Lease.class));
 
         assertThat(mixinLeaseSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
                 .anyMatch(association -> association.getId().equals("mixinItems")), is(true));
@@ -343,7 +365,7 @@ class ParentedCollectionNavigationActionUtilTest {
 
     @Test
     void synthesizes_navigation_action_for_view_model_owned_collection_with_entity_elements() {
-        val homePageSpec = mmc.getSpecificationLoader().loadSpecification(HomePageViewModel.class);
+        val homePageSpec = withNavigationActions(mmc.getSpecificationLoader().loadSpecification(HomePageViewModel.class));
         val homePageNavigationAction = homePageSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
 
@@ -392,7 +414,7 @@ class ParentedCollectionNavigationActionUtilTest {
     void orders_scalar_child_parameters_using_static_collection_column_order() {
         val orderedMmc = newMetamodelContext();
         orderedMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val orderedLeaseSpec = orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class);
+        val orderedLeaseSpec = withNavigationActions(orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class));
         val orderedNavigationAction = orderedLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val parameters = orderedNavigationAction.getParameters();
@@ -406,7 +428,7 @@ class ParentedCollectionNavigationActionUtilTest {
     void derives_navigation_action_member_order_from_associated_collection_lazily() {
         val orderedMmc = newMetamodelContext();
         orderedMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val orderedLeaseSpec = orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class);
+        val orderedLeaseSpec = withNavigationActions(orderedMmc.getSpecificationLoader().loadSpecification(OrderedLease.class));
         val orderedNavigationAction = orderedLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val layoutOrderFacet = orderedNavigationAction.getFacet(LayoutOrderFacet.class);
@@ -666,7 +688,7 @@ class ParentedCollectionNavigationActionUtilTest {
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val publishingLeaseSpec = withNavigationActions(publishingMmc.getSpecificationLoader().loadSpecification(Lease.class));
         val publishingNavigationAction = publishingLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         val lease = new Lease();
@@ -701,7 +723,7 @@ class ParentedCollectionNavigationActionUtilTest {
         val interaction = Mockito.mock(Interaction.class);
         val publishingMmc = newMetamodelContextWithServices(commandPublisher, interactionProvider);
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.ENABLED);
-        val publishingLeaseSpec = publishingMmc.getSpecificationLoader().loadSpecification(Lease.class);
+        val publishingLeaseSpec = withNavigationActions(publishingMmc.getSpecificationLoader().loadSpecification(Lease.class));
         val publishingNavigationAction = publishingLeaseSpec.getAction(
                 ObjectSpecificationAbstract.ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + "items").orElseThrow();
         publishingMmc.getConfiguration().getExtensions().getCommandLog().setRecordingSupport(RecordingSupport.DISABLED);
@@ -731,6 +753,16 @@ class ParentedCollectionNavigationActionUtilTest {
         val faFacet = action.getFacet(FaFacet.class);
         assertThat(faFacet, instanceOf(FaFacetForParentedCollectionNavigation.class));
         assertThat(faFacet.getSpecialization().leftIfAny().getLayers().toQuickNotation(), is(FaFacetForParentedCollectionNavigation.CSS_CLASS_FA));
+    }
+
+    /**
+     * Navigation actions are synthesized once per type during the post-processing phase
+     * (by SynthesizeNavigationActionsPostProcessor), which the unit-test harness does not run; invoke that
+     * synthesis directly here, as the production post-process sweep would.
+     */
+    private static ObjectSpecification withNavigationActions(final ObjectSpecification spec) {
+        ((ObjectSpecificationAbstract) spec).synthesizeNavigationActions();
+        return spec;
     }
 
     private MetaModelContext_forTesting newMetamodelContext(final Class<?>... mixinTypes) {
@@ -895,20 +927,20 @@ class ParentedCollectionNavigationActionUtilTest {
             final SelectableReference choicesReference,
             final SelectableReference autocompleteReference) {
         switch (parameterId) {
-        case "name":
-            return name;
-        case "sequence":
-            return sequence;
-        case "checkbox":
-            return checkbox;
-        case "boundedReference":
-            return boundedReference;
-        case "choicesReference":
-            return choicesReference;
-        case "autocompleteReference":
-            return autocompleteReference;
-        default:
-            return null;
+            case "name":
+                return name;
+            case "sequence":
+                return sequence;
+            case "checkbox":
+                return checkbox;
+            case "boundedReference":
+                return boundedReference;
+            case "choicesReference":
+                return choicesReference;
+            case "autocompleteReference":
+                return autocompleteReference;
+            default:
+                return null;
         }
     }
 

@@ -50,10 +50,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.lang.Nullable;
@@ -176,6 +175,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -200,6 +200,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findChangedReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -224,6 +225,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappingByRecordedBookmark.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -251,6 +253,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = findReplayResultMappingsByActualBookmark.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = CommandReplayResultMapping.class
     )
@@ -277,6 +280,7 @@ public class CommandLogMenu {
             commandPublishing = Publishing.DISABLED,
             domainEvent = deleteReplayResultMappings.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
     )
     @ActionLayout(cssClassFa = "fa-trash", sequence="56")
@@ -300,60 +304,41 @@ public class CommandLogMenu {
 
     @Action(
             commandPublishing = Publishing.DISABLED,
-            domainEvent = exportManager.DomainEvent.class,
+            domainEvent = commandManager.DomainEvent.class,
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE
     )
-    @ActionLayout(cssClassFa = "solid share-from-square", sequence="50")
-    public class exportManager {
-        public class DomainEvent extends ActionDomainEvent<exportManager> {
+    @ActionLayout(cssClassFa = "solid circle-play", sequence="50")
+    public class commandManager {
+        public class DomainEvent extends ActionDomainEvent<commandManager> {
             public DomainEvent() { }
         }
 
-        @MemberSupport public CommandExportManager act(
-                @ParameterLayout(describedAs = "Limits the commands shown; only commands since this timestamp are available for export.  Set to a time immediately before the commands to be replayed.")
-                final java.sql.Timestamp since
-                ) {
-            return new CommandExportManager(new CommandExportManager.State(since, CommandExportManager_changeLimit.MAX_LIMIT), replayContext);
-        }
-
-        @MemberSupport public java.sql.Timestamp defaultSince() {
-            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
-            return truncatedTo(now, ChronoUnit.HOURS);
-        }
-    }
-
-    @Action(
-            commandPublishing = Publishing.DISABLED,
-            domainEvent = replayManager.DomainEvent.class,
-            executionPublishing = Publishing.DISABLED,
-            restrictTo = RestrictTo.PROTOTYPING,
-            semantics = SemanticsOf.SAFE
-    )
-    @ActionLayout(cssClassFa = "solid circle-play", sequence="51")
-    public class replayManager {
-        public class DomainEvent extends ActionDomainEvent<replayManager> {
-            public DomainEvent() { }
-        }
-
-        @MemberSupport public CommandReplayManager act(
+        @MemberSupport public CommandManager act(
                 @Parameter(
                         optionality = Optionality.OPTIONAL,
                         fileAccept = ".yml,.yaml"
                 )
-                final Blob commandsYaml
+                final Blob commandsYaml,
+                @Parameter(optionality = Optionality.OPTIONAL)
+                @ParameterLayout(describedAs = "Sets the baseline for commands; not required if commands are imported, defaults to current time.")
+                final java.sql.Timestamp since
         ) {
-            final var now = clockService.getClock().nowAsJavaSqlTimestamp();
-            final var commandReplayManager = new CommandReplayManager(now, replayContext);
-            return Optional.ofNullable(commandsYaml)
-                    .map(yaml -> importCommands(commandReplayManager).act(yaml, true))
-                    .orElse(commandReplayManager);
+            final var baseline = since != null ? since : clockService.getClock().nowAsJavaSqlTimestamp();
+            final var commandManager = new CommandManager(stateFor(baseline), replayContext);
+            return commandsYaml != null
+                    ? importCommands(commandManager).act(commandsYaml, true)
+                    : commandManager;
         }
 
-        private CommandReplayManager_importCommands importCommands(CommandReplayManager commandReplayManager) {
-            return factoryService.mixin(CommandReplayManager_importCommands.class, commandReplayManager);
+        private CommandManager_importCommands importCommands(CommandManager commandManager) {
+            return factoryService.mixin(CommandManager_importCommands.class, commandManager);
         }
+    }
+
+    private static CommandManager.@NonNull State stateFor(Timestamp timestamp) {
+        return new CommandManager.State(timestamp, HasLimit_changeLimit.MAX_LIMIT);
     }
 
     private static @NonNull Timestamp truncatedTo(Timestamp now, ChronoUnit chronoUnit) {

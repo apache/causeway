@@ -94,6 +94,7 @@ import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPos
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.members.navigation.SynthesizeNavigationActionsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.param.ChoicesAndDefaultsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
@@ -250,6 +251,11 @@ extends ProgrammingModelAbstract {
     private void addPostProcessors() {
 
         val mmc = getMetaModelContext();
+
+        // synthesize navigation ("selector") actions before the builtin post-processors run, so that the
+        // synthesized actions still receive described-as / typical-length / authorization / etc post-processing.
+        // No-op unless command-log recording support is enabled with the POST_PROCESS synthesis strategy.
+        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, new SynthesizeNavigationActionsPostProcessor(mmc));
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));

@@ -22,17 +22,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
+
 import org.springframework.lang.Nullable;
 
+import lombok.Builder;
+import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
@@ -41,15 +52,23 @@ import lombok.experimental.Accessors;
  */
 @Value @Accessors(fluent = true)
 public final class ReplayContext {
-        RepositoryService repositoryService;
-        InteractionService interactionService;
-        TransactionService transactionService;
-        CommandLogEntryRepository commandLogEntryRepository;
-        CommandExecutorService commandExecutorService;
-        ClockService clockService;
-        List<CommandReplayMappingListener> commandReplayMappingListeners;
-        SpecificationLoader specificationLoader;
 
+    RepositoryService repositoryService;
+    InteractionService interactionService;
+    TransactionService transactionService;
+    CommandLogEntryRepository commandLogEntryRepository;
+    CommandExecutorService commandExecutorService;
+    ClockService clockService;
+    Scratchpad scratchpad;
+    MetaModelService metaModelService;
+    CausewayConfiguration causewayConfiguration;
+    List<CommandReplayReferenceDataService> commandReplayReferenceDataServices;
+    SpecificationLoader specificationLoader;
+    QueryResultsCache queryResultsCache;
+    BookmarkService bookmarkService;
+    ResultRemappingService resultRemappingService;
+
+    @Builder
     public ReplayContext(
             final RepositoryService repositoryService,
             final InteractionService interactionService,
@@ -57,41 +76,62 @@ public final class ReplayContext {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final List<CommandReplayMappingListener> commandReplayMappingListeners) {
-        this(
-                repositoryService,
-                interactionService,
-                transactionService,
-                commandLogEntryRepository,
-                commandExecutorService,
-                clockService,
-                commandReplayMappingListeners,
-                null);
-    }
-
-    public ReplayContext(
-            final RepositoryService repositoryService,
-            final InteractionService interactionService,
-            final TransactionService transactionService,
-            final CommandLogEntryRepository commandLogEntryRepository,
-            final CommandExecutorService commandExecutorService,
-            final ClockService clockService,
-            final List<CommandReplayMappingListener> commandReplayMappingListeners,
-            final SpecificationLoader specificationLoader) {
+            final Scratchpad scratchpad,
+            final MetaModelService metaModelService,
+            final CausewayConfiguration causewayConfiguration,
+            final @Singular("commandReplayReferenceDataService") List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
+            final SpecificationLoader specificationLoader,
+            final ResultRemappingService resultRemappingService,
+            final BookmarkService bookmarkService,
+            final QueryResultsCache queryResultsCache) {
         this.repositoryService = repositoryService;
         this.interactionService = interactionService;
         this.transactionService = transactionService;
         this.commandLogEntryRepository = commandLogEntryRepository;
         this.commandExecutorService = commandExecutorService;
         this.clockService = clockService;
-        this.commandReplayMappingListeners = commandReplayMappingListeners;
+        this.scratchpad = scratchpad;
+        this.metaModelService = metaModelService;
+        this.causewayConfiguration = causewayConfiguration;
+        this.commandReplayReferenceDataServices = commandReplayReferenceDataServices;
+        this.bookmarkService = bookmarkService;
+        this.resultRemappingService = resultRemappingService;
         this.specificationLoader = specificationLoader;
+        this.queryResultsCache = queryResultsCache;
     }
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
     	return interactionId!=null
-			? commandLogEntryRepository().findByInteractionId(interactionId)
+			? commandLogEntryRepository().findByInteractionIdCached(interactionId)
 			: Optional.empty();
     }
-        
+
+    @Programmatic
+    public boolean isRecordingSupportEnabled() {
+        return causewayConfiguration().getExtensions().getCommandLog().getRecordingSupport().isEnabled();
+    }
+
+    boolean isDomainService(final Bookmark bookmark) {
+        if(queryResultsCache == null) {
+            // unit testing
+            return doIsDomainService(bookmark);
+        }
+        return queryResultsCache.execute(
+                () -> doIsDomainService(bookmark),
+                getClass(), "isDomainService",
+                bookmark);
+    }
+
+    private boolean doIsDomainService(Bookmark bookmark) {
+        final var metaModelService = metaModelService();
+        final var specificationLoader = specificationLoader();
+        if (metaModelService == null || specificationLoader == null) {
+            // shouldn't happen, except perhaps in unit testing?
+            return false;
+        }
+        return metaModelService.lookupLogicalTypeByName(bookmark.getLogicalTypeName())
+                .flatMap(specificationLoader::specForLogicalType)
+                .map(ObjectSpecification::isDomainService)
+                .orElse(false);
+    }
 }

@@ -58,6 +58,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.causeway.applib.services.wrapper.control.ExceptionHandler;
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2010,6 +2012,50 @@ public class CausewayConfiguration {
                 }
             }
 
+            private final CommandExecutorService commandExecutorService = new CommandExecutorService();
+            @Data
+            public static class CommandExecutorService {
+
+                /**
+                 * Whether and how to interact with interaction advisors (to check if the member is hidden, disabled, valid)
+                 */
+                public enum InteractionAdvisorPolicy {
+                    /**
+                     * Check with interaction advisors, throw an exception if there is a veto (similar to the
+                     * {@link org.apache.causeway.applib.services.wrapper.WrapperFactory#wrap(Object)}.
+                     *
+                     * <p>
+                     *     The exceptions thrown are the same as those used by
+                     *     {@link org.apache.causeway.applib.services.wrapper.WrapperFactory}.
+                     * </p>
+                     *
+                     * @see org.apache.causeway.applib.services.wrapper.WrapperFactory
+                     */
+                    CHECK,
+                    /**
+                     * Check with interaction advisors, but ignore any vetos.
+                     *
+                     * <p>
+                     *     This ensures that the event phases are called in the correct order, in case these are being
+                     *     leveraged for advanced processing (eg using the
+                     *     {@link org.apache.causeway.applib.services.scratchpad.Scratchpad}), but ignores any veto.
+                     * </p>
+                     */
+                    CHECK_BUT_IGNORE,
+                    /**
+                     * Check with interaction advisors, but ignore any vetos (similar to the
+                     * {@link org.apache.causeway.applib.services.wrapper.WrapperFactory#wrap(Object, SyncControl)} with
+                     * {@link SyncControl#withSkipRules()}.
+                     */
+                    NO_CHECK
+                }
+
+                /**
+                 * Whether and how to check any interaction advisors of the action/property (hide, disable, validate)
+                 */
+                private InteractionAdvisorPolicy interactionAdvisorPolicy = InteractionAdvisorPolicy.NO_CHECK;
+            }
+
             private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
             @Data
             public static class ApplicationFeatures {
@@ -2252,7 +2298,7 @@ public class CausewayConfiguration {
                 REQUIRE_WEAVED
             }
             private SafeguardMode safeguardMode = SafeguardMode.REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED;
-            
+
         }
     }
 
@@ -2958,7 +3004,7 @@ public class CausewayConfiguration {
              * (typically trailing) column (labeled 'action-column').
              */
             private boolean actionColumnEnabled = true;
-        	
+
             /**
              * Specifies the subclass of
              * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to
@@ -3391,17 +3437,17 @@ public class CausewayConfiguration {
             @Data
             public static class FileUpload {
             	/**
-            	 * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'], 
+            	 * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
             	 * where 'object' enables fallback behavior. We remove this here.
-            	 *  
+            	 *
             	 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
             	 */
             	private List<String> disabledPreviewTypes = List.of("object");
             	/**
             	 * Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
-            	 * 
+            	 *
             	 * <p>We have seen CSV files causing issues, so we disallow those by default.
-            	 * 
+            	 *
             	 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
             	 */
             	private List<String> disabledPreviewMimeTypes = List.of("text/csv");

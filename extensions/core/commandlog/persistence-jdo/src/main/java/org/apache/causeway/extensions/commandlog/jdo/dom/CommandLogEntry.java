@@ -67,14 +67,6 @@ import lombok.Setter;
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
-            name  = Nq.FIND_RECENT_BY_TARGET_OR_RESULT,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE target == :targetOrResult "
-                  + "    || result == :targetOrResult "
-                  + " ORDER BY timestamp DESC "
-                  + " RANGE 0,30"),
-    @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
@@ -151,29 +143,6 @@ import lombok.Setter;
                     + " WHERE completedAt == null "
                     + " ORDER BY timestamp DESC"),
     @Query(
-            name  = Nq.FIND_COMPLETED,
-            value = "SELECT "
-                    + "  FROM " + CommandLogEntry.FQCN + " "
-                    + " WHERE completedAt != null "
-                    + " ORDER BY timestamp DESC"),
-    @Query(
-            name  = Nq.FIND_FIRST,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE startedAt   != null "
-                  + "    && completedAt != null "
-                  + " ORDER BY timestamp ASC "
-                  + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-                                   // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-    @Query(
-            name  = Nq.FIND_SINCE,
-            value = "SELECT "
-                  + "FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE timestamp > :timestamp "
-                  + "   && startedAt != null "
-                  + "   && completedAt != null "
-                  + "ORDER BY timestamp ASC"),
-    @Query(
             name  = Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
@@ -187,15 +156,6 @@ import lombok.Setter;
                     + " WHERE executeIn == 'BACKGROUND' "
                     + "    && target    == :target "
                     + " ORDER BY timestamp DESC"),
-    @Query(
-            name  = Nq.FIND_MOST_RECENT_REPLAYED,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE (replayState == 'OK' || replayState == 'FAILED') "
-                  + " ORDER BY timestamp DESC "
-                  + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-                                   // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-
     @Query(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,
             value = "SELECT "

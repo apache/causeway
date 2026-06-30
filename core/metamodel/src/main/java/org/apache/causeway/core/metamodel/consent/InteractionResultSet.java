@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 public class InteractionResultSet {
 
-    private final List<InteractionResult> results = new ArrayList<InteractionResult>();
+    private final List<InteractionResult> results = new ArrayList<>();
     private InteractionResult firstResult = null;
 
     public InteractionResultSet() {

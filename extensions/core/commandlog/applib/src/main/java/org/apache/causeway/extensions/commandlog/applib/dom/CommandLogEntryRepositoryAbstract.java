@@ -36,6 +36,7 @@ import org.apache.causeway.applib.query.QueryRange;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -52,6 +53,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject QueryResultsCache queryResultsCache;
 
     private final Class<C> commandLogEntryClass;
 
@@ -73,6 +75,18 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         c.setExecuteIn(executeIn);
         persist(c);
         return c;
+    }
+
+    @Override
+    public Optional<CommandLogEntry> findByInteractionIdCached(final UUID interactionId) {
+        if(queryResultsCache == null) {
+            // unit testing
+            return findByInteractionId(interactionId);
+        }
+        return queryResultsCache.execute(
+                () -> findByInteractionId(interactionId),
+                getClass(), "findByInteractionIdCached",
+                interactionId);
     }
 
     @Override
@@ -130,14 +144,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_CURRENT))
-        );
-    }
-
-    @Override
-    public List<CommandLogEntry> findCompleted() {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_COMPLETED))
         );
     }
 
@@ -209,68 +215,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-    @Override
-    public List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult) {
-        return _Casts.uncheckedCast(
-                repositoryService().allMatches(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET_OR_RESULT)
-                            .withParameter("targetOrResult", targetOrResult)
-                            .withLimit(30L)
-                    )
-        );
-    }
-
-    /**
-     * Intended to support the replay of commands on a secondary instance of
-     * the application.
-     *
-     * This finder returns all (completed) {@link CommandLogEntry}s started after
-     * the command with the specified interactionId.  The number of commands
-     * returned can be limited so that they can be applied in batches.
-     *
-     * If the provided interactionId is null, then only a single
-     * {@link CommandLogEntry command} is returned.  This is intended to support
-     * the case when the secondary does not yet have any
-     * {@link CommandLogEntry command}s replicated.  In practice this is unlikely;
-     * typically we expect that the secondary will be set up to run against a
-     * copy of the primary instance's DB (restored from a backup), in which
-     * case there will already be a {@link CommandLogEntry command} representing the
-     * current high water mark on the secondary system.
-     *
-     * If the interactionId is not null but the corresponding
-     * {@link CommandLogEntry command} is not found, then <tt>null</tt> is returned.
-     * In the replay scenario the caller will probably interpret this as an
-     * error because it means that the high water mark on the secondary is
-     * inaccurate, referring to a non-existent {@link CommandLogEntry command} on
-     * the primary.
-     *
-     * @param interactionId - the identifier of the {@link CommandLogEntry command} being
-     *                   the replay HWM (using {@link #findMostRecentReplayed()} on the
-     *                   secondary), or null if no HWM was found there.
-     * @param batchSize - to restrict the number returned (so that replay
-     *                   commands can be batched).
-     */
-    @Override
-    public List<CommandLogEntry> findSince(final UUID interactionId, final Integer batchSize) {
-        if(interactionId == null) {
-            return findFirst();
-        }
-        final C from = findByInteractionIdElseNull(interactionId);
-        if(from == null) {
-            return Collections.emptyList();
-        }
-        return findSince(from.getTimestamp(), batchSize);
-    }
-
-    private List<CommandLogEntry> findFirst() {
-        Optional<CommandLogEntry> firstCommandIfAny =
-                _Casts.uncheckedCast(repositoryService().firstMatch(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FIRST)));
-        return firstCommandIfAny
-                .map(Collections::singletonList)
-                .orElse(Collections.emptyList());
-    }
-
     /**
      * Returns any persisted commands that have not yet started.
      *
@@ -299,22 +243,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-    /**
-     * The most recent replayed command previously replicated from primary to
-     * secondary.
-     *
-     * <p>
-     * This should always exist except for the very first times
-     * (after restored the prod DB to secondary).
-     * </p>
-     */
-    @Override
-    public Optional<CommandLogEntry> findMostRecentReplayed() {
-        return _Casts.uncheckedCast(
-                repositoryService().firstMatch(
-                    Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_REPLAYED))
-        );
-    }
 
     /**
      * The most recent completed command, as queried on the
@@ -369,34 +297,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
     // --
 
     @Override
-    public List<CommandLogEntry> findCommandsOnPrimaryElseFail(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException {
-
-        final List<CommandLogEntry> commands = findSince(interactionId, batchSize);
-        if(commands == null) {
-            throw new NotFoundException(interactionId);
-        }
-        return commands;
-    }
-
-    private C findByInteractionIdElseNull(final UUID interactionId) {
-        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                .withParameter("interactionId", interactionId);
-        return repositoryService().uniqueMatch(q).orElse(null);
-    }
-
-    private List<CommandLogEntry> findSince(
-            final Timestamp timestamp,
-            final Integer batchSizeIfAny) {
-
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
-                .withParameter("timestamp", timestamp);
-
-        return allMatches(query, batchSizeIfAny);
-    }
-
-    @Override
     public List<CommandLogEntry> findForegroundSinceTimestamp(final Timestamp since, Integer batchSizeIfAny) {
         var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER)
                 .withParameter("from", since);
@@ -412,60 +312,29 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return allMatches(query, batchSizeIfAny);
     }
 
-    @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since) {
-        return findForegroundSinceTimestampAndCanBeExported(since, null);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndCanBeExported(final Timestamp since, Integer batchSizeIfAny) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.UNDEFINED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundBeforeTimestampAndCanBeExported(final Timestamp before, Integer batchSizeIfAny) {
-        return findForegroundBeforeTimestampWithState(before, ReplayState.UNDEFINED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundSinceTimestampAndHasBeenExported(final Timestamp since, Integer batchSizeIfAny) {
-        return findForegroundSinceTimestampWithState(since, ReplayState.EXPORTED, batchSizeIfAny);
-    }
-
-    @Override
-    public List<CommandLogEntry> findForegroundBeforeTimestampAndHasBeenExported(final Timestamp before, Integer batchSizeIfAny) {
-        return findForegroundBeforeTimestampWithState(before, ReplayState.EXPORTED, batchSizeIfAny);
-    }
 
     @Override
     public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(final Timestamp since) {
         return findForegroundSinceTimestampWithStates(since, ReplayState.PENDING, ReplayState.FAILED);
     }
 
-    /**
-     * Command Replay feature: Cannot replay or retry.
-     */
     @Override
-    public List<CommandLogEntry> findSinceAndWithReplayOkOrExcluded(final Timestamp since) {
-        return findForegroundSinceTimestampWithStates(since, ReplayState.OK, ReplayState.EXCLUDED);
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayUndefinedOrOk(final Timestamp since) {
+        return findForegroundSinceTimestampWithStates(since, ReplayState.UNDEFINED, ReplayState.OK);
     }
 
-    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState, Integer batchSizeIfAny) {
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
-                .withParameter("from", from)
-                .withParameter("replayState", replayState);
-
-        return allMatches(query, batchSizeIfAny);
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(final Timestamp since) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.EXCLUDED);
     }
 
-    private List<CommandLogEntry> findForegroundBeforeTimestampWithState(Timestamp to, ReplayState replayState, Integer batchSizeIfAny) {
-        var query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_BEFORE_AND_REPLAY_STATE)
-                .withParameter("to", to)
-                .withParameter("replayState", replayState);
-
-        return allMatches(query, batchSizeIfAny);
+    private List<CommandLogEntry> findForegroundSinceTimestampWithState(Timestamp from, ReplayState replayState1) {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE)
+                                .withParameter("from", from)
+                                .withParameter("replayState", replayState1)));
     }
-
 
     private List<CommandLogEntry> findForegroundSinceTimestampWithStates(Timestamp from, ReplayState replayState1, ReplayState replayState2) {
         return _Casts.uncheckedCast(

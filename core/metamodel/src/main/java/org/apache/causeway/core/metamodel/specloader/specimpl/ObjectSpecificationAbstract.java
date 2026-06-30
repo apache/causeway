@@ -117,7 +117,6 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -789,7 +788,6 @@ public abstract class ObjectSpecificationAbstract
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
-        ensureNavigationActionsForMixedInAssociations();
 
         return actionScopes.stream()
                 .flatMap(actionScope -> stream(objectActionsByType.get(actionScope)))
@@ -939,6 +937,7 @@ public abstract class ObjectSpecificationAbstract
 
     private final _Oneshot mixedInActionAdder = new _Oneshot();
     private final _Oneshot mixedInAssociationAdder = new _Oneshot();
+    private final _Oneshot navigationActionAdder = new _Oneshot();
 
     /**
      * one-shot: must be no-op, if already created
@@ -991,33 +990,41 @@ public abstract class ObjectSpecificationAbstract
     }
 
     /**
-     * Mixed-in associations are appended lazily and can be materialized before or after actions.
-     * When navigation actions are enabled, make sure association mixins receive matching synthetic actions
-     * without treating ordinary mixin actions as navigation sources.
+     * Synthesizes the synthetic navigation ("selector") actions for <i>all</i> parented collections (own and
+     * mixed-in) and scalar references, once per spec.
+     * <p>
+     * Invoked once per type by {@code SynthesizeNavigationActionsPostProcessor} during the post-processing
+     * phase (so element types are already introspected and synthesis cannot recurse via the lazy
+     * action-streaming path).  A no-op unless command-log recording-support is enabled.
      */
-    private void ensureNavigationActionsForMixedInAssociations() {
+    public void synthesizeNavigationActions() {
         if (!isRecordingSupportEnabled()) {
             return;
         }
+        // one-shot: synthesize at most once per spec.
+        navigationActionAdder.trigger(() -> addNavigationActions(
+                streamAssociations(MixedIn.INCLUDED)));
+    }
+
+    private void addNavigationActions(final Stream<ObjectAssociation> candidateAssociations) {
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
 
         val existingActionIds = objectActions.stream()
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet());
-        val mixedInAssociationsWithoutNavigation = stream(unmodifiableAssociations.get())
-                .filter(MixedInMember.class::isInstance)
+        val associationsWithoutNavigation = candidateAssociations
                 .filter(association -> !existingActionIds.contains(
                         ParentedCollectionNavigationActionUtil.ACTION_ID_PREFIX + association.getId()))
                 .collect(Can.toCan());
         val parentedCollectionNavigationActions = ParentedCollectionNavigationActionUtil
-                .createFor(this, mixedInAssociationsWithoutNavigation.stream())
+                .createFor(this, associationsWithoutNavigation.stream())
                 .collect(Can.toCan());
         existingActionIds.addAll(parentedCollectionNavigationActions.stream()
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet()));
         val navigationActions = Stream.concat(
                         parentedCollectionNavigationActions.stream(),
-                        ScalarReferenceNavigationActionUtil.createFor(this, mixedInAssociationsWithoutNavigation.stream(), existingActionIds))
+                        ScalarReferenceNavigationActionUtil.createFor(this, associationsWithoutNavigation.stream(), existingActionIds))
                 .collect(Collectors.toList());
         if (navigationActions.isEmpty()) {
             return;

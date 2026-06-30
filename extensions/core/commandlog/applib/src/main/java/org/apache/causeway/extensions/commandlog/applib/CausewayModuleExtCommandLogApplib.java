@@ -18,11 +18,18 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import java.util.List;
+
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
@@ -36,39 +43,37 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandReplayResultMapping_delete;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_changeLimit;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_deleteCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_nextPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_previousPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetryNext;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_moveCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_deleteCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_nextPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_previousPage;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_excludeCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_exportSelected;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsDown;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_moveCommandsUp;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager_unexcludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_excludeCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSequence;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_unexcludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedPendingOrFailed;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_deleteSelectedSucceededOrExcluded;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_excludeSelectedFromReplay;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_importCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager_replayOrRetrySelected;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryMultiple;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exclude;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_export;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_unexclude;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_previous;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_replayOrRetry;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ResultRemappingService;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
-import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataServiceForRefData;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
@@ -84,8 +89,7 @@ import org.springframework.context.annotation.Import;
         CommandLogMenu.class,
 
         // viewmodels
-        CommandExportManager.class,
-        CommandReplayManager.class,
+        CommandManager.class,
 
         // mixins
         HasInteractionId_commandLogEntry.class,
@@ -95,32 +99,30 @@ import org.springframework.context.annotation.Import;
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
         CommandReplayResultMapping_delete.class,
-        ReplayableCommand_makeExportable.class,
+        ReplayableCommand.openTarget.class,
+        ReplayableCommand_unexclude.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_replayOrRetry.class,
         ReplayableCommand_previous.class,
         ReplayableCommand_next.class,
-        ReplayableCommand_excludeFromReplay.class,
+        ReplayableCommand_exclude.class,
+        ReplayableCommand_export.class,
         ReplayableCommand_delete.class,
         HasBaseline_changeBaseline.class,
         HasBaseline_previousHour.class,
         HasBaseline_previousHour.class,
         HasBaseline_nextHour.class,
-        CommandExportManager_exportSelected.class,
-        CommandExportManager_excludeCommands.class,
-        CommandExportManager_moveCommandsUp.class,
-        CommandExportManager_moveCommandsDown.class,
-        CommandExportManager_deleteCommands.class,
-        CommandExportManager_unexcludeCommands.class,
-        CommandExportManager_previousPage.class,
-        CommandExportManager_nextPage.class,
-        CommandExportManager_changeLimit.class,
-        CommandReplayManager_importCommands.class,
-        CommandReplayManager_replayOrRetryNext.class,
-        CommandReplayManager_replayOrRetrySelected.class,
-        CommandReplayManager_excludeSelectedFromReplay.class,
-        CommandReplayManager_deleteSelectedSucceededOrExcluded.class,
-        CommandReplayManager_deleteSelectedPendingOrFailed.class,
+        CommandManager_exportSequence.class,
+        CommandManager_excludeCommands.class,
+        CommandManager_moveCommands.class,
+        CommandManager_deleteCommands.class,
+        CommandManager_unexcludeCommands.class,
+        CommandManager_previousPage.class,
+        CommandManager_nextPage.class,
+        HasLimit_changeLimit.class,
+        CommandManager_importCommands.class,
+        CommandManager_replayOrRetryNext.class,
+        CommandManager_replayOrRetryMultiple.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,
@@ -133,6 +135,7 @@ import org.springframework.context.annotation.Import;
         CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+        ResultRemappingService.class,
 
         BackgroundCommandsJobControl.class,
 
@@ -167,22 +170,6 @@ public class CausewayModuleExtCommandLogApplib {
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> { }
 
-    public static final String NAMESPACE_REPLAY_PRIMARY = "causeway.ext.commandReplayPrimary";
-    public static final String NAMESPACE_REPLAY_SECONDARY = "causeway.ext.commandReplaySecondary";
-
-    public static final String SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL =
-            NAMESPACE_REPLAY_PRIMARY + ".CommandRetrievalOnPrimaryService";
-
-    public static void honorSystemEnvironment() {
-        if("true".equalsIgnoreCase(System.getenv("PRIMARY"))) {
-            SpringProfileUtil.removeActiveProfile("commandreplay-secondary"); // just in case
-            SpringProfileUtil.addActiveProfile("commandreplay-primary");
-        } else if("true".equalsIgnoreCase(System.getenv("SECONDARY"))) {
-            SpringProfileUtil.removeActiveProfile("commandreplay-primary"); // just in case
-            SpringProfileUtil.addActiveProfile("commandreplay-secondary");
-        }
-    }
-
     @Bean ReplayContext replayContext(
             final RepositoryService repositoryService,
             final InteractionService interactionService,
@@ -190,12 +177,26 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final java.util.List<CommandReplayMappingListener> commandReplayMappingListeners,
-            final SpecificationLoader specificationLoader) {
+            final Scratchpad scratchpad,
+            final MetaModelService metaModelService,
+            final CausewayConfiguration causewayConfiguration,
+            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices,
+            final SpecificationLoader specificationLoader,
+            final BookmarkService bookmarkService,
+            final ResultRemappingService resultRemappingService,
+            final QueryResultsCache queryResultsCache) {
         return new ReplayContext(
                 repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService,
-                commandReplayMappingListeners, specificationLoader);
+                scratchpad,
+                metaModelService,
+                causewayConfiguration,
+                commandReplayReferenceDataServices,
+                specificationLoader,
+                resultRemappingService,
+                bookmarkService,
+                queryResultsCache
+        );
     }
 
 }

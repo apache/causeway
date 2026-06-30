@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel._testing;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -58,6 +60,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.memento._Mementos;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
@@ -161,11 +164,37 @@ extends MetaModelContext {
 
     @Builder.Default
     Can<Function<MetaModelContext, MetaModelRefiner>> refiners = Can.empty();
-    
+
     @Builder.Default
-    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory = 
+    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory =
         (mmc, refiners)->new ProgrammingModelFacetsJava11(mmc, refiners);
-    
+
+    @Builder.Default
+    private UrlEncodingService urlEncodingService = new UrlEncodingService() {
+        @Override
+        public String encode(byte[] bytes) {
+            return "ENCODED";
+        }
+
+        @Override
+        public byte[] decode(String str) {
+            return new byte[0];
+        }
+    };
+
+    @Builder.Default
+    private _Mementos.SerializingAdapter serializingAdapter = new _Mementos.SerializingAdapter() {
+        @Override
+        public Serializable write(@NonNull Object value) {
+            return null;
+        }
+
+        @Override
+        public <T> T read(@NonNull Class<T> cls, @NonNull Serializable value) {
+            return null;
+        }
+    };
+
     private InteractionService interactionService;
 
     private TranslationService translationService;
@@ -240,6 +269,8 @@ extends MetaModelContext {
 //                specificationLoader,
                 interactionService,
                 getTranslationService(),
+                urlEncodingService,
+                serializingAdapter,
                 authentication,
                 authorizationManager,
                 authenticationManager,
@@ -364,8 +395,8 @@ extends MetaModelContext {
     }
     private final ProgrammingModel initProgrammingModel() {
         var metamodelRefiners = refiners.map(factory->factory.apply(this));
-        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners); 
-                 
+        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners);
+
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         return programmingModel;
     }

@@ -1,0 +1,7 @@
+#interactionId
+timestamp
+targetAbbreviated
+member
+replayState
+#hasResult
+#knownParticipants

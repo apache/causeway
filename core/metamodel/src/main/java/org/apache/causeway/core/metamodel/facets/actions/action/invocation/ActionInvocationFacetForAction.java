@@ -35,7 +35,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * (that's done by the sibling facet {@link ActionInvocationFacetForMixedInPropertyOrCollection})
  */
 public class ActionInvocationFacetForAction
-extends ActionInvocationFacetAbstract {
+        extends ActionInvocationFacetAbstract {
+
+    public static ActionInvocationFacetForAction createObjectTypeSpecific(
+            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+            final MethodFacade method,
+            final ObjectSpecification declaringType,
+            final ObjectSpecification returnType,
+            final FacetHolder holder) {
+        return new ObjectTypeSpecific(domainEventHolder, method, declaringType, returnType, holder);
+    }
 
     public ActionInvocationFacetForAction(
             final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
@@ -44,6 +53,23 @@ extends ActionInvocationFacetAbstract {
             final ObjectSpecification returnType,
             final FacetHolder holder) {
         super(domainEventHolder, method, declaringType, returnType, holder);
+    }
+
+    private static class ObjectTypeSpecific extends ActionInvocationFacetForAction {
+
+        protected ObjectTypeSpecific(
+                final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+                final MethodFacade method,
+                final ObjectSpecification declaringType,
+                final ObjectSpecification returnType,
+                final FacetHolder holder) {
+            super(domainEventHolder, method, declaringType, returnType, holder);
+        }
+
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
     }
 
     @Override

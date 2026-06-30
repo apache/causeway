@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
         executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        sequence = "0.2",
+        associateWith = "dto", sequence = "0.2",
         describedAs = "Opens the underlying Command Log Entry"
 )
 @RequiredArgsConstructor

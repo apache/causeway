@@ -37,8 +37,8 @@ import lombok.NonNull;
 import lombok.val;
 
 public class CollectionDomainEventFacet
-extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
-implements HidingInteractionAdvisor {
+        extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
+        implements HidingInteractionAdvisor {
 
     // -- FACET TYPE
 
@@ -62,7 +62,7 @@ implements HidingInteractionAdvisor {
                 .map(domainEvent ->
                         new CollectionDomainEventFacet(domainEvent,
                                 EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
-                .orElseGet(()->{
+                .orElseGet(() -> {
 
                     /* only used to lookup {@link CollectionDomainEventDefaultFacetForDomainObjectAnnotation} */
                     val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
@@ -70,14 +70,25 @@ implements HidingInteractionAdvisor {
 
                     return typeFromDomainObject != null
                             ? new CollectionDomainEventFacet(
-                                    typeFromDomainObject.getEventType(),
-                                    EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
+                            typeFromDomainObject.getEventType(),
+                            EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
                             : new CollectionDomainEventFacet(
-                                    CollectionDomainEvent.Default.class,
-                                    EventTypeOrigin.DEFAULT, facetHolder);
+                            CollectionDomainEvent.Default.class,
+                            EventTypeOrigin.DEFAULT, facetHolder);
                 });
 
         return collectionDomainEventFacet;
+    }
+
+    public static Optional<CollectionDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        facetHolder));
     }
 
     // -- CONSTRUCTION
@@ -92,18 +103,33 @@ implements HidingInteractionAdvisor {
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
+    private static class ObjectTypeSpecific extends CollectionDomainEventFacet {
+
+        protected ObjectTypeSpecific(
+                final Class<? extends CollectionDomainEvent<?, ?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, holder);
+        }
+
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
-        if(!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
+        if (!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
         mixeeSpec
-        .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
-        .ifPresent(facetOnMixee->
-            super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
+                .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .ifPresent(facetOnMixee ->
+                        super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
     }
 
     @Override
     public String hides(final VisibilityContext ic) {
-        if(!isPostable()) return null; // bale out
+        if (!isPostable()) return null; // bale out
 
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(

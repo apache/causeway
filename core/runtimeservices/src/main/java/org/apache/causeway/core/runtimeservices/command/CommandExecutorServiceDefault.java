@@ -30,8 +30,24 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.wrapper.DisabledException;
+import org.apache.causeway.applib.services.wrapper.HiddenException;
+import org.apache.causeway.applib.services.wrapper.InvalidException;
+import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 
+import org.apache.causeway.core.metamodel.consent.Consent;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +119,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject Provider<CommandPublisher> commandPublisherProvider;
 
     @Inject @Getter final SpecificationLoader specificationLoader;
+    @Autowired private CausewayConfiguration causewayConfiguration;
 
     @Override
     public Try<Bookmark> executeCommand(final Command command) {
@@ -194,6 +211,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val targetOidDtoList = oidsDto.getOid();
 
         val interactionType = memberDto.getInteractionType();
+        final var interactionInitiatedBy = InteractionInitiatedBy.FRAMEWORK;
         if(interactionType == InteractionType.ACTION_INVOCATION) {
 
             val actionDto = (ActionDto) memberDto;
@@ -210,7 +228,38 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             val interactionHead = objectAction.interactionHead(targetAdapter);
 
-            val resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+            final var interactionAdvisorPolicy = getInteractionAdvisorPolicy();
+            switch(interactionAdvisorPolicy) {
+                case CHECK:
+                    final var visibility = objectAction.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    if(visibility.isVetoed()) {
+                        final var interactionEvent = new ActionVisibilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier());
+                        throw new HiddenException(visibility.getReasonAsString().orElse(null), interactionEvent);
+                    }
+                    final var usability = objectAction.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    if(usability.isVetoed()) {
+                        final var interactionEvent = new ActionUsabilityEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier());
+                        throw new DisabledException(usability.getReasonAsString().orElse(null), interactionEvent);
+                    }
+                    // this checks each arg individually, then all of them as a set.
+                    final var argumentsValidity = objectAction.isArgumentSetValid(interactionHead, argAdapters, interactionInitiatedBy);
+                    if(argumentsValidity.isVetoed()) {
+                        // ActionInvocationEvent is somewhat odd as the underlying event, but it is what WrapperFactory does...
+                        final var interactionEvent = new ActionInvocationEvent(targetAdapter.getPojo(), objectAction.getFeatureIdentifier(), argAdapters.stream().map(ManagedObject::getPojo).toArray());
+                        throw new InvalidException(argumentsValidity.getReasonAsString().orElse(null), interactionEvent);
+                    }
+                    break;
+                case CHECK_BUT_IGNORE:
+                    final var visibleIgnored = objectAction.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    final var usableIgnored = objectAction.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    final var argumentSetValidIgnored = objectAction.isArgumentSetValid(interactionHead, argAdapters, interactionInitiatedBy);
+                    break;
+                case NO_CHECK:
+                    break;
+            }
+
+
+            val resultAdapter = objectAction.execute(interactionHead, argAdapters, interactionInitiatedBy);
 
             // flush any PersistenceCommands pending
             // (else might get transient objects for the return value)
@@ -244,12 +293,40 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             val property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
             val newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
-            property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+            final var interactionAdvisorPolicy = getInteractionAdvisorPolicy();
+            switch(interactionAdvisorPolicy) {
+                case CHECK:
+                    final var visibility = property.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    if(visibility.isVetoed()) {
+                        throw new HiddenException(new PropertyVisibilityEvent(targetAdapter.getPojo(), property.getFeatureIdentifier()));
+                    }
+                    final var usability = property.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    if(usability.isVetoed()) {
+                        throw new DisabledException(new PropertyUsabilityEvent(targetAdapter.getPojo(), property.getFeatureIdentifier()));
+                    }
+                    final var validity = property.isAssociationValid(targetAdapter, newValueAdapter, interactionInitiatedBy);
+                    if(validity.isVetoed()) {
+                        throw new InvalidException(new PropertyModifyEvent(targetAdapter.getPojo(), property.getFeatureIdentifier(), newValueAdapter.getPojo()));
+                    }
+                    break;
+                case CHECK_BUT_IGNORE:
+                    final var visibilityIgnored = property.isVisible(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    final var usabilityIgnored = property.isUsable(targetAdapter, interactionInitiatedBy, Where.ANYWHERE);
+                    final var validityIgnored = property.isAssociationValid(targetAdapter, newValueAdapter, interactionInitiatedBy);
+                    break;
+                case NO_CHECK:
+                    break;
+            }
+            property.set(targetAdapter, newValueAdapter, interactionInitiatedBy);
 
             // there is no return value for property modifications.
         }
 
         return null;
+    }
+
+    private CausewayConfiguration.Core.RuntimeServices.CommandExecutorService.InteractionAdvisorPolicy getInteractionAdvisorPolicy() {
+        return causewayConfiguration.getCore().getRuntimeServices().getCommandExecutorService().getInteractionAdvisorPolicy();
     }
 
     private String targetBookmarkStrFor(CommandDto dto) {
@@ -349,7 +426,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return UtilStr.namedArgStr(paramName, argValue);
     }
 
-//not used    
+//not used
 //    private static boolean isSensitiveName(String name) {
 //        return name.equalsIgnoreCase("password") ||
 //               name.equalsIgnoreCase("secret") ||

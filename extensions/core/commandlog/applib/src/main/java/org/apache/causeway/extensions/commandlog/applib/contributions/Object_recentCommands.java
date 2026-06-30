@@ -68,7 +68,7 @@ public class Object_recentCommands {
     @MemberSupport public List<? extends CommandLogEntry> act() {
         List<CommandLogEntry> commandLogEntries = new ArrayList<>();
         bookmarkService.bookmarksFor(domainObject).forEach(bookmark -> {
-            List<CommandLogEntry> recent = commandLogEntryRepository.findRecentByTargetOrResult(bookmark);
+            List<CommandLogEntry> recent = commandLogEntryRepository.findRecentByTarget(bookmark);
             commandLogEntries.addAll(recent);
         });
         commandLogEntries.sort(Comparator.comparing(CommandLogEntry::getTimestamp).reversed());
