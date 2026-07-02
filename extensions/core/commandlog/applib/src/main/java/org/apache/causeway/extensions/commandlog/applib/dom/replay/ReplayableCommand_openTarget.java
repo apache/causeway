@@ -37,7 +37,7 @@ public class ReplayableCommand_openTarget {
 
     @MemberSupport
     public String disableAct() {
-        return replayableCommand.targetBookmarkIfAny().isEmpty() ? null : "No target bookmark";
+        return replayableCommand.targetBookmarkIfAny().isPresent() ? null : "No target bookmark";
     }
 
     @Inject BookmarkService bookmarkService;
