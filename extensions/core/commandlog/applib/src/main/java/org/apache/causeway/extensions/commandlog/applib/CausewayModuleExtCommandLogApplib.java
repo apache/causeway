@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
@@ -59,10 +58,12 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_p
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryMultiple;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exclude;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_export;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exportTR;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openTarget;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openTargetTR;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_unexclude;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
@@ -99,7 +100,8 @@ import org.springframework.context.annotation.Import;
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
         CommandReplayResultMapping_delete.class,
-        ReplayableCommand.openTarget.class,
+        ReplayableCommand_openTarget.class,
+        ReplayableCommand_openTargetTR.class,
         ReplayableCommand_unexclude.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_replayOrRetry.class,
@@ -107,6 +109,7 @@ import org.springframework.context.annotation.Import;
         ReplayableCommand_next.class,
         ReplayableCommand_exclude.class,
         ReplayableCommand_export.class,
+        ReplayableCommand_exportTR.class,
         ReplayableCommand_delete.class,
         HasBaseline_changeBaseline.class,
         HasBaseline_previousHour.class,

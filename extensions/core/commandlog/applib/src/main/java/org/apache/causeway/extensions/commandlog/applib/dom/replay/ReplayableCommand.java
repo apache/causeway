@@ -53,7 +53,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheControl;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
@@ -72,7 +72,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
-import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant.Role;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -269,29 +268,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .orElse(null);
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(
-            associateWith = "target",
-            position = ActionLayout.Position.PANEL
-    )
-    public class openTarget {
-
-        @MemberSupport public Object act() {
-            return targetIfAny().orElse(null);
-        }
-
-        @MemberSupport public String disableAct() {
-            return targetIfAny().isEmpty() ? null : "Cannot access target";
-        }
-
-        private @NonNull Optional<Object> targetIfAny() {
-            return targetBookmarkIfAny()
-                    .flatMap(Bookmark::parse)
-                    .flatMap(bookmark -> bookmarkService.lookup(bookmark));
-        }
-        @Inject BookmarkService bookmarkService;
-    }
-
     @Property
     @PropertyLayout(
             sequence = "2.3",
@@ -368,7 +344,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
     }
 
-    private @NonNull Optional<String> targetBookmarkIfAny() {
+    @NonNull Optional<String> targetBookmarkIfAny() {
         return commandRecord()
                 .map(CommandRecord::target)
                 .map(Bookmark::stringify);
