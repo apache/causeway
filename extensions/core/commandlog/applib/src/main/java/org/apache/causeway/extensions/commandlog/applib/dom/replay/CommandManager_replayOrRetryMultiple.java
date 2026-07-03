@@ -33,6 +33,9 @@ public class CommandManager_replayOrRetryMultiple {
         TEN(10),
         TWENTY(20),
         FORTY(40),
+        EIGHTY(80),
+        ONE_SIXTY(160),
+        THREE_TWENTY(320),
         ALL(Integer.MAX_VALUE),
         ;
         private final int limit;
