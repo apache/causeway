@@ -30,19 +30,15 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.ViewModel;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
@@ -51,10 +47,8 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
@@ -200,7 +194,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
     }
 
     private String targetTitlePrefix() {
-        return targetBookmarkIfAny()
+        return recordedTargetBookmarkStrIfAny()
                 .orElse("");
     }
 
@@ -254,7 +248,7 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             hidden = Where.PARENTED_TABLES,
             describedAs = "Recorded target of the command")
     public String getTarget() {
-        return targetBookmarkIfAny()
+        return recordedTargetBookmarkStrIfAny()
                 .orElse(null);
     }
 
@@ -265,28 +259,35 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             hidden = Where.PARENTED_TABLES,
             describedAs = "Actual target of the command")
     public String getActualTarget() {
-        return targetBookmarkIfAny()
-                .flatMap(Bookmark::parse)
-                .flatMap((Bookmark x) -> commandReplayResultMappingRepository.findByRecordedBookmark(x))
-                .map(CommandReplayResultMapping::getActualBookmark)
+        return actualTargetBookmarkIfAny()
                 .map(Bookmark::stringify)
                 .orElse(null);
     }
 
-    @Inject CommandReplayResultMappingRepository commandReplayResultMappingRepository;
-
     @Property
     @PropertyLayout(
-            named = "Target",
-            sequence = "2.2",
-            fieldSetId = "target",
+            named = "Recorded Target",
+            sequence = "2.2.1",
             hidden = Where.OBJECT_FORMS,
-            describedAs = "Target of the command")
-    public String getTargetAbbreviated() {
-        return targetBookmarkIfAny()
+            describedAs = "Recorded target of the command")
+    public String getRecordedTargetAbbreviated() {
+        return recordedTargetBookmarkStrIfAny()
                 .map(ReplayableCommand::abbreviatedIfRequired)
                 .orElse(null);
     }
+
+    @Property
+    @PropertyLayout(
+            named = "Actual Target",
+            sequence = "2.2.2",
+            hidden = Where.OBJECT_FORMS,
+            describedAs = "Actual target of the command")
+    public String getActualTargetAbbreviated() {
+        return actualTargetBookmarkIfAny()
+                .map(ReplayableCommand::abbreviatedIfRequired)
+                .orElse(null);
+    }
+
 
     @Property
     @PropertyLayout(
@@ -319,7 +320,6 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
                 .map(replayableCommandParticipantTracker::isKnownParticipants)
                 .orElse(false);
     }
-
 
 
     @Property
@@ -364,11 +364,24 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
         return x.length() > abbreviateIfLongerThan ? x.substring(0, abbreviateIfLongerThan) + "..." : x;
     }
 
-    @NonNull Optional<String> targetBookmarkIfAny() {
+    private static @NonNull String abbreviatedIfRequired(Bookmark x) {
+        return x != null ? abbreviatedIfRequired(x.stringify()) : "";
+    }
+
+    @NonNull Optional<String> recordedTargetBookmarkStrIfAny() {
         return commandRecord()
                 .map(CommandRecord::target)
                 .map(Bookmark::stringify);
     }
+
+    @NonNull Optional<Bookmark> actualTargetBookmarkIfAny() {
+        return recordedTargetBookmarkStrIfAny()
+                .flatMap(Bookmark::parse)
+                .flatMap((Bookmark x) -> commandReplayResultMappingRepository.findByRecordedBookmark(x))
+                .map(CommandReplayResultMapping::getActualBookmark);
+    }
+
+    @Inject CommandReplayResultMappingRepository commandReplayResultMappingRepository;
 
 
     @Property
