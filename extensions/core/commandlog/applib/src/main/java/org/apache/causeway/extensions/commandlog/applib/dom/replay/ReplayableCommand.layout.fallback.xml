@@ -47,6 +47,7 @@
                     <cpt:fieldSet name="Target">
                         <cpt:action id="openTarget"/>
                         <cpt:property id="target"/>
+                        <cpt:property id="actualTarget"/>
                         <cpt:property id="member"/>
                     </cpt:fieldSet>
                 </bs:col>

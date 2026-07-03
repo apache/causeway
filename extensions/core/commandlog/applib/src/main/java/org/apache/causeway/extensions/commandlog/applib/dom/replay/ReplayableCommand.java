@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.ViewModel;
@@ -68,6 +69,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -249,11 +252,28 @@ public final class ReplayableCommand implements ViewModel, Comparable<Replayable
             sequence = "2.1",
             fieldSetId = "target",
             hidden = Where.PARENTED_TABLES,
-            describedAs = "Target of the command")
+            describedAs = "Recorded target of the command")
     public String getTarget() {
         return targetBookmarkIfAny()
                 .orElse(null);
     }
+
+    @Property
+    @PropertyLayout(
+            sequence = "2.1.5",
+            fieldSetId = "target",
+            hidden = Where.PARENTED_TABLES,
+            describedAs = "Actual target of the command")
+    public String getActualTarget() {
+        return targetBookmarkIfAny()
+                .flatMap(Bookmark::parse)
+                .flatMap((Bookmark x) -> commandReplayResultMappingRepository.findByRecordedBookmark(x))
+                .map(CommandReplayResultMapping::getActualBookmark)
+                .map(Bookmark::stringify)
+                .orElse(null);
+    }
+
+    @Inject CommandReplayResultMappingRepository commandReplayResultMappingRepository;
 
     @Property
     @PropertyLayout(

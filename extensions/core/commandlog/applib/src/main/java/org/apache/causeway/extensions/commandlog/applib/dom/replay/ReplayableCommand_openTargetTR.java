@@ -12,6 +12,9 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         named = "Open Target",
+        describedAs = "Open recorded or actual target",
         hidden = Where.OBJECT_FORMS
 )
 @RequiredArgsConstructor
@@ -31,18 +35,23 @@ public class ReplayableCommand_openTargetTR {
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
-    public Object act(boolean areYouSure) {
-        return mixin().act();
-    }
-
-    @MemberSupport
-    public boolean defaultAreYouSure() {
-        return true;
+    public Object act(ReplayableCommand_openTarget.TargetType targetType) {
+        return mixin().act(targetType);
     }
 
     @MemberSupport
     public String disableAct() {
         return mixin().disableAct();
+    }
+
+    @MemberSupport
+    public List<ReplayableCommand_openTarget.TargetType> choicesTargetType() {
+        return mixin().choicesTargetType();
+    }
+
+    @MemberSupport
+    public ReplayableCommand_openTarget.TargetType defaultTargetType() {
+        return mixin().defaultTargetType();
     }
 
     private ReplayableCommand_openTarget mixin() {
