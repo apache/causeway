@@ -46,8 +46,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_moveCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_deleteCommands;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_nextPage;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_previousPage;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_excludeCommands;
@@ -120,8 +118,6 @@ import org.springframework.context.annotation.Import;
         CommandManager_moveCommands.class,
         CommandManager_deleteCommands.class,
         CommandManager_unexcludeCommands.class,
-        CommandManager_previousPage.class,
-        CommandManager_nextPage.class,
         HasLimit_changeLimit.class,
         CommandManager_importCommands.class,
         CommandManager_replayOrRetryNext.class,

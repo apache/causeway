@@ -86,7 +86,7 @@ public class CommandManager
     public CommandManager(
             final String memento,
             final ReplayContext replayContext) {
-        this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 50)),  replayContext);
+        this(State.parseMemento(memento, new State(replayContext.clockService().getClock().nowAsJavaSqlTimestamp(), 100)),  replayContext);
     }
 
     @Override

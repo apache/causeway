@@ -17,7 +17,7 @@ import org.apache.causeway.applib.annotation.*;
 @RequiredArgsConstructor
 public class HasLimit_changeLimit {
 
-    public static int MAX_LIMIT = 100;
+    public static int MAX_LIMIT = 320;
 
     public static class DomainEvent extends CommandManager.ActionDomainEvent<HasLimit_changeLimit> { }
 
