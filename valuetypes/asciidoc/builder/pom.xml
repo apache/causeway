@@ -12,100 +12,124 @@ additional
 	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.causeway.valuetypes</groupId>
-        <artifactId>causeway-valuetypes-asciidoc</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.apache.causeway.valuetypes</groupId>
+		<artifactId>causeway-valuetypes-asciidoc</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
-    <name>Apache Causeway Val - Asciidoctor (Builder)</name>
+	<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
+	<name>Apache Causeway Val - Asciidoctor (Builder)</name>
 
-    <description>
-        Library for programmatic AsciiDoc generation.
+	<description>
+		Library for programmatic AsciiDoc generation.
 
-        The AsciiDoc name is trademarked by the Eclipse Foundation
-        (https://www.eclipse.org/).
-        This project is *not* part of the specification effort for _AsciiDoc_
-        under the
-        AsciiDoc Working Group. See
-        https://projects.eclipse.org/proposals/asciidoc-language
-        and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we
-        are happy to
-        help with transfer of source code, if any project (under the umbrella of
-        the
-        AsciiDoc Working Group) is willing to take over.
-    </description>
+		The AsciiDoc name is trademarked by the Eclipse Foundation
+		(https://www.eclipse.org/).
+		This project is *not* part of the specification effort for _AsciiDoc_
+		under the
+		AsciiDoc Working Group. See
+		https://projects.eclipse.org/proposals/asciidoc-language
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we
+		are happy to
+		help with transfer of source code, if any project (under the umbrella of
+		the
+		AsciiDoc Working Group) is willing to take over.
+	</description>
 
-    <properties>
-        <jar-plugin.automaticModuleName>
-            org.apache.causeway.valuetypes.asciidoc.builder</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>
-            org/apache/causeway/valuetypes/asciidoc/builder</git-plugin.propertiesDir>
-    </properties>
+	<properties>
+		<jar-plugin.automaticModuleName>
+			org.apache.causeway.valuetypes.asciidoc.builder</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>
+			org/apache/causeway/valuetypes/asciidoc/builder</git-plugin.propertiesDir>
+	</properties>
 
-    <dependencies>
+	<dependencies>
 
-        <dependency>
-            <groupId>org.apache.causeway.commons</groupId>
-            <artifactId>causeway-commons</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.causeway.valuetypes</groupId>
-            <artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
+		</dependency>
 
-        <!--same as in ../ui -->
-        <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jruby</groupId>
-            <artifactId>jruby</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm-commons</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-posix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-enxio</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-constants</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jnr</groupId>
-            <artifactId>jnr-ffi</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm-commons</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<!--same as in ../ui -->
+		<dependency>
+			<groupId>org.asciidoctor</groupId>
+			<artifactId>asciidoctorj</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jruby</groupId>
+			<artifactId>jruby</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-commons</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-posix</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-enxio</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-constants</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-ffi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jffi</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-posix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-enxio</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-constants</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-ffi</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-commons</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jffi</artifactId>
+		</dependency>
 
-        <!-- TESTING -->
+		<!-- TESTING -->
 
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 
 </project>

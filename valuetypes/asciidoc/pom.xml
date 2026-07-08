@@ -133,6 +133,11 @@
                 <artifactId>jnr-ffi</artifactId>
                 <version>2.3.0</version>
             </dependency>
+			<dependency>
+				<groupId>com.github.jnr</groupId>
+				<artifactId>jffi</artifactId>
+				<version>1.4.0</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
