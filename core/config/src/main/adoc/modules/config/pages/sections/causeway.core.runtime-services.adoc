@@ -78,7 +78,7 @@ bulk.threshold
 |  1
 | Determines the threshold as to whether to execute a set of entity changes in blk, in other words without a transaction flush in between.
 
-If the threshold is passed (by default, anything more than 1 entity to persist), then the `RepositoryService#execInBulk(Callable)` API is used.
+If the threshold is passed (by default, anything more than 1 entity to persist), then the `RepositoryService++#++execInBulk(Callable)` API is used.
 
 
 |

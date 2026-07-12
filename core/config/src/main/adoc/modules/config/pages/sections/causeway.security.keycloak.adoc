@@ -34,7 +34,7 @@ causeway.security.keycloak. +
 client-role-prefix
 
 | 
-| If `#isExtractClientRoles()` client roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+| If `++#++isExtractClientRoles()` client roles are to be extracted}, this allows the resultant role to be optionally prefixed.
 
 
 |
@@ -108,7 +108,7 @@ causeway.security.keycloak. +
 role-prefix
 
 | 
-| If `#isExtractRoles()` roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+| If `++#++isExtractRoles()` roles are to be extracted}, this allows the resultant role to be optionally prefixed.
 
 
 

@@ -22,7 +22,7 @@ context-class
 
 Either this or packagePrefix must be specified. This property is used by preference.
 
-@see #getPackagePrefix()
+@see ++#++getPackagePrefix()
 
 
 |
@@ -58,9 +58,9 @@ package-prefix
 | 
 | Specifies the base package from which to search for fixture scripts.
 
-Either this or `#getContextClass()` must be specified; `#getContextClass()` is used by preference.
+Either this or `++#++getContextClass()` must be specified; `++#++getContextClass()` is used by preference.
 
-@see #getContextClass()
+@see ++#++getContextClass()
 
 
 |

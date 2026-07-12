@@ -20,7 +20,7 @@ lock-after-full-introspection
 |  true
 | If true, then no new specifications will be allowed to be loaded once introspection has been complete.
 
-Only applies if the introspector is configured to perform full introspection up-front (either because of `IntrospectionMode#FULL` or `IntrospectionMode#LAZY++_++UNLESS++_++PRODUCTION` when in production); otherwise is ignored.
+Only applies if the introspector is configured to perform full introspection up-front (either because of `IntrospectionMode++#++FULL` or `IntrospectionMode++#++LAZY++_++UNLESS++_++PRODUCTION` when in production); otherwise is ignored.
 
 
 |
@@ -31,7 +31,7 @@ introspector.mode
 |  lazy-unless-production
 | Whether all known types should be fully introspected as part of the bootstrapping, or should only be partially introspected initially.
 
-Leaving this as lazy means that there's a chance that metamodel validation errors will not be discovered during bootstrap. That said, metamodel validation is still run incrementally for any classes introspected lazily after initial bootstrapping (unless `#isValidateIncrementally()` is disabled.
+Leaving this as lazy means that there's a chance that metamodel validation errors will not be discovered during bootstrap. That said, metamodel validation is still run incrementally for any classes introspected lazily after initial bootstrapping (unless `++#++isValidateIncrementally()` is disabled.
 
 
 |

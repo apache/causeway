@@ -369,7 +369,7 @@ additional
 
 These are in addition to the main namespaces granted.
 
-@see NamespacePermissions#getSticky()
+@see NamespacePermissions++#++getSticky()
 
 
 |
@@ -384,9 +384,9 @@ These namespaces are intended to be sufficient to allow users with this admin ro
 
 These roles cannot be removed via user interface
 
-WARNING: normally these should not be overridden. Instead, specify additional namespaces using `NamespacePermissions#getAdditional()`.
+WARNING: normally these should not be overridden. Instead, specify additional namespaces using `NamespacePermissions++#++getAdditional()`.
 
-@see NamespacePermissions#getAdditional()
+@see NamespacePermissions++#++getAdditional()
 
 
 |
@@ -395,7 +395,7 @@ causeway.extensions.secman.seed. +
 admin.password
 
 | 
-| The corresponding password for user. @see #getUserName()
+| The corresponding password for user. @see ++#++getUserName()
 
 
 |
@@ -406,9 +406,9 @@ admin.role-name
 | 
 | The name of security admin role.
 
-Users with this role (in particular, the default user are granted access to a set of namespaces (`NamespacePermissions#getSticky()` and `NamespacePermissions#getAdditional()`) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
+Users with this role (in particular, the default user are granted access to a set of namespaces (`NamespacePermissions++#++getSticky()` and `NamespacePermissions++#++getAdditional()`) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
 
-@see Admin#getUserName() @see NamespacePermissions#getSticky() @see NamespacePermissions#getAdditional()
+@see Admin++#++getUserName() @see NamespacePermissions++#++getSticky() @see NamespacePermissions++#++getAdditional()
 
 
 |
@@ -421,9 +421,9 @@ admin.user-name
 
 This user is automatically made a member of the role, from which it is granted permissions to administer other users.
 
-The password for this user is set in `Admin#getPassword()`.
+The password for this user is set in `Admin++#++getPassword()`.
 
-@see #getPassword() @see #getRoleName()
+@see ++#++getPassword() @see ++#++getRoleName()
 
 
 |
@@ -454,9 +454,9 @@ causeway.extensions.secman. +
 user-menu-me-action-policy
 
 |  hide
-| Whether the presence of SecMan should result in the automatic suppression of the `UserMenu`'s `me#act() me()` action.
+| Whether the presence of SecMan should result in the automatic suppression of the `UserMenu`'s `me++#++act() me()` action.
 
-This is normally what is required as SecMan's `ApplicationUser` is a more comprehensive representation of the current user. If the default `me#act() me()` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
+This is normally what is required as SecMan's `ApplicationUser` is a more comprehensive representation of the current user. If the default `me++#++act() me()` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
 
 
 |

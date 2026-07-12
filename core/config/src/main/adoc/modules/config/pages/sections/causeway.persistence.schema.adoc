@@ -28,7 +28,7 @@ auto-create-schemas
 | 
 | List of additional schemas to be auto-created.
 
-Explicitly creates given list of schemas by using the specified `#getCreateSchemaSqlTemplate()` to generate the actual SQL statement against the configured data-source.
+Explicitly creates given list of schemas by using the specified `++#++getCreateSchemaSqlTemplate()` to generate the actual SQL statement against the configured data-source.
 
 This configuration mechanism does not consider any schema-auto-creation configuration (if any), that independently is provided the standard JPA way.
 

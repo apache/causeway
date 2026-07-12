@@ -149,7 +149,7 @@ max-date
 |  2100-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
 
-As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/++#++maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
 
 Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
 
@@ -162,7 +162,7 @@ min-date
 |  1900-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
 
-As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/++#++maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
 
 Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
 
@@ -186,7 +186,7 @@ causeway.viewer.wicket. +
 development-utilities.enable
 
 | 
-| Determines whether debug bar and other stuff influenced by `DebugSettings#isDevelopmentUtilitiesEnabled()` is enabled or not.
+| Determines whether debug bar and other stuff influenced by `DebugSettings++#++isDevelopmentUtilitiesEnabled()` is enabled or not.
 
 By default, depends on the mode (prototyping = enabled, server = disabled). This property acts as an override.
 
@@ -198,7 +198,7 @@ causeway.viewer.wicket.dialog-mode
 |  sidebar
 | Whether the dialog mode rendered when invoking actions on domain objects should be to use the sidebar (the default) or to use a modal dialog.
 
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+This can be overridden on a case-by-case basis using `ActionLayout++#++promptStyle()`.
 
 
 |
@@ -209,7 +209,7 @@ dialog-mode-for-menu
 |  modal
 | Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
 
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+This can be overridden on a case-by-case basis using `ActionLayout++#++promptStyle()`.
 
 
 |
@@ -232,7 +232,7 @@ disabled-preview-mime-types
 |  text/csv
 | Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
 
-We have seen CSV files causing issues, so we disallow those by default. @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
+We have seen CSV files causing issues, so we disallow those by default. @see https://plugins.krajee.com/file-input/plugin-options++#++disabledPreviewMimeTypes
 
 
 |
@@ -241,7 +241,7 @@ causeway.viewer.wicket.file-upload. +
 disabled-preview-types
 
 |  object
-| If left empty, the default allows ++[++'image', 'html', 'text', 'video', 'audio', 'flash', 'object'++]++, where 'object' enables fallback behavior. We remove this here. @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
+| If left empty, the default allows ++[++'image', 'html', 'text', 'video', 'audio', 'flash', 'object'++]++, where 'object' enables fallback behavior. We remove this here. @see https://plugins.krajee.com/file-input/plugin-options++#++disabledPreviewTypes
 
 
 |
@@ -300,7 +300,7 @@ causeway.viewer.wicket. +
 max-title-length-in-tables
 
 |  12
-| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either `#getMaxTitleLengthInParentedTables()` or `#getMaxTitleLengthInStandaloneTables()`.
+| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either `++#++getMaxTitleLengthInParentedTables()` or `++#++getMaxTitleLengthInStandaloneTables()`.
 
 If truncated, then the remainder of the title will be replaced with ellipses (...).
 
@@ -412,7 +412,7 @@ prompt-style
 |  inline
 | Whether to use a modal dialog for property edits and for actions associated with properties.
 
-This can be overridden on a case-by-case basis using `@PropertyLayout#promptStyle` and `@ActionLayout#promptStyle`.
+This can be overridden on a case-by-case basis using `@PropertyLayout++#++promptStyle` and `@ActionLayout++#++promptStyle`.
 
 This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother user experience.
 
@@ -470,7 +470,7 @@ replace-disabled-tag-with-readonly- +
 tag
 
 |  true
-| In Firefox and more recent versions of Chrome 54{plus}, cannot copy out of disabled fields; instead we use the readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
+| In Firefox and more recent versions of Chrome 54{plus}, cannot copy out of disabled fields; instead we use the readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html++#++the-readonly-attribute)
 
 This behaviour is enabled by default but can be disabled using this flag
 
@@ -504,7 +504,7 @@ suppress-password-reset
 | 
 | Whether to suppress the password reset link on the sign-in page.
 
-Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `#isSuppressSignUp()` sign-up link).
+Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `++#++isSuppressSignUp()` sign-up link).
 
 
 |
@@ -515,7 +515,7 @@ suppress-sign-up
 | 
 | Whether to suppress the sign-up link on the sign-in page.
 
-Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `#isSuppressPasswordReset()` password reset link).
+Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `++#++isSuppressPasswordReset()` password reset link).
 
 
 |
@@ -535,7 +535,7 @@ initial
 |  Flatly
 | The initial theme to use.
 
-Expected to be in the list of `#getEnabled()` themes.
+Expected to be in the list of `++#++getEnabled()` themes.
 
 
 |

@@ -21,7 +21,7 @@ generate-random-web-admin-password
 
 If a password is generated, it is logged to the logging subsystem (Log4j2).
 
-Recommended (`true`) when `#isWebAllowRemoteAccess()` is also `true`.
+Recommended (`true`) when `++#++isWebAllowRemoteAccess()` is also `true`.
 
 
 |

@@ -80,7 +80,7 @@ For integration testing, it's generally better to use datanucleus.schema.generat
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
-@see #setAutoCreateColumns(boolean) @see #setAutoCreateConstraints(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
+@see ++#++setAutoCreateColumns(boolean) @see ++#++setAutoCreateConstraints(boolean) @see ++#++setAutoCreateTables(boolean) @see GenerateDatabase++#++setMode(String)
 
 
 |
@@ -93,7 +93,7 @@ auto-create-columns
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
-@see #setAutoCreateAll(boolean) @see #setAutoCreateConstraints(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
+@see ++#++setAutoCreateAll(boolean) @see ++#++setAutoCreateConstraints(boolean) @see ++#++setAutoCreateTables(boolean) @see GenerateDatabase++#++setMode(String)
 
 
 |
@@ -106,7 +106,7 @@ auto-create-constraints
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
-@see #setAutoCreateAll(boolean) @see #setAutoCreateColumns(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
+@see ++#++setAutoCreateAll(boolean) @see ++#++setAutoCreateColumns(boolean) @see ++#++setAutoCreateTables(boolean) @see GenerateDatabase++#++setMode(String)
 
 
 |
@@ -130,7 +130,7 @@ auto-create-tables
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
-@see #setAutoCreateAll(boolean) @see #setAutoCreateColumns(boolean) @see #setAutoCreateConstraints(boolean) @see GenerateDatabase#setMode(String)
+@see ++#++setAutoCreateAll(boolean) @see ++#++setAutoCreateColumns(boolean) @see ++#++setAutoCreateConstraints(boolean) @see GenerateDatabase++#++setMode(String)
 
 
 |
