@@ -5,125 +5,100 @@
 :page-partial:
 
 Apache Causeway v4 is based on Spring Boot v4.
-This milestone release mitigates a security vulnerability, provides bug fixes and some new features.  
+
+This milestone release mitigates a security vulnerability, provides bug fixes and some new features.
 
 Notable changes in this release:
 
-⚠️ Attention Required
-
-- Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408] 
-- By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs). 
-The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as _Base64_ encoded byte array, like e.g.
-`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=` 
-A minimum of 16 bytes is required, we recommend 32. 
-https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
+* address https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408] (https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988])
 +
-[source,java]
-.32 byte HMAC Generator
-----
-import org.apache.causeway.commons.internal.base._Bytes;
-//..
-var secret = new byte[32]; // double the minimum requirement of 16
-SecureRandom.getInstanceStrong().nextBytes(secret);
-var hmacBase64 = _Bytes.stringifyUtf8Base64(secret);
-System.out.println(hmacBase64);
-----
+By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs).
+The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes).
+A minimum of 16 bytes is required, we recommend 32. (eg. `-13,4,0, ...`)
 
-- [Programming Model] Support for Property Clear Methods was removed https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
+* _Open Telemetry_ integration (https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975])
++
+This activates when dependencies are found on the class path and _Spring Profile_ `observation` is active.
++
+TIP: For more details, see xref:relnotes::2026/4.0.0-M2/otel-howto.adoc[Open Telemetry Setup]
 
-- [Programming Model] Support for `ValueSemanticsProvider` registration via _Spring_ factory methods.
+* Better handling of Eclipse Static weaving (https://issues.apache.org/jira/browse/CAUSEWAY-3942[CAUSEWAY-3942], link:https://issues.apache.org/jira/browse/CAUSEWAY-3967[CAUSEWAY-3967], link:https://issues.apache.org/jira/browse/CAUSEWAY-3959[CAUSEWAY-3959], link:https://issues.apache.org/jira/browse/CAUSEWAY-3969[CAUSEWAY-3969])
 
-⭐ New Features
 
-- _Open Telemetry_ integration, activates when dependencies are found on the class path and _Spring Profile_ `observation` is active. (see Appendix below) 
-https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
-- Pickup Webjar Version Strings automatically from Classpath https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948]
-- [Wicket Viewer] Select2 with Object Icons https://issues.apache.org/jira/browse/CAUSEWAY-3904[CAUSEWAY-3904]
-- Built-in _Value Semantics_ for various number grouping separation styles, changing the default grouping character to a narrow space https://issues.apache.org/jira/browse/CAUSEWAY-4006[CAUSEWAY-4006]
+== New Feature
 
-🐞 Bug Fixes
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3989[CAUSEWAY-3989] - [CommandLog] Bulk-Export and -Upload of Commands
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3982[CAUSEWAY-3982] - extend auditing to only log on updates, not create or delete.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975] - Open Telemetry Integration
 
-- ApplicationFeatureViewModel may fail to properly instantiate https://issues.apache.org/jira/browse/CAUSEWAY-3966[CAUSEWAY-3966]
-- NPE in EntityChangeTrackerDefault when Logging with DEBUG level https://issues.apache.org/jira/browse/CAUSEWAY-3946[CAUSEWAY-3946]
-- Metamodel Introspection Policy not honored for Java Records as Viewmodels https://issues.apache.org/jira/browse/CAUSEWAY-3991[CAUSEWAY-3991]
-- Switching between Layout Variants may result in _Members_ staying hidden https://issues.apache.org/jira/browse/CAUSEWAY-3971[CAUSEWAY-3971]
-- [Commons] Internal OneShot Util may deadlock (potentially preventing App from startup) https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972]
-- [Wicket Viewer] Hide Tabs when content is permanently hidden https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983] 
-- [Wicket Viewer] Table Row Actions Redirect might fail if behind Reverse Proxy https://issues.apache.org/jira/browse/CAUSEWAY-3976[CAUSEWAY-3976]
-- [Wicket Viewer] Upload Button may trigger Download of same File https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950]
-- [Wicket Viewer] Downloadlink may fail with Network Error https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958]
-- [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3958]
-- [Wicket Viewer] Actions in Tables have wrong Result Routing https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961]
-- [Wicket Viewer] Dropdown Menu Clicks sometimes ignored https://issues.apache.org/jira/browse/CAUSEWAY-3992[CAUSEWAY-3992]
 
-🔨 Dependency Upgrades
+== Improvement
 
-- Upgrade to Spring Boot 4.0.5
-- Upgrade to EclipseLink 5.0.0
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988] - [Security] Support for Env Var provided HMAC Secret
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984] - [Programming Model] Remove Support for Property Clear Methods
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3969[CAUSEWAY-3969] - [JPA] Fail early on inconsistent weave state within discovered entity type hierarchies
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3964[CAUSEWAY-3964] - Metamodel Inspector Support for Type Hierarchy
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3959[CAUSEWAY-3959] - [JPA] Build framework-provided Entities using Static Weaving
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948] - Pickup Webjar Version Strings automatically from Classpath
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3945[CAUSEWAY-3945] - [Wicket Viewer] Disable client-side Caching for Tabular Downloads (eg Excel)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3942[CAUSEWAY-3942] - Support EclipseLink static weaving automatically.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3940[CAUSEWAY-3940] - Metamodel Validation Errors are misleading when Issue is just a missing -parameters Compiler Flag
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3939[CAUSEWAY-3939] - Viewmodel Bookmark Overhaul
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3937[CAUSEWAY-3937] - [Applib/Core] Grid Loading Overhaul
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3904[CAUSEWAY-3904] - [Wicket Viewer] Select2 with Object Icons
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3967[CAUSEWAY-3967] - [JPA] Framework Consuming App fails to bookmark Entities when Weaving is enabled
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3630[CAUSEWAY-3630] - [Wicket Viewer] Simplified Tabular Data Integration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2445[CAUSEWAY-2445] - [Ongoing] CI Maintenance
 
-== Appendix 
 
-=== Open Telemetry Minimal Setup (for Applications)
+== Bug
 
-[source,xml]
-.Maven
-----
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-opentelemetry</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.micrometer</groupId>
-    <artifactId>micrometer-registry-otlp</artifactId>
-</dependency>
-----
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3992[CAUSEWAY-3992] - [Wicket Viewer] Dropdown Menu Clicks sometimes ignored
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3991[CAUSEWAY-3991] - Metamodel Introspection Policy not honored for Java Records as Viewmodels
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3987[CAUSEWAY-3987] - [Wicket Viewer] Regression - Latest Webjar PDFJS breaks PDF integration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983] - [Wicket Viewer] Empty Tabs should be hidden (Regression)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3976[CAUSEWAY-3976] - [Wicket Viewer] Table Row Actions Redirect might fail if behind Reverse Proxy
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972] - [Commons] Internal OneShot Util may deadlock
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3971[CAUSEWAY-3971] - [Wicket Viewer] Switching between Layout Variants may result in Members staying hidden
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3966[CAUSEWAY-3966] - ApplicationFeatureViewModel may fail to properly instantiate
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3965[CAUSEWAY-3965] - [Metamodel] Type Hierarchy Introspection misses out on Interfaces
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3961[CAUSEWAY-3961] - [Wicket Viewer] Actions in Tables have wrong Result Routing
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3960[CAUSEWAY-3960] - [Wicket Viewer] Actions in Tables have wrong Usability/Visibility Logic
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958] - [Wicket Viewer] Downloadlink may fail with Network Error
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950] - [Wicket Viewer] Upload Button may trigger Download of same File
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3949[CAUSEWAY-3949] - Unstable Tests
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3946[CAUSEWAY-3946] - NPE in EntityChangeTrackerDefault when Logging with DEBUG level
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3944[CAUSEWAY-3944] - [JPA] Collection Mementos may taint Owner Entity State
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3938[CAUSEWAY-3938] - [Wicket Viewer] Editing uninitialized mandatory property causes exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3913[CAUSEWAY-3913] - [Layout] Inconsistent slot-in handling when feature should appear more than once
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3899[CAUSEWAY-3899] - NPE guard for DomainChangeRecord
 
-[source,yml]
-.Configuration
-----
-spring:
-  application:
-    name: <name of service>
-  
-management:
-  tracing:
-    sampling:
-      probability: 1  
-  opentelemetry:
-    tracing:
-      export:
-        otlp:
-          endpoint: http://<my-endpoint>:4318/v1/traces
-----
 
-[source,java]
-.Spring - disables 'metric' export (we are currently only using 'traces')
-----
-@Bean
-OtlpConfig otlpConfig() {
-    return new OtlpConfig() {
-        @Override public @Nullable String get(final String key) { return null;}
-        @Override public boolean enabled() { return false; }
-    };
-}
-----
+== Dependency upgrade
 
-[source,bash]
-.Docker - one of many options is to use Jaeger as telemetry collector
-----
-docker run -d --name jaeger \
--p 16686:16686 \
--p 4317:4317 \
--p 4318:4318 \
--p 5778:5778 \
--p 9411:9411 \
-cr.jaegertracing.io/jaegertracing/jaeger
-----
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3947[CAUSEWAY-3947] - Migrate to Jackson 3.x
+* Upgrade to Spring Boot 4.0.5
+* Upgrade to EclipseLink 5.0.0
 
-Exposing Jaeger's UI at http://<my-endpoint>:16686
 
-=== Open Telemetry Usage
+== Task
 
-- See blog: https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot
-- See also: https://www.jaegertracing.io/docs/2.16/getting-started/
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3990[CAUSEWAY-3990] - 4.0.0-M2 release tasks
+
+
+== Documentation
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3979[CAUSEWAY-3979] - DefaultRoutingService is no longer used (since v2)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3911[CAUSEWAY-3911] - Adopt Tip&Tail
+
+
+
+== Won't Do
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3963[CAUSEWAY-3963] - WONT DO - [Debug] For every Type introspected, keep track of what triggered the Introspection
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3744[CAUSEWAY-3744] - [Abandoned] For JPA dynamic weaving, implement LoadTimeWeaverAware as a way...
+
+== Duplicate
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3912[CAUSEWAY-3912] - [Duplicate] Per Viewer Service Filtering
 
