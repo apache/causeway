@@ -1,0 +1,76 @@
+= Open Telemetry Setup
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Add the following dependencies into your application:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-opentelemetry</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-otlp</artifactId>
+</dependency>
+----
+
+And update configuration:
+
+[source,yml,subs="attributes+"]
+.application.yaml
+----
+spring:
+  application:
+    name: <name of service>
+
+management:
+  tracing:
+    sampling:
+      probability: 1
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://<my-endpoint>:4318/v1/traces
+----
+
+
+In Spring app, disable the 'metric' export (we are currently only using 'traces') in a suitable `@Configuration`, for example `AppManifest`:
+
+[source,java]
+.AppManifest.java
+----
+@Bean
+OtlpConfig otlpConfig() {
+    return new OtlpConfig() {
+        @Override public @Nullable String get(final String key) { return null;}
+        @Override public boolean enabled() { return false; }
+    };
+}
+----
+
+Run up Jaeger as a telemetry collector:
++
+[source,bash]
+.Docker - one of many options is to use Jaeger as telemetry collector
+----
+docker run -d --name jaeger \
+-p 16686:16686 \
+-p 4317:4317 \
+-p 4318:4318 \
+-p 5778:5778 \
+-p 9411:9411 \
+cr.jaegertracing.io/jaegertracing/jaeger
+----
+
+This will expose Jaeger's UI at http://<my-endpoint>:16686
+
+=== Open Telemetry Usage
+
+- See blog: https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot
+- See also: https://www.jaegertracing.io/docs/2.16/getting-started/
+

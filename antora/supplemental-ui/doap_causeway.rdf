@@ -39,6 +39,14 @@
     <release>
       <Version>
         <name>causeway</name>
+        <created>2026-06-12</created>
+        <revision>4.0.0-M2</revision>
+      </Version>
+    </release>
+
+    <release>
+      <Version>
+        <name>causeway</name>
         <created>2026-04-09</created>
         <revision>3.6.0</revision>
       </Version>
