@@ -92,6 +92,10 @@
 			</exclusions>
 		</dependency>
         <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+		</dependency>
+        <dependency>
         	<!-- provides jakarta.el.* -->
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
