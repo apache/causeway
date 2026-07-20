@@ -308,7 +308,7 @@ asciidoc:
     page-causewaycurrmajorversion: "v3"
     page-causewaynextmajorversion: "v4"
     page-causewaysnapshotversion: "4.0.0-SNAPSHOT"
-    page-causewayreleaseversion: "4.0.0-M1"
+    page-causewayreleaseversion: "4.0.0-M2"
     page-causewayjdkversion: "21"
 
 output:
