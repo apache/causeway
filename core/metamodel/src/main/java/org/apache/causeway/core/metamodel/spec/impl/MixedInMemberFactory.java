@@ -1,0 +1,126 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.spec.impl;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
+
+record MixedInMemberFactory(
+		//FIXME refactor to use ObjectSpecification 
+		ObjectSpecificationDefault spec) {
+
+    /**
+     * Creates all mixed in properties and collections for this spec.
+     */
+    public List<ObjectAssociation> createMixedInAssociations() {
+    	var include = spec.isEntityOrViewModelOrAbstract() 
+    			&& !spec.isInjectable() 
+    			&& !spec.isValue();
+        return include 
+    		? spec.getCausewayBeanTypeRegistry().streamMixinTypes()
+	            .flatMap(this::createMixedInAssociation)
+	            .toList()
+            : List.of();
+    }
+    
+    /**
+     * Creates all mixed in actions for this spec.
+     */
+    public List<ObjectActionMixedIn> createMixedInActions() {
+        var include = spec.isEntityOrViewModelOrAbstract()
+                || spec.getBeanSort().isManagedBeanContributing()
+                // in support of composite value-type constructor mixins
+                || spec.getBeanSort().isValue();
+        return include
+    		? spec.getCausewayBeanTypeRegistry().streamMixinTypes()
+				.flatMap(this::createMixedInAction)
+				.toList()
+			: List.of();
+    }
+    
+    // -- HELPER
+
+    private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
+        var mixinSpec = spec.specLoaderInternal().loadSpecification(mixinType,
+                IntrospectionRequest.FULL);
+        if (mixinSpec == null
+                || mixinSpec == spec)
+			return Stream.empty();
+        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
+        if(mixinFacet == null)
+			// this shouldn't happen; to be covered by meta-model validation later
+            return Stream.empty();
+        if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
+			return Stream.empty();
+        var mixinMethodName = mixinFacet.getMainMethodName();
+
+        return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+	        .filter(_SpecPredicates::isMixedInAssociation)
+	        .map(ObjectActionDefault.class::cast)
+	        .map(_MixedInMemberFactory.mixedInAssociation(spec, mixinSpec, mixinMethodName));
+    }
+    
+    private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
+
+        var mixinSpec = spec.specLoaderInternal().loadSpecification(mixinType,
+                IntrospectionRequest.FULL);
+        if (mixinSpec == null
+                || mixinSpec == spec)
+			return Stream.empty();
+        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
+        if(mixinFacet == null)
+			// this shouldn't happen; to be covered by meta-model validation later
+            return Stream.empty();
+        if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
+			return Stream.empty();
+        // don't mixin Object_ mixins to domain services
+        if(spec.getBeanSort().isManagedBeanContributing()
+                && mixinFacet.isMixinFor(java.lang.Object.class))
+			return Stream.empty();
+
+        var mixinMethodName = mixinFacet.getMainMethodName();
+
+        return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+	        // value types only support constructor mixins
+	        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
+	        .filter(_SpecPredicates::isMixedInAction)
+	        .map(ObjectActionDefault.class::cast)
+	        .map(_MixedInMemberFactory.mixedInAction(spec, mixinSpec, mixinMethodName));
+    }
+
+    /**
+     * Whether the mixin's main method returns an instance of type equal to the mixee's type.
+     * <p>
+     * Introduced to support constructor mixins for value-types and
+     * also to support associated <i>Actions</i> for <i>Action Parameters</i>.
+     */
+    private boolean whenIsValueThenIsAlsoConstructorMixin(final ObjectAction act) {
+        return spec.getBeanSort().isValue()
+                ? Objects.equals(spec, act.getReturnType())
+                : true;
+    }
+	
+}

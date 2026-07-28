@@ -28,6 +28,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
@@ -52,9 +54,7 @@ import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessO
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -290,7 +290,7 @@ implements HasMetaModelContext {
                         featureType,
                         method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
-        
+
         // warn on parameter names NOT reflectable
         if(processMethodContext.hasPotentialNonReflectableParameterNames()) {
     		log.warn("potential missing -parameters compiler flag with method {}#{}",
@@ -301,10 +301,6 @@ implements HasMetaModelContext {
         for (FacetFactory facetFactory : factoriesByFeatureType.getOrElseEmpty(featureType)) {
             facetFactory.process(processMethodContext);
         }
-    }
-
-    public void processMemberOrder(final ObjectMember facetHolder) {
-
     }
 
     /**
@@ -375,7 +371,9 @@ implements HasMetaModelContext {
         var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
         for (var factory : factories) {
             if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
-                if(!accessorFacetFactory.supportsProperties()) continue;
+                if(!accessorFacetFactory.supportsProperties()) {
+					continue;
+				}
                 propertyOrCollectionIdentifyingFactories.add(accessorFacetFactory);
             }
         }
@@ -385,7 +383,9 @@ implements HasMetaModelContext {
         var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
         for (var factory : factories) {
             if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
-                if(!accessorFacetFactory.supportsCollections()) continue;
+                if(!accessorFacetFactory.supportsCollections()) {
+					continue;
+				}
                 propertyOrCollectionIdentifyingFactories.add(accessorFacetFactory);
             }
         }

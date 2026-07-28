@@ -27,7 +27,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
@@ -43,7 +42,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -64,8 +62,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
@@ -103,10 +99,10 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.impl.MemberPopulator.ComputedMembers;
 import org.apache.causeway.core.metamodel.spec.impl.MemberPopulator.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
@@ -116,28 +112,28 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-final class ObjectSpecificationDefault
+final class ObjectSpecification2
 implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLoaderInternal {
 
     // -- CONSTRUCTION
 
     /**
-     * Lazily built by {@link #getMember(ResolvedMethod)}.
+     * Lazily built by {@link #getMember(Method)}.
      */
     private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
 
-    private final FacetedMethodsBuilder facetedMethodsBuilder;
+    final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
     private final _Lazy<Boolean> isInjectableLazy;
 
     @Getter(onMethod_={@Override})
     private final IntrospectionPolicy introspectionPolicy;
-    
+
     @Getter @Accessors(fluent = true)
     private final CausewayBeanMetaData typeMeta;
 
-    public ObjectSpecificationDefault(
+    public ObjectSpecification2(
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull MetaModelContext mmc,
             final @NonNull FacetProcessor facetProcessor,
@@ -151,7 +147,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             facetProcessor.getMetaModelContext(),
             Identifier.classIdentifier(logicalType()));
 
+        this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
+
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
@@ -166,8 +164,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
 
         this.columnHelper = new _MembersAsColumns(mmc);
+        this.memberPopulator = new MemberPopulator2(this);
     }
-    
+
     @Override public BeanSort getBeanSort() { return typeMeta.beanSort(); }
     @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
@@ -201,79 +200,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 : superclass().getFullIdentifier());
     }
 
-    protected void introspectTypeHierarchy() {
-
-        facetedMethodsBuilder.introspectClass();
-
-        // name
-        addNamedFacetIfRequired();
-
-        // go no further if a value
-        if(this.isValue()) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
-            }
-            return;
-        }
-
-        loadSpecOfSuperclass(getCorrespondingClass().getSuperclass());
-        loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
-    }
-
-    private void introspectMembers() {
-
-        // yet this logic does not skip UNKNONW
-        if(this.getBeanSort().isCollection()
-                || this.getBeanSort().isVetoed()
-                || this.isValue()) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
-            }
-            return;
-        }
-
-        var memberFactory = new RegularMemberFactory(this, facetedMethodsBuilder);
-        
-        // create associations and actions
-        replaceAssociations(memberFactory.createAssociations());
-        replaceActions(memberFactory.createActions());
-
-        postProcessor.postProcess(this);
-        invalidateCachedFacets();
-    }
-
-    @Override
-    public void synthesizeNavigationActions() {
-        if (!getMetaModelContext().getConfiguration()
-                .extensions().commandLog().recordingSupport().isEnabled()) {
-            return;
-        }
-
-        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
-        var existingActionIds = objectActions.stream()
-                .map(ObjectAction::getId)
-                .collect(Collectors.toSet());
-        var existingSyntheticActionIds = objectActions.stream()
-                .filter(action -> action.lookupFacet(ParentedCollectionNavigationFacet.class).isPresent()
-                        || action.lookupFacet(ScalarReferenceNavigationFacet.class).isPresent())
-                .map(ObjectAction::getId)
-                .collect(Collectors.toSet());
-        var syntheticActions = SyntheticNavigationActionFactory.createFor(
-                        getMetaModelContext(),
-                        this,
-                        associations.stream(),
-                        existingActionIds,
-                        existingSyntheticActionIds)
-                .toList();
-        if (syntheticActions.isEmpty()) {
-            return;
-        }
-
-        replaceActions(Stream.concat(objectActions.stream(), syntheticActions.stream()));
-        membersByMethod = null;
-    }
-
-    private void addNamedFacetIfRequired() {
+    void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
                     _Strings.asNaturalName.apply(getShortIdentifier()),
@@ -289,8 +216,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
 
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getDeclaredAction %s on %s".formatted(id, this.getFeatureIdentifier()));
+    	memberPopulator.introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+    			()->"getDeclaredAction %s on %s".formatted(id, this.getFeatureIdentifier()));
 
         return _Strings.isEmpty(id)
             ? Optional.empty()
@@ -304,8 +231,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getMember %s on %s".formatted(method.name(), this.getFeatureIdentifier()));
+    	memberPopulator.introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+    			()->"getMember %s on %s".formatted(method.name(), this.getFeatureIdentifier()));
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
@@ -386,7 +313,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     // -- FIELDS
 
-    private final PostProcessor postProcessor;
+    final PostProcessor postProcessor;
+    final FacetProcessor facetProcessor;
 
     // -- ASSOCIATIONS
 
@@ -431,7 +359,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
-    private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
+    private final MemberPopulator2 memberPopulator;
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
@@ -443,70 +371,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public void introspect(final IntrospectionRequest request) {
-        switch (request) {
-            case REGISTER -> introspectUpTo(IntrospectionState.NOT_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-            case TYPE_ONLY -> introspectUpTo(IntrospectionState.TYPE_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-            case FULL -> introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-        }
-    }
-
-    /**
-     * @param introspectionContextProvider keeps track of the causal chain of introspection requests
-     */
-    private void introspectUpTo(final IntrospectionState upTo, final Supplier<String> introspectionContextProvider) {
-        if(!isLessThan(upTo))
-			return; // optimization
-
-        if(log.isDebugEnabled()) {
-            log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
-        }
-
-        switch (introspectionState) {
-            case NOT_INTROSPECTED->{
-                if(isLessThan(upTo)) {
-                    introspectType();
-                }
-                if(isLessThan(upTo)) {
-                    introspectFully();
-                    specLoaderInternal().validateLater(this, introspectionContextProvider);
-                }
-            }
-            case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
-            case TYPE_INTROSPECTED->{
-                if(isLessThan(upTo)) {
-                    introspectFully();
-                    specLoaderInternal().validateLater(this, introspectionContextProvider);
-                }
-            }
-            case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
-            case FULLY_INTROSPECTED->{}// nothing to do ... all done
-        }
-    }
-
-    private void introspectType() {
-        // set to avoid infinite loops
-        this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
-        introspectTypeHierarchy();
-        invalidateCachedFacets();
-        this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
-    }
-
-    private void introspectFully() {
-
-        // set to avoid infinite loops
-        this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-        introspectMembers();
-        this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
-
-        // make sure we've loaded the facets from layout.xml also.
-        Facets.gridPreload(this, null);
-    }
-
-    private boolean isLessThan(final IntrospectionState upTo) {
-        return this.introspectionState.compareTo(upTo) < 0;
+    	memberPopulator.introspect(request);
     }
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
@@ -568,33 +433,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 this.interfaces.clear();
                 this.interfaces.addAll(interfaceSpecList);
                 unmodifiableInterfaces.clear();
-            }
-        }
-    }
-
-    protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
-        var orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
-        synchronized (unmodifiableAssociations) {
-            this.associations.clear();
-            this.associations.addAll(orderedAssociations);
-            unmodifiableAssociations.clear(); // invalidate
-        }
-    }
-
-    protected final void replaceActions(final Stream<ObjectAction> objectActions) {
-        var orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
-        synchronized (unmodifiableActions){
-            this.objectActions.clear();
-            this.objectActions.addAll(orderedActions);
-            unmodifiableActions.clear(); // invalidate
-
-            // rebuild objectActionsByType multi-map
-            for (var actionType : ActionScope.values()) {
-                var objectActionForType = objectActionsByType.getOrElseNew(actionType);
-                objectActionForType.clear();
-                orderedActions.stream()
-                .filter(ObjectAction.Predicates.ofActionType(actionType))
-                .forEach(objectActionForType::add);
             }
         }
     }
@@ -776,7 +614,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     // -- FACET HANDLING
-    
+
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
         synchronized(unmodifiableInterfaces) {
@@ -811,10 +649,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
-
-        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
+    	memberPopulator.includeMixedInMembers(
+    		()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
 
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
@@ -824,7 +660,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+    	memberPopulator.introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
                 ()->"getMember %s of %s".formatted(memberId, this.getFeatureIdentifier()));
 
         if(_Strings.isEmpty(memberId))
@@ -843,8 +679,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getDeclaredAssociation %s of %s".formatted(id, this.getFeatureIdentifier()));
+    	memberPopulator.introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+    			()->"getDeclaredAssociation %s of %s".formatted(id, this.getFeatureIdentifier()));
 
         if(_Strings.isEmpty(id))
 			return Optional.empty();
@@ -864,16 +700,13 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     public Stream<ObjectAction> streamDeclaredActions(
             final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
-
-        mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
+    	memberPopulator.includeMixedInMembers(
+    			()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
                 .filter(mixedIn.toFilter());
     }
-
 
     // -- VALIDITY
 
@@ -921,49 +754,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         return containsFacet(ParentedCollectionFacet.class);
     }
 
-    // -- MIXIN ADDER ONESHOTs
-
-    private final _Oneshot mixedInActionAdder = new _Oneshot();
-    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
-
-    /**
-     * one-shot: must be no-op, if already created
-     */
-    private void createMixedInActionsAndResort() {
-        var memberFactory = new MixedInMemberFactory(this);
-        var mixedInActions = memberFactory.createMixedInActions();
-        if(mixedInActions.isEmpty())
-			return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
-
-        var regularActions = _Lists.newArrayList(objectActions); // defensive copy
-
-        // note: we are doing this before any member sorting
-        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
-
-        replaceActions(Stream.concat(
-                regularActions.stream(),
-                mixedInActions.stream()));
-    }
-
-    /**
-     * one-shot: must be no-op, if already created
-     */
-    private void createMixedInAssociationsAndResort() {
-        var memberFactory = new MixedInMemberFactory(this);
-        var mixedInAssociations = memberFactory.createMixedInAssociations();
-        if(mixedInAssociations.isEmpty())
-			return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
-
-        var regularAssociations = _Lists.newArrayList(associations); // defensive copy
-
-        // note: we are doing this before any member sorting
-        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);
-
-        replaceAssociations(Stream.concat(
-                regularAssociations.stream(),
-                mixedInAssociations.stream()));
-    }
-
     @Getter(lazy = true)
     private final CausewayBeanTypeRegistry causewayBeanTypeRegistry =
         getServiceRegistry()
@@ -974,7 +764,58 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         getServiceRegistry().select(EntityTitleSubscriber.class);
 
     boolean isFullyIntrospected() {
-        return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
+        return memberPopulator.isFullyIntrospected();
     }
+
+    @Deprecated
+	void replaceMembers(final ComputedMembers computedMembers) {
+		synchronized (unmodifiableAssociations) {
+            associations.clear();
+            associations.addAll(computedMembers.associationsInOrder().toList());
+            unmodifiableAssociations.clear(); // invalidate
+        }
+		synchronized (unmodifiableActions) {
+			objectActions.clear();
+			objectActions.addAll(computedMembers.actionsInOrder().toList());
+			unmodifiableActions.clear(); // invalidate
+			// rebuild objectActionsByType multi-map
+            for (var actionType : ActionScope.values()) {
+                var objectActionForType = objectActionsByType.getOrElseNew(actionType);
+                objectActionForType.clear();
+                computedMembers.actionsInOrder().stream()
+	                .filter(ObjectAction.Predicates.ofActionType(actionType))
+	                .forEach(objectActionForType::add);
+            }
+        }
+	}
+
+//    @Deprecated
+//    protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
+//        var orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
+//        synchronized (unmodifiableAssociations) {
+//            this.associations.clear();
+//            this.associations.addAll(orderedAssociations);
+//            unmodifiableAssociations.clear(); // invalidate
+//        }
+//    }
+//
+//    @Deprecated
+//    protected final void replaceActions(final Stream<ObjectAction> objectActions) {
+//        var orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
+//        synchronized (unmodifiableActions){
+//            this.objectActions.clear();
+//            this.objectActions.addAll(orderedActions);
+//            unmodifiableActions.clear(); // invalidate
+//
+//            // rebuild objectActionsByType multi-map
+//            for (var actionType : ActionScope.values()) {
+//                var objectActionForType = objectActionsByType.getOrElseNew(actionType);
+//                objectActionForType.clear();
+//                orderedActions.stream()
+//                .filter(ObjectAction.Predicates.ofActionType(actionType))
+//                .forEach(objectActionForType::add);
+//            }
+//        }
+//    }
 
 }

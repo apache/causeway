@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
@@ -104,7 +105,7 @@ implements
 
     }
 
-    private final ObjectSpecificationDefault inspectedTypeSpec;
+    private final ObjectSpecification inspectedTypeSpec;
 
     @Getter private final Class<?> introspectedClass;
 
@@ -120,7 +121,7 @@ implements
     // -- CONSTRUCTOR
 
     public FacetedMethodsBuilder(
-            final ObjectSpecificationDefault inspectedTypeSpec,
+            final ObjectSpecification inspectedTypeSpec,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
@@ -399,11 +400,14 @@ implements
             return true;
         }
 
-        // exclude those that have eg. reserved prefixes
-        if (getFacetProcessor().recognizes(actionMethod)) {
-            // this is a potential orphan candidate, collect these, than use when validating
-            inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
-            return false;
+        //FIXME potentially misses other ObjectSpecification impl.
+        if(inspectedTypeSpec instanceof ObjectSpecificationDefault objspecDefault) {
+	        // exclude those that have eg. reserved prefixes
+	        if (getFacetProcessor().recognizes(actionMethod)) {
+	            // this is a potential orphan candidate, collect these, than use when validating
+	        	objspecDefault.getPotentialOrphans().add(actionMethod);
+	            return false;
+	        }
         }
 
         if(introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
@@ -434,9 +438,12 @@ implements
                 .orElse(null);
         if(mixinFacet==null) return false;
 
-        if(!inspectedTypeSpec.isFullyIntrospected())
-            // members are not introspected yet, so make a guess
-            return mixinFacet.isCandidateForMain(method);
+        //FIXME potentially misses other ObjectSpecification impl.
+        if(inspectedTypeSpec instanceof ObjectSpecificationDefault objspecDefault) {
+        	if(!objspecDefault.isFullyIntrospected())
+        		// members are not introspected yet, so make a guess
+        		return mixinFacet.isCandidateForMain(method);
+        }
 
         return inspectedTypeSpec
                 .lookupMixedInAction(inspectedTypeSpec)

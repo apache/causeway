@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -111,6 +112,7 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsOptional;
 import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsRequired;
@@ -1002,6 +1004,26 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         var vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
         assertHasAction(vmSpec, "myAction"); // regular action (just a sanity check)
+        assertHasAction(vmSpec, actionName); // contributed action
+        assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
+    }
+
+    // -- JAVA RECORD AS MIXIN
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperMixinContribution_actionRecord.class
+    })
+    @Disabled("WIP")
+    void record_as_mixin(final Class<?> mixinClass) {
+
+        final String actionName = _Strings.splitThenStream(mixinClass.getSimpleName(), "_")
+                .reduce((a, b)->b)
+                .orElseThrow();
+
+        var mixinSpec = specificationLoader.specForTypeElseFail(mixinClass);
+
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
         assertHasAction(vmSpec, actionName); // contributed action
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,7 +37,7 @@ final class _MemberSortingUtils {
 
     static List<ObjectAssociation> sortAssociationsIntoList(final Stream<ObjectAssociation> associations) {
         var deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
-        var orderedAssociations = _Lists.<ObjectAssociation> newArrayList();
+        var orderedAssociations = new ArrayList<ObjectAssociation>();
         sortAssociations(deweyOrderSet, orderedAssociations);
         return orderedAssociations;
     }
@@ -45,7 +46,7 @@ final class _MemberSortingUtils {
 
     static List<ObjectAction> sortActionsIntoList(final Stream<ObjectAction> actions) {
         var deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
-        var orderedActions = _Lists.<ObjectAction>newArrayList();
+        var orderedActions = new ArrayList<ObjectAction>();
         sortActions(deweyOrderSet, orderedActions);
         return orderedActions;
     }
@@ -58,30 +59,25 @@ final class _MemberSortingUtils {
                 associationsToAppendTo.add((ObjectAssociation) element);
             } else if (element instanceof OneToOneAssociation) {
                 associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof DeweyOrderSet) {
+            } else if (element instanceof DeweyOrderSet childOrderSet) {
                 // just flatten.
-                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
                 sortAssociations(childOrderSet, associationsToAppendTo);
-            } else {
-                throw new UnknownTypeException(element);
-            }
+            } else
+				throw new UnknownTypeException(element);
         }
     }
 
     private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
         for (var element : orderSet) {
-            if(element instanceof ObjectAction) {
-                var objectAction = (ObjectAction) element;
+            if(element instanceof ObjectAction objectAction) {
                 actionsToAppendTo.add(objectAction);
             }
-            else if (element instanceof DeweyOrderSet) {
-                var deweyOrderSet = ((DeweyOrderSet) element);
+            else if (element instanceof DeweyOrderSet deweyOrderSet) {
                 var actions = _Lists.<ObjectAction>newArrayList();
                 sortActions(deweyOrderSet, actions);
                 actionsToAppendTo.addAll(actions);
-            } else {
-                throw new UnknownTypeException(element);
-            }
+            } else
+				throw new UnknownTypeException(element);
         }
     }
 

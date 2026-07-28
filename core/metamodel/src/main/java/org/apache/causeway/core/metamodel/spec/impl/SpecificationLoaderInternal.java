@@ -61,9 +61,8 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
             final @Nullable String logicalTypeName,
             final @NonNull IntrospectionRequest request) {
 
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
-            return null;
-        }
+        if(_Strings.isNullOrEmpty(logicalTypeName))
+			return null;
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
                     loadSpecification(logicalType.correspondingClass(), request))
