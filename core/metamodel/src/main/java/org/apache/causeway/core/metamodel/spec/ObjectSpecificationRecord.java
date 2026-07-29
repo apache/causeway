@@ -242,11 +242,6 @@ implements
 		return null;
 	}
 	@Override
-	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
 	public String getTitle(final TitleRenderRequest titleRenderRequest) {
 		// TODO Auto-generated method stub
 		return null;

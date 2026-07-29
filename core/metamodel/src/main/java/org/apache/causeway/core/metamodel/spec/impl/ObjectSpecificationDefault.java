@@ -68,7 +68,6 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedColle
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
@@ -759,16 +758,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 .orElse("");
     }
 
-    /*
-     * help is typically a reference (eg a URL) and so should not default to a
-     * textual value if not set up
-     */
-    @Override
-    public String getHelp() {
-        var helpFacet = getFacet(HelpFacet.class);
-        return helpFacet == null ? null : helpFacet.value();
-    }
-
     @Override
     public final Optional<Contributing> contributing() {
         return mixinFacet()
@@ -778,10 +767,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     // -- FACET HANDLING
     
     @Override
-    public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
+    public <Q extends Facet> Optional<Q> lookupFacet(final Class<Q> facetType) {
         synchronized(unmodifiableInterfaces) {
-        	return Hierarchical.lookupFacet(facetType, facetHolder, this)
-        			.orElse(null);
+        	return Hierarchical.lookupFacet(facetType, facetHolder, this);
         }
     }
 

@@ -26,9 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -50,7 +47,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -78,6 +74,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 
@@ -226,14 +224,6 @@ extends
      * {@link ObjectDescribedFacet}; is not necessarily immutable.
      */
     String getDescription();
-
-    /**
-     * Returns a help string or lookup reference, if any, of the specification.
-     * <p>
-     * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
-     * is not necessarily immutable.
-     */
-    String getHelp();
 
     /**
      * Returns the title to display of target adapter, rendered within the context
