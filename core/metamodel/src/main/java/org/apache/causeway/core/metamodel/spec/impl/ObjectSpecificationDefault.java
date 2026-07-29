@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -55,7 +56,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -814,7 +814,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
                 ()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
 
-        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
+        mixedInMemberAdder.trigger(this::createMixedInMembersAndResort); // only if not already
 
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
@@ -867,7 +867,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
                 ()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
 
-        mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
+        mixedInMemberAdder.trigger(this::createMixedInMembersAndResort);
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
@@ -923,19 +923,23 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     // -- MIXIN ADDER ONESHOTs
 
-    private final _Oneshot mixedInActionAdder = new _Oneshot();
-    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
+    private final _Oneshot mixedInMemberAdder = new _Oneshot();
 
     /**
      * one-shot: must be no-op, if already created
      */
-    private void createMixedInActionsAndResort() {
-        var memberFactory = new MixedInMemberFactory(this);
+    private void createMixedInMembersAndResort() {
+    	var memberFactory = new MixedInMemberFactory(this, specLoaderInternal());
+    	createMixedInActionsAndResort(memberFactory);
+    	createMixedInAssociationsAndResort(memberFactory);
+    }
+    
+    private void createMixedInActionsAndResort(MixedInMemberFactory memberFactory) {
         var mixedInActions = memberFactory.createMixedInActions();
         if(mixedInActions.isEmpty())
 			return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
 
-        var regularActions = _Lists.newArrayList(objectActions); // defensive copy
+        var regularActions = new ArrayList<>(objectActions); // defensive copy
 
         // note: we are doing this before any member sorting
         _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
@@ -945,16 +949,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 mixedInActions.stream()));
     }
 
-    /**
-     * one-shot: must be no-op, if already created
-     */
-    private void createMixedInAssociationsAndResort() {
-        var memberFactory = new MixedInMemberFactory(this);
+    private void createMixedInAssociationsAndResort(MixedInMemberFactory memberFactory) {
         var mixedInAssociations = memberFactory.createMixedInAssociations();
         if(mixedInAssociations.isEmpty())
 			return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
 
-        var regularAssociations = _Lists.newArrayList(associations); // defensive copy
+        var regularAssociations = new ArrayList<>(associations); // defensive copy
 
         // note: we are doing this before any member sorting
         _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);
@@ -963,11 +963,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
     }
-
-    @Getter(lazy = true)
-    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry =
-        getServiceRegistry()
-                .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
 
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =

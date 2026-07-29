@@ -20,18 +20,29 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 
 record MixedInMemberFactory(
-		//FIXME refactor to use ObjectSpecification 
-		ObjectSpecificationDefault spec) {
-
+		ObjectSpecification spec,
+		SpecificationLoaderInternal specLoaderInternal,
+		CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
+	
+	MixedInMemberFactory(
+			ObjectSpecification spec,
+			SpecificationLoaderInternal specLoaderInternal) {
+		this(spec, specLoaderInternal, spec.getServiceRegistry()
+				.lookupServiceElseFail(CausewayBeanTypeRegistry.class));
+	}
+	
     /**
      * Creates all mixed in properties and collections for this spec.
      */
@@ -40,7 +51,7 @@ record MixedInMemberFactory(
     			&& !spec.isInjectable() 
     			&& !spec.isValue();
         return include 
-    		? spec.getCausewayBeanTypeRegistry().streamMixinTypes()
+    		? causewayBeanTypeRegistry.streamMixinTypes()
 	            .flatMap(this::createMixedInAssociation)
 	            .toList()
             : List.of();
@@ -55,7 +66,7 @@ record MixedInMemberFactory(
                 // in support of composite value-type constructor mixins
                 || spec.getBeanSort().isValue();
         return include
-    		? spec.getCausewayBeanTypeRegistry().streamMixinTypes()
+    		? causewayBeanTypeRegistry.streamMixinTypes()
 				.flatMap(this::createMixedInAction)
 				.toList()
 			: List.of();
@@ -64,7 +75,7 @@ record MixedInMemberFactory(
     // -- HELPER
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
-        var mixinSpec = spec.specLoaderInternal().loadSpecification(mixinType,
+        var mixinSpec = specLoaderInternal.loadSpecification(mixinType,
                 IntrospectionRequest.FULL);
         if (mixinSpec == null
                 || mixinSpec == spec)
@@ -80,12 +91,12 @@ record MixedInMemberFactory(
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
 	        .filter(_SpecPredicates::isMixedInAssociation)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(_MixedInMemberFactory.mixedInAssociation(spec, mixinSpec, mixinMethodName));
+	        .map(mixedInAssociation(spec, mixinSpec, mixinMethodName));
     }
     
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
-        var mixinSpec = spec.specLoaderInternal().loadSpecification(mixinType,
+        var mixinSpec = specLoaderInternal.loadSpecification(mixinType,
                 IntrospectionRequest.FULL);
         if (mixinSpec == null
                 || mixinSpec == spec)
@@ -108,7 +119,7 @@ record MixedInMemberFactory(
 	        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
 	        .filter(_SpecPredicates::isMixedInAction)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(_MixedInMemberFactory.mixedInAction(spec, mixinSpec, mixinMethodName));
+	        .map(mixedInAction(spec, mixinSpec, mixinMethodName));
     }
 
     /**
@@ -121,6 +132,28 @@ record MixedInMemberFactory(
         return spec.getBeanSort().isValue()
                 ? Objects.equals(spec, act.getReturnType())
                 : true;
+    }
+    
+    private static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
+            final ObjectSpecification mixeeSpec,
+            final ObjectSpecification mixinSpec,
+            final String mixinMethodName) {
+
+        return mixinAction -> new ObjectActionMixedIn(
+                mixinSpec, mixinMethodName, mixinAction, mixeeSpec);
+    }
+
+    private static Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
+            final ObjectSpecification mixeeSpec,
+            final ObjectSpecification mixinSpec,
+            final String mixinMethodName) {
+
+        return mixinAction ->
+            mixinAction.getReturnType().isSingular()
+                ? new OneToOneAssociationMixedIn(
+                        mixeeSpec, mixinAction, mixinSpec, mixinMethodName)
+                : new OneToManyAssociationMixedIn(
+                        mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
     }
 	
 }

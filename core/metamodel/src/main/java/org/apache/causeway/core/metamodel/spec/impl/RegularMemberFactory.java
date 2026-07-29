@@ -32,7 +32,6 @@ record RegularMemberFactory(
 		ObjectSpecification spec,
 		FacetedMethodsBuilder facetedMethodsBuilder) {
 	
-    // -- create associations and actions
 	Stream<ObjectAssociation> createAssociations() {
         return facetedMethodsBuilder.getAssociationFacetedMethods()
             .stream()
@@ -42,9 +41,9 @@ record RegularMemberFactory(
     
     Stream<ObjectAction> createActions() {
     	return facetedMethodsBuilder.getActionFacetedMethods()
-    			.stream()
-    			.map(this::createAction)
-    			.filter(_NullSafe::isPresent);
+			.stream()
+			.map(this::createAction)
+			.filter(_NullSafe::isPresent);
     }
     
     // -- HELPER
