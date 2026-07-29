@@ -99,7 +99,7 @@ public record MetaModelServiceDefault(
         specificationLoader().specForLogicalType(logicalType)
                 .ifPresent(objectSpecification -> {
                     logicalTypes.add(logicalType);
-                    objectSpecification.getAliases().stream().forEach(logicalTypes::add);
+                    objectSpecification.aliases().stream().forEach(logicalTypes::add);
                 });
         return Can.ofCollection(logicalTypes);
     }

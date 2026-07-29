@@ -592,7 +592,7 @@ implements
                     specsByLogicalTypeName.putElement(objSpec.logicalTypeName(), objSpec);
 
                     // also adding aliases to the multi-map
-                    objSpec.getAliases()
+                    objSpec.aliases()
                     .forEach(alias->
                         specsByLogicalTypeName.putElement(alias.logicalName(), objSpec));
                 }
@@ -649,7 +649,7 @@ implements
 
                 private boolean logicalTypeNameIsNotIncludedInAliased(final ObjectSpecification objectSpecification) {
                     if (getConfiguration().core().metaModel().validator().allowLogicalTypeNameAsAlias()) {
-                        return objectSpecification.getAliases()
+                        return objectSpecification.aliases()
                                 .map(LogicalType::logicalName).stream()
                                 .noneMatch(name -> objectSpecification.logicalTypeName().equals(name));
                     }

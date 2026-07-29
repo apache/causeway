@@ -206,7 +206,7 @@ extends
      * Corresponds to {@link DomainService#aliased()} and
      * {@link DomainObject#aliased()}.
      */
-    Can<LogicalType> getAliases();
+    Can<LogicalType> aliases();
 
     /**
      * Returns the (singular) name for objects of this specification.

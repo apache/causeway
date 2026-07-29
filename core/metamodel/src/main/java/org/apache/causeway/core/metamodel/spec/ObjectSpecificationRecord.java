@@ -18,22 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -42,27 +44,36 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
-import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
+import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
+import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
+import org.springframework.util.StringUtils;
 
-//TODO[causeway-core-metamodel-CAUSEWAY-3834] WIP
+//TODO WIP
 public record ObjectSpecificationRecord(
 		CausewayBeanMetaData typeMeta,
         FeatureType featureType,
@@ -70,62 +81,29 @@ public record ObjectSpecificationRecord(
         Hierarchical hierarchical,
         ObjectActionContainer actionContainer,
         ObjectAssociationContainer associationContainer,
+        Can<EntityTitleSubscriber> titleSubscribers,
         IntrospectionPolicy introspectionPolicy,
+        Can<LogicalType> aliases,
     	Optional<ValueFacet<?>> valueFacet,
     	Optional<EntityFacet> entityFacet,
     	Optional<ViewModelFacet> viewmodelFacet,
     	Optional<MixinFacet> mixinFacet,
-    	_Lazy<Can<LogicalType>> aliases,
-    	_Lazy<Boolean> isDomainServiceLazy,
-    	_Lazy<Boolean> isInjectableLazy)
+    	Optional<ObjectNamedFacet> objectNamedFacet,
+    	Optional<ObjectDescribedFacet> objectDescribedFacet,
+    	Optional<TypeOfFacet> typeOfFacet, // explicit element type
+    	Optional<TitleFacet> titleFacet,
+    	Optional<IconFacet> iconFacet,
+    	Optional<FaFacet> faFacet,
+    	Optional<NavigableParentFacet> navigableParentFacet,
+    	Optional<CssClassFacet> cssClassFacet,
+    	boolean isDomainService,
+    	boolean isInjectable,
+    	boolean isParented,
+		boolean isImmutable,
+		boolean isHidden,
+		Map<ResolvedMethod, ObjectMember> membersByMethod)
 implements
 	ObjectSpecification {
-
-//	ObjectSpecificationRecord(
-//			final CausewayBeanMetaData typeMeta,
-//	        final FeatureType featureType,
-//	        final FacetHolder facetHolder,
-//	        final Hierarchical hierarchical,
-//	        final ObjectActionContainer actionContainer,
-//	        final ObjectAssociationContainer associationContainer,
-//	        final IntrospectionPolicy introspectionPolicy) {
-//		this(typeMeta, featureType, facetHolder, hierarchical, actionContainer, associationContainer, introspectionPolicy,
-//				null, null, null, null,
-//				_Lazy.threadSafe(()->Hierarchical.lookupFacet(AliasedFacet.class, facetHolder, hierarchical)
-//						.map(AliasedFacet::getAliases)
-//						.orElseGet(Can::empty)),
-//				_Lazy.threadSafe(()->_ClassCache.getInstance()
-//						.head(typeMeta.getCorrespondingClass())
-//						.hasAnnotation(DomainService.class))
-//				);
-//	}
-
-	public ObjectSpecificationRecord {
-		aliases = _Lazy.threadSafe(()->Hierarchical.lookupFacet(AliasedFacet.class, facetHolder, hierarchical)
-					.map(AliasedFacet::getAliases)
-					.orElseGet(Can::empty));
-		isDomainServiceLazy = _Lazy.threadSafe(()->_ClassCache.getInstance()
-				.head(typeMeta.getCorrespondingClass())
-				.hasAnnotation(DomainService.class));
-
-		boolean isVetoedForInjection = switch (typeMeta.managedBy()) {
-	        case NONE, CAUSEWAY, PERSISTENCE -> true;
-	        case UNSPECIFIED, SPRING  -> false;
-		};
-
-		isInjectableLazy = _Lazy.threadSafe(()->
-	        !isVetoedForInjection
-	                && !typeMeta.beanSort().isAbstract()
-	                && !typeMeta.beanSort().isValue()
-	                && !typeMeta.beanSort().isEntity()
-	                && !typeMeta.beanSort().isViewModel()
-	                && !typeMeta.beanSort().isMixin()
-	                && (typeMeta.beanSort().isManagedBeanAny()
-	                        || getServiceRegistry()
-	                                .lookupRegisteredBeanById(typeMeta.logicalType())
-	                                .isPresent()));
-	}
-
 
     // -- SPECIFICATION
 
@@ -214,85 +192,118 @@ implements
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
 	@Override public String getFullIdentifier() { return getCorrespondingClass().getName(); }
 	@Override public String getShortIdentifier() { return logicalType().logicalSimpleName(); }
-	@Override public Can<LogicalType> getAliases() { return aliases().get(); }
-	@Override public boolean isDomainService() { return isDomainServiceLazy.get(); }
-	@Override public boolean isInjectable() { return isInjectableLazy.get(); }
-	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
-	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
-	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
 
 	@Override
 	public Optional<? extends ObjectMember> getMember(final String memberId) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+        if(_Strings.isEmpty(memberId))
+			return Optional.empty();
+
+        var objectAction = getAction(memberId);
+        if(objectAction.isPresent())
+			return objectAction;
+
+        var association = getAssociation(memberId);
+        if(association.isPresent())
+			return association;
+
+        return Optional.empty();
 	}
 	@Override
 	public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+        return Optional.ofNullable(membersByMethod.get(method));
 	}
 	@Override
 	public String getSingularName() {
-		// TODO Auto-generated method stub
-		return null;
+		return objectNamedFacet
+            .flatMap(ObjectNamedFacet::translated)
+            // unexpected code reach, however keep for JUnit testing
+            .orElseGet(()->"(%s has neither title- nor object-named-facet)"
+            	.formatted(getFullIdentifier()));
 	}
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return objectDescribedFacet
+            .map(ObjectDescribedFacet::translated)
+            .orElse("");
 	}
 	@Override
 	public String getTitle(final TitleRenderRequest titleRenderRequest) {
-		// TODO Auto-generated method stub
-		return null;
+        if (titleFacet.isPresent()) {
+            var titleString = titleFacet.get().title(titleRenderRequest);
+            if(StringUtils.hasLength(titleString)) {
+	            notifyTitleSubscribers(titleRenderRequest, titleString);
+	            return titleString;
+            }
+        }
+        return "%s%s"
+    		.formatted(isInjectable
+	                ? ""
+	                : "Untitled ",
+                getSingularName());
 	}
 	@Override
-	public Optional<IconResource> getIcon(final ManagedObject object, final IconSize iconSize) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public Optional<IconResource> getIcon(final ManagedObject domainObject, final IconSize iconSize) {
+        if(ManagedObjects.isSpecified(domainObject)) {
+            _Assert.assertEquals(domainObject.objSpec(), this);
+        }
+        return iconFacet
+            .flatMap(facet->facet.icon(domainObject, iconSize))
+            .or(()->faLayers(domainObject)
+                .map(ObjectSupport.FontAwesomeIconResource::new));
 	}
 	@Override
 	public Object getNavigableParent(final Object object) {
-		// TODO Auto-generated method stub
-		return null;
+		return navigableParentFacet
+				.map(facet->facet.navigableParent(object))
+				.orElse(null);
 	}
 	@Override
 	public String getCssClass(final ManagedObject domainObject) {
-		// TODO Auto-generated method stub
-		return null;
+		return cssClassFacet
+			.map(facet->facet.cssClass(domainObject))
+			.orElse(null);
 	}
 	@Override
 	public Optional<ObjectSpecification> explicitElementSpec() {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return typeOfFacet
+            .map(TypeOfFacet::elementSpec);
 	}
 	@Override
 	public Optional<Contributing> contributing() {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return mixinFacet()
+            .map(MixinFacet::contributing);
 	}
-	@Override
+
+	@Override //TODO perhaps move - not the responsibility of a data carrier
 	public ObjectTitleContext createTitleInteractionContext(final ManagedObject targetObjectAdapter,
-			final InteractionInitiatedBy invocationMethod) {
-		// TODO Auto-generated method stub
-		return null;
+			final InteractionInitiatedBy initiatedBy) {
+		return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(),
+                targetObjectAdapter.getTitle(),
+                initiatedBy);
 	}
+
+    // -- VALIDITY //TODO perhaps move - not the responsibility of a data carrier
+
 	@Override
 	public ObjectValidityContext createValidityInteractionContext(final ManagedObject targetAdapter,
 			final InteractionInitiatedBy interactionInitiatedBy) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
 	}
-	@Override
-	public Consent isValid(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public InteractionResult isValidResult(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Consent isValid(
+            final ManagedObject targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
+    }
+    @Override
+    public InteractionResult isValidResult(
+            final ManagedObject targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        var validityContext =
+                createValidityInteractionContext(
+                        targetAdapter, interactionInitiatedBy);
+        return InteractionUtils.isValidResult(this, validityContext);
+    }
 
 	// -- FACET LOOKUP
 
@@ -301,4 +312,26 @@ implements
 		return Hierarchical.lookupFacet(facetType, facetHolder, this);
 	}
 
+	// -- HELPER
+
+	private Optional<FontAwesomeLayers> faLayers(final ManagedObject domainObject){
+        return faFacet
+            .map(FaFacet::getSpecialization)
+            .map(either->either.fold(
+                faStaticFacet->(FaLayersProvider)faStaticFacet,
+                faImperativeFacet->faImperativeFacet.getFaLayersProvider(domainObject)))
+            .map(FaLayersProvider::getLayers);
+    }
+
+	private void notifyTitleSubscribers(final TitleRenderRequest titleRenderRequest, final String titleString) {
+		if(!isEntity()
+				|| titleSubscribers.isEmpty())
+			return;
+		titleRenderRequest
+			.object()
+			.getBookmark()
+			.ifPresent(bookmark ->
+			titleSubscribers
+			.forEach(subscriber -> subscriber.entityTitleIs(bookmark, titleString)));
+	}
 }

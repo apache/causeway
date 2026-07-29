@@ -98,6 +98,7 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -139,18 +140,19 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
-            final @NonNull MetaModelContext mmc,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
             final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry) {
 
+        final MetaModelContext mmc = facetProcessor.getMetaModelContext();
+
     	this.typeMeta = typeMeta;
-    	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(getServiceRegistry()));
+    	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(mmc.getServiceRegistry()));
     	this.isDomainServiceLazy = _Lazy.threadSafe(()->
         	_ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
 
         this.facetHolder = FacetHolder.simple(
-            facetProcessor.getMetaModelContext(),
+            mmc,
             Identifier.classIdentifier(logicalType()));
 
         this.postProcessor = postProcessor;
@@ -169,6 +171,41 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
         this.columnHelper = new _MembersAsColumns(mmc);
     }
+
+    // -- SHALLOW IMMUTABLE
+
+	ObjectSpecificationRecord toRecord() {
+		return new ObjectSpecificationRecord(
+				typeMeta,
+				getFeatureType(),
+				facetHolder,
+				this,//Hierarchical,
+				this,//ObjectActionContainer
+				this,//ObjectAssociationContainer
+				getServiceRegistry().select(EntityTitleSubscriber.class),
+				introspectionPolicy,
+				aliases(),
+				valueFacet(),
+		    	entityFacet(),
+		    	viewmodelFacet(),
+		    	mixinFacet(),
+		    	lookupFacet(ObjectNamedFacet.class),
+		    	lookupFacet(ObjectDescribedFacet.class),
+		    	lookupFacet(TypeOfFacet.class),
+		    	lookupNonFallbackFacet(TitleFacet.class),
+		    	lookupFacet(IconFacet.class),
+		    	lookupFacet(FaFacet.class),
+		        lookupFacet(NavigableParentFacet.class),
+		        lookupFacet(CssClassFacet.class),
+				isDomainService(),
+				isInjectable(),
+				isParented(),
+				isImmutable(),
+				isHidden(),
+				catalogueMembers());
+	}
+
+    // --
 
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
     @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
@@ -202,7 +239,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 : superclass().getFullIdentifier());
     }
 
-    protected void introspectTypeHierarchy() {
+    private void introspectTypeHierarchy() {
 
         facetedMethodsBuilder.introspectClass();
 
@@ -676,7 +713,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public Can<LogicalType> getAliases() {
+    public Can<LogicalType> aliases() {
         return aliasedFacet != null
                 ? aliasedFacet.getAliases()
                 : Can.empty();
@@ -762,7 +799,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         }
     }
 
-    @Override //FIXME separation of concerns
+    @Override //TODO separation of concerns ?
     public ObjectTitleContext createTitleInteractionContext(
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {

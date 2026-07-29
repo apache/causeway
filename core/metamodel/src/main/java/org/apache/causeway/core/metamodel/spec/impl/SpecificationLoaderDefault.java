@@ -59,7 +59,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.PreloadableTypes;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -125,8 +124,6 @@ implements
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
 
-    @Getter private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
-
     private FacetProcessor facetProcessor;
 
     private final Map<Class<?>, ObjectSpecificationMutable> cache = new ConcurrentHashMap<>();
@@ -179,7 +176,6 @@ implements
                 ()->new ValueSemanticsResolverDefault(List.of(), null),
                 classSubstitutorRegistry);
 
-        instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel);
         instance.postProcessor = enablePostprocessors
                 ? new PostProcessor(programmingModel)
@@ -195,7 +191,6 @@ implements
         if (log.isDebugEnabled()) {
             log.debug("initialising {}", this);
         }
-        this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         this.facetProcessor = new FacetProcessor(programmingModel);
     }
 
@@ -576,7 +571,7 @@ implements
 
         spec.introspect(request);
 
-        if(spec.getAliases().isNotEmpty()
+        if(spec.aliases().isNotEmpty()
             // this bool. expr. is an optimization, not strictly required ... a bit of hack though
             && request == IntrospectionRequest.TYPE_ONLY) {
 
@@ -601,7 +596,6 @@ implements
     private ObjectSpecificationMutable createSpecification(final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
                         typeMeta,
-                        metaModelContext,
                         facetProcessor,
                         postProcessor,
                         classSubstitutorRegistry);

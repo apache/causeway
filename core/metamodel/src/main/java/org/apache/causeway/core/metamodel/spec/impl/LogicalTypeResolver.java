@@ -93,7 +93,7 @@ record LogicalTypeResolver(
     ObjectSpecification registerAliases(final @NonNull ObjectSpecification spec) {
 
         // adding aliases to the lookup map
-        spec.getAliases()
+        spec.aliases()
         .forEach(alias->{
                 putWithWarnOnOverride(alias.logicalName(), spec);
         });
