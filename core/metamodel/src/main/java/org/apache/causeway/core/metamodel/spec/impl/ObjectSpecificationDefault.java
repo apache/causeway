@@ -117,7 +117,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 final class ObjectSpecificationDefault
-implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLoaderInternal {
+implements ObjectSpecificationBuilder {
 
     // -- CONSTRUCTION
 
@@ -174,7 +174,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     // -- SHALLOW IMMUTABLE
 
-	ObjectSpecificationRecord toRecord() {
+	@Override
+	public ObjectSpecificationRecord build() {
 		return new ObjectSpecificationRecord(
 				typeMeta,
 				getFeatureType(),

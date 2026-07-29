@@ -20,8 +20,20 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-//renamed
-public interface ObjectSpecificationMutable extends ObjectSpecification {
+interface ObjectSpecificationBuilder
+extends
+	ObjectMemberContainer,
+	HasSpecificationLoaderInternal,
+	ObjectSpecification // TODO remove
+//	Specification,
+//	HasLogicalType,
+//	HasFacetHolder,
+//	Hierarchical,
+//	ObjectActionContainer,
+//	ObjectAssociationContainer,
+//	ObjectMemberContainer,
+//	HasSpecificationLoaderInternal
+	{
 
     enum IntrospectionRequest {
         /**
@@ -40,9 +52,6 @@ public interface ObjectSpecificationMutable extends ObjectSpecification {
 
     void introspect(IntrospectionRequest request);
 
-    /**
-     * Adds configuration-gated framework navigation actions during metamodel post-processing.
-     */
-    void synthesizeNavigationActions();
+    ObjectSpecification build();
 
 }
