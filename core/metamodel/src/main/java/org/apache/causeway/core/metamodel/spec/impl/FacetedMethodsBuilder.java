@@ -30,8 +30,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
@@ -54,9 +52,9 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationBuilder.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -105,7 +103,7 @@ implements
 
     }
 
-    private final ObjectSpecification inspectedTypeSpec;
+    private final ObjectSpecificationBuilder inspectedTypeSpec;
 
     @Getter private final Class<?> introspectedClass;
 
@@ -121,7 +119,7 @@ implements
     // -- CONSTRUCTOR
 
     public FacetedMethodsBuilder(
-            final ObjectSpecification inspectedTypeSpec,
+            final ObjectSpecificationBuilder inspectedTypeSpec,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
@@ -400,14 +398,11 @@ implements
             return true;
         }
 
-        //FIXME potentially misses other ObjectSpecification impl.
-        if(inspectedTypeSpec instanceof ObjectSpecificationDefault objspecDefault) {
-	        // exclude those that have eg. reserved prefixes
-	        if (getFacetProcessor().recognizes(actionMethod)) {
-	            // this is a potential orphan candidate, collect these, than use when validating
-	        	objspecDefault.getPotentialOrphans().add(actionMethod);
-	            return false;
-	        }
+        // exclude those that have eg. reserved prefixes
+        if (getFacetProcessor().recognizes(actionMethod)) {
+            // this is a potential orphan candidate, collect these, than use when validating
+        	inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
+            return false;
         }
 
         if(introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
@@ -438,12 +433,9 @@ implements
                 .orElse(null);
         if(mixinFacet==null) return false;
 
-        //FIXME potentially misses other ObjectSpecification impl.
-        if(inspectedTypeSpec instanceof ObjectSpecificationDefault objspecDefault) {
-        	if(!objspecDefault.isFullyIntrospected())
-        		// members are not introspected yet, so make a guess
-        		return mixinFacet.isCandidateForMain(method);
-        }
+    	if(!inspectedTypeSpec.isFullyIntrospected())
+    		// members are not introspected yet, so make a guess
+    		return mixinFacet.isCandidateForMain(method);
 
         return inspectedTypeSpec
                 .lookupMixedInAction(inspectedTypeSpec)

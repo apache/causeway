@@ -967,7 +967,8 @@ implements ObjectSpecificationBuilder {
     private final Can<EntityTitleSubscriber> titleSubscribers =
         getServiceRegistry().select(EntityTitleSubscriber.class);
 
-    boolean isFullyIntrospected() {
+    @Override
+	public boolean isFullyIntrospected() {
         return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
     }
 

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.Set;
+
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 interface ObjectSpecificationBuilder
@@ -50,8 +53,10 @@ extends
         FULL
     }
 
-    void introspect(IntrospectionRequest request);
-
     ObjectSpecification build();
+
+    void introspect(IntrospectionRequest request);
+    Set<ResolvedMethod> getPotentialOrphans();
+	boolean isFullyIntrospected();
 
 }
