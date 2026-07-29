@@ -234,7 +234,7 @@ extends MetaModelPostProcessorAbstract {
     private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
         var elementType = param.getElementType();
         if(elementType == null
-                || !elementType.getBeanSort().policy().isAllowedAsMemberElementType()) {
+                || !elementType.beanSort().policy().isAllowedAsMemberElementType()) {
             // ignore, as these cases are covered later by meta-model validation
             return;
         }

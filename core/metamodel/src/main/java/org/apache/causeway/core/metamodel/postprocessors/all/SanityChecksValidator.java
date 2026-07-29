@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -31,6 +29,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import jakarta.inject.Inject;
 
 /**
  * Checks various preconditions for a sane meta-model.
@@ -96,7 +96,7 @@ implements
             final ObjectSpecification elementType) {
 
         if(elementType == null
-                || !elementType.getBeanSort().policy().isAllowedAsMemberElementType()) {
+                || !elementType.beanSort().policy().isAllowedAsMemberElementType()) {
 
             ValidationFailureUtils.raiseMemberInvalidElementType(facetHolder, declaringType, elementType);
         }

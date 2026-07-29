@@ -18,20 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.model.context;
 
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLEnumType;
-
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
-
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -49,7 +44,10 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomain
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.springframework.stereotype.Component;
 
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLEnumType;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -97,7 +95,7 @@ public class Context {
                            x.isViewModel()
                         || (includeEntities && x.isEntity())
                         || (includeEntities && x.isAbstract()) // this is a little bit inaccurate; Person.class was not being picked up, not sure that MappedSuperclass is enough to install the EntityFacet though.
-                        || x.getBeanSort().isManagedBeanContributing()
+                        || x.beanSort().isManagedBeanContributing()
                 )
                 .filter(predicate)
                 .sorted(Comparator.comparing(HasLogicalType::logicalTypeName))
@@ -105,9 +103,8 @@ public class Context {
     }
 
     private void computeLogicalTypeNames() {
-        if (logicalTypeNames != null) {
-            return;
-        }
+        if (logicalTypeNames != null)
+			return;
         logicalTypeNames = doComputeLogicalTypeNames();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(logicalTypeNames);
     }

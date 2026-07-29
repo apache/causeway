@@ -21,11 +21,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -35,6 +30,10 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import jakarta.inject.Named;
 
 interface SpecificationLoaderInternal extends SpecificationLoader {
 
@@ -152,7 +151,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
         if(logicalType==null) return Optional.empty();
         var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER);
         return spec != null
-                ? Optional.of(spec.getBeanSort())
+                ? Optional.of(spec.beanSort())
                 : Optional.empty();
     }
 

@@ -201,14 +201,14 @@ implements
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), getBeanSort().name(), superclass() == null
+            .formatted(getFullIdentifier(), beanSort().name(), superclass() == null
                 ? "Object"
                 : superclass().getFullIdentifier());
     }
 
     // -- COMPONENTS AND GETTERS
 
-    @Override public BeanSort getBeanSort() { return typeMeta.beanSort(); }
+    @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
     @Override public IntrospectionPolicy getIntrospectionPolicy() { return introspectionPolicy; }
     @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }

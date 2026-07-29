@@ -35,43 +35,43 @@ record MixedInMemberFactory(
 		ObjectSpecification spec,
 		SpecificationLoaderInternal specLoaderInternal,
 		CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
-	
+
 	MixedInMemberFactory(
-			ObjectSpecification spec,
-			SpecificationLoaderInternal specLoaderInternal) {
+			final ObjectSpecification spec,
+			final SpecificationLoaderInternal specLoaderInternal) {
 		this(spec, specLoaderInternal, spec.getServiceRegistry()
 				.lookupServiceElseFail(CausewayBeanTypeRegistry.class));
 	}
-	
+
     /**
      * Creates all mixed in properties and collections for this spec.
      */
     public List<ObjectAssociation> createMixedInAssociations() {
-    	var include = spec.isEntityOrViewModelOrAbstract() 
-    			&& !spec.isInjectable() 
+    	var include = spec.isEntityOrViewModelOrAbstract()
+    			&& !spec.isInjectable()
     			&& !spec.isValue();
-        return include 
+        return include
     		? causewayBeanTypeRegistry.streamMixinTypes()
 	            .flatMap(this::createMixedInAssociation)
 	            .toList()
             : List.of();
     }
-    
+
     /**
      * Creates all mixed in actions for this spec.
      */
     public List<ObjectActionMixedIn> createMixedInActions() {
         var include = spec.isEntityOrViewModelOrAbstract()
-                || spec.getBeanSort().isManagedBeanContributing()
+                || spec.beanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
-                || spec.getBeanSort().isValue();
+                || spec.beanSort().isValue();
         return include
     		? causewayBeanTypeRegistry.streamMixinTypes()
 				.flatMap(this::createMixedInAction)
 				.toList()
 			: List.of();
     }
-    
+
     // -- HELPER
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
@@ -93,7 +93,7 @@ record MixedInMemberFactory(
 	        .map(ObjectActionDefault.class::cast)
 	        .map(mixedInAssociation(spec, mixinSpec, mixinMethodName));
     }
-    
+
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         var mixinSpec = specLoaderInternal.loadSpecification(mixinType,
@@ -108,7 +108,7 @@ record MixedInMemberFactory(
         if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
 			return Stream.empty();
         // don't mixin Object_ mixins to domain services
-        if(spec.getBeanSort().isManagedBeanContributing()
+        if(spec.beanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class))
 			return Stream.empty();
 
@@ -129,11 +129,11 @@ record MixedInMemberFactory(
      * also to support associated <i>Actions</i> for <i>Action Parameters</i>.
      */
     private boolean whenIsValueThenIsAlsoConstructorMixin(final ObjectAction act) {
-        return spec.getBeanSort().isValue()
+        return spec.beanSort().isValue()
                 ? Objects.equals(spec, act.getReturnType())
                 : true;
     }
-    
+
     private static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
             final ObjectSpecification mixeeSpec,
             final ObjectSpecification mixinSpec,
@@ -155,5 +155,5 @@ record MixedInMemberFactory(
                 : new OneToManyAssociationMixedIn(
                         mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
     }
-	
+
 }

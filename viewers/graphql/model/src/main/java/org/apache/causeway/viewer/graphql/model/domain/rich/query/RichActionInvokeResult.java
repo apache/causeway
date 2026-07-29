@@ -18,14 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -39,7 +32,12 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.jspecify.annotations.Nullable;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -70,7 +68,7 @@ public class RichActionInvokeResult extends Element {
     @Nullable
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
         var objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
+        switch (objectSpecification.beanSort()){
 
             case COLLECTION:
 
@@ -106,30 +104,26 @@ public class RichActionInvokeResult extends Element {
         var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
 
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
-        }
+        if (objectSpecification == null)
+			return null;
 
         var objectAction = actionInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(objectAction.getFeatureIdentifier());
 
         var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+        if (usableConsent.isVetoed())
+			throw new DisabledException(objectAction.getFeatureIdentifier());
 
         var head = objectAction.interactionHead(managedObject);
         var argumentManagedObjects = actionInteractor.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+        if (validityConsent.isVetoed())
+			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();

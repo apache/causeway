@@ -21,15 +21,14 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#SERVICE}
@@ -102,7 +101,7 @@ implements ManagedObject {
     private void assertInjectable(final ObjectSpecification spec) {
         _Assert.assertTrue(spec.isInjectable(),
                 ()->"type %s must be injectable to be considered a service; bean-sort: %s"
-                        .formatted(pojo.getClass(), spec.getBeanSort()));
+                        .formatted(pojo.getClass(), spec.beanSort()));
     }
 
 }

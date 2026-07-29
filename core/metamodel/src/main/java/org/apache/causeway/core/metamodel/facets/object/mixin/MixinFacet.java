@@ -43,6 +43,7 @@ public interface MixinFacet extends Facet {
 
     public enum Contributing {
         /**
+         * FIXME remove
          * Initial state early during introspection.
          */
         UNSPECIFIED,

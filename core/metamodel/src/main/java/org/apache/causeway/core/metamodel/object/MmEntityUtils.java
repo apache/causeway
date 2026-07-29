@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -34,6 +31,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 
@@ -42,13 +41,11 @@ public final class MmEntityUtils {
 
     @NonNull
     public Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
-        if(adapter==null) {
-            return Optional.empty();
-        }
+        if(adapter==null)
+			return Optional.empty();
         var spec = adapter.objSpec();
-        if(spec==null || !spec.isEntity()) {
-            return Optional.empty();
-        }
+        if(spec==null || !spec.isEntity())
+			return Optional.empty();
 
         return spec.entityFacet()
                 .map(EntityFacet::getPersistenceStack);
@@ -73,7 +70,7 @@ public final class MmEntityUtils {
         entityFacet.delete(managedObject.getPojo());
     }
 
-    public <T> T detachedPojo(ObjectManager objectManager, @Nullable T pojo) {
+    public <T> T detachedPojo(final ObjectManager objectManager, @Nullable final T pojo) {
         if(pojo == null) return null;
         var managedObject = objectManager.adapt(pojo);
         return isAttachedEntity(managedObject)
@@ -82,15 +79,13 @@ public final class MmEntityUtils {
     }
 
     public void requiresEntity(final ManagedObject managedObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
-            throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject))
+			throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
         var spec = managedObject.objSpec();
-        if(!spec.isEntity()) {
-            throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
+        if(!spec.isEntity())
+			throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
                     spec.getCorrespondingClass(),
-                    spec.getBeanSort());
-        }
+                    spec.beanSort());
     }
 
     /**
@@ -101,9 +96,8 @@ public final class MmEntityUtils {
     public void ifHasNoOidThenFlush(final @Nullable ManagedObject entity) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
                 || !entity.specialization().isEntity()
-                || entity.isBookmarkMemoized()) {
-            return;
-        }
+                || entity.isBookmarkMemoized())
+			return;
         if(!getEntityState(entity).hasOid()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
@@ -149,20 +143,17 @@ public final class MmEntityUtils {
             final ManagedObject first,
             final ManagedObject second) {
 
-        if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
-            return;
-        }
+        if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second))
+			return;
         var secondSpec = second.objSpec();
-        if(secondSpec.isParented() || !secondSpec.isEntity()) {
-            return;
-        }
+        if(secondSpec.isParented() || !secondSpec.isEntity())
+			return;
 
-        if(!MmEntityUtils.getEntityState(second).hasOid()) {
-            throw _Exceptions.illegalArgument(
+        if(!MmEntityUtils.getEntityState(second).hasOid())
+			throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
                     first.getTitle());
-        }
     }
 
     // -- PROPERTY CHANGE PUBLISHING

@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.logicaltype.classname;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlType;
-
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -33,6 +30,9 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlType;
 
 public class LogicalTypeFacetFromClassNameFactory
 extends FacetFactoryAbstract
@@ -78,7 +78,7 @@ implements
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
                         .builder()
                         .addVariable("type", objectSpec.getFullIdentifier())
-                        .addVariable("beanSort", objectSpec.getBeanSort().name())
+                        .addVariable("beanSort", objectSpec.beanSort().name())
                         .addVariable("configProperty", "causeway.core.meta-model.validator.explicit-logical-type-names")
                         .buildMessage());
             }
@@ -94,11 +94,10 @@ implements
                 || objectSpec.isMixin()
                 || MmSpecUtils.isFixtureScript(objectSpec)) return true;
         if (objectSpec.isEntity()) return false;
-        if (objectSpec.isViewModel()) {
-            // with
+        if (objectSpec.isViewModel())
+			// with
             // skip JAXB DTOs
             return objectSpec.getCorrespondingClass().getAnnotation(XmlType.class) != null;
-        }
         if (objectSpec.isInjectable()) {
             // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
             if(!objectSpec.isDomainService()) return true;

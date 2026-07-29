@@ -18,20 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.mutation;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -55,7 +46,14 @@ import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
+import org.jspecify.annotations.Nullable;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,7 +63,7 @@ public class RichMutationForAction extends Element {
 
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
-    private String argumentName;
+    private final String argumentName;
 
     public RichMutationForAction(
             final ObjectSpecification objectSpec,
@@ -98,7 +96,7 @@ public class RichMutationForAction extends Element {
     @Nullable
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
         ObjectSpecification objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
+        switch (objectSpecification.beanSort()){
 
             case COLLECTION:
 
@@ -129,7 +127,7 @@ public class RichMutationForAction extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        var isService = objectSpec.getBeanSort().isManagedBeanContributing();
+        var isService = objectSpec.beanSort().isManagedBeanContributing();
 
         var environment = new Environment.For(dataFetchingEnvironment);
         Object sourcePojo;
@@ -159,9 +157,8 @@ public class RichMutationForAction extends Element {
                     String key = ObjectFeatureUtils.keyFor(refValue);
                     BookmarkedPojo value = environment.getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-                } else {
-                    throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-                }
+                } else
+					throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
             }
             sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
@@ -170,22 +167,19 @@ public class RichMutationForAction extends Element {
         ManagedObject managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
         var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(objectAction.getFeatureIdentifier());
 
         var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+        if (usableConsent.isVetoed())
+			throw new DisabledException(objectAction.getFeatureIdentifier());
 
         var head = objectAction.interactionHead(managedObject);
         var argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+        if (validityConsent.isVetoed())
+			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();
@@ -198,7 +192,7 @@ public class RichMutationForAction extends Element {
         var argName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         // add target (if not a service)
-        if (! objectSpec.getBeanSort().isManagedBeanContributing()) {
+        if (! objectSpec.beanSort().isManagedBeanContributing()) {
             arguments.add(
                     GraphQLArgument.newArgument()
                             .name(argName)

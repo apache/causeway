@@ -52,7 +52,7 @@ public record ObjectDementifierFactory() {
                 var spec = request.objectSpecification();
                 var mmc = spec.getMetaModelContext();
                 // intercept when managed by Spring
-                return spec.getBeanSort().policy().isInjectable()
+                return spec.beanSort().policy().isInjectable()
                     ? mmc.lookupServiceAdapterById(request.memento().logicalType().logicalName())
                     : mmc.getObjectManager().loadObjectElseFail(request.memento().bookmark());
             }

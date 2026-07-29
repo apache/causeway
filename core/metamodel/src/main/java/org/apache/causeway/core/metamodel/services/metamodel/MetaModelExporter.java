@@ -80,9 +80,8 @@ class MetaModelExporter {
         .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
         .allMatch(Optional::isPresent);
 
-        if(useTinyDomain) {
-            return exportTinyDomain(tinyDomain, config);
-        }
+        if(useTinyDomain)
+			return exportTinyDomain(tinyDomain, config);
 
         MetamodelDto metamodelDto = new MetamodelDto();
 
@@ -130,9 +129,8 @@ class MetaModelExporter {
                 objectSpecificationByDomainClassId.put(id, objectSpecification);
             }
         }
-        if(buf.size() > 0) {
-            throw new IllegalStateException(String.join("\n", buf));
-        }
+        if(buf.size() > 0)
+			throw new IllegalStateException(String.join("\n", buf));
 
         // phase 3: now copy all domain classes into the metamodel
         for (final ObjectSpecification objectSpecification : _Lists.newArrayList(domainClassByObjectSpec.keySet())) {
@@ -194,15 +192,13 @@ class MetaModelExporter {
             final Config config) {
 
         var namespacePrefixes = config.getNamespacePrefixes();
-        if(config.isNamespacePrefixAny()) {
-            return true; // export all
-        }
+        if(config.isNamespacePrefixAny())
+			return true; // export all
 
         var logicalTypeName = specification.logicalTypeName();
         for (var prefix : namespacePrefixes) {
-            if(logicalTypeName.startsWith(prefix)) {
-                return true;
-            }
+            if(logicalTypeName.startsWith(prefix))
+				return true;
         }
         return false;
     }
@@ -230,9 +226,8 @@ class MetaModelExporter {
         }
         addFacets(specification, domainClass.getFacets(), config);
 
-        if(specification.isValueOrIsParented() || isEnum(specification)) {
-            return;
-        }
+        if(specification.isValueOrIsParented() || isEnum(specification))
+			return;
 
         if (specification.isInjectable()) {
             if(specification.isDomainService()) {
@@ -434,9 +429,8 @@ class MetaModelExporter {
     private void addAttribute(
             final org.apache.causeway.schema.metamodel.v2.Facet facetType,
             final String key, final String str) {
-        if(str == null) {
-            return;
-        }
+        if(str == null)
+			return;
         FacetAttr attributeDto = new FacetAttr();
         attributeDto.setName(key);
         attributeDto.setValue(str);
@@ -460,7 +454,7 @@ class MetaModelExporter {
     }
 
     private boolean isValueType(final ObjectSpecification specification) {
-        return specification.getBeanSort().isValue();
+        return specification.beanSort().isValue();
     }
 
 }

@@ -110,7 +110,7 @@ public class ObjectFeatureUtils {
                     Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
-                    switch (elementType.getBeanSort()) {
+                    switch (elementType.beanSort()) {
 
                         case VALUE:
                             return adaptValue(oap, argumentValue, context);
@@ -145,7 +145,7 @@ public class ObjectFeatureUtils {
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
                     }
                 });
     }

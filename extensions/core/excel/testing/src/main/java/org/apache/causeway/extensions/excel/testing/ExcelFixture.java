@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -48,6 +45,8 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -91,14 +90,13 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
             var beanSort = Optional.ofNullable(specLoader)
             .flatMap(sl->sl.specForType(cls))
             .filter(_NullSafe::isPresent)
-            .map(ObjectSpecification::getBeanSort)
+            .map(ObjectSpecification::beanSort)
             .orElse(BeanSort.UNKNOWN);
 
-            if (!beanSort.isViewModel() && !beanSort.isEntity()) {
-                throw new IllegalArgumentException(String.format(
+            if (!beanSort.isViewModel() && !beanSort.isEntity())
+				throw new IllegalArgumentException(String.format(
                         "Class '%s' does not implement '%s', nor is it persistable",
                         cls.getSimpleName(), ExcelFixtureRowHandler.class.getSimpleName()));
-            }
         }
         this.classes = classes;
     }
@@ -169,8 +167,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
             final Object rowObj,
             final ExecutionContext ec,
             final Object previousRow) {
-        if (rowObj instanceof ExcelFixtureRowHandler) {
-            final ExcelFixtureRowHandler rowHandler = (ExcelFixtureRowHandler) rowObj;
+        if (rowObj instanceof final ExcelFixtureRowHandler rowHandler) {
             return rowHandler.handleRow(ec, this, previousRow);
         } else {
             repositoryService.persist(rowObj);

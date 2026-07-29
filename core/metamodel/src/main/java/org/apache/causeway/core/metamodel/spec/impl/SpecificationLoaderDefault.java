@@ -34,19 +34,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -86,7 +73,17 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -221,7 +218,7 @@ implements
         public void collect(final @Nullable ObjectSpecificationMutable spec) {
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
-            switch (spec.getBeanSort()) {
+            switch (spec.beanSort()) {
                 case VALUE -> valueSpecs.put(spec.getCorrespondingClass(), spec);
                 case MANAGED_BEAN_CONTRIBUTING -> domainServiceSpecs.add(spec);
                 case MIXIN -> mixinSpecs.add(spec);
@@ -283,8 +280,8 @@ implements
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
-            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
+            introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
+            introspect(snapshot.filter(x->!x.beanSort().isMixin()), IntrospectionRequest.FULL);
         }
 
         log.info(" - running remaining validators");
@@ -492,7 +489,7 @@ implements
         }
     }
 
-    private _Lazy<ValidationFailures> validationResult =
+    private final _Lazy<ValidationFailures> validationResult =
             _Lazy.threadSafe(this::runMetaModelValidators);
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);

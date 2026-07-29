@@ -102,7 +102,7 @@ extends
     class Comparators{
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
-                Comparator.comparing(ObjectSpecification::getBeanSort)
+                Comparator.comparing(ObjectSpecification::beanSort)
                     .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
@@ -268,11 +268,11 @@ extends
     /**
      * @since 2.0
      */
-    BeanSort getBeanSort();
+    BeanSort beanSort();
 
     /**
-     * Optionally the mixin sort {@link Contributing},
-     * based on whether the corresponding class is a mixin type.
+     * Optionally how the Mixin is {@link Contributing} (as Action, Property or Collection),
+     * based on whether the corresponding class is a Mixin type.
      * @since 2.0
      */
     Optional<Contributing> contributing();
@@ -335,7 +335,7 @@ extends
      * @see #isSingular()
      */
     default boolean isPlural() {
-        return getBeanSort().isCollection();
+        return beanSort().isCollection();
     }
 
     /**
@@ -345,7 +345,7 @@ extends
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 || valueFacet().isPresent();
     }
 
@@ -353,7 +353,7 @@ extends
      * Whether objects of this type are composite values.
      */
     default boolean isCompositeValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 && valueFacet().map(ValueFacet::isCompositeValueType).orElse(false);
     }
 
@@ -401,7 +401,7 @@ extends
     boolean isDomainService();
 
     default boolean isMixin() {
-        return getBeanSort().isMixin();
+        return beanSort().isMixin();
     }
 
     /**
@@ -429,7 +429,7 @@ extends
     }
 
     default boolean isAbstract() {
-        return getBeanSort().isAbstract();
+        return beanSort().isAbstract();
     }
 
     /**
@@ -448,8 +448,8 @@ extends
      * Includes abstract types that have {@link EntityFacet}.
      */
     default boolean isEntity() {
-        return getBeanSort().isEntity()
-                || (getBeanSort().isAbstract()
+        return beanSort().isEntity()
+                || (beanSort().isAbstract()
                         && entityFacet().isPresent());
     }
 
@@ -457,8 +457,8 @@ extends
      * Includes abstract types that have {@link ViewModelFacet}.
      */
     default boolean isViewModel() {
-        return getBeanSort().isViewModel()
-                || (getBeanSort().isAbstract()
+        return beanSort().isViewModel()
+                || (beanSort().isAbstract()
                         && viewmodelFacet().isPresent());
     }
 
@@ -491,13 +491,13 @@ extends
     }
 
     /**
-     * @see #getBeanSort()
+     * @see #beanSort()
      */
     default boolean isEntityOrViewModelOrAbstract() {
         // optimized, no need to check facets
-        return getBeanSort().isViewModel()
-                || getBeanSort().isEntity()
-                || getBeanSort().isAbstract();
+        return beanSort().isViewModel()
+                || beanSort().isEntity()
+                || beanSort().isAbstract();
     }
 
     /**

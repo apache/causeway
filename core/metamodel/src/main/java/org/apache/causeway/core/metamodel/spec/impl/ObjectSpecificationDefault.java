@@ -129,10 +129,11 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
     private final _Lazy<Boolean> isInjectableLazy;
+    private final _Lazy<Boolean> isDomainServiceLazy;
 
     @Getter(onMethod_={@Override})
     private final IntrospectionPolicy introspectionPolicy;
-    
+
     @Getter @Accessors(fluent = true)
     private final CausewayBeanMetaData typeMeta;
 
@@ -145,6 +146,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     	this.typeMeta = typeMeta;
     	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(getServiceRegistry()));
+    	this.isDomainServiceLazy = _Lazy.threadSafe(()->
+        	_ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
 
         this.facetHolder = FacetHolder.simple(
             facetProcessor.getMetaModelContext(),
@@ -157,7 +160,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
 
         // naturally supports attribute inheritance from the type's hierarchy
-        this.introspectionPolicy = this.lookupFacet(IntrospectionPolicyFacet.class)
+        this.introspectionPolicy = lookupFacet(IntrospectionPolicyFacet.class)
                 .map(IntrospectionPolicyFacet::getIntrospectionPolicy)
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
@@ -166,19 +169,18 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
         this.columnHelper = new _MembersAsColumns(mmc);
     }
-    
-    @Override public BeanSort getBeanSort() { return typeMeta.beanSort(); }
+
+    @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
     @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
 	@Override public String getFullIdentifier() { return getCorrespondingClass().getName(); }
 	@Override public String getShortIdentifier() { return logicalType().logicalSimpleName(); }
 //	@Override public Can<LogicalType> getAliases() { return aliases().get(); }
-//	@Override public boolean isDomainService() { return isDomainServiceLazy.get(); }
-//	@Override public boolean isInjectable() { return isInjectableLazy.get(); }
-//	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
-//	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
-//	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
-
+	@Override public boolean isDomainService() { return isDomainServiceLazy.get(); }
+	@Override public boolean isInjectable() { return isInjectableLazy.get(); }
+	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
+	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
+	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
 
     // -- CONTRACT
 
@@ -195,7 +197,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), getBeanSort().name(), superclass() == null
+            .formatted(getFullIdentifier(), beanSort().name(), superclass() == null
                 ? "Object"
                 : superclass().getFullIdentifier());
     }
@@ -222,17 +224,17 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private void introspectMembers() {
 
         // yet this logic does not skip UNKNONW
-        if(this.getBeanSort().isCollection()
-                || this.getBeanSort().isVetoed()
+        if(this.beanSort().isCollection()
+                || this.beanSort().isVetoed()
                 || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.beanSort(), getFullIdentifier());
             }
             return;
         }
 
         var memberFactory = new RegularMemberFactory(this, facetedMethodsBuilder);
-        
+
         // create associations and actions
         replaceAssociations(memberFactory.createAssociations());
         replaceActions(memberFactory.createActions());
@@ -366,18 +368,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         return columnHelper.streamActionsForColumnRendering(this, where);
     }
 
-    @Override
-    public boolean isInjectable() {
-        return isInjectableLazy.get();
-    }
 
-    private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(()->
-        _ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
-
-    @Override
-    public boolean isDomainService() {
-        return isDomainServiceLazy.get();
-    }
 
     //-----------------------------------------------------------------------------------------------------------------
     // MERGED FROM FORMER ObjectSpecificationAbstract
@@ -432,7 +423,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
-    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
+    @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
 
     // -- Stuff immediately derivable from class
     @Override
@@ -610,7 +601,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     @Override
     public final Optional<ValueFacet<?>> valueFacet() {
         if(valueFacet == null
-                && getBeanSort().isValue()) {
+                && beanSort().isValue()) {
             invalidateCachedFacets();
         }
         return Optional.ofNullable(valueFacet);
@@ -717,7 +708,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public boolean isOfType(final ObjectSpecification other) {
-
         var thisClass = this.getCorrespondingClass();
         var otherClass = other.getCorrespondingClass();
 
@@ -727,7 +717,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
-
         var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
         var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
 
@@ -765,7 +754,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     // -- FACET HANDLING
-    
+
     @Override
     public <Q extends Facet> Optional<Q> lookupFacet(final Class<Q> facetType) {
         synchronized(unmodifiableInterfaces) {
@@ -773,7 +762,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         }
     }
 
-    @Override
+    @Override //FIXME separation of concerns
     public ObjectTitleContext createTitleInteractionContext(
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
@@ -893,22 +882,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
     }
 
-    // -- convenience isXxx (looked up from facets)
-    @Override
-    public boolean isImmutable() {
-        return containsFacet(ImmutableFacet.class);
-    }
-
-    @Override
-    public boolean isHidden() {
-        return containsFacet(HiddenFacet.class);
-    }
-
-    @Override
-    public boolean isParented() {
-        return containsFacet(ParentedCollectionFacet.class);
-    }
-
     // -- MIXIN ADDER ONESHOTs
 
     private final _Oneshot mixedInMemberAdder = new _Oneshot();
@@ -921,8 +894,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     	createMixedInActionsAndResort(memberFactory);
     	createMixedInAssociationsAndResort(memberFactory);
     }
-    
-    private void createMixedInActionsAndResort(MixedInMemberFactory memberFactory) {
+
+    private void createMixedInActionsAndResort(final MixedInMemberFactory memberFactory) {
         var mixedInActions = memberFactory.createMixedInActions();
         if(mixedInActions.isEmpty())
 			return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
@@ -937,7 +910,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 mixedInActions.stream()));
     }
 
-    private void createMixedInAssociationsAndResort(MixedInMemberFactory memberFactory) {
+    private void createMixedInAssociationsAndResort(final MixedInMemberFactory memberFactory) {
         var mixedInAssociations = memberFactory.createMixedInAssociations();
         if(mixedInAssociations.isEmpty())
 			return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
