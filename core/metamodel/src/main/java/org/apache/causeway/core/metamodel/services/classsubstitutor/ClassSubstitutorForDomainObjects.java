@@ -18,31 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.BeanSort.BeanPolicy;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-
 import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
-@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
-public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
-
-    private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
-
-    @Inject
-    public ClassSubstitutorForDomainObjects(final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
-        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
-    }
+public record ClassSubstitutorForDomainObjects(CausewayBeanTypeRegistry causewayBeanTypeRegistry)
+implements ClassSubstitutor {
 
     @Override
     public Substitution getSubstitution(final @NonNull Class<?> cls) {

@@ -126,7 +126,7 @@ implements ObjectSpecificationBuilder {
      */
     private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
 
-    private final FacetedMethodsBuilder facetedMethodsBuilder;
+    private final FacetedMethodsFactory facetedMethodsFactory;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _MembersAsColumns columnHelper;
     private final _Lazy<Boolean> isInjectableLazy;
@@ -166,8 +166,8 @@ implements ObjectSpecificationBuilder {
                 .map(IntrospectionPolicyFacet::getIntrospectionPolicy)
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
-        this.facetedMethodsBuilder =
-                new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+        this.facetedMethodsFactory =
+                new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
 
         this.columnHelper = new _MembersAsColumns(mmc);
     }
@@ -242,7 +242,7 @@ implements ObjectSpecificationBuilder {
 
     private void introspectTypeHierarchy() {
 
-        facetedMethodsBuilder.introspectClass();
+        facetedMethodsFactory.introspectClass();
 
         // name
         addNamedFacetIfRequired();
@@ -271,7 +271,7 @@ implements ObjectSpecificationBuilder {
             return;
         }
 
-        var memberFactory = new RegularMemberFactory(this, facetedMethodsBuilder);
+        var memberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
 
         // create associations and actions
         replaceAssociations(memberFactory.createAssociations());

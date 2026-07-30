@@ -30,22 +30,20 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 record RegularMemberFactory(
 		ObjectSpecification spec,
-		FacetedMethodsBuilder facetedMethodsBuilder) {
-	
+		FacetedMethodsFactory factory) {
+
 	Stream<ObjectAssociation> createAssociations() {
-        return facetedMethodsBuilder.getAssociationFacetedMethods()
-            .stream()
+        return factory.createAssociationFacetedMethods()
             .map(this::createAssociation)
             .filter(_NullSafe::isPresent);
     }
-    
+
     Stream<ObjectAction> createActions() {
-    	return facetedMethodsBuilder.getActionFacetedMethods()
-			.stream()
+    	return factory.createActionFacetedMethods()
 			.map(this::createAction)
 			.filter(_NullSafe::isPresent);
     }
-    
+
     // -- HELPER
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
@@ -73,5 +71,5 @@ record RegularMemberFactory(
         } else
 			return null;
     }
-	
+
 }

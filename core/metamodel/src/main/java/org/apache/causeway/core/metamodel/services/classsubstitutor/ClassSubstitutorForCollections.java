@@ -18,29 +18,22 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import jakarta.inject.Named;
-
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-
 import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
-@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
-public class ClassSubstitutorForCollections implements ClassSubstitutor {
+public record ClassSubstitutorForCollections() implements ClassSubstitutor {
 
     @Override
     public Substitution getSubstitution(final @NonNull Class<?> cls) {
-
         return CollectionSemantics.valueOf(cls)
             .map(CollectionSemantics::getContainerType)
             .map(Substitution::replaceWith) // replace container type with first replacement type that matches
-            .orElse( Substitution.passThrough()) // indifferent
-        ;
-
+            .orElse(Substitution.passThrough()); // indifferent
     }
 }
