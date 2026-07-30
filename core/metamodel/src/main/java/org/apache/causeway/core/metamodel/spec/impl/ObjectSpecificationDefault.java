@@ -406,12 +406,6 @@ implements ObjectSpecificationBuilder {
         return columnHelper.streamActionsForColumnRendering(this, where);
     }
 
-
-
-    //-----------------------------------------------------------------------------------------------------------------
-    // MERGED FROM FORMER ObjectSpecificationAbstract
-    //-----------------------------------------------------------------------------------------------------------------
-
     // -- FIELDS
 
     private final PostProcessor postProcessor;
@@ -485,28 +479,19 @@ implements ObjectSpecificationBuilder {
      * @param introspectionContextProvider keeps track of the causal chain of introspection requests
      */
     private void introspectUpTo(final IntrospectionState upTo, final Supplier<String> introspectionContextProvider) {
-        if(!isLessThan(upTo))
-			return; // optimization
-
-        if(log.isDebugEnabled()) {
-            log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
-        }
-
         switch (introspectionState) {
             case NOT_INTROSPECTED->{
-                if(isLessThan(upTo)) {
+                if(introspectionState.isLessThan(upTo)) {
                     introspectType();
                 }
-                if(isLessThan(upTo)) {
-                    introspectFully();
-                    specLoaderInternal().validateLater(this, introspectionContextProvider);
+                if(introspectionState.isLessThan(upTo)) {
+                    introspectFully(introspectionContextProvider);
                 }
             }
             case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
             case TYPE_INTROSPECTED->{
-                if(isLessThan(upTo)) {
-                    introspectFully();
-                    specLoaderInternal().validateLater(this, introspectionContextProvider);
+                if(introspectionState.isLessThan(upTo)) {
+                    introspectFully(introspectionContextProvider);
                 }
             }
             case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
@@ -515,26 +500,20 @@ implements ObjectSpecificationBuilder {
     }
 
     private void introspectType() {
-        // set to avoid infinite loops
         this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
         introspectTypeHierarchy();
         invalidateCachedFacets();
         this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
     }
 
-    private void introspectFully() {
-
-        // set to avoid infinite loops
+    private void introspectFully(final Supplier<String> introspectionContextProvider) {
         this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
         introspectMembers();
         this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
 
         // make sure we've loaded the facets from layout.xml also.
         Facets.gridPreload(this, null);
-    }
-
-    private boolean isLessThan(final IntrospectionState upTo) {
-        return this.introspectionState.compareTo(upTo) < 0;
+        specLoaderInternal().validateLater(this, introspectionContextProvider);
     }
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {

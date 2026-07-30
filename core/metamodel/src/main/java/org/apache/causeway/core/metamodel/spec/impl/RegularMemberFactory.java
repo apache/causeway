@@ -24,12 +24,11 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 record RegularMemberFactory(
-		ObjectSpecification spec,
+		ObjectSpecificationBuilder spec,
 		FacetedMethodsFactory factory) {
 
 	Stream<ObjectAssociation> createAssociations() {
