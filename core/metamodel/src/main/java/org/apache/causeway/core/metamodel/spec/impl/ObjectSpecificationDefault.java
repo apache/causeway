@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,20 +34,15 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -109,7 +101,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -119,7 +110,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 final class ObjectSpecificationDefault
-implements ObjectSpecificationBuilder {
+implements
+	ObjectSpecificationBuilder,
+	HasObjectActionContainer,
+	HasObjectAssociationContainer {
 
     // -- CONSTRUCTION
 
@@ -139,6 +133,11 @@ implements ObjectSpecificationBuilder {
 
     @Getter @Accessors(fluent = true)
     private final CausewayBeanMetaData typeMeta;
+
+    @Getter @Accessors(fluent = true)
+    private AssociationContainer objectAssociationContainer = AssociationContainer.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private ActionContainer objectActionContainer = ActionContainer.EMPTY;
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
@@ -183,8 +182,8 @@ implements ObjectSpecificationBuilder {
 				getFeatureType(),
 				facetHolder,
 				this,//Hierarchical,
-				this,//ObjectActionContainer
-				this,//ObjectAssociationContainer
+				objectActionContainer,
+				objectAssociationContainer,
 				getServiceRegistry().select(EntityTitleSubscriber.class),
 				introspectionPolicy,
 				aliases(),
@@ -276,13 +275,29 @@ implements ObjectSpecificationBuilder {
         Assert.isTrue(!isLockedDown.get(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
         		.formatted(getCorrespondingClass().getName()));
 
-        var memberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
+        // fully introspect up the type hierarchy including interfaces
+        // because members creation depends on presence of inherited members
+        streamTypeHierarchyAndInterfaces()
+    		.forEach(it->((ObjectSpecificationDefault)it)
+    			.introspect(IntrospectionRequest.FULL));
 
         // create associations and actions
-        replaceAssociations(memberFactory.createAssociations());
-        replaceActions(memberFactory.createActions());
 
-        createMixedInMembersAndResort();
+        var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
+        var regularAssociations = regularMemberFactory.createAssociations().toList();
+        var regularActions = regularMemberFactory.createActions().toList();
+
+        var mixedInMemberFactory = new MixedInMemberFactory(this, specLoaderInternal());
+        var mixedInAssociations = mixedInMemberFactory.createMixedInAssociations();
+        var mixedInActions = mixedInMemberFactory.createMixedInActions();
+
+        this.objectAssociationContainer = new AssociationContainer(
+        		associationsInOrder(regularAssociations, mixedInAssociations),
+        		superclass());
+        this.objectActionContainer = new ActionContainer(
+        		actionsInOrder(regularActions, mixedInActions),
+        		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
+        		superclass());
 
         postProcessor.postProcess(this);
         invalidateCachedFacets();
@@ -330,25 +345,6 @@ implements ObjectSpecificationBuilder {
     }
 
     // -- getObjectAction
-
-    @Override
-    public Optional<ObjectAction> getDeclaredAction(
-            final @Nullable String id,
-            final ImmutableEnumSet<ActionScope> actionScopes,
-            final MixedIn mixedIn) {
-
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getDeclaredAction %s on %s".formatted(id, this.getFeatureIdentifier()));
-
-        return _Strings.isEmpty(id)
-            ? Optional.empty()
-            : streamDeclaredActions(actionScopes, mixedIn)
-                .filter(action->
-                    id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                            || id.equals(action.getFeatureIdentifier().memberLogicalName())
-                )
-                .findFirst();
-    }
 
     @Override
     public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
@@ -404,43 +400,14 @@ implements ObjectSpecificationBuilder {
         return elementSpecification.get();
     }
 
-    // -- TABLE COLUMN RENDERING
-
-    @Override public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final ColumnQuery columnQuery) {
-	   return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
-    }
-
-    @Override
-    public Stream<ObjectAction> streamActionsForColumnRendering(final Where where) {
-        return columnHelper.streamActionsForColumnRendering(this, where);
-    }
-
     // -- FIELDS
 
     private final PostProcessor postProcessor;
 
-    // -- ASSOCIATIONS
-
-    private final List<ObjectAssociation> associations = _Lists.newArrayList();
-
-    // defensive immutable lazy copy of associations
-    private final _Lazy<Can<ObjectAssociation>> unmodifiableAssociations =
-            _Lazy.threadSafe(()->Can.ofCollection(associations));
-
     // -- ACTIONS
-
-    private final List<ObjectAction> objectActions = _Lists.newArrayList();
 
     /** not API, used for validation */
     @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
-
-    // defensive immutable lazy copy of objectActions
-    private final _Lazy<Can<ObjectAction>> unmodifiableActions =
-            _Lazy.threadSafe(()->Can.ofCollection(objectActions));
-
-    // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
-    private final ListMultimap<ActionScope, ObjectAction> objectActionsByType =
-            _Multimaps.newConcurrentListMultimap();
 
     // -- INTERFACES
 
@@ -525,7 +492,7 @@ implements ObjectSpecificationBuilder {
         specLoaderInternal().validateLater(this, introspectionContextProvider);
     }
 
-    protected void loadSpecOfSuperclass(final Class<?> superclass) {
+    private void loadSpecOfSuperclass(final Class<?> superclass) {
         if (superclass == null)
 			return;
 
@@ -536,7 +503,7 @@ implements ObjectSpecificationBuilder {
         }
     }
 
-    protected void loadSpecOfInterfaces(final Class<?>[] interfaces) {
+    private void loadSpecOfInterfaces(final Class<?>[] interfaces) {
     	if(interfaces==null)
 			return;
 
@@ -588,34 +555,25 @@ implements ObjectSpecificationBuilder {
         }
     }
 
-    final void replaceAssociations(final Stream<ObjectAssociation> associations) {
-        var orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
-        synchronized (unmodifiableAssociations) {
-            this.associations.clear();
-            this.associations.addAll(orderedAssociations);
-            unmodifiableAssociations.clear(); // invalidate
-        }
+    private List<ObjectAssociation> associationsInOrder(
+    		final List<ObjectAssociation> regularAssociations,
+            final List<? extends ObjectAssociation> mixedInAssociations) {
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations); // do before sorting
+        return _MemberSortingUtils.sortAssociationsIntoList(Stream.concat(
+                regularAssociations.stream(),
+                mixedInAssociations.stream()));
     }
 
-    final void replaceActions(final Stream<ObjectAction> objectActions) {
-        var orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
-        synchronized (unmodifiableActions){
-            this.objectActions.clear();
-            this.objectActions.addAll(orderedActions);
-            unmodifiableActions.clear(); // invalidate
-
-            // rebuild objectActionsByType multi-map
-            for (var actionType : ActionScope.values()) {
-                var objectActionForType = objectActionsByType.getOrElseNew(actionType);
-                objectActionForType.clear();
-                orderedActions.stream()
-                .filter(ObjectAction.Predicates.ofActionType(actionType))
-                .forEach(objectActionForType::add);
-            }
-        }
+    private List<ObjectAction> actionsInOrder(
+    		final List<ObjectAction> regularActions,
+            final List<? extends ObjectAction> mixedInActions) {
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions); // do before sorting
+        return _MemberSortingUtils.sortActionsIntoList(Stream.concat(
+        		regularActions.stream(),
+        		mixedInActions.stream()));
     }
 
-    void invalidateCachedFacets() {
+    private void invalidateCachedFacets() {
         this.valueFacet = getFacet(ValueFacet.class);
         this.titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
         this.iconFacet = getFacet(IconFacet.class);
@@ -810,19 +768,6 @@ implements ObjectSpecificationBuilder {
         return unmodifiableInterfaces.get();
     }
 
-    // -- ASSOCIATIONS
-
-    @Override
-    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
-
-        synchronized(unmodifiableAssociations) {
-            return stream(unmodifiableAssociations.get())
-                    .filter(mixedIn.toFilter());
-        }
-    }
-
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
@@ -840,36 +785,6 @@ implements ObjectSpecificationBuilder {
 			return association;
 
         return Optional.empty();
-    }
-
-    @Override
-    public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getDeclaredAssociation %s of %s".formatted(id, this.getFeatureIdentifier()));
-
-        if(_Strings.isEmpty(id))
-			return Optional.empty();
-
-        return streamDeclaredAssociations(mixedIn)
-                .filter(objectAssociation->objectAssociation.getId().equals(id))
-                .findFirst();
-    }
-
-    @Override
-    public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-        var actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
-        return streamActions(actionScopes, mixedIn);
-    }
-
-    @Override
-    public Stream<ObjectAction> streamDeclaredActions(
-            final ImmutableEnumSet<ActionScope> actionScopes,
-            final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
-        return actionScopes.stream()
-                .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
-                .filter(mixedIn.toFilter());
     }
 
     // -- VALIDITY
@@ -902,49 +817,6 @@ implements ObjectSpecificationBuilder {
         return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
     }
 
-    // -- MIXIN ADDER ONESHOTs
-
-    private final _Oneshot mixedInMemberAdder = new _Oneshot();
-
-    /**
-     * one-shot: must be no-op, if already created
-     */
-    private void createMixedInMembersAndResort() {
-    	var memberFactory = new MixedInMemberFactory(this, specLoaderInternal());
-    	createMixedInActionsAndResort(memberFactory);
-    	createMixedInAssociationsAndResort(memberFactory);
-    }
-
-    private void createMixedInActionsAndResort(final MixedInMemberFactory memberFactory) {
-        var mixedInActions = memberFactory.createMixedInActions();
-        if(mixedInActions.isEmpty())
-			return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
-
-        var regularActions = new ArrayList<>(objectActions); // defensive copy
-
-        // note: we are doing this before any member sorting
-        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
-
-        replaceActions(Stream.concat(
-                regularActions.stream(),
-                mixedInActions.stream()));
-    }
-
-    private void createMixedInAssociationsAndResort(final MixedInMemberFactory memberFactory) {
-        var mixedInAssociations = memberFactory.createMixedInAssociations();
-        if(mixedInAssociations.isEmpty())
-			return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
-
-        var regularAssociations = new ArrayList<>(associations); // defensive copy
-
-        // note: we are doing this before any member sorting
-        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);
-
-        replaceAssociations(Stream.concat(
-                regularAssociations.stream(),
-                mixedInAssociations.stream()));
-    }
-
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =
         getServiceRegistry().select(EntityTitleSubscriber.class);
@@ -953,5 +825,11 @@ implements ObjectSpecificationBuilder {
 	public boolean isFullyIntrospected() {
         return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
     }
+
+	@Override
+	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final ColumnQuery columnQuery) {
+		//TODO migrate
+		return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
+	}
 
 }

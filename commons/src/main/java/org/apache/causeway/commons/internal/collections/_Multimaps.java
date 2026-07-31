@@ -40,11 +40,10 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -66,6 +65,7 @@ public class _Multimaps {
      * @param <V>
      */
     public static interface ListMultimap<K, V> extends Map<K, List<V>> {
+
         /**
          * Adds {@code value} to the List stored under {@code key}.
          * (If no such List exists, a new List is created.)

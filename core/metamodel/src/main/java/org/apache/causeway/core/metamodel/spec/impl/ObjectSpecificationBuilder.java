@@ -22,11 +22,14 @@ import java.util.Set;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 
 interface ObjectSpecificationBuilder
 extends
-	ObjectMemberContainer,
 	HasSpecificationLoaderInternal,
+	ObjectActionContainer,
+	ObjectAssociationContainer,
 	ObjectSpecification // TODO remove
 //	Specification,
 //	HasLogicalType,
