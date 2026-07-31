@@ -29,9 +29,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
@@ -42,9 +39,9 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
+import org.jspecify.annotations.NonNull;
 
 record _MembersAsColumns(
 		boolean isColumnOrderPatchingEnabled,
@@ -58,16 +55,17 @@ record _MembersAsColumns(
 				mmc.getServiceRegistry().select(TableColumnOrderService.class));
 	}
 
-    public Stream<ObjectAction> streamActionsForColumnRendering(
-            final ObjectSpecification elementType,
-            final Where where) {
-        if(elementType.isValue())
-			return Stream.empty();
-
-        return elementType.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(where))
-            .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
-    }
+//inlined to ActionContainer
+//    public Stream<ObjectAction> streamActionsForColumnRendering(
+//            final ObjectSpecification elementType,
+//            final Where where) {
+//        if(elementType.isValue())
+//			return Stream.empty();
+//
+//        return elementType.streamRuntimeActions(MixedIn.INCLUDED)
+//            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(where))
+//            .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
+//    }
 
     /**
      * @param parentObject not used for standalone tables and allowed to be empty for parented ones

@@ -124,7 +124,6 @@ implements
 
     private final FacetedMethodsFactory facetedMethodsFactory;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
-    private final _MembersAsColumns columnHelper;
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
 
@@ -169,8 +168,6 @@ implements
 
         this.facetedMethodsFactory =
                 new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
-
-        this.columnHelper = new _MembersAsColumns(mmc);
     }
 
     // -- SHALLOW IMMUTABLE
@@ -293,7 +290,8 @@ implements
 
         this.objectAssociationContainer = new AssociationContainer(
         		associationsInOrder(regularAssociations, mixedInAssociations),
-        		superclass());
+        		superclass(),
+        		this);
         this.objectActionContainer = new ActionContainer(
         		actionsInOrder(regularActions, mixedInActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
@@ -825,11 +823,5 @@ implements
 	public boolean isFullyIntrospected() {
         return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
     }
-
-	@Override
-	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final ColumnQuery columnQuery) {
-		//TODO migrate
-		return columnHelper.streamAssociationsForColumnRendering(this, columnQuery);
-	}
 
 }

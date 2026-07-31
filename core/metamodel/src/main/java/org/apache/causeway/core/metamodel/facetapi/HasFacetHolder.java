@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 
+@FunctionalInterface
 public interface HasFacetHolder extends FacetHolder {
 
     // -- INTERFACE

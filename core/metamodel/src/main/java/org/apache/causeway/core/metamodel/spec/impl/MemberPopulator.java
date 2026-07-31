@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.stream.Stream;
-
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
+//TODO wip
 interface MemberPopulator {
 
 	enum IntrospectionState {
@@ -54,32 +50,6 @@ interface MemberPopulator {
 		boolean isLessThan(final IntrospectionState other) {
 			return this.ordinal() < other.ordinal();
 		}
-	}
-	
-	record ComputedMembers(
-			Can<ObjectAssociation> associationsInOrder,
-			Can<ObjectAction> actionsInOrder
-			//Map<ResolvedMethod, ObjectMember> membersByMethod,
-			) {
-
-		ComputedMembers() {
-			this(Can.empty(), Can.empty());
-		}
-
-		ComputedMembers(
-				final Stream<ObjectAssociation> associations,
-				final Stream<ObjectAction> actions) {
-			this(
-					Can.ofCollection(_MemberSortingUtils.sortAssociationsIntoList(associations)),
-					Can.ofCollection(_MemberSortingUtils.sortActionsIntoList(actions)));
-		}
-
-		ComputedMembers join(final ComputedMembers other) {
-			return new ComputedMembers(
-					Stream.concat(this.associationsInOrder.stream(), other.associationsInOrder.stream()),
-					Stream.concat(this.actionsInOrder.stream(), other.actionsInOrder.stream()));
-		}
-
 	}
 
 }
