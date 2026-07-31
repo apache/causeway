@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+/**
+ * Guarantees thread-safe state transition.
+ */
 final class IntrospectionStateHandlerThreadSafe
 implements IntrospectionStateHandler {
 
@@ -45,43 +48,50 @@ implements IntrospectionStateHandler {
     	if(isFullyIntrospected())
     		return; // optimization
 
-    	// This ensures only one thread changes state at a time,
-    	// but threads block while another thread holds the lock.
-    	synchronized (lock) {
-	        switch (state) {
-	            case NOT_INTROSPECTED->{
-	                if(state.isLessThan(upTo)) {
-	                	transitionToTypeIntrospected();
-	                }
-	                if(state.isLessThan(upTo)) {
-	                	transitionToFullyIntrospected();
-	                }
-	            }
-	            case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
-	            case TYPE_INTROSPECTED->{
-	                if(state.isLessThan(upTo)) {
-	                	transitionToFullyIntrospected();
-	                }
-	            }
-	            case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
-	            case FULLY_INTROSPECTED->{}// nothing to do ... all done
-	        }
-    	}
+        switch (state) {
+            case NOT_INTROSPECTED->{
+                if(state.isLessThan(upTo)) {
+                	transitionToTypeIntrospected();
+                }
+                if(state.isLessThan(upTo)) {
+                	transitionToFullyIntrospected();
+                }
+            }
+            case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
+            case TYPE_INTROSPECTED->{
+                if(state.isLessThan(upTo)) {
+                	transitionToFullyIntrospected();
+                }
+            }
+            case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
+            case FULLY_INTROSPECTED->{}// nothing to do ... all done
+        }
     }
 
     // -- HELPER
 
     private void transitionToTypeIntrospected() {
-        this.state = IntrospectionState.TYPE_BEING_INTROSPECTED;
-        introspectTypeHierarchy.run();
-        this.state = IntrospectionState.TYPE_INTROSPECTED;
+    	// This ensures only one thread changes state at a time,
+    	// but threads block while another thread holds the lock.
+    	synchronized (lock) {
+    		if(!state.isLessThan(IntrospectionState.TYPE_BEING_INTROSPECTED))
+				return; // in case the state had changed till acquiring the lock
+	        this.state = IntrospectionState.TYPE_BEING_INTROSPECTED;
+	        introspectTypeHierarchy.run();
+	        this.state = IntrospectionState.TYPE_INTROSPECTED;
+    	}
     }
 
     private void transitionToFullyIntrospected() {
-    	this.state = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-        introspectMembers.run();
-        this.state = IntrospectionState.FULLY_INTROSPECTED;
+    	// This ensures only one thread changes state at a time,
+    	// but threads block while another thread holds the lock.
+    	synchronized (lock) {
+    		if(!state.isLessThan(IntrospectionState.MEMBERS_BEING_INTROSPECTED))
+				return; // in case the state had changed till acquiring the lock
+	    	this.state = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
+	        introspectMembers.run();
+	        this.state = IntrospectionState.FULLY_INTROSPECTED;
+    	}
     }
-
 
 }
