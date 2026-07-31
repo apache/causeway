@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -109,6 +110,7 @@ import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import lombok.Getter;
@@ -259,6 +261,7 @@ implements ObjectSpecificationBuilder {
         loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
     }
 
+    private final AtomicBoolean isLockedDown = new AtomicBoolean(); //TODO temporary
     private void introspectMembers() {
 
         // yet this logic does not skip UNKNONW
@@ -270,6 +273,8 @@ implements ObjectSpecificationBuilder {
             }
             return;
         }
+        Assert.isTrue(!isLockedDown.get(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
+        		.formatted(getCorrespondingClass().getName()));
 
         var memberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
 
@@ -277,8 +282,12 @@ implements ObjectSpecificationBuilder {
         replaceAssociations(memberFactory.createAssociations());
         replaceActions(memberFactory.createActions());
 
+        createMixedInMembersAndResort();
+
         postProcessor.postProcess(this);
         invalidateCachedFacets();
+
+        isLockedDown.set(true);
     }
 
     @Override
@@ -579,7 +588,7 @@ implements ObjectSpecificationBuilder {
         }
     }
 
-    protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
+    final void replaceAssociations(final Stream<ObjectAssociation> associations) {
         var orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
@@ -588,7 +597,7 @@ implements ObjectSpecificationBuilder {
         }
     }
 
-    protected final void replaceActions(final Stream<ObjectAction> objectActions) {
+    final void replaceActions(final Stream<ObjectAction> objectActions) {
         var orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
@@ -808,8 +817,6 @@ implements ObjectSpecificationBuilder {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
                 ()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
 
-        mixedInMemberAdder.trigger(this::createMixedInMembersAndResort); // only if not already
-
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
                     .filter(mixedIn.toFilter());
@@ -860,14 +867,10 @@ implements ObjectSpecificationBuilder {
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
                 ()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
-
-        mixedInMemberAdder.trigger(this::createMixedInMembersAndResort);
-
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
                 .filter(mixedIn.toFilter());
     }
-
 
     // -- VALIDITY
 

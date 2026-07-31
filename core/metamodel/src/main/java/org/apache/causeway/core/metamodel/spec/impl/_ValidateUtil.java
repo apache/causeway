@@ -44,18 +44,18 @@ class _ValidateUtil{
         var snapshot = specLoader.snapshotSpecifications();
 
         programmingModel.streamValidators()
-        .filter(MetaModelValidator::isEnabled)
-        .forEach(validator -> {
-            log.debug("Running validator: {}", validator);
-            try {
-                runValidator(validator, snapshot);
-            } catch (Throwable t) {
-                log.error("failure", t);
-                throw t;
-            } finally {
-                log.debug("Done validator: {}", validator);
-            }
-        });
+	        .filter(MetaModelValidator::isEnabled)
+	        .forEach(validator -> {
+	            log.debug("Running validator: {}", validator);
+	            try {
+	                runValidator(validator, snapshot);
+	            } catch (Throwable t) {
+	                log.error("failure", t);
+	                throw t;
+	            } finally {
+	                log.debug("Done validator: {}", validator);
+	            }
+	        });
 
         log.debug("Done running MetaModelValidators.");
     }
@@ -89,7 +89,7 @@ class _ValidateUtil{
         objValidator.validateObjectEnter(objSpec);
 
         actionValidator
-        .ifPresentOrElse(
+        	.ifPresentOrElse(
                 validator->
                     objSpec.streamRuntimeActions(MixedIn.INCLUDED)
                     .forEach(act->{
@@ -107,16 +107,16 @@ class _ValidateUtil{
                 );
 
         propertyValidator
-        .ifPresent(validator->{
-            objSpec.streamProperties(MixedIn.INCLUDED)
-            .forEach(prop->validator.validateProperty(objSpec, prop));
-        });
+	        .ifPresent(validator->{
+	            objSpec.streamProperties(MixedIn.INCLUDED)
+	            .forEach(prop->validator.validateProperty(objSpec, prop));
+	        });
 
         collectionValidator
-        .ifPresent(validator->{
-            objSpec.streamCollections(MixedIn.INCLUDED)
-            .forEach(coll->validator.validateCollection(objSpec, coll));
-        });
+	        .ifPresent(validator->{
+	            objSpec.streamCollections(MixedIn.INCLUDED)
+	            .forEach(coll->validator.validateCollection(objSpec, coll));
+	        });
 
         objValidator.validateObjectExit(objSpec);
     }
