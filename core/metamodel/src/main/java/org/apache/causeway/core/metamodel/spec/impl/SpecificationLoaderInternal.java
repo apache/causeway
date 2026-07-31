@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -28,7 +27,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationBuilder.IntrospectionRequest;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -157,9 +156,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
 
     /**
      * queue {@code objectSpec} for later validation
-     * @param objectSpec
-     * @param introspectionContextProvider
      */
-    void validateLater(ObjectSpecification objectSpec, Supplier<String> introspectionContextProvider);
+    void validateLater(ObjectSpecification objectSpec);
 
 }

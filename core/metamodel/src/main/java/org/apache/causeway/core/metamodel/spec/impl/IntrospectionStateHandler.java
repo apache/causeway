@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-//TODO wip
-interface MemberPopulator {
+interface IntrospectionStateHandler {
 
 	enum IntrospectionState {
 	    /**
@@ -50,6 +50,53 @@ interface MemberPopulator {
 		boolean isLessThan(final IntrospectionState other) {
 			return this.ordinal() < other.ordinal();
 		}
+	}
+
+    enum IntrospectionRequest {
+        /**
+         * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
+         */
+		REGISTER,
+        /**
+         * Partial introspection, that only includes type-hierarchy but not members.
+         */
+		TYPE_ONLY,
+        /**
+         * Full introspection, that includes type-hierarchy and members.
+         */
+		FULL
+    }
+
+	void introspectUpTo(final IntrospectionState upTo);
+	boolean isFullyIntrospected();
+
+	default void introspect(final IntrospectionRequest request) {
+        switch (request) {
+            case REGISTER -> register();
+            case TYPE_ONLY -> introspectTypeOnly();
+            case FULL -> introspectFully();
+        }
+    }
+
+	/**
+     * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
+     */
+	default void register() {
+		introspectUpTo(IntrospectionState.NOT_INTROSPECTED);
+	}
+
+	/**
+     * Partial introspection, that only includes type-hierarchy but not members.
+     */
+	default void introspectTypeOnly() {
+		introspectUpTo(IntrospectionState.TYPE_INTROSPECTED);
+	}
+
+	/**
+     * Full introspection, that includes type-hierarchy and members.
+     */
+	default void introspectFully() {
+		introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 	}
 
 }

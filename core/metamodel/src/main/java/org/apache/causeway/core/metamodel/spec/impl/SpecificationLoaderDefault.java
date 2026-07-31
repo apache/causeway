@@ -31,7 +31,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
@@ -67,7 +66,7 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationBuilder.IntrospectionRequest;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
@@ -386,8 +385,7 @@ implements
 
     @Override
     public void validateLater(
-            final ObjectSpecification objectSpec,
-            final Supplier<String> introspectionContextProvider) {
+            final ObjectSpecification objectSpec) {
         if(!isMetamodelFullyIntrospected())
             // don't trigger validation during bootstrapping
             // getValidationResult() is lazily populated later on first request anyway
@@ -397,7 +395,7 @@ implements
             return;
 
         if(log.isInfoEnabled()) {
-            log.info("re-validation triggered by {}", introspectionContextProvider.get());
+            log.info("re-validation triggered for {}", objectSpec.getFullIdentifier());
         }
 
         // validators might discover new specs
@@ -557,7 +555,8 @@ implements
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionRequest request) {
 
-        if(type==null) return null;
+        if(type==null)
+        	return null;
 
         var substitute = classSubstitutorRegistry.getSubstitution(type);
         if (substitute.isNeverIntrospect()) return null; // never inspect

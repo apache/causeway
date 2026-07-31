@@ -30,6 +30,7 @@ extends
 	HasSpecificationLoaderInternal,
 	ObjectActionContainer,
 	ObjectAssociationContainer,
+	IntrospectionStateHandler,
 	ObjectSpecification // TODO remove
 //	Specification,
 //	HasLogicalType,
@@ -41,25 +42,8 @@ extends
 //	HasSpecificationLoaderInternal
 	{
 
-    enum IntrospectionRequest {
-        /**
-         * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
-         */
-        REGISTER,
-        /**
-         * Partial introspection, that only includes type-hierarchy but not members.
-         */
-        TYPE_ONLY,
-        /**
-         * Full introspection, that includes type-hierarchy and members.
-         */
-        FULL
-    }
-
     ObjectSpecification build();
 
-    void introspect(IntrospectionRequest request);
     Set<ResolvedMethod> getPotentialOrphans();
-	boolean isFullyIntrospected();
 
 }

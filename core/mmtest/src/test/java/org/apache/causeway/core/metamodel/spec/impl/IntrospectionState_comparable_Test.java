@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.metamodel.spec.impl.MemberPopulator.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionState;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

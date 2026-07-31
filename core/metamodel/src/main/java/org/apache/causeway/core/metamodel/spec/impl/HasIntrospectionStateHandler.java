@@ -18,22 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationBuilder.IntrospectionRequest;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
+@FunctionalInterface
+interface HasIntrospectionStateHandler extends IntrospectionStateHandler {
 
-interface SpecificationPopulator {
+	IntrospectionStateHandler introspectionStateHandler();
 
-    /**
-     * Return the specification for the specified class of object.
-     *
-     * <p>It is possible for this method to return <tt>null</tt>, for example if
-     * any of the configured {@link ClassSubstitutor}s has filtered out the class.
-     *
-     * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
-     */
-    @Nullable
-    ObjectSpecificationBuilder getSpecificationBuilder(@Nullable Class<?> domainType, @NonNull IntrospectionRequest request);
+	@Override
+	default void introspectUpTo(final IntrospectionState upTo) {
+		introspectionStateHandler().introspectUpTo(upTo);
+	}
+
+	@Override
+	default boolean isFullyIntrospected() {
+		return introspectionStateHandler().isFullyIntrospected();
+	}
 
 }

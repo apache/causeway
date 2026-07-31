@@ -26,7 +26,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
@@ -96,7 +95,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.impl.MemberPopulator.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -112,6 +110,7 @@ import lombok.extern.slf4j.Slf4j;
 final class ObjectSpecificationDefault
 implements
 	ObjectSpecificationBuilder,
+	HasIntrospectionStateHandler,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
 
@@ -126,6 +125,9 @@ implements
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
+
+    @Getter @Accessors(fluent = true)
+	private final IntrospectionStateHandler introspectionStateHandler;
 
     @Getter(onMethod_={@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -168,6 +170,18 @@ implements
 
         this.facetedMethodsFactory =
                 new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
+
+        this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
+        		()->{
+        			introspectTypeHierarchy();
+        	        invalidateCachedFacets();
+        		},
+        		()->{
+        	        introspectMembers();
+//        	        // make sure we've loaded the facets from layout.xml also.
+        	        Facets.gridPreload(this, null);
+        	        specLoaderInternal().validateLater(this);
+        		});
     }
 
     // -- SHALLOW IMMUTABLE
@@ -275,8 +289,8 @@ implements
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
         streamTypeHierarchyAndInterfaces()
-    		.forEach(it->((ObjectSpecificationDefault)it)
-    			.introspect(IntrospectionRequest.FULL));
+    		.forEach(it->((IntrospectionStateHandler)it)
+    			.introspectFully());
 
         // create associations and actions
 
@@ -303,6 +317,7 @@ implements
         isLockedDown.set(true);
     }
 
+<<<<<<< Upstream, based on origin/main
     @Override
     public void synthesizeNavigationActions() {
         if (!getMetaModelContext().getConfiguration()
@@ -334,6 +349,10 @@ implements
         membersByMethod = null;
     }
 
+=======
+    //TODO this is a facet factory responsibility
+    @Deprecated
+>>>>>>> df432ff CAUSEWAY-4044: thread-safe IntrospectionStateHandler
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
@@ -346,8 +365,7 @@ implements
 
     @Override
     public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getMember %s on %s".formatted(method.name(), this.getFeatureIdentifier()));
+    	introspectFully();
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
@@ -427,67 +445,12 @@ implements
     private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
-    private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
-
     @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
 
     // -- Stuff immediately derivable from class
     @Override
     public final FeatureType getFeatureType() {
         return FeatureType.OBJECT;
-    }
-
-    @Override
-    public void introspect(final IntrospectionRequest request) {
-        switch (request) {
-            case REGISTER -> introspectUpTo(IntrospectionState.NOT_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-            case TYPE_ONLY -> introspectUpTo(IntrospectionState.TYPE_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-            case FULL -> introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"introspect(%s)".formatted(request));
-        }
-    }
-
-    /**
-     * @param introspectionContextProvider keeps track of the causal chain of introspection requests
-     */
-    private void introspectUpTo(final IntrospectionState upTo, final Supplier<String> introspectionContextProvider) {
-        switch (introspectionState) {
-            case NOT_INTROSPECTED->{
-                if(introspectionState.isLessThan(upTo)) {
-                    introspectType();
-                }
-                if(introspectionState.isLessThan(upTo)) {
-                    introspectFully(introspectionContextProvider);
-                }
-            }
-            case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
-            case TYPE_INTROSPECTED->{
-                if(introspectionState.isLessThan(upTo)) {
-                    introspectFully(introspectionContextProvider);
-                }
-            }
-            case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
-            case FULLY_INTROSPECTED->{}// nothing to do ... all done
-        }
-    }
-
-    private void introspectType() {
-        this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
-        introspectTypeHierarchy();
-        invalidateCachedFacets();
-        this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
-    }
-
-    private void introspectFully(final Supplier<String> introspectionContextProvider) {
-        this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
-        introspectMembers();
-        this.introspectionState = IntrospectionState.FULLY_INTROSPECTED;
-
-        // make sure we've loaded the facets from layout.xml also.
-        Facets.gridPreload(this, null);
-        specLoaderInternal().validateLater(this, introspectionContextProvider);
     }
 
     private void loadSpecOfSuperclass(final Class<?> superclass) {
@@ -768,8 +731,7 @@ implements
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
-                ()->"getMember %s of %s".formatted(memberId, this.getFeatureIdentifier()));
+    	introspectionStateHandler.introspectFully();
 
         if(_Strings.isEmpty(memberId))
 			return Optional.empty();
@@ -818,10 +780,5 @@ implements
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =
         getServiceRegistry().select(EntityTitleSubscriber.class);
-
-    @Override
-	public boolean isFullyIntrospected() {
-        return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
-    }
 
 }
