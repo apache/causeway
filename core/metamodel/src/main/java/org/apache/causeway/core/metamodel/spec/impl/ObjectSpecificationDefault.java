@@ -43,11 +43,13 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -141,10 +143,12 @@ implements
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
 
     public ObjectSpecificationDefault(
+    		final Profiler profiler,
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
-            final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry) {
+            final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry,
+            final @NonNull MixinSpecStreamer mixinSpecStreamer) {
 
         final MetaModelContext mmc = facetProcessor.getMetaModelContext();
 
@@ -173,13 +177,16 @@ implements
 
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
-        			introspectTypeHierarchy();
+        			profiler.measure("types", this::introspectTypeHierarchy);
+        			//introspectTypeHierarchy();
         	        invalidateCachedFacets();
         		},
         		()->{
-        	        introspectMembers();
+        			profiler.measure("members", ()->introspectMembers(mixinSpecStreamer, profiler));
+        	        //introspectMembers();
 //        	        // make sure we've loaded the facets from layout.xml also.
-        	        Facets.gridPreload(this, null);
+        	        //Facets.gridPreload(this, null);
+        			profiler.measure("gridPreload", ()->Facets.gridPreload(this, null));
         	        specLoaderInternal().validateLater(this);
         		});
     }
@@ -272,7 +279,7 @@ implements
     }
 
     private final AtomicBoolean isLockedDown = new AtomicBoolean(); //TODO temporary
-    private void introspectMembers() {
+    private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer, final Profiler profiler) {
 
         // yet this logic does not skip UNKNONW
         if(this.beanSort().isCollection()
@@ -288,19 +295,25 @@ implements
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-        streamTypeHierarchyAndInterfaces()
-    		.forEach(it->((IntrospectionStateHandler)it)
-    			.introspectFully());
+
+        profiler.measure("hierarchy", ()->{
+        	streamTypeHierarchyAndInterfaces()
+	    		.forEach(it->((IntrospectionStateHandler)it)
+	    			.introspectFully());
+        });
 
         // create associations and actions
 
         var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
-        var regularAssociations = regularMemberFactory.createAssociations().toList();
-        var regularActions = regularMemberFactory.createActions().toList();
+        var regularAssociations = profiler.measure("-regularAssociations", ()->regularMemberFactory.createAssociations().toList());
+        var regularActions = profiler.measure("-regularActions", ()->regularMemberFactory.createActions().toList());
 
-        var mixedInMemberFactory = new MixedInMemberFactory(this, specLoaderInternal());
-        var mixedInAssociations = mixedInMemberFactory.createMixedInAssociations();
-        var mixedInActions = mixedInMemberFactory.createMixedInActions();
+        var mixinSpecStreamerX = new MixinSpecStreamerOnTheFly(
+        		specLoaderInternal(), getServiceRegistry().lookupServiceElseFail(CausewayBeanTypeRegistry.class));
+        var mixedInMemberFactory = new MixedInMemberFactory(this, mixinSpecStreamerX);
+        //XXX takes 50% of time
+        var mixedInAssociations = profiler.measure("-mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations());
+        var mixedInActions = profiler.measure("-mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
 
         this.objectAssociationContainer = new AssociationContainer(
         		associationsInOrder(regularAssociations, mixedInAssociations),
@@ -311,7 +324,11 @@ implements
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
-        postProcessor.postProcess(this);
+        profiler.measure("-postProcessor", ()->{
+        	//XXX takes 50% of time
+        	postProcessor.postProcess(this);
+        });
+
         invalidateCachedFacets();
 
         isLockedDown.set(true);

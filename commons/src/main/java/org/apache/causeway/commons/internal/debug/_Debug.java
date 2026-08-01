@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.commons.internal.debug;
 
+import java.util.HashMap;
+import java.util.LongSummaryStatistics;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -46,7 +51,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _Debug {
 
-    public void onCondition(
+    @Deprecated(forRemoval = false) // do not remove, see java-doc
+	public void onCondition(
             final boolean condition,
             final Runnable runnable) {
 
@@ -55,22 +61,77 @@ public class _Debug {
         }
     }
 
-    public void onClassSimpleNameMatch(
+    @Deprecated(forRemoval = false) // do not remove, see java-doc
+	public void onClassSimpleNameMatch(
             final Class<?> correspondingClass,
             final String classSimpleName,
             final Runnable runnable) {
         onCondition(correspondingClass.getSimpleName().equals(classSimpleName), runnable);
     }
 
-    public void dump(final Object x) {
+    @Deprecated(forRemoval = false) // do not remove, see java-doc
+	public void dump(final Object x) {
         dump(x, 0);
     }
 
     /**
      * General purpose log entry.
      */
-    public void log(final String format, final Object...args) {
+    @Deprecated(forRemoval = false) // do not remove, see java-doc
+	public void log(final String format, final Object...args) {
         _XrayEvent.record(1, _IconResource.LOG, format, args);
+    }
+
+    public record Profiler(
+    		Map<String, Measurement> measurements) {
+
+    	public record Measurement(
+    			String name,
+    			LongSummaryStatistics stats) {
+    		Measurement(final String name) {
+    			this(name, new LongSummaryStatistics());
+    		}
+    		void collect(final Runnable runnable) {
+    			var t0 = System.nanoTime();
+    			runnable.run();
+    			stats.accept(System.nanoTime() - t0);
+    		}
+    		<T> T collect(final Supplier<T> callable) {
+    			var t0 = System.nanoTime();
+    			var t = callable.get();
+    			stats.accept(System.nanoTime() - t0);
+    			return t;
+    		}
+    		@Override
+    		public final String toString() {
+    			return "Profiling %s: %d ms, avg %.2f ms (count=%d)"
+    					.formatted(name,
+    							stats.getSum()/1000_000L,
+    							stats.getAverage()/1000_000.,
+    							stats.getCount());
+    		}
+    	}
+
+    	public Profiler() {
+    		this(new HashMap<>());
+    	}
+
+    	public void measure(final String name, final Runnable runnable) {
+    		measurements.computeIfAbsent(name, Measurement::new)
+    			.collect(runnable);
+    	}
+
+    	public <T> T measure(final String name, final Supplier<T> callable) {
+    		return measurements.computeIfAbsent(name, Measurement::new)
+    			.collect(callable);
+    	}
+
+    	@Override
+    	public final String toString() {
+    		return new TreeMap<>(measurements).values().stream()
+    			.map(Measurement::toString)
+    			.collect(Collectors.joining("\n"));
+    	}
     }
 
     // -- HELPER

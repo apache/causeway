@@ -46,6 +46,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -119,6 +120,8 @@ implements
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
     private PostProcessor postProcessor;
+    private MixinSpecStreamer mixinSpecStreamer = MixinSpecStreamer.EMPTY;
+    private final Profiler profiler = new Profiler();
 
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
@@ -238,6 +241,7 @@ implements
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);
 
+
         var specs = new SpecCollector();
 
         // preload otherwise not eagerly discovered classes
@@ -262,8 +266,14 @@ implements
             .forEach(specs::collect);
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
+        //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
+        //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
+
+        // lockdown
+        this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
+
         introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
                 specs.entitySpecs(), IntrospectionRequest.FULL);
@@ -293,7 +303,10 @@ implements
         if(isFullIntrospect()) {
             setMetamodelFullyIntrospected(true);
         }
+
+        log.info("\n{}", profiler);
     }
+
 
     @Override
     public Optional<ValidationFailures> getValidationResult() {
@@ -487,6 +500,7 @@ implements
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
     private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
+	//private Can<ObjectSpecification> mixinSpecs = Can.empty();
 
     private ValidationFailures runMetaModelValidators() {
         validationInProgress.set(true);
@@ -592,12 +606,15 @@ implements
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecificationBuilder createSpecification(final CausewayBeanMetaData typeMeta) {
+    private ObjectSpecificationBuilder createSpecification(
+    		final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
-                        typeMeta,
-                        facetProcessor,
-                        postProcessor,
-                        classSubstitutorRegistry);
+        		profiler,
+                typeMeta,
+                facetProcessor,
+                postProcessor,
+                classSubstitutorRegistry,
+                mixinSpecStreamer);
         return objectSpec;
     }
 

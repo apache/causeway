@@ -23,27 +23,17 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 
 record MixedInMemberFactory(
 		ObjectSpecification spec,
-		SpecificationLoaderInternal specLoaderInternal,
-		CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
+		MixinSpecStreamer mixinSpecStreamer) {
 
-	MixedInMemberFactory(
-			final ObjectSpecification spec,
-			final SpecificationLoaderInternal specLoaderInternal) {
-		this(spec, specLoaderInternal, spec.getServiceRegistry()
-				.lookupServiceElseFail(CausewayBeanTypeRegistry.class));
-	}
-
-    /**
+	/**
      * Creates all mixed in properties and collections for this spec.
      */
     public List<ObjectAssociation> createMixedInAssociations() {
@@ -51,7 +41,7 @@ record MixedInMemberFactory(
     			&& !spec.isInjectable()
     			&& !spec.isValue();
         return include
-    		? causewayBeanTypeRegistry.streamMixinTypes()
+    		? mixinSpecStreamer.streamMixinSpecs()
 	            .flatMap(this::createMixedInAssociation)
 	            .toList()
             : List.of();
@@ -66,7 +56,7 @@ record MixedInMemberFactory(
                 // in support of composite value-type constructor mixins
                 || spec.beanSort().isValue();
         return include
-    		? causewayBeanTypeRegistry.streamMixinTypes()
+    		? mixinSpecStreamer.streamMixinSpecs()
 				.flatMap(this::createMixedInAction)
 				.toList()
 			: List.of();
@@ -74,11 +64,8 @@ record MixedInMemberFactory(
 
     // -- HELPER
 
-    private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
-        var mixinSpec = specLoaderInternal.loadSpecification(mixinType,
-                IntrospectionRequest.FULL);
-        if (mixinSpec == null
-                || mixinSpec == spec)
+    private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec) {
+        if (mixinSpec == spec)
 			return Stream.empty();
         var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null)
@@ -94,12 +81,8 @@ record MixedInMemberFactory(
 	        .map(mixedInAssociation(spec, mixinSpec, mixinMethodName));
     }
 
-    private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
-
-        var mixinSpec = specLoaderInternal.loadSpecification(mixinType,
-                IntrospectionRequest.FULL);
-        if (mixinSpec == null
-                || mixinSpec == spec)
+    private Stream<ObjectActionMixedIn> createMixedInAction(final ObjectSpecification mixinSpec) {
+        if (mixinSpec == spec)
 			return Stream.empty();
         var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null)
