@@ -32,13 +32,9 @@ extends MemberDescribedFacetWithStaticTextAbstract {
     public static Optional<MemberDescribedFacet> create(
             final ObjectDescribedFacet objectDescribedFacet,
             final FacetHolder holder) {
-
-        var describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
-
-        return Optional.ofNullable(describedIfAny)
-        .map(described->
-            new MemberDescribedFacetFromType(described, holder));
-
+        return _Strings.nonEmpty(objectDescribedFacet.text())
+	        .map(described->
+	            new MemberDescribedFacetFromType(described, holder));
     }
 
     private MemberDescribedFacetFromType(

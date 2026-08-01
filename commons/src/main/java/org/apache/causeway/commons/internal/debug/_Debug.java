@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.commons.internal.debug;
 
-import java.util.HashMap;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -104,16 +104,16 @@ public class _Debug {
     		}
     		@Override
     		public final String toString() {
-    			return "Profiling %s: %d ms, avg %.2f ms (count=%d)"
+    			return "Profiling %s: %.3f ms, avg %.3f ms (count=%d)"
     					.formatted(name,
-    							stats.getSum()/1000_000L,
+    							(stats.getSum())/1000_000.,
     							stats.getAverage()/1000_000.,
     							stats.getCount());
     		}
     	}
 
     	public Profiler() {
-    		this(new HashMap<>());
+    		this(new ConcurrentHashMap<>());
     	}
 
     	public void measure(final String name, final Runnable runnable) {
@@ -129,9 +129,47 @@ public class _Debug {
     	@Override
     	public final String toString() {
     		return new TreeMap<>(measurements).values().stream()
-    			.map(Measurement::toString)
-    			.collect(Collectors.joining("\n"));
+		    			.map(Measurement::toString)
+		    			.collect(Collectors.joining("\n"));
     	}
+    }
+
+	@Deprecated(forRemoval = false) // do not remove, see java-doc
+	public String measureTimeResolutionNanos() {
+        final int iterations = 1_000_000; // Run many samples
+        long zeroChangeCount = 0;
+        long totalSteps = 0;
+
+        var sb = new StringBuilder();
+
+        sb.append("Sampling " + iterations + " consecutive calls to System.nanoTime()...");
+
+        final LongSummaryStatistics stats = new LongSummaryStatistics();
+
+        for (int i = 0; i < iterations; i++) {
+            long delta = System.nanoTime() - System.nanoTime();
+            if (delta == 0) {
+                zeroChangeCount++;
+            } else {
+                stats.accept(-delta);
+            }
+        }
+
+        double percentageSame = (double) zeroChangeCount / iterations * 100;
+
+        sb.append("\n--- Results ---");
+        sb.append("\nTotal Iterations: " + iterations);
+        sb.append("\nTimes resolution didn't change: " + zeroChangeCount);
+        sb.append("\nPercentage of identical consecutive readings: " + String.format("%.2f", percentageSame) + "%");
+        sb.append("\nTotal unique 'ticks' detected: " + totalSteps);
+
+        sb.append("\n\n--- Delta Statistics (Time between calls) ---");
+        sb.append("\nTotal valid deltas recorded: " + stats.getCount());
+        sb.append("\nMinimum delta detected:     " + stats.getMin() + " ns");
+        sb.append("\nMaximum delta detected:     " + stats.getMax() + " ns");
+        sb.append("\nAverage delta:               %.2f ns\n".formatted(stats.getAverage()));
+
+        return sb.toString();
     }
 
     // -- HELPER

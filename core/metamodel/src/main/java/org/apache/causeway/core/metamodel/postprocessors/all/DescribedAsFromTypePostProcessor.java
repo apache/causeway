@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
@@ -34,6 +32,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.inject.Inject;
 
 public class DescribedAsFromTypePostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -66,27 +66,25 @@ extends MetaModelPostProcessorAbstract {
     // -- HELPER
 
     private void handleMember(final ObjectMember member) {
-        if(member.containsNonFallbackFacet(MemberDescribedFacet.class)) {
-            return;
-        }
+        if(member.containsNonFallbackFacet(MemberDescribedFacet.class))
+			return;
         member.getElementType()
-        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(objectDescribedFacet ->
-            FacetUtil.addFacetIfPresent(
+	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
+	        .ifPresent(objectDescribedFacet ->
+	            FacetUtil.addFacetIfPresent(
                     MemberDescribedFacetFromType
-                    .create(objectDescribedFacet, facetedMethodFor(member))));
+                    	.create(objectDescribedFacet, facetedMethodFor(member))));
     }
 
     private void handleParam(final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
-            return;
-        }
+        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class))
+			return;
         parameter.getElementType()
-        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(objectDescribedFacet->
-            FacetUtil.addFacetIfPresent(
+	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
+	        .ifPresent(objectDescribedFacet->
+	            FacetUtil.addFacetIfPresent(
                     ParamDescribedFacetFromType
-                    .create(objectDescribedFacet, parameter.getFacetHolder())));
+	                    .create(objectDescribedFacet, parameter.getFacetHolder())));
     }
 
 }

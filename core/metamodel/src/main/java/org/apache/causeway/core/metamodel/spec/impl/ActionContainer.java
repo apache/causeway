@@ -18,21 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -42,18 +36,16 @@ record ActionContainer(
 		/**
 		 * scopes as available at runtime
 		 */
-		ImmutableEnumSet<ActionScope> actionScopes,
-		// partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
-		ListMultimap<ActionScope, ObjectAction> objectActionsByType,
-		Can<ObjectAction> actionsInOrder,
+		ImmutableEnumSet<ActionScope> actionScopesAtRuntime,
+		List<ObjectAction> productionActions,
+		List<ObjectAction> prototypeActions,
 		ObjectActionContainer superContainer)
 implements ObjectActionContainer {
 
-	// e.g. used for value types
+	// useful types that have no mixin support e.g. value types
 	static ActionContainer EMPTY = new ActionContainer(
 			ImmutableEnumSet.noneOf(ActionScope.class),
-			_Multimaps.newListMultimap(Map::of, List::of),
-			Can.empty(),
+			List.of(), List.of(), //Can.empty(),
 			null);
 
 	ActionContainer(
@@ -63,18 +55,15 @@ implements ObjectActionContainer {
 			 */
 			final ImmutableEnumSet<ActionScope> actionScopes,
 			final ObjectActionContainer superContainer) {
-		this(actionScopes, _Multimaps.newListMultimap(),
-				build(actionsInOrder),
+		this(actionScopes,
+				catalogue(actionsInOrder, ActionScope.PRODUCTION),
+				catalogue(actionsInOrder, ActionScope.PROTOTYPE),
 				superContainer);
-		buildMap();
-	}
-
-	private static Can<ObjectAction> build(final List<ObjectAction> actionsInOrder) {
-		return Can.ofCollection(actionsInOrder);
 	}
 
 	@Override
-	public Optional<ObjectAction> getAction(final String id,
+	public Optional<ObjectAction> getAction(
+			final String id,
 			final ImmutableEnumSet<ActionScope> actionScopes,
 			final MixedIn mixedIn) {
         var declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
@@ -92,7 +81,9 @@ implements ObjectActionContainer {
 	}
 
 	@Override
-	public Optional<ObjectAction> getDeclaredAction(final String id, final ImmutableEnumSet<ActionScope> actionScopes,
+	public Optional<ObjectAction> getDeclaredAction(
+			final String id,
+			final ImmutableEnumSet<ActionScope> actionScopes,
 			final MixedIn mixedIn) {
         return _Strings.isEmpty(id)
             ? Optional.empty()
@@ -105,7 +96,9 @@ implements ObjectActionContainer {
 	}
 
 	@Override
-	public Stream<ObjectAction> streamActions(final ImmutableEnumSet<ActionScope> actionTypes, final MixedIn mixedIn,
+	public Stream<ObjectAction> streamActions(
+			final ImmutableEnumSet<ActionScope> actionTypes,
+			final MixedIn mixedIn,
 			final Consumer<ObjectAction> onActionOverloaded) {
 
 		var actionStream = isTypeHierarchyRoot()
@@ -114,8 +107,8 @@ implements ObjectActionContainer {
                         streamDeclaredActions(actionTypes, mixedIn),
                         superContainer.streamActions(actionTypes, mixedIn));
 
-        var actionSignatures = _Sets.<String>newHashSet();
-        var actionIds = _Sets.<String>newHashSet();
+        var actionSignatures = new HashSet<String>();
+        var actionIds = new HashSet<String>();
 
         return actionStream
 
@@ -140,7 +133,7 @@ implements ObjectActionContainer {
 
 	@Override
 	public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-       return streamActions(actionScopes, mixedIn);
+       return streamActions(actionScopesAtRuntime, mixedIn);
 	}
 
 	@Override
@@ -155,7 +148,7 @@ implements ObjectActionContainer {
 			final ImmutableEnumSet<ActionScope> actionScopes,
 			final MixedIn mixedIn) {
         return actionScopes.stream()
-            .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
+            .flatMap(actionScope->list(actionScope).stream())
             .filter(mixedIn.toFilter());
 	}
 
@@ -165,15 +158,18 @@ implements ObjectActionContainer {
         return superContainer==null;
     }
 
-	private void buildMap() {
-        // rebuild objectActionsByType multi-map
-        for (var actionType : ActionScope.values()) {
-            var objectActionForType = objectActionsByType.getOrElseNew(actionType);
-            objectActionForType.clear();
-            actionsInOrder.stream()
-	            .filter(ObjectAction.Predicates.ofActionType(actionType))
-	            .forEach(objectActionForType::add);
-        }
+	private List<ObjectAction> list(final ActionScope actionScope) {
+		return switch (actionScope) {
+			case PRODUCTION ->  productionActions;
+			case PROTOTYPE -> prototypeActions;
+		};
 	}
 
+	private static List<ObjectAction> catalogue(
+			final List<ObjectAction> actionsInOrder,
+			final ActionScope actionScope) {
+		return actionsInOrder.stream()
+			.filter(ObjectAction.Predicates.ofActionType(actionScope))
+			.toList();
+	}
 }

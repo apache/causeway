@@ -241,16 +241,15 @@ implements
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);
 
-
         var specs = new SpecCollector();
 
         // preload otherwise not eagerly discovered classes
-        var prealoadCount = preloadableTypes.stream()
+        var preloadCount = preloadableTypes.stream()
             .flatMap(PreloadableTypes::stream)
             .map(this::loadSpecification)
             .filter(_NullSafe::isPresent)
             .count();
-        log.info(" - preloaded {} otherwise not eagerly discovered types", prealoadCount);
+        log.info(" - preloaded {} otherwise not eagerly discovered types", preloadCount);
 
         var valueTypesFromProviders = valueSemanticsResolver.get().streamClassesWithValueSemantics()
             .map(valueClass->CausewayBeanMetaData.value(LogicalType.infer(valueClass), DiscoveredBy.CAUSEWAY_UPFRONT))
@@ -266,12 +265,10 @@ implements
             .forEach(specs::collect);
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
-        //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
-        //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
 
-        // lockdown
+        // lock down mixins
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
 
         introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
@@ -284,7 +281,7 @@ implements
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
+            //introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
             introspect(snapshot.filter(x->!x.beanSort().isMixin()), IntrospectionRequest.FULL);
         }
 

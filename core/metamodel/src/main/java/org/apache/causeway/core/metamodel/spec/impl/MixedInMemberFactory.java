@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -35,15 +36,25 @@ record MixedInMemberFactory(
 
 	/**
      * Creates all mixed in properties and collections for this spec.
+	 * @param profiler
      */
-    public List<ObjectAssociation> createMixedInAssociations() {
-    	var include = spec.isEntityOrViewModelOrAbstract()
+    public List<ObjectAssociation> createMixedInAssociations(final Profiler profiler) {
+
+    	var include =
+
+    	profiler.measure("members.mixedInAssociations.createMixedInAssociation.inclusion", ()->
+
+    	spec.isEntityOrViewModelOrAbstract()
     			&& !spec.isInjectable()
-    			&& !spec.isValue();
+    			&& !spec.isValue()
+    	);
+
         return include
-    		? mixinSpecStreamer.streamMixinSpecs()
+    		? profiler.measure("members.mixedInAssociations.createMixedInAssociation.stream", ()->
+    				mixinSpecStreamer.streamMixinSpecs()
+				.filter(mixinSpec-> mixinSpec != spec)
 	            .flatMap(this::createMixedInAssociation)
-	            .toList()
+	            .toList())
             : List.of();
     }
 
@@ -57,6 +68,7 @@ record MixedInMemberFactory(
                 || spec.beanSort().isValue();
         return include
     		? mixinSpecStreamer.streamMixinSpecs()
+				.filter(mixinSpec-> mixinSpec != spec)
 				.flatMap(this::createMixedInAction)
 				.toList()
 			: List.of();
@@ -65,25 +77,19 @@ record MixedInMemberFactory(
     // -- HELPER
 
     private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec) {
-        if (mixinSpec == spec)
-			return Stream.empty();
-        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
+		var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null)
 			// this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
         if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
 			return Stream.empty();
-        var mixinMethodName = mixinFacet.getMainMethodName();
-
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
 	        .filter(_SpecPredicates::isMixedInAssociation)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(mixedInAssociation(spec, mixinSpec, mixinMethodName));
+	        .map(mixedInAssociation(spec, mixinSpec, mixinFacet.getMainMethodName()));
     }
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final ObjectSpecification mixinSpec) {
-        if (mixinSpec == spec)
-			return Stream.empty();
         var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null)
 			// this shouldn't happen; to be covered by meta-model validation later
@@ -95,14 +101,12 @@ record MixedInMemberFactory(
                 && mixinFacet.isMixinFor(java.lang.Object.class))
 			return Stream.empty();
 
-        var mixinMethodName = mixinFacet.getMainMethodName();
-
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
 	        // value types only support constructor mixins
 	        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
 	        .filter(_SpecPredicates::isMixedInAction)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(mixedInAction(spec, mixinSpec, mixinMethodName));
+	        .map(mixedInAction(spec, mixinSpec, mixinFacet.getMainMethodName()));
     }
 
     /**
@@ -131,8 +135,7 @@ record MixedInMemberFactory(
             final ObjectSpecification mixinSpec,
             final String mixinMethodName) {
 
-        return mixinAction ->
-            mixinAction.getReturnType().isSingular()
+        return mixinAction -> mixinAction.getReturnType().isSingular()
                 ? new OneToOneAssociationMixedIn(
                         mixeeSpec, mixinAction, mixinSpec, mixinMethodName)
                 : new OneToManyAssociationMixedIn(

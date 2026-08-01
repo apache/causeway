@@ -28,12 +28,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 record MixinSpecStreamerEager(Can<ObjectSpecification> mixinSpecs)
 implements MixinSpecStreamer {
 
-	MixinSpecStreamerEager(final SpecificationLoader specLoader, final Can<Class<?>> mixinTypes) {
-		this(mixinTypes.map(specLoader::specForTypeElseFail));
-	}
-
 	MixinSpecStreamerEager(final SpecificationLoader specLoader, final CausewayBeanTypeRegistry beanTypeRegistry) {
-		this(specLoader, beanTypeRegistry.streamMixinTypes().collect(Can.toCan()));
+		this(beanTypeRegistry.streamMixinTypes()
+				.map(specLoader::specForTypeElseFail)
+				.collect(Can.toCan()));
 	}
 
 	@Override

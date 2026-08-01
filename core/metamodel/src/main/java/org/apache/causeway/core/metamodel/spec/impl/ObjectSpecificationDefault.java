@@ -305,15 +305,15 @@ implements
         // create associations and actions
 
         var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
-        var regularAssociations = profiler.measure("-regularAssociations", ()->regularMemberFactory.createAssociations().toList());
-        var regularActions = profiler.measure("-regularActions", ()->regularMemberFactory.createActions().toList());
+        var regularAssociations = profiler.measure("members.regularAssociations", ()->regularMemberFactory.createAssociations().toList());
+        var regularActions = profiler.measure("members.regularActions", ()->regularMemberFactory.createActions().toList());
 
         var mixinSpecStreamerX = new MixinSpecStreamerOnTheFly(
         		specLoaderInternal(), getServiceRegistry().lookupServiceElseFail(CausewayBeanTypeRegistry.class));
         var mixedInMemberFactory = new MixedInMemberFactory(this, mixinSpecStreamerX);
         //XXX takes 50% of time
-        var mixedInAssociations = profiler.measure("-mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations());
-        var mixedInActions = profiler.measure("-mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
+        var mixedInAssociations = profiler.measure("members.mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations(profiler));
+        var mixedInActions = profiler.measure("members.mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
 
         this.objectAssociationContainer = new AssociationContainer(
         		associationsInOrder(regularAssociations, mixedInAssociations),
@@ -324,7 +324,7 @@ implements
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
-        profiler.measure("-postProcessor", ()->{
+        profiler.measure("members.postProcessor", ()->{
         	//XXX takes 50% of time
         	postProcessor.postProcess(this);
         });
