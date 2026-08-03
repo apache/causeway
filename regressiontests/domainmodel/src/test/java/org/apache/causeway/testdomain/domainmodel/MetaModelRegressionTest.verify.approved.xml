@@ -56,8 +56,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.MixinConcrete"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -6757,8 +6757,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.ProperChoicesWhenActionHasParamSupportingMethod_remove"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -8359,8 +8359,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.ProperChoicesWhenActionHasParamSupportingMethod_remove"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -34042,8 +34042,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -34367,8 +34367,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -34681,8 +34681,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -35009,8 +35009,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -35337,8 +35337,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action5"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -35524,8 +35524,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -35844,8 +35844,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="coll"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -36066,8 +36066,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="coll"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -36288,8 +36288,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="coll"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -36489,8 +36489,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="prop"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -36720,8 +36720,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="prop"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -36951,8 +36951,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mainMethodName" value="prop"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -39203,8 +39203,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -39381,8 +39381,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1a"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -39559,8 +39559,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1b"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -39737,8 +39737,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -39915,8 +39915,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -40093,8 +40093,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -40271,8 +40271,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -40449,8 +40449,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
@@ -49826,8 +49826,8 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
                 <mml:attr name="contributing" value="AS_ACTION"/>
                 <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-                <mml:attr name="holderType" value="org.apache.causeway.testdomain.model.good.ProperServiceWithMixin"/>
                 <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperServiceWithMixin"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperServiceWithMixin.Now"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>

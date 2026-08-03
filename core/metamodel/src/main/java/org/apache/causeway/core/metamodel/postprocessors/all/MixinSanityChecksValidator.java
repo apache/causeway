@@ -112,7 +112,7 @@ implements
 
     private void checkMixinMainMethod(final ObjectSpecification objSpec, final Identifier memberIdentifier) {
         var mixinFacet = objSpec.mixinFacet().orElseThrow();
-        var expectedMethodName = mixinFacet.getMainMethodName();
+        var expectedMethodName = mixinFacet.mainMethodName();
         var actualMethodName = memberIdentifier.memberLogicalName();
 
         if(!expectedMethodName.equals(actualMethodName)) {

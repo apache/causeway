@@ -20,13 +20,6 @@ package org.apache.causeway.core.metamodel.services.init;
 
 import java.io.File;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
@@ -39,7 +32,12 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -91,6 +89,7 @@ public record MetamodelInitializer(
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
+        taskList.rethrow();
 
         { // log any validation failures, experimental code however, not sure how to best propagate failures
             var validationResult = specificationLoader.getOrAssessValidationResult();

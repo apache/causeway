@@ -20,14 +20,22 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 record MixinSpecStreamerOnTheFly(
 		SpecificationLoader specLoader,
-		CausewayBeanTypeRegistry beanTypeRegistry)
+		CausewayBeanTypeRegistry beanTypeRegistry,
+		Profiler profiler)
 implements MixinSpecStreamer {
+
+	MixinSpecStreamerOnTheFly(
+			final SpecificationLoader specLoader,
+			final CausewayBeanTypeRegistry beanTypeRegistry) {
+		this(specLoader, beanTypeRegistry, Profiler.getInstance());
+	}
 
 	@Override
 	public Stream<ObjectSpecification> streamMixinSpecs() {

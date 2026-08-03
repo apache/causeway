@@ -45,15 +45,14 @@ record MixedInMemberFactory(
     	profiler.measure("members.mixedInAssociations.createMixedInAssociation.inclusion", ()->
 
     	spec.isEntityOrViewModelOrAbstract()
-    			&& !spec.isInjectable()
     			&& !spec.isValue()
+    			&& !spec.isInjectable()
     	);
 
         return include
     		? profiler.measure("members.mixedInAssociations.createMixedInAssociation.stream", ()->
-    				mixinSpecStreamer.streamMixinSpecs()
-				.filter(mixinSpec-> mixinSpec != spec)
-	            .flatMap(this::createMixedInAssociation)
+    			mixinSpecStreamer.streamMixinSpecsFor(spec)
+	            .flatMap(it->createMixedInAssociation(it, profiler))
 	            .toList())
             : List.of();
     }
@@ -67,8 +66,7 @@ record MixedInMemberFactory(
                 // in support of composite value-type constructor mixins
                 || spec.beanSort().isValue();
         return include
-    		? mixinSpecStreamer.streamMixinSpecs()
-				.filter(mixinSpec-> mixinSpec != spec)
+    		? mixinSpecStreamer.streamMixinSpecsFor(spec)
 				.flatMap(this::createMixedInAction)
 				.toList()
 			: List.of();
@@ -76,26 +74,18 @@ record MixedInMemberFactory(
 
     // -- HELPER
 
-    private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec) {
-		var mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null)
-			// this shouldn't happen; to be covered by meta-model validation later
-            return Stream.empty();
-        if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
-			return Stream.empty();
+    private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec, final Profiler profiler) {
+    	return profiler.measure("members.mixedInAssociations.createMixedInAssociation.create", ()->{
+    	var mixinFacet = mixinSpec.mixinFacetElseFail();
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
 	        .filter(_SpecPredicates::isMixedInAssociation)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(mixedInAssociation(spec, mixinSpec, mixinFacet.getMainMethodName()));
+	        .map(mixedInAssociation(spec, mixinSpec, mixinFacet.mainMethodName()));
+    	});
     }
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final ObjectSpecification mixinSpec) {
-        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null)
-			// this shouldn't happen; to be covered by meta-model validation later
-            return Stream.empty();
-        if(!mixinFacet.isMixinFor(spec.getCorrespondingClass()))
-			return Stream.empty();
+    	var mixinFacet = mixinSpec.mixinFacetElseFail();
         // don't mixin Object_ mixins to domain services
         if(spec.beanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class))
@@ -106,7 +96,7 @@ record MixedInMemberFactory(
 	        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
 	        .filter(_SpecPredicates::isMixedInAction)
 	        .map(ObjectActionDefault.class::cast)
-	        .map(mixedInAction(spec, mixinSpec, mixinFacet.getMainMethodName()));
+	        .map(mixedInAction(spec, mixinSpec, mixinFacet.mainMethodName()));
     }
 
     /**

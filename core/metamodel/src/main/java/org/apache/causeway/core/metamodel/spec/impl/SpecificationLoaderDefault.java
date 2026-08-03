@@ -121,7 +121,7 @@ implements
     private final ProgrammingModel programmingModel;
     private PostProcessor postProcessor;
     private MixinSpecStreamer mixinSpecStreamer = MixinSpecStreamer.EMPTY;
-    private final Profiler profiler = new Profiler();
+    private final Profiler profiler = Profiler.getInstance();
 
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
@@ -227,6 +227,13 @@ implements
         }
     }
 
+    @Override
+    public boolean contains(@Nullable final Class<?> cls) {
+    	return cls!=null
+			? cache.containsKey(cls)
+    		: false;
+    }
+
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link CausewayBeanTypeRegistry}).
@@ -266,8 +273,9 @@ implements
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
-        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
 
+        this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
+        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
         // lock down mixins
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
 
@@ -281,7 +289,15 @@ implements
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            //introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
+            snapshot.stream()
+            	.filter(it->((ObjectSpecificationDefault)it).isFullyIntrospected())
+            	.forEach(it->{
+            		log.warn("not fully introspected after first pass {}", it);
+//            	Assert.isTrue(
+//
+//            			()->"not fully introspected %s".formatted(it));
+            });
+            introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
             introspect(snapshot.filter(x->!x.beanSort().isMixin()), IntrospectionRequest.FULL);
         }
 
@@ -606,12 +622,11 @@ implements
     private ObjectSpecificationBuilder createSpecification(
     		final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
-        		profiler,
                 typeMeta,
                 facetProcessor,
                 postProcessor,
                 classSubstitutorRegistry,
-                mixinSpecStreamer);
+                ()->mixinSpecStreamer);
         return objectSpec;
     }
 

@@ -1581,8 +1581,8 @@
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
         <mml:attr name="contributing" value="AS_PROPERTY"/>
         <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
-        <mml:attr name="holderType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel"/>
         <mml:attr name="mainMethodName" value="prop"/>
+        <mml:attr name="mixeeType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel"/>
         <mml:attr name="mixinType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
         <mml:attr name="precedence" value="DEFAULT"/>
       </mml:facet>

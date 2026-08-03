@@ -29,9 +29,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 //@Slf4j
@@ -39,13 +39,16 @@ public abstract class MixinFacetAbstract
 extends FacetAbstract
 implements MixinFacet {
 
-    @Getter(onMethod_={@Override})
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
     private final @NonNull String mainMethodName;
     @Getter(onMethod_={@Override}) @Accessors(fluent=true)
     private @NonNull Contributing contributing = Contributing.UNSPECIFIED;
 
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
     private final @NonNull Class<?> mixinType;
-    private final @NonNull Class<?> holderType;
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final @NonNull Class<?> mixeeType;
     private final @NonNull Constructor<?> constructor;
 
     private static final Class<? extends Facet> type() {
@@ -63,33 +66,30 @@ implements MixinFacet {
         this.mixinType = mixinType;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
-        this.holderType = constructor.getParameterTypes()[0];
+        this.mixeeType = constructor.getParameterTypes()[0];
     }
 
     @Override
     public boolean isMixinFor(final Class<?> candidateDomainType) {
         return candidateDomainType == null
                 ? false
-                : holderType.isAssignableFrom(candidateDomainType);
+                : mixeeType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
     public Object instantiate(final Object mixee) {
-        if(constructor == null) {
-            throw _Exceptions.unrecoverable(
+        if(constructor == null)
+			throw _Exceptions.unrecoverable(
                     "Failed to instantiate mixin. "
                     + "Invalid mix-in declaration of type %s, missing contructor", mixinType);
-        }
-        if(mixee == null) {
-            return null;
-        }
-        if(!isMixinFor(mixee.getClass())) {
-            throw _Exceptions.illegalArgument(
+        if(mixee == null)
+			return null;
+        if(!isMixinFor(mixee.getClass()))
+			throw _Exceptions.illegalArgument(
                     "Failed to instantiate mixin. "
                     + "Mixin class %s is not a mixin for supplied object [%s]. "
                     + "Mixin construction expects type: %s",
-                    mixinType.getName(), mixee, holderType);
-        }
+                    mixinType.getName(), mixee, mixeeType);
         try {
             var mixinPojo = constructor.newInstance(mixee);
             getServiceInjector().injectServicesInto(mixinPojo);
@@ -110,7 +110,7 @@ implements MixinFacet {
          * mixin invocation will take care of calling the right method,
          * that is in terms of type-hierarchy the 'nearest' to this mixin;
          */
-        return method.name().equals(getMainMethodName())
+        return method.name().equals(mainMethodName())
                 && method.method().getDeclaringClass()
                     .isAssignableFrom(constructor.getDeclaringClass());
     }
@@ -121,7 +121,7 @@ implements MixinFacet {
         visitor.accept("mixinType", mixinType);
         visitor.accept("contributing", contributing);
         visitor.accept("mainMethodName", mainMethodName);
-        visitor.accept("holderType", holderType);
+        visitor.accept("mixeeType", mixeeType);
     }
 
     /**

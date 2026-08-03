@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
@@ -49,7 +50,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -143,12 +143,11 @@ implements
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
 
     public ObjectSpecificationDefault(
-    		final Profiler profiler,
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
             final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry,
-            final @NonNull MixinSpecStreamer mixinSpecStreamer) {
+            final @NonNull Supplier<MixinSpecStreamer> mixinSpecStreamerSupplier) {
 
         final MetaModelContext mmc = facetProcessor.getMetaModelContext();
 
@@ -175,6 +174,8 @@ implements
         this.facetedMethodsFactory =
                 new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
 
+        var profiler = Profiler.getInstance();
+
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
         			profiler.measure("types", this::introspectTypeHierarchy);
@@ -182,7 +183,7 @@ implements
         	        invalidateCachedFacets();
         		},
         		()->{
-        			profiler.measure("members", ()->introspectMembers(mixinSpecStreamer, profiler));
+        			profiler.measure("members", ()->introspectMembers(mixinSpecStreamerSupplier.get(), profiler));
         	        //introspectMembers();
 //        	        // make sure we've loaded the facets from layout.xml also.
         	        //Facets.gridPreload(this, null);
@@ -308,10 +309,7 @@ implements
         var regularAssociations = profiler.measure("members.regularAssociations", ()->regularMemberFactory.createAssociations().toList());
         var regularActions = profiler.measure("members.regularActions", ()->regularMemberFactory.createActions().toList());
 
-        var mixinSpecStreamerX = new MixinSpecStreamerOnTheFly(
-        		specLoaderInternal(), getServiceRegistry().lookupServiceElseFail(CausewayBeanTypeRegistry.class));
-        var mixedInMemberFactory = new MixedInMemberFactory(this, mixinSpecStreamerX);
-        //XXX takes 50% of time
+        var mixedInMemberFactory = new MixedInMemberFactory(this, mixinSpecStreamer);
         var mixedInAssociations = profiler.measure("members.mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations(profiler));
         var mixedInActions = profiler.measure("members.mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
 
@@ -325,7 +323,6 @@ implements
         		superclass());
 
         profiler.measure("members.postProcessor", ()->{
-        	//XXX takes 50% of time
         	postProcessor.postProcess(this);
         });
 

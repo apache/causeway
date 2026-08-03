@@ -29,4 +29,12 @@ interface MixinSpecStreamer {
 
 	Stream<ObjectSpecification> streamMixinSpecs();
 
+	default Stream<ObjectSpecification> streamMixinSpecsFor(final ObjectSpecification mixeeSpec) {
+		return streamMixinSpecs()
+				.filter(mixinSpec-> mixinSpec != mixeeSpec)
+				.filter(mixinSpec-> mixinSpec.mixinFacet()
+						.map(mixinFacet->mixinFacet.isMixinFor(mixeeSpec.getCorrespondingClass()))
+						.orElse(false));
+	}
+
 }

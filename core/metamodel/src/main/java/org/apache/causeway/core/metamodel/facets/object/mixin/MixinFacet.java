@@ -66,12 +66,15 @@ public interface MixinFacet extends Facet {
         public boolean isUnspecified() { return this==UNSPECIFIED; }
     }
 
+    Class<?> mixinType();
+    Class<?> mixeeType();
+
     Contributing contributing();
 
     /**
      * The mixin's main method name.
      */
-    String getMainMethodName();
+    String mainMethodName();
 
     boolean isMixinFor(Class<?> candidateDomainType);
 

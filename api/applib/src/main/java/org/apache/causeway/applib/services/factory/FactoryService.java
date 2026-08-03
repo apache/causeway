@@ -20,15 +20,13 @@ package org.apache.causeway.applib.services.factory;
 
 import java.util.NoSuchElementException;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Collects together methods for instantiating domain objects, also injecting
@@ -109,7 +107,7 @@ public interface FactoryService {
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @throws IllegalArgumentException if mixinClass is not a mixin type
+     * @throws IllegalArgumentException if mixinClass is not a mixin type or if mixinClass is not already part of the metamodel
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
     <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn);

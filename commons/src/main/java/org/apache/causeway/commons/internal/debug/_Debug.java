@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.jspecify.annotations.NonNull;
 
 import lombok.experimental.UtilityClass;
 
@@ -111,6 +113,10 @@ public class _Debug {
     							stats.getCount());
     		}
     	}
+
+    	public static Profiler getInstance() {
+            return _Context.computeIfAbsent(Profiler.class, (@NonNull Supplier<Profiler>) Profiler::new);
+        }
 
     	public Profiler() {
     		this(new ConcurrentHashMap<>());
