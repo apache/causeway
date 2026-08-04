@@ -18,8 +18,17 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -146,6 +155,21 @@ public final class CommandDtoUtils {
     }
 
     /**
+     * Uses multi-doc YAML format to represent a collection of {@link CommandExportDto} entries.
+     *
+     * <p>Each document contains an embedded {@code command} and, when available, a {@code result}
+     * with {@code type} and {@code id} fields. Null results are omitted and the legacy
+     * {@code returnedObject} field is never emitted.
+     *
+     * @since 4.0 {@index}
+     */
+    public String toYamlExport(final Iterable<CommandExportDto> commandExports) {
+        var yamlWriteCustomizer = CommandDtoJacksonSupport.yamlWriteCustomizer();
+        return YamlUtils.writeMultiDoc(_NullSafe.stream(commandExports)
+                .map(commandExport -> YamlUtils.toStringUtf8(commandExport, yamlWriteCustomizer)));
+    }
+
+    /**
      * Either parses from (regular) YAML-list format or from multi-doc YAML format,
      * any representing a collection of {@link CommandDto} entries.
      */
@@ -154,6 +178,151 @@ public final class CommandDtoUtils {
     	return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, yamlReadCustomizer)
 			.getValue()
 			.orElseGet(Collections::emptyList);
+    }
+
+    /**
+     * Creates a structurally independent copy using the complete JAXB command schema mapping.
+     *
+     * @since 4.0 {@index}
+     */
+    public CommandDto copy(final CommandDto commandDto) {
+        if(commandDto == null) {
+            return null;
+        }
+        try {
+            final JAXBContext jaxbContext = JaxbUtils.jaxbContextFor(CommandDto.class);
+            final Marshaller marshaller = jaxbContext.createMarshaller();
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            final var writer = new StringWriter();
+            marshaller.marshal(commandDto, writer);
+            try (final var reader = new StringReader(writer.toString())) {
+                return (CommandDto) unmarshaller.unmarshal(reader);
+            }
+        } catch (JAXBException e) {
+            throw new IllegalStateException("Failed to deep-copy CommandDto", e);
+        }
+    }
+
+    /**
+     * Command DTO and optional result bookmark after decoding a portable command export.
+     *
+     * @since 4.0 {@index}
+     */
+    public static class ImportedCommandDto {
+
+        private CommandDto command;
+        private Bookmark result;
+
+        public static ImportedCommandDto of(
+                final CommandDto command,
+                final Bookmark result) {
+            final var importedCommandDto = new ImportedCommandDto();
+            importedCommandDto.setCommand(command);
+            importedCommandDto.setResult(result);
+            return importedCommandDto;
+        }
+
+        public CommandDto getCommand() {
+            return command;
+        }
+
+        public void setCommand(final CommandDto command) {
+            this.command = command;
+        }
+
+        public Bookmark getResult() {
+            return result;
+        }
+
+        public void setResult(final Bookmark result) {
+            this.result = result;
+        }
+    }
+
+    /**
+     * Portable command DTO envelope with optional {@link BookmarkDto result} metadata.
+     *
+     * <p>The YAML representation uses {@code command} and {@code result}; the result contains
+     * {@code type} and {@code id}. Unknown input fields are ignored, but the legacy
+     * {@code returnedObject} name is not an alias for {@code result}.
+     *
+     * @since 4.0 {@index}
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CommandExportDto {
+
+        private CommandDto command;
+        private BookmarkDto result;
+
+        public static CommandExportDto of(
+                final CommandDto command,
+                final Bookmark result) {
+            final var commandExportDto = new CommandExportDto();
+            commandExportDto.setCommand(command);
+            commandExportDto.setResult(BookmarkDto.of(result));
+            return commandExportDto;
+        }
+
+        public CommandDto getCommand() {
+            return command;
+        }
+
+        public void setCommand(final CommandDto command) {
+            this.command = command;
+        }
+
+        public BookmarkDto getResult() {
+            return result;
+        }
+
+        public void setResult(final BookmarkDto result) {
+            this.result = result;
+        }
+    }
+
+    /**
+     * Portable bookmark identity represented by logical type name and identifier.
+     *
+     * @since 4.0 {@index}
+     */
+    public static class BookmarkDto {
+
+        private String type;
+        private String id;
+
+        public static BookmarkDto of(final Bookmark bookmark) {
+            if(bookmark == null) {
+                return null;
+            }
+            final var bookmarkDto = new BookmarkDto();
+            bookmarkDto.setType(bookmark.logicalTypeName());
+            bookmarkDto.setId(bookmark.identifier());
+            return bookmarkDto;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(final String type) {
+            this.type = type;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(final String id) {
+            this.id = id;
+        }
+
+        /**
+         * Converts the portable identity without resolving the bookmark.
+         */
+        public Bookmark toBookmark() {
+            return Bookmark.forLogicalTypeNameAndIdentifier(type, id);
+        }
     }
  
 }

@@ -17,7 +17,18 @@ class CommandDtoUtils {
   void setUserData(CommandDto dto, String key, Bookmark bookmark)
   void clearUserData(CommandDto dto, String key)
   String toYaml(Iterable<CommandDto> commandDtos)
+  String toMultiDocYaml(Iterable<CommandDto> commandDtos)
+  String toYamlExport(Iterable<CommandExportDto> commandExports)
   List<CommandDto> fromYaml(DataSource commandDtosYaml)
+  CommandDto copy(CommandDto commandDto)
+  class ImportedCommandDto
+  class CommandExportDto
+  class BookmarkDto
 }
 ----
+
+`CommandExportDto` wraps an embedded `CommandDto` with optional result bookmark metadata.
+Its multi-document YAML representation uses `result.type` and `result.id`, omits a null result, and never emits the legacy `returnedObject` field.
+`ImportedCommandDto` carries the embedded command and optional applib `Bookmark` for later replay-import consumers.
+`copy(CommandDto)` creates a structurally independent copy using the complete JAXB command schema mapping.
 

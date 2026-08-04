@@ -357,30 +357,42 @@ implements MemberExecutorService {
         return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
-    private void setCommandResultIfEntity(
+    void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
-        if(command.getResult() != null)
+        if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
-            return;
+        }
+        singletonResultCandidate(resultAdapter)
+                .ifPresent(candidate -> setCommandResultIfEntityScalar(command, candidate));
+    }
+
+    private Optional<ManagedObject> singletonResultCandidate(final ManagedObject resultAdapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+            return Optional.empty();
+        }
+        if(resultAdapter instanceof PackedManagedObject packedManagedObject) {
+            var unpacked = packedManagedObject.unpack();
+            return unpacked.size() == 1
+                    ? unpacked.getSingleton()
+                            .filter(candidate -> !ManagedObjects.isNullOrUnspecifiedOrEmpty(candidate))
+                    : Optional.empty();
+        }
+        return Optional.of(resultAdapter);
+    }
+
+    private void setCommandResultIfEntityScalar(
+            final Command command,
+            final ManagedObject resultAdapter) {
         var entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable())
-            return;
-        if(entityState.isHollow()
-                || entityState.isDetached()) {
+        if(entityState.isPersistable()
+                && (!entityState.hasOid() || entityState.isDetached())) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             transactionService.flushTransaction();
         }
-        // re-evaluate
-        if(!resultAdapter.getEntityState().hasOid()) {
-            log.warn("was unable to get a bookmark for the command result, "
-                    + "which is an entity: {}", resultAdapter);
-            return;
-        }
-        var bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
-        command.updater().setResult(Try.success(bookmark));
+        resultAdapter.getBookmark()
+                .ifPresent(bookmark -> command.updater().setResult(Try.success(bookmark)));
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
