@@ -35,6 +35,20 @@ public abstract class CommandPublishingFacetForPropertyFromConfiguration extends
         }
     }
 
+    static class EnabledByRecordingSupport extends CommandPublishingFacetForPropertyFromConfiguration {
+
+        EnabledByRecordingSupport(
+                final FacetHolder holder,
+                final ServiceInjector servicesInjector) {
+            super(holder, servicesInjector);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    }
+
     static class None extends CommandPublishingFacetForPropertyFromConfiguration {
 
         None(FacetHolder holder, ServiceInjector servicesInjector) {

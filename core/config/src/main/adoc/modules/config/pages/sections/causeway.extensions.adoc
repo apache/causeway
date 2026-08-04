@@ -36,6 +36,10 @@ recording-support
 
 |  DISABLED
 | Whether command recording support is enabled.
+When enabled, ordinary safe actions and property edits use the normal command-publishing lifecycle.
+Explicit safe-action publishing disablement remains an opt-out, while property edits are included even when property command publishing is explicitly disabled so replay recordings remain complete.
+Marked targets and owners remain excluded by command-recording suppression.
+When disabled, existing action and property publishing policies are unchanged.
 
 
 |

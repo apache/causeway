@@ -40,7 +40,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,35 +54,35 @@ import static org.mockito.Mockito.when;
 class MemberExecutorServiceDefaultTest {
 
     @Test
-    void suppressedTargetBypassesCommandPreparation() {
+    void recordingAwareSafeActionOnSuppressedTargetBypassesCommandPreparation() {
         var commandPublisherProvider = commandPublisherProvider();
         var service = newService(commandPublisherProvider);
         var interactionHead = interactionHead(new Object(), new SuppressedTarget());
         var command = mock(Command.class);
-        var objectMember = mock(ObjectMember.class);
+        var objectAction = mock(ObjectAction.class);
         var facetHolder = mock(FacetHolder.class);
 
-        service.prepareCommandForPublishing(command, interactionHead, objectMember, facetHolder);
+        service.prepareCommandForPublishing(command, interactionHead, objectAction, facetHolder);
 
-        verifyNoInteractions(commandPublisherProvider, command, objectMember, facetHolder);
+        verifyNoInteractions(commandPublisherProvider, command, objectAction, facetHolder);
     }
 
     @Test
-    void suppressedOwnerBypassesCommandPreparation() {
+    void recordingAwarePropertyOnSuppressedOwnerBypassesCommandPreparation() {
         var commandPublisherProvider = commandPublisherProvider();
         var service = newService(commandPublisherProvider);
         var interactionHead = interactionHead(new SuppressedTarget(), new Object());
         var command = mock(Command.class);
-        var objectMember = mock(ObjectMember.class);
+        var property = mock(OneToOneAssociation.class);
         var facetHolder = mock(FacetHolder.class);
 
-        service.prepareCommandForPublishing(command, interactionHead, objectMember, facetHolder);
+        service.prepareCommandForPublishing(command, interactionHead, property, facetHolder);
 
-        verifyNoInteractions(commandPublisherProvider, command, objectMember, facetHolder);
+        verifyNoInteractions(commandPublisherProvider, command, property, facetHolder);
     }
 
     @Test
-    void unmarkedTargetRetainsNormalPublisherNotification() {
+    void recordingAwareEligibleInteractionUsesOneNormalReadyNotification() {
         var commandPublisher = mock(CommandPublisher.class);
         var commandPublisherProvider = commandPublisherProvider();
         when(commandPublisherProvider.get()).thenReturn(commandPublisher);

@@ -3654,9 +3654,10 @@ public record CausewayConfiguration(
             /**
              * Whether command recording support is enabled.
              *
-             * <p>When enabled, recording-aware policies may broaden command publishing eligibility while
-             * honoring {@code CommandRecordingSuppressed}.  Disabled by default to preserve existing
-             * command-publishing behavior.
+             * <p>When enabled, ordinary safe actions and property edits become eligible for the normal command-publishing lifecycle.
+             * An explicit safe-action publishing disablement remains an opt-out, while property edits are included even when property command publishing is explicitly disabled so replay recordings remain complete.
+             * Targets and member owners implementing {@code CommandRecordingSuppressed} remain excluded.
+             * Disabled by default to preserve existing command-publishing behavior.
              */
             @DefaultValue("DISABLED")
             RecordingSupport recordingSupport,

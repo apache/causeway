@@ -64,6 +64,12 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
+        if(configuration.extensions().commandLog().recordingSupport().isEnabled()
+                && (propertyIfAny.isPresent() || representsProperty(holder))) {
+            return new CommandPublishingFacetForPropertyFromConfiguration.EnabledByRecordingSupport(
+                    holder, servicesInjector);
+        }
+
         var publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
 
         return propertyIfAny

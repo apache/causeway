@@ -60,10 +60,10 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
             final FacetHolder holder) {
 
         var publishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+        var safeSemantics = Facets.hasSafeSemantics(holder);
 
         return actionsIfAny
-            .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-            .map(action -> {
+            .<CommandPublishingFacet>map(action -> {
                 Publishing publishing = action.commandPublishing();
 
                 final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
@@ -74,10 +74,17 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                 }
 
                 return switch (publishing) {
+                    case NOT_SPECIFIED -> safeSemantics
+                        ? safeActionFacet(publishingPolicy, configuration, holder, servicesInjector)
+                        : null;
                     case AS_CONFIGURED -> switch (publishingPolicy) {
-                        case NONE -> new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
-                        case IGNORE_QUERY_ONLY, IGNORE_SAFE -> Facets.hasSafeSemantics(holder)
-                            ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
+                        case NONE -> safeSemantics
+                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                                holder, servicesInjector, configuration)
+                            : new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
+                        case IGNORE_QUERY_ONLY, IGNORE_SAFE -> safeSemantics
+                            ? new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                                holder, servicesInjector, configuration)
                             : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
                         case ALL -> new CommandPublishingFacetForActionAnnotationAsConfigured.All(holder, servicesInjector);
                         default -> throw new IllegalStateException(
@@ -88,7 +95,21 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                     default -> throw new IllegalStateException(
                             String.format("@Action#commandPublishing '%s' not recognised", publishing));
                 };
-            });
+            })
+            .or(() -> safeSemantics
+                ? Optional.of(safeActionFacet(publishingPolicy, configuration, holder, servicesInjector))
+                : Optional.empty());
+    }
+
+    private static CommandPublishingFacet safeActionFacet(
+            final ActionConfigOptions.PublishingPolicy publishingPolicy,
+            final CausewayConfiguration configuration,
+            final FacetHolder holder,
+            final ServiceInjector servicesInjector) {
+        return publishingPolicy == ActionConfigOptions.PublishingPolicy.ALL
+            ? new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector)
+            : new CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport(
+                holder, servicesInjector, configuration);
     }
 
     CommandPublishingFacetForActionAnnotation(
