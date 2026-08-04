@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.regressiontests</groupId>
 		<artifactId>causeway-regressiontests</artifactId>
-		<version>4.0.0-M3-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -54,18 +54,18 @@
             <groupId>org.apache.causeway.persistence</groupId>
             <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.causeway.testing</groupId>
             <artifactId>causeway-testing-fixtures-applib</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.causeway.viewer</groupId>
             <artifactId>causeway-viewer-restfulobjects-applib</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.causeway.mavendeps</groupId>
             <artifactId>causeway-mavendeps-webapp</artifactId>
@@ -79,5 +79,5 @@
         </dependency>
 
 	</dependencies>
-	
+
 </project>

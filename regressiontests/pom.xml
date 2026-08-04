@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway</groupId>
         <artifactId>causeway-parent</artifactId>
-        <version>4.0.0-M3-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -170,7 +170,7 @@
         <module>cucumber</module>
         <module>domainmodel</module>
         <module>eventhandling</module>
-<!--        <module>layouts</module> many broken tests --> 
+<!--        <module>layouts</module> many broken tests -->
         <module>factory</module>
         <module>interact</module>
         <module>persistence-jpa</module>

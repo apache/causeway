@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-executionoutbox</artifactId>
-        <version>4.0.0-M3-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
@@ -33,7 +33,7 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.extensions.executionoutbox.restclient</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/extensions/executionoutbox/restclient</git-plugin.propertiesDir>
-        
+
         <!-- TODO CAUSEWAY-3892
             as of 03-07-25 failing integration tests-->
         <maven.test.skip>true</maven.test.skip>

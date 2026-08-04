@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
-        <version>4.0.0-M3-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
@@ -46,11 +46,11 @@
             <groupId>org.apache.causeway.viewer</groupId>
             <artifactId>causeway-viewer-wicket-ui</artifactId>
         </dependency>
-        
+
      	<dependency>
 		    <groupId>org.webjars</groupId>
 			<artifactId>fullcalendar</artifactId>
-			<!--  webjar 
+			<!--  webjar
             see also o.a.i.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendar*Reference -->
 			<version>6.1.10</version>
 		</dependency>

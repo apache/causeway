@@ -24,15 +24,15 @@ under the License.
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests</artifactId>
-        <version>4.0.0-M3-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../../../regressiontests/pom.xml</relativePath>
     </parent>
 
     <artifactId>causeway-testing-fakedata-integtests</artifactId>
     <name>Apache Causeway Tst - FakeData (integ tests)</name>
-    
+
     <dependencies>
-    
+
    		<!-- PERSISTENCE -->
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
@@ -57,7 +57,7 @@ under the License.
 			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
