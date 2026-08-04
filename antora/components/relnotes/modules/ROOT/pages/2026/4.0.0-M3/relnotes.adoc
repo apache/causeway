@@ -1,21 +1,21 @@
-[[r4.0.0-M2]]
-= 4.0.0-M2
+[[r4.0.0-M3]]
+= 4.0.0-M3
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 Apache Causeway v4 is based on Spring Boot v4.
-This milestone release mitigates a security vulnerability, provides bug fixes and some new features.  
+This milestone release mitigates a security vulnerability, provides bug fixes and some new features.
 
 Notable changes in this release:
 
 ⚠️ Attention Required
 
-- Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408] 
-- By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs). 
+- Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408]
+- By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs).
 The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as _Base64_ encoded byte array, like e.g.
-`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=` 
-A minimum of 16 bytes is required, we recommend 32. 
+`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=`
+A minimum of 16 bytes is required, we recommend 32.
 https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
 +
 [source,java]
@@ -35,7 +35,7 @@ System.out.println(hmacBase64);
 
 ⭐ New Features
 
-- _Open Telemetry_ integration, activates when dependencies are found on the class path and _Spring Profile_ `observation` is active. (see Appendix below) 
+- _Open Telemetry_ integration, activates when dependencies are found on the class path and _Spring Profile_ `observation` is active. (see Appendix below)
 https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - Pickup Webjar Version Strings automatically from Classpath https://issues.apache.org/jira/browse/CAUSEWAY-3948[CAUSEWAY-3948]
 - [Wicket Viewer] Select2 with Object Icons https://issues.apache.org/jira/browse/CAUSEWAY-3904[CAUSEWAY-3904]
@@ -48,7 +48,7 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - Metamodel Introspection Policy not honored for Java Records as Viewmodels https://issues.apache.org/jira/browse/CAUSEWAY-3991[CAUSEWAY-3991]
 - Switching between Layout Variants may result in _Members_ staying hidden https://issues.apache.org/jira/browse/CAUSEWAY-3971[CAUSEWAY-3971]
 - [Commons] Internal OneShot Util may deadlock (potentially preventing App from startup) https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972]
-- [Wicket Viewer] Hide Tabs when content is permanently hidden https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983] 
+- [Wicket Viewer] Hide Tabs when content is permanently hidden https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983]
 - [Wicket Viewer] Table Row Actions Redirect might fail if behind Reverse Proxy https://issues.apache.org/jira/browse/CAUSEWAY-3976[CAUSEWAY-3976]
 - [Wicket Viewer] Upload Button may trigger Download of same File https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950]
 - [Wicket Viewer] Downloadlink may fail with Network Error https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958]
@@ -61,7 +61,7 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 - Upgrade to Spring Boot 4.0.5
 - Upgrade to EclipseLink 5.0.0
 
-== Appendix 
+== Appendix
 
 === Open Telemetry Minimal Setup (for Applications)
 
@@ -84,11 +84,11 @@ https://issues.apache.org/jira/browse/CAUSEWAY-3975[CAUSEWAY-3975]
 spring:
   application:
     name: <name of service>
-  
+
 management:
   tracing:
     sampling:
-      probability: 1  
+      probability: 1
   opentelemetry:
     tracing:
       export:
