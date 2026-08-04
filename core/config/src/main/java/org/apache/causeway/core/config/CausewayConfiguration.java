@@ -3655,9 +3655,11 @@ public record CausewayConfiguration(
              * Whether command recording support is enabled.
              *
              * <p>When enabled, ordinary safe actions and property edits become eligible for the normal command-publishing lifecycle.
+             * Eligible parented collections and scalar domain-object references also gain deterministic safe {@code Navigate To} actions whose ids start with {@code __causeway_navigate_to_}.
+             * Collection navigation parameters follow visible collection columns and identify exactly one child; reference navigation returns the referenced object.
              * An explicit safe-action publishing disablement remains an opt-out, while property edits are included even when property command publishing is explicitly disabled so replay recordings remain complete.
-             * Targets and member owners implementing {@code CommandRecordingSuppressed} remain excluded.
-             * Disabled by default to preserve existing command-publishing behavior.
+             * Targets and member owners implementing {@code CommandRecordingSuppressed} remain excluded, including from synthetic navigation action creation.
+             * Disabled by default to preserve existing command-publishing and association-navigation behavior.
              */
             @DefaultValue("DISABLED")
             RecordingSupport recordingSupport,

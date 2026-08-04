@@ -74,6 +74,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacet;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
@@ -127,7 +129,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     // -- CONSTRUCTION
 
     /**
-     * Lazily built by {@link #getMember(Method)}.
+     * Lazily built by {@link #getMember(ResolvedMethod)}.
      */
     private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
 
@@ -235,6 +237,37 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
         postProcessor.postProcess(this);
         invalidateCachedFacets();
+    }
+
+    @Override
+    public void synthesizeNavigationActions() {
+        if (!getMetaModelContext().getConfiguration()
+                .extensions().commandLog().recordingSupport().isEnabled()) {
+            return;
+        }
+
+        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
+        var existingActionIds = objectActions.stream()
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        var existingSyntheticActionIds = objectActions.stream()
+                .filter(action -> action.lookupFacet(ParentedCollectionNavigationFacet.class).isPresent()
+                        || action.lookupFacet(ScalarReferenceNavigationFacet.class).isPresent())
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        var syntheticActions = SyntheticNavigationActionFactory.createFor(
+                        getMetaModelContext(),
+                        this,
+                        associations.stream(),
+                        existingActionIds,
+                        existingSyntheticActionIds)
+                .toList();
+        if (syntheticActions.isEmpty()) {
+            return;
+        }
+
+        replaceActions(Stream.concat(objectActions.stream(), syntheticActions.stream()));
+        membersByMethod = null;
     }
 
     private void addNamedFacetIfRequired() {

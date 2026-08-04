@@ -102,6 +102,18 @@ public record FacetedMethod(
                 getParameters(mmc, declaringType, methodFacade));
     }
 
+    public static FacetedMethod createSyntheticAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String actionId,
+            final Class<?> returnType,
+            final Class<?>[] parameterTypes,
+            final String[] parameterNames) {
+        var methodFacade = _MethodFacades.virtual(
+                declaringType, actionId, returnType, parameterTypes, parameterNames);
+        return createForAction(mmc, declaringType, methodFacade);
+    }
+
     private static Can<FacetedMethodParameter> getParameters(
             final MetaModelContext mmc,
             final Class<?> declaringType,

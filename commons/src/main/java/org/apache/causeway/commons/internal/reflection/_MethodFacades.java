@@ -71,6 +71,20 @@ public class _MethodFacades {
         return new RegularMethod(method);
     }
 
+    public MethodFacade virtual(
+            final @NonNull Class<?> declaringClass,
+            final @NonNull String name,
+            final @NonNull Class<?> returnType,
+            final @Nullable Class<?>[] parameterTypes,
+            final @Nullable String[] parameterNames) {
+        return new VirtualMethod(
+                declaringClass,
+                name,
+                returnType,
+                parameterTypes != null ? parameterTypes : _Constants.emptyClasses,
+                parameterNames != null ? parameterNames : new String[0]);
+    }
+
     /**
      * JUnit
      */
@@ -113,7 +127,7 @@ public class _MethodFacades {
     }
 
     public static sealed interface MethodFacade
-    permits ParamsAsTupleMethod, RegularMethod {
+    permits ParamsAsTupleMethod, RegularMethod, VirtualMethod {
 
         Class<?>[] getParameterTypes();
         Class<?> getParameterType(int paramNum);
@@ -173,6 +187,74 @@ public class _MethodFacades {
             }
             throw _Exceptions.unexpectedCodeReach();
         }
+    }
+
+    private record VirtualMethod(
+            Class<?> declaringClass,
+            String name,
+            Class<?> returnType,
+            Class<?>[] parameterTypes,
+            String[] parameterNames) implements MethodFacade {
+
+        @Override public Class<?> getDeclaringClass() { return declaringClass; }
+        @Override public int getParameterCount() { return parameterTypes.length; }
+        @Override public Class<?>[] getParameterTypes() { return parameterTypes; }
+        @Override public Class<?> getParameterType(final int paramNum) { return parameterTypes[paramNum]; }
+        @Override public String getName() { return name; }
+        @Override public Class<?> getReturnType() { return returnType; }
+        @Override public Optional<ResolvedMethod> asMethod() { return Optional.of(asMethodForIntrospection()); }
+        @Override public Optional<ResolvedConstructor> asConstructor() { return Optional.empty(); }
+        @Override public Executable asExecutable() { return virtualMethodForIntrospection(); }
+        @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
+            return Optional.empty();
+        }
+        @Override public ResolvedMethod asMethodForIntrospection() {
+            return new ResolvedMethod() {
+                @Override public Method method() { return virtualMethodForIntrospection(); }
+                @Override public java.util.stream.Stream<Annotation> streamAnnotations() {
+                    return java.util.stream.Stream.empty();
+                }
+                @Override public Class<?> implementationClass() { return declaringClass; }
+                @Override public Class<?> returnType() { return returnType; }
+                @Override public Class<?>[] paramTypes() { return parameterTypes; }
+                @Override public String name() { return name; }
+                @Override public int paramCount() { return parameterTypes.length; }
+                @Override public Class<?> paramType(final int paramIndex) { return parameterTypes[paramIndex]; }
+                @Override public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+                    return Object.class;
+                }
+                @Override public Class<?> resolveGenericTypeArgumentOnMethodReturn(final int argumentIndex) {
+                    return Object.class;
+                }
+            };
+        }
+        @Override public String getParameterName(final int paramNum) {
+            return paramNum < parameterNames.length && parameterNames[paramNum] != null
+                    ? parameterNames[paramNum]
+                    : "param" + paramNum;
+        }
+        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
+                final Class<A> annotationType, final int paramNum) {
+            return Optional.empty();
+        }
+        @Override public Object[] getArguments(
+                final Object[] executionParameters, final ParameterConverter converter) {
+            return executionParameters;
+        }
+        @Override public boolean isAnnotatedAsNullable() { return false; }
+        @Override public ResolvedType resolveMethodReturn() { return ResolvedType.singular(returnType); }
+        @Override public ResolvedType resolveParameter(final int paramIndex) {
+            return ResolvedType.singular(parameterTypes[paramIndex]);
+        }
+    }
+
+    @SneakyThrows
+    private static Method virtualMethodForIntrospection() {
+        return _MethodFacades.class.getDeclaredMethod("virtualMethod");
+    }
+
+    @SuppressWarnings("unused")
+    private static void virtualMethod() {
     }
 
     /**

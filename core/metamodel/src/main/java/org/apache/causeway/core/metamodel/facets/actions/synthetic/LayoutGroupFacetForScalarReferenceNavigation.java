@@ -16,32 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.spec.impl;
+package org.apache.causeway.core.metamodel.facets.actions.synthetic;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
 
-public interface ObjectSpecificationMutable extends ObjectSpecification {
+/**
+ * Associates a synthetic navigation action with the scalar reference it navigates from.
+ */
+public class LayoutGroupFacetForScalarReferenceNavigation
+        extends LayoutGroupFacetAbstract {
 
-    enum IntrospectionRequest {
-        /**
-         * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
-         */
-        REGISTER,
-        /**
-         * Partial introspection, that only includes type-hierarchy but not members.
-         */
-        TYPE_ONLY,
-        /**
-         * Full introspection, that includes type-hierarchy and members.
-         */
-        FULL
+    public LayoutGroupFacetForScalarReferenceNavigation(
+            final String referenceId,
+            final String referenceName,
+            final FacetHolder holder) {
+        super(new GroupIdAndName(referenceId, referenceName), holder);
     }
-
-    void introspect(IntrospectionRequest request);
-
-    /**
-     * Adds configuration-gated framework navigation actions during metamodel post-processing.
-     */
-    void synthesizeNavigationActions();
 
 }
