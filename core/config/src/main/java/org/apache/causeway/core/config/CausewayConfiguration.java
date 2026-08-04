@@ -1838,7 +1838,29 @@ public record CausewayConfiguration(
             @DefaultValue
             Translation translation,
             @DefaultValue
-            EntityPropertyChangePublisher entityPropertyChangePublisher) {
+            EntityPropertyChangePublisher entityPropertyChangePublisher,
+            @DefaultValue
+            CommandExecutorService commandExecutorService) {
+
+            /**
+             * Controls interaction-advisor checks performed when command DTOs are executed.
+             */
+            public record CommandExecutorService(
+                /**
+                 * Whether action and property interaction advisors are enforced, invoked but ignored, or skipped.
+                 */
+                @DefaultValue("NO_CHECK")
+                InteractionAdvisorPolicy interactionAdvisorPolicy) {
+
+                public enum InteractionAdvisorPolicy {
+                    /** Enforce visibility, usability, and validity vetoes. */
+                    CHECK,
+                    /** Invoke visibility, usability, and validity advisors but ignore their vetoes. */
+                    CHECK_BUT_IGNORE,
+                    /** Skip visibility, usability, and validity advisors. */
+                    NO_CHECK
+                }
+            }
 
             /**
              * Mail specific configuration in addition to Spring's <code>spring.mail.*</code>.
@@ -3664,7 +3686,36 @@ public record CausewayConfiguration(
             @DefaultValue("DISABLED")
             RecordingSupport recordingSupport,
             @DefaultValue
+            ReplayResultMapping replayResultMapping,
+            @DefaultValue
             RunBackgroundCommands runBackgroundCommands) {
+
+            /**
+             * Configures the built-in command replay result mapping listener.
+             */
+            public record ReplayResultMapping(
+                /**
+                 * Storage strategy for the built-in listener.
+                 * Persistent storage is implemented by the commandlog persistence extensions.
+                 */
+                @DefaultValue("IN_MEMORY")
+                StorageStrategy storageStrategy,
+                /**
+                 * Behavior when a recorded bookmark is observed with a different actual bookmark after already being mapped.
+                 */
+                @DefaultValue("THROW_EXCEPTION")
+                OnConflictPolicy onConflictPolicy) {
+
+                public enum StorageStrategy {
+                    IN_MEMORY,
+                    PERSISTENT
+                }
+
+                public enum OnConflictPolicy {
+                    THROW_EXCEPTION,
+                    LOG_AND_CONTINUE
+                }
+            }
 
             /**
              * As per {@link CommandLog#persist()}.

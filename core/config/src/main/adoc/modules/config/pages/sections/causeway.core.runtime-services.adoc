@@ -21,6 +21,19 @@ application-features.init
 
 
 |
+[[causeway.core.runtime-services.command-executor-service.interaction-advisor-policy]]
+causeway.core.runtime-services. +
+command-executor-service. +
+interaction-advisor-policy
+
+|  NO_CHECK
+| Controls interaction-advisor checks during command DTO execution.
+`CHECK` enforces action and property visibility, usability, and validity vetoes.
+`CHECK_BUT_IGNORE` invokes the same advisor phases but continues after vetoes.
+`NO_CHECK` skips advisor calls and preserves compatibility with existing command execution.
+
+
+|
 [[causeway.core.runtime-services.email.override.bcc]]
 causeway.core.runtime-services. +
 email.override.bcc

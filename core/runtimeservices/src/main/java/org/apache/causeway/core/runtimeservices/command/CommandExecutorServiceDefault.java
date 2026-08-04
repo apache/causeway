@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -40,6 +42,16 @@ import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.sudo.SudoService;
+import org.apache.causeway.applib.services.wrapper.DisabledException;
+import org.apache.causeway.applib.services.wrapper.HiddenException;
+import org.apache.causeway.applib.services.wrapper.InvalidException;
+import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.collections.Can;
@@ -47,8 +59,12 @@ import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Core.RuntimeServices.CommandExecutorService.InteractionAdvisorPolicy;
 import org.apache.causeway.core.metamodel.commons.UtilStr;
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
@@ -87,8 +103,13 @@ public record CommandExecutorServiceDefault(
         SchemaValueMarshaller valueMarshaller,
         MetaModelService metaModelService,
         Provider<CommandPublisher> commandPublisherProvider,
-        SpecificationLoader specificationLoader
-        ) implements CommandExecutorService {
+        SpecificationLoader specificationLoader,
+        CausewayConfiguration causewayConfiguration
+) implements CommandExecutorService {
+
+    @Inject
+    public CommandExecutorServiceDefault {
+    }
 
     private static final Pattern ID_PARSER =
             Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
@@ -143,14 +164,14 @@ public record CommandExecutorServiceDefault(
         commandPublisherProvider.get().start(command);
 
         Try<Bookmark> result = transactionService.callWithinCurrentTransactionElseCreateNew(
-            () -> {
-                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH)
-                    // short-circuit
-                    return doExecuteCommand(dto);
-                return sudoService.call(
-                        context -> interactionContextPolicy.mapper.apply(context, dto),
-                        () -> doExecuteCommand(dto));
-            });
+                () -> {
+                    if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH)
+                        // short-circuit
+                        return doExecuteCommand(dto);
+                    return sudoService.call(
+                            context -> interactionContextPolicy.mapper.apply(context, dto),
+                            () -> doExecuteCommand(dto));
+                });
 
         command.updater().setResult(result);
 
@@ -162,7 +183,7 @@ public record CommandExecutorServiceDefault(
 
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Executing: {} {} {} {}",
                     dto.getMember().getLogicalMemberIdentifier(),
                     dto.getInteractionId(),
@@ -177,7 +198,7 @@ public record CommandExecutorServiceDefault(
         var targetOidDtoList = oidsDto.getOid();
 
         var interactionType = memberDto.getInteractionType();
-        if(interactionType == InteractionType.ACTION_INVOCATION) {
+        if (interactionType == InteractionType.ACTION_INVOCATION) {
 
             var actionDto = (ActionDto) memberDto;
 
@@ -193,6 +214,13 @@ public record CommandExecutorServiceDefault(
 
             var interactionHead = objectAction.interactionHead(targetAdapter);
 
+            applyActionAdvisorPolicy(
+                    causewayConfiguration.core().runtimeServices().commandExecutorService().interactionAdvisorPolicy(),
+                    objectAction,
+                    targetAdapter,
+                    interactionHead,
+                    argAdapters);
+
             var resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
             // flush any PersistenceCommands pending
@@ -207,7 +235,7 @@ public record CommandExecutorServiceDefault(
             // Object unused = priorExecution.getReturned();
             //
 
-            if(resultAdapter != null)
+            if (resultAdapter != null)
                 return ManagedObjects.bookmark(resultAdapter)
                         .orElse(null);
         } else {
@@ -219,18 +247,97 @@ public record CommandExecutorServiceDefault(
 
             var targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter))
+            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter))
                 throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
                         Bookmark.forOidDto(targetOidDto));
 
             var property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
             var newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
+
+            applyPropertyAdvisorPolicy(
+                    causewayConfiguration.core().runtimeServices().commandExecutorService().interactionAdvisorPolicy(),
+                    property,
+                    targetAdapter,
+                    newValueAdapter);
+
             property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
             // there is no return value for property modifications.
         }
 
         return null;
+    }
+
+    static void applyActionAdvisorPolicy(
+            final InteractionAdvisorPolicy policy,
+            final ObjectAction action,
+            final ManagedObject target,
+            final InteractionHead interactionHead,
+            final Can<ManagedObject> arguments) {
+
+        if (policy == InteractionAdvisorPolicy.NO_CHECK) {
+            return;
+        }
+
+        var visibility = action.isVisible(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
+        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed()) {
+            throw new HiddenException(advised(
+                    new ActionVisibilityEvent(target.getPojo(), action.getFeatureIdentifier()), visibility));
+        }
+
+        var usability = action.isUsable(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
+        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed()) {
+            throw new DisabledException(advised(
+                    new ActionUsabilityEvent(target.getPojo(), action.getFeatureIdentifier()), usability));
+        }
+
+        var validity = action.isArgumentSetValid(interactionHead, arguments, InteractionInitiatedBy.FRAMEWORK);
+        if (policy == InteractionAdvisorPolicy.CHECK && validity.isVetoed()) {
+            var argumentPojos = arguments.stream()
+                    .map(ManagedObject::getPojo)
+                    .toArray();
+            throw new InvalidException(advised(
+                    new ActionInvocationEvent(target.getPojo(), action.getFeatureIdentifier(), argumentPojos), validity));
+        }
+    }
+
+    static void applyPropertyAdvisorPolicy(
+            final InteractionAdvisorPolicy policy,
+            final OneToOneAssociation property,
+            final ManagedObject target,
+            final ManagedObject proposedValue) {
+
+        if (policy == InteractionAdvisorPolicy.NO_CHECK) {
+            return;
+        }
+
+        var visibility = property.isVisible(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
+        if (policy == InteractionAdvisorPolicy.CHECK && visibility.isVetoed()) {
+            throw new HiddenException(advised(
+                    new PropertyVisibilityEvent(target.getPojo(), property.getFeatureIdentifier()), visibility));
+        }
+
+        var usability = property.isUsable(target, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE);
+        if (policy == InteractionAdvisorPolicy.CHECK && usability.isVetoed()) {
+            throw new DisabledException(advised(
+                    new PropertyUsabilityEvent(target.getPojo(), property.getFeatureIdentifier()), usability));
+        }
+
+        var validity = property.isAssociationValid(target, proposedValue, InteractionInitiatedBy.FRAMEWORK);
+        if (policy == InteractionAdvisorPolicy.CHECK && validity.isVetoed()) {
+            throw new InvalidException(advised(
+                    new PropertyModifyEvent(
+                            target.getPojo(),
+                            property.getFeatureIdentifier(),
+                            proposedValue.getPojo()),
+                    validity));
+        }
+    }
+
+    private static <T extends InteractionEvent> T advised(final T event, final Consent consent) {
+        consent.getReasonAsString()
+                .ifPresent(reason -> event.advised(reason, CommandExecutorServiceDefault.class));
+        return event;
     }
 
     private String targetBookmarkStrFor(final CommandDto dto) {
@@ -241,9 +348,9 @@ public record CommandExecutorServiceDefault(
 
     private String argStrFor(final CommandDto dto) {
         var memberDto = dto.getMember();
-        if(memberDto instanceof ActionDto actionDto)
+        if (memberDto instanceof ActionDto actionDto)
             return paramNameArgValuesFor(actionDto);
-        if(memberDto instanceof PropertyDto propertyDto) {
+        if (memberDto instanceof PropertyDto propertyDto) {
             var proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
             return proposedValue.getTitle();
         }
@@ -263,7 +370,7 @@ public record CommandExecutorServiceDefault(
         var localActionId = localPartOf(logicalMemberIdentifier);
 
         var objectAction = findActionElseNull(objectSpecification, localActionId);
-        if(objectAction == null)
+        if (objectAction == null)
             throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
         return objectAction;
     }
@@ -280,7 +387,7 @@ public record CommandExecutorServiceDefault(
         var objectSpecification = targetAdapter.objSpec();
 
         var property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
-        if(property == null)
+        if (property == null)
             throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
         return property;
     }

@@ -344,7 +344,8 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
             .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
-            .map(commandLogEntry->tryReplay(commandLogEntry.getCommandDto())
+            .map(commandLogEntry -> tryReplay(
+                    replayContext.resultRemappingService().remapped(commandLogEntry.getCommandDto()))
                 .mapSuccessAsNullable(__ -> this))
             // if nothing to do, return with an 'empty success'
             .orElseGet(()->Try.success(null));
@@ -366,18 +367,19 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
      */
     private Try<Bookmark> tryReplay(final CommandDto commandDto) {
         var tryResultBookmark = replayContext.transactionService()
-            .callTransactional(Propagation.REQUIRES_NEW, () -> replayContext.commandExecutorService()
-                .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
-                // if we have a replay failure, this throws, which will roll back the surrounding transaction
-                .valueAsNullableElseFail());
-
-        replayContext.transactionService()
-            .runTransactional(Propagation.REQUIRES_NEW, () -> {
-                // handle the replay outcome
-                tryResultBookmark.accept(
-                        this::onReplayError,
-                        bookmarkOpt->onReplaySuccess());
+            .callTransactional(Propagation.REQUIRES_NEW, () -> {
+                var actualResult = replayContext.commandExecutorService()
+                    .executeCommand(InteractionContextPolicy.SWITCH_USER_AND_TIME, commandDto)
+                    // if we have a replay failure, this throws, which will roll back the surrounding transaction
+                    .valueAsNullableElseFail();
+                onReplaySuccess(actualResult);
+                return actualResult;
             });
+
+        tryResultBookmark.accept(
+            ex -> replayContext.transactionService()
+                .runTransactional(Propagation.REQUIRES_NEW, () -> onReplayError(ex)),
+            __ -> { });
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
         invalidateCachedRecord();
@@ -418,9 +420,15 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
     /**
      * Handles the happy replay case.
      */
-    private void onReplaySuccess() {
+    private void onReplaySuccess(final Bookmark actualResult) {
         commandLogEntry() // refetch from persistence
-            .ifPresent(entry->entry.saveAnalysis(null));
+            .ifPresent(entry -> {
+                entry.saveAnalysis(null);
+                replayContext.resultRemappingService().notifyReplayResult(
+                    entry.getResult(),
+                    actualResult,
+                    entry.getInteractionId());
+            });
     }
 
 }

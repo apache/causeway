@@ -47,6 +47,30 @@ When disabled, existing action, property publishing, and association-navigation 
 
 
 |
+[[causeway.extensions.command-log.replay-result-mapping.on-conflict-policy]]
+causeway.extensions.command-log. +
+replay-result-mapping. +
+on-conflict-policy
+
+|  THROW_EXCEPTION
+| Controls conflicts when a recorded replay result bookmark has already been mapped to a different actual bookmark.
+`THROW_EXCEPTION` fails and rolls back replay, while `LOG_AND_CONTINUE` retains the first mapping and logs the conflict.
+
+
+|
+[[causeway.extensions.command-log.replay-result-mapping.storage-strategy]]
+causeway.extensions.command-log. +
+replay-result-mapping. +
+storage-strategy
+
+|  IN_MEMORY
+| Selects the built-in replay mapping listener storage strategy.
+`IN_MEMORY` provides instance-scoped mappings when no application listener exists.
+`PERSISTENT` suppresses the in-memory listener; persistent storage is supplied by the later commandlog persistence reconciliation.
+Applications can provide a `CommandReplayMappingListener` bean to replace the built-in listener.
+
+
+|
 [[causeway.extensions.command-log.run-background-commands.batch-size]]
 causeway.extensions.command-log. +
 run-background-commands.batch-size

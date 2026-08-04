@@ -155,6 +155,14 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
     @Programmatic
     default void sync(final Command command) {
 
+        setStartedAt(command.getStartedAt());
+        setCompletedAt(command.getCompletedAt());
+
+        var replayState = getReplayState();
+        if(replayState != null && !replayState.isExportable() && !replayState.isExported()) {
+            return;
+        }
+
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
@@ -162,9 +170,6 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
         setCommandDto(command.getCommandDto());
         setTarget(command.getTarget());
         setLogicalMemberIdentifier(command.getLogicalMemberIdentifier());
-
-        setStartedAt(command.getStartedAt());
-        setCompletedAt(command.getCompletedAt());
 
         setResult(command.getResult());
         setException(command.getException());

@@ -40,7 +40,8 @@ public record ReplayContext(
         TransactionService transactionService,
         CommandLogEntryRepository commandLogEntryRepository,
         CommandExecutorService commandExecutorService,
-        ClockService clockService) {
+        ClockService clockService,
+        ResultRemappingService resultRemappingService) {
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
         return interactionId!=null

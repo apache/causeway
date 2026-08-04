@@ -42,6 +42,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExport
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ResultRemappingService;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
@@ -51,6 +52,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCom
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseStateListener;
@@ -101,6 +103,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+        ResultRemappingService.class,
+        CommandReplayMappingListenerInMemory.BeanFactory.class,
 
         BackgroundCommandsJobControl.class,
 
@@ -156,9 +160,10 @@ public class CausewayModuleExtCommandLogApplib {
             final TransactionService transactionService,
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
-            final ClockService clockService) {
+            final ClockService clockService,
+            final ResultRemappingService resultRemappingService) {
         return new ReplayContext(repositoryService, interactionService, transactionService,
-                commandLogEntryRepository, commandExecutorService, clockService);
+                commandLogEntryRepository, commandExecutorService, clockService, resultRemappingService);
     }
 
 }
