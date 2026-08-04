@@ -29,7 +29,7 @@
 
 | Issues | Capability nodes | Current main state | Classification | Planned change |
 |---|---|---|---|---|
-| CAUSEWAY-4012, 4015, 4018 | C1 | Recording-support switch, marker, and events absent | Adapt | `reconcile-command-recording-core-policy` |
+| CAUSEWAY-4012, 4015, 4018 | C1 | Recording-support configuration, suppression marker, pause/resume events, fixture suppression, and helper suppression reconciled | Adapt | Completed by `reconcile-command-recording-core-policy` |
 | CAUSEWAY-4012, 4033 | C2 | Recording-aware safe-action and property-edit policy absent | Adapt | `reconcile-recording-aware-publishing` |
 | CAUSEWAY-4019, 4020, 4021, 4034, 4038, 4039 | C3, C4b | Synthetic selector/navigation concepts absent | Adapt | `reconcile-synthetic-command-navigation` |
 | CAUSEWAY-4030, 4034, 4039 | C4a | Singleton-list and expanded result capture absent | Adapt | `reconcile-command-result-metadata` |
@@ -45,13 +45,24 @@
 | Later manager specs | W1 | Older export/replay actions exist but maintenance workflow differs materially | Supersede | `reconcile-command-manager-workflows` |
 | Later background-completion specs | B1, B2 | Required recording/replay sequencing guards not established | Adapt | `reconcile-command-background-gates` |
 
+## Completed reconciliation changes
+
+| Change | Nodes | Main specification | Archived change | Implementation evidence |
+|---|---|---|---|---|
+| `reconcile-command-recording-core-policy` | C1 | `openspec/specs/command-recording-control/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-recording-core-policy/` | Planning `1b7f593e9ef`; implementation `2ddd9bc37fd`; archive `1771c2e17e9`; focused Maven tests passed |
+
+## Resolved questions
+
+| Decision | Affected nodes | Resolution evidence |
+|---|---|---|
+| Recording-support configuration remains under `causeway.extensions.command-log` and uses Causeway 4 immutable record configuration. | C1, C2, C3 | `reconcile-command-recording-core-policy/design.md` in the archived change |
+| Commandlog pause/resume nesting is application-context-wide and maintained with atomic pause depth. | C1 | `reconcile-command-recording-core-policy/design.md` and `CommandLogPauseStateTest` |
+
 ## Open questions
 
 | Question | Affected nodes | Resolution point |
 |---|---|---|
 | Can the Causeway 4 Spring context become unavailable during `ServiceRegistryDefault.select()` in metamodel disposal? | CAUSEWAY-4002 | Separate lifecycle investigation before core work is declared complete |
-| Should recording-support configuration remain under `causeway.extensions.command-log` even though it changes core metamodel behaviour? | C1, C2, C3 | First change design |
-| Should pause/resume nesting be maintained per thread, interaction, transaction, or application context? | C1 | First change design and maintenance implementation comparison |
 | Which current Causeway 4 metamodel post-processor should install synthetic actions? | C3 | Synthetic-navigation design |
 | Should view-model result capture accept all bookmarkable view models or only replay-stable forms? | C4a, D1 | Result-metadata design |
 | Can replay mapping SPI remain entirely in commandlog applib, or does command executor integration require a narrower core hook? | D2, M1 | Replay-mapping design |
