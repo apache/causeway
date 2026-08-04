@@ -32,8 +32,8 @@
 | CAUSEWAY-4012, 4015, 4018 | C1 | Recording-support configuration, suppression marker, pause/resume events, fixture suppression, and helper suppression reconciled | Adapt | Completed by `reconcile-command-recording-core-policy` |
 | CAUSEWAY-4012, 4033 | C2 | Recording-aware safe-action and property-edit policy absent | Adapt | `reconcile-recording-aware-publishing` |
 | CAUSEWAY-4019, 4020, 4021, 4034, 4038, 4039 | C3, C4b | Synthetic selector/navigation concepts absent | Adapt | `reconcile-synthetic-command-navigation` |
-| CAUSEWAY-4030, 4034, 4039 | C4a | Singleton-list and expanded result capture absent | Adapt | `reconcile-command-result-metadata` |
-| CAUSEWAY-4010, 4024 | D1 | `CommandExportDto`, `ImportedCommandDto`, and result envelope absent | Adapt | `reconcile-command-result-metadata` |
+| CAUSEWAY-4030, 4034, 4039 | C4a | Scalar, bookmarkable view-model, and singleton-container result capture reconciled | Adapt | Completed by `reconcile-command-result-metadata` |
+| CAUSEWAY-4010, 4024 | D1 | Result-bearing transfer DTOs, bookmark metadata, deep copying, and multi-document YAML foundations reconciled | Adapt | Completed by `reconcile-command-result-metadata` |
 | CAUSEWAY-4042 | D2 | `InteractionAdvisorPolicy` absent | Adapt | `reconcile-command-replay-mapping` |
 | CAUSEWAY-4010, 4039 | M1, M2 | Mapping SPI and in-memory listener absent | Supersede | `reconcile-command-replay-mapping` |
 | Later maintenance mapping work | M3 | Mapping entity, repository, and persistent listener absent | Supersede | `reconcile-persistent-replay-mapping` |
@@ -50,6 +50,7 @@
 | Change | Nodes | Main specification | Archived change | Implementation evidence |
 |---|---|---|---|---|
 | `reconcile-command-recording-core-policy` | C1 | `openspec/specs/command-recording-control/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-recording-core-policy/` | Planning `1b7f593e9ef`; implementation `2ddd9bc37fd`; archive `1771c2e17e9`; focused Maven tests passed |
+| `reconcile-command-result-metadata` | C4a, D1 | `openspec/specs/command-result-metadata/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-result-metadata/` | Planning `2d386a8c4db`; implementation `79b093c2cfb`; archive `4a481394175`; focused and aggregate Maven tests passed |
 
 ## Resolved questions
 
@@ -57,6 +58,7 @@
 |---|---|---|
 | Recording-support configuration remains under `causeway.extensions.command-log` and uses Causeway 4 immutable record configuration. | C1, C2, C3 | `reconcile-command-recording-core-policy/design.md` in the archived change |
 | Commandlog pause/resume nesting is application-context-wide and maintained with atomic pause depth. | C1 | `reconcile-command-recording-core-policy/design.md` and `CommandLogPauseStateTest` |
+| Result capture accepts every bookmarkable single result, including view models, while replay stability remains a downstream policy decision. | C4a, D1 | `reconcile-command-result-metadata/design.md` in the archived change |
 
 ## Open questions
 
@@ -64,7 +66,6 @@
 |---|---|---|
 | Can the Causeway 4 Spring context become unavailable during `ServiceRegistryDefault.select()` in metamodel disposal? | CAUSEWAY-4002 | Separate lifecycle investigation before core work is declared complete |
 | Which current Causeway 4 metamodel post-processor should install synthetic actions? | C3 | Synthetic-navigation design |
-| Should view-model result capture accept all bookmarkable view models or only replay-stable forms? | C4a, D1 | Result-metadata design |
 | Can replay mapping SPI remain entirely in commandlog applib, or does command executor integration require a narrower core hook? | D2, M1 | Replay-mapping design |
 | How should persistent mapping selection work when both JPA and JDO modules are visible? | M3 | Persistent-mapping design |
 | How will migration from separate `CommandExportManager` and `CommandReplayManager` view-model mementos be handled? | P2 | Unified-manager design |
