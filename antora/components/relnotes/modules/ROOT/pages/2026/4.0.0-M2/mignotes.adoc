@@ -15,10 +15,10 @@ Upgrade Summary:
 . Causeway now uses *slf4j* (instead of _log4j_) ✅
 . Migrate build requirements to *Maven 4* ✅
 
-Optional to come with `4.0.0` or later 
+Optional to come with `4.0.0` or later
 
 . Removal of *rest-client* artifact in favor of Spring's RestClient
-. Removal of *encrypt-jbcrypt* artifact 
+. Removal of *encrypt-jbcrypt* artifact
 
 == Configuration
 
@@ -36,12 +36,22 @@ Some presets for the _Spring Configuration_ have been removed
 
 |===
 
+== Programming Model
+
+Notable changes in this release:
+
+* Support for Property Clear Methods in the Programming Model (eg `clearUsername()`) has been removed.
++
+See https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
+
+
 == Applib
 
 Removal of Interaction-Layer related classes from applib. (Motivation: Layering is an implementation choice, which should not be exposed as API.)
 
-- `InteractionLayerTracker` was relocated to metamodel (removed from applib).
-- `InteractionService` and `InteractionContext` were relocated from `..iactnlayer..` to `..iactn..`
+* `InteractionLayerTracker` was relocated to metamodel (removed from applib).
+* `InteractionService` and `InteractionContext` were relocated from `..iactnlayer..` to `..iactn..`
+
 
 == RestEasy Integration Removed
 
@@ -120,7 +130,7 @@ causeway:
     restfulobjects:
       basePath: /restful
 ----
-+
+
 
 
 == Immutable Configuration
@@ -134,9 +144,14 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 `ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
 (In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
 
+
 == Object Icon Support (Experimental)
 
-WARNING: This is a _Programming Model_/_API_ draft. It might receive some polishing till final `4.0.0`.  
+[WARNING]
+====
+This is a _Programming Model_/_API_ draft.
+It might receive some polishing till final `4.0.0`.
+====
 
 Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconSize iconSize)`,
 which also supports image data embedding and supersedes `String iconName()`.

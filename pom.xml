@@ -31,7 +31,7 @@
 
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-all</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.0-M3-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -157,6 +157,17 @@
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>dev.pcms</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
                         <version>1.18.42.1</version>
@@ -195,9 +206,35 @@
                         </configuration>
                     </plugin>
 
+                    <!-- Create a source-release artifact that contains the fully buildable
+                         project directory source structure. This is the artifact which is
+                         the official subject of any release vote. -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.apache.resources</groupId>
+                                <artifactId>apache-source-release-assembly-descriptor</artifactId>
+                                <version>${version.apache-resource-bundles}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>source-release-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                                    <descriptorRefs>
+                                        <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
+                                    </descriptorRefs>
+                                    <tarLongFileMode>${assembly.tarLongFileMode}</tarLongFileMode>
+                                </configuration>
+                            </execution>
+                        </executions>
                         <configuration>
                             <attach>true</attach>
                         </configuration>

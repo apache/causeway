@@ -3,6 +3,7 @@
 
 
 * 2026
+** xref:relnotes:ROOT:2026/4.0.0-M2/relnotes.adoc[4.0.0-M2]
 ** xref:relnotes:ROOT:2026/3.6.0/relnotes.adoc[3.6.0]
 
 * 2025
