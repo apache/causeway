@@ -51,6 +51,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -96,7 +97,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = CommandLogEntry.CssClassUiEvent.class,
         layoutUiEvent = CommandLogEntry.LayoutUiEvent.class)
 public interface CommandLogEntry
-extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
+extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandRecordingSuppressed {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
     public static final String SCHEMA = CausewayModuleExtCommandLogApplib.SCHEMA;

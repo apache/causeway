@@ -45,6 +45,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -60,7 +61,7 @@ public record CommandReplayManager(
         @Property
         @PropertyLayout(describedAs = "Only commands after this baseline are listed for replay")
         java.sql.Timestamp baseline,
-        ReplayContext replayContext) implements ViewModel {
+        ReplayContext replayContext) implements ViewModel, CommandRecordingSuppressed {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandReplayManager";
 

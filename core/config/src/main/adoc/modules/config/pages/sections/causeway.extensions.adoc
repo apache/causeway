@@ -30,6 +30,15 @@ persist
 
 
 |
+[[causeway.extensions.command-log.recording-support]]
+causeway.extensions.command-log. +
+recording-support
+
+|  DISABLED
+| Whether command recording support is enabled.
+
+
+|
 [[causeway.extensions.command-log.run-background-commands.batch-size]]
 causeway.extensions.command-log. +
 run-background-commands.batch-size

@@ -61,6 +61,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
     final ClockService clockService;
+    final CommandLogPauseState commandLogPauseState;
 
     @Override
     public boolean isEnabled() {
@@ -70,7 +71,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onReady(final Command command) {
 
-        if (!isEnabled())
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
 
         var existingCommandLogEntryIfAny =
@@ -112,7 +113,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onStarted(final Command command) {
 
-        if (!isEnabled())
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())
@@ -124,7 +125,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        if (!isEnabled())
+        if (!isEnabled() || commandLogPauseState.isPaused())
             return;
 
         commandLogEntryRepository.findByInteractionId(command.getInteractionId())

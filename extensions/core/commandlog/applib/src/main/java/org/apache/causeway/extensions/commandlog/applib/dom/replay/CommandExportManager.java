@@ -45,6 +45,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
@@ -61,7 +62,7 @@ public record CommandExportManager(
         @Property
         @PropertyLayout(describedAs = "Only commands after this timestamp are available for export")
         java.sql.Timestamp baseline,
-        ReplayContext replayContext) implements ViewModel {
+        ReplayContext replayContext) implements ViewModel, CommandRecordingSuppressed {
 
 	public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandExportManager";
 

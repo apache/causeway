@@ -52,6 +52,8 @@ import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeSchedu
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
+import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseStateListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 
 @Configuration(proxyBeanMethods = false)
@@ -95,6 +97,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         RunBackgroundCommandsJobListener.Noop.class,
 
         // @Service's
+        CommandLogPauseState.class,
+        CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
 

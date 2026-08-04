@@ -3651,6 +3651,15 @@ public record CausewayConfiguration(
              */
             @DefaultValue("ENABLED")
             PersistPolicy persist,
+            /**
+             * Whether command recording support is enabled.
+             *
+             * <p>When enabled, recording-aware policies may broaden command publishing eligibility while
+             * honoring {@code CommandRecordingSuppressed}.  Disabled by default to preserve existing
+             * command-publishing behavior.
+             */
+            @DefaultValue("DISABLED")
+            RecordingSupport recordingSupport,
             @DefaultValue
             RunBackgroundCommands runBackgroundCommands) {
 
@@ -3667,6 +3676,23 @@ public record CausewayConfiguration(
                 ENABLED,
                 /**
                  * Do <i>NOT</i> persist to the command log.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * As per {@link CommandLog#recordingSupport()}.
+             */
+            public enum RecordingSupport {
+                /**
+                 * Enable command recording support.
+                 */
+                ENABLED,
+                /**
+                 * Disable command recording support.  This is the default.
                  */
                 DISABLED;
 

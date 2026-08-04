@@ -48,6 +48,7 @@ import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
@@ -76,7 +77,8 @@ import lombok.experimental.Accessors;
 @DomainObjectLayout//(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
 @AllArgsConstructor
-public final class ReplayableCommand implements ViewModel, Comparable<ReplayableCommand> {
+public final class ReplayableCommand
+implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed {
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
