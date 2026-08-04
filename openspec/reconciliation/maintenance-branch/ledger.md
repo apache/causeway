@@ -30,7 +30,7 @@
 | Issues | Capability nodes | Current main state | Classification | Planned change |
 |---|---|---|---|---|
 | CAUSEWAY-4012, 4015, 4018 | C1 | Recording-support configuration, suppression marker, pause/resume events, fixture suppression, and helper suppression reconciled | Adapt | Completed by `reconcile-command-recording-core-policy` |
-| CAUSEWAY-4012, 4033 | C2 | Recording-aware safe-action and property-edit policy absent | Adapt | `reconcile-recording-aware-publishing` |
+| CAUSEWAY-4012, 4033 | C2 | Recording-aware safe-action and authoritative property-edit command-publishing policy reconciled | Adapt | Completed by `reconcile-recording-aware-publishing` |
 | CAUSEWAY-4019, 4020, 4021, 4034, 4038, 4039 | C3, C4b | Synthetic selector/navigation concepts absent | Adapt | `reconcile-synthetic-command-navigation` |
 | CAUSEWAY-4030, 4034, 4039 | C4a | Scalar, bookmarkable view-model, and singleton-container result capture reconciled | Adapt | Completed by `reconcile-command-result-metadata` |
 | CAUSEWAY-4010, 4024 | D1 | Result-bearing transfer DTOs, bookmark metadata, deep copying, and multi-document YAML foundations reconciled | Adapt | Completed by `reconcile-command-result-metadata` |
@@ -51,6 +51,7 @@
 |---|---|---|---|---|
 | `reconcile-command-recording-core-policy` | C1 | `openspec/specs/command-recording-control/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-recording-core-policy/` | Planning `1b7f593e9ef`; implementation `2ddd9bc37fd`; archive `1771c2e17e9`; focused Maven tests passed |
 | `reconcile-command-result-metadata` | C4a, D1 | `openspec/specs/command-result-metadata/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-result-metadata/` | Planning `2d386a8c4db`; implementation `79b093c2cfb`; archive `4a481394175`; focused and aggregate Maven tests passed |
+| `reconcile-recording-aware-publishing` | C2 | `openspec/specs/recording-aware-command-publishing/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-recording-aware-publishing/` | Planning `fc74666a15e`; implementation `35f1b39b3a7`; archive `37f6db329ab`; focused and aggregate Maven tests passed |
 
 ## Resolved questions
 
@@ -59,6 +60,7 @@
 | Recording-support configuration remains under `causeway.extensions.command-log` and uses Causeway 4 immutable record configuration. | C1, C2, C3 | `reconcile-command-recording-core-policy/design.md` in the archived change |
 | Commandlog pause/resume nesting is application-context-wide and maintained with atomic pause depth. | C1 | `reconcile-command-recording-core-policy/design.md` and `CommandLogPauseStateTest` |
 | Result capture accepts every bookmarkable single result, including view models, while replay stability remains a downstream policy decision. | C4a, D1 | `reconcile-command-result-metadata/design.md` in the archived change |
+| Recording support broadens publishing through the normal facet lifecycle; explicit safe-action disablement remains an opt-out, while property edits remain recording-eligible even when explicitly disabled so replay sequences stay complete. | C2 | `reconcile-recording-aware-publishing/design.md` and `RecordingAwareCommandPublishingFacetTest` |
 
 ## Open questions
 
