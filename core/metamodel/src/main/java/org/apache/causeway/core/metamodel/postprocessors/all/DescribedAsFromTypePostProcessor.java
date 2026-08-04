@@ -40,26 +40,26 @@ extends MetaModelPostProcessorAbstract {
 
     @Inject
     public DescribedAsFromTypePostProcessor(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->!spec.isMixin());
     }
 
     @Override
-    public void postProcessParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+    public void postProcessParameter(final ObjectSpecification objSpec, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         handleParam(parameter);
     }
 
     @Override
-    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void postProcessAction(final ObjectSpecification objSpec, final ObjectAction objectAction) {
         handleMember(objectAction);
     }
 
     @Override
-    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {
         handleMember(prop);
     }
 
     @Override
-    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {
         handleMember(coll);
     }
 

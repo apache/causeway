@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.metamodel;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -74,13 +75,14 @@ class MetaModelExporter {
     MetamodelDto exportMetaModel(final Config config) {
 
         // single type(s) MM export support
-        var tinyDomain = _Lists.<ObjectSpecification>newArrayList();
+        var tinyDomain = new ArrayList<ObjectSpecification>();
         var useTinyDomain = _NullSafe.stream(config.getNamespacePrefixes())
-        .map(namespace->specificationLookup.specForLogicalTypeName(namespace))
-        .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
-        .allMatch(Optional::isPresent);
+	        .map(namespace->specificationLookup.specForLogicalTypeName(namespace))
+	        .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
+	        .allMatch(Optional::isPresent);
 
-        if(useTinyDomain)
+        if(useTinyDomain
+        		&& !tinyDomain.isEmpty())
 			return exportTinyDomain(tinyDomain, config);
 
         MetamodelDto metamodelDto = new MetamodelDto();

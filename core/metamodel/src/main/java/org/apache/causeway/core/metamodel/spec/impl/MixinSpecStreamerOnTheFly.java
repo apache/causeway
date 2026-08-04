@@ -25,18 +25,21 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
+@Deprecated // not used anymore
 record MixinSpecStreamerOnTheFly(
 		SpecificationLoader specLoader,
 		CausewayBeanTypeRegistry beanTypeRegistry,
 		Profiler profiler)
 implements MixinSpecStreamer {
 
+	@Deprecated
 	MixinSpecStreamerOnTheFly(
 			final SpecificationLoader specLoader,
 			final CausewayBeanTypeRegistry beanTypeRegistry) {
 		this(specLoader, beanTypeRegistry, Profiler.getInstance());
 	}
 
+	@Deprecated
 	@Override
 	public Stream<ObjectSpecification> streamMixinSpecs() {
 		return beanTypeRegistry.streamMixinTypes()

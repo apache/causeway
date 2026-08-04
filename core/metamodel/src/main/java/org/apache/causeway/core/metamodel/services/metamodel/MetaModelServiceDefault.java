@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +129,7 @@ public record MetaModelServiceDefault(
 
         var specifications = specificationLoader().snapshotSpecifications();
 
-        final List<DomainMember> rows = _Lists.newArrayList();
+        final List<DomainMember> rows = new ArrayList<>();
         for (final ObjectSpecification spec : specifications) {
             if (exclude(spec)) {
                 continue;

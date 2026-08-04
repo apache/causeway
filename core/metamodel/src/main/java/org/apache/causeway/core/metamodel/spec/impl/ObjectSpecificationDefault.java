@@ -309,7 +309,9 @@ implements
         var regularAssociations = profiler.measure("members.regularAssociations", ()->regularMemberFactory.createAssociations().toList());
         var regularActions = profiler.measure("members.regularActions", ()->regularMemberFactory.createActions().toList());
 
-        var mixedInMemberFactory = new MixedInMemberFactory(this, mixinSpecStreamer);
+        var mixedInMemberFactory = new MixedInMemberFactory(this, isMixin()
+        		? MixinSpecStreamer.EMPTY
+				: mixinSpecStreamer);
         var mixedInAssociations = profiler.measure("members.mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations(profiler));
         var mixedInActions = profiler.measure("members.mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
 
@@ -322,9 +324,11 @@ implements
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
-        profiler.measure("members.postProcessor", ()->{
-        	postProcessor.postProcess(this);
-        });
+        //TODO would allow to introspect mixins in isolation if(!isMixin()) {
+			profiler.measure("members.postProcessor", ()->{
+				postProcessor.postProcess(this);
+			});
+		//}
 
         invalidateCachedFacets();
 

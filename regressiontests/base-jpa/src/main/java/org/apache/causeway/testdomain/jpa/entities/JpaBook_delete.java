@@ -43,10 +43,10 @@ public class JpaBook_delete {
 
     @Inject private RepositoryService repository;
 
-    private final JpaBook holder;
+    private final JpaBook mixee;
 
     @MemberSupport public Collection<JpaBook> act() {
-        repository.remove(holder);
+        repository.remove(mixee);
         return repository.allInstances(JpaBook.class);
     }
 

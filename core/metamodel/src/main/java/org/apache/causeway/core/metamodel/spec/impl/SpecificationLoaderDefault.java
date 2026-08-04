@@ -273,11 +273,30 @@ implements
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
-
-        this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
+        //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
+        //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
-        // lock down mixins
+        // lock down mixins, also assuming non of the previously fully introspected types need any mixins
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
+
+        //TODO  expected no entities fully introspected yet. however, some postprocessors, that
+        // run on mixin-spec have the sideeffect of fully introspecting other types e.g. by asking for the
+        // members's element type
+        cache.values().stream()
+        	.filter(spec->!spec.isMixin())
+        	.filter(spec->!spec.isValue())
+        	.filter(ObjectSpecificationBuilder::isFullyIntrospected)
+        	.forEach(spec->{
+    			log.warn("type (non-mixin, non-value) found fully introspected after mixin introspection {}"
+    					+ " - reload triggered", spec.getCorrespondingClass());
+    			invalidateCache(spec.getCorrespondingClass());
+    			//reloadSpecification(spec.getCorrespondingClass());
+        	});
+
+//debug
+//        var mmService = new MetaModelServiceDefault(()->this, GridService.NOOP);
+//		var dto = mmService.getDomainModel();
+//		System.err.println(YamlUtils.toStringUtf8(dto, JsonUtils::onlyIncludeNonNull));
 
         introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
@@ -286,19 +305,19 @@ implements
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
+        var snapshot = snapshotSpecifications();
+        snapshot.stream()
+	        .filter(spec->spec.beanSort().isMixin())
+	        .filter(spec->!spec.isFullyIntrospected())
+	        .forEach(spec->{
+	        	log.warn("Mixin was missing during first pass {}."
+	        			+ "It will not be added to the metamodel. For inclusion, "
+	        			+ "make sure it is discovered by Spring.", spec);
+	        });
+
         if(isFullIntrospect()) {
-            var snapshot = snapshotSpecifications();
-            log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            snapshot.stream()
-            	.filter(it->((ObjectSpecificationDefault)it).isFullyIntrospected())
-            	.forEach(it->{
-            		log.warn("not fully introspected after first pass {}", it);
-//            	Assert.isTrue(
-//
-//            			()->"not fully introspected %s".formatted(it));
-            });
-            introspect(snapshot.filter(x->x.beanSort().isMixin()), IntrospectionRequest.FULL);
-            introspect(snapshot.filter(x->!x.beanSort().isMixin()), IntrospectionRequest.FULL);
+            log.info(" - introspecting types not initially discovered by Spring {}", snapshot.size());
+            introspect(snapshot.filter(spec->!spec.beanSort().isMixin()), IntrospectionRequest.FULL);
         }
 
         log.info(" - running remaining validators");
