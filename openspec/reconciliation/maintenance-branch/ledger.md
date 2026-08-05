@@ -36,7 +36,7 @@
 | CAUSEWAY-4010, 4024 | D1 | Result-bearing transfer DTOs, bookmark metadata, deep copying, and multi-document YAML foundations reconciled | Adapt | Completed by `reconcile-command-result-metadata` |
 | CAUSEWAY-4042 | D2 | Configurable command-execution advisor policies reconciled | Adapt | Completed by `reconcile-command-replay-mapping` |
 | CAUSEWAY-4010, 4039 | M1, M2 | Bookmark-only remapping SPI, execution-copy remapping, atomic result observation, and conditional in-memory listener reconciled | Supersede | Completed by `reconcile-command-replay-mapping` |
-| Later maintenance mapping work | M3 | Mapping entity, repository, and persistent listener absent | Supersede | `reconcile-persistent-replay-mapping` |
+| Later maintenance mapping work | M3 | Persistent mapping contracts, listener, management UI, and Jakarta Persistence adapter reconciled; the removed commandlog JDO adapter is not applicable on Causeway 4 | Supersede | Completed by `reconcile-persistent-replay-mapping` |
 | Maintenance consolidated replayable-command specs | P1 | Basic `ReplayableCommand` exists but lacks participants, result presence, actual mappings, and adjacent navigation | Supersede | `reconcile-replayable-command-projection` |
 | Maintenance consolidated manager specs | P2 | Separate export and replay managers exist | Supersede | `reconcile-unified-command-manager` |
 | CAUSEWAY-4034 and later maintenance specs | R1 | `RefData` and command replay reference-data SPI absent | Adapt | `reconcile-command-reference-data` |
@@ -54,6 +54,7 @@
 | `reconcile-recording-aware-publishing` | C2 | `openspec/specs/recording-aware-command-publishing/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-recording-aware-publishing/` | Planning `fc74666a15e`; implementation `35f1b39b3a7`; archive `37f6db329ab`; focused and aggregate Maven tests passed |
 | `reconcile-synthetic-command-navigation` | C3, C4b | `openspec/specs/synthetic-command-navigation/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-synthetic-command-navigation/` | Planning `9194e8317f8`; implementation `42b9ecbb433`; archive `ea0a1b8b4c1`; focused and affected aggregate Maven tests passed |
 | `reconcile-command-replay-mapping` | D2, M1, M2 | `openspec/specs/command-execution-advisor-policy/spec.md`; `openspec/specs/command-replay-mapping/spec.md` | `openspec/changes/archive/2026-08-04-reconcile-command-replay-mapping/` | Planning `b9412ee98a7`; implementation `6b4ab64d193`; archive `74ba8b40c0a`; focused and affected aggregate Maven tests passed |
+| `reconcile-persistent-replay-mapping` | M3 | `openspec/specs/persistent-command-replay-mapping/spec.md` | `openspec/changes/archive/2026-08-05-reconcile-persistent-replay-mapping/` | Planning `d88eb297388`; implementation `1990363924f`; archive `d95ee405f68`; focused and affected aggregate Maven tests passed |
 
 ## Resolved questions
 
@@ -65,13 +66,13 @@
 | Recording support broadens publishing through the normal facet lifecycle; explicit safe-action disablement remains an opt-out, while property edits remain recording-eligible even when explicitly disabled so replay sequences stay complete. | C2 | `reconcile-recording-aware-publishing/design.md` and `RecordingAwareCommandPublishingFacetTest` |
 | Causeway 4 installs synthetic navigation actions through an `A0_BEFORE_BUILTIN` metamodel post-processor so later standard action processing observes them. | C3, C4b | `reconcile-synthetic-command-navigation/design.md` in the archived change and `SyntheticNavigationActionTest` |
 | Replay mapping policy remains entirely in commandlog applib through a bookmark-only listener SPI and result-remapping service; core runtime services implement only general command-execution advisor policy. | D2, M1, M2 | `reconcile-command-replay-mapping/design.md` in the archived change, `ResultRemappingServiceTest`, and `CommandExecutorInteractionAdvisorTest` |
+| Persistent replay-result mappings use the Causeway 4 commandlog JPA module only; the commandlog JDO adapter was deliberately removed and is not restored. | M3 | `reconcile-persistent-replay-mapping/design.md`, `CommandReplayResultMapping_IntegTest`, and the Causeway 4 commandlog module inventory |
 
 ## Open questions
 
 | Question | Affected nodes | Resolution point |
 |---|---|---|
 | Can the Causeway 4 Spring context become unavailable during `ServiceRegistryDefault.select()` in metamodel disposal? | CAUSEWAY-4002 | Separate lifecycle investigation before core work is declared complete |
-| How should persistent mapping selection work when both JPA and JDO modules are visible? | M3 | Persistent-mapping design |
 | How will migration from separate `CommandExportManager` and `CommandReplayManager` view-model mementos be handled? | P2 | Unified-manager design |
 | Which services count as export roots in the Causeway 4 service registry and logical-type model? | R2 | Reachability design |
 | Which persistence operations are required to retimestamp commands safely under JPA and JDO? | W1 | Manager-workflow design |
@@ -81,5 +82,5 @@
 Each child change must identify the maintenance scenarios it satisfies.
 Tests should be ported by observable behaviour rather than copied mechanically.
 Framework-level contracts should be tested in `api/applib`, `core/metamodel`, `core/runtimeservices`, or `core/mmtest` as appropriate.
-Commandlog behaviour should be tested in commandlog applib integration tests and in both persistence adapters when storage semantics are involved.
+Commandlog behaviour should be tested in commandlog applib integration tests and in every applicable persistence adapter when storage semantics are involved; omitted maintenance adapters must be justified as explicit Causeway 4 adaptations.
 Any deviation from maintenance behaviour must be recorded as an explicit Causeway 4 adaptation in the child change design.
