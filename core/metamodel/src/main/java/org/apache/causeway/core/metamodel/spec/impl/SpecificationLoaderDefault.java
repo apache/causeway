@@ -61,6 +61,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.Preloadabl
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.object.Mm2YamlUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
@@ -234,6 +235,14 @@ implements
     		: false;
     }
 
+    enum Phase {
+    	BEFORE_MIXINS,
+    	DURING_MIXINS,
+    	AFTER_MIXINS,
+    }
+
+    Phase phase = Phase.BEFORE_MIXINS;
+
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link CausewayBeanTypeRegistry}).
@@ -275,9 +284,11 @@ implements
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
         //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
         //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
+        this.phase = Phase.DURING_MIXINS;
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
-        // lock down mixins, also assuming non of the previously fully introspected types need any mixins
+        // lock down mixins, also assuming none of the previously fully introspected types need any mixins
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
+        this.phase = Phase.AFTER_MIXINS;
 
         //TODO  expected no entities fully introspected yet. however, some postprocessors, that
         // run on mixin-spec have the sideeffect of fully introspecting other types e.g. by asking for the
@@ -289,16 +300,11 @@ implements
         	.forEach(spec->{
     			log.warn("type (non-mixin, non-value) found fully introspected after mixin introspection {}"
     					+ " - reload triggered", spec.getCorrespondingClass());
-    			invalidateCache(spec.getCorrespondingClass());
+    			//invalidateCache(spec.getCorrespondingClass());
     			//reloadSpecification(spec.getCorrespondingClass());
         	});
 
-//debug
-//        var mmService = new MetaModelServiceDefault(()->this, GridService.NOOP);
-//		var dto = mmService.getDomainModel();
-//		System.err.println(YamlUtils.toStringUtf8(dto, JsonUtils::onlyIncludeNonNull));
-
-        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
+        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL); //TODO no mixins required either
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
                 specs.entitySpecs(), IntrospectionRequest.FULL);
         introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL);
@@ -307,7 +313,7 @@ implements
 
         var snapshot = snapshotSpecifications();
         snapshot.stream()
-	        .filter(spec->spec.beanSort().isMixin())
+	        .filter(ObjectSpecificationBuilder::isMixin)
 	        .filter(spec->!spec.isFullyIntrospected())
 	        .forEach(spec->{
 	        	log.warn("Mixin was missing during first pass {}."
@@ -315,10 +321,14 @@ implements
 	        			+ "make sure it is discovered by Spring.", spec);
 	        });
 
-        if(isFullIntrospect()) {
+        //if(isFullIntrospect())  //TODO enforced, otherwise types discovered during introspection never get fully introspected (bug) 
+        {
             log.info(" - introspecting types not initially discovered by Spring {}", snapshot.size());
-            introspect(snapshot.filter(spec->!spec.beanSort().isMixin()), IntrospectionRequest.FULL);
+            introspect(snapshot.filter(spec->!spec.isMixin()), IntrospectionRequest.FULL);
         }
+
+      //debug
+        //System.err.println(Mm2YamlUtils.toYaml(snapshotSpecifications()));
 
         log.info(" - running remaining validators");
         getOrAssessValidationResult(); // as a side effect memoizes the validation result
@@ -614,7 +624,14 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        spec.introspect(request);
+        if(phase == Phase.DURING_MIXINS
+        		&& request==IntrospectionRequest.FULL
+        		&& !spec.isMixin()) {
+        	// don't allow the side-effect of fully introspecting other types during mixin introspection
+        	spec.introspect(IntrospectionRequest.TYPE_ONLY);
+        } else {
+        	spec.introspect(request);
+        }
 
         if(spec.aliases().isNotEmpty()
             // this bool. expr. is an optimization, not strictly required ... a bit of hack though
