@@ -66,7 +66,8 @@ storage-strategy
 |  IN_MEMORY
 | Selects the built-in replay mapping listener storage strategy.
 `IN_MEMORY` provides instance-scoped mappings when no application listener exists.
-`PERSISTENT` suppresses the in-memory listener; persistent storage is supplied by the later commandlog persistence reconciliation.
+`PERSISTENT` uses the commandlog JPA module to retain identity and changed mappings across application restarts, including the originating command interaction id when available.
+Persistent mode requires a `CommandReplayResultMappingRepository`; without one, no built-in listener is installed.
 Applications can provide a `CommandReplayMappingListener` bean to replace the built-in listener.
 
 

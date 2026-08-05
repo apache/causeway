@@ -3696,7 +3696,8 @@ public record CausewayConfiguration(
             public record ReplayResultMapping(
                 /**
                  * Storage strategy for the built-in listener.
-                 * Persistent storage is implemented by the commandlog persistence extensions.
+                 * Persistent storage requires the commandlog JPA persistence module or an
+                 * application-provided replay-result mapping repository.
                  */
                 @DefaultValue("IN_MEMORY")
                 StorageStrategy storageStrategy,

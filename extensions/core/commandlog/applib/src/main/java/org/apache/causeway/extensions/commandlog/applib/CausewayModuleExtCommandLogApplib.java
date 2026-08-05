@@ -35,6 +35,8 @@ import org.apache.causeway.extensions.commandlog.applib.contributions.Object_rec
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandReplayResultMapping_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
@@ -73,6 +75,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogEntry_childCommands.class,
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
+        CommandReplayResultMapping_delete.class,
         ReplayableCommand_makeExportable.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_openTarget.class,
@@ -103,6 +106,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogPauseStateListener.class,
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+        CommandReplayResultMapping.TableColumnOrderDefault.class,
         ResultRemappingService.class,
         CommandReplayMappingListenerInMemory.BeanFactory.class,
 

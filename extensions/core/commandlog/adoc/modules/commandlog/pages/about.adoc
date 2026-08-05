@@ -103,6 +103,35 @@ causeway:
 +
 See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.publish-policy[causeway.extensions.command-log.publish-policy] configuration property for more details.
 
+=== Persistent Replay-result Mappings
+
+Command replay can observe that an object recorded with one bookmark on the source system was created with another bookmark locally.
+By default these replay-result mappings are held in memory for the lifetime of the application instance.
+To retain mappings across restarts, select persistent storage:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  extensions:
+    command-log:
+      replay-result-mapping:
+        storage-strategy: PERSISTENT
+        on-conflict-policy: THROW_EXCEPTION
+----
+
+Persistent mapping requires the `causeway-extensions-commandlog-persistence-jpa` dependency and its additive `CommandReplayResultMapping` database table.
+Causeway 4's commandlog persistence adapter is JPA-only; the JDO adapter removed for Causeway 4 is not restored by this feature.
+
+The first observed mapping for a recorded bookmark is authoritative.
+Repeated observations of the same actual bookmark are idempotent and retain the original command interaction id.
+A different later result either fails and rolls back replay (`THROW_EXCEPTION`) or is logged and ignored (`LOG_AND_CONTINUE`).
+Identity mappings are stored as well as changed mappings.
+
+When the repository is available, the commandlog menu provides prototyping actions to list all or changed mappings, find mappings by recorded or actual bookmark, and delete all mappings.
+Each mapping can also be inspected and deleted individually.
+An application-defined `CommandReplayMappingListener` bean remains authoritative and causes both built-in listeners to back off.
+
 
 [#menubar-layout-xml]
 === menubar.layout.xml
@@ -299,4 +328,3 @@ include::partial$commandsubscriber-vs-executionsubscriber.adoc[]
 * xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI
 * xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
 * xref:executionlog:about.adoc[] extension
-

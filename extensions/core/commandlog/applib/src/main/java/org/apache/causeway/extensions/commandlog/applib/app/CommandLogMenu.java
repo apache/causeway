@@ -42,12 +42,16 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
@@ -77,8 +81,10 @@ public class CommandLogMenu {
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
     private final CommandLogEntryRepository commandLogEntryRepository;
+    private final Optional<CommandReplayResultMappingRepository> commandReplayResultMappingRepository;
     private final ClockService clockService;
     private final ReplayContext replayContext;
+    private final MessageService messageService;
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -150,6 +156,123 @@ public class CommandLogMenu {
 
         @MemberSupport public List<? extends CommandLogEntry> act() {
             return commandLogEntryRepository.findAll();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class)
+    @ActionLayout(cssClassFa = "fa-search", sequence = "52")
+    public class findReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappings> { }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act() {
+            return commandReplayResultMappingRepository
+                    .map(CommandReplayResultMappingRepository::findAll)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findChangedReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class)
+    @ActionLayout(cssClassFa = "fa-search", sequence = "53")
+    public class findChangedReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<findChangedReplayResultMappings> { }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act() {
+            return commandReplayResultMappingRepository
+                    .map(CommandReplayResultMappingRepository::findChanged)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappingByRecordedBookmark.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class)
+    @ActionLayout(cssClassFa = "fa-search", sequence = "54")
+    public class findReplayResultMappingByRecordedBookmark {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappingByRecordedBookmark> { }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act(
+                @Parameter(optionality = Optionality.MANDATORY)
+                final Bookmark recordedBookmark) {
+            return commandReplayResultMappingRepository
+                    .flatMap(repository -> repository.findByRecordedBookmark(recordedBookmark))
+                    .map(List::of)
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findReplayResultMappingsByActualBookmark.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            typeOf = CommandReplayResultMapping.class)
+    @ActionLayout(cssClassFa = "fa-search", sequence = "55")
+    public class findReplayResultMappingsByActualBookmark {
+        public class DomainEvent extends ActionDomainEvent<findReplayResultMappingsByActualBookmark> { }
+
+        @MemberSupport public List<? extends CommandReplayResultMapping> act(
+                @Parameter(optionality = Optionality.MANDATORY)
+                final Bookmark actualBookmark) {
+            return commandReplayResultMappingRepository
+                    .map(repository -> repository.findByActualBookmark(actualBookmark))
+                    .orElseGet(List::of);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
+        }
+    }
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = deleteReplayResultMappings.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    @ActionLayout(cssClassFa = "fa-trash", sequence = "56")
+    public class deleteReplayResultMappings {
+        public class DomainEvent extends ActionDomainEvent<deleteReplayResultMappings> { }
+
+        @MemberSupport public void act() {
+            commandReplayResultMappingRepository.ifPresent(repository -> {
+                var count = repository.findAll().size();
+                repository.removeAll();
+                messageService.informUser("Deleted %d command replay result mapping%s"
+                        .formatted(count, count == 1 ? "" : "s"));
+            });
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return commandReplayResultMappingRepository.isEmpty();
         }
     }
 
