@@ -21,11 +21,11 @@
         <bs:col span="12">
             <bs:tabGroup>
                 <bs:tab name="Record/Replay">
-                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="pendingOrFailed"/></bs:col></bs:row>
+                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="pendingOrFailed"><cpt:action id="importCommands"/></cpt:collection></bs:col></bs:row>
                     <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="recordedOrReplayed"/></bs:col></bs:row>
                 </bs:tab>
                 <bs:tab name="Sequence">
-                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="100" id="commandsInSequence"/></bs:col></bs:row>
+                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="100" id="commandsInSequence"><cpt:action id="exportSequence"/></cpt:collection></bs:col></bs:row>
                     <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="excluded"/></bs:col></bs:row>
                 </bs:tab>
             </bs:tabGroup>

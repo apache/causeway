@@ -22,6 +22,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -31,6 +32,7 @@ import jakarta.xml.bind.Unmarshaller;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -178,6 +180,81 @@ public final class CommandDtoUtils {
     	return YamlUtils.tryReadAsList(CommandDto.class, commandDtosYaml, yamlReadCustomizer)
 			.getValue()
 			.orElseGet(Collections::emptyList);
+    }
+
+    /**
+     * Decodes the explicit multi-document formats accepted by command replay import.
+     *
+     * <p>The canonical {@link CommandExportDto} envelope is attempted first so optional
+     * result bookmarks remain available to the importer. Legacy multi-document
+     * {@link CommandDto} input remains supported, while YAML list roots are deliberately
+     * rejected. The more permissive {@link #fromYaml(DataSource)} API is unchanged.
+     *
+     * @since 4.0 {@index}
+     */
+    public List<ImportedCommandDto> fromYamlForReplay(final DataSource commandDtosYaml) {
+        final String yaml = commandDtosYaml.tryReadAsStringUtf8()
+                .ifFailureFail()
+                .getValue()
+                .orElse("");
+        failIfYamlListRoot(yaml);
+
+        Try<List<CommandExportDto>> wrappedAttempt = tryReadMultiDocument(CommandExportDto.class, yaml);
+        final var wrapped = wrappedAttempt.getValue().orElseGet(Collections::emptyList);
+        if (wrapped.stream().anyMatch(export -> export != null && export.getCommand() != null)) {
+            return wrapped.stream()
+                    .filter(Objects::nonNull)
+                    .filter(export -> export.getCommand() != null)
+                    .map(export -> ImportedCommandDto.of(
+                            export.getCommand(),
+                            export.getResult() != null ? export.getResult().toBookmark() : null))
+                    .toList();
+        }
+        if (wrappedAttempt.isSuccess()) {
+            wrappedAttempt = Try.failure(new IllegalArgumentException(
+                    "YAML does not contain any CommandExportDto documents with embedded commands"));
+        }
+
+        final Try<List<CommandDto>> legacyAttempt = tryReadMultiDocument(CommandDto.class, yaml);
+        if (legacyAttempt.isSuccess()) {
+            return legacyAttempt.getValue().orElseGet(Collections::emptyList).stream()
+                    .filter(Objects::nonNull)
+                    .map(command -> ImportedCommandDto.of(command, null))
+                    .toList();
+        }
+
+        final Throwable legacyFailure = legacyAttempt.getFailure()
+                .orElseGet(() -> new IllegalArgumentException("Unable to decode command replay YAML"));
+        wrappedAttempt.getFailure().ifPresent(legacyFailure::addSuppressed);
+        if (legacyFailure instanceof RuntimeException runtimeException) {
+            throw runtimeException;
+        }
+        throw new IllegalArgumentException("Unable to decode command replay YAML", legacyFailure);
+    }
+
+    private <T> Try<List<T>> tryReadMultiDocument(
+            final Class<T> elementType,
+            final String yaml) {
+        final var yamlReadCustomizer = CommandDtoJacksonSupport.yamlReadCustomizer();
+        return YamlUtils.tryReadMultiDoc(DataSource.ofStringUtf8(yaml))
+                .mapSuccessAsNullable(documents -> documents
+                        .map(document -> YamlUtils.tryRead(
+                                elementType,
+                                DataSource.ofStringUtf8(document),
+                                yamlReadCustomizer)
+                                .ifFailureFail()
+                                .getValue()
+                                .orElse(null))
+                        .filter(Objects::nonNull)
+                        .toList());
+    }
+
+    private void failIfYamlListRoot(final String yaml) {
+        final String stripped = yaml.stripLeading();
+        if (stripped.startsWith("- ") || stripped.startsWith("-\n") || stripped.startsWith("-\r\n")) {
+            throw new IllegalArgumentException(
+                    "Command replay import requires multi-document YAML, not a YAML list");
+        }
     }
 
     /**

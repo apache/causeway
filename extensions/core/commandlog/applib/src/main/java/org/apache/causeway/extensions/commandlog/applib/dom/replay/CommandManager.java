@@ -53,6 +53,9 @@ public class CommandManager implements ViewModel, HasBaseline, HasLimit, Command
             CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandManager";
     public static final int DEFAULT_LIMIT = 100;
 
+    public static abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+
     private final Timestamp baseline;
     private final int limit;
     private final ReplayContext replayContext;
@@ -142,6 +145,11 @@ public class CommandManager implements ViewModel, HasBaseline, HasLimit, Command
 
     @Override public String viewModelMemento() {
         return new State(baseline, limit).toMemento();
+    }
+
+    @Programmatic
+    ReplayContext replayContext() {
+        return replayContext;
     }
 
     @Override

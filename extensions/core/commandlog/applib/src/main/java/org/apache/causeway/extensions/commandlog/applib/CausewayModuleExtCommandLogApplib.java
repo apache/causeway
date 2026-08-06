@@ -48,6 +48,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSequence;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
@@ -118,6 +120,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         HasBaseline_previousHour.class,
         HasBaseline_nextHour.class,
         HasLimit_changeLimit.class,
+        CommandManager_exportSequence.class,
+        CommandManager_importCommands.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,

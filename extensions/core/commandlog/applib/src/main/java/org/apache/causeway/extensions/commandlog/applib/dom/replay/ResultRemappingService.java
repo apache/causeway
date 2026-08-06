@@ -66,6 +66,18 @@ public record ResultRemappingService(
     }
 
     @Programmatic
+    public CommandDtoUtils.CommandExportDto remapped(
+            final CommandDtoUtils.CommandExportDto recordedExportDto) {
+        if (recordedExportDto == null) {
+            return null;
+        }
+        var exportCopy = new CommandDtoUtils.CommandExportDto();
+        exportCopy.setCommand(remapped(recordedExportDto.getCommand()));
+        exportCopy.setResult(copyAndRemap(recordedExportDto.getResult()));
+        return exportCopy;
+    }
+
+    @Programmatic
     public Optional<Bookmark> lookup(final Bookmark recordedBookmark) {
         if (recordedBookmark == null) {
             return Optional.empty();
@@ -129,8 +141,28 @@ public record ResultRemappingService(
                 .ifPresent(replacement -> copyToOid(replacement, oidDto));
     }
 
+    private CommandDtoUtils.BookmarkDto copyAndRemap(
+            final CommandDtoUtils.BookmarkDto recordedBookmarkDto) {
+        if (recordedBookmarkDto == null) {
+            return null;
+        }
+        var bookmarkCopy = new CommandDtoUtils.BookmarkDto();
+        bookmarkCopy.setType(recordedBookmarkDto.getType());
+        bookmarkCopy.setId(recordedBookmarkDto.getId());
+        lookup(recordedBookmarkDto.toBookmark())
+                .ifPresent(replacement -> copyToBookmarkDto(replacement, bookmarkCopy));
+        return bookmarkCopy;
+    }
+
     private static void copyToOid(final Bookmark bookmark, final OidDto oidDto) {
         oidDto.setType(bookmark.logicalTypeName());
         oidDto.setId(bookmark.identifier());
+    }
+
+    private static void copyToBookmarkDto(
+            final Bookmark bookmark,
+            final CommandDtoUtils.BookmarkDto bookmarkDto) {
+        bookmarkDto.setType(bookmark.logicalTypeName());
+        bookmarkDto.setId(bookmark.identifier());
     }
 }

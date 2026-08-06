@@ -25,6 +25,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils.CommandExportDto;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListener;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -70,6 +71,61 @@ class ResultRemappingServiceTest {
         assertThat(target(execution)).isEqualTo(bookmark("demo.Customer", "1"));
         assertThat(referenceParameter(execution)).isEqualTo(bookmark("demo.Customer", "1"));
         assertThat(stringParameter(execution)).isEqualTo("unchanged");
+    }
+
+    @Test
+    void remapsExportInputsAndResultOnIndependentEnvelopeCopy() {
+        var listener = listenerMapping("demo.Customer", "1", "demo.Customer", "2");
+        var service = new ResultRemappingService(List.of(listener));
+        var recordedCommand = actionCommand();
+        var recordedExport = CommandExportDto.of(
+                recordedCommand, bookmark("demo.Customer", "1"));
+
+        var remappedExport = service.remapped(recordedExport);
+
+        assertThat(remappedExport).isNotSameAs(recordedExport);
+        assertThat(remappedExport.getCommand()).isNotSameAs(recordedCommand);
+        assertThat(target(remappedExport.getCommand())).isEqualTo(bookmark("demo.Customer", "2"));
+        assertThat(referenceParameter(remappedExport.getCommand()))
+                .isEqualTo(bookmark("demo.Customer", "2"));
+        assertThat(remappedExport.getResult().toBookmark())
+                .isEqualTo(bookmark("demo.Customer", "2"));
+        assertThat(target(recordedCommand)).isEqualTo(bookmark("demo.Customer", "1"));
+        assertThat(referenceParameter(recordedCommand)).isEqualTo(bookmark("demo.Customer", "1"));
+        assertThat(recordedExport.getResult().toBookmark())
+                .isEqualTo(bookmark("demo.Customer", "1"));
+    }
+
+    @Test
+    void exportRemappingRetainsUnmappedValuesAndNullResult() {
+        var service = new ResultRemappingService(List.of());
+        var recordedCommand = actionCommand();
+        var recordedExport = CommandExportDto.of(recordedCommand, null);
+
+        var remappedExport = service.remapped(recordedExport);
+
+        assertThat(target(remappedExport.getCommand())).isEqualTo(bookmark("demo.Customer", "1"));
+        assertThat(referenceParameter(remappedExport.getCommand()))
+                .isEqualTo(bookmark("demo.Customer", "1"));
+        assertThat(remappedExport.getResult()).isNull();
+        assertThat(service.remapped((CommandExportDto) null)).isNull();
+    }
+
+    @Test
+    void exportRemappingContinuesAfterListenerFailure() {
+        var failing = mock(CommandReplayMappingListener.class);
+        var recorded = bookmark("demo.Customer", "1");
+        when(failing.lookup(recorded)).thenThrow(new IllegalStateException("lookup failed"));
+        var succeeding = listenerMapping("demo.Customer", "1", "demo.Customer", "2");
+        var service = new ResultRemappingService(List.of(failing, succeeding));
+
+        var remappedExport = service.remapped(CommandExportDto.of(actionCommand(), recorded));
+
+        assertThat(target(remappedExport.getCommand())).isEqualTo(bookmark("demo.Customer", "2"));
+        assertThat(referenceParameter(remappedExport.getCommand()))
+                .isEqualTo(bookmark("demo.Customer", "2"));
+        assertThat(remappedExport.getResult().toBookmark())
+                .isEqualTo(bookmark("demo.Customer", "2"));
     }
 
     @Test

@@ -99,8 +99,40 @@ class ReplayableCommandPresentationTest {
                 ReplayableCommand_openTargetTR.class);
     }
 
+    @Test
+    void unifiedManagerLayoutExposesOnlyCurrentExportImportControls() throws Exception {
+        var layout = managerResource("CommandManager.layout.fallback.xml");
+
+        assertThat(layout).contains(
+                "id=\"baseline\"", "id=\"limit\"",
+                "id=\"commandsInSequence\"", "id=\"excluded\"",
+                "id=\"pendingOrFailed\"", "id=\"recordedOrReplayed\"",
+                "id=\"exportSequence\"", "id=\"importCommands\"");
+        assertThat(layout.indexOf("id=\"pendingOrFailed\"")).isLessThan(
+                layout.indexOf("id=\"importCommands\""));
+        assertThat(layout.indexOf("id=\"commandsInSequence\"")).isLessThan(
+                layout.indexOf("id=\"exportSequence\""));
+        assertThat(layout).doesNotContain(
+                "excludeCommands", "restoreCommands", "deleteCommands",
+                "moveCommands", "retimestampCommands", "replaySequence",
+                "waitForBackground", "backgroundGate");
+
+        var imports = List.of(CausewayModuleExtCommandLogApplib.class
+                .getAnnotation(Import.class).value());
+        assertThat(imports).contains(
+                CommandManager_exportSequence.class,
+                CommandManager_importCommands.class);
+    }
+
     private static String resource(final String name) throws IOException {
         try (var stream = ReplayableCommand.class.getResourceAsStream(name)) {
+            assertThat(stream).as(name).isNotNull();
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private static String managerResource(final String name) throws IOException {
+        try (var stream = CommandManager.class.getResourceAsStream(name)) {
             assertThat(stream).as(name).isNotNull();
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }
