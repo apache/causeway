@@ -77,6 +77,10 @@ class CommandManagerCompatibilityTest {
                 HasLimit_changeLimit.class,
                 CommandManager_exportSequence.class,
                 CommandManager_importCommands.class,
+                CommandManager_excludeCommands.class,
+                CommandManager_unexcludeCommands.class,
+                CommandManager_deleteCommands.class,
+                CommandManager_moveCommands.class,
                 CommandExportManager.openCommandManager.class,
                 CommandReplayManager.openCommandManager.class);
     }

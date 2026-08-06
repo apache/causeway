@@ -25,8 +25,8 @@
                     <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="recordedOrReplayed"/></bs:col></bs:row>
                 </bs:tab>
                 <bs:tab name="Sequence">
-                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="100" id="commandsInSequence"><cpt:action id="exportSequence"/></cpt:collection></bs:col></bs:row>
-                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="excluded"/></bs:col></bs:row>
+                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="100" id="commandsInSequence"><cpt:action id="exportSequence"/><cpt:action id="excludeCommands"/><cpt:action id="moveCommands"/></cpt:collection></bs:col></bs:row>
+                    <bs:row><bs:col span="12"><cpt:collection defaultView="table" paged="15" id="excluded"><cpt:action id="unexcludeCommands"/><cpt:action id="deleteCommands"/></cpt:collection></bs:col></bs:row>
                 </bs:tab>
             </bs:tabGroup>
         </bs:col>

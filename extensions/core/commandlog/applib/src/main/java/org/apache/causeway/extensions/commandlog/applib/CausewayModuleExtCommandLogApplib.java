@@ -48,8 +48,12 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_deleteCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_excludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSequence;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_moveCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_unexcludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
@@ -122,6 +126,10 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         HasLimit_changeLimit.class,
         CommandManager_exportSequence.class,
         CommandManager_importCommands.class,
+        CommandManager_excludeCommands.class,
+        CommandManager_unexcludeCommands.class,
+        CommandManager_deleteCommands.class,
+        CommandManager_moveCommands.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,

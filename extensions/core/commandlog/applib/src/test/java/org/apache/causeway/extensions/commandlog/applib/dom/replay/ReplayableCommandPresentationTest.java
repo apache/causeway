@@ -28,6 +28,10 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,28 +104,42 @@ class ReplayableCommandPresentationTest {
     }
 
     @Test
-    void unifiedManagerLayoutExposesOnlyCurrentExportImportControls() throws Exception {
+    void unifiedManagerLayoutExposesExportImportAndW1CollectionWorkflows() throws Exception {
         var layout = managerResource("CommandManager.layout.fallback.xml");
 
         assertThat(layout).contains(
                 "id=\"baseline\"", "id=\"limit\"",
                 "id=\"commandsInSequence\"", "id=\"excluded\"",
                 "id=\"pendingOrFailed\"", "id=\"recordedOrReplayed\"",
-                "id=\"exportSequence\"", "id=\"importCommands\"");
+                "id=\"exportSequence\"", "id=\"importCommands\"",
+                "id=\"excludeCommands\"", "id=\"unexcludeCommands\"",
+                "id=\"deleteCommands\"", "id=\"moveCommands\"");
         assertThat(layout.indexOf("id=\"pendingOrFailed\"")).isLessThan(
                 layout.indexOf("id=\"importCommands\""));
         assertThat(layout.indexOf("id=\"commandsInSequence\"")).isLessThan(
                 layout.indexOf("id=\"exportSequence\""));
         assertThat(layout).doesNotContain(
-                "excludeCommands", "restoreCommands", "deleteCommands",
-                "moveCommands", "retimestampCommands", "replaySequence",
+                "moveCommandsUp", "moveCommandsDown", "retimestampCommands", "replaySequence",
+                "replayMultiple", "recordingCompletion", "replayCompletion",
                 "waitForBackground", "backgroundGate");
 
         var imports = List.of(CausewayModuleExtCommandLogApplib.class
                 .getAnnotation(Import.class).value());
         assertThat(imports).contains(
                 CommandManager_exportSequence.class,
-                CommandManager_importCommands.class);
+                CommandManager_importCommands.class,
+                CommandManager_excludeCommands.class,
+                CommandManager_unexcludeCommands.class,
+                CommandManager_deleteCommands.class,
+                CommandManager_moveCommands.class);
+    }
+
+    @Test
+    void w1ActionsArePrototypingCollectionActionsWithPublishingSuppressed() {
+        assertW1Action(CommandManager_excludeCommands.class, "commandsInSequence", "btn-secondary");
+        assertW1Action(CommandManager_moveCommands.class, "commandsInSequence", "btn-secondary");
+        assertW1Action(CommandManager_unexcludeCommands.class, "excluded", "btn-secondary");
+        assertW1Action(CommandManager_deleteCommands.class, "excluded", "btn-danger");
     }
 
     private static String resource(final String name) throws IOException {
@@ -136,5 +154,18 @@ class ReplayableCommandPresentationTest {
             assertThat(stream).as(name).isNotNull();
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }
+    }
+
+    private static void assertW1Action(
+            final Class<?> type,
+            final String association,
+            final String cssClass) {
+        final var action = type.getAnnotation(Action.class);
+        final var layout = type.getAnnotation(ActionLayout.class);
+        assertThat(action.restrictTo()).isEqualTo(RestrictTo.PROTOTYPING);
+        assertThat(action.commandPublishing()).isEqualTo(Publishing.DISABLED);
+        assertThat(action.executionPublishing()).isEqualTo(Publishing.DISABLED);
+        assertThat(layout.associateWith()).isEqualTo(association);
+        assertThat(layout.cssClass()).isEqualTo(cssClass);
     }
 }
