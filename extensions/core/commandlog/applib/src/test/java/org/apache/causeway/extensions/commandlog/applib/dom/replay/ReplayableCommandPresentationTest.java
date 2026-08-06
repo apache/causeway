@@ -70,6 +70,22 @@ class ReplayableCommandPresentationTest {
     }
 
     @Test
+    void knownParticipantsFollowsResultPresenceInReplayableAndManagerTables() throws Exception {
+        var replayableColumns = resource("ReplayableCommand.columnOrder.fallback.txt").lines().toList();
+
+        assertThat(replayableColumns).containsSubsequence("hasResult", "knownParticipants");
+        for (var collection : List.of(
+                "commandsInSequence", "excluded", "pendingOrFailed", "recordedOrReplayed")) {
+            var columns = resource("CommandManager#" + collection + ".columnOrder.fallback.txt")
+                    .lines().toList();
+            assertThat(columns).containsSubsequence("hasResult", "knownParticipants");
+        }
+        var layout = ReplayableCommand.class.getMethod("isKnownParticipants")
+                .getAnnotation(PropertyLayout.class);
+        assertThat(layout.hidden()).isEqualTo(Where.OBJECT_FORMS);
+    }
+
+    @Test
     void moduleRegistersParticipantAndNavigationButNotLegacyTargetMixins() {
         var imports = List.of(CausewayModuleExtCommandLogApplib.class
                 .getAnnotation(Import.class).value());
