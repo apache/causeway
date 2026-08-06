@@ -37247,8 +37247,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="1"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37334,8 +37334,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="2"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37421,8 +37421,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="3"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37508,8 +37508,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="4"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37595,8 +37595,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="5"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37682,8 +37682,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="6"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37769,8 +37769,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="7"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -37856,8 +37856,8 @@
                         <mml:attr name="precedence" value="LOW"/>
                         <mml:attr name="sequence" value="8"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -39290,8 +39290,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -39468,8 +39468,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -39646,8 +39646,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -39824,8 +39824,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -40002,8 +40002,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -40180,8 +40180,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -40358,8 +40358,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -40536,8 +40536,8 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
-                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
