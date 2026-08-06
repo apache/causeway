@@ -125,12 +125,12 @@ The unified manager SHALL supply each replayable command it creates with the man
 - **THEN** its baseline-and-limit memento remains unchanged
 
 ### Requirement: Fallback presentation exposes P2 review metadata only
-The manager fallback layout SHALL expose baseline and limit with their state controls and SHALL present all four collections as sequence and replay review surfaces. Manager collection tables SHALL identify commands using interaction id, timestamp, member, replay state, result presence, and known-participants status, with known participants immediately after result presence. The layout SHALL expose E1 sequence-export and replay-import actions. The layout MUST NOT expose workflow mutation, replay gates, or background-gate controls.
+The manager fallback layout SHALL expose baseline and limit with their state controls and SHALL present all four collections as sequence and replay review surfaces. Manager collection tables SHALL identify commands using interaction id, timestamp, member, replay state, result presence, and known-participants status, with known participants immediately after result presence. The layout SHALL expose E1 sequence-export and replay-import actions. It SHALL expose W1 exclusion and movement actions with `commandsInSequence` and W1 restoration and deletion actions with `excluded`. The layout MUST NOT expose replay-multiple controls, recording background-completion gates, or replay background-completion gates.
 
-#### Scenario: Unified manager layout includes E1 actions
+#### Scenario: Unified manager layout includes W1 workflows
 - **WHEN** the manager is rendered from fallback layout metadata
-- **THEN** baseline, limit, all four collections, P1 identification columns, R2 known-participants status, and E1 export/import actions are visible
-- **AND** controls owned by W1 and B1/B2 are absent
+- **THEN** baseline, limit, all four collections, P1 identification columns, R2 known-participants status, E1 export/import actions, and W1 exclusion, restoration, deletion, and movement actions are visible
+- **AND** controls owned by B1/B2 are absent
 
 ### Requirement: Unified manager exports a result-bearing command sequence
 The unified manager SHALL provide a prototyping `exportSequence` action associated with `commandsInSequence`. The action SHALL serialize the implicit known-participant sequence in manager order as multi-document `CommandExportDto` YAML, embedding each recorded command and its optional result bookmark. It SHALL support a filename prefix defaulting to `commands`, an optional sanitized timestamp suffix derived from the first exported command, and optional export remapping. Export MUST NOT mutate command DTOs, results, timestamps, replay states, repository membership, baseline, or limit.
