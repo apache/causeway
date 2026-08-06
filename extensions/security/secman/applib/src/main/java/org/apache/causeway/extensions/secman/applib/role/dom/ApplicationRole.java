@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
@@ -60,7 +61,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
         iconUiEvent = ApplicationRole.IconUiEvent.class,
         cssClassUiEvent = ApplicationRole.CssClassUiEvent.class,
         layoutUiEvent = ApplicationRole.LayoutUiEvent.class)
-public interface ApplicationRole extends Comparable<ApplicationRole> {
+public interface ApplicationRole extends Comparable<ApplicationRole>, RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;

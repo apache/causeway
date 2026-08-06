@@ -41,6 +41,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.user.RoleMemento;
@@ -76,7 +77,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
         layoutUiEvent = ApplicationUser.LayoutUiEvent.class)
 public interface ApplicationUser
-        extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
+        extends HasUsername, HasAtPath, Comparable<ApplicationUser>, RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;

@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
@@ -60,7 +61,7 @@ import lombok.experimental.UtilityClass;
         iconUiEvent = ApplicationTenancy.IconUiEvent.class,
         cssClassUiEvent = ApplicationTenancy.CssClassUiEvent.class,
         layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class)
-public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
+public interface ApplicationTenancy extends Comparable<ApplicationTenancy>, RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;

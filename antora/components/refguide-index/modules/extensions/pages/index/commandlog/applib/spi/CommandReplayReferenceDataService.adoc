@@ -1,0 +1,31 @@
+= CommandReplayReferenceDataService
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Classifies bookmarked entities whose logical type and identifier are stable and expected to exist in every command replay environment.
+
+Applications can register zero or more implementations.
+Classification uses OR semantics: a bookmark is reference data when any implementation accepts it.
+A null bookmark, no services, or no accepting service returns `false`; classifier failures remain visible.
+
+The commandlog module registers `CommandReplayReferenceDataServiceForRefData` by default.
+It resolves the bookmark through the metamodel and accepts the corresponding class when it implements `RefData`, without loading or instantiating the bookmarked object.
+
+SecMan's `ApplicationUser`, `ApplicationRole`, `ApplicationTenancy`, and `ApplicationPermission` abstractions implement `RefData`.
+Replay deployments therefore need to provision matching SecMan identities in every environment.
+
+Reference-data classification alone does not change exportability or command-manager collections.
+Known-participant and reachability integration is provided by the later export-reachability capability.
+
+== API
+
+[source,java]
+.CommandReplayReferenceDataService.java
+----
+interface CommandReplayReferenceDataService {
+  boolean isReferenceData(Bookmark bookmark);
+
+  static boolean isReferenceData(
+      List<? extends CommandReplayReferenceDataService> services,
+      Bookmark bookmark);
+}
+----

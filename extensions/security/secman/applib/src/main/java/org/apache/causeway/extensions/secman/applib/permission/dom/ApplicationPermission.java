@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
@@ -89,7 +90,7 @@ import lombok.experimental.UtilityClass;
         iconUiEvent = ApplicationPermission.IconUiEvent.class,
         cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
         layoutUiEvent = ApplicationPermission.LayoutUiEvent.class)
-public interface ApplicationPermission extends Comparable<ApplicationPermission> {
+public interface ApplicationPermission extends Comparable<ApplicationPermission>, RefData {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
