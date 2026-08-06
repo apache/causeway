@@ -70,7 +70,35 @@ class CommandLogEntryAdjacentQuery_IntegTest extends CausewayIntegrationTestAbst
                 .containsExactly(second, first);
     }
 
+    @Test
+    void unifiedManagerQueriesUseInclusiveBaselineStateSetsAndOrdering() {
+        var before = persist("2026-08-05T09:59:59Z", ExecuteIn.FOREGROUND, ReplayState.EXCLUDED);
+        var undefined = persist("2026-08-05T10:00:00Z", ExecuteIn.FOREGROUND, ReplayState.UNDEFINED);
+        var exported = persist("2026-08-05T10:01:00Z", ExecuteIn.FOREGROUND, ReplayState.EXPORTED);
+        var pending = persist("2026-08-05T10:02:00Z", ExecuteIn.FOREGROUND, ReplayState.PENDING);
+        var ok = persist("2026-08-05T10:03:00Z", ExecuteIn.FOREGROUND, ReplayState.OK);
+        var failed = persist("2026-08-05T10:04:00Z", ExecuteIn.FOREGROUND, ReplayState.FAILED);
+        var excluded = persist("2026-08-05T10:05:00Z", ExecuteIn.FOREGROUND, ReplayState.EXCLUDED);
+        persist("2026-08-05T10:06:00Z", ExecuteIn.BACKGROUND, ReplayState.EXCLUDED);
+        var baseline = timestamp("2026-08-05T10:00:00Z");
+
+        assertThat(repository.findForegroundSinceTimestampAndWithReplayExcluded(baseline))
+                .containsExactly(excluded)
+                .doesNotContain(before);
+        assertThat(repository.findForegroundSinceTimestampAndWithReplayPendingOrFailed(baseline))
+                .containsExactly(pending, failed);
+        assertThat(repository.findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(baseline))
+                .containsExactly(undefined, exported, ok);
+    }
+
     private CommandLogEntry persist(final String instant, final ExecuteIn executeIn) {
+        return persist(instant, executeIn, ReplayState.UNDEFINED);
+    }
+
+    private CommandLogEntry persist(
+            final String instant,
+            final ExecuteIn executeIn,
+            final ReplayState replayState) {
         var entry = new CommandLogEntry();
         entry.setInteractionId(UUID.randomUUID());
         entry.setUsername("tester");
@@ -78,7 +106,7 @@ class CommandLogEntryAdjacentQuery_IntegTest extends CausewayIntegrationTestAbst
         entry.setTarget(Bookmark.forLogicalTypeNameAndIdentifier("demo.Customer", "1"));
         entry.setExecuteIn(executeIn);
         entry.setLogicalMemberIdentifier("demo.Customer#update");
-        entry.setReplayState(ReplayState.UNDEFINED);
+        entry.setReplayState(replayState);
         repository.persist(entry);
         return entry;
     }

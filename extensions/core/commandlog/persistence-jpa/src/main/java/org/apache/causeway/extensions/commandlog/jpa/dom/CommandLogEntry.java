@@ -238,6 +238,14 @@ import lombok.Setter;
                   + "   AND cl.timestamp >= :from "
                   + "   AND (cl.replayState = :replayState1 OR cl.replayState = :replayState2) "
                   + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_THREE_REPLAY_STATES,
+            query = "SELECT cl "
+                  + " FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.FOREGROUND "
+                  + "   AND cl.timestamp >= :from "
+                  + "   AND (cl.replayState = :replayState1 OR cl.replayState = :replayState2 OR cl.replayState = :replayState3) "
+                  + " ORDER BY cl.timestamp ASC"),
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

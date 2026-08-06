@@ -63,6 +63,12 @@ public enum ReplayState {
                 || this == ReplayState.FAILED;
     }
 
+    public boolean isReplayable() {
+        return this == ReplayState.PENDING
+                || this == ReplayState.OK
+                || this == ReplayState.FAILED;
+    }
+
     public boolean isOkOrExcluded() {
         return this == ReplayState.OK
                 || this == ReplayState.EXCLUDED;
@@ -83,6 +89,11 @@ public enum ReplayState {
     public static boolean isPendingOrFailed(final @Nullable ReplayState replayState) {
         return replayState != null
                 && replayState.isPendingOrFailed();
+    }
+
+    public static boolean isReplayable(final @Nullable ReplayState replayState) {
+        return replayState != null
+                && replayState.isReplayable();
     }
 
     public static boolean isOkOrExcluded(final @Nullable ReplayState replayState) {

@@ -18,44 +18,32 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.sql.Timestamp;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        restrictTo = RestrictTo.PROTOTYPING,
-        semantics = SemanticsOf.NON_IDEMPOTENT,
+        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_replayOrRetry.DomainEvent.class,
-        executionPublishing = Publishing.DISABLED
-)
+        domainEvent = HasBaseline_previousHour.DomainEvent.class,
+        executionPublishing = Publishing.DISABLED)
 @ActionLayout(
-        sequence = "0.1",
-        cssClassFa = "solid circle-play",
-        cssClass = "btn-primary"
-        //hidden = Where.NOWHERE // show in tables //TODO NPE bug
-)
+        associateWith = "baseline", sequence = "1",
+        named = "-1 hour", position = ActionLayout.Position.PANEL,
+        describedAs = "Move back one hour")
 @RequiredArgsConstructor
-public class ReplayableCommand_replayOrRetry {
+public class HasBaseline_previousHour {
+    public static class DomainEvent extends HasBaseline.ActionDomainEvent<HasBaseline_previousHour> { }
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_replayOrRetry> {
-    }
+    private final HasBaseline hasBaseline;
 
-    private final ReplayableCommand replayableCommand;
-
-    @MemberSupport
-    public ReplayableCommand act() {
-        replayableCommand.tryReplayOrRetry();
-        return replayableCommand;
-    }
-
-    @MemberSupport
-    public String disableAct() {
-        return replayableCommand.disableReplayOrRetry();
+    @MemberSupport public HasBaseline act() {
+        return hasBaseline.withBaseline(Timestamp.from(hasBaseline.getBaseline().toInstant().minusSeconds(3600)));
     }
 }

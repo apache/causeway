@@ -53,6 +53,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 
@@ -85,6 +86,27 @@ public class CommandLogMenu {
     private final ClockService clockService;
     private final ReplayContext replayContext;
     private final MessageService messageService;
+
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = commandManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "solid list", sequence="49")
+    public class commandManager {
+        public class DomainEvent extends ActionDomainEvent<commandManager> { }
+
+        @MemberSupport public CommandManager act(
+                @ParameterLayout(describedAs = "Only foreground commands at or after this timestamp are shown")
+                final Timestamp baseline) {
+            return new CommandManager(baseline, CommandManager.DEFAULT_LIMIT, replayContext);
+        }
+
+        @MemberSupport public Timestamp defaultBaseline() {
+            return truncatedTo(clockService.getClock().nowAsJavaSqlTimestamp(), ChronoUnit.HOURS);
+        }
+    }
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -301,6 +323,10 @@ public class CommandLogMenu {
             final var now = clockService.getClock().nowAsJavaSqlTimestamp();
             return truncatedTo(now, ChronoUnit.HOURS);
         }
+
+        @MemberSupport public boolean hideAct() {
+            return true;
+        }
     }
 
     @Action(
@@ -331,6 +357,10 @@ public class CommandLogMenu {
 
         private CommandReplayManager.importCommands importCommands(final CommandReplayManager commandReplayManager) {
             return factoryService.mixin(CommandReplayManager.importCommands.class, commandReplayManager);
+        }
+
+        @MemberSupport public boolean hideAct() {
+            return true;
         }
     }
 

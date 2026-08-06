@@ -3,6 +3,10 @@
 
 This service exposes a set of menu actions to search and list xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s, by default under the "Activity" secondary menu.
 
+Its prototyping command-manager action is the primary entry point for command sequence review.
+It opens a unified manager at the start of the current hour with a default page limit of 100.
+The former export-manager and replay-manager launch actions remain registered but hidden so existing custom metadata and direct integrations continue to resolve.
+
 == API
 
 [source,java]
@@ -12,4 +16,3 @@ class CommandLogMenu {
   public static final String LOGICAL_TYPE_NAME;
 }
 ----
-

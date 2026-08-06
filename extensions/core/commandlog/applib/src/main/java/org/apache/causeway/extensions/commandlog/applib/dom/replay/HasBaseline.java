@@ -18,25 +18,16 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import org.junit.jupiter.api.Test;
+import java.sql.Timestamp;
 
-import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public interface HasBaseline {
 
-class CommandRecordingSuppressionTest {
+    abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-    @Test
-    void commandlogHelperTypesOptOutOfRecording() {
-        assertThat(isSuppressed(CommandExportManager.class)).isTrue();
-        assertThat(isSuppressed(CommandReplayManager.class)).isTrue();
-        assertThat(isSuppressed(CommandManager.class)).isTrue();
-        assertThat(isSuppressed(ReplayableCommand.class)).isTrue();
-        assertThat(isSuppressed(CommandLogEntry.class)).isTrue();
-    }
+    Timestamp getBaseline();
 
-    private boolean isSuppressed(final Class<?> type) {
-        return CommandRecordingSuppressed.class.isAssignableFrom(type);
-    }
+    HasBaseline withBaseline(Timestamp baseline);
 }

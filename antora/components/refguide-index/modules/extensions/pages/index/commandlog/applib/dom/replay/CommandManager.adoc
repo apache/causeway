@@ -1,0 +1,36 @@
+= CommandManager
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The unified command manager is the primary commandlog surface for reviewing foreground command sequences.
+It is a command-recording-suppressed view model whose bookmark state contains an inclusive baseline timestamp and a page limit, which defaults to 100.
+
+The manager provides four read-only views:
+
+* `commandsInSequence` shows the bounded, eligible, non-excluded foreground sequence.
+* `excluded` shows eligible commands marked `EXCLUDED`.
+* `pendingOrFailed` shows every imported command awaiting replay or retry, including resultless safe actions.
+* `recordedOrReplayed` shows eligible `UNDEFINED`, legacy `EXPORTED`, and successfully replayed `OK` commands.
+
+Replay or retry is available for commands in `PENDING`, `OK`, and `FAILED` states.
+It is unavailable for `UNDEFINED`, `EXPORTED`, and `EXCLUDED` commands.
+Background-completion gating is not part of this manager contract.
+
+Existing `CommandExportManager` and `CommandReplayManager` bookmarks remain valid.
+Both legacy managers provide a safe `openCommandManager` action that transfers their baseline and uses the default limit.
+
+== API
+
+[source,java]
+.CommandManager.java
+----
+class CommandManager implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed {
+  public static final String LOGICAL_TYPE_NAME;
+  public static final int DEFAULT_LIMIT;
+  Timestamp getBaseline();
+  int getLimit();
+  List<ReplayableCommand> getCommandsInSequence();
+  List<ReplayableCommand> getExcluded();
+  List<ReplayableCommand> getPendingOrFailed();
+  List<ReplayableCommand> getRecordedOrReplayed();
+}
+----

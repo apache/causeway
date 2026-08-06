@@ -329,6 +329,20 @@ public record CommandReplayManager(
     }
 
     @Action(
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = openCommandManager.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED)
+    @ActionLayout(sequence = "3", named = "Open Command Manager")
+    public class openCommandManager {
+        public class DomainEvent extends ActionDomainEvent<openCommandManager> { }
+
+        @MemberSupport public CommandManager act() {
+            return new CommandManager(baseline, CommandManager.DEFAULT_LIMIT, replayContext);
+        }
+    }
+
+    @Action(
             restrictTo = RestrictTo.PROTOTYPING,
             choicesFrom = "succeededOrExcluded",
             semantics = SemanticsOf.IDEMPOTENT,

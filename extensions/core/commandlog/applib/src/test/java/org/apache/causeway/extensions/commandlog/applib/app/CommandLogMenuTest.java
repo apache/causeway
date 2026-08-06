@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,16 +34,20 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMapping;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandReplayResultMappingRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class CommandLogMenuTest {
 
@@ -96,6 +102,8 @@ class CommandLogMenuTest {
 
     @Test
     void mappingActionsFollowReplayWorkflowOrder() {
+        assertThat(sequenceOf(CommandLogMenu.commandManager.class))
+                .isLessThan(sequenceOf(CommandLogMenu.exportManager.class));
         assertThat(sequenceOf(CommandLogMenu.exportManager.class))
                 .isLessThan(sequenceOf(CommandLogMenu.replayManager.class));
         assertThat(sequenceOf(CommandLogMenu.replayManager.class))
@@ -108,6 +116,28 @@ class CommandLogMenuTest {
                 .isLessThan(sequenceOf(CommandLogMenu.findReplayResultMappingsByActualBookmark.class));
         assertThat(sequenceOf(CommandLogMenu.findReplayResultMappingsByActualBookmark.class))
                 .isLessThan(sequenceOf(CommandLogMenu.deleteReplayResultMappings.class));
+    }
+
+    @Test
+    void unifiedManagerIsPrimaryAndUsesCurrentHourDefaults() {
+        var now = Instant.parse("2026-08-06T10:37:42Z");
+        var clockService = mock(ClockService.class);
+        var clock = mock(VirtualClock.class);
+        when(clock.nowAsJavaSqlTimestamp()).thenReturn(Timestamp.from(now));
+        when(clockService.getClock()).thenReturn(clock);
+        var context = new ReplayContext(null, null, null, mock(CommandLogEntryRepository.class),
+                null, clockService, null, null, null);
+        var menu = new CommandLogMenu(
+                mock(CommandLogEntryRepository.class), Optional.empty(), clockService, context,
+                mock(MessageService.class));
+        var action = menu.new commandManager();
+
+        assertThat(action.defaultBaseline()).isEqualTo(Timestamp.from(Instant.parse("2026-08-06T10:00:00Z")));
+        var manager = action.act(action.defaultBaseline());
+        assertThat(manager.getBaseline()).isEqualTo(action.defaultBaseline());
+        assertThat(manager.getLimit()).isEqualTo(CommandManager.DEFAULT_LIMIT);
+        assertThat(menu.new exportManager().hideAct()).isTrue();
+        assertThat(menu.new replayManager().hideAct()).isTrue();
     }
 
     private static int sequenceOf(final Class<?> actionClass) {

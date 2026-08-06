@@ -18,44 +18,34 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.sql.Timestamp;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        restrictTo = RestrictTo.PROTOTYPING,
-        semantics = SemanticsOf.NON_IDEMPOTENT,
+        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        domainEvent = ReplayableCommand_replayOrRetry.DomainEvent.class,
-        executionPublishing = Publishing.DISABLED
-)
-@ActionLayout(
-        sequence = "0.1",
-        cssClassFa = "solid circle-play",
-        cssClass = "btn-primary"
-        //hidden = Where.NOWHERE // show in tables //TODO NPE bug
-)
+        domainEvent = HasBaseline_changeBaseline.DomainEvent.class,
+        executionPublishing = Publishing.DISABLED)
+@ActionLayout(associateWith = "baseline", sequence = "2", promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
 @RequiredArgsConstructor
-public class ReplayableCommand_replayOrRetry {
+public class HasBaseline_changeBaseline {
+    public static class DomainEvent extends HasBaseline.ActionDomainEvent<HasBaseline_changeBaseline> { }
 
-    public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_replayOrRetry> {
+    private final HasBaseline hasBaseline;
+
+    @MemberSupport public HasBaseline act(final Timestamp baseline) {
+        return hasBaseline.withBaseline(baseline);
     }
 
-    private final ReplayableCommand replayableCommand;
-
-    @MemberSupport
-    public ReplayableCommand act() {
-        replayableCommand.tryReplayOrRetry();
-        return replayableCommand;
-    }
-
-    @MemberSupport
-    public String disableAct() {
-        return replayableCommand.disableReplayOrRetry();
+    @MemberSupport public Timestamp defaultBaseline() {
+        return hasBaseline.getBaseline();
     }
 }

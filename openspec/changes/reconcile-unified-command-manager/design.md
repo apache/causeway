@@ -40,7 +40,7 @@ Introduce small `HasBaseline` and `HasLimit` contracts and manager mixins for pr
 
 The legacy managers keep their existing controls and mementos. Retrofitting their URLs with a limit was rejected because it would break their compatibility role.
 
-### Define four disjoint review intentions over foreground commands
+### Define four focused review intentions over foreground commands
 
 `commandsInSequence` reads foreground entries at or after the baseline in repository order, applies the page limit at the repository boundary, excludes only `EXCLUDED`, and applies P1 general eligibility. It therefore includes eligible Causeway 4 entries in `UNDEFINED`, `EXPORTED`, `PENDING`, `OK`, and `FAILED` states.
 

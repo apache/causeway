@@ -65,6 +65,29 @@ class CommandLogEntryRepositoryAdjacentQueryTest {
         assertThat(before.getRange().isUnconstrained()).isTrue();
     }
 
+    @Test
+    void selectsUnifiedManagerReplayStateQueries() {
+        var timestamp = Timestamp.valueOf("2026-08-05 12:00:00");
+
+        repository.findForegroundSinceTimestampAndWithReplayExcluded(timestamp);
+        var excluded = captureLastQuery();
+        assertThat(excluded.getName()).isEqualTo(
+                CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE);
+        assertThat(excluded.getParametersByName())
+                .containsEntry("from", timestamp)
+                .containsEntry("replayState", ReplayState.EXCLUDED);
+
+        repository.findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(timestamp);
+        var recorded = captureLastQuery();
+        assertThat(recorded.getName()).isEqualTo(
+                CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_THREE_REPLAY_STATES);
+        assertThat(recorded.getParametersByName())
+                .containsEntry("from", timestamp)
+                .containsEntry("replayState1", ReplayState.UNDEFINED)
+                .containsEntry("replayState2", ReplayState.EXPORTED)
+                .containsEntry("replayState3", ReplayState.OK);
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     private NamedQuery<CommandLogEntry> captureLastQuery() {
         var captor = ArgumentCaptor.forClass(Query.class);

@@ -43,7 +43,12 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_nextHour;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_previousHour;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasLimit_changeLimit;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
@@ -69,6 +74,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogMenu.class,
 
         // viewmodels
+        CommandManager.class,
         CommandReplayManager.class,
         ReplayableCommandParticipant.class,
 
@@ -100,6 +106,12 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandReplayManager.excludeSelectedFromReplay.class,
         CommandReplayManager.deleteSelectedSucceededOrExcluded.class,
         CommandReplayManager.deleteSelectedPendingOrFailed.class,
+        CommandExportManager.openCommandManager.class,
+        CommandReplayManager.openCommandManager.class,
+        HasBaseline_changeBaseline.class,
+        HasBaseline_previousHour.class,
+        HasBaseline_nextHour.class,
+        HasLimit_changeLimit.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,

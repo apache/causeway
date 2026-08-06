@@ -111,6 +111,9 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
         boolean canReplayOrRetryOrMarkForExclusion() {
             return replayState.isPendingOrFailed();
         }
+        boolean canReplayOrRetry() {
+            return replayState.isReplayable();
+        }
         public String faQuickIcon() {
             return switch (replayState) {
                 case UNDEFINED -> "solid terminal .col-indigo";
@@ -455,7 +458,7 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
         if(disableReplayOrRetry()!=null)
             return Try.success(null); // guard against disallowed invocation
         return commandLogEntry()
-            .filter(ReplayableCommand::canReplayOrRetryOrMarkForExclusion)
+            .filter(ReplayableCommand::canReplayOrRetry)
             .map(commandLogEntry -> tryReplay(
                     replayContext.resultRemappingService().remapped(commandLogEntry.getCommandDto()))
                 .mapSuccessAsNullable(__ -> this))
@@ -465,10 +468,10 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
 
     String disableReplayOrRetry() {
         return commandRecord()
-                .map(CommandRecord::canReplayOrRetryOrMarkForExclusion)
+                .map(CommandRecord::canReplayOrRetry)
                 .orElse(false)
                 ? null
-                : "Cannot replay, if neither PENDING nor FAILED";
+                : "Cannot replay, unless PENDING, OK or FAILED";
     }
 
     // -- HELPER
@@ -520,6 +523,10 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
 
     private static boolean canReplayOrRetryOrMarkForExclusion(final CommandLogEntry commandLogEntry) {
         return ReplayState.isPendingOrFailed(commandLogEntry.getReplayState());
+    }
+
+    private static boolean canReplayOrRetry(final CommandLogEntry commandLogEntry) {
+        return ReplayState.isReplayable(commandLogEntry.getReplayState());
     }
 
     /**

@@ -18,25 +18,14 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
-import org.junit.jupiter.api.Test;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 
-import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+public interface HasLimit {
 
-import static org.assertj.core.api.Assertions.assertThat;
+    abstract class ActionDomainEvent<T>
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-class CommandRecordingSuppressionTest {
+    int getLimit();
 
-    @Test
-    void commandlogHelperTypesOptOutOfRecording() {
-        assertThat(isSuppressed(CommandExportManager.class)).isTrue();
-        assertThat(isSuppressed(CommandReplayManager.class)).isTrue();
-        assertThat(isSuppressed(CommandManager.class)).isTrue();
-        assertThat(isSuppressed(ReplayableCommand.class)).isTrue();
-        assertThat(isSuppressed(CommandLogEntry.class)).isTrue();
-    }
-
-    private boolean isSuppressed(final Class<?> type) {
-        return CommandRecordingSuppressed.class.isAssignableFrom(type);
-    }
+    HasLimit withLimit(int limit);
 }

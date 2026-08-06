@@ -149,6 +149,7 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_BEFORE  = LOGICAL_TYPE_NAME + ".findForegroundByTimestampBefore";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATE  = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayState";
         public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_REPLAY_STATES = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndReplayStates";
+        public static final String FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_THREE_REPLAY_STATES = LOGICAL_TYPE_NAME + ".findForegroundByTimestampAfterAndThreeReplayStates";
 
         public static final String FIND_BACKGROUND_AND_NOT_YET_STARTED  = LOGICAL_TYPE_NAME + ".findBackgroundAndNotYetStarted";
         public static final String FIND_RECENT_BACKGROUND_BY_TARGET     = LOGICAL_TYPE_NAME + ".findRecentBackgroundByTarget";

@@ -138,6 +138,10 @@ public interface CommandLogEntryRepository {
      */
     List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayPendingOrFailed(Timestamp since);
 
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(Timestamp since);
+
+    List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(Timestamp since);
+
     /**
      * Command Replay feature: Cannot replay or retry.
      */

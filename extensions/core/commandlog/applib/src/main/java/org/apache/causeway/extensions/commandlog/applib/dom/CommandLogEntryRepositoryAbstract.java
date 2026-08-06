@@ -433,6 +433,17 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return findForegroundSinceTimestampWithStates(since, ReplayState.PENDING, ReplayState.FAILED);
     }
 
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayExcluded(final Timestamp since) {
+        return findForegroundSinceTimestampWithState(since, ReplayState.EXCLUDED);
+    }
+
+    @Override
+    public List<CommandLogEntry> findForegroundSinceTimestampAndWithReplayRecordedOrReplayed(final Timestamp since) {
+        return findForegroundSinceTimestampWithStates(
+                since, ReplayState.UNDEFINED, ReplayState.EXPORTED, ReplayState.OK);
+    }
+
     /**
      * Command Replay feature: Cannot replay or retry.
      */
@@ -456,6 +467,20 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                                 .withParameter("from", from)
                                 .withParameter("replayState1", replayState1)
                                 .withParameter("replayState2", replayState2)));
+    }
+
+    private List<CommandLogEntry> findForegroundSinceTimestampWithStates(
+            final Timestamp from,
+            final ReplayState replayState1,
+            final ReplayState replayState2,
+            final ReplayState replayState3) {
+        return _Casts.uncheckedCast(
+                repositoryService().allMatches(
+                        Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FOREGROUND_BY_TIMESTAMP_AFTER_AND_THREE_REPLAY_STATES)
+                                .withParameter("from", from)
+                                .withParameter("replayState1", replayState1)
+                                .withParameter("replayState2", replayState2)
+                                .withParameter("replayState3", replayState3)));
     }
 
     private RepositoryService repositoryService() {

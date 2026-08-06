@@ -106,7 +106,17 @@ class CommandManagerEligibilityTest {
                 List.of(resultless, resultBearing));
     }
 
-    private static CommandLogEntry entry(final Bookmark result) {
+    static ReplayContext context(final CommandLogEntryRepository repository) {
+        var featureRepository = mock(ApplicationFeatureRepository.class);
+        var feature = mock(ApplicationFeature.class);
+        when(featureRepository.findFeature(any())).thenReturn(feature);
+        when(feature.getActionSemantics()).thenReturn(Optional.of(SemanticsOf.SAFE));
+        return new ReplayContext(
+                null, null, null, repository, null, null,
+                new ResultRemappingService(List.of()), null, featureRepository);
+    }
+
+    static CommandLogEntry entry(final Bookmark result) {
         var dto = new CommandDto();
         dto.setMember(new ActionDto());
         var entry = mock(CommandLogEntry.class);
