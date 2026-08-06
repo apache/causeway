@@ -75,6 +75,8 @@ class CommandManagerCompatibilityTest {
                 HasBaseline_previousHour.class,
                 HasBaseline_nextHour.class,
                 HasLimit_changeLimit.class,
+                CommandManager_exportSequence.class,
+                CommandManager_importCommands.class,
                 CommandExportManager.openCommandManager.class,
                 CommandReplayManager.openCommandManager.class);
     }
