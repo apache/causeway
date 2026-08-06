@@ -320,6 +320,8 @@ public record CommandReplayManager(
                     + "or marked to be excluded from replay (replayState=EXCLUDE)")
     public List<ReplayableCommand> getSucceededOrExcluded() {
         return commandLogEntryRepository().findSinceAndWithReplayOkOrExcluded(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))

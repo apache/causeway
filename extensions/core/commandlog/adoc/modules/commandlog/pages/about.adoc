@@ -132,6 +132,32 @@ When the repository is available, the commandlog menu provides prototyping actio
 Each mapping can also be inspected and deleted individually.
 An application-defined `CommandReplayMappingListener` bean remains authoritative and causes both built-in listeners to back off.
 
+=== Replayable Command Projections
+
+The export and replay managers wrap command-log entries as `ReplayableCommand` view models.
+Each command reports whether it has a recorded result and derives a Participants collection from its command data:
+
+* `TARGET` rows represent recorded target bookmarks;
+* `PARAMETER` rows represent reference-valued action parameters and include the parameter name (scalar parameters are omitted); and
+* `RESULT` represents the recorded result bookmark, when present.
+
+Participants show the recorded bookmark even when the referenced object is unavailable locally.
+Their actual bookmark comes from the configured replay-mapping service.
+For target and parameter rows an explicit mapping is visible in any replay state; after a successful (`OK`) replay, an unmapped bookmark falls back to the recorded value.
+A result row exposes its actual bookmark only after successful replay, using an explicit mapping when available and otherwise the recorded value.
+The optional target, argument, and result object links resolve only the actual bookmark and remain empty if that object is not available locally; bookmark audit data remains visible.
+
+Participant view-model mementos contain identity rather than bookmark state: the owning interaction id followed by `--target`, `--parameter--<name>`, or `--result`.
+Opening such a memento re-derives the participant from the current command and current replay mappings.
+
+General command projections include state-changing commands, safe commands with a recorded result, and commands whose semantics cannot be resolved.
+They omit resultless safe actions without deleting or changing the underlying command-log entries.
+The pending-or-failed replay collection is intentionally exempt so that all imported replay work remains reviewable.
+The safe Previous and Next actions navigate foreground commands in command-log order, skipping entries that are ineligible under this general rule.
+
+For now, export and replay continue to use the separate `CommandExportManager` and `CommandReplayManager` view models.
+A future change may unify their sequence-management surface; the participant projection and eligibility policy do not depend on that redesign.
+
 
 [#menubar-layout-xml]
 === menubar.layout.xml

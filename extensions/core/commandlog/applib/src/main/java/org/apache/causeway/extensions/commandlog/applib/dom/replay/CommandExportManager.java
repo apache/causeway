@@ -142,6 +142,8 @@ public record CommandExportManager(
             describedAs = "Commands that can be exported")
     public List<ReplayableCommand> getNotYetExported() {
         return commandLogEntryRepository().findForegroundSinceTimestampAndCanBeExported(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))
@@ -233,6 +235,8 @@ public record CommandExportManager(
     @CollectionLayout(describedAs = "Commands that have been exported")
     public List<ReplayableCommand> getExported() {
         return commandLogEntryRepository().findForegroundSinceTimestampAndHasBeenExported(baseline).stream()
+            .filter(entry -> ReplayableCommandEligibility.isEligible(
+                    entry, replayContext.applicationFeatureRepository()))
             .map(entry->new ReplayableCommand(
                     entry.getInteractionId(),
                     replayContext))

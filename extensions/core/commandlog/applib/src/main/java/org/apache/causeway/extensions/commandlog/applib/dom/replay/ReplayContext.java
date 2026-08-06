@@ -23,6 +23,8 @@ import java.util.UUID;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
@@ -41,7 +43,21 @@ public record ReplayContext(
         CommandLogEntryRepository commandLogEntryRepository,
         CommandExecutorService commandExecutorService,
         ClockService clockService,
-        ResultRemappingService resultRemappingService) {
+        ResultRemappingService resultRemappingService,
+        @Nullable BookmarkService bookmarkService,
+        @Nullable ApplicationFeatureRepository applicationFeatureRepository) {
+
+    public ReplayContext(
+            final RepositoryService repositoryService,
+            final InteractionService interactionService,
+            final TransactionService transactionService,
+            final CommandLogEntryRepository commandLogEntryRepository,
+            final CommandExecutorService commandExecutorService,
+            final ClockService clockService,
+            final ResultRemappingService resultRemappingService) {
+        this(repositoryService, interactionService, transactionService, commandLogEntryRepository,
+                commandExecutorService, clockService, resultRemappingService, null, null);
+    }
 
     public Optional<CommandLogEntry> lookupCommandLogEntry(final @Nullable UUID interactionId) {
         return interactionId!=null

@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
@@ -43,14 +45,15 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ResultRemappingService;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openTarget;
-import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openTargetTR;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_previous;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_replayOrRetry;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ResultRemappingService;
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
@@ -67,6 +70,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
 
         // viewmodels
         CommandReplayManager.class,
+        ReplayableCommandParticipant.class,
 
         // mixins
         HasInteractionId_commandLogEntry.class,
@@ -78,8 +82,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandReplayResultMapping_delete.class,
         ReplayableCommand_makeExportable.class,
         ReplayableCommand_openCommandLogEntry.class,
-        ReplayableCommand_openTarget.class,
-        ReplayableCommand_openTargetTR.class,
+        ReplayableCommand_previous.class,
+        ReplayableCommand_next.class,
         ReplayableCommand_replayOrRetry.class,
         ReplayableCommand_excludeFromReplay.class,
         ReplayableCommand_delete.class,
@@ -165,9 +169,12 @@ public class CausewayModuleExtCommandLogApplib {
             final CommandLogEntryRepository commandLogEntryRepository,
             final CommandExecutorService commandExecutorService,
             final ClockService clockService,
-            final ResultRemappingService resultRemappingService) {
+            final ResultRemappingService resultRemappingService,
+            final BookmarkService bookmarkService,
+            final ApplicationFeatureRepository applicationFeatureRepository) {
         return new ReplayContext(repositoryService, interactionService, transactionService,
-                commandLogEntryRepository, commandExecutorService, clockService, resultRemappingService);
+                commandLogEntryRepository, commandExecutorService, clockService, resultRemappingService,
+                bookmarkService, applicationFeatureRepository);
     }
 
 }
