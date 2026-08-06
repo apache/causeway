@@ -63,6 +63,7 @@ import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeSchedu
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataServiceForRefData;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseStateListener;
@@ -125,6 +126,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandReplayResultMapping.TableColumnOrderDefault.class,
         ResultRemappingService.class,
         CommandReplayMappingListenerInMemory.BeanFactory.class,
+        CommandReplayReferenceDataServiceForRefData.class,
 
         BackgroundCommandsJobControl.class,
 
