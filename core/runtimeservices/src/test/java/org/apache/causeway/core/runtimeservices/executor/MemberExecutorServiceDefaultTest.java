@@ -18,12 +18,14 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.UUID;
-
-import jakarta.inject.Provider;
-
-import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
@@ -44,12 +46,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import jakarta.inject.Provider;
 
 class MemberExecutorServiceDefaultTest {
 
@@ -219,7 +218,7 @@ class MemberExecutorServiceDefaultTest {
         var objectSpecification = mock(ObjectSpecification.class);
         var specificationLoader = mock(SpecificationLoader.class);
         when(objectSpecification.isValue()).thenReturn(true);
-        when(objectSpecification.getBeanSort()).thenReturn(BeanSort.VALUE);
+        when(objectSpecification.beanSort()).thenReturn(BeanSort.VALUE);
         when(objectSpecification.getSpecificationLoader()).thenReturn(specificationLoader);
         when(specificationLoader.specForType(pojo.getClass())).thenReturn(Optional.of(objectSpecification));
         return ManagedObject.value(objectSpecification, pojo);

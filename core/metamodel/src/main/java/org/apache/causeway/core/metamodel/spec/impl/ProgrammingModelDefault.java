@@ -92,7 +92,6 @@ import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPos
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
-import org.apache.causeway.core.metamodel.postprocessors.members.navigation.SynthesizeNavigationActionsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.param.ChoicesAndDefaultsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
@@ -249,9 +248,6 @@ extends ProgrammingModelAbstract {
 
     private void addPostProcessors() {
         var mmc = getMetaModelContext();
-
-        // must run before later action post-processors inspect the action list
-        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, new SynthesizeNavigationActionsPostProcessor(mmc));
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));

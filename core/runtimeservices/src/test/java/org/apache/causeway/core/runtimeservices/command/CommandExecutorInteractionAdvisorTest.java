@@ -18,10 +18,15 @@
  */
 package org.apache.causeway.core.runtimeservices.command;
 
-import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
+import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -40,14 +45,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 class CommandExecutorInteractionAdvisorTest {
 
@@ -281,7 +280,7 @@ class CommandExecutorInteractionAdvisorTest {
         var specification = mock(ObjectSpecification.class);
         var specificationLoader = mock(SpecificationLoader.class);
         when(specification.isValue()).thenReturn(true);
-        when(specification.getBeanSort()).thenReturn(BeanSort.VALUE);
+        when(specification.beanSort()).thenReturn(BeanSort.VALUE);
         when(specification.getSpecificationLoader()).thenReturn(specificationLoader);
         when(specificationLoader.specForType(pojo.getClass())).thenReturn(Optional.of(specification));
         return ManagedObject.value(specification, pojo);

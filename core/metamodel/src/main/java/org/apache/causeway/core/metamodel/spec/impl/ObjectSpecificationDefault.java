@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,6 +43,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -58,8 +58,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -315,12 +313,16 @@ implements
         var mixedInAssociations = profiler.measure("members.mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations(profiler));
         var mixedInActions = profiler.measure("members.mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
 
+        var syntheticActions = getConfiguration().extensions().commandLog().recordingSupport().isEnabled()
+    		? new SyntheticNavigationActionFactory(this, regularAssociations, mixedInAssociations, regularActions, mixedInActions).synthesizeNavigationActions()
+    		: List.<ObjectAction>of();
+
         this.objectAssociationContainer = new AssociationContainer(
         		associationsInOrder(regularAssociations, mixedInAssociations),
         		superclass(),
         		this);
         this.objectActionContainer = new ActionContainer(
-        		actionsInOrder(regularActions, mixedInActions),
+        		actionsInOrder(regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
@@ -335,42 +337,8 @@ implements
         isLockedDown.set(true);
     }
 
-<<<<<<< Upstream, based on origin/main
-    @Override
-    public void synthesizeNavigationActions() {
-        if (!getMetaModelContext().getConfiguration()
-                .extensions().commandLog().recordingSupport().isEnabled()) {
-            return;
-        }
-
-        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort);
-        var existingActionIds = objectActions.stream()
-                .map(ObjectAction::getId)
-                .collect(Collectors.toSet());
-        var existingSyntheticActionIds = objectActions.stream()
-                .filter(action -> action.lookupFacet(ParentedCollectionNavigationFacet.class).isPresent()
-                        || action.lookupFacet(ScalarReferenceNavigationFacet.class).isPresent())
-                .map(ObjectAction::getId)
-                .collect(Collectors.toSet());
-        var syntheticActions = SyntheticNavigationActionFactory.createFor(
-                        getMetaModelContext(),
-                        this,
-                        associations.stream(),
-                        existingActionIds,
-                        existingSyntheticActionIds)
-                .toList();
-        if (syntheticActions.isEmpty()) {
-            return;
-        }
-
-        replaceActions(Stream.concat(objectActions.stream(), syntheticActions.stream()));
-        membersByMethod = null;
-    }
-
-=======
     //TODO this is a facet factory responsibility
     @Deprecated
->>>>>>> df432ff CAUSEWAY-4044: thread-safe IntrospectionStateHandler
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
@@ -535,7 +503,7 @@ implements
     }
 
     private List<ObjectAssociation> associationsInOrder(
-    		final List<ObjectAssociation> regularAssociations,
+    		final List<? extends ObjectAssociation> regularAssociations,
             final List<? extends ObjectAssociation> mixedInAssociations) {
     	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations); // do before sorting
         return _MemberSortingUtils.sortAssociationsIntoList(Stream.concat(
@@ -544,12 +512,14 @@ implements
     }
 
     private List<ObjectAction> actionsInOrder(
-    		final List<ObjectAction> regularActions,
-            final List<? extends ObjectAction> mixedInActions) {
+    		final List<? extends ObjectAction> regularActions,
+            final List<? extends ObjectAction> mixedInActions,
+            final List<? extends ObjectAction> syntheticActions) {
     	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions); // do before sorting
-        return _MemberSortingUtils.sortActionsIntoList(Stream.concat(
-        		regularActions.stream(),
-        		mixedInActions.stream()));
+        return _MemberSortingUtils.sortActionsIntoList(_Streams.concat(
+		        		regularActions.stream(),
+		        		mixedInActions.stream(),
+		        		syntheticActions.stream()));
     }
 
     private void invalidateCachedFacets() {
