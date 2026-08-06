@@ -69,7 +69,6 @@ import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocBuilder;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
-import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
@@ -79,7 +78,6 @@ import lombok.experimental.Accessors;
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout//(cssClassFa = "terminal")
 @Named(ReplayableCommand.LOGICAL_TYPE_NAME)
-@AllArgsConstructor
 public final class ReplayableCommand
 implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed {
 
@@ -93,6 +91,8 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
 	private final ReplayContext replayContext;
     @Programmatic
     public ReplayContext replayContext() { return replayContext; }
+
+    private final ReplayableCommandParticipantTracker participantTracker;
 
 
 	private final ObjectReference<CommandRecord> recordRef;
@@ -136,7 +136,17 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
     ReplayableCommand(
             final UUID interactionId,
             final ReplayContext replayContext) {
-        this(interactionId, replayContext, new ObjectReference<>(null));
+        this(interactionId, replayContext, null);
+    }
+
+    ReplayableCommand(
+            final UUID interactionId,
+            final ReplayContext replayContext,
+            final ReplayableCommandParticipantTracker participantTracker) {
+        this.interactionId = interactionId;
+        this.replayContext = replayContext;
+        this.participantTracker = participantTracker;
+        this.recordRef = new ObjectReference<>(null);
     }
 
     @ObjectSupport public String title() {
@@ -236,6 +246,21 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
         return commandLogEntry()
                 .map(CommandLogEntry::getResult)
                 .isPresent();
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "5.1",
+            fieldSetId = "details",
+            hidden = Where.OBJECT_FORMS,
+            describedAs = "Whether this command uses only participants known at this point in the manager sequence")
+    public boolean isKnownParticipants() {
+        if (participantTracker == null) {
+            return false;
+        }
+        return commandLogEntry()
+                .map(participantTracker::isKnownParticipants)
+                .orElse(false);
     }
 
     @Collection

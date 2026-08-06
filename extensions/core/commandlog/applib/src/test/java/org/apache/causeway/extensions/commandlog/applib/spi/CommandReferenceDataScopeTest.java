@@ -31,30 +31,39 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandExportManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CommandReferenceDataScopeTest {
 
-    private static final List<Class<?>> R2_CONSUMERS = List.of(
-            CommandManager.class,
+    private static final List<Class<?>> LEGACY_MANAGERS = List.of(
             CommandExportManager.class,
-            CommandReplayManager.class,
-            ReplayableCommand.class);
+            CommandReplayManager.class);
 
     @Test
-    void r1DoesNotWireClassificationIntoManagersOrReplayableCommands() {
+    void r2ConsumesClassificationThroughReplayContextOnly() {
         var spiName = CommandReplayReferenceDataService.class.getName();
 
-        assertThat(R2_CONSUMERS.stream()
+        assertThat(declaredSignatures(ReplayContext.class))
+                .anyMatch(signature -> signature.contains(spiName));
+        assertThat(Stream.of(CommandManager.class, ReplayableCommand.class)
+                .flatMap(CommandReferenceDataScopeTest::declaredSignatures))
+                .noneMatch(signature -> signature.contains(spiName));
+        assertThat(LEGACY_MANAGERS.stream()
                 .flatMap(CommandReferenceDataScopeTest::declaredSignatures))
                 .noneMatch(signature -> signature.contains(spiName));
     }
 
     @Test
-    void r1DoesNotAddKnownParticipantOrReferenceDataMembers() {
-        assertThat(R2_CONSUMERS.stream()
+    void r2AddsKnownParticipantsOnlyToUnifiedManagerProjection() {
+        assertThat(Stream.of(CommandManager.class, ReplayableCommand.class)
+                .flatMap(type -> Arrays.stream(type.getDeclaredMethods()))
+                .map(Method::getName)
+                .map(name -> name.toLowerCase(Locale.ROOT)))
+                .anyMatch(name -> name.contains("knownparticipant"));
+        assertThat(LEGACY_MANAGERS.stream()
                 .flatMap(type -> Arrays.stream(type.getDeclaredMethods()))
                 .map(Method::getName)
                 .map(name -> name.toLowerCase(Locale.ROOT)))

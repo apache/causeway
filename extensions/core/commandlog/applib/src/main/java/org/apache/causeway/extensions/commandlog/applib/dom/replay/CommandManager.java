@@ -19,7 +19,10 @@
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -34,6 +37,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -42,7 +46,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 @DomainObject(introspection = Introspection.ANNOTATION_REQUIRED)
 @DomainObjectLayout(cssClassFa = "solid list")
 @Named(CommandManager.LOGICAL_TYPE_NAME)
-public class CommandManager implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed {
+public class CommandManager implements ViewModel, HasBaseline, HasLimit, CommandRecordingSuppressed,
+        ReplayableCommandParticipantTracker {
 
     public static final String LOGICAL_TYPE_NAME =
             CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandManager";
@@ -139,12 +144,53 @@ public class CommandManager implements ViewModel, HasBaseline, HasLimit, Command
         return new State(baseline, limit).toMemento();
     }
 
+    @Override
+    @Programmatic
+    public boolean isKnownParticipants(final CommandLogEntry commandLogEntry) {
+        if (commandLogEntry == null || !replayContext.isRecordingSupportEnabled()) {
+            return false;
+        }
+        var knownParticipants = new HashSet<Bookmark>();
+        for (var entry : commandLogEntries()) {
+            if (sameInteractionId(entry, commandLogEntry.getInteractionId())) {
+                return validator().validateParticipants(entry, knownParticipants).isEmpty();
+            }
+            Optional.ofNullable(entry.getResult()).ifPresent(knownParticipants::add);
+        }
+        return false;
+    }
+
+    @Programmatic
+    Optional<CommandKnownParticipantsValidator.Failure> validateKnownTargets(
+            final List<? extends CommandLogEntry> commandLogEntries) {
+        return replayContext.isRecordingSupportEnabled()
+                ? validator().validate(baseline, commandLogEntries)
+                : Optional.empty();
+    }
+
+    private List<CommandLogEntry> commandLogEntries() {
+        return replayContext.commandLogEntryRepository().findForegroundSinceTimestamp(baseline, limit).stream()
+                .filter(entry -> entry.getReplayState() != ReplayState.EXCLUDED)
+                .filter(this::isEligible)
+                .toList();
+    }
+
+    private CommandKnownParticipantsValidator validator() {
+        return new CommandKnownParticipantsValidator(replayContext::isExportRoot);
+    }
+
+    private static boolean sameInteractionId(final CommandLogEntry entry, final UUID interactionId) {
+        return entry != null
+                && interactionId != null
+                && interactionId.equals(entry.getInteractionId());
+    }
+
     private boolean isEligible(final CommandLogEntry entry) {
         return ReplayableCommandEligibility.isEligible(entry, replayContext.applicationFeatureRepository());
     }
 
     private ReplayableCommand wrap(final CommandLogEntry entry) {
-        return new ReplayableCommand(entry.getInteractionId(), replayContext);
+        return new ReplayableCommand(entry.getInteractionId(), replayContext, this);
     }
 
     private static int normalizeLimit(final int candidate) {

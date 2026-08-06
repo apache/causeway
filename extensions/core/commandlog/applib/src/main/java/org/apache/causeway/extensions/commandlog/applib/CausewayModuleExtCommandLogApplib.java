@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,7 +31,9 @@ import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasUsername_recentCommandsByUser;
@@ -63,6 +67,7 @@ import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeSchedu
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayMappingListenerInMemory;
+import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataService;
 import org.apache.causeway.extensions.commandlog.applib.spi.CommandReplayReferenceDataServiceForRefData;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandLogPauseState;
@@ -185,10 +190,14 @@ public class CausewayModuleExtCommandLogApplib {
             final ClockService clockService,
             final ResultRemappingService resultRemappingService,
             final BookmarkService bookmarkService,
-            final ApplicationFeatureRepository applicationFeatureRepository) {
+            final ApplicationFeatureRepository applicationFeatureRepository,
+            final CausewayConfiguration causewayConfiguration,
+            final SpecificationLoader specificationLoader,
+            final List<CommandReplayReferenceDataService> commandReplayReferenceDataServices) {
         return new ReplayContext(repositoryService, interactionService, transactionService,
                 commandLogEntryRepository, commandExecutorService, clockService, resultRemappingService,
-                bookmarkService, applicationFeatureRepository);
+                bookmarkService, applicationFeatureRepository, causewayConfiguration,
+                specificationLoader, commandReplayReferenceDataServices);
     }
 
 }
