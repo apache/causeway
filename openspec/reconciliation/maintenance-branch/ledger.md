@@ -39,7 +39,7 @@
 | Later maintenance mapping work | M3 | Persistent mapping contracts, listener, management UI, and Jakarta Persistence adapter reconciled; the removed commandlog JDO adapter is not applicable on Causeway 4 | Supersede | Completed by `reconcile-persistent-replay-mapping` |
 | Maintenance consolidated replayable-command specs | P1 | Replay-useful eligibility, result presence, bookmark participants, actual mappings, object links, identity mementos, layouts, and adjacent navigation reconciled | Supersede | Completed by `reconcile-replayable-command-projection` |
 | Maintenance consolidated manager specs | P2 | Unified baseline/limit manager, four review collections, replay-state boundary, primary menu entry, and legacy-manager compatibility shims reconciled | Supersede | Completed by `reconcile-unified-command-manager` |
-| CAUSEWAY-4034 and later maintenance specs | R1 | `RefData` and command replay reference-data SPI absent | Adapt | `reconcile-command-reference-data` |
+| CAUSEWAY-4034 and later maintenance specs | R1 | `RefData`, the bookmark-classification SPI, marker-backed default classifier, and SecMan declarations reconciled | Adapt | Completed by `reconcile-command-reference-data` |
 | Later maintenance export specs | R2 | Baseline-bounded participant reachability validator absent | Supersede | `reconcile-command-export-reachability` |
 | CAUSEWAY-4010 and later export specs | E1 | Legacy YAML export/import baseline exists | Supersede | `reconcile-command-export-import` |
 | Later manager specs | W1 | Older export/replay actions exist but maintenance workflow differs materially | Supersede | `reconcile-command-manager-workflows` |
@@ -57,6 +57,7 @@
 | `reconcile-persistent-replay-mapping` | M3 | `openspec/specs/persistent-command-replay-mapping/spec.md` | `openspec/changes/archive/2026-08-05-reconcile-persistent-replay-mapping/` | Planning `d88eb297388`; implementation `1990363924f`; archive `d95ee405f68`; focused and affected aggregate Maven tests passed |
 | `reconcile-replayable-command-projection` | P1 | `openspec/specs/replayable-command-projection/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-replayable-command-projection/` | Planning `2e65bb795a7`; implementation `4bc1b204484`; archive `30b53793cf2`; focused and full commandlog reactor Maven tests plus IDE inspection passed |
 | `reconcile-unified-command-manager` | P2 | `openspec/specs/unified-command-manager/spec.md`; `openspec/specs/replayable-command-projection/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-unified-command-manager/` | Planning `3ee2f7875cb`; implementation `5b95dd3b4a9`; archive `6811dfc6b1f`; focused commandlog applib and JPA Maven verification plus strict OpenSpec validation passed |
+| `reconcile-command-reference-data` | R1 | `openspec/specs/command-export-refdata-marker/spec.md`; `openspec/specs/command-export-reference-data-participants/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-command-reference-data/` | Planning `4d9156d2c24`; implementation `c4716bce636`; archive `aa8f7c5a8b7`; focused applib, commandlog applib, and SecMan applib Maven verification plus strict OpenSpec validation passed |
 
 ## Resolved questions
 
@@ -71,6 +72,7 @@
 | Persistent replay-result mappings use the Causeway 4 commandlog JPA module only; the commandlog JDO adapter was deliberately removed and is not restored. | M3 | `reconcile-persistent-replay-mapping/design.md`, `CommandReplayResultMapping_IntegTest`, and the Causeway 4 commandlog module inventory |
 | Replayable-command participants remain a derived read model; actual bookmarks come through the mapping SPI, result mappings remain gated until replay succeeds, and pending-or-failed imported work bypasses general eligibility. | P1 | `reconcile-replayable-command-projection/design.md`, `ReplayableCommandParticipantTest`, and `CommandManagerEligibilityTest` |
 | The unified manager is the forward path with a baseline/limit memento; both legacy manager logical types and timestamp-only mementos remain loadable compatibility shims, their standard launchers are hidden, and stored bookmarks are not rewritten. | P2 | `reconcile-unified-command-manager/design.md`, `CommandManagerCompatibilityTest`, and `CommandLogMenuTest` |
+| Reference data is an explicit stability assertion made through the dependency-neutral `RefData` marker or application bookmark classifiers; the default classifier uses metamodel type assignability without loading domain objects, and the built-in SecMan identity abstractions opt in. | R1 | `reconcile-command-reference-data/design.md`, `CommandReplayReferenceDataServiceForRefDataTest`, and `ReferenceDataContractTest` |
 
 ## Open questions
 
