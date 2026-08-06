@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
@@ -80,7 +79,7 @@ public interface Hierarchical {
 		Stream<T> facetsCombined = _Streams.<T>concat(facets1, facets2, facets3);
 
 		// local class, declared inside this method body, so it is not publicly exposed via this interface
-		// while the test method is called, collects the first occurrence of a fallback facet 
+		// while the test method is called, collects the first occurrence of a fallback facet
 		class FallbackFacetFilter<Q extends Facet> implements Predicate<Q> {
 	        Q fallback;
 
@@ -96,7 +95,7 @@ public interface Hierarchical {
 	            return false;
 	        }
 	    }
-		
+
         var filter = new FallbackFacetFilter<T>();
 
         return Optional.ofNullable(facetsCombined
