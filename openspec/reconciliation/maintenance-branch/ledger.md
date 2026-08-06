@@ -17,11 +17,11 @@
 | CAUSEWAY-3979 | Deprecate `RoutingServiceDefault` | Matching main history | Equivalent | None |
 | CAUSEWAY-3983 | Remove always-hidden tab content | Matching main history | Equivalent | None |
 | CAUSEWAY-3985 | Restrict table sorting to comparable values | Exact `isComparableOrOrdered()` capability exists | Equivalent | None |
-| CAUSEWAY-3989 | Initial command replay and YAML baseline | Main retains the earlier baseline | Adapt | D1 and P2 reconciled; complete later YAML evolution through E1 |
+| CAUSEWAY-3989 | Initial command replay and YAML baseline | Main retains the earlier baseline | Adapt | D1, P2, and E1 reconciled |
 | CAUSEWAY-3995 | Clear layout caches after metamodel initialization | Matching main history | Equivalent | None |
 | CAUSEWAY-3996 | In-memory layout patching | Matching main history | Equivalent | None |
 | CAUSEWAY-3997 | Listing and column-order fixes | Matching main history | Equivalent | Selective viewer regression tests |
-| CAUSEWAY-3998 | Import commands from the oldest baseline | Matching main history | Equivalent | Reassess through E1 under the unified manager |
+| CAUSEWAY-3998 | Import commands from the oldest baseline | Unified-manager import retains the limit and optionally moves to the oldest usable imported timestamp | Equivalent | Completed through E1 |
 | CAUSEWAY-4002 | Avoid unavailable IoC container during metamodel disposal | Main uses a different Spring context abstraction | Unresolved | Verify Causeway 4 disposal lifecycle separately |
 | Unnumbered update-only publishing | Publish entity changes only for updates | `Publishing.ENABLED_FOR_UPDATES_ONLY` exists on main | Equivalent | None |
 
@@ -41,7 +41,7 @@
 | Maintenance consolidated manager specs | P2 | Unified baseline/limit manager, four review collections, replay-state boundary, primary menu entry, and legacy-manager compatibility shims reconciled | Supersede | Completed by `reconcile-unified-command-manager` |
 | CAUSEWAY-4034 and later maintenance specs | R1 | `RefData`, the bookmark-classification SPI, marker-backed default classifier, and SecMan declarations reconciled | Adapt | Completed by `reconcile-command-reference-data` |
 | Later maintenance export specs | R2 | Baseline-bounded participant reachability, Causeway 4 export-root classification, and contextual manager feedback reconciled | Supersede | Completed by `reconcile-command-export-reachability` |
-| CAUSEWAY-4010 and later export specs | E1 | Legacy YAML export/import baseline exists | Supersede | `reconcile-command-export-import` |
+| CAUSEWAY-4010 and later export specs | E1 | Strict canonical and legacy replay import, result-bearing sequence export, optional envelope remapping, and unified-manager actions reconciled | Supersede | Completed by `reconcile-command-export-import` |
 | Later manager specs | W1 | Older export/replay actions exist but maintenance workflow differs materially | Supersede | `reconcile-command-manager-workflows` |
 | Later background-completion specs | B1, B2 | Required recording/replay sequencing guards not established | Adapt | `reconcile-command-background-gates` |
 
@@ -59,6 +59,7 @@
 | `reconcile-unified-command-manager` | P2 | `openspec/specs/unified-command-manager/spec.md`; `openspec/specs/replayable-command-projection/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-unified-command-manager/` | Planning `3ee2f7875cb`; implementation `5b95dd3b4a9`; archive `6811dfc6b1f`; focused commandlog applib and JPA Maven verification plus strict OpenSpec validation passed |
 | `reconcile-command-reference-data` | R1 | `openspec/specs/command-export-refdata-marker/spec.md`; `openspec/specs/command-export-reference-data-participants/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-command-reference-data/` | Planning `4d9156d2c24`; implementation `c4716bce636`; archive `aa8f7c5a8b7`; focused applib, commandlog applib, and SecMan applib Maven verification plus strict OpenSpec validation passed |
 | `reconcile-command-export-reachability` | R2 | `openspec/specs/command-export-known-targets/spec.md`; `openspec/specs/replayable-command-exportability/spec.md`; `openspec/specs/unified-command-manager/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-command-export-reachability/` | Planning `39813b4d6f2`; implementation `1e7b3930db9`; archive `83422722e3d`; commandlog applib Maven verification under JDK 21 plus strict OpenSpec validation passed |
+| `reconcile-command-export-import` | E1 | `openspec/specs/command-export-known-targets/spec.md`; `openspec/specs/command-replay-mapping/spec.md`; `openspec/specs/command-result-metadata/spec.md`; `openspec/specs/unified-command-manager/spec.md` | `openspec/changes/archive/2026-08-06-reconcile-command-export-import/` | Planning `a9b7938d28d`; implementation `b97514b8992`; archive `1268e87ba48`; API, mmtest, and commandlog applib Maven verification under JDK 21 plus strict OpenSpec validation passed |
 
 ## Resolved questions
 
@@ -75,13 +76,14 @@
 | The unified manager is the forward path with a baseline/limit memento; both legacy manager logical types and timestamp-only mementos remain loadable compatibility shims, their standard launchers are hidden, and stored bookmarks are not rewritten. | P2 | `reconcile-unified-command-manager/design.md`, `CommandManagerCompatibilityTest`, and `CommandLogMenuTest` |
 | Reference data is an explicit stability assertion made through the dependency-neutral `RefData` marker or application bookmark classifiers; the default classifier uses metamodel type assignability without loading domain objects, and the built-in SecMan identity abstractions opt in. | R1 | `reconcile-command-reference-data/design.md`, `CommandReplayReferenceDataServiceForRefDataTest`, and `ReferenceDataContractTest` |
 | Export roots are metamodel logical types classified as domain services, OR-composed with R1 reference-data classifiers; ordinary bookmarked objects are never loaded merely to establish reachability, and manager context is passed explicitly rather than through request-global scratchpad state. | R2 | `reconcile-command-export-reachability/design.md`, `CommandKnownParticipantsValidatorTest`, and `CommandManagerKnownParticipantsTest` |
+| Unified-manager export derives its immutable ordered sequence from R2-known commands and emits canonical result-bearing envelopes; strict replay import accepts canonical and legacy multi-document streams, stores unresolved result bookmarks without object lookup, and optionally moves the baseline while retaining the limit. | E1 | `reconcile-command-export-import/design.md`, `CommandManagerExportSequenceTest`, and `CommandManagerImportCommandsTest` |
 
 ## Open questions
 
 | Question | Affected nodes | Resolution point |
 |---|---|---|
 | Can the Causeway 4 Spring context become unavailable during `ServiceRegistryDefault.select()` in metamodel disposal? | CAUSEWAY-4002 | Separate lifecycle investigation before core work is declared complete |
-| Which persistence operations are required to retimestamp commands safely under JPA and JDO? | W1 | Manager-workflow design |
+| Which persistence operations are required to move and retimestamp commands safely under the Causeway 4 JPA adapter without restoring the removed commandlog JDO adapter? | W1 | Manager-workflow design |
 
 ## Acceptance evidence policy
 
