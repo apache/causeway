@@ -32,24 +32,19 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.springframework.util.Assert;
 
 record MemberCatalog(
-		ObjectSpecificationBuilder spec,
 		Map<ResolvedMethod, ObjectMember> membersByMethod) {
 
-	static MemberCatalog EMPTY = new MemberCatalog(null, Map.of());
+	static MemberCatalog EMPTY = new MemberCatalog(Map.of());
 
     MemberCatalog(final ObjectSpecificationBuilder spec) {
-    	this(Objects.requireNonNull(spec), catalogMembersByMethod(spec));
+    	this(catalogMembersByMethod(Objects.requireNonNull(spec)));
 	}
 
 	Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
-		if(spec==null) // the EMPTY case
+		if(this==EMPTY) // the EMPTY case
 			throw new UnsupportedOperationException("members are only available after introspection, lookupMember was probably called too early");
-		Assert.isTrue(spec.isFullyIntrospected(), ()->
-			"members are only available after %s was fully introspect"
-				.formatted(spec.getFullIdentifier()));
         return Optional.ofNullable(membersByMethod.get(method));
     }
 

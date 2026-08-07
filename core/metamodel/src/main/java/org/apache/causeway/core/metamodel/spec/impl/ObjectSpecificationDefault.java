@@ -40,7 +40,6 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -86,7 +85,6 @@ import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
@@ -114,6 +112,8 @@ implements
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
 
+    @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
+
     @Getter @Accessors(fluent = true)
 	private final IntrospectionStateHandler introspectionStateHandler;
 
@@ -129,6 +129,42 @@ implements
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
     @Getter @Accessors(fluent = true)
     private MemberCatalog memberCatalog = MemberCatalog.EMPTY;
+
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
+    		_Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
+    				.map(TypeOfFacet::elementSpec));
+    // -- FIELDS
+
+    private final PostProcessor postProcessor;
+
+    // -- ACTIONS
+
+    /** not API, used for validation */
+    @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
+
+    // -- INTERFACES
+
+    private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
+
+    // defensive immutable lazy copy of interfaces
+    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
+    		_Lazy.threadSafe(()->Can.ofCollection(interfaces));
+
+    private ObjectSpecification superclassSpec;
+
+    private ValueFacet<?> valueFacet;
+    private EntityFacet entityFacet;
+    private ViewModelFacet viewmodelFacet;
+    private MixinFacet mixinFacet;
+    private TitleFacet titleFacet;
+    private IconFacet iconFacet;
+    private NavigableParentFacet navigableParentFacet;
+    private AliasedFacet aliasedFacet;
+    private CssClassFacet cssClassFacet;
+
+    @Getter(lazy = true)
+    private final Can<EntityTitleSubscriber> titleSubscribers =
+    getServiceRegistry().select(EntityTitleSubscriber.class);
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
@@ -309,11 +345,11 @@ implements
     		: List.<ObjectAction>of();
 
         this.objectAssociationContainer = new AssociationContainer(
-        		associationsInOrder(regularAssociations, mixedInAssociations),
+        		_MemberSortingUtils.associationsInOrder(this, regularAssociations, mixedInAssociations),
         		superclass(),
         		this);
         this.objectActionContainer = new ActionContainer(
-        		actionsInOrder(regularActions, mixedInActions, syntheticActions),
+        		_MemberSortingUtils.actionsInOrder(this, regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
@@ -347,47 +383,13 @@ implements
 
     // -- ELEMENT SPECIFICATION
 
-    private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
-            _Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
-                    .map(TypeOfFacet::elementSpec));
 
     @Override
     public Optional<ObjectSpecification> explicitElementSpec() {
         return elementSpecification.get();
     }
 
-    // -- FIELDS
 
-    private final PostProcessor postProcessor;
-
-    // -- ACTIONS
-
-    /** not API, used for validation */
-    @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
-
-    // -- INTERFACES
-
-    private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
-
-    // defensive immutable lazy copy of interfaces
-    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
-            _Lazy.threadSafe(()->Can.ofCollection(interfaces));
-
-    private ObjectSpecification superclassSpec;
-
-    private ValueFacet<?> valueFacet;
-    private EntityFacet entityFacet;
-    private ViewModelFacet viewmodelFacet;
-    private MixinFacet mixinFacet;
-    private TitleFacet titleFacet;
-    private IconFacet iconFacet;
-    private NavigableParentFacet navigableParentFacet;
-    private AliasedFacet aliasedFacet;
-    private CssClassFacet cssClassFacet;
-
-    @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
-
-    // -- Stuff immediately derivable from class
     @Override
     public final FeatureType getFeatureType() {
         return FeatureType.OBJECT;
@@ -454,26 +456,6 @@ implements
                 unmodifiableInterfaces.clear();
             }
         }
-    }
-
-    private List<ObjectAssociation> associationsInOrder(
-    		final List<? extends ObjectAssociation> regularAssociations,
-            final List<? extends ObjectAssociation> mixedInAssociations) {
-    	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations); // do before sorting
-        return _MemberSortingUtils.sortAssociationsIntoList(Stream.concat(
-                regularAssociations.stream(),
-                mixedInAssociations.stream()));
-    }
-
-    private List<ObjectAction> actionsInOrder(
-    		final List<? extends ObjectAction> regularActions,
-            final List<? extends ObjectAction> mixedInActions,
-            final List<? extends ObjectAction> syntheticActions) {
-    	_MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions); // do before sorting
-        return _MemberSortingUtils.sortActionsIntoList(_Streams.concat(
-		        		regularActions.stream(),
-		        		mixedInActions.stream(),
-		        		syntheticActions.stream()));
     }
 
     private void invalidateCachedFacets() {
@@ -718,9 +700,5 @@ implements
             final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
     }
-
-    @Getter(lazy = true)
-    private final Can<EntityTitleSubscriber> titleSubscribers =
-        getServiceRegistry().select(EntityTitleSubscriber.class);
 
 }
