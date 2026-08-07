@@ -26,7 +26,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
@@ -34,6 +36,8 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ReplayableCommandReplayStateTest {
@@ -51,6 +55,7 @@ class ReplayableCommandReplayStateTest {
         when(entry.getCommandDto()).thenReturn(new CommandDto());
         var repository = mock(CommandLogEntryRepository.class);
         when(repository.findByInteractionId(id)).thenReturn(Optional.of(entry));
+        when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of());
         var context = new ReplayContext(null, null, null, repository, null, null,
                 new ResultRemappingService(List.of()), null, null);
         var command = new ReplayableCommand(id, context);
@@ -58,6 +63,30 @@ class ReplayableCommandReplayStateTest {
         assertThat(command.disableReplayOrRetry() == null).isEqualTo(replayable);
         assertThat(command.disableExcludeFromReplay() == null).isEqualTo(excludable);
         assertThat(new ReplayableCommand_replayOrRetry(command).disableAct() == null).isEqualTo(replayable);
+    }
+
+    @Test
+    void pendingBackgroundWorkDisablesAndDirectlyGuardsOtherwiseReplayableCommand() {
+        var id = UUID.randomUUID();
+        var entry = mock(CommandLogEntry.class);
+        when(entry.getInteractionId()).thenReturn(id);
+        when(entry.getReplayState()).thenReturn(ReplayState.PENDING);
+        when(entry.getCommandDto()).thenReturn(new CommandDto());
+        var repository = mock(CommandLogEntryRepository.class);
+        when(repository.findByInteractionId(id)).thenReturn(Optional.of(entry));
+        when(repository.findBackgroundAndNotYetStarted()).thenReturn(List.of(mock(CommandLogEntry.class)));
+        var executor = mock(CommandExecutorService.class);
+        var context = new ReplayContext(null, null, null, repository, executor, null,
+                new ResultRemappingService(List.of()), null, null);
+        var command = new ReplayableCommand(id, context);
+
+        assertThat(command.disableReplayOrRetry()).isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
+        assertThat(new ReplayableCommand_replayOrRetry(command).disableAct())
+                .isEqualTo(ReplayPendingBackgroundCommands.WAIT_MESSAGE);
+        assertThat(command.tryReplayOrRetry().isSuccess()).isTrue();
+        verify(executor, never()).executeCommand(
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any(CommandDto.class));
     }
 
     private static Stream<Arguments> states() {

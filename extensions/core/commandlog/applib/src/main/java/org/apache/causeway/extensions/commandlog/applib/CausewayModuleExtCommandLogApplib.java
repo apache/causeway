@@ -53,6 +53,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManage
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_exportSequence;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_importCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_moveCommands;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryMultiple;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_replayOrRetryNext;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandManager_unexcludeCommands;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.CommandReplayManager;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.HasBaseline_changeBaseline;
@@ -130,6 +132,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandManager_unexcludeCommands.class,
         CommandManager_deleteCommands.class,
         CommandManager_moveCommands.class,
+        CommandManager_replayOrRetryNext.class,
+        CommandManager_replayOrRetryMultiple.class,
 
         // @Component's
         RunBackgroundCommandsJob.class,
