@@ -11,11 +11,27 @@
 - PostProcessor
 - ClassSubstitutorRegistry/ClassSubstitutor
 
+== SpecificationLoader
+
+This class acts as the primary engine for constructing the system's metadata (the "Metamodel"). Based on the requirements and implementation notes:
+
+- *Orchestration*: It integrates various subsystems, such as mix-in processing, class substitution, and post-processing.
+- *Configuration Management*: It handles different operational modes (EAGER vs. LAZY) to determine how much of the metamodel is explored upfront versus on-the-fly.
+- *Lifecycle & Reloading*: It manages the complexity of "reloading" specifications while ensuring that shared references do not cause consistency issues.
+
 [source,java]
 .SpecificationLoader
 ----
 ObjectSpecification loadSpecification(Class<?> cls) 
 ----
+
+== ObjectSpecification
+
+This is the core data structure representing a class's meta data within the _Metamodel_.
+
+- *Stateful Wrapper*: It is designed as a wrapper around internal, potentially mutable data. This allows the system to maintain consistent references even when underlying information is refreshed or updated.
+- *FacetHolder*: It holds various facets of the class definition
+- *ObjectActionContainer* and *ObjectAssociationContainer* class member meta data.
 
 [source,java]
 .ObjectSpecification
@@ -51,16 +67,9 @@ However TYPE_ONLY introspection is allowed.
  .. EAGER - fully introspect all types, starting with those discovered up front, 
  then include those discovered during introspection. Then lock down the Metamodel - make it unmodifiable.
  .. LAZY - only fully introspect Mixins, introspect the rest on the fly.
-. The Spec Loader shall support evicting a Spec from the cache. (In support of reloading a Spec) 
-We need to be sure none of the other Specs still holds a reference to the evicted Spec.
-  
-=== Implementation
-  
-The `ObjectSpecification`, as cached by the `SpecificationLoader`, 
-is a wrapper that has a stable identity, 
-but delegates to another internal instance of ObjectSpec (probably as sub-interface). 
-On reload, we throw away the old internal instance, and rebuild a new one (eagerly or lazily as required).
- 
+. The Spec Loader shall support Specification reloading. (Simply evicting a Spec from the cache might not work, 
+because we cannot be sure that none of the other Specs still holds a reference to the evicted Spec.)
+
 
 [plantuml,fig-introspection-participants,svg]
 .Introspection Participants
