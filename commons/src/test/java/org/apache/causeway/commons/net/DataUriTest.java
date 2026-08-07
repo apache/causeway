@@ -18,14 +18,16 @@
  */
 package org.apache.causeway.commons.net;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +58,12 @@ class DataUriTest {
         var parsed = DataUri.parse(scenario.externalForm);
         assertEquals(scenario.externalForm, ref.toExternalForm());
         assertEquals(ref, parsed); // check equality relation
+    }
+
+    @Test
+    void mime() {
+    	Assertions.assertEquals(DataUri.ImageType.SVG.mediaType(), "image/svg+xml");
+    	Assertions.assertEquals(DataUri.ImageType.PNG.mediaType(), "image/png");
     }
 
 }
