@@ -45,12 +45,10 @@ This exception MUST NOT broaden eligibility in other projections.
 - **THEN** the general collection does not wrap it
 
 ### Requirement: Replay or retry uses the P2 replay-state boundary
-The replay-or-retry action SHALL be enabled for a replayable command in state `PENDING`, `OK`, or `FAILED`.
-It SHALL be disabled for state `UNDEFINED`, legacy `EXPORTED`, or `EXCLUDED`.
-The action guard SHALL use a replay-specific predicate and MUST NOT broaden exclusion-action eligibility.
-P2 SHALL NOT add a background-completion condition to this guard.
+The replay-or-retry action SHALL be enabled for a replayable command in state `PENDING`, `OK`, or `FAILED` when no background command is pending execution. It SHALL be disabled for state `UNDEFINED`, legacy `EXPORTED`, or `EXCLUDED`. It SHALL also be disabled while at least one persisted `ExecuteIn.BACKGROUND` command has not yet started, with a message instructing the replay user to wait until pending background commands have executed and committed. The action guard SHALL use a replay-specific predicate and MUST NOT broaden exclusion-action eligibility. Direct invocation MUST NOT replay a command when either the replay-state or background-completion guard disables it.
 
 #### Scenario: Successful command can be replayed again
+- **GIVEN** no background command is pending
 - **WHEN** a replayable command is in state `OK`
 - **THEN** replay-or-retry is enabled
 
@@ -62,9 +60,17 @@ P2 SHALL NOT add a background-completion condition to this guard.
 - **WHEN** a replayable command is in state `EXCLUDED`
 - **THEN** replay-or-retry is disabled
 
-#### Scenario: Background gating remains deferred
-- **WHEN** a replayable command is in `PENDING`, `OK`, or `FAILED` and background metadata is absent or incomplete
-- **THEN** P2 state eligibility alone does not disable replay-or-retry
+#### Scenario: Pending background work disables replay
+- **GIVEN** a replayable command is in `PENDING`, `OK`, or `FAILED`
+- **AND** at least one background command is pending execution
+- **WHEN** replay-or-retry disablement is evaluated
+- **THEN** replay-or-retry is disabled with the pending-background wait message
+
+#### Scenario: Direct invocation cannot bypass background completion
+- **GIVEN** a replayable command is otherwise replayable
+- **AND** at least one background command is pending execution
+- **WHEN** replay-or-retry is invoked directly
+- **THEN** the command is not replayed
 
 ### Requirement: Replayable command reports result presence
 A replayable command SHALL expose a non-persisted Boolean property named `hasResult`.
