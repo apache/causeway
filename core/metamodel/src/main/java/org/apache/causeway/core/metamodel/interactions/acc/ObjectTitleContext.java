@@ -42,6 +42,15 @@ public record ObjectTitleContext(
 implements AccessContext {
 
     public ObjectTitleContext(
+    		final Identifier identifier,
+            final ManagedObject targetObjectAdapter,
+            final InteractionInitiatedBy interactionMethod) {
+        this(targetObjectAdapter, identifier,
+                targetObjectAdapter.getTitle(),
+                interactionMethod);
+    }
+
+    public ObjectTitleContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final String title,

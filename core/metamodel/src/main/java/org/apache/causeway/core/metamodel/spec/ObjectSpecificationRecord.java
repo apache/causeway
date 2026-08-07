@@ -38,9 +38,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -59,9 +56,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
-import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -273,37 +267,6 @@ implements
 		return mixinFacet()
             .map(MixinFacet::contributing);
 	}
-
-	@Override //TODO perhaps move - not the responsibility of a data carrier
-	public ObjectTitleContext createTitleInteractionContext(final ManagedObject targetObjectAdapter,
-			final InteractionInitiatedBy initiatedBy) {
-		return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(),
-                targetObjectAdapter.getTitle(),
-                initiatedBy);
-	}
-
-    // -- VALIDITY //TODO perhaps move - not the responsibility of a data carrier
-
-	@Override
-	public ObjectValidityContext createValidityInteractionContext(final ManagedObject targetAdapter,
-			final InteractionInitiatedBy interactionInitiatedBy) {
-		return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
-	}
-    @Override
-    public Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
-    }
-    @Override
-    public InteractionResult isValidResult(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        var validityContext =
-                createValidityInteractionContext(
-                        targetAdapter, interactionInitiatedBy);
-        return InteractionUtils.isValidResult(this, validityContext);
-    }
 
 	// -- FACET LOOKUP
 

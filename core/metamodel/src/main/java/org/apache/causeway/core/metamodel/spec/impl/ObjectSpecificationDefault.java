@@ -44,9 +44,6 @@ import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -73,10 +70,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
-import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -216,43 +209,9 @@ implements
         		});
     }
 
-    // -- SHALLOW IMMUTABLE
-
-	@Override
-	public ObjectSpecificationRecord build() {
-		//WIP
-		return new ObjectSpecificationRecord(
-				typeMeta,
-				getFeatureType(),
-				facetHolder,
-				this,//Hierarchical,
-				objectActionContainer,
-				objectAssociationContainer,
-				getServiceRegistry().select(EntityTitleSubscriber.class),
-				introspectionPolicy,
-				aliases(),
-				valueFacet(),
-		    	entityFacet(),
-		    	viewmodelFacet(),
-		    	mixinFacet(),
-		    	lookupFacet(ObjectNamedFacet.class),
-		    	lookupFacet(ObjectDescribedFacet.class),
-		    	lookupFacet(TypeOfFacet.class),
-		    	lookupNonFallbackFacet(TitleFacet.class),
-		    	lookupFacet(IconFacet.class),
-		    	lookupFacet(FaFacet.class),
-		        lookupFacet(NavigableParentFacet.class),
-		        lookupFacet(CssClassFacet.class),
-				isDomainService(),
-				isInjectable(),
-				isParented(),
-				isImmutable(),
-				isHidden(),
-				new MemberCatalog(this).membersByMethod());
-	}
-
     // --
 
+	@Override public FeatureType getFeatureType() { return FeatureType.OBJECT; }
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
     @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
@@ -383,16 +342,9 @@ implements
 
     // -- ELEMENT SPECIFICATION
 
-
     @Override
     public Optional<ObjectSpecification> explicitElementSpec() {
         return elementSpecification.get();
-    }
-
-
-    @Override
-    public final FeatureType getFeatureType() {
-        return FeatureType.OBJECT;
     }
 
     private void loadSpecOfSuperclass(final Class<?> superclass) {
@@ -508,7 +460,7 @@ implements
         if (titleFacet != null) {
             var titleString = titleFacet.title(titleRenderRequest);
             if (!_Strings.isEmpty(titleString)) {
-                notifySubscribersIfEntity(titleRenderRequest, titleString);
+                notifyAnyTitleSubscribers(titleRenderRequest, titleString);
                 return titleString;
             }
         }
@@ -516,18 +468,6 @@ implements
                 ? ""
                 : "Untitled ";
         return prefix + getSingularName();
-    }
-
-    private void notifySubscribersIfEntity(
-            final TitleRenderRequest titleRenderRequest,
-            final String titleString) {
-        if (!isEntity())
-			return;
-
-        var managedObject = titleRenderRequest.object();
-        managedObject.getBookmark().ifPresent(bookmark -> {
-            getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
-        });
     }
 
     @Override
@@ -631,16 +571,6 @@ implements
         }
     }
 
-    @Override //TODO separation of concerns ?
-    public ObjectTitleContext createTitleInteractionContext(
-            final ManagedObject targetObjectAdapter,
-            final InteractionInitiatedBy interactionMethod) {
-
-        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(),
-                targetObjectAdapter.getTitle(),
-                interactionMethod);
-    }
-
     // -- INHERITED
 
     @Override
@@ -671,34 +601,52 @@ implements
         return Optional.empty();
     }
 
-    // -- VALIDITY
+    // -- SHALLOW IMMUTABLE / EXPERIMENTAL
 
-    @Override
-    public Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+	@Override
+	public ObjectSpecificationRecord build() {
+		//WIP
+		return new ObjectSpecificationRecord(
+				typeMeta,
+				getFeatureType(),
+				facetHolder,
+				this,//Hierarchical,
+				objectActionContainer,
+				objectAssociationContainer,
+				getServiceRegistry().select(EntityTitleSubscriber.class),
+				introspectionPolicy,
+				aliases(),
+				valueFacet(),
+		    	entityFacet(),
+		    	viewmodelFacet(),
+		    	mixinFacet(),
+		    	lookupFacet(ObjectNamedFacet.class),
+		    	lookupFacet(ObjectDescribedFacet.class),
+		    	lookupFacet(TypeOfFacet.class),
+		    	lookupNonFallbackFacet(TitleFacet.class),
+		    	lookupFacet(IconFacet.class),
+		    	lookupFacet(FaFacet.class),
+		        lookupFacet(NavigableParentFacet.class),
+		        lookupFacet(CssClassFacet.class),
+				isDomainService(),
+				isInjectable(),
+				isParented(),
+				isImmutable(),
+				isHidden(),
+				new MemberCatalog(this).membersByMethod());
+	}
 
-        return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
+    // -- HELPER
+
+    private void notifyAnyTitleSubscribers(
+    		final TitleRenderRequest titleRenderRequest,
+    		final String titleString) {
+    	if (!isEntity())
+    		return;
+
+    	var managedObject = titleRenderRequest.object();
+    	managedObject.getBookmark().ifPresent(bookmark -> {
+    		getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
+    	});
     }
-
-    @Override
-    public InteractionResult isValidResult(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        var validityContext =
-                createValidityInteractionContext(
-                        targetAdapter, interactionInitiatedBy);
-        return InteractionUtils.isValidResult(this, validityContext);
-    }
-
-    /**
-     * Create an {@link InteractionContext} representing an attempt to save the
-     * object.
-     */
-    @Override
-    public ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
-    }
-
 }

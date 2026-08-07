@@ -64,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -283,32 +284,46 @@ extends
      * Create an {@link InteractionContext} representing an attempt to read the
      * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(
-            ManagedObject targetObjectAdapter,
-            InteractionInitiatedBy invocationMethod);
+    default ObjectTitleContext createTitleInteractionContext(
+            final ManagedObject targetObjectAdapter,
+            final InteractionInitiatedBy invocationMethod) {
+    	return new ObjectTitleContext(getFeatureIdentifier(), targetObjectAdapter, invocationMethod);
+    }
 
     // -- VALIDITY
 
     // internal API
-    ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    /**
+     * Create an {@link InteractionContext} representing an attempt to save the
+     * object.
+     */
+    default ObjectValidityContext createValidityInteractionContext(
+    		final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    	return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
-    Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    default Consent isValid(
+    		final ManagedObject targetAdapter,
+    		final InteractionInitiatedBy interactionInitiatedBy) {
+    	return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
-    InteractionResult isValidResult(
+    default InteractionResult isValidResult(
             final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        var validityContext =
+                createValidityInteractionContext(
+                        targetAdapter, interactionInitiatedBy);
+        return InteractionUtils.isValidResult(this, validityContext);
+    }
 
     // -- FACETS
 
