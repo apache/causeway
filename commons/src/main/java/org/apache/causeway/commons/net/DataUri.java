@@ -30,10 +30,12 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import org.jspecify.annotations.Nullable;
-
 import org.springframework.util.StringUtils;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 
 /**
  * The data URI scheme is a uniform resource identifier (URI) scheme that provides
@@ -53,30 +55,33 @@ public record DataUri(
         BASE64
     }
 
+    @RequiredArgsConstructor
     public enum ImageType {
         BMP,
         GIF,
         ICO,
         JPEG,
         PNG,
-        SVG,
+        SVG("image/svg+xml"),
         TIFF,
         WEBP;
-        /**
+        ImageType() {
+        	this.mediaType = "image/" + formatName();
+		}
+        @Getter @Accessors(fluent = true)
+        private final String mediaType;
+		/**
          * The informal name of the format like 'pdf' or 'jpeg' etc.
          */
         public String formatName() {
             return name().toLowerCase(Locale.ROOT);
-        }
-        public String mediaType() {
-            return "image/" + formatName();
         }
     }
 
     // -- FACTORIES
 
     @SneakyThrows
-    public static DataUri parse(String dataURI) {
+    public static DataUri parse(final String dataURI) {
         var uri = new URI(dataURI);
         if(!"data".equals(uri.getScheme())) {
             throw new IllegalArgumentException("Invalid Data URI format");
@@ -105,7 +110,7 @@ public record DataUri(
         return new DataUri(mediaType, parameters, encoding, decodeData(encoding, dataPart));
     }
 
-    public static DataUri embeddedImage(final ImageType imageType, byte[] imageData) {
+    public static DataUri embeddedImage(final ImageType imageType, final byte[] imageData) {
         Objects.requireNonNull(imageType);
         Objects.requireNonNull(imageData);
         return new DataUri(imageType.mediaType(), null, Encoding.BASE64, imageData);
@@ -116,10 +121,10 @@ public record DataUri(
     // canonical constructor
     @SneakyThrows
     public DataUri(
-            @Nullable String mediaType,
-            @Nullable List<String> parameters,
-            @Nullable Encoding encoding,
-            @Nullable byte[] data) {
+            @Nullable final String mediaType,
+            @Nullable final List<String> parameters,
+            @Nullable final Encoding encoding,
+            @Nullable final byte[] data) {
         this.mediaType = StringUtils.hasLength(mediaType) ? mediaType : "text/plain;charset=US-ASCII";
         this.parameters = parameters!=null ? List.copyOf(parameters) : List.of();
         this.encoding = encoding!=null ? encoding : Encoding.NONE;
@@ -155,7 +160,7 @@ public record DataUri(
      * @implNote override needed, otherwise the data array would be compared by reference
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if(this == o) return true;
         return o instanceof DataUri other
             ? Objects.equals(this.mediaType, other.mediaType)
@@ -173,7 +178,7 @@ public record DataUri(
             : URLEncoder.encode(new String(data, StandardCharsets.UTF_8), StandardCharsets.UTF_8).replace("+", "%20");
     }
 
-    private static byte[] decodeData(Encoding encoding, String dataPart) {
+    private static byte[] decodeData(final Encoding encoding, final String dataPart) {
         return encoding == Encoding.BASE64
                 ? Base64.getDecoder().decode(dataPart)
                 : dataPart.getBytes(StandardCharsets.UTF_8);
