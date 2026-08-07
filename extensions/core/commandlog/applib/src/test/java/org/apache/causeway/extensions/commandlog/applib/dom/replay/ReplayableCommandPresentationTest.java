@@ -104,7 +104,7 @@ class ReplayableCommandPresentationTest {
     }
 
     @Test
-    void unifiedManagerLayoutExposesExportImportAndW1CollectionWorkflows() throws Exception {
+    void unifiedManagerLayoutExposesCompletedReconciliationWorkflows() throws Exception {
         var layout = managerResource("CommandManager.layout.fallback.xml");
 
         assertThat(layout).contains(
@@ -113,9 +113,13 @@ class ReplayableCommandPresentationTest {
                 "id=\"pendingOrFailed\"", "id=\"recordedOrReplayed\"",
                 "id=\"exportSequence\"", "id=\"importCommands\"",
                 "id=\"excludeCommands\"", "id=\"unexcludeCommands\"",
-                "id=\"deleteCommands\"", "id=\"moveCommands\"");
-        assertThat(layout.indexOf("id=\"pendingOrFailed\"")).isLessThan(
-                layout.indexOf("id=\"importCommands\""));
+                "id=\"deleteCommands\"", "id=\"moveCommands\"",
+                "id=\"replayOrRetryNext\"", "id=\"replayOrRetryMultiple\"");
+        assertThat(layout).containsSubsequence(
+                "id=\"pendingOrFailed\"",
+                "id=\"replayOrRetryNext\"",
+                "id=\"replayOrRetryMultiple\"",
+                "id=\"importCommands\"");
         assertThat(layout.indexOf("id=\"commandsInSequence\"")).isLessThan(
                 layout.indexOf("id=\"exportSequence\""));
         assertThat(layout).doesNotContain(
@@ -131,7 +135,9 @@ class ReplayableCommandPresentationTest {
                 CommandManager_excludeCommands.class,
                 CommandManager_unexcludeCommands.class,
                 CommandManager_deleteCommands.class,
-                CommandManager_moveCommands.class);
+                CommandManager_moveCommands.class,
+                CommandManager_replayOrRetryNext.class,
+                CommandManager_replayOrRetryMultiple.class);
     }
 
     @Test
@@ -140,6 +146,12 @@ class ReplayableCommandPresentationTest {
         assertW1Action(CommandManager_moveCommands.class, "commandsInSequence", "btn-secondary");
         assertW1Action(CommandManager_unexcludeCommands.class, "excluded", "btn-secondary");
         assertW1Action(CommandManager_deleteCommands.class, "excluded", "btn-danger");
+    }
+
+    @Test
+    void b2ActionsAreOrderedPrototypingCollectionActionsWithPublishingSuppressed() {
+        assertB2Action(CommandManager_replayOrRetryNext.class, "1.1", "btn-primary");
+        assertB2Action(CommandManager_replayOrRetryMultiple.class, "1.2", "btn-secondary");
     }
 
     private static String resource(final String name) throws IOException {
@@ -166,6 +178,21 @@ class ReplayableCommandPresentationTest {
         assertThat(action.commandPublishing()).isEqualTo(Publishing.DISABLED);
         assertThat(action.executionPublishing()).isEqualTo(Publishing.DISABLED);
         assertThat(layout.associateWith()).isEqualTo(association);
+        assertThat(layout.cssClass()).isEqualTo(cssClass);
+    }
+
+    private static void assertB2Action(
+            final Class<?> type,
+            final String sequence,
+            final String cssClass) {
+        final var action = type.getAnnotation(Action.class);
+        final var layout = type.getAnnotation(ActionLayout.class);
+        assertThat(action.restrictTo()).isEqualTo(RestrictTo.PROTOTYPING);
+        assertThat(action.choicesFrom()).isEqualTo("pendingOrFailed");
+        assertThat(action.commandPublishing()).isEqualTo(Publishing.DISABLED);
+        assertThat(action.executionPublishing()).isEqualTo(Publishing.DISABLED);
+        assertThat(layout.associateWith()).isEqualTo("pendingOrFailed");
+        assertThat(layout.sequence()).isEqualTo(sequence);
         assertThat(layout.cssClass()).isEqualTo(cssClass);
     }
 }

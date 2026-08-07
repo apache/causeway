@@ -95,13 +95,18 @@ Optionally, modify the configuration properties for the _Command Log_ module its
 causeway:
   extensions:
     command-log:
-      publish-policy: "always"    # <.>
+      publish-policy: "always"       # <.>
+      recording-support: "ENABLED"  # <.>
 ----
 
 
 <.> the alternative is `"only-if-system-changed"`, which suppresses the persisting of `CommandLogEntry`s for commands where no other system state was changed (for example a finder action with safe semantics).
 +
 See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.publish-policy[causeway.extensions.command-log.publish-policy] configuration property for more details.
+
+<.> enables command recording and replay support; it is `DISABLED` by default.
++
+See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.recording-support[causeway.extensions.command-log.recording-support] configuration property for more details.
 
 === Persistent Replay-result Mappings
 
@@ -155,8 +160,29 @@ They omit resultless safe actions without deleting or changing the underlying co
 The pending-or-failed replay collection is intentionally exempt so that all imported replay work remains reviewable.
 The safe Previous and Next actions navigate foreground commands in command-log order, skipping entries that are ineligible under this general rule.
 
-For now, export and replay continue to use the separate `CommandExportManager` and `CommandReplayManager` view models.
-A future change may unify their sequence-management surface; the participant projection and eligibility policy do not depend on that redesign.
+The `CommandManager` view model is the forward sequence-management surface for export, import, exclusion, movement, restoration, deletion, and replay workflows.
+The older `CommandExportManager` and `CommandReplayManager` view models remain available as compatibility surfaces.
+
+=== Recording and Replay with Background Commands
+
+Recording and replay use a global, conservative definition of pending background work: any persisted command with `ExecuteIn.BACKGROUND` and no `startedAt` timestamp is pending.
+This reuses the existing command-log repository query; it is not limited by user, tenant, parent interaction, or replay-manager baseline.
+
+When `recording-support` is `ENABLED`, the foreground command that schedules background work is allowed to complete.
+While that work remains pending, an attempt to create a later recorded foreground command fails with a message instructing the user to wait until pending background commands have executed and committed.
+The command can be retried after the background job commits.
+The gate does not apply when recording support is disabled or command recording is paused.
+
+Replay entry points apply the same wait condition, including an individual `ReplayableCommand`, the unified manager, and the retained legacy replay manager.
+The unified manager contributes `replayOrRetryNext` and `replayOrRetryMultiple` to its `pendingOrFailed` collection.
+Replay-next acts on the oldest eligible command.
+Replay-multiple supports bounds of 5, 10, 20, 40, 80, 160, 320, or all, and defaults to 10.
+It stops after the first replay failure or as soon as a replay schedules new pending background work, preserving completed replay states.
+After the background work executes and commits, invoke replay again to continue with the remaining pending or failed commands.
+The replay controls never poll for, wait on, or execute background work themselves.
+
+This Causeway 4 behavior uses the existing JPA commandlog adapter and named query, and requires no datastore migration or additional configuration.
+No commandlog JDO adapter is provided for Causeway 4.
 
 
 [#menubar-layout-xml]
@@ -245,7 +271,8 @@ Assuming that the `exportInvoices()` action is a regular action on the `Supplier
 ----
 @Action
 public void exportInvoices(Supplier supplier) {
-    backgroundService.execute(supplier).exportInvoices();
+    backgroundService.execute(supplier)
+        .acceptAsync(Supplier::exportInvoices);
 }
 ----
 
@@ -256,7 +283,8 @@ If instead this functionality is implemented as a mixin, we would use something 
 ----
 @Action
 public void exportInvoices(Supplier supplier) {
-    backgroundService.executeMixin(Supplier_exportInvoices.class, supplier).act();
+    backgroundService.executeMixin(Supplier_exportInvoices.class, supplier)
+        .acceptAsync(Supplier_exportInvoices::act);
 }
 ----
 

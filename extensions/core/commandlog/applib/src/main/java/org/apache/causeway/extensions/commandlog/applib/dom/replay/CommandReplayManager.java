@@ -207,17 +207,25 @@ public record CommandReplayManager(
     public class replayOrRetrySelected {
         public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
         @MemberSupport public CommandReplayManager act(final List<ReplayableCommand> selected) {
+            if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext)) {
+                return CommandReplayManager.this;
+            }
             var replayables = selected.stream()
                 .sorted()
                 .collect(Collectors.toList());
             for(var replayableCommand : replayables) {
                 var tryReplayOrRetry = replayableCommand.tryReplayOrRetry(); // filtered on its own responsibility
-                if(tryReplayOrRetry.isFailure())
+                if(tryReplayOrRetry.isFailure()
+                        || ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext))
                     return CommandReplayManager.this; // stop further execution
             }
             return CommandReplayManager.this;
         }
         @MemberSupport public String disableAct() {
+            final var backgroundReason = ReplayPendingBackgroundCommands.disableReason(replayContext);
+            if (backgroundReason != null) {
+                return backgroundReason;
+            }
             return getPendingOrFailed().isEmpty() ? "No commands in collection" : null;
         }
         @MemberSupport public String validateSelected(final List<ReplayableCommand> selected) {
@@ -241,6 +249,9 @@ public record CommandReplayManager(
     public class replayOrRetryNext {
         public class DomainEvent extends ActionDomainEvent<replayOrRetrySelected> { }
         @MemberSupport public CommandReplayManager act() {
+            if (ReplayPendingBackgroundCommands.hasPendingBackgroundCommands(replayContext)) {
+                return CommandReplayManager.this;
+            }
             var nextIfAny = streamPendingOrFailed().findFirst();
             // should always be present, due to our guard
             nextIfAny.ifPresent(ReplayableCommand::tryReplayOrRetry);
@@ -249,6 +260,10 @@ public record CommandReplayManager(
 
         @MemberSupport
         public String disableAct() {
+            final var backgroundReason = ReplayPendingBackgroundCommands.disableReason(replayContext);
+            if (backgroundReason != null) {
+                return backgroundReason;
+            }
             return sizePendingOrFailed() == 0 ? "No commands in collection" : null;
         }
     }
