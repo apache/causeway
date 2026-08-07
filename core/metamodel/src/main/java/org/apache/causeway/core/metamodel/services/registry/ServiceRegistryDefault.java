@@ -82,9 +82,10 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        var iocContainer = causewaySystemEnvironment.springContextHolder();
-        return iocContainer
-                .select(type, qualifiers);
+        var springContextHolder = causewaySystemEnvironment.springContextHolder();
+        return springContextHolder!=null
+                ? springContextHolder.select(type, qualifiers)
+                : Can.empty();
     }
 
     @Override

@@ -22,7 +22,7 @@
 | CAUSEWAY-3996 | In-memory layout patching | Matching main history | Equivalent | None |
 | CAUSEWAY-3997 | Listing and column-order fixes | Matching main history | Equivalent | Selective viewer regression tests |
 | CAUSEWAY-3998 | Import commands from the oldest baseline | Unified-manager import retains the limit and optionally moves to the oldest usable imported timestamp | Equivalent | Completed through E1 |
-| CAUSEWAY-4002 | Avoid unavailable IoC container during metamodel disposal | Main uses a different Spring context abstraction | Unresolved | Verify Causeway 4 disposal lifecycle separately |
+| CAUSEWAY-4002 | Avoid unavailable IoC container during metamodel disposal | Causeway 4 reproduced the same shutdown-time null selection through `SpringContextHolder`; `ServiceRegistryDefault.select()` now returns an empty selection when that holder is unavailable, allowing disposal to complete | Adapt | Implemented by `guard-service-selection-during-context-shutdown`; archive pending |
 | Unnumbered update-only publishing | Publish entity changes only for updates | `Publishing.ENABLED_FOR_UPDATES_ONLY` exists on main | Equivalent | None |
 
 ## Command recording and replay inventory
@@ -81,12 +81,11 @@
 | Unified-manager export derives its immutable ordered sequence from R2-known commands and emits canonical result-bearing envelopes; strict replay import accepts canonical and legacy multi-document streams, stores unresolved result bookmarks without object lookup, and optionally moves the baseline while retaining the limit. | E1 | `reconcile-command-export-import/design.md`, `CommandManagerExportSequenceTest`, and `CommandManagerImportCommandsTest` |
 | Unified-manager workflow mutations use fresh interaction-id-based collection snapshots; existing managed `CommandLogEntry` mutations persist exclusion, restoration, deletion, and matching entry/DTO retimestamps through the Causeway 4 JPA adapter without a schema change, repository mutation API, or restored commandlog JDO adapter. | W1 | `reconcile-command-manager-workflows/design.md`, commandlog applib workflow tests, and `CommandManagerWorkflow_IntegTest` |
 | Pending background work is defined globally by the existing repository query as persisted `ExecuteIn.BACKGROUND` entries with null `startedAt`; recording support rejects only later new foreground entries, every retained replay surface shares the same gate, and bounded replay pauses without waiting until background execution commits. | B1, B2 | `reconcile-command-background-gates/design.md`, `CommandManagerBackgroundReplayTest`, and `CommandBackgroundGate_IntegTest` |
+| The Causeway 4 Spring context holder is cleared before metamodel bean destruction, reproducing the maintenance CAUSEWAY-4002 lifecycle NPE; service selection therefore treats an unavailable holder as empty while preserving active-context type and qualifier delegation. | CAUSEWAY-4002 | Maintenance commit `47167916d2c`, `guard-service-selection-during-context-shutdown/design.md`, `ServiceRegistryDefaultTest`, focused `HomePage_IntegTest` shutdown evidence, and the affected 40-project JDK 21 reactor |
 
 ## Open questions
 
-| Question | Affected nodes | Resolution point |
-|---|---|---|
-| Can the Causeway 4 Spring context become unavailable during `ServiceRegistryDefault.select()` in metamodel disposal? | CAUSEWAY-4002 | Separate lifecycle investigation before core work is declared complete |
+None.
 
 ## Acceptance evidence policy
 
