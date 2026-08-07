@@ -19,12 +19,10 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -41,14 +39,11 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,7 +52,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -91,7 +85,6 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -116,11 +109,6 @@ implements
 
     // -- CONSTRUCTION
 
-    /**
-     * Lazily built by {@link #getMember(ResolvedMethod)}.
-     */
-    private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
-
     private final FacetedMethodsFactory facetedMethodsFactory;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _Lazy<Boolean> isInjectableLazy;
@@ -139,6 +127,8 @@ implements
     private AssociationContainer objectAssociationContainer = AssociationContainer.EMPTY;
     @Getter @Accessors(fluent = true)
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private MemberCatalog memberCatalog = MemberCatalog.EMPTY;
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
@@ -194,6 +184,7 @@ implements
 
 	@Override
 	public ObjectSpecificationRecord build() {
+		//WIP
 		return new ObjectSpecificationRecord(
 				typeMeta,
 				getFeatureType(),
@@ -221,7 +212,7 @@ implements
 				isParented(),
 				isImmutable(),
 				isHidden(),
-				catalogueMembers());
+				new MemberCatalog(this).membersByMethod());
 	}
 
     // --
@@ -331,6 +322,7 @@ implements
 				postProcessor.postProcess(this);
 			});
 		//}
+		this.memberCatalog = new MemberCatalog(this);
 
         invalidateCachedFacets();
 
@@ -347,48 +339,10 @@ implements
         }
     }
 
-    // -- getObjectAction
-
     @Override
     public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
     	introspectFully();
-
-        if (membersByMethod == null) {
-            this.membersByMethod = catalogueMembers();
-        }
-
-        var member = membersByMethod.get(method);
-        return Optional.ofNullable(member);
-    }
-
-    private Map<ResolvedMethod, ObjectMember> catalogueMembers() {
-        var membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
-        cataloguePropertiesAndCollections(membersByMethod::put);
-        catalogueActions(membersByMethod::put);
-        return membersByMethod;
-    }
-
-    private void cataloguePropertiesAndCollections(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
-        streamDeclaredAssociations(MixedIn.EXCLUDED)
-        .forEach(field->
-            field.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(Can::stream)
-                .map(MethodFacade::asMethodElseFail) // expected regular
-                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
-                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
-    }
-
-    private void catalogueActions(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
-        streamDeclaredActions(MixedIn.INCLUDED)
-        .forEach(userAction->
-            userAction.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(Can::stream)
-                .map(MethodFacade::asMethodForIntrospection)
-                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
-                .forEach(imperativeFacetMethod->
-                    onMember.accept(imperativeFacetMethod, userAction)));
+    	return memberCatalog.lookupMember(method);
     }
 
     // -- ELEMENT SPECIFICATION
@@ -719,7 +673,7 @@ implements
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-    	introspectionStateHandler.introspectFully();
+    	introspectFully();
 
         if(_Strings.isEmpty(memberId))
 			return Optional.empty();
