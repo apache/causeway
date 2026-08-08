@@ -43,6 +43,7 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link FactoryService}.
@@ -53,6 +54,7 @@ import jakarta.inject.Provider;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@Slf4j
 public record FactoryServiceDefault(
         InteractionService interactionService, // dependsOn
         Provider<SpecificationLoader> specificationLoaderProvider,
@@ -98,10 +100,12 @@ implements FactoryService {
 
     @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixee) {
-    	if(!specificationLoaderProvider().get().contains(mixinClass))
-			throw _Exceptions.illegalArgument("Mixin class '%s' is not part of the meta model, hence will not be loaded, "
-    				+ "because that would invalidate the entire metamodel as currently held in memory",
+    	if(!specificationLoaderProvider().get().contains(mixinClass)) {
+    		// in effect only warns once
+			log.warn("Mixin class '{}' is not part of the meta model, "
+					+ "it will be loaded, but this has no effect on mixed-in member creation for domain types",
                     mixinClass.getName());
+		}
 
         var mixinSpec = loadSpecElseFail(mixinClass);
         var mixinFacet = mixinSpec.lookupFacet(MixinFacet.class).orElse(null);

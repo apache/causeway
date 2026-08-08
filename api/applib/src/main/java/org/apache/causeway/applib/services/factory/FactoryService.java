@@ -107,8 +107,9 @@ public interface FactoryService {
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @throws IllegalArgumentException if mixinClass is not a mixin type or if mixinClass is not already part of the metamodel
-     * @apiNote forces the mixinClass to be added to the meta-model if not already
+     * @throws IllegalArgumentException if mixinClass is not a mixin type
+     * @apiNote does not add the mixinClass to the meta-model's set of mixins
+     * 		that are mixed in to types.
      */
     <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn);
 
