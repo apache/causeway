@@ -194,8 +194,8 @@ extends MetaModelValidatorAbstract {
                     .isSupportMethodAnnotationsRequired())
             return; // ignore
 
-        var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
-            ? specDefault.getPotentialOrphans()
+        var potentialOrphans = spec instanceof ObjectSpecificationInternal internalSpec
+            ? internalSpec.potentialOrphans()
             : Collections.<ResolvedMethod>emptySet();
         if(potentialOrphans.isEmpty()) return; // nothing to do
 

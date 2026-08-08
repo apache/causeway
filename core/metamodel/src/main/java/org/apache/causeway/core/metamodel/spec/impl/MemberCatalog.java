@@ -38,7 +38,7 @@ record MemberCatalog(
 
 	static MemberCatalog EMPTY = new MemberCatalog(Map.of());
 
-    MemberCatalog(final ObjectSpecificationBuilder spec) {
+    MemberCatalog(final ObjectSpecificationInternal spec) {
     	this(catalogMembersByMethod(Objects.requireNonNull(spec)));
 	}
 
@@ -50,14 +50,14 @@ record MemberCatalog(
 
 	// -- HELPER
 
-	private static Map<ResolvedMethod, ObjectMember> catalogMembersByMethod(final ObjectSpecificationBuilder spec) {
+	private static Map<ResolvedMethod, ObjectMember> catalogMembersByMethod(final ObjectSpecificationInternal spec) {
 		var membersByMethod = new HashMap<ResolvedMethod, ObjectMember>();
 		cataloguePropertiesAndCollections(spec, membersByMethod::put);
 		catalogueActions(spec, membersByMethod::put);
 		return Collections.unmodifiableMap(membersByMethod);
 	}
 
-    private static void cataloguePropertiesAndCollections(final ObjectSpecificationBuilder spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+    private static void cataloguePropertiesAndCollections(final ObjectSpecificationInternal spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
 	        .forEach(field->
 	            field.streamFacets(ImperativeFacet.class)
@@ -68,7 +68,7 @@ record MemberCatalog(
 	                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
-    private static void catalogueActions(final ObjectSpecificationBuilder spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+    private static void catalogueActions(final ObjectSpecificationInternal spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
     	spec.streamDeclaredActions(MixedIn.INCLUDED)
 	        .forEach(userAction->
 	            userAction.streamFacets(ImperativeFacet.class)

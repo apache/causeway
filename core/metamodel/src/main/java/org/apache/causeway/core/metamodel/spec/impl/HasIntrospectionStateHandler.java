@@ -29,8 +29,8 @@ interface HasIntrospectionStateHandler extends IntrospectionStateHandler {
 	}
 
 	@Override
-	default boolean isFullyIntrospected() {
-		return introspectionStateHandler().isFullyIntrospected();
+	default IntrospectionState introspectionState() {
+		return introspectionStateHandler().introspectionState();
 	}
 
 }

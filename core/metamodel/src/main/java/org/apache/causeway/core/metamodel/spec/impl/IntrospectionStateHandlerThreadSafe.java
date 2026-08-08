@@ -38,9 +38,9 @@ implements IntrospectionStateHandler {
 	}
 
 	@Override
-	public boolean isFullyIntrospected() {
+	public IntrospectionState introspectionState() {
 		// we don't care about thread synchronization here
-		return state == IntrospectionState.FULLY_INTROSPECTED;
+		return state;
 	}
 
     @Override

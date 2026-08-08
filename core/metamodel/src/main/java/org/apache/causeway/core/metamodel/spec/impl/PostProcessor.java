@@ -33,7 +33,7 @@ record PostProcessor(
                 .collect(Can.toCan()));
     }
 
-    public void postProcess(final ObjectSpecificationBuilder objSpecBuilder) {
+    public void postProcess(final ObjectSpecificationInternal objSpecBuilder) {
 
         for (var postProcessor : enabledPostProcessors) {
 

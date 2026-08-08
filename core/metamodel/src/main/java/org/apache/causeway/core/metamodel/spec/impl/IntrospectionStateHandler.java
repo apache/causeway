@@ -25,7 +25,7 @@ interface IntrospectionStateHandler {
 
 	enum IntrospectionState {
 	    /**
-	     * At this stage, {@link LogicalType} only.
+	     * At this stage, {@link LogicalType} only, that is, just registered with a stable identity.
 	     */
 	    NOT_INTROSPECTED,
 	    /**
@@ -40,12 +40,16 @@ interface IntrospectionStateHandler {
 	     * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
 	     */
 	    MEMBERS_BEING_INTROSPECTED,
-
-	    //MIXED_IN_MEMBERS_ADDED,
 	    /**
 	     * Fully introspected... class and also its members.
 	     */
 	    FULLY_INTROSPECTED;
+
+		boolean isOnlyRegistered() { return this == NOT_INTROSPECTED; }
+		boolean isTypeBeingIntrospected() { return this == TYPE_BEING_INTROSPECTED; }
+		boolean isOnlyTypeIntrospected() { return this == TYPE_INTROSPECTED; }
+		boolean isMembersBeingIntrospected() { return this == MEMBERS_BEING_INTROSPECTED; }
+		boolean isFullyIntrospected() { return this == FULLY_INTROSPECTED; }
 
 		boolean isLessThan(final IntrospectionState other) {
 			return this.ordinal() < other.ordinal();
@@ -67,8 +71,20 @@ interface IntrospectionStateHandler {
 		FULL
     }
 
+    /**
+     * Provides the state of initialization. It is not until the final state is reached,
+     * that this {@link ObjectSpecification} can be trusted to contain complete and consistent metadata.
+     *
+     * @apiNote allows a peek at initialization state that is not synchronized among threads.
+     * 		Meaning the state has progressed at least to the point indicated by the return value.
+     */
+    IntrospectionState introspectionState();
+
+    default boolean isFullyIntrospected() {
+    	return introspectionState() == IntrospectionState.FULLY_INTROSPECTED;
+    }
+
 	void introspectUpTo(final IntrospectionState upTo);
-	boolean isFullyIntrospected();
 
 	default void introspect(final IntrospectionRequest request) {
         switch (request) {

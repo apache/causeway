@@ -25,25 +25,20 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 
-interface ObjectSpecificationBuilder
+/**
+ * package private, implements {@link ObjectSpecification}
+ * but is potentially in the process of being initialized.
+ *
+ * <p> How far we are in the initializing phases can be queried via {@link #introspectionState()}
+ */
+interface ObjectSpecificationInternal
 extends
 	HasSpecificationLoaderInternal,
 	ObjectActionContainer,
 	ObjectAssociationContainer,
 	IntrospectionStateHandler,
-	ObjectSpecification // TODO remove
-//	Specification,
-//	HasLogicalType,
-//	HasFacetHolder,
-//	Hierarchical,
-//	ObjectActionContainer,
-//	ObjectAssociationContainer,
-//	ObjectMemberContainer,
-//	HasSpecificationLoaderInternal
-	{
+	ObjectSpecification {
 
-    ObjectSpecification build();
-
-    Set<ResolvedMethod> getPotentialOrphans();
+    Set<ResolvedMethod> potentialOrphans();
 
 }

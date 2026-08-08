@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 record RegularMemberFactory(
-		ObjectSpecificationBuilder spec,
+		ObjectSpecificationInternal spec,
 		FacetedMethodsFactory factory) {
 
 	Stream<ObjectAssociation> createAssociations() {

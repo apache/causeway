@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -30,8 +29,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 record MixinSpecStreamerEager(
 		Can<ObjectSpecification> mixinSpecs,
 		/** key: mixeeClass, value: mixinSpec */
-		_Multimaps.ListMultimap<Class<?>, ObjectSpecification> mixinsByMixeeClass,
-		Profiler profiler)
+		_Multimaps.ListMultimap<Class<?>, ObjectSpecification> mixinsByMixeeClass)
 implements MixinSpecStreamer {
 
 	MixinSpecStreamerEager(final SpecificationLoader specLoader, final CausewayBeanTypeRegistry beanTypeRegistry) {
@@ -39,8 +37,7 @@ implements MixinSpecStreamer {
 				.map(specLoader::specForTypeElseFail)
 				.filter(mixinSpec-> mixinSpec.mixinFacet().isPresent())
 				.collect(Can.toCan()),
-				_Multimaps.newListMultimap(),
-				Profiler.getInstance());
+				_Multimaps.newListMultimap());
 		streamMixinSpecs()
 			.forEach(mixinSpec->
 				mixinsByMixeeClass.putElement(mixinSpec.mixinFacetElseFail().mixeeType(), mixinSpec));
@@ -53,9 +50,9 @@ implements MixinSpecStreamer {
 
 	@Override
 	public Stream<ObjectSpecification> streamMixinSpecsFor(final ObjectSpecification mixeeSpec) {
-		return profiler.measure("MixinSpecStreamerEager", () -> mixeeSpec.streamTypeHierarchyAndInterfaces()
+		return mixeeSpec.streamTypeHierarchyAndInterfaces()
 			.map(ObjectSpecification::getCorrespondingClass)
-			.flatMap(mixinsByMixeeClass::streamElements));
+			.flatMap(mixinsByMixeeClass::streamElements);
 	}
 
 }

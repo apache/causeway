@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -28,16 +27,8 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 @Deprecated // not used anymore
 record MixinSpecStreamerOnTheFly(
 		SpecificationLoader specLoader,
-		CausewayBeanTypeRegistry beanTypeRegistry,
-		Profiler profiler)
+		CausewayBeanTypeRegistry beanTypeRegistry)
 implements MixinSpecStreamer {
-
-	@Deprecated
-	MixinSpecStreamerOnTheFly(
-			final SpecificationLoader specLoader,
-			final CausewayBeanTypeRegistry beanTypeRegistry) {
-		this(specLoader, beanTypeRegistry, Profiler.getInstance());
-	}
 
 	@Deprecated
 	@Override

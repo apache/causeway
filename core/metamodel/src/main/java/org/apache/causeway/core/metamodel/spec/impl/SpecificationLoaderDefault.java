@@ -46,7 +46,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -61,7 +60,6 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.Preloadabl
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.causeway.core.metamodel.object.Mm2YamlUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
@@ -122,14 +120,14 @@ implements
     private final ProgrammingModel programmingModel;
     private PostProcessor postProcessor;
     private MixinSpecStreamer mixinSpecStreamer = MixinSpecStreamer.EMPTY;
-    private final Profiler profiler = Profiler.getInstance();
+    //perf... private final Profiler profiler = Profiler.getInstance();
 
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
 
     private FacetProcessor facetProcessor;
 
-    private final Map<Class<?>, ObjectSpecificationBuilder> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ObjectSpecificationInternal> cache = new ConcurrentHashMap<>();
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     /**
@@ -198,13 +196,13 @@ implements
     }
 
     record SpecCollector(
-            List<ObjectSpecificationBuilder> knownSpecs,
-            Map<Class<?>, ObjectSpecificationBuilder> valueSpecs,
-            List<ObjectSpecificationBuilder> domainServiceSpecs,
-            List<ObjectSpecificationBuilder> mixinSpecs,
-            List<ObjectSpecificationBuilder> entitySpecs,
-            List<ObjectSpecificationBuilder> viewmodelSpecs,
-            List<ObjectSpecificationBuilder> otherSpecs) {
+            List<ObjectSpecificationInternal> knownSpecs,
+            Map<Class<?>, ObjectSpecificationInternal> valueSpecs,
+            List<ObjectSpecificationInternal> domainServiceSpecs,
+            List<ObjectSpecificationInternal> mixinSpecs,
+            List<ObjectSpecificationInternal> entitySpecs,
+            List<ObjectSpecificationInternal> viewmodelSpecs,
+            List<ObjectSpecificationInternal> otherSpecs) {
 
         SpecCollector() {
             this(new ArrayList<>(),
@@ -213,7 +211,7 @@ implements
                     new ArrayList<>(), new ArrayList<>());
         }
 
-        public void collect(final @Nullable ObjectSpecificationBuilder spec) {
+        public void collect(final @Nullable ObjectSpecificationInternal spec) {
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
             switch (spec.beanSort()) {
@@ -296,7 +294,7 @@ implements
         cache.values().stream()
         	.filter(spec->!spec.isMixin())
         	.filter(spec->!spec.isValue())
-        	.filter(ObjectSpecificationBuilder::isFullyIntrospected)
+        	.filter(ObjectSpecificationInternal::isFullyIntrospected)
         	.forEach(spec->{
     			log.warn("type (non-mixin, non-value) found fully introspected after mixin introspection {}"
     					+ " - reload triggered", spec.getCorrespondingClass());
@@ -313,7 +311,7 @@ implements
 
         var snapshot = snapshotSpecifications();
         snapshot.stream()
-	        .filter(ObjectSpecificationBuilder::isMixin)
+	        .filter(ObjectSpecificationInternal::isMixin)
 	        .filter(spec->!spec.isFullyIntrospected())
 	        .forEach(spec->{
 	        	log.warn("Mixin was missing during first pass {}."
@@ -321,7 +319,7 @@ implements
 	        			+ "make sure it is discovered by Spring.", spec);
 	        });
 
-        //if(isFullIntrospect())  //TODO enforced, otherwise types discovered during introspection never get fully introspected (bug) 
+        //if(isFullIntrospect())  //TODO enforced, otherwise types discovered during introspection never get fully introspected (bug)
         {
             log.info(" - introspecting types not initially discovered by Spring {}", snapshot.size());
             introspect(snapshot.filter(spec->!spec.isMixin()), IntrospectionRequest.FULL);
@@ -346,7 +344,7 @@ implements
             setMetamodelFullyIntrospected(true);
         }
 
-        log.info("\n{}", profiler);
+        //perf .. log.info("\n{}", profiler);
     }
 
 
@@ -481,7 +479,7 @@ implements
     // -- LOOKUP
 
     @Override
-    public Can<ObjectSpecificationBuilder> snapshotSpecifications() {
+    public Can<ObjectSpecificationInternal> snapshotSpecifications() {
         return Can.ofCollection(cache.values());
     }
 
@@ -598,7 +596,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationBuilder primeSpecification(
+    private ObjectSpecificationInternal primeSpecification(
             final @NonNull CausewayBeanMetaData typeMeta) {
         return loadSpecificationNullable(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
@@ -606,7 +604,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationBuilder loadSpecificationNullable(
+    private ObjectSpecificationInternal loadSpecificationNullable(
             final @Nullable Class<?> type,
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionRequest request) {
@@ -655,7 +653,7 @@ implements
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecificationBuilder createSpecification(
+    private ObjectSpecificationInternal createSpecification(
     		final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
                 typeMeta,
@@ -667,7 +665,7 @@ implements
     }
 
     private void introspectSequential(
-            final Can<ObjectSpecificationBuilder> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         for (var spec : specs) {
             spec.introspect(request);
@@ -675,7 +673,7 @@ implements
     }
 
     private void introspectParallel(
-            final Can<ObjectSpecificationBuilder> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         specs.parallelStream()
         .forEach(spec -> {
@@ -690,7 +688,7 @@ implements
 
     private void introspectAndLog(
             final String info,
-            final Iterable<ObjectSpecificationBuilder> specs,
+            final Iterable<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         var stopWatch = _Timing.now();
         introspect(Can.ofIterable(specs), request);
@@ -699,7 +697,7 @@ implements
     }
 
     private void introspect(
-            final Can<ObjectSpecificationBuilder> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         if(parallel) {
             introspectParallel(specs, request);

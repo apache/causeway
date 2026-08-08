@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -38,9 +39,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -93,7 +91,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 final class ObjectSpecificationDefault
 implements
-	ObjectSpecificationBuilder,
+	ObjectSpecificationInternal,
 	HasIntrospectionStateHandler,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
@@ -126,18 +124,14 @@ implements
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
     		_Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
     				.map(TypeOfFacet::elementSpec));
-    // -- FIELDS
 
     private final PostProcessor postProcessor;
 
-    // -- ACTIONS
-
     /** not API, used for validation */
-    @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
+    @Getter @Accessors(fluent = true)
+    private final Set<ResolvedMethod> potentialOrphans = new HashSet<>();
 
-    // -- INTERFACES
-
-    private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
+    private final List<ObjectSpecification> interfaces = new ArrayList<>();
 
     // defensive immutable lazy copy of interfaces
     private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
@@ -157,7 +151,7 @@ implements
 
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =
-    getServiceRegistry().select(EntityTitleSubscriber.class);
+    	getServiceRegistry().select(EntityTitleSubscriber.class);
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
@@ -191,20 +185,16 @@ implements
         this.facetedMethodsFactory =
                 new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
 
-        var profiler = Profiler.getInstance();
-
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
-        			profiler.measure("types", this::introspectTypeHierarchy);
+        			this.introspectTypeHierarchy();
         			//introspectTypeHierarchy();
         	        invalidateCachedFacets();
         		},
         		()->{
-        			profiler.measure("members", ()->introspectMembers(mixinSpecStreamerSupplier.get(), profiler));
-        	        //introspectMembers();
+        			introspectMembers(mixinSpecStreamerSupplier.get());
 //        	        // make sure we've loaded the facets from layout.xml also.
-        	        //Facets.gridPreload(this, null);
-        			profiler.measure("gridPreload", ()->Facets.gridPreload(this, null));
+        	        Facets.gridPreload(this, null);
         	        specLoaderInternal().validateLater(this);
         		});
     }
@@ -263,8 +253,7 @@ implements
         loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
     }
 
-    private final AtomicBoolean isLockedDown = new AtomicBoolean(); //TODO temporary
-    private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer, final Profiler profiler) {
+    private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer) {
 
         // yet this logic does not skip UNKNONW
         if(this.beanSort().isCollection()
@@ -275,29 +264,27 @@ implements
             }
             return;
         }
-        Assert.isTrue(!isLockedDown.get(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
-        		.formatted(getCorrespondingClass().getName()));
+        Assert.isTrue(!isFullyIntrospected(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
+        		.formatted(getFullIdentifier()));
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
+    	streamTypeHierarchyAndInterfaces()
+    		.forEach(it->((IntrospectionStateHandler)it)
+    			.introspectFully());
 
-        profiler.measure("hierarchy", ()->{
-        	streamTypeHierarchyAndInterfaces()
-	    		.forEach(it->((IntrospectionStateHandler)it)
-	    			.introspectFully());
-        });
 
         // create associations and actions
 
         var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
-        var regularAssociations = profiler.measure("members.regularAssociations", ()->regularMemberFactory.createAssociations().toList());
-        var regularActions = profiler.measure("members.regularActions", ()->regularMemberFactory.createActions().toList());
+        var regularAssociations = regularMemberFactory.createAssociations().toList();
+        var regularActions = regularMemberFactory.createActions().toList();
 
         var mixedInMemberFactory = new MixedInMemberFactory(this, isMixin()
         		? MixinSpecStreamer.EMPTY
 				: mixinSpecStreamer);
-        var mixedInAssociations = profiler.measure("members.mixedInAssociations", ()->mixedInMemberFactory.createMixedInAssociations(profiler));
-        var mixedInActions = profiler.measure("members.mixedInActions", ()->mixedInMemberFactory.createMixedInActions());
+        var mixedInAssociations = mixedInMemberFactory.createMixedInAssociations();
+        var mixedInActions = mixedInMemberFactory.createMixedInActions();
 
         var syntheticActions = getConfiguration().extensions().commandLog().recordingSupport().isEnabled()
     		? new SyntheticNavigationActionFactory(this, regularAssociations, mixedInAssociations, regularActions, mixedInActions).synthesizeNavigationActions()
@@ -312,19 +299,15 @@ implements
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superclass());
 
-        //TODO would allow to introspect mixins in isolation if(!isMixin()) {
-			profiler.measure("members.postProcessor", ()->{
-				postProcessor.postProcess(this);
-			});
+        //TODO? can we run mixin creation without triggering full introspection of other types ... if(!isMixin()) {
+		postProcessor.postProcess(this);
 		//}
 		this.memberCatalog = new MemberCatalog(this);
 
         invalidateCachedFacets();
-
-        isLockedDown.set(true);
     }
 
-    //TODO this is a facet factory responsibility
+    //TODO this is a facet factory responsibility, should be done when the facet processor runs on the type ... see constructor
     @Deprecated
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
@@ -603,8 +586,7 @@ implements
 
     // -- SHALLOW IMMUTABLE / EXPERIMENTAL
 
-	@Override
-	public ObjectSpecificationRecord build() {
+	public ObjectSpecificationRecord toUnmodifiable() {
 		//WIP
 		return new ObjectSpecificationRecord(
 				typeMeta,

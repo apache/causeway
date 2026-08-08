@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -38,22 +37,15 @@ record MixedInMemberFactory(
      * Creates all mixed in properties and collections for this spec.
 	 * @param profiler
      */
-    public List<ObjectAssociation> createMixedInAssociations(final Profiler profiler) {
-
-    	var include =
-
-    	profiler.measure("members.mixedInAssociations.createMixedInAssociation.inclusion", ()->
-
-    	spec.isEntityOrViewModelOrAbstract()
+    public List<ObjectAssociation> createMixedInAssociations() {
+    	var include = spec.isEntityOrViewModelOrAbstract()
     			&& !spec.isValue()
-    			&& !spec.isInjectable()
-    	);
+    			&& !spec.isInjectable();
 
         return include
-    		? profiler.measure("members.mixedInAssociations.createMixedInAssociation.stream", ()->
-    			mixinSpecStreamer.streamMixinSpecsFor(spec)
-	            .flatMap(it->createMixedInAssociation(it, profiler))
-	            .toList())
+    		? mixinSpecStreamer.streamMixinSpecsFor(spec)
+	            .flatMap(this::createMixedInAssociation)
+	            .toList()
             : List.of();
     }
 
@@ -74,14 +66,13 @@ record MixedInMemberFactory(
 
     // -- HELPER
 
-    private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec, final Profiler profiler) {
-    	return profiler.measure("members.mixedInAssociations.createMixedInAssociation.create", ()->{
+    private Stream<ObjectAssociation> createMixedInAssociation(final ObjectSpecification mixinSpec) {
     	var mixinFacet = mixinSpec.mixinFacetElseFail();
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
 	        .filter(_SpecPredicates::isMixedInAssociation)
 	        .map(ObjectActionDefault.class::cast)
 	        .map(mixedInAssociation(spec, mixinSpec, mixinFacet.mainMethodName()));
-    	});
+
     }
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final ObjectSpecification mixinSpec) {

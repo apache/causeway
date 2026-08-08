@@ -66,7 +66,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.springframework.util.ClassUtils;
 
 record SyntheticNavigationActionFactory(
-		ObjectSpecificationBuilder ownerSpec,
+		ObjectSpecificationInternal ownerSpec,
 		List<ObjectAssociation> regularAssociations,
 		List<ObjectAssociation> mixedInAssociations,
 		List<ObjectAction> regularActions,
@@ -231,7 +231,7 @@ record SyntheticNavigationActionFactory(
                 collection.getFeatureIdentifier(),
                 parentPlaceholder,
                 AssociationsLookup.AVAILABLE);
-        var elementType = (ObjectSpecificationBuilder)collection.getElementType();
+        var elementType = (ObjectSpecificationInternal)collection.getElementType();
         if(!elementType.isFullyIntrospected()) {
 			elementType.introspectFully();
 		}

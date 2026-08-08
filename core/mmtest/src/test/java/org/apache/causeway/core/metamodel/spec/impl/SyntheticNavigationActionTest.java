@@ -252,7 +252,7 @@ class SyntheticNavigationActionTest {
     void repeated_synthesis_is_an_idempotent_no_op() {
         var mmc = context(true);
         var spec = mmc.getSpecificationLoader().specForTypeElseFail(Lease.class);
-        Assertions.assertTrue(((ObjectSpecificationBuilder)spec).isFullyIntrospected());
+        Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
         assertThat(spec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(action -> action.getId().equals("__causeway_navigate_to_items"))
                 .count()).isEqualTo(1L);
@@ -424,7 +424,7 @@ class SyntheticNavigationActionTest {
             final Class<?> ownerType,
             final String associationId) {
         ObjectSpecification spec = mmc.getSpecificationLoader().specForTypeElseFail(ownerType);
-        Assertions.assertTrue(((ObjectSpecificationBuilder)spec).isFullyIntrospected());
+        Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
         return spec.getAction(SyntheticNavigationActionFactory.ACTION_ID_PREFIX + associationId);
     }
 
