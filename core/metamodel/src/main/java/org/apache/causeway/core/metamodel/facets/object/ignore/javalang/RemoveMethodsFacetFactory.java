@@ -50,13 +50,13 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         super.process(processClassContext);
 
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
         var isConcreteMixin = facetHolder instanceof ObjectSpecification o
                 ? o.beanSort().isMixin()
                 : false;
 
-        var isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
+        var isActionAnnotationRequired = processClassContext.introspectionPolicy()
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         getClassCache()
@@ -90,7 +90,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
                 }
             });
 
-        removeSuperclassMethods(processClassContext.getCls(), processClassContext);
+        removeSuperclassMethods(processClassContext.cls(), processClassContext);
 
         // no need to remove java.lang.Object methods, as this is already taken care of by the ClassCache (tested)
 

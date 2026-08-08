@@ -84,8 +84,8 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        var valueClass = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var valueClass = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
         var valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
         var logicalType = LogicalType.fqcn(valueClass);

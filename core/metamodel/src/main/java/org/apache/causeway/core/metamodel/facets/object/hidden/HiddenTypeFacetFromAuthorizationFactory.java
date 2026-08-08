@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import jakarta.inject.Inject;
 
 /**
  * Installs the {@link HiddenTypeFacetFromAuthorization} on the
@@ -41,7 +41,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        final FacetHolder facetHolder = processClassContext.facetHolder();
         FacetUtil.addFacet(new HiddenTypeFacetFromAuthorization(facetHolder));
     }
 

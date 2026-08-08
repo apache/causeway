@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.choices.enums;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 public class ChoicesFacetFromEnumFactory
 extends FacetFactoryAbstract {
@@ -34,11 +34,10 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
-        if (!cls.isEnum()) {
-            return;
-        }
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
+        if (!cls.isEnum())
+			return;
         addFacet(new ChoicesFacetFromEnum(facetHolder, cls));
     }
 

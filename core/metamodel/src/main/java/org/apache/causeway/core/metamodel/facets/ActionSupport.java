@@ -23,8 +23,6 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -33,6 +31,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,7 @@ public record ActionSupport() {
                     .additionalParamTypes(Can.empty());
         }
         public Class<?>[] paramTypes() {
-            return processMethodContext().getMethod().getParameterTypes();
+            return processMethodContext().methodFacade().getParameterTypes();
         }
     }
 

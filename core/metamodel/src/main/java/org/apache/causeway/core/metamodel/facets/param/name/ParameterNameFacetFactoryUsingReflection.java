@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.facets.param.name;
 
 import java.util.regex.Pattern;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 /**
  * Uses JDK8+ reflection API to derive the parameter name from the code.
@@ -53,16 +53,15 @@ extends FacetFactoryAbstract {
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        var parameterName = processParameterContext.getParameterName();
+        var parameterName = processParameterContext.parameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
         var argXMatcher = argXPattern.matcher(parameterName);
-        if (argXMatcher.matches()){
-            return;
-        }
+        if (argXMatcher.matches())
+			return;
 
         var naturalName = _Strings.asNaturalName.apply(parameterName);
-        var facetHolder = processParameterContext.getFacetHolder();
+        var facetHolder = processParameterContext.facetHolder();
 
         FacetUtil.addFacet(
                 new NamedFacetForParameterUsingReflection(naturalName, facetHolder));

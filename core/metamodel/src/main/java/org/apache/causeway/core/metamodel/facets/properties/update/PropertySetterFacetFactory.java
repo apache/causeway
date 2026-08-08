@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.update;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
@@ -31,6 +29,8 @@ import org.apache.causeway.core.metamodel.facets.properties.update.init.Property
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 /**
  * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
@@ -48,7 +48,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        var getterMethod = processMethodContext.getMethod();
+        var getterMethod = processMethodContext.methodFacade();
         final String capitalizedName = _Strings.baseName(getterMethod.getName());
         var methodNameCandidates = Can.ofSingleton(
                 AccessorSemantics.SET.prefix(capitalizedName));
@@ -57,13 +57,13 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         var setterMethods =
         MethodFinder
-        .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy())
+        .accessor(processMethodContext.cls(), methodNameCandidates, processMethodContext.introspectionPolicy())
         .withReturnTypeAnyOf(ReturnTypeCategory.VOID.getReturnTypes())
         .streamMethodsMatchingSignature(signature)
         .peek(processMethodContext::removeMethod)
         .collect(Can.toCan());
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
+        final FacetHolder property = processMethodContext.facetHolder();
         if (setterMethods.isNotEmpty()) {
 
             setterMethods

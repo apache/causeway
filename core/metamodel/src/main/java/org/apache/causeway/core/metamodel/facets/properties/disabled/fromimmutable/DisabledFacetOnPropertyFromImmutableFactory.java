@@ -36,12 +36,12 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        var declaringClass = processMethodContext.getMethod().getDeclaringClass();
+        var declaringClass = processMethodContext.methodFacade().getDeclaringClass();
         var spec = processMethodContext.loadSpecificationTypeOnly(declaringClass);
 
         spec.lookupNonFallbackFacet(ImmutableFacet.class)
         .ifPresent(immutableFacet->{
-            var facetHolder = processMethodContext.getFacetHolder();
+            var facetHolder = processMethodContext.facetHolder();
 
             var semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
 	            .map(DisabledFacet::getSemantics)

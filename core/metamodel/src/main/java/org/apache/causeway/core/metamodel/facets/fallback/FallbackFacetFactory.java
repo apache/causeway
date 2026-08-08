@@ -21,14 +21,14 @@ package org.apache.causeway.core.metamodel.facets.fallback;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
+
+import jakarta.inject.Inject;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
@@ -65,7 +65,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         addFacet(new TitleFacetNone(facetHolder));
         addFacet(new PagedFacetFromConfiguration(
@@ -76,7 +76,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+        final FacetedMethod facetedMethod = processMethodContext.facetHolder();
 
         addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
 
@@ -102,7 +102,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final TypedFacetHolder typedHolder = processParameterContext.getFacetHolder();
+        final TypedFacetHolder typedHolder = processParameterContext.facetHolder();
         if (typedHolder.featureType().isActionParameter()) {
             addFacet(new MultiLineFacetNone(typedHolder));
             addFacet(new MaxLengthFacetUnlimited(typedHolder));

@@ -16,8 +16,6 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.object.grid;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -25,6 +23,8 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import jakarta.inject.Inject;
 
 public class GridFacetFactory
 extends FacetFactoryAbstract {
@@ -38,7 +38,7 @@ extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         if(gridService.get()==null) return;
 
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         if(facetHolder instanceof ObjectSpecification objSpec) {
             if(objSpec.isEntityOrViewModelOrAbstract()) {

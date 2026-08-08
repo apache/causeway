@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrde
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
+import jakarta.inject.Inject;
+
 public class ActionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -46,12 +46,12 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
         var actionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ActionLayout.class,
                         () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ActionLayout.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), ActionLayout.class));
 
         // cssClass
         addFacetIfPresent(

@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmark
 
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
+import jakarta.inject.Inject;
+
 public class BookmarkPolicyFacetFallbackFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -46,12 +46,12 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processClassContext.facetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processMethodContext.facetHolder()));
     }
 
     /**
@@ -90,9 +90,8 @@ implements MetaModelRefiner {
             var bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
             if(bookmarkPolicyFacet == null
                     || bookmarkPolicyFacet.precedence().isFallback()
-                    || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER) {
-                return false;
-            }
+                    || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER)
+				return false;
             return true;
         };
     }

@@ -72,7 +72,7 @@ implements
             final @NonNull ProcessMethodContext processMethodContext,
             final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet) {
 
-    	final FacetHolder facetHolder = processMethodContext.getFacetHolder();
+    	final FacetHolder facetHolder = processMethodContext.facetHolder();
 
         var propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
@@ -82,7 +82,7 @@ implements
                 .orElseGet(()->{
 
                     /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
+                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.cls());
                     var typeFromDomainObject = typeSpec.lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
                     		.orElse(null);
 

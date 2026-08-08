@@ -76,8 +76,8 @@ implements
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        var facetHolder = processClassContext.getFacetHolder();
-        var type = processClassContext.getCls();
+        var facetHolder = processClassContext.facetHolder();
+        var type = processClassContext.cls();
 
         // XmlRootElement annotation (with default precedence)
         var hasXmlRootElementAnnotation = _ClassCache.getInstance().head(type).hasJaxbRootElementSemantics();

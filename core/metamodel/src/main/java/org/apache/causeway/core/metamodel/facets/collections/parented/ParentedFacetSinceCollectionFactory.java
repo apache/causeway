@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.parented;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -28,6 +26,8 @@ import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+
+import jakarta.inject.Inject;
 
 /**
  * All collection types are intrinsically {@link ParentedCollectionFacet parented}.
@@ -46,10 +46,9 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
-            return;
-        }
-        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
+        if (!processClassContaxt.facetHolder().containsFacet(CollectionFacet.class))
+			return;
+        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.facetHolder()));
     }
 
 }

@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.callbacks;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -32,6 +30,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 public class CallbackFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
@@ -60,15 +60,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final ProcessClassContext processClassContext,
             final CallbackMethod callbackMethodEnum,
             final BiFunction<Can<MethodFacade>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
         var callbackMethods =
             MethodFinder
             .livecycleCallback(
                     cls,
                     callbackMethodEnum.getMethodNames(),
-                    processClassContext.getIntrospectionPolicy())
+                    processClassContext.introspectionPolicy())
             .withRequiredReturnType(void.class)
             .streamMethodsMatchingSignature(NO_ARG)
             .peek(processClassContext::removeMethod)

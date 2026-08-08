@@ -45,120 +45,82 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Responsible for processing elements of the metamodel, registered to the
  * {@link org.apache.causeway.core.metamodel.progmodel.ProgrammingModel} using
  * {@link org.apache.causeway.core.metamodel.progmodel.ProgrammingModel#addFactory(ProgrammingModel.FacetProcessingOrder, FacetFactory, ProgrammingModel.Marker...)}.
  *
- * <p>
- *     IMPORTANT: with respect to mixed-in members, {@link FacetFactory}s are
- *     only run against those members in their original form as an action of
- *     a mixin class, <i>not</i> as contributed mixin methods of the mixee type.
- *     This is because they actually run against {@link FacetedMethod}s, which
- *     are the peer object that is wrapped by (the respective subclasses of)
- *     {@link org.apache.causeway.core.metamodel.spec.feature.ObjectMember}.
- * </p>
+ * <p>IMPORTANT: with respect to mixed-in members, {@link FacetFactory}s are
+ * only run against those members in their original form as an action of
+ * a mixin class, <i>not</i> as contributed mixin methods of the mixee type.
+ * This is because they actually run against {@link FacetedMethod}s, which
+ * are the peer object that is wrapped by (the respective subclasses of)
+ * {@link org.apache.causeway.core.metamodel.spec.feature.ObjectMember}.
  *
- * <p>
- *     To process a mixin member in the context of it actually being a mixin
- *     member (for example, authorization or translations), instead use the
- *     {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor} interface.
- * </p>
+ * <p>To process a mixin member in the context of it actually being a mixin
+ * member (for example, authorization or translations), instead use the
+ * {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor} interface.
  */
 public interface FacetFactory {
 
-    @RequiredArgsConstructor
-    static class AbstractProcessContext<T extends FacetHolder> {
-        @Getter private final T facetHolder;
+	@FunctionalInterface
+	interface HasMethodRemover extends MethodRemover {
+
+        MethodRemover methodRemover();
+
+        @Override default void removeMethod(final ResolvedMethod method) {
+            methodRemover().removeMethod(method);
+        }
+        @Override default void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
+            methodRemover().removeMethods(filter, onRemoval);
+        }
+        @Override default Can<ResolvedMethod> snapshotMethodsRemaining() {
+            return methodRemover().snapshotMethodsRemaining();
+        }
     }
 
-    static class AbstractProcessWithClsContext<T extends FacetHolder>
-    extends AbstractProcessContext<T>{
+    interface ProcessWithClsContext<T extends FacetHolder> {
+
+    	T facetHolder();
 
         /**
          * The class being introspected.
          *
-         * <p>
-         *     In the context of method introspection, this isn't necessarily the same as the
-         *     {@link java.lang.reflect.Method#getDeclaringClass() declaring class}
-         *     of the method being introspected; that method might have been inherited.
-         * </p>
+         * <p>In the context of method introspection, this isn't necessarily the same as the
+         * {@link java.lang.reflect.Method#getDeclaringClass() declaring class}
+         * of the method being introspected; that method might have been inherited.
          */
-        @Getter private final @NonNull Class<?> cls;
-        @Getter private final @NonNull IntrospectionPolicy introspectionPolicy;
+    	Class<?> cls();
 
-        AbstractProcessWithClsContext(
-                final Class<?> cls,
-                final IntrospectionPolicy introspectionPolicy,
-                final T facetHolder) {
-            super(facetHolder);
-            this.cls = cls;
-            this.introspectionPolicy = introspectionPolicy;
-        }
+    	IntrospectionPolicy introspectionPolicy();
 
         /**
          * Annotation lookup on this context's type (cls).
          * @since 2.0
          */
-        public <A extends Annotation> Optional<A> synthesizeOnType(final Class<A> annotationType) {
-            return _Annotations.synthesize(cls, annotationType);
+        default <A extends Annotation> Optional<A> synthesizeOnType(final Class<A> annotationType) {
+            return _Annotations.synthesize(cls(), annotationType);
         }
-
     }
 
-    static class AbstractProcessWithMethodContext<T extends FacetHolder>
-    extends AbstractProcessWithClsContext<T>
-    implements MethodRemover{
 
-        @Getter private final MethodFacade method;
-        protected final MethodRemover methodRemover;
+    interface ProcessWithMethodContext<T extends FacetHolder>
+    extends ProcessWithClsContext<T> {
 
-        AbstractProcessWithMethodContext(
-                final Class<?> cls,
-                final IntrospectionPolicy introspectionPolicy,
-                final MethodFacade method,
-                final MethodRemover methodRemover,
-                final T facetHolder) {
-
-            super(cls, introspectionPolicy, facetHolder);
-            this.method = method;
-            this.methodRemover = methodRemover;
-        }
+    	MethodFacade methodFacade();
 
     	/**
     	 * Whether the method's underlying byte code was NOT compiled with the {@code -parameters} flag.
     	 * Might have false positives, hence 'potential' in the name.
     	 */
-		public boolean hasPotentialNonReflectableParameterNames() {
-    		for(int i=0; i<method.getParameterCount(); ++i) {
-    			var paramName = method.getParameterName(i);
+		default boolean hasPotentialNonReflectableParameterNames() {
+			var methodFacade = methodFacade();
+    		for(int i=0; i<methodFacade.getParameterCount(); ++i) {
+    			var paramName = methodFacade.getParameterName(i);
     			if(paramName.equals("arg" + i)) return true;
     		}
     		return false;
     	}
-
-        @Override
-        public void removeMethod(final ResolvedMethod method) {
-            methodRemover.removeMethod(method);
-        }
-
-        @Override
-        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
-            methodRemover.removeMethods(filter, onRemoval);
-        }
-
-        @Override
-        public Can<ResolvedMethod> snapshotMethodsRemaining() {
-            return methodRemover.snapshotMethodsRemaining();
-        }
-
-    }
-
-    public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
-        public T getFacetHolder();
     }
 
     /**
@@ -173,45 +135,19 @@ public interface FacetFactory {
      */
     ImmutableEnumSet<FeatureType> getFeatureTypes();
 
-    // //////////////////////////////////////
-    // process class
-    // //////////////////////////////////////
+    // -- PROCESS CLASS
 
-    public static final class ProcessClassContext
-    extends AbstractProcessWithClsContext<FacetHolder>
-    implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
-
-        private final MethodRemover methodRemover;
-
-        public ProcessClassContext(
-                final Class<?> cls,
-                final IntrospectionPolicy introspectionPolicy,
-                final MethodRemover methodRemover,
-                final FacetHolder facetHolder) {
-            super(cls, introspectionPolicy, facetHolder);
-            this.methodRemover = methodRemover;
-        }
-
-        @Override
-        public void removeMethod(final @Nullable ResolvedMethod method) {
-            methodRemover.removeMethod(method);
-        }
-
-        @Override
-        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
-            methodRemover.removeMethods(filter, onRemoval);
-        }
-
-        @Override
-        public Can<ResolvedMethod> snapshotMethodsRemaining() {
-            return methodRemover.snapshotMethodsRemaining();
-        }
+    public record ProcessClassContext(
+    		Class<?> cls,
+            IntrospectionPolicy introspectionPolicy,
+            MethodRemover methodRemover,
+            FacetHolder facetHolder)
+    implements
+    	ProcessWithClsContext<FacetHolder>, HasMethodRemover {
 
         // -- JUNIT SUPPORT
 
-        /**
-         * For testing only.
-         */
+        /** For testing only. */
         public static ProcessClassContext forTesting(
                 final Class<?> cls,
                 final MethodRemover methodRemover,
@@ -227,49 +163,33 @@ public interface FacetFactory {
      */
     void process(ProcessClassContext processClassContext);
 
-    // //////////////////////////////////////
-    // process method
-    // //////////////////////////////////////
+    // -- PROCESS METHOD
 
-    public static final class ProcessMethodContext
-    extends AbstractProcessWithMethodContext<FacetedMethod>
-    implements ProcessContextWithMetadataProperties<FacetedMethod> {
+    public record ProcessMethodContext(
+    		 Class<?> cls,
+             IntrospectionPolicy introspectionPolicy,
+             FeatureType featureType,
+             MethodFacade methodFacade,
+             MethodRemover methodRemover,
+             FacetedMethod facetedMethod,
+             /**
+              * Whether we are currently processing a mixin type AND this context's method can be identified
+              * as the main method of the processed mixin class.
+              * @since 2.0
+              */
+             boolean isMixinMain,
+             Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction)
+    implements
+    	ProcessWithMethodContext<FacetedMethod>, HasMethodRemover {
 
-        @Getter private final FeatureType featureType;
-        /**
-         * Whether we are currently processing a mixin type AND this context's method can be identified
-         * as the main method of the processed mixin class.
-         * @since 2.0
-         */
-        @Getter private final boolean mixinMain;
-        private final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction;
-
-        /**
-         * @param isMixinMain whether we are currently processing a mixin type AND this context's method can be identified
-         *         as the main method of the processed mixin class. (since 2.0)
-         */
-        public ProcessMethodContext(
-                final Class<?> cls,
-                final IntrospectionPolicy introspectionPolicy,
-                final FeatureType featureType,
-                final MethodFacade method,
-                final MethodRemover methodRemover,
-                final FacetedMethod facetedMethod,
-                final boolean isMixinMain,
-                final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction) {
-
-            super(cls, introspectionPolicy, method, methodRemover, facetedMethod);
-            this.featureType = featureType;
-            this.mixinMain = isMixinMain;
-            this.loadSpecificationTypeOnlyFunction = loadSpecificationTypeOnlyFunction;
-        }
+    	@Override public FacetedMethod facetHolder() { return facetedMethod; }
 
         /**
          * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(final Class<A> annotationType) {
-            return getMethod().synthesize(annotationType);
+            return methodFacade().synthesize(annotationType);
         }
 
         /**
@@ -300,7 +220,7 @@ public interface FacetFactory {
 
         public Can<String> memberSupportCandidates(
                 final String methodPrefix) {
-            return switch (getFeatureType()) {
+            return switch (featureType()) {
 			case ACTION -> namingConventionForActionSupport(methodPrefix);
 			case PROPERTY, COLLECTION -> isMixinMain()
 			                        ? namingConventionForActionSupport(methodPrefix)
@@ -312,7 +232,7 @@ public interface FacetFactory {
         public Can<java.util.function.IntFunction<String>> parameterSupportCandidates(
                 final String methodPrefix) {
 
-            return switch (getFeatureType()) {
+            return switch (featureType()) {
 			case ACTION -> namingConventionForParameterSupport(methodPrefix);
 			default -> Can.empty();
 			};
@@ -322,21 +242,21 @@ public interface FacetFactory {
 
         private Can<String> namingConventionForActionSupport(
                 final String prefix) {
-            var actionMethod = getMethod();
+            var actionMethod = methodFacade();
             return ProgrammingModelConstants.ActionSupportNaming
                     .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<java.util.function.IntFunction<String>> namingConventionForParameterSupport(
                 final String prefix) {
-            var actionMethod = getMethod();
+            var actionMethod = methodFacade();
             return ProgrammingModelConstants.ParameterSupportNaming
                     .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<String> namingConventionForPropertyAndCollectionSupport(
                 final String prefix) {
-            var getterMethod = getMethod();
+            var getterMethod = methodFacade();
             return ProgrammingModelConstants.MemberSupportNaming
                     .namesFor(getterMethod, prefix, isMixinMain());
         }
@@ -374,42 +294,37 @@ public interface FacetFactory {
 
     // -- PROCESS PARAM
 
-    public static final class ProcessParameterContext
-    extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
+    public record ProcessParameterContext(
+    		Class<?> cls,
+            IntrospectionPolicy introspectionPolicy,
+            MethodFacade methodFacade,
+            MethodRemover methodRemover,
+            FacetedMethodParameter facetedMethodParameter)
+    implements
+    	ProcessWithMethodContext<FacetedMethodParameter>, HasMethodRemover {
 
-        @Getter private final int paramNum;
-        @Getter private final Class<?> parameterType;
-        @Getter private final String parameterName;
+    	@Override public FacetedMethodParameter facetHolder() { return facetedMethodParameter; }
 
-        public ProcessParameterContext(
-                final Class<?> cls,
-                final IntrospectionPolicy introspectionPolicy,
-                final MethodFacade method,
-                final MethodRemover methodRemover,
-                final FacetedMethodParameter facetedMethodParameter) {
-
-            super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
-            this.paramNum = facetedMethodParameter.paramIndex();
-            this.parameterType = super.method.getParameterType(paramNum);
-            this.parameterName = super.method.getParameterName(paramNum);
-        }
+        public int paramNum() { return facetedMethodParameter.paramIndex(); }
+		public Class<?> parameterType() { return methodFacade.getParameterType(paramNum()); }
+		public String parameterName() { return methodFacade.getParameterName(paramNum()); }
 
         /**
          * Annotation lookup on this context's method parameter.
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType) {
-            return super.method.synthesizeOnParameter(annotationType, paramNum);
+            return methodFacade.synthesizeOnParameter(annotationType, paramNum());
         }
 
         public Stream<Annotation> streamParameterAnnotations() {
-            var parameterTypeAnnotations = this.getMethod().asExecutable()
-                .getAnnotatedParameterTypes()[this.getParamNum()]
+            var parameterTypeAnnotations = methodFacade.asExecutable()
+                .getAnnotatedParameterTypes()[paramNum()]
                 .getAnnotations();
             var parameterAnnotations = MethodParameter
                     .forExecutable(
-                            this.getMethod().asExecutable(),
-                            this.getParamNum())
+                    		methodFacade.asExecutable(),
+                            paramNum())
                     .getParameterAnnotations();
             return Stream.concat(
                 _NullSafe.stream(parameterTypeAnnotations),

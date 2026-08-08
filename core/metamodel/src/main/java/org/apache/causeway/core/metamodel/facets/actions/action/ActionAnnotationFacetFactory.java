@@ -79,11 +79,11 @@ extends FacetFactoryAbstract {
                 .synthesizeOnMethodOrMixinType(
                         Action.class,
                         () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Action.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Action.class));
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Action at all.
         addFacetIfPresent(
@@ -93,14 +93,14 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        var actionMethod = processMethodContext.getMethod();
+        var actionMethod = processMethodContext.methodFacade();
 
         final boolean isAction = !processMethodContext.isMixinMain()
                 || actionIfAny.isPresent();
 
         try {
 
-            var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
+            var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.cls());
             if(typeSpec==null)
 				return;
 
@@ -114,7 +114,7 @@ extends FacetFactoryAbstract {
             //
 
             // search for @Action(domainEvent=...), else use the default event type
-            var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, processMethodContext.getFacetHolder());
+            var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, processMethodContext.facetHolder());
             addFacet(actionDomainEventFacet);
 
             // replace the current actionInvocationFacet with one that will
@@ -127,17 +127,17 @@ extends FacetFactoryAbstract {
                 isAction
                     ? new ActionInvocationFacetForAction(
                             actionDomainEventFacet,
-                            actionMethod, typeSpec, returnSpec, processMethodContext.getFacetHolder())
+                            actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder())
                     // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
                     : new ActionInvocationFacetForMixedInPropertyOrCollection(
-                            actionMethod, typeSpec, returnSpec, processMethodContext.getFacetHolder()));
+                            actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder()));
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         // search for @Action(restrictTo=...)
         addFacetIfPresent(
@@ -148,7 +148,7 @@ extends FacetFactoryAbstract {
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         // check for @Action(semantics=...)
         addFacet(
@@ -164,12 +164,12 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
 			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
@@ -183,14 +183,14 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing,
         // see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
 			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
@@ -204,8 +204,8 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        var method = processMethodContext.getMethod();
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var method = processMethodContext.methodFacade();
+        var facetedMethod = processMethodContext.facetHolder();
 
         var methodReturnType = method.getReturnType();
 
@@ -223,7 +223,7 @@ extends FacetFactoryAbstract {
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Action(choicesFrom=...)
         addFacetIfPresent(
@@ -238,7 +238,7 @@ extends FacetFactoryAbstract {
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Action(fileAccept=...)
         addFacetIfPresent(

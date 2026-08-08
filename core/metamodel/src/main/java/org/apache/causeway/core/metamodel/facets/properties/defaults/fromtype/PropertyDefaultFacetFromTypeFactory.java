@@ -43,19 +43,19 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         // don't overwrite any defaults that might already picked up
-        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder()
+        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.facetHolder()
                 .lookupNonFallbackFacet(PropertyDefaultFacet.class)
                 .orElse(null);
         if (existingDefaultFacet != null)
 			return;
 
         // try to infer defaults from the underlying return type
-        processMethodContext.loadSpecificationTypeOnly(processMethodContext.getMethod().getReturnType())
+        processMethodContext.loadSpecificationTypeOnly(processMethodContext.methodFacade().getReturnType())
         	.lookupFacet(DefaultedFacet.class)
 	        .ifPresent(returnTypeDefaultedFacet->{
 	            FacetUtil.addFacet(
 	                    new PropertyDefaultFacetFromDefaultedFacet(
-	                            returnTypeDefaultedFacet, processMethodContext.getFacetHolder()));
+	                            returnTypeDefaultedFacet, processMethodContext.facetHolder()));
 	        });
     }
 

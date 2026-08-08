@@ -65,22 +65,22 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         var propertyIfAny = propertyIfAny(processMethodContext);
 
-        if(processMethodContext.getFeatureType().isCollection()) {
+        if(processMethodContext.featureType().isCollection()) {
             if(propertyIfAny.isPresent()) {
                 // Property annotation is not allowed on collection feature
                 ValidationFailureUtils
-                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Property.class);
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Property.class);
             }
             return; // skip further processing, since this is a collection feature
         }
 
         if(propertyIfAny.isPresent()) {
             if(processMethodContext.isMixinMain()) {
-                inferMixinSort(processMethodContext.getFacetHolder());
-            } else if(processMethodContext.getFeatureType().isAction()) {
+                inferMixinSort(processMethodContext.facetHolder());
+            } else if(processMethodContext.featureType().isAction()) {
                 // Property annotation is not allowed on action feature (unless mixin main)
                 ValidationFailureUtils
-                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Property.class);
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Property.class);
             }
         }
 
@@ -103,7 +103,7 @@ extends FacetFactoryAbstract {
             .synthesizeOnMethodOrMixinType(
                     Property.class,
                     () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Property.class));
     }
 
     void inferMixinSort(final FacetedMethod facetedMethod) {
@@ -115,7 +115,7 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         /*
          * immutable properties as well as mixed-in ones have no setter, hence phases:
@@ -164,7 +164,7 @@ extends FacetFactoryAbstract {
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         // search for @Property(editing=...)
         addFacetIfPresent(
@@ -175,7 +175,7 @@ extends FacetFactoryAbstract {
     void processCommandPublishing(
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
@@ -186,7 +186,7 @@ extends FacetFactoryAbstract {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
 			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
@@ -199,7 +199,7 @@ extends FacetFactoryAbstract {
 
     void processProjecting(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         addFacetIfPresent(
                 ProjectingFacetFromPropertyAnnotation
@@ -211,7 +211,7 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
@@ -223,7 +223,7 @@ extends FacetFactoryAbstract {
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.cls()))
 			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
@@ -236,7 +236,7 @@ extends FacetFactoryAbstract {
 
     void processMaxLength(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(maxLength=...)
         addFacetIfPresent(
@@ -245,7 +245,7 @@ extends FacetFactoryAbstract {
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(mustSatisfy=...)
         addFacetIfPresent(
@@ -254,7 +254,7 @@ extends FacetFactoryAbstract {
     }
 
     void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(entityPropertyChangePublishing=...)
         addFacetIfPresent(
@@ -263,7 +263,7 @@ extends FacetFactoryAbstract {
     }
 
     void processSnapshot(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // search for @Property(notPersisted=...)
         addFacetIfPresent(
@@ -273,8 +273,8 @@ extends FacetFactoryAbstract {
 
     void processOptional(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        var method = processMethodContext.getMethod();
-        var holder = processMethodContext.getFacetHolder();
+        var method = processMethodContext.methodFacade();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Nullable
         var hasNullable = method.isAnnotatedAsNullable();
@@ -290,8 +290,8 @@ extends FacetFactoryAbstract {
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var holder = processMethodContext.getFacetHolder();
-        var returnType = processMethodContext.getMethod().getReturnType();
+        var holder = processMethodContext.facetHolder();
+        var returnType = processMethodContext.methodFacade().getReturnType();
 
         // check for @Pattern first
         var patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
@@ -308,7 +308,7 @@ extends FacetFactoryAbstract {
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         // check for @Property(maxLength=...)
         addFacetIfPresent(

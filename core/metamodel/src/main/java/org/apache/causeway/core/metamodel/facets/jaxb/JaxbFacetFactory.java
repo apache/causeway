@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.jaxb;
 
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.isPublic;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
+
 import java.lang.reflect.Modifier;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,12 +30,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlTransient;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -50,9 +47,11 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.isPublic;
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
-
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -78,11 +77,10 @@ implements MetaModelRefiner {
     private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
 
         var xmlJavaTypeAdapterIfAny = processClassContext.synthesizeOnType(XmlJavaTypeAdapter.class);
-        if(!xmlJavaTypeAdapterIfAny.isPresent()) {
-            return;
-        }
+        if(!xmlJavaTypeAdapterIfAny.isPresent())
+			return;
 
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
@@ -91,11 +89,10 @@ implements MetaModelRefiner {
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
 
         var xmlAccessorTypeIfAny = processClassContext.synthesizeOnType(XmlAccessorType.class);
-        if(!xmlAccessorTypeIfAny.isPresent()) {
-            return;
-        }
+        if(!xmlAccessorTypeIfAny.isPresent())
+			return;
 
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
         addFacet(
                 new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value()));
     }
@@ -107,9 +104,9 @@ implements MetaModelRefiner {
 
         //[ahuber] accessType not yet used, but could be in future extensions
         final Optional<XmlAccessorTypeFacet> accessorTypeFacet =
-                Optional.ofNullable(processMethodContext.getFacetHolder().getFacet(XmlAccessorTypeFacet.class));
+                Optional.ofNullable(processMethodContext.facetHolder().getFacet(XmlAccessorTypeFacet.class));
         final XmlAccessType accessType = accessorTypeFacet
-                .map(facet->facet.value())
+                .map(XmlAccessorTypeFacet::value)
                 .orElse(XmlAccessType.PUBLIC_MEMBER); // the annotation's default value
         // ---
 
@@ -122,11 +119,10 @@ implements MetaModelRefiner {
 
         var xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
 
-        if(!xmlJavaTypeAdapterIfAny.isPresent()) {
-            return;
-        }
+        if(!xmlJavaTypeAdapterIfAny.isPresent())
+			return;
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
         addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
@@ -135,11 +131,10 @@ implements MetaModelRefiner {
 
         var xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
 
-        if(!xmlTransientIfAny.isPresent()) {
-            return;
-        }
+        if(!xmlTransientIfAny.isPresent())
+			return;
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
         addFacet(new XmlTransientFacetDefault(facetHolder));
     }
 
@@ -154,14 +149,12 @@ implements MetaModelRefiner {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
             final boolean viewModel = objectSpec.isViewModel();
-            if(!viewModel) {
-                return;
-            }
+            if(!viewModel)
+				return;
 
             final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-            if (!(facet instanceof ViewModelFacetForXmlRootElementAnnotation)) {
-                return;
-            }
+            if (!(facet instanceof ViewModelFacetForXmlRootElementAnnotation))
+				return;
 
             for (final TypeValidator typeValidator : typeValidators) {
                 typeValidator.validate(objectSpec);
@@ -346,9 +339,8 @@ implements MetaModelRefiner {
                     .getPublicConstructors(correspondingClass)
                     .filter(paramCount(0));
 
-            if(publicNoArgConstructors.getCardinality().isOne()) {
-                return; // happy case
-            }
+            if(publicNoArgConstructors.getCardinality().isOne())
+				return; // happy case
 
             var privateNoArgConstructors = _Reflect
                     .getDeclaredConstructors(correspondingClass)

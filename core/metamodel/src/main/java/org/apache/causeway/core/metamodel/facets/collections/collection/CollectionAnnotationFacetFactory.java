@@ -49,22 +49,22 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         var collectionIfAny = collectionIfAny(processMethodContext);
 
-        if(processMethodContext.getFeatureType().isProperty()) {
+        if(processMethodContext.featureType().isProperty()) {
             if(collectionIfAny.isPresent()) {
                 // Collection annotation is not allowed on property feature
                 ValidationFailureUtils
-                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Collection.class);
             }
             return; // skip further processing, since this is a property feature
         }
 
         if(collectionIfAny.isPresent()) {
             if(processMethodContext.isMixinMain()) {
-                inferMixinSort(processMethodContext.getFacetHolder());
-            } else if(processMethodContext.getFeatureType().isAction()) {
+                inferMixinSort(processMethodContext.facetHolder());
+            } else if(processMethodContext.featureType().isAction()) {
                 // Collection annotation is not allowed on action feature (unless mixin main)
                 ValidationFailureUtils
-                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
+                    .raiseMemberInvalidAnnotation(processMethodContext.facetHolder(), Collection.class);
             }
         }
 
@@ -77,7 +77,7 @@ extends FacetFactoryAbstract {
             .synthesizeOnMethodOrMixinType(
                     Collection.class,
                     () -> ValidationFailureUtils
-                    .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Collection.class));
+                    .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Collection.class));
     }
 
     void inferMixinSort(final FacetedMethod facetedMethod) {
@@ -89,7 +89,7 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        var holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.facetHolder();
 
         var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
@@ -111,8 +111,8 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        var facetHolder = processMethodContext.getFacetHolder();
-        var method = processMethodContext.getMethod();
+        var facetHolder = processMethodContext.facetHolder();
+        var method = processMethodContext.methodFacade();
 
         var methodReturnType = method.getReturnType();
         CollectionSemantics.valueOf(methodReturnType)

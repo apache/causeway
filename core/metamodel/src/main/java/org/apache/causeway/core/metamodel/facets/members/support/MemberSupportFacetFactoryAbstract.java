@@ -23,7 +23,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Membe
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class MemberSupportFacetFactoryAbstract
@@ -52,16 +51,15 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                 && !processMethodContext.isMixinMain()) {
             // stop processing if it is not an allowed property or collection
             var isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
-                    && processMethodContext.getFeatureType().isProperty();
+                    && processMethodContext.featureType().isProperty();
             var isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
-                    && processMethodContext.getFeatureType().isCollection();
+                    && processMethodContext.featureType().isCollection();
             if(!(isProp
-                    || isColl)) {
-                return; // skip
-            }
+                    || isColl))
+				return; // skip
         }
 
-        var getterMethod = processMethodContext.getMethod();
+        var getterMethod = processMethodContext.methodFacade();
         var elementType = getterMethod.getReturnType(); // in case of an action, is never used
 
         var methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
@@ -69,9 +67,9 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
         search(processMethodContext,
                 MethodFinder
-                .memberSupport(processMethodContext.getCls(),
+                .memberSupport(processMethodContext.cls(),
                         methodNameCandidates,
-                        processMethodContext.getIntrospectionPolicy())
+                        processMethodContext.introspectionPolicy())
                 .withReturnTypeAnyOf(memberSupportPrefix
                         .getSupportMethodReturnType().matchingTypes(elementType))
                 );

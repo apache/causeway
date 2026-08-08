@@ -50,11 +50,11 @@ implements AccessorFacetFactory {
 
     @Override
     public final void process(final ProcessMethodContext processMethodContext) {
-        var accessorMethod = processMethodContext.getMethod().asMethodElseFail();
+        var accessorMethod = processMethodContext.methodFacade().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
-        var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
-        var facetHolder = processMethodContext.getFacetHolder();
+        var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.cls());
+        var facetHolder = processMethodContext.facetHolder();
 
         addFacet(createFacet(typeSpec, accessorMethod, facetHolder));
     }

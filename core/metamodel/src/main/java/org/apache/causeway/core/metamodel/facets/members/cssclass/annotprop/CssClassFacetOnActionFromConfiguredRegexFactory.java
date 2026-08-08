@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+
+import jakarta.inject.Inject;
 
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
@@ -37,17 +37,15 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        if(processMethodContext.isMixinMain()) {
-            return; // don't match regex against 'act' say
-        }
+        if(processMethodContext.isMixinMain())
+			return; // don't match regex against 'act' say
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        if(facetHolder.containsNonFallbackFacet(CssClassFacet.class)) {
-            return;
-        }
+        final FacetedMethod facetHolder = processMethodContext.facetHolder();
+        if(facetHolder.containsNonFallbackFacet(CssClassFacet.class))
+			return;
 
         // the name which we match the regex against
-        var actionName = processMethodContext.getMethod().getName();
+        var actionName = processMethodContext.methodFacade().getName();
 
         addFacetIfPresent(
                 CssClassFacetOnActionFromConfiguredRegex

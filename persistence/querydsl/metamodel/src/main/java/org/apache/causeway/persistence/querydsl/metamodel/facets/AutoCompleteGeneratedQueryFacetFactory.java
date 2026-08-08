@@ -21,8 +21,6 @@ package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
 import java.util.Optional;
 
-import org.springframework.util.ReflectionUtils;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -33,6 +31,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import org.springframework.util.ReflectionUtils;
 
 public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract {
 
@@ -43,14 +42,12 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        if (processClassContext.getFacetHolder().containsFacet(AutoCompleteUsingQueryDslFacet.class)) {
-            return;
-        }
+        if (processClassContext.facetHolder().containsFacet(AutoCompleteUsingQueryDslFacet.class))
+			return;
 
-        var isEntity = processClassContext.getFacetHolder().containsFacet(EntityFacet.class);
-        if(!isEntity) {
-            return;
-        }
+        var isEntity = processClassContext.facetHolder().containsFacet(EntityFacet.class);
+        if(!isEntity)
+			return;
 
         var domainObjectIfAny= processClassContext.synthesizeOnType(DomainObject.class);
 
@@ -81,8 +78,8 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
         var queryDslSupport = queryDslSupport();
 
         addFacet(new AutoCompleteUsingQueryDslFacet(
-                processClassContext.getCls(),
-                processClassContext.getFacetHolder(),
+                processClassContext.cls(),
+                processClassContext.facetHolder(),
                 repositoryAdditionalPredicateObject, repositoryAdditionalPredicateMethod,
                 limitResults, minLength,
                 queryDslSupport
@@ -92,7 +89,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
         var owningType = facetedMethod.owningType();
         var declaringSpec = specForTypeElseFail(owningType);
 
@@ -116,7 +113,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
 
         // we update the existing facet
         var autoCompleteUsingQueryDslFacet = Optional.ofNullable(declaringSpec.getFacet(AutoCompleteFacet.class))
-                .filter(x -> x instanceof AutoCompleteUsingQueryDslFacet)
+                .filter(AutoCompleteUsingQueryDslFacet.class::isInstance)
                 .map(AutoCompleteUsingQueryDslFacet.class::cast)
                 .orElseGet(() -> {
                     var newFacet = new AutoCompleteUsingQueryDslFacet(declaringSpec.getCorrespondingClass(), declaringSpec, null, null, null, null, queryDslSupport());
@@ -132,7 +129,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
                 .synthesizeOnMethodOrMixinType(
                         Property.class,
                         () -> ValidationFailureUtils
-                                .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
+                                .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Property.class));
     }
 
     private QueryDslSupport queryDslSupport() {

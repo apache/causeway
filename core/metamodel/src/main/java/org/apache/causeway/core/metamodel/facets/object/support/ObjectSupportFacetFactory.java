@@ -93,8 +93,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final FacetedMethod member = processMethodContext.getFacetHolder();
-        final Class<?> owningClass = processMethodContext.getCls();
+        final FacetedMethod member = processMethodContext.facetHolder();
+        final Class<?> owningClass = processMethodContext.cls();
         var owningSpec = processMethodContext.loadSpecificationTypeOnly(owningClass);
 
         owningSpec.lookupFacet(DisabledObjectFacet.class)
@@ -114,14 +114,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         MethodFinder
             .publicOnly(
-                    processClassContext.getCls(),
+                    processClassContext.cls(),
                     toString.getMethodNames())
             .withReturnTypeAnyOf(toString.getReturnTypeCategory().getReturnTypes())
             .streamMethodsMatchingSignature(NO_ARG)
             .peek(processClassContext::removeMethod)
             .forEach(method->{
                 addFacetIfPresent(TitleFacetFromToStringMethod
-                        .create(method, processClassContext.getFacetHolder()));
+                        .create(method, processClassContext.facetHolder()));
             });
     }
 
@@ -132,15 +132,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> objectSupportFacetConstructor) {
         MethodFinder
             .objectSupport(
-                    processClassContext.getCls(),
+                    processClassContext.cls(),
                     objectSupportMethodEnum.getMethodNames(),
-                    processClassContext.getIntrospectionPolicy())
+                    processClassContext.introspectionPolicy())
             .withReturnTypeAnyOf(objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes())
             .streamMethodsMatchingSignature(methodSignature)
             .peek(processClassContext::removeMethod)
             .forEach(method->{
                 addFacetIfPresent(objectSupportFacetConstructor
-                        .apply(method, processClassContext.getFacetHolder()))
+                        .apply(method, processClassContext.facetHolder()))
                 .orElse(null);
             });
     }

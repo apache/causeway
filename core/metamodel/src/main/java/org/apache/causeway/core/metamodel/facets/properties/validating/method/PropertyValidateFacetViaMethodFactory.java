@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.validating.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 public class PropertyValidateFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract  {
@@ -39,7 +39,7 @@ extends MemberSupportFacetFactoryAbstract  {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        var getterMethod = processMethodContext.getMethod();
+        var getterMethod = processMethodContext.methodFacade();
         var argType = getterMethod.getReturnType();
 
         methodFinder
@@ -48,7 +48,7 @@ extends MemberSupportFacetFactoryAbstract  {
         .forEach(validateMethod->{
             addFacet(
                     new PropertyValidateFacetViaMethod(
-                            validateMethod, processMethodContext.getFacetHolder()));
+                            validateMethod, processMethodContext.facetHolder()));
         });
 
     }

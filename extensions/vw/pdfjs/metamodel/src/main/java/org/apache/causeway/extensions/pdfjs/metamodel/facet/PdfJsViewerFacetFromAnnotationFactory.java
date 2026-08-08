@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
-import jakarta.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -30,6 +26,9 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 public class PdfJsViewerFacetFromAnnotationFactory
 extends FacetFactoryAbstract {
@@ -53,13 +52,13 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         var pdfjsViewerIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                     PdfJsViewer.class,
                     () -> ValidationFailureUtils
-                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), PdfJsViewer.class));
+                            .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), PdfJsViewer.class));
 
         pdfjsViewerIfAny.ifPresent(
             pdfjsViewer -> {

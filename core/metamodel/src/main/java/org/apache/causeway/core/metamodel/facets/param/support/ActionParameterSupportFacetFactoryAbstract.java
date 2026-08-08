@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportin
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberAndPropertySupportFacetFactoryAbstract;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class ActionParameterSupportFacetFactoryAbstract
@@ -56,7 +55,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
     @Override
     public final void process(final ProcessMethodContext processMethodContext) {
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
         var parameters = facetedMethod.parameters();
 
         if (parameters.isEmpty()) return;

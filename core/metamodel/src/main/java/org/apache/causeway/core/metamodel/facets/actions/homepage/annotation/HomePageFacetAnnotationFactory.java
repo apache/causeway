@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.homepage.annotation;
 
+import static org.apache.causeway.commons.internal.functions._Predicates.not;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.HomePage;
@@ -42,10 +42,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-
-import static org.apache.causeway.commons.internal.functions._Predicates.not;
-
 import org.jspecify.annotations.NonNull;
+
+import jakarta.inject.Inject;
 
 public class HomePageFacetAnnotationFactory
 extends FacetFactoryAbstract
@@ -64,10 +63,9 @@ implements MetaModelRefiner {
 //        _Assert.assertEquals("expected same", homepageAnnot,
 //                Annotations.getAnnotation(processMethodContext.getMethod(), HomePage.class));
 
-        if (homepageAnnot == null) {
-            return;
-        }
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        if (homepageAnnot == null)
+			return;
+        final FacetedMethod facetHolder = processMethodContext.facetHolder();
         FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
     }
 

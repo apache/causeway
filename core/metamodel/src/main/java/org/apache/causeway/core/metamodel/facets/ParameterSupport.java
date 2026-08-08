@@ -23,8 +23,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -36,6 +34,7 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Retur
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +58,7 @@ public record ParameterSupport() {
         }
 
         public Class<?>[] paramTypes() {
-            return processMethodContext().getMethod().getParameterTypes();
+            return processMethodContext().methodFacade().getParameterTypes();
         }
 
         private Can<String> getSupporingMethodNameCandidates(final int paramIndex) {
@@ -108,7 +107,7 @@ public record ParameterSupport() {
             final ParamSupportingMethodSearchRequest searchRequest,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        var actionMethod = searchRequest.processMethodContext().getMethod();
+        var actionMethod = searchRequest.processMethodContext().methodFacade();
         var paramCount = actionMethod.getParameterCount();
 
         for (int i = 0; i < paramCount; i++) {
@@ -125,7 +124,7 @@ public record ParameterSupport() {
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
         var processMethodContext = searchRequest.processMethodContext();
-        var type = processMethodContext.getCls();
+        var type = processMethodContext.cls();
         var paramTypes = searchRequest.paramTypes();
         var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
 
@@ -134,7 +133,7 @@ public record ParameterSupport() {
         MethodFinderPAT
         .findMethodWithPATArg(
                 MethodFinder
-                .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+                .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
                 .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType)),
                 paramTypes,
                 searchRequest.additionalParamTypes())
@@ -160,14 +159,14 @@ public record ParameterSupport() {
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
         var processMethodContext = searchRequest.processMethodContext();
-        var type = processMethodContext.getCls();
+        var type = processMethodContext.cls();
         var paramTypes = searchRequest.paramTypes();
         var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         var paramType = paramTypes[paramIndex];
         var signature = new Class<?>[]{paramType};
 
         MethodFinder
-            .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+            .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
             .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType))
             .streamMethodsMatchingSignature(signature)
             .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
@@ -183,7 +182,7 @@ public record ParameterSupport() {
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
         var processMethodContext = searchRequest.processMethodContext();
-        var type = processMethodContext.getCls();
+        var type = processMethodContext.cls();
         var paramTypes = searchRequest.paramTypes();
         var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         var paramType = paramTypes[paramIndex];
@@ -194,7 +193,7 @@ public record ParameterSupport() {
             var signature = concat(paramTypes, limit, additionalParamTypes);
             var supportingMethod =
                     MethodFinder
-                    .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+                    .memberSupport(type, methodNames, processMethodContext.introspectionPolicy())
                     .withReturnTypeAnyOf(searchRequest.returnTypePattern().matchingTypes(paramType))
                     .streamMethodsMatchingSignature(signature)
                     .findFirst()

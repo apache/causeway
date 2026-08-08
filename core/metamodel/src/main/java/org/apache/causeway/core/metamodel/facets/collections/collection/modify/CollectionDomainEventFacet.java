@@ -54,7 +54,7 @@ implements HidingInteractionAdvisor {
             final @NonNull Optional<Collection> collectionIfAny,
             final @NonNull ProcessMethodContext processMethodContext) {
 
-    	final FacetHolder facetHolder = processMethodContext.getFacetHolder();
+    	final FacetHolder facetHolder = processMethodContext.facetHolder();
         var collectionDomainEventFacet = collectionIfAny
                 .map(Collection::domainEvent)
                 .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
@@ -64,7 +64,7 @@ implements HidingInteractionAdvisor {
                 .orElseGet(()->{
 
                     /* only used to lookup {@link CollectionDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
+                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.cls());
                     var typeFromDomainObject = typeSpec.lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
                     		.orElse(null);
 

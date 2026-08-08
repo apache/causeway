@@ -20,10 +20,6 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
-import org.springframework.util.StringUtils;
-
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -37,6 +33,9 @@ import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrde
 import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeSequenceFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+import org.springframework.util.StringUtils;
+
+import jakarta.inject.Inject;
 
 public class PropertyLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -49,12 +48,12 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
         var propertyLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         PropertyLayout.class,
                         () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), PropertyLayout.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), PropertyLayout.class));
 
         addFacetIfPresent(CssClassFacetForPropertyLayoutAnnotation
             .create(propertyLayoutIfAny, facetHolder));
@@ -94,7 +93,7 @@ extends FacetFactoryAbstract {
                 .map(PropertyLayout::navigableSubtree)
                 .filter(StringUtils::hasLength)
                 .flatMap(sequence->NavigableSubtreeSequenceFacet.create("PropertyLayout annotation",
-                    processMethodContext.getCls(), processMethodContext.getMethod().asMethod(), sequence, facetHolder)));
+                    processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder)));
     }
 
     // -- HELPER
@@ -106,9 +105,8 @@ extends FacetFactoryAbstract {
 
         // guard against member not being a property
         if(holder instanceof FacetedMethod facetedMethod
-                && facetedMethod.featureType() != FeatureType.PROPERTY) {
-            return Optional.empty();
-        }
+                && facetedMethod.featureType() != FeatureType.PROPERTY)
+			return Optional.empty();
 
         return Optional.ofNullable(
 

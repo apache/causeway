@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 public class ObjectValidPropertiesFacetImplFactory
 extends FacetFactoryAbstract {
@@ -35,6 +35,6 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         addFacet(
-                new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
+                new ObjectValidPropertiesFacetImpl(processClassContaxt.facetHolder()));
     }
 }

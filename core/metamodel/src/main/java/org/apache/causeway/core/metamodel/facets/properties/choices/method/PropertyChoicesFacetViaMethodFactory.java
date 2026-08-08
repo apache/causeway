@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.choices.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 public class PropertyChoicesFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -39,7 +39,7 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        var getterOrMixinMain = processMethodContext.getMethod();
+        var getterOrMixinMain = processMethodContext.methodFacade();
         var getterType = getterOrMixinMain.getReturnType();
 
         methodFinder
@@ -48,7 +48,7 @@ extends MemberSupportFacetFactoryAbstract {
         .forEach(choicesMethod->{
             addFacet(
                     new PropertyChoicesFacetViaMethod(
-                            choicesMethod, getterType, processMethodContext.getFacetHolder()));
+                            choicesMethod, getterType, processMethodContext.facetHolder()));
         });
 
     }

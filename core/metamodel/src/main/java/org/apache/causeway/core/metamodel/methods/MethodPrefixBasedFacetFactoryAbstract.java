@@ -30,9 +30,9 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -126,14 +126,14 @@ implements MethodPrefixBasedFacetFactory {
 
     protected boolean isPropertyOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isProperty());
+                || (processMethodContext.featureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.featureType().isProperty());
     }
 
     protected boolean isCollectionOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isCollection());
+                || (processMethodContext.featureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.featureType().isCollection());
     }
 
     // -- HELPER

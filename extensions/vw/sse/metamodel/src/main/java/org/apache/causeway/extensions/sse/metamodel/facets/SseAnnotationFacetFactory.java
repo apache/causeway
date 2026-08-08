@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.extensions.sse.metamodel.facets;
 
-import jakarta.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -29,6 +25,9 @@ import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.extensions.sse.applib.annotations.ServerSentEvents;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
 
 public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
@@ -54,7 +53,7 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processObserve(final ProcessMethodContext processMethodContext) {
-        var facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.facetHolder();
 
         var serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
 

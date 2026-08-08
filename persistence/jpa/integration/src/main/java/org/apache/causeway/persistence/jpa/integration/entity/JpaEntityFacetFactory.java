@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.persistence.jpa.integration.entity;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
 //@Slf4j
 public class JpaEntityFacetFactory
@@ -38,9 +38,9 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        var cls = processClassContext.getCls();
+        var cls = processClassContext.cls();
 
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         var entityIfAny = processClassContext.synthesizeOnType(Entity.class);
         if(!entityIfAny.isPresent()) return;

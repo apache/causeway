@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
@@ -27,6 +25,8 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import jakarta.inject.Inject;
 
 public class ViewModelSemanticCheckingFacetFactory
 extends FacetFactoryAbstract {
@@ -39,12 +39,11 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        var cls = processClassContext.getCls();
+        var cls = processClassContext.cls();
 
         final boolean implementsViewModel = org.apache.causeway.applib.ViewModel.class.isAssignableFrom(cls);
-        if(!implementsViewModel){
-            return;
-        }
+        if(!implementsViewModel)
+			return;
 
         if(getConfiguration().applib().annotation().viewModel().validation().semanticChecking().enable()) {
             checkViewModelSemantics(processClassContext);
@@ -54,8 +53,8 @@ extends FacetFactoryAbstract {
     // -- HELPER
 
     private void checkViewModelSemantics(final ProcessClassContext processClassContext) {
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
         final DomainObject domainObject = processClassContext.synthesizeOnType(DomainObject.class).orElse(null);
         final boolean annotatedWithDomainObject = domainObject != null;

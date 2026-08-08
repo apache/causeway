@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Digits;
-
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -33,6 +30,9 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractiona
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Digits;
 
 public class ValueSemanticsAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -48,16 +48,16 @@ extends FacetFactoryAbstract {
             .synthesizeOnMethodOrMixinType(
                     ValueSemantics.class,
                     () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), ValueSemantics.class));
 
         // support for @jakarta.validation.constraints.Digits
         var digitsOpt = processMethodContext
             .synthesizeOnMethodOrMixinType(
                     Digits.class,
                     () -> ValidationFailureUtils
-                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), Digits.class));
 
-        processAll(processMethodContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
+        processAll(processMethodContext.facetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     @Override
@@ -66,7 +66,7 @@ extends FacetFactoryAbstract {
         // support for @jakarta.validation.constraints.Digits
         var digitsOpt = processParameterContext.synthesizeOnParameter(Digits.class);
 
-        processAll(processParameterContext.getFacetHolder(), valueSemanticsOpt, digitsOpt);
+        processAll(processParameterContext.facetHolder(), valueSemanticsOpt, digitsOpt);
     }
 
     // -- HELPER

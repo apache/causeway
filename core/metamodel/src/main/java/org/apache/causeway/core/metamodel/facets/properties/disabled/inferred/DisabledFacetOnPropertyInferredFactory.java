@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.disabled.inferred;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -27,6 +25,8 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+
+import jakarta.inject.Inject;
 
 /**
  * Run "near the end"
@@ -42,16 +42,14 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod property = processMethodContext.getFacetHolder();
+        final FacetedMethod property = processMethodContext.facetHolder();
 
-        if(property.containsNonFallbackFacet(DisabledFacet.class)) {
-            // already disabled
+        if(property.containsNonFallbackFacet(DisabledFacet.class))
+			// already disabled
             return;
-        }
-        if(property.containsNonFallbackFacet(PropertySetterFacet.class)) {
-            // already known to be modifiable
+        if(property.containsNonFallbackFacet(PropertySetterFacet.class))
+			// already known to be modifiable
             return;
-        }
 
         // else, infer that this is not modifiable
         FacetUtil.addFacet(new DisabledFacetOnPropertyFromMissingSetter(property));

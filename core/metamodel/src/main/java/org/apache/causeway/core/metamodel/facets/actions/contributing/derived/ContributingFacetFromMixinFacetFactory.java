@@ -44,14 +44,14 @@ extends FacetFactoryAbstract {
 			// skip processing if not mixin main
             return;
 
-        var method = processMethodContext.getMethod();
+        var method = processMethodContext.methodFacade();
         var declaringClass = method.getDeclaringClass();
         var spec = processMethodContext.loadSpecificationTypeOnly(declaringClass);
 
         if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent())
 			return;
 
-        var facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.facetHolder();
 
         //[1998] if @Action or @ActionLayout detected on type level infer:
         //@ActionLayout(contributed=ACTION)

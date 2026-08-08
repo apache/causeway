@@ -20,9 +20,6 @@ package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.Column;
-
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -32,6 +29,9 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
 
 public class BigDecimalFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
@@ -45,10 +45,10 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        if(BigDecimal.class != processMethodContext.getMethod().getReturnType())
+        if(BigDecimal.class != processMethodContext.methodFacade().getReturnType())
             return;
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        final FacetedMethod facetHolder = processMethodContext.facetHolder();
 
         var jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 

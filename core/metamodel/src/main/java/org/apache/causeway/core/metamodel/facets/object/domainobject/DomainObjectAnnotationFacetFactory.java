@@ -18,19 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
@@ -86,9 +80,12 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -142,14 +139,13 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        if(domainObjectIfAny.isEmpty()) {
-            return;
-        }
+        if(domainObjectIfAny.isEmpty())
+			return;
 
         var domainObject = domainObjectIfAny.get();
 
-        var facetHolder = processClassContext.getFacetHolder();
-        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.facetHolder();
+        var cls = processClassContext.cls();
 
         if(processClassContext.synthesizeOnType(Value.class).isPresent()) {
             ValidationFailure.raiseFormatted(facetHolder,
@@ -199,7 +195,7 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
         //var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         // check for @DomainObject(entityChangePublishing=....)
         var entityChangePublishing = domainObjectIfAny
@@ -214,8 +210,8 @@ implements
     void processAutoComplete(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
         // check from @DomainObject(autoCompleteRepository=...)
         processClassContext.synthesizeOnType(DomainObject.class)
@@ -257,14 +253,13 @@ implements
         var repoMethod = getClassCache()
             .streamPublicMethods(repositoryClass)
             .filter(method->method.name().equals(methodName))
-            .filter(method->method.isSingleArg())
+            .filter(ResolvedMethod::isSingleArg)
             .filter(method->method.paramType(0).equals(String.class))
             .findFirst()
             .orElse(null);
 
-        if(repoMethod!=null) {
-            return repoMethod;
-        }
+        if(repoMethod!=null)
+			return repoMethod;
 
         ValidationFailure.raise(
                 facetHolder.getSpecificationLoader(),
@@ -285,7 +280,7 @@ implements
     void processBounded(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
         FacetUtil.addFacetIfPresent(
                 ChoicesFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
@@ -295,7 +290,7 @@ implements
     void processEditing(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         FacetUtil.addFacetIfPresent(
                 EditingEnabledFacetForDomainObjectAnnotation
@@ -311,8 +306,8 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
         FacetUtil.addFacetIfPresent(
                 AliasedFacetForDomainObjectAnnotation
@@ -324,8 +319,8 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
         FacetUtil.addFacetIfPresent(
                 IntrospectionPolicyFacetForDomainObjectAnnotation
@@ -335,12 +330,11 @@ implements
     void processNature(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        var cls = processClassContext.getCls();
-        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.cls();
+        var facetHolder = processClassContext.facetHolder();
 
-        if(!domainObjectIfAny.isPresent()) {
-            return;
-        }
+        if(!domainObjectIfAny.isPresent())
+			return;
 
         // handle with least priority
         if(addFacetIfPresent(
@@ -349,18 +343,15 @@ implements
                         domainObjectIfAny,
                         mementoContext,
                         facetHolder))
-                .isPresent()) {
-            return;
-        }
+                .isPresent())
+			return;
 
         if(cls.isInterface()
-                || Modifier.isAbstract(cls.getModifiers())) {
-
-            // entirely ignore abstract types
+                || Modifier.isAbstract(cls.getModifiers()))
+			// entirely ignore abstract types
             // there is no reason for these to be recognized as mixins,
             // as only concrete mixins will ever contribute to the domain
             return;
-        }
 
         var mixinDomainObjectIfAny =
                 domainObjectIfAny
@@ -377,10 +368,9 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
 
-        if(!domainObjectIfAny.isPresent()) {
-            return;
-        }
-        var facetHolder = processClassContext.getFacetHolder();
+        if(!domainObjectIfAny.isPresent())
+			return;
+        var facetHolder = processClassContext.facetHolder();
 
         processLifecycleEventCreated(domainObjectIfAny, facetHolder);
         processLifecycleEventLoaded(domainObjectIfAny, facetHolder);
@@ -394,10 +384,9 @@ implements
     private void processDomainEvents(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        if(!domainObjectIfAny.isPresent()) {
-            return;
-        }
-        var facetHolder = processClassContext.getFacetHolder();
+        if(!domainObjectIfAny.isPresent())
+			return;
+        var facetHolder = processClassContext.facetHolder();
 
         processDomainEventAction(domainObjectIfAny, facetHolder);
         processDomainEventProperty(domainObjectIfAny, facetHolder);
@@ -648,11 +637,10 @@ implements
                 }
 
                 private boolean logicalTypeNameIsNotIncludedInAliased(final ObjectSpecification objectSpecification) {
-                    if (getConfiguration().core().metaModel().validator().allowLogicalTypeNameAsAlias()) {
-                        return objectSpecification.aliases()
+                    if (getConfiguration().core().metaModel().validator().allowLogicalTypeNameAsAlias())
+						return objectSpecification.aliases()
                                 .map(LogicalType::logicalName).stream()
                                 .noneMatch(name -> objectSpecification.logicalTypeName().equals(name));
-                    }
                     return true;
                 }
 

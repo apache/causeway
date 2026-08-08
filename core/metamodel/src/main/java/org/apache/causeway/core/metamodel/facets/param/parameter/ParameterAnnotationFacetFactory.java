@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
-
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -33,6 +30,9 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.Mus
 import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
+
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 public class ParameterAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -55,7 +55,7 @@ extends FacetFactoryAbstract {
     // check for @Parameter(precedingParamsPolicy=...)
     void processPrecedingParamsPolicy(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
@@ -65,7 +65,7 @@ extends FacetFactoryAbstract {
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
@@ -75,7 +75,7 @@ extends FacetFactoryAbstract {
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
@@ -85,10 +85,10 @@ extends FacetFactoryAbstract {
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        var parameterType = processParameterContext.getParameterType();
+        var parameterType = processParameterContext.parameterType();
 
         var patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
         addFacetIfPresent(
@@ -102,13 +102,13 @@ extends FacetFactoryAbstract {
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         var hasNullable = processParameterContext.streamParameterAnnotations()
             .anyMatch(annot->annot.annotationType().getSimpleName().equals("Nullable"));
 
-        var parameterType = processParameterContext.getParameterType();
+        var parameterType = processParameterContext.parameterType();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnParameter
@@ -121,7 +121,7 @@ extends FacetFactoryAbstract {
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
 
-        var holder = processParameterContext.getFacetHolder();
+        var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(

@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.actions.validate.method;
 
 import java.util.EnumSet;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -29,6 +27,8 @@ import org.apache.causeway.core.metamodel.facets.ActionSupport;
 import org.apache.causeway.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterValidationFacetViaMethod}.
@@ -58,7 +58,7 @@ extends MemberSupportFacetFactoryAbstract {
             var patConstructor = searchResult.patConstructor();
             addFacet(
                     new ActionValidationFacetViaMethod(
-                            validateMethod, patConstructor, processMethodContext.getFacetHolder()));
+                            validateMethod, patConstructor, processMethodContext.facetHolder()));
         });
 
     }

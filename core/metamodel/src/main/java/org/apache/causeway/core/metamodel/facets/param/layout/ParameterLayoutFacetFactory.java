@@ -20,12 +20,12 @@ package org.apache.causeway.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 public class ParameterLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -45,7 +45,7 @@ extends FacetFactoryAbstract {
             final ProcessParameterContext processParameterContext,
             final Optional<ParameterLayout> parameterLayoutIfAny) {
 
-        var facetHolder = processParameterContext.getFacetHolder();
+        var facetHolder = processParameterContext.facetHolder();
 
         addFacetIfPresent(
                 CssClassFacetForParameterLayoutAnnotation

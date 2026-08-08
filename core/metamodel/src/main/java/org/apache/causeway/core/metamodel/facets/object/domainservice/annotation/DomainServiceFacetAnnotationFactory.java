@@ -41,14 +41,13 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessClassContext processClassContext) {
         var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
-        if (!domainServiceIfAny.isPresent()) {
-            return;
-        }
-        var facetHolder = processClassContext.getFacetHolder();
+        if (!domainServiceIfAny.isPresent())
+			return;
+        var facetHolder = processClassContext.facetHolder();
 
         addFacetIfPresent(
                 AliasedFacetForDomainServiceAnnotation
-                    .create(domainServiceIfAny, processClassContext.getCls(), facetHolder));
+                    .create(domainServiceIfAny, processClassContext.cls(), facetHolder));
     }
 
     @Override
@@ -56,9 +55,8 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            if(!spec.isDomainService()) {
-                return;
-            }
+            if(!spec.isDomainService())
+				return;
 
             final String associationNames = spec
                     .streamAssociations(MixedIn.EXCLUDED)
@@ -67,9 +65,8 @@ implements MetaModelRefiner {
 //                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
                     .collect(Collectors.joining(", "));
 
-            if(associationNames.isEmpty()) {
-                return;
-            }
+            if(associationNames.isEmpty())
+				return;
 
             ValidationFailure.raiseFormatted(
                     spec,

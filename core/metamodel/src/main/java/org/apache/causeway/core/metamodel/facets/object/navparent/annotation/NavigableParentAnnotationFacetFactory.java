@@ -22,8 +22,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Objects;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
@@ -42,6 +40,8 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParen
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import jakarta.inject.Inject;
 
 /**
  * For detailed behavioral specification see
@@ -62,8 +62,8 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        final Class<?> cls = processClassContext.cls();
+        final FacetHolder facetHolder = processClassContext.facetHolder();
 
         // Starting from the current domain-object class, we search down the object
         // inheritance hierarchy (super class, super super class, ...), until we find
@@ -78,9 +78,8 @@ implements MetaModelRefiner {
                         InterfacePolicy.EXCLUDE)
                 .findFirst();
 
-        if (evaluators.isEmpty()) {
-            return; // no parent resolvable
-        }
+        if (evaluators.isEmpty())
+			return; // no parent resolvable
 
         final Evaluators.Evaluator parentEvaluator = evaluators.get();
 
@@ -96,9 +95,8 @@ implements MetaModelRefiner {
             if(method==null)
                 return; // code should not be reached, since case should be handled by meta-data validation
 
-        } else {
-            return; // no parent resolvable
-        }
+        } else
+			return; // no parent resolvable
 
         addFacetIfPresent(
                 NavigableParentFacetViaMethod.create(cls, method, facetHolder));
@@ -122,9 +120,8 @@ implements MetaModelRefiner {
 
             var cls = spec.getCorrespondingClass();
 
-            if(!spec.lookupFacet(NavigableParentFacet.class).isPresent()) {
-                return; // skip check
-            }
+            if(!spec.lookupFacet(NavigableParentFacet.class).isPresent())
+				return; // skip check
 
             var evaluators =
                     Evaluators.streamEvaluators(cls,
@@ -135,20 +132,17 @@ implements MetaModelRefiner {
                     // guard against inherited method having identical synthesized annotations as bas method,
                     // while not actually overriding
                     .distinct((a, b)->{
-                        if(!Objects.equals(a.getClass(), b.getClass())) {
-                            return false; // different
-                        }
-                        if(a instanceof MethodEvaluator) {
-                            var ma = (MethodEvaluator) a;
+                        if(!Objects.equals(a.getClass(), b.getClass()))
+							return false; // different
+                        if(a instanceof MethodEvaluator ma) {
                             var mb = (MethodEvaluator) b;
                             return _Reflect.methodsSame(ma.getMethod().method(), mb.getMethod().method());
                         }
                         return true; // equal
                     });;
 
-            if (evaluators.isEmpty()) {
-                return; // no conflict, continue validation processing
-            }
+            if (evaluators.isEmpty())
+				return; // no conflict, continue validation processing
 
             if (evaluators.isCardinalityMultiple()) {
 
@@ -169,11 +163,8 @@ implements MetaModelRefiner {
 
             final Evaluators.Evaluator parentEvaluator = evaluators.getSingletonOrFail();
 
-            if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
+            if(parentEvaluator instanceof final Evaluators.FieldEvaluator fieldEvaluator) {
                 // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
-
-                final Evaluators.FieldEvaluator fieldEvaluator =
-                        (Evaluators.FieldEvaluator) parentEvaluator;
 
                 if(!fieldEvaluator.getCorrespondingGetter().isPresent()) {
 

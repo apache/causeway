@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
+
+import jakarta.inject.Inject;
 
 public class DomainServiceLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -37,7 +37,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        var facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.facetHolder();
 
         var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
         var domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
@@ -47,9 +47,8 @@ extends FacetFactoryAbstract {
                 domainServiceIfAny.isPresent() ||
                 domainServiceLayoutIfAny.isPresent();
 
-        if(!isAnyPresent) {
-            return;
-        }
+        if(!isAnyPresent)
+			return;
 
         var menuBar = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::menuBar)

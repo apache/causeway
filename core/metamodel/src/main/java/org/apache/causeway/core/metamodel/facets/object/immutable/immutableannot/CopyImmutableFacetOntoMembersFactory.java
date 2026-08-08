@@ -37,8 +37,8 @@ public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final FacetedMethod member = processMethodContext.getFacetHolder();
-        final Class<?> owningClass = processMethodContext.getCls();
+        final FacetedMethod member = processMethodContext.facetHolder();
+        final Class<?> owningClass = processMethodContext.cls();
         final ObjectSpecification owningSpec = processMethodContext.loadSpecificationTypeOnly(owningClass);
 
         // assuming, that immutability is an object-type level concern and not a member-type level concern

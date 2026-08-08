@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
+
+import jakarta.inject.Inject;
 
 public class HideForContextFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -45,7 +45,7 @@ extends MemberSupportFacetFactoryAbstract {
         .forEach(hideMethod->{
             addFacet(
                     new HideForContextFacetViaMethod(
-                            hideMethod, processMethodContext.getFacetHolder()));
+                            hideMethod, processMethodContext.facetHolder()));
         });
 
     }
