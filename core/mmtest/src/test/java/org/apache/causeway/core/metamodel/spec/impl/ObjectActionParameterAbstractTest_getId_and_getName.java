@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ class ObjectActionParameterAbstractTest_getId_and_getName {
         var mmc = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
-        var spec = ((SpecificationLoaderInternal)mmc.getSpecificationLoader()).loadSpecification(Customer.class, IntrospectionRequest.FULL);
+        var spec = mmc.getSpecificationLoader().loadSpecification(Customer.class);
         action = spec.getAction("aMethod").orElseThrow();
     }
 

@@ -260,7 +260,7 @@ implements
         // preload otherwise not eagerly discovered classes
         var preloadCount = preloadableTypes.stream()
             .flatMap(PreloadableTypes::stream)
-            .map(this::loadSpecification)
+            .map(this::loadSpecificationTypeOnly)
             .filter(_NullSafe::isPresent)
             .count();
         log.info(" - preloaded {} otherwise not eagerly discovered types", preloadCount);

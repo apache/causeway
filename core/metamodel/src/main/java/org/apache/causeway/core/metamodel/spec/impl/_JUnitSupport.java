@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.function.Function;
+
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
@@ -50,6 +52,10 @@ public class _JUnitSupport {
                 .instanceForTesting(causewayConfiguration, causewaySystemEnvironment, serviceRegistry,
                         programmingModel, enablePostprocessors, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
                         classSubstitutorRegistry);
+    }
+
+    public Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction(final SpecificationLoader specLoader) {
+		return ((SpecificationLoaderDefault)specLoader)::loadSpecificationTypeOnly;
     }
 
     public OneToOneAssociationMixedIn mixedInProp(

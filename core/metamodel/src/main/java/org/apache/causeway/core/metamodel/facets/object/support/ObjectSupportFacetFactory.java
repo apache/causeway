@@ -22,8 +22,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
@@ -48,6 +46,8 @@ import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+
+import jakarta.inject.Inject;
 
 /**
  * Installs {@link DisabledObjectFacetViaMethod}
@@ -95,7 +95,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        var owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+        var owningSpec = processMethodContext.loadSpecificationTypeOnly(owningClass);
 
         owningSpec.lookupFacet(DisabledObjectFacet.class)
 	        .map(disabledObjectFacet->disabledObjectFacet.clone(member))

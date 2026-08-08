@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.collections.collection;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
@@ -36,6 +34,8 @@ import org.apache.causeway.core.metamodel.facets.collections.collection.modify.C
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import jakarta.inject.Inject;
 
 public class CollectionAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -89,7 +89,6 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        var cls = processMethodContext.getCls();
         var holder = processMethodContext.getFacetHolder();
 
         var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
@@ -107,7 +106,7 @@ extends FacetFactoryAbstract {
         // search for @Collection(domainEvent=...)
         addFacet(
             CollectionDomainEventFacet
-                .create(collectionIfAny, cls, holder));
+                .create(collectionIfAny, processMethodContext));
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {

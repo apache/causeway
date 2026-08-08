@@ -189,9 +189,6 @@ public interface SpecificationLoader {
 
     boolean isMetamodelFullyIntrospected();
 
-    // -- CAUTION! (use only during meta-model initialization)
-
-    //TODO[causeway-core-metamodel-CAUSEWAY-3834] remove from this interface
     @Nullable ObjectSpecification loadSpecification(@Nullable Class<?> domainType);
 
 	boolean contains(@Nullable Class<?> cls);

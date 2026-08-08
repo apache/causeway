@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.function.Supplier;
 
-import jakarta.inject.Named;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -32,6 +30,8 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+
+import jakarta.inject.Named;
 
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetamodelInspectMenu")
 @DomainService

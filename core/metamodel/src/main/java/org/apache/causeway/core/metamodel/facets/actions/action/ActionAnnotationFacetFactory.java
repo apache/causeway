@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
@@ -43,6 +41,8 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGrou
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import jakarta.inject.Inject;
 
 public class ActionAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -100,25 +100,21 @@ extends FacetFactoryAbstract {
 
         try {
 
-            var typeSpec = getSpecificationLoader().loadSpecification(processMethodContext.getCls());
-            if(typeSpec==null) {
-                return;
-            }
+            var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
+            if(typeSpec==null)
+				return;
 
             var returnType = actionMethod.getReturnType();
-            var returnSpec = getSpecificationLoader().loadSpecification(returnType);
-            if (returnSpec == null) {
-                return;
-            }
-
-            var holder = processMethodContext.getFacetHolder();
+            var returnSpec = processMethodContext.loadSpecificationTypeOnly(returnType);
+            if (returnSpec == null)
+				return;
 
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
 
             // search for @Action(domainEvent=...), else use the default event type
-            var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, holder);
+            var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, processMethodContext.getFacetHolder());
             addFacet(actionDomainEventFacet);
 
             // replace the current actionInvocationFacet with one that will
@@ -131,10 +127,10 @@ extends FacetFactoryAbstract {
                 isAction
                     ? new ActionInvocationFacetForAction(
                             actionDomainEventFacet,
-                            actionMethod, typeSpec, returnSpec, holder)
+                            actionMethod, typeSpec, returnSpec, processMethodContext.getFacetHolder())
                     // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
                     : new ActionInvocationFacetForMixedInPropertyOrCollection(
-                            actionMethod, typeSpec, returnSpec, holder));
+                            actionMethod, typeSpec, returnSpec, processMethodContext.getFacetHolder()));
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }
@@ -173,11 +169,10 @@ extends FacetFactoryAbstract {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Action(commandPublishing=...)
         addFacetIfPresent(CommandPublishingFacetForActionAnnotation
@@ -195,11 +190,10 @@ extends FacetFactoryAbstract {
         // see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(

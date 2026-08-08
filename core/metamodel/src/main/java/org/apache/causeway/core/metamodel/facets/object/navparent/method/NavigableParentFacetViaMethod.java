@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -61,10 +60,7 @@ extends NavigableParentFacetAbstract {
 
                 return Optional.empty();
             },
-            // success
-            methodHandle->{
-                return Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder));
-            });
+            methodHandle -> Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder)));
     }
 
     protected NavigableParentFacetViaMethod(
@@ -98,18 +94,14 @@ extends NavigableParentFacetAbstract {
             final @NonNull FacetHolder holder) {
 
         var navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
-        if(navigableParentSpec==null) {
-            return Either.left("vetoed");
-        }
-        if(navigableParentSpec.isPlural()) {
-            return Either.left("plural");
-        }
-        if(navigableParentSpec.isVoid()) {
-            return Either.left("void");
-        }
-        if(navigableParentSpec.isValue()) {
-            return Either.left("value-type");
-        }
+        if(navigableParentSpec==null)
+			return Either.left("vetoed");
+        if(navigableParentSpec.isPlural())
+			return Either.left("plural");
+        if(navigableParentSpec.isVoid())
+			return Either.left("void");
+        if(navigableParentSpec.isValue())
+			return Either.left("value-type");
         return Try.call(()->MethodHandles.lookup().unreflect(method.method()))
                 .mapToEither(
                         e->String.format("'reflection exception while trying to create a method handle for %s'\n"

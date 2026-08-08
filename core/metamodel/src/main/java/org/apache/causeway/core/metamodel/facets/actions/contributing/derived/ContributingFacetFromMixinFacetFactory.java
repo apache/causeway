@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.contributing.derived;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -28,6 +26,8 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+
+import jakarta.inject.Inject;
 
 public class ContributingFacetFromMixinFacetFactory
 extends FacetFactoryAbstract {
@@ -40,18 +40,16 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        if(!processMethodContext.isMixinMain()) {
-            // skip processing if not mixin main
+        if(!processMethodContext.isMixinMain())
+			// skip processing if not mixin main
             return;
-        }
 
         var method = processMethodContext.getMethod();
         var declaringClass = method.getDeclaringClass();
-        var spec = getSpecificationLoader().loadSpecification(declaringClass);
+        var spec = processMethodContext.loadSpecificationTypeOnly(declaringClass);
 
-        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent()) {
-            return;
-        }
+        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent())
+			return;
 
         var facetedMethod = processMethodContext.getFacetHolder();
 

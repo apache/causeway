@@ -333,7 +333,7 @@ implements
         if (superclass == null)
 			return;
 
-        this.superclassSpec = specLoaderInternal().loadSpecification(superclass);
+        this.superclassSpec = specLoaderInternal().loadSpecificationTypeOnly(superclass);
         if (superclassSpec != null
         		&& log.isDebugEnabled()) {
             log.debug("  Superclass {}", superclass.getName());
@@ -360,7 +360,7 @@ implements
         	})
         	.filter(Objects::nonNull)
         	.filter(interfaceType->classCache.head(interfaceType).hasAnnotation(DomainObject.class))
-        	.map(specLoaderInternal()::loadSpecification)
+        	.map(specLoaderInternal()::loadSpecificationTypeOnly)
         	.filter(Objects::nonNull)
         	.toList();
 

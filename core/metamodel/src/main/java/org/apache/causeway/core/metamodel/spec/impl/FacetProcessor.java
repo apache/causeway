@@ -25,10 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
@@ -54,6 +53,8 @@ import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessO
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -281,7 +282,8 @@ implements HasMetaModelContext {
             final MethodRemover methodRemover,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
-            final boolean isMixinMain) {
+            final boolean isMixinMain,
+            final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction) {
 
         var processMethodContext =
                 new ProcessMethodContext(
@@ -289,7 +291,7 @@ implements HasMetaModelContext {
                         introspectionPolicy,
                         featureType,
                         method,
-                        removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
+                        removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain, loadSpecificationTypeOnlyFunction);
 
         // warn on parameter names NOT reflectable
         if(processMethodContext.hasPotentialNonReflectableParameterNames()) {

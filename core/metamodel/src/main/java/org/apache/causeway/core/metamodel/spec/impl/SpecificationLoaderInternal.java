@@ -137,12 +137,15 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
                         bookmark));
     }
 
-    // -- CAUTION! (use only during meta-model initialization)
+    default @Nullable ObjectSpecification loadSpecificationTypeOnly(
+            final @Nullable Class<?> domainType) {
+        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY);
+    }
 
     @Override
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY);
+        return loadSpecification(domainType, IntrospectionRequest.FULL);
     }
 
     @Override

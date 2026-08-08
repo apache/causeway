@@ -210,7 +210,8 @@ implements
                         methodRemover,
                         facetedMethod,
                         FeatureType.COLLECTION,
-                        isMixinMain(accessorMethodFacade));
+                        isMixinMain(accessorMethodFacade),
+                        specLoaderInternal()::loadSpecificationTypeOnly);
 
             // figure out what the type is
             final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
@@ -255,7 +256,8 @@ implements
                     methodRemover,
                     facetedMethod,
                     FeatureType.PROPERTY,
-                    isMixinMain(accessorMethodFacade));
+                    isMixinMain(accessorMethodFacade),
+                    specLoaderInternal()::loadSpecificationTypeOnly);
 
             onNewFacetedMethod.accept(facetedMethod);
         }
@@ -308,7 +310,8 @@ implements
                 methodRemover,
                 action,
                 FeatureType.ACTION,
-                isMixinMain(actionMethodFacade));
+                isMixinMain(actionMethodFacade),
+                specLoaderInternal()::loadSpecificationTypeOnly);
 
         action.parameters()
             .forEach(actionParam->
@@ -320,7 +323,7 @@ implements
 
     private boolean isAllParamTypesValid(final MethodFacade actionMethod) {
         for (var paramType : actionMethod.getParameterTypes()) {
-            var paramSpec = specLoaderInternal().loadSpecification(paramType);
+            var paramSpec = specLoaderInternal().loadSpecificationTypeOnly(paramType);
             if (paramSpec == null) return false;
         }
         return true;

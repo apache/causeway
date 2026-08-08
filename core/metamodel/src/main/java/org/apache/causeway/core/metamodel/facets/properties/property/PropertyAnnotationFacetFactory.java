@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
-
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
@@ -52,6 +49,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegEx
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 public class PropertyAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -115,7 +115,6 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        var cls = processMethodContext.getCls();
         var holder = processMethodContext.getFacetHolder();
 
         /*
@@ -133,9 +132,8 @@ extends FacetFactoryAbstract {
                 || (processMethodContext.isMixinMain()
                         && propertyIfAny.isPresent());
 
-        if(!isProperty) {
+        if(!isProperty)
 			return; // bale out if method is not representing a property (no matter mixed-in or not)
-		}
 
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
@@ -143,7 +141,7 @@ extends FacetFactoryAbstract {
 
         // search for @Property(domainEvent=...), else use default event type
         var propertyDomainEventFacet = PropertyDomainEventFacet
-                .create(propertyIfAny, cls, getterFacetIfAny, holder);
+                .create(propertyIfAny, processMethodContext, getterFacetIfAny);
 
         addFacet(propertyDomainEventFacet);
 
@@ -182,18 +180,16 @@ extends FacetFactoryAbstract {
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
         //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
-        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class)) {
-            return;
-        }
+        if (facetHolder.containsNonFallbackFacet(CommandPublishingFacet.class))
+			return;
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Property(commandPublishing=...)
         addFacet(
@@ -220,19 +216,17 @@ extends FacetFactoryAbstract {
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
         //  if the holder represents an action then an ExecutionPublishingFacet will already have been installed).
-        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class)) {
-            return;
-        }
+        if (holder.containsNonFallbackFacet(ExecutionPublishingFacet.class))
+			return;
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasInteractionId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls()))
+			// do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
-        }
 
         // check for @Property(executionPublishing=...)
         addFacet(
@@ -304,9 +298,8 @@ extends FacetFactoryAbstract {
         if (addFacetIfPresent(
                 RegExFacetForPatternAnnotationOnProperty
                 .create(patternIfAny, returnType, holder))
-                .isPresent()) {
-            return;
-        }
+                .isPresent())
+			return;
 
         // else search for @Property(pattern=...)
         addFacetIfPresent(

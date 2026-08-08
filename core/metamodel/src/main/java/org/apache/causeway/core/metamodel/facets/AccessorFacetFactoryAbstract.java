@@ -53,8 +53,7 @@ implements AccessorFacetFactory {
         var accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
-        var cls = processMethodContext.getCls();
-        var typeSpec = getSpecificationLoader().loadSpecification(cls);
+        var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
         var facetHolder = processMethodContext.getFacetHolder();
 
         addFacet(createFacet(typeSpec, accessorMethod, facetHolder));

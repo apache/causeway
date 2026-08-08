@@ -49,9 +49,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 abstract class ObjectActionParameterAbstract
 implements
@@ -188,9 +188,8 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
-        if (autoCompleteFacet == null) {
-            return Can.empty();
-        }
+        if (autoCompleteFacet == null)
+			return Can.empty();
 
         var paramSpec = getElementType();
 
@@ -226,9 +225,8 @@ implements
 
         var paramSpec = getElementType();
         var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-        if (choicesFacet == null) {
-            return Can.empty();
-        }
+        if (choicesFacet == null)
+			return Can.empty();
 
         var visibleChoices = choicesFacet.getChoices(paramSpec,
                 pendingArgs.actionInteractionHead(),
@@ -289,18 +287,17 @@ implements
             final Class<?> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
             final Class<?> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
 
-            final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
-            final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
+            final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecificationTypeOnly(choiceWrappedClass);
+            final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecificationTypeOnly(paramWrappedClass);
 
             // type returned by choices must be an instance of the param type
             // in other words <param type> is assignable from <choices type>
 
             // TODO: should implement this instead as a MetaModelValidator (subject to [CAUSEWAY-3172])
-            if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
-                throw new DomainModelException(String.format(
+            if (!choiceWrappedSpec.isOfType(paramWrappedSpec))
+				throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",
                         paramSpec.getFullIdentifier(), choiceClass.getName()));
-            }
         }
     }
 

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.immutable.immutableannot;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -27,6 +25,8 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import jakarta.inject.Inject;
 
 public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
 
@@ -39,7 +39,7 @@ public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+        final ObjectSpecification owningSpec = processMethodContext.loadSpecificationTypeOnly(owningClass);
 
         // assuming, that immutability is an object-type level concern and not a member-type level concern
         // it is save to just copy onto members, as ImmutableFacet(s) should never ever be declared

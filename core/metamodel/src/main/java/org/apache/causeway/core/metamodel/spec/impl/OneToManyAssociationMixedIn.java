@@ -84,7 +84,7 @@ implements MixedInMember {
                 ? actionTypeOfFacet.value().elementType()
                 : (Class<?>)Object.class;
 
-        return objectAction.specLoaderInternal().loadSpecification(type);
+        return objectAction.specLoaderInternal().loadSpecificationTypeOnly(type);
     }
 
     public OneToManyAssociationMixedIn(
@@ -131,9 +131,8 @@ implements MixedInMember {
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where().isAlways()) {
-            return originalFacet;
-        }
+                originalFacet.where().isAlways())
+			return originalFacet;
         // ensure that the contributed association is always disabled
         return new DisabledFacetForContributee(VetoReason.mixedinCollection(), this);
     }

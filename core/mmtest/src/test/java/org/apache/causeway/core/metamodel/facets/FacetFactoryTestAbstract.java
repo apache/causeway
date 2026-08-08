@@ -18,17 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import org.jspecify.annotations.NonNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -55,6 +50,10 @@ import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.core.mmtestsupport.MethodRemover_forTesting;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
+import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -250,13 +249,16 @@ implements HasMetaModelContext {
         var id = facetedMethod.getFeatureIdentifier();
         assertNotNull(id.className());
 
+        var specLoader = getSpecificationLoader();
+
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.ACTION,
                 _MethodFacades.regular(annotatedMethod),
-                methodRemover, facetedMethod, true);
+                methodRemover, facetedMethod, true,
+                _JUnitSupport.loadSpecificationTypeOnlyFunction(specLoader));
 
-        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
-        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
+        final ObjectSpecification mixeeSpec = specLoader.loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = specLoader.loadSpecification(mixinClass);
         final ObjectAction mixedInAct =
                 _JUnitSupport.mixedInActionforMixinMain(mixeeSpec, mixinSpec, "act", facetedMethod);
 
@@ -345,13 +347,16 @@ implements HasMetaModelContext {
         var id = facetedMethod.getFeatureIdentifier();
         assertNotNull(id.className());
 
+        var specLoader = getSpecificationLoader();
+
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.PROPERTY,
                 _MethodFacades.regular(annotatedMethod),
-                methodRemover, facetedMethod, true);
+                methodRemover, facetedMethod, true,
+                _JUnitSupport.loadSpecificationTypeOnlyFunction(specLoader));
 
-        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
-        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
+        final ObjectSpecification mixeeSpec = specLoader.loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = specLoader.loadSpecification(mixinClass);
         final OneToOneAssociation mixedInProp =
                 _JUnitSupport.mixedInProp(mixeeSpec, mixinSpec, "prop", facetedMethod);
 
@@ -406,13 +411,16 @@ implements HasMetaModelContext {
         var id = facetedMethod.getFeatureIdentifier();
         assertNotNull(id.className());
 
+        var specLoader = getSpecificationLoader();
+
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.COLLECTION,
                 _MethodFacades.regular(annotatedMethod),
-                methodRemover, facetedMethod, true);
+                methodRemover, facetedMethod, true,
+                _JUnitSupport.loadSpecificationTypeOnlyFunction(specLoader));
 
-        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
-        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
+        final ObjectSpecification mixeeSpec = specLoader.loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = specLoader.loadSpecification(mixinClass);
         final OneToManyAssociation mixedInColl =
                 _JUnitSupport.mixedInColl(mixeeSpec, mixinSpec, "coll", facetedMethod);
 

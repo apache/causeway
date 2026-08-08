@@ -53,7 +53,7 @@ implements OneToManyAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 ((SpecificationLoaderInternal)facetedMethod.getMetaModelContext().getSpecificationLoader())
-                    .loadSpecification(facetedMethod.resolvedType().elementType()));
+                    .loadSpecificationTypeOnly(facetedMethod.resolvedType().elementType()));
     }
 
     protected OneToManyAssociationDefault(

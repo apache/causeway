@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.columnorder;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Where;
@@ -36,6 +30,11 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 /**
  * Default implementation of {@link ColumnOrderTxtFileService}.

@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -38,6 +39,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
@@ -124,7 +127,7 @@ public interface FacetFactory {
             this.method = method;
             this.methodRemover = methodRemover;
         }
-        
+
     	/**
     	 * Whether the method's underlying byte code was NOT compiled with the {@code -parameters} flag.
     	 * Might have false positives, hence 'potential' in the name.
@@ -239,6 +242,7 @@ public interface FacetFactory {
          * @since 2.0
          */
         @Getter private final boolean mixinMain;
+        private final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction;
 
         /**
          * @param isMixinMain whether we are currently processing a mixin type AND this context's method can be identified
@@ -251,11 +255,13 @@ public interface FacetFactory {
                 final MethodFacade method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod,
-                final boolean isMixinMain) {
+                final boolean isMixinMain,
+                final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction) {
 
             super(cls, introspectionPolicy, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.mixinMain = isMixinMain;
+            this.loadSpecificationTypeOnlyFunction = loadSpecificationTypeOnlyFunction;
         }
 
         /**
@@ -294,30 +300,22 @@ public interface FacetFactory {
 
         public Can<String> memberSupportCandidates(
                 final String methodPrefix) {
-            switch(getFeatureType()) {
-            case ACTION:
-                return namingConventionForActionSupport(methodPrefix);
-            case PROPERTY:
-            case COLLECTION:
-                return isMixinMain()
-                        ? namingConventionForActionSupport(methodPrefix)
-                        : namingConventionForPropertyAndCollectionSupport(methodPrefix); // handles getters
-
-                //return namingConventionForPropertyAndCollectionSupport(methodPrefix);
-            default:
-                return Can.empty();
-            }
+            return switch (getFeatureType()) {
+			case ACTION -> namingConventionForActionSupport(methodPrefix);
+			case PROPERTY, COLLECTION -> isMixinMain()
+			                        ? namingConventionForActionSupport(methodPrefix)
+			                        : namingConventionForPropertyAndCollectionSupport(methodPrefix); // handles getters
+			default -> Can.empty();
+			};
         }
 
         public Can<java.util.function.IntFunction<String>> parameterSupportCandidates(
                 final String methodPrefix) {
 
-            switch(getFeatureType()) {
-            case ACTION:
-                return namingConventionForParameterSupport(methodPrefix);
-            default:
-                return Can.empty();
-            }
+            return switch (getFeatureType()) {
+			case ACTION -> namingConventionForParameterSupport(methodPrefix);
+			default -> Can.empty();
+			};
         }
 
         // -- SUPPORTING METHOD NAMING CONVENTIONS
@@ -343,6 +341,12 @@ public interface FacetFactory {
                     .namesFor(getterMethod, prefix, isMixinMain());
         }
 
+        // -- SPEC
+
+        public @Nullable ObjectSpecification loadSpecificationTypeOnly(@Nullable final Class<?> domainType) {
+        	return loadSpecificationTypeOnlyFunction.apply(domainType);
+        }
+
         // -- JUNIT SUPPORT
 
         /**
@@ -355,9 +359,10 @@ public interface FacetFactory {
                 final ResolvedMethod method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
-            return new ProcessMethodContext(
+        	return new ProcessMethodContext(
                     cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, _MethodFacades.regular(method),
-                    methodRemover, facetedMethod, false);
+                    methodRemover, facetedMethod, false,
+                    _JUnitSupport.loadSpecificationTypeOnlyFunction(facetedMethod.getSpecificationLoader()));
         }
 
     }

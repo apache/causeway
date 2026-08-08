@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -35,6 +33,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -47,6 +46,7 @@ import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
@@ -69,9 +69,10 @@ implements
      */
     public static PropertyDomainEventFacet create(
             final @NonNull Optional<Property> propertyIfAny,
-            final @NonNull Class<?> classBeingIntrospected,
-            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
-            final @NonNull FacetHolder facetHolder) {
+            final @NonNull ProcessMethodContext processMethodContext,
+            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet) {
+
+    	final FacetHolder facetHolder = processMethodContext.getFacetHolder();
 
         var propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
@@ -81,8 +82,9 @@ implements
                 .orElseGet(()->{
 
                     /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    var typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
-                    var typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    var typeSpec = processMethodContext.loadSpecificationTypeOnly(processMethodContext.getCls());
+                    var typeFromDomainObject = typeSpec.lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                    		.orElse(null);
 
                     return typeFromDomainObject != null
                             ? new PropertyDomainEventFacet(
@@ -176,9 +178,7 @@ implements
         if(!isPostable()) return null; // bale out
 
         // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) return null;
-
-        final ProposedHolder ph = (ProposedHolder) ic;
+        if(!(ic instanceof final ProposedHolder ph)) return null;
 
         final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.target(), ic.initiatedBy());
         final ManagedObject proposedAdapter = ph.proposed();
@@ -192,9 +192,8 @@ implements
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
+            if(reasonTranslatable != null)
+				return reasonTranslatable.translate(translationService, translationContext);
             return event.getInvalidityReason();
         }
 
