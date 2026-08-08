@@ -42,7 +42,7 @@ record ActionContainer(
 		ObjectActionContainer superContainer)
 implements ObjectActionContainer {
 
-	// useful types that have no mixin support e.g. value types
+	// useful for types that have no mixin support e.g. value types
 	static ActionContainer EMPTY = new ActionContainer(
 			ImmutableEnumSet.noneOf(ActionScope.class),
 			List.of(), List.of(), //Can.empty(),

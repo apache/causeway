@@ -13,10 +13,10 @@
 
 == SpecificationLoader
 
-This class acts as the primary engine for constructing the system's metadata (the "Metamodel"). Based on the requirements and implementation notes:
+This class acts as the primary engine for constructing the system's metadata (the "Metamodel"):
 
-- *Orchestration*: It integrates various subsystems, such as mix-in processing, class substitution, and post-processing.
-- *Configuration Management*: It handles different operational modes (EAGER vs. LAZY) to determine how much of the metamodel is explored upfront versus on-the-fly.
+- *Orchestration*: It integrates various subsystems, such as class substitution, mix-in processing and post-processing.
+- *Configuration*: It handles different operational modes (EAGER vs. LAZY) to determine how much of the metamodel is explored upfront versus on-the-fly.
 - *Lifecycle & Reloading*: It manages the complexity of "reloading" specifications while ensuring that shared references do not cause consistency issues.
 
 [source,java]
@@ -31,7 +31,7 @@ This is the core data structure representing a class's meta data within the _Met
 
 - *Stateful Wrapper*: It is designed as a wrapper around internal, potentially mutable data. This allows the system to maintain consistent references even when underlying information is refreshed or updated.
 - *FacetHolder*: It holds various facets of the class definition
-- *ObjectActionContainer* and *ObjectAssociationContainer* class member meta data.
+- *ObjectActionContainer* and *ObjectAssociationContainer* hold class member meta data. Members are either _regular_, _mixed-in_ or _synthetic_.
 
 [source,java]
 .ObjectSpecification

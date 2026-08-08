@@ -33,28 +33,28 @@ record PostProcessor(
                 .collect(Can.toCan()));
     }
 
-    public void postProcess(final ObjectSpecificationInternal objSpecBuilder) {
+    public void postProcess(final ObjectSpecificationInternal internalSpec) {
 
         for (var postProcessor : enabledPostProcessors) {
 
-            if(!postProcessor.getFilter().test(objSpecBuilder)) {
+            if(!postProcessor.getFilter().test(internalSpec)) {
 				continue;
 			}
 
-            postProcessor.postProcessObject(objSpecBuilder);
+            postProcessor.postProcessObject(internalSpec);
 
-            objSpecBuilder.streamRuntimeActions(MixedIn.INCLUDED)
+            internalSpec.streamRuntimeActions(MixedIn.INCLUDED)
             .forEach(act->{
                 act.streamParameters().forEach(param ->
-                    postProcessor.postProcessParameter(objSpecBuilder, act, param));
-                postProcessor.postProcessAction(objSpecBuilder, act);
+                    postProcessor.postProcessParameter(internalSpec, act, param));
+                postProcessor.postProcessAction(internalSpec, act);
             });
 
-            objSpecBuilder.streamProperties(MixedIn.INCLUDED)
-            	.forEach(prop->postProcessor.postProcessProperty(objSpecBuilder, prop));
+            internalSpec.streamProperties(MixedIn.INCLUDED)
+            	.forEach(prop->postProcessor.postProcessProperty(internalSpec, prop));
 
-            objSpecBuilder.streamCollections(MixedIn.INCLUDED)
-            	.forEach(coll->postProcessor.postProcessCollection(objSpecBuilder, coll));
+            internalSpec.streamCollections(MixedIn.INCLUDED)
+            	.forEach(coll->postProcessor.postProcessCollection(internalSpec, coll));
 
         }
 

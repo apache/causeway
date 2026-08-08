@@ -73,7 +73,7 @@ interface IntrospectionStateHandler {
 
     /**
      * Provides the state of initialization. It is not until the final state is reached,
-     * that this {@link ObjectSpecification} can be trusted to contain complete and consistent metadata.
+     * that corresponding {@link ObjectSpecification} can be trusted to contain complete and consistent metadata.
      *
      * @apiNote allows a peek at initialization state that is not synchronized among threads.
      * 		Meaning the state has progressed at least to the point indicated by the return value.

@@ -35,7 +35,6 @@ record MixedInMemberFactory(
 
 	/**
      * Creates all mixed in properties and collections for this spec.
-	 * @param profiler
      */
     public List<ObjectAssociation> createMixedInAssociations() {
     	var include = spec.isEntityOrViewModelOrAbstract()
@@ -92,8 +91,8 @@ record MixedInMemberFactory(
 
     /**
      * Whether the mixin's main method returns an instance of type equal to the mixee's type.
-     * <p>
-     * Introduced to support constructor mixins for value-types and
+     *
+     * <p> Introduced to support constructor mixins for value-types and
      * also to support associated <i>Actions</i> for <i>Action Parameters</i>.
      */
     private boolean whenIsValueThenIsAlsoConstructorMixin(final ObjectAction act) {

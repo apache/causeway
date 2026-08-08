@@ -187,8 +187,7 @@ implements
 
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
-        			this.introspectTypeHierarchy();
-        			//introspectTypeHierarchy();
+        			introspectTypeHierarchy();
         	        invalidateCachedFacets();
         		},
         		()->{
