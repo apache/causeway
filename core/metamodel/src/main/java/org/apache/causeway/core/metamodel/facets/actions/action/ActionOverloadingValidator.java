@@ -46,7 +46,7 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionOverloadingValidator(final MetaModelContext mmc) {
-        super(mmc, spec->spec.getBeanSort()!=BeanSort.UNKNOWN
+        super(mmc, spec->spec.beanSort()!=BeanSort.UNKNOWN
                 && !spec.isAbstract());
     }
 

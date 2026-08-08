@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Objects;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
@@ -37,6 +35,8 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
+
+import jakarta.inject.Inject;
 
 public class ViewModelFacetFactory
 extends FacetFactoryAbstract
@@ -109,7 +109,7 @@ implements
 
             // ensure concrete viewmodel types have a ViewModelFacet
             if(!objectSpec.isAbstract()
-                    && objectSpec.getBeanSort().isViewModel()
+                    && objectSpec.beanSort().isViewModel()
                     && !objectSpec.viewmodelFacet().isPresent()) {
                 ValidationFailure.raiseFormatted(objectSpec,
                         ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY

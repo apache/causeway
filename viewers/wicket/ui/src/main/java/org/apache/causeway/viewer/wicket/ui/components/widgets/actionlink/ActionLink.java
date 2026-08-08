@@ -223,7 +223,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
         var actionOwnerSpec = actionModel.getActionOwner().objSpec();
         var actionPrompt = ActionPromptProvider
                 .getFrom(this.getPage())
-                .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
+                .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.beanSort());
 
         var actionParametersPanel = getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),

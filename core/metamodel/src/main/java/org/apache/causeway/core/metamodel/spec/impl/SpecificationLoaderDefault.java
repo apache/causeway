@@ -31,21 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -72,7 +58,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.PreloadableTypes;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -81,12 +66,22 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -124,15 +119,15 @@ implements
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
     private PostProcessor postProcessor;
+    private MixinSpecStreamer mixinSpecStreamer = MixinSpecStreamer.EMPTY;
+    //perf... private final Profiler profiler = Profiler.getInstance();
 
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
 
-    @Getter private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
-
     private FacetProcessor facetProcessor;
 
-    private final Map<Class<?>, ObjectSpecificationMutable> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ObjectSpecificationInternal> cache = new ConcurrentHashMap<>();
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     /**
@@ -182,7 +177,6 @@ implements
                 ()->new ValueSemanticsResolverDefault(List.of(), null),
                 classSubstitutorRegistry);
 
-        instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel);
         instance.postProcessor = enablePostprocessors
                 ? new PostProcessor(programmingModel)
@@ -198,18 +192,17 @@ implements
         if (log.isDebugEnabled()) {
             log.debug("initialising {}", this);
         }
-        this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         this.facetProcessor = new FacetProcessor(programmingModel);
     }
 
     record SpecCollector(
-            List<ObjectSpecificationMutable> knownSpecs,
-            Map<Class<?>, ObjectSpecificationMutable> valueSpecs,
-            List<ObjectSpecificationMutable> domainServiceSpecs,
-            List<ObjectSpecificationMutable> mixinSpecs,
-            List<ObjectSpecificationMutable> entitySpecs,
-            List<ObjectSpecificationMutable> viewmodelSpecs,
-            List<ObjectSpecificationMutable> otherSpecs) {
+            List<ObjectSpecificationInternal> knownSpecs,
+            Map<Class<?>, ObjectSpecificationInternal> valueSpecs,
+            List<ObjectSpecificationInternal> domainServiceSpecs,
+            List<ObjectSpecificationInternal> mixinSpecs,
+            List<ObjectSpecificationInternal> entitySpecs,
+            List<ObjectSpecificationInternal> viewmodelSpecs,
+            List<ObjectSpecificationInternal> otherSpecs) {
 
         SpecCollector() {
             this(new ArrayList<>(),
@@ -218,10 +211,10 @@ implements
                     new ArrayList<>(), new ArrayList<>());
         }
 
-        public void collect(final @Nullable ObjectSpecificationMutable spec) {
+        public void collect(final @Nullable ObjectSpecificationInternal spec) {
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
-            switch (spec.getBeanSort()) {
+            switch (spec.beanSort()) {
                 case VALUE -> valueSpecs.put(spec.getCorrespondingClass(), spec);
                 case MANAGED_BEAN_CONTRIBUTING -> domainServiceSpecs.add(spec);
                 case MIXIN -> mixinSpecs.add(spec);
@@ -232,6 +225,21 @@ implements
             }
         }
     }
+
+    @Override
+    public boolean contains(@Nullable final Class<?> cls) {
+    	return cls!=null
+			? cache.containsKey(cls)
+    		: false;
+    }
+
+    enum Phase {
+    	BEFORE_MIXINS,
+    	DURING_MIXINS,
+    	AFTER_MIXINS,
+    }
+
+    Phase phase = Phase.BEFORE_MIXINS;
 
     /**
      * Initializes and wires up, and primes the cache based on any service
@@ -250,12 +258,12 @@ implements
         var specs = new SpecCollector();
 
         // preload otherwise not eagerly discovered classes
-        var prealoadCount = preloadableTypes.stream()
+        var preloadCount = preloadableTypes.stream()
             .flatMap(PreloadableTypes::stream)
             .map(this::loadSpecification)
             .filter(_NullSafe::isPresent)
             .count();
-        log.info(" - preloaded {} otherwise not eagerly discovered types", prealoadCount);
+        log.info(" - preloaded {} otherwise not eagerly discovered types", preloadCount);
 
         var valueTypesFromProviders = valueSemanticsResolver.get().streamClassesWithValueSemantics()
             .map(valueClass->CausewayBeanMetaData.value(LogicalType.infer(valueClass), DiscoveredBy.CAUSEWAY_UPFRONT))
@@ -272,20 +280,53 @@ implements
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
+        //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
+        //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
+        this.phase = Phase.DURING_MIXINS;
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
-        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
+        // lock down mixins, also assuming none of the previously fully introspected types need any mixins
+        this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
+        this.phase = Phase.AFTER_MIXINS;
+
+        //TODO  expected no entities fully introspected yet. however, some postprocessors, that
+        // run on mixin-spec have the sideeffect of fully introspecting other types e.g. by asking for the
+        // members's element type
+        cache.values().stream()
+        	.filter(spec->!spec.isMixin())
+        	.filter(spec->!spec.isValue())
+        	.filter(ObjectSpecificationInternal::isFullyIntrospected)
+        	.forEach(spec->{
+    			log.warn("type (non-mixin, non-value) found fully introspected after mixin introspection {}"
+    					+ " - reload triggered", spec.getCorrespondingClass());
+    			//invalidateCache(spec.getCorrespondingClass());
+    			//reloadSpecification(spec.getCorrespondingClass());
+        	});
+
+        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL); //TODO no mixins required either
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
                 specs.entitySpecs(), IntrospectionRequest.FULL);
         introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL);
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
-        if(isFullIntrospect()) {
-            var snapshot = snapshotSpecifications();
-            log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
-            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
+        var snapshot = snapshotSpecifications();
+        snapshot.stream()
+	        .filter(ObjectSpecificationInternal::isMixin)
+	        .filter(spec->!spec.isFullyIntrospected())
+	        .forEach(spec->{
+	        	log.warn("Mixin was missing during first pass {}."
+	        			+ "It will not be added to the metamodel. For inclusion, "
+	        			+ "make sure it is discovered by Spring.", spec);
+	        });
+
+        //if(isFullIntrospect())  //TODO enforced, otherwise types discovered during introspection never get fully introspected (bug)
+        {
+            log.info(" - introspecting types not initially discovered by Spring {}", snapshot.size());
+            introspect(snapshot.filter(spec->!spec.isMixin()), IntrospectionRequest.FULL);
         }
+
+      //debug
+        //System.err.println(Mm2YamlUtils.toYaml(snapshotSpecifications()));
 
         log.info(" - running remaining validators");
         getOrAssessValidationResult(); // as a side effect memoizes the validation result
@@ -302,7 +343,10 @@ implements
         if(isFullIntrospect()) {
             setMetamodelFullyIntrospected(true);
         }
+
+        //perf .. log.info("\n{}", profiler);
     }
+
 
     @Override
     public Optional<ValidationFailures> getValidationResult() {
@@ -394,8 +438,7 @@ implements
 
     @Override
     public void validateLater(
-            final ObjectSpecification objectSpec,
-            final Supplier<String> introspectionContextProvider) {
+            final ObjectSpecification objectSpec) {
         if(!isMetamodelFullyIntrospected())
             // don't trigger validation during bootstrapping
             // getValidationResult() is lazily populated later on first request anyway
@@ -405,7 +448,7 @@ implements
             return;
 
         if(log.isInfoEnabled()) {
-            log.info("re-validation triggered by {}", introspectionContextProvider.get());
+            log.info("re-validation triggered for {}", objectSpec.getFullIdentifier());
         }
 
         // validators might discover new specs
@@ -436,7 +479,7 @@ implements
     // -- LOOKUP
 
     @Override
-    public Can<ObjectSpecificationMutable> snapshotSpecifications() {
+    public Can<ObjectSpecificationInternal> snapshotSpecifications() {
         return Can.ofCollection(cache.values());
     }
 
@@ -492,11 +535,12 @@ implements
         }
     }
 
-    private _Lazy<ValidationFailures> validationResult =
+    private final _Lazy<ValidationFailures> validationResult =
             _Lazy.threadSafe(this::runMetaModelValidators);
 
     private final AtomicBoolean validationInProgress = new AtomicBoolean(false);
     private final BlockingQueue<ObjectSpecification> validationQueue = new LinkedBlockingQueue<>();
+	//private Can<ObjectSpecification> mixinSpecs = Can.empty();
 
     private ValidationFailures runMetaModelValidators() {
         validationInProgress.set(true);
@@ -552,7 +596,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationMutable primeSpecification(
+    private ObjectSpecificationInternal primeSpecification(
             final @NonNull CausewayBeanMetaData typeMeta) {
         return loadSpecificationNullable(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
@@ -560,12 +604,13 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationMutable loadSpecificationNullable(
+    private ObjectSpecificationInternal loadSpecificationNullable(
             final @Nullable Class<?> type,
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionRequest request) {
 
-        if(type==null) return null;
+        if(type==null)
+        	return null;
 
         var substitute = classSubstitutorRegistry.getSubstitution(type);
         if (substitute.isNeverIntrospect()) return null; // never inspect
@@ -577,9 +622,16 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        spec.introspect(request);
+        if(phase == Phase.DURING_MIXINS
+        		&& request==IntrospectionRequest.FULL
+        		&& !spec.isMixin()) {
+        	// don't allow the side-effect of fully introspecting other types during mixin introspection
+        	spec.introspect(IntrospectionRequest.TYPE_ONLY);
+        } else {
+        	spec.introspect(request);
+        }
 
-        if(spec.getAliases().isNotEmpty()
+        if(spec.aliases().isNotEmpty()
             // this bool. expr. is an optimization, not strictly required ... a bit of hack though
             && request == IntrospectionRequest.TYPE_ONLY) {
 
@@ -601,18 +653,19 @@ implements
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecificationMutable createSpecification(final CausewayBeanMetaData typeMeta) {
+    private ObjectSpecificationInternal createSpecification(
+    		final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
-                        typeMeta,
-                        metaModelContext,
-                        facetProcessor,
-                        postProcessor,
-                        classSubstitutorRegistry);
+                typeMeta,
+                facetProcessor,
+                postProcessor,
+                classSubstitutorRegistry,
+                ()->mixinSpecStreamer);
         return objectSpec;
     }
 
     private void introspectSequential(
-            final Can<ObjectSpecificationMutable> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         for (var spec : specs) {
             spec.introspect(request);
@@ -620,7 +673,7 @@ implements
     }
 
     private void introspectParallel(
-            final Can<ObjectSpecificationMutable> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         specs.parallelStream()
         .forEach(spec -> {
@@ -635,7 +688,7 @@ implements
 
     private void introspectAndLog(
             final String info,
-            final Iterable<ObjectSpecificationMutable> specs,
+            final Iterable<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         var stopWatch = _Timing.now();
         introspect(Can.ofIterable(specs), request);
@@ -644,7 +697,7 @@ implements
     }
 
     private void introspect(
-            final Can<ObjectSpecificationMutable> specs,
+            final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         if(parallel) {
             introspectParallel(specs, request);

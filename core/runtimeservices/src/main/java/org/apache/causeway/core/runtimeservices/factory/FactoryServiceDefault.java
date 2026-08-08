@@ -20,14 +20,6 @@ package org.apache.causeway.core.runtimeservices.factory;
 
 import java.util.Optional;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -43,8 +35,15 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link FactoryService}.
@@ -55,6 +54,7 @@ import org.jspecify.annotations.NonNull;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@Slf4j
 public record FactoryServiceDefault(
         InteractionService interactionService, // dependsOn
         Provider<SpecificationLoader> specificationLoaderProvider,
@@ -67,9 +67,8 @@ implements FactoryService {
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
         var spec = loadSpecElseFail(requiredType);
-        if(spec.isInjectable()) {
-            return get(requiredType);
-        }
+        if(spec.isInjectable())
+			return get(requiredType);
         return create(requiredType);
     }
 
@@ -83,9 +82,8 @@ implements FactoryService {
     @Override
     public <T> T detachedEntity(final @NonNull Class<T> domainClass) {
         var entitySpec = loadSpecElseFail(domainClass);
-        if(!entitySpec.isEntity()) {
-            throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
-        }
+        if(!entitySpec.isEntity())
+			throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
         return createObject(domainClass, entitySpec);
     }
 
@@ -93,26 +91,30 @@ implements FactoryService {
     public <T> T detachedEntity(final @NonNull T entityPojo) {
         var entityClass = entityPojo.getClass();
         var spec = loadSpecElseFail(entityClass);
-        if(!spec.isEntity()) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recognized as an entity type by the framework.",
+        if(!spec.isEntity())
+			throw _Exceptions.illegalArgument("Type '%s' is not recognized as an entity type by the framework.",
                     entityClass);
-        }
         objectLifecyclePublisher().onPostCreate(ManagedObject.entity(spec, entityPojo, Optional.empty()));
         return entityPojo;
     }
 
     @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixee) {
+    	if(!specificationLoaderProvider().get().contains(mixinClass)) {
+    		// in effect only warns once
+			log.warn("Mixin class '{}' is not part of the meta model, "
+					+ "it will be loaded, but this has no effect on mixed-in member creation for domain types",
+                    mixinClass.getName());
+		}
+
         var mixinSpec = loadSpecElseFail(mixinClass);
-        var mixinFacet = mixinSpec.getFacet(MixinFacet.class);
-        if(mixinFacet == null) {
-            throw _Exceptions.illegalArgument("Class '%s' is not a mixin",
+        var mixinFacet = mixinSpec.lookupFacet(MixinFacet.class).orElse(null);
+        if(mixinFacet == null)
+			throw _Exceptions.illegalArgument("Class '%s' is not a mixin",
                     mixinClass.getName());
-        }
-        if(mixinSpec.isAbstract()) {
-            throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin",
+        if(mixinSpec.isAbstract())
+			throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin",
                     mixinClass.getName());
-        }
         var mixin = mixinFacet.instantiate(mixee);
         return _Casts.uncheckedCast(mixin);
     }
@@ -121,10 +123,9 @@ implements FactoryService {
     public <T> T viewModel(final @NonNull T viewModelPojo) {
         var viewModelClass = viewModelPojo.getClass();
         var spec = loadSpecElseFail(viewModelClass);
-        if(!spec.isViewModel()) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recognized as a ViewModel by the framework.",
+        if(!spec.isViewModel())
+			throw _Exceptions.illegalArgument("Type '%s' is not recognized as a ViewModel by the framework.",
                     viewModelClass);
-        }
         spec.viewmodelFacetElseFail().initialize(viewModelPojo);
         objectLifecyclePublisher().onPostCreate(ManagedObject.viewmodel(spec, viewModelPojo, Optional.empty()));
         return viewModelPojo;
@@ -139,16 +140,13 @@ implements FactoryService {
     @Override
     public <T> T create(final @NonNull Class<T> domainClass) {
         var spec = loadSpecElseFail(domainClass);
-        if(spec.isInjectable()) {
-            throw _Exceptions.illegalArgument(
+        if(spec.isInjectable())
+			throw _Exceptions.illegalArgument(
                     "Class '%s' is managed by Spring, use get() instead", domainClass.getName());
-        }
-        if(spec.isViewModel()) {
-            return createViewModelElseFail(domainClass, spec, Optional.empty());
-        }
-        if(spec.isEntity()) {
-            return detachedEntity(domainClass);
-        }
+        if(spec.isViewModel())
+			return createViewModelElseFail(domainClass, spec, Optional.empty());
+        if(spec.isEntity())
+			return detachedEntity(domainClass);
         // fallback to generic object creation
         return createObject(domainClass, spec);
     }
@@ -184,7 +182,7 @@ implements FactoryService {
     }
 
     @Override
-    public <T> TreeNode<T> treeNode(T root) {
+    public <T> TreeNode<T> treeNode(final T root) {
         return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoaderProvider().get())));
     }
 

@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.core.config.environment;
 
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
+import org.apache.causeway.commons.internal.base._StableValue;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
@@ -31,12 +32,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.commons.internal.base._StableValue;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -63,10 +61,10 @@ public class CausewaySystemEnvironment {
     private final DeploymentType deploymentType;
 
     @Autowired
-    public CausewaySystemEnvironment(ApplicationContext springContext) {
+    public CausewaySystemEnvironment(final ApplicationContext springContext) {
         this.springContextHolder = new SpringContextHolder(springContext);
         this.deploymentType = deploymentTypeFromEnvironment();
-        log.info("init for %s (hashCode = {})", deploymentType, this.hashCode());
+        log.info("init for {} (hashCode = {})", deploymentType, this.hashCode());
     }
 
     //JUnit
@@ -184,7 +182,7 @@ public class CausewaySystemEnvironment {
         return "false".equalsIgnoreCase(value);
     }
 
-    private _StableValue<Boolean> _isIntegrationTesting = new _StableValue<Boolean>();
+    private final _StableValue<Boolean> _isIntegrationTesting = new _StableValue<Boolean>();
     /**
      * Whether we find Spring's ContextCache on the class path.
      */

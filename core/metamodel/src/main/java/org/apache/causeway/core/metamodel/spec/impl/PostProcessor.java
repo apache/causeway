@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 record PostProcessor(
@@ -34,28 +33,31 @@ record PostProcessor(
                 .collect(Can.toCan()));
     }
 
-    public void postProcess(final ObjectSpecification objectSpecification) {
+    public void postProcess(final ObjectSpecificationInternal internalSpec) {
 
         for (var postProcessor : enabledPostProcessors) {
 
-            if(!postProcessor.getFilter().test(objectSpecification)) continue;
+            if(!postProcessor.getFilter().test(internalSpec)) {
+				continue;
+			}
 
-            postProcessor.postProcessObject(objectSpecification);
+            postProcessor.postProcessObject(internalSpec);
 
-            objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
+            internalSpec.streamRuntimeActions(MixedIn.INCLUDED)
             .forEach(act->{
                 act.streamParameters().forEach(param ->
-                    postProcessor.postProcessParameter(objectSpecification, act, param));
-                postProcessor.postProcessAction(objectSpecification, act);
+                    postProcessor.postProcessParameter(internalSpec, act, param));
+                postProcessor.postProcessAction(internalSpec, act);
             });
 
-            objectSpecification.streamProperties(MixedIn.INCLUDED)
-            .forEach(prop->postProcessor.postProcessProperty(objectSpecification, prop));
+            internalSpec.streamProperties(MixedIn.INCLUDED)
+            	.forEach(prop->postProcessor.postProcessProperty(internalSpec, prop));
 
-            objectSpecification.streamCollections(MixedIn.INCLUDED)
-            .forEach(coll->postProcessor.postProcessCollection(objectSpecification, coll));
+            internalSpec.streamCollections(MixedIn.INCLUDED)
+            	.forEach(coll->postProcessor.postProcessCollection(internalSpec, coll));
 
         }
+
     }
 
 }

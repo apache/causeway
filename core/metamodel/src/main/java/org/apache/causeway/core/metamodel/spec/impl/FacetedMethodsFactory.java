@@ -19,33 +19,28 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
@@ -54,30 +49,35 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
+import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+// has side-effects: calls specloader
 @Slf4j
-class FacetedMethodsBuilder
+record FacetedMethodsFactory(
+	    ObjectSpecificationInternal internalSpec,
+	    ConcurrentMethodRemover methodRemover,
+	    FacetProcessor facetProcessor,
+	    ClassSubstitutorRegistry classSubstitutorRegistry)
 implements
     HasSpecificationLoaderInternal,
     HasMetaModelContext {
 
-    /* thread-safety ... make sure every methodsRemaining access is synchronized! */
-    private static final class ConcurrentMethodRemover implements MethodRemover {
+    private record ConcurrentMethodRemover(
+    		/* thread-safe */
+    		Set<ResolvedMethod> methodsRemaining) implements MethodRemover {
 
-        private final Set<ResolvedMethod> methodsRemaining;
+    	static ConcurrentMethodRemover forInternalSpec(final ObjectSpecificationInternal internalSpec) {
+    		return new ConcurrentMethodRemover((internalSpec.getIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
+                    ? _ClassCache.getInstance().streamResolvedMethods(internalSpec.getCorrespondingClass())
+                    : _ClassCache.getInstance().streamPublicMethods(internalSpec.getCorrespondingClass()))
+				.collect(Collectors.toCollection(ConcurrentHashMap::newKeySet)));
+    	}
 
-        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<ResolvedMethod> methodStream) {
-            this.methodsRemaining = methodStream
-                    .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
-        }
-
-        @Override
-        public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
+        @Override public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
             methodsRemaining.removeIf(method -> {
                 var doRemove = removeIf.test(method);
                 if(doRemove) {
@@ -86,128 +86,106 @@ implements
                 return doRemove;
             });
         }
-
-        @Override
-        public void removeMethod(final ResolvedMethod method) {
+        @Override public void removeMethod(final ResolvedMethod method) {
             if(method==null) return;
             methodsRemaining.remove(method);
         }
-
-        Stream<ResolvedMethod> streamRemaining() {
-            return methodsRemaining.stream();
-        }
-
-        @Override
-        public Can<ResolvedMethod> snapshotMethodsRemaining() {
+        @Override public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return Can.ofCollection(methodsRemaining);
         }
-
+        private Stream<ResolvedMethod> streamRemaining() {
+        	return methodsRemaining.stream();
+        }
     }
 
-    private final ObjectSpecificationDefault inspectedTypeSpec;
-
-    @Getter private final Class<?> introspectedClass;
-
-    private List<FacetedMethod> associationFacetMethods;
-    private List<FacetedMethod> actionFacetedMethods;
-
-    private final ConcurrentMethodRemover methodRemover;
-
-    @Getter private final FacetProcessor facetProcessor;
-
-    private final ClassSubstitutorRegistry classSubstitutorRegistry;
-
-    // -- CONSTRUCTOR
-
-    public FacetedMethodsBuilder(
-            final ObjectSpecificationDefault inspectedTypeSpec,
+    FacetedMethodsFactory(
+            final ObjectSpecificationInternal internalSpec,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
+    	this(internalSpec, ConcurrentMethodRemover.forInternalSpec(internalSpec), facetProcessor, classSubstitutorRegistry);
+    }
 
-        if (log.isDebugEnabled()) {
-            log.debug("creating JavaIntrospector for {}", inspectedTypeSpec.getFullIdentifier());
+    FacetedMethodsFactory {
+    	if (log.isDebugEnabled()) {
+            log.debug("creating {} for {}", this.getClass().getSimpleName(), internalSpec.getFullIdentifier());
         }
-
-        this.facetProcessor = facetProcessor;
-        this.classSubstitutorRegistry = classSubstitutorRegistry;
-        this.inspectedTypeSpec = inspectedTypeSpec;
-        this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
-
-        var classCache = _ClassCache.getInstance();
-        var methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? classCache.streamResolvedMethods(introspectedClass)
-                : classCache.streamPublicMethods(introspectedClass);
-        this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // Class and stuff immediately derived from class
-    // ////////////////////////////////////////////////////////////////////////////
-
-    private String getClassName() {
-        return introspectedClass.getName();
+    Class<?> introspectedClass() {
+    	return internalSpec.getCorrespondingClass();
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect class
-    // ////////////////////////////////////////////////////////////////////////////
 
     public void introspectClass() {
         if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: class-level details", getClassName());
+            log.debug("introspecting {}: class-level details", introspectedClass().getName());
         }
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
-        getFacetProcessor()
-        .process(introspectedClass, introspectionPolicy(), methodRemover, inspectedTypeSpec);
+        facetProcessor
+        	.process(introspectedClass(), introspectionPolicy(), methodRemover, internalSpec);
     }
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect associations
-    // ////////////////////////////////////////////////////////////////////////////
 
     /**
      * Returns a {@link List} of {@link FacetedMethod}s representing object
      * actions, lazily creating them first if required.
      */
-    public List<FacetedMethod> getAssociationFacetedMethods() {
-        if (associationFacetMethods == null) {
-            associationFacetMethods = createAssociationFacetedMethods();
+    public Stream<FacetedMethod> createActionFacetedMethods() {
+        if (log.isDebugEnabled()) {
+            log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), introspectedClass().getName());
         }
-        return associationFacetMethods;
+        var actionFacetedMethods = new ArrayList<FacetedMethod>();
+        collectActionFacetedMethods(actionFacetedMethods::add);
+        return actionFacetedMethods.stream();
     }
 
-    private List<FacetedMethod> createAssociationFacetedMethods() {
+    /**
+     * Returns a {@link Stream} of {@link FacetedMethod}s representing object
+     * actions, lazily creating them first if required.
+     */
+    public Stream<FacetedMethod> createAssociationFacetedMethods() {
         if (log.isDebugEnabled()) {
-            log.debug("introspecting(policy={}) {}: properties and collections", introspectionPolicy(), getClassName());
+            log.debug("introspecting(policy={}) {}: properties and collections", introspectionPolicy(), introspectedClass().getName());
         }
-
-        var specLoader = (SpecificationLoaderInternal)getSpecificationLoader();
 
         var associationCandidateMethods = new HashSet<ResolvedMethod>();
 
-        getFacetProcessor()
+        facetProcessor
             .findAssociationCandidateGetters(
                 methodRemover.streamRemaining(),
                 associationCandidateMethods::add);
 
         // Ensure all return types are known
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
-            .filter(typeToLoad->typeToLoad!=introspectedClass)
-            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY));
+            .filter(typeToLoad->typeToLoad!=introspectedClass())
+            .forEach(typeToLoad->internalSpec.specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY));
 
         // now create FacetedMethods for collections and for properties
         var associationFacetedMethods = new ArrayList<FacetedMethod>();
 
-        var collectionAccessors = getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover);
+        var collectionAccessors = facetProcessor.findAndRemoveCollectionAccessors(methodRemover);
         createCollectionFacetedMethodsFromAccessors(collectionAccessors, associationFacetedMethods::add);
 
-        var propertyAccessors = getFacetProcessor().findAndRemovePropertyAccessors(methodRemover);
+        var propertyAccessors = facetProcessor.findAndRemovePropertyAccessors(methodRemover);
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, associationFacetedMethods::add);
 
-        return Collections.unmodifiableList(associationFacetedMethods);
+        return associationFacetedMethods.stream();
     }
+
+    /**
+     * exposed for debugging purposes
+     */
+    public Can<ResolvedMethod> snapshotMethodsRemaining() {
+    	return methodRemover.snapshotMethodsRemaining();
+    }
+
+    @Override
+    public String toString() {
+        return "%s[class=%s]".formatted(this.getClass().getSimpleName(), introspectedClass().getName());
+    }
+
+    // -- HELPER
 
     private void createCollectionFacetedMethodsFromAccessors(
             final List<ResolvedMethod> accessorMethods,
@@ -223,10 +201,10 @@ implements
             var accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // create property and add facets
-            var facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
-            getFacetProcessor()
+            var facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass(), accessorMethod);
+            facetProcessor
                 .process(
-                        introspectedClass,
+                        introspectedClass(),
                         introspectionPolicy(),
                         accessorMethodFacade,
                         methodRemover,
@@ -264,14 +242,14 @@ implements
 
             // create a 1:1 association peer
             var facetedMethod = FacetedMethod
-                    .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
+                    .createForProperty(getMetaModelContext(), introspectedClass(), accessorMethod);
 
             var accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
-            getFacetProcessor()
-            .process(
-                    introspectedClass,
+            facetProcessor
+            	.process(
+                    introspectedClass(),
                     introspectionPolicy(),
                     accessorMethodFacade,
                     methodRemover,
@@ -281,30 +259,6 @@ implements
 
             onNewFacetedMethod.accept(facetedMethod);
         }
-    }
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect actions
-    // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Returns a {@link List} of {@link FacetedMethod}s representing object
-     * actions, lazily creating them first if required.
-     */
-    public List<FacetedMethod> getActionFacetedMethods() {
-        if (actionFacetedMethods == null) {
-            actionFacetedMethods = findActionFacetedMethods();
-        }
-        return actionFacetedMethods;
-    }
-
-    private List<FacetedMethod> findActionFacetedMethods() {
-        if (log.isDebugEnabled()) {
-            log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
-        }
-        var actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
-        collectActionFacetedMethods(actionFacetedMethods::add);
-        return actionFacetedMethods;
     }
 
     private void collectActionFacetedMethods(final Consumer<FacetedMethod> onActionFacetedMethod) {
@@ -339,16 +293,16 @@ implements
     @Nullable
     private FacetedMethod createActionFacetedMethod(final ResolvedMethod actionMethod) {
 
-        var actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
+        var actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, internalSpec);
         if (!isAllParamTypesValid(actionMethodFacade)) return null;
 
         final FacetedMethod action = FacetedMethod
-                .createForAction(getMetaModelContext(), introspectedClass, actionMethodFacade);
+                .createForAction(getMetaModelContext(), introspectedClass(), actionMethodFacade);
 
         // process facets on the action & parameters
-        getFacetProcessor()
-        .process(
-                introspectedClass,
+        facetProcessor
+        	.process(
+                introspectedClass(),
                 introspectionPolicy(),
                 actionMethodFacade,
                 methodRemover,
@@ -357,10 +311,9 @@ implements
                 isMixinMain(actionMethodFacade));
 
         action.parameters()
-            .forEach(actionParam->{
-                getFacetProcessor()
-                    .processParams(introspectedClass, introspectionPolicy(), actionMethodFacade, methodRemover, actionParam);
-            });
+            .forEach(actionParam->
+            	facetProcessor
+                    .processParams(introspectedClass(), introspectionPolicy(), actionMethodFacade, methodRemover, actionParam));
 
         return action;
     }
@@ -400,9 +353,9 @@ implements
         }
 
         // exclude those that have eg. reserved prefixes
-        if (getFacetProcessor().recognizes(actionMethod)) {
+        if (facetProcessor.recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
-            inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
+        	internalSpec.potentialOrphans().add(actionMethod);
             return false;
         }
 
@@ -430,16 +383,16 @@ implements
      * @param method
      */
     private boolean isMixinMain(final ResolvedMethod method) {
-        var mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
+        var mixinFacet = internalSpec.lookupNonFallbackFacet(MixinFacet.class)
                 .orElse(null);
         if(mixinFacet==null) return false;
 
-        if(!inspectedTypeSpec.isFullyIntrospected())
-            // members are not introspected yet, so make a guess
-            return mixinFacet.isCandidateForMain(method);
+    	if(!internalSpec.isFullyIntrospected())
+    		// members are not introspected yet, so make a guess
+    		return mixinFacet.isCandidateForMain(method);
 
-        return inspectedTypeSpec
-                .lookupMixedInAction(inspectedTypeSpec)
+        return internalSpec
+                .lookupMixedInAction(internalSpec)
                 .map(HasFacetedMethod.class::cast)
                 .map(HasFacetedMethod::getFacetedMethod)
                 .map(FacetedMethod::methodFacade)
@@ -449,21 +402,7 @@ implements
     }
 
     private IntrospectionPolicy introspectionPolicy() {
-        return inspectedTypeSpec.getIntrospectionPolicy();
-    }
-
-    @Override
-    public String toString() {
-        final ToString str = new ToString(this);
-        str.append("class", getClassName());
-        return str.toString();
-    }
-
-    /**
-     * exposed for debugging purposes
-     */
-    public Can<ResolvedMethod> snapshotMethodsRemaining() {
-        return methodRemover.snapshotMethodsRemaining();
+        return internalSpec.getIntrospectionPolicy();
     }
 
 }

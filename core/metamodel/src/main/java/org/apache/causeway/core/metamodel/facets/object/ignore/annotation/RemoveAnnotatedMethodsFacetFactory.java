@@ -21,10 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._ClassCache.Attribute;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -33,6 +29,9 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
+
+import jakarta.inject.Inject;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {
@@ -103,7 +102,7 @@ extends FacetFactoryAbstract {
         // shortcut, when we already know the class is not a mixin
         if(processClassContext.getFacetHolder() instanceof ObjectSpecification) {
             var spec = (ObjectSpecification) processClassContext.getFacetHolder();
-            if(!spec.getBeanSort().isMixin())
+            if(!spec.beanSort().isMixin())
                 return method->false;
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier

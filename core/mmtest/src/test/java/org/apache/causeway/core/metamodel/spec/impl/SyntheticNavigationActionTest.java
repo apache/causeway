@@ -18,17 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import org.springframework.boot.test.util.TestPropertyValues;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -63,7 +58,12 @@ import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.test.util.TestPropertyValues;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -228,7 +228,7 @@ class SyntheticNavigationActionTest {
     @Test
     void registered_postprocessor_synthesizes_actions_before_later_action_processing() {
         var mmc = context(true, true);
-        var spec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
+        var spec = mmc.getSpecificationLoader().specForTypeElseFail(Lease.class);
 
         assertThat(spec.getAction("__causeway_navigate_to_items")).isPresent();
     }
@@ -251,13 +251,8 @@ class SyntheticNavigationActionTest {
     @Test
     void repeated_synthesis_is_an_idempotent_no_op() {
         var mmc = context(true);
-        var spec = mmc.getSpecificationLoader().loadSpecification(Lease.class);
-        spec.streamDeclaredAssociations(MixedIn.INCLUDED).toList();
-        var mutableSpec = (ObjectSpecificationMutable) spec;
-
-        mutableSpec.synthesizeNavigationActions();
-        mutableSpec.synthesizeNavigationActions();
-
+        var spec = mmc.getSpecificationLoader().specForTypeElseFail(Lease.class);
+        Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
         assertThat(spec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(action -> action.getId().equals("__causeway_navigate_to_items"))
                 .count()).isEqualTo(1L);
@@ -285,7 +280,7 @@ class SyntheticNavigationActionTest {
     void collection_parameters_follow_columns_and_exclude_hidden_large_and_unconstrained_properties() {
         var action = action(context(true), Lease.class, "items").orElseThrow();
 
-        assertThat(action.getParameters().stream().map(parameter -> parameter.getId()).toList())
+        assertThat(action.getParameters().stream().map(ObjectActionParameter::getId).toList())
                 .containsExactly(
                         "name",
                         "checkbox",
@@ -294,7 +289,7 @@ class SyntheticNavigationActionTest {
                         "boundedReference",
                         "autocompleteReference",
                         "objectAutocompleteReference");
-        assertThat(action.getParameters().stream().allMatch(parameter -> parameter.isOptional())).isTrue();
+        assertThat(action.getParameters().stream().allMatch(ObjectActionParameter::isOptional)).isTrue();
         assertThat(action.getParameters().stream()
                 .filter(parameter -> parameter.getId().equals("checkbox"))
                 .findFirst().orElseThrow().getElementType().getCorrespondingClass())
@@ -428,9 +423,8 @@ class SyntheticNavigationActionTest {
             final MetaModelContext_forTesting mmc,
             final Class<?> ownerType,
             final String associationId) {
-        ObjectSpecification spec = mmc.getSpecificationLoader().loadSpecification(ownerType);
-        spec.streamDeclaredAssociations(MixedIn.INCLUDED).toList();
-        ((ObjectSpecificationMutable) spec).synthesizeNavigationActions();
+        ObjectSpecification spec = mmc.getSpecificationLoader().specForTypeElseFail(ownerType);
+        Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
         return spec.getAction(SyntheticNavigationActionFactory.ACTION_ID_PREFIX + associationId);
     }
 

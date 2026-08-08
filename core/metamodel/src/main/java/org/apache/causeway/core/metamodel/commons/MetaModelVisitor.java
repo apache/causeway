@@ -53,7 +53,7 @@ public interface MetaModelVisitor {
      */
     public final static Predicate<ObjectSpecification> SKIP_ABSTRACT =
             spec->!spec.isAbstract()
-                && spec.getBeanSort().policy().isIntrospectionAllowed();
+                && spec.beanSort().policy().isIntrospectionAllowed();
 
     /** types pass this filter, if is NOT a mixin */
     public final static Predicate<ObjectSpecification> SKIP_MIXINS =
@@ -61,7 +61,7 @@ public interface MetaModelVisitor {
 
     /** types pass this filter, if IS a mixin */
     public final static Predicate<ObjectSpecification> MIXINS =
-            spec->spec.isMixin();
+            ObjectSpecification::isMixin;
 
     /** types pass this filter, if member-annotation is not required */
     public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =

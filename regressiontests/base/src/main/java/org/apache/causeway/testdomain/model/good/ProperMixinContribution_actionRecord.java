@@ -16,32 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.spec.impl;
+package org.apache.causeway.testdomain.model.good;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
-public interface ObjectSpecificationMutable extends ObjectSpecification {
+/**
+ * For (test) mixin descriptions see {@link ProperMixinContribution}.
+ */
+//TODO WIP //@Action
+public record ProperMixinContribution_actionRecord(
+		ProperMixinContribution mixee) {
 
-    enum IntrospectionRequest {
-        /**
-         * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
-         */
-        REGISTER,
-        /**
-         * Partial introspection, that only includes type-hierarchy but not members.
-         */
-        TYPE_ONLY,
-        /**
-         * Full introspection, that includes type-hierarchy and members.
-         */
-        FULL
+    //@Action(semantics = SemanticsOf.SAFE)
+    private Blob act() {
+        return Blob.of("sample", CommonMimeType.BIN, null);
     }
-
-    void introspect(IntrospectionRequest request);
-
-    /**
-     * Adds configuration-gated framework navigation actions during metamodel post-processing.
-     */
-    void synthesizeNavigationActions();
 
 }

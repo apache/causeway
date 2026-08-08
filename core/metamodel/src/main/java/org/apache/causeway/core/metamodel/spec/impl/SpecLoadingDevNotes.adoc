@@ -1,0 +1,94 @@
+= Object Specification Loading
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== Participants
+
+- SpecificationLoader
+- ObjectSpecification
+- FacetedMethodsBuilder
+- FacetProcessor
+- PostProcessor
+- ClassSubstitutorRegistry/ClassSubstitutor
+
+== SpecificationLoader
+
+This class acts as the primary engine for constructing the system's metadata (the "Metamodel"):
+
+- *Orchestration*: It integrates various subsystems, such as class substitution, mix-in processing and post-processing.
+- *Configuration*: It handles different operational modes (EAGER vs. LAZY) to determine how much of the metamodel is explored upfront versus on-the-fly.
+- *Lifecycle & Reloading*: It manages the complexity of "reloading" specifications while ensuring that shared references do not cause consistency issues.
+
+[source,java]
+.SpecificationLoader
+----
+ObjectSpecification loadSpecification(Class<?> cls) 
+----
+
+== ObjectSpecification
+
+This is the core data structure representing a class's meta data within the _Metamodel_.
+
+- *Stateful Wrapper*: It is designed as a wrapper around internal, potentially mutable data. This allows the system to maintain consistent references even when underlying information is refreshed or updated.
+- *FacetHolder*: It holds various facets of the class definition
+- *ObjectActionContainer* and *ObjectAssociationContainer* hold class member meta data. Members are either _regular_, _mixed-in_ or _synthetic_.
+
+[source,java]
+.ObjectSpecification
+----
+// inherited from Hierarchical ...
+Can<ObjectSpecification> interfaces(); 
+boolean isOfType(ObjectSpecification other);
+boolean isOfTypeResolvePrimitive(ObjectSpecification other);
+ObjectSpecification superclass();
+
+FacetHolder getFacetHolder(); // inherited from HasFacetHolder
+FeatureType getFeatureType(); // inherited from Specification
+LogicalType logicalType(); // inherited from HasLogicalType
+ObjectActionContainer objectActionContainer(); // inherited from HasObjectActionContainer
+ObjectAssociationContainer objectAssociationContainer(); // inherited from HasObjectAssociationContainer
+----
+
+== Building the Metamodel
+
+=== Requirements
+
+Given categories of classes (mixins, values, entities, viewmodels, ...) 
+the _Metamodel_ is bootstrapped.
+
+. List of Mixin classes must be final once the Metamodel introspection starts. 
+For any mixin discovered later, we log a warning.
+. The Spec Loader is required to mix in members from above list to all Specs, 
+except Value-, Abstract-types and Mixins.
+. Mixins that apply to java.lang.Object are not mixed in to service-types
+. Mixin introspection must not as a side-effect fully introspect other types. 
+However TYPE_ONLY introspection is allowed.
+. The Spec Loader shall support 2 modes of operation
+ .. EAGER - fully introspect all types, starting with those discovered up front, 
+ then include those discovered during introspection. Then lock down the Metamodel - make it unmodifiable.
+ .. LAZY - only fully introspect Mixins, introspect the rest on the fly.
+. The Spec Loader shall support Specification reloading. (Simply evicting a Spec from the cache might not work, 
+because we cannot be sure that none of the other Specs still holds a reference to the evicted Spec.)
+
+
+[plantuml,fig-introspection-participants,svg]
+.Introspection Participants
+----
+@startuml
+
+object ObjectSpecification {
+    facets
+    regular members
+    mixed-in members
+}
+
+class SpecificationLoader <<Service>> {
+    loadSpecification(Class): ObjectSpecification
+}
+
+hide empty members
+
+@enduml
+----
+
+

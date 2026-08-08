@@ -29,20 +29,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.InteractionContext;
@@ -83,7 +69,18 @@ import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionE
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -212,7 +209,7 @@ implements WrapperFactory, HasMetaModelContext {
 
     // -- ASYNC WRAPPING
 
-    AsyncExecutor asyncExecutor(AsyncControl asyncControl) {
+    AsyncExecutor asyncExecutor(final AsyncControl asyncControl) {
         return new AsyncExecutor(
                 interactionServiceProvider.get(),
                 transactionServiceProvider.get(),
@@ -224,7 +221,7 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     @Override
-    public <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl) {
+    public <T> AsyncProxy<T> asyncWrap(final T domainObject, final AsyncControl asyncControl) {
         var pojo = unwrap(domainObject);
         var proxy = wrap(pojo, asyncControl.syncControl());
         return new AsyncProxyInternal<>(
@@ -278,19 +275,17 @@ implements WrapperFactory, HasMetaModelContext {
 
         var adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || !adapter.objSpec().getBeanSort().policy().isWrappingSupported()) {
-            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
+                || !adapter.objSpec().beanSort().policy().isWrappingSupported())
+			throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
-        }
 
         return adapter;
     }
 
-    private void guardAgainstMixin(ManagedObject mo) {
-        if(mo.objSpec().isMixin()) {
-            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
+    private void guardAgainstMixin(final ManagedObject mo) {
+        if(mo.objSpec().isMixin())
+			throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.wrapMixin(...) instead");
-        }
     }
 
     // -- HELPER - SETUP

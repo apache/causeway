@@ -23,15 +23,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Holds discovered domain types grouped by bean-sort.

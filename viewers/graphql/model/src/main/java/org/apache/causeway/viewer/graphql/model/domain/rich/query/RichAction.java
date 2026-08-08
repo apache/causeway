@@ -23,9 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.commons.collections.Can;
@@ -46,6 +43,8 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -95,16 +94,12 @@ public class RichAction
 
     private boolean isInvokeAllowed(final ObjectAction objectAction) {
         var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
-        switch (apiVariant) {
-            case QUERY_ONLY:
-            case QUERY_AND_MUTATIONS:
-                return objectAction.getSemantics().isSafeInNature();
-            case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT:
-                return true;
-            default:
-                // shouldn't happen
-                throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
-        }
+        return switch (apiVariant) {
+		case QUERY_ONLY, QUERY_AND_MUTATIONS -> objectAction.getSemantics().isSafeInNature();
+		case QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT -> true;
+		default -> // shouldn't happen
+		throw new IllegalArgumentException("Unknown API variant: " + apiVariant);
+		};
     }
 
     @Override
@@ -135,17 +130,15 @@ public class RichAction
                     Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
-                    switch (elementType.getBeanSort()) {
+                    switch (elementType.beanSort()) {
 
                         case VALUE:
                             return adaptValue(oap, argumentValue, context);
 
                         case ENTITY:
                         case VIEW_MODEL:
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            // fall through
+                            if (argumentValue == null)
+							 return ManagedObject.empty(elementType);
 
                         case ABSTRACT:
                             // if the parameter is abstract, we still attempt to figure out the arguments.
@@ -170,7 +163,7 @@ public class RichAction
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
                     }
                 });
     }
@@ -181,9 +174,8 @@ public class RichAction
             final Context context) {
 
         var elementType = oap.getElementType();
-        if (argumentValue == null) {
-            return ManagedObject.empty(elementType);
-        }
+        if (argumentValue == null)
+			return ManagedObject.empty(elementType);
 
         var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
@@ -201,22 +193,19 @@ public class RichAction
         if (refValue != null) {
             String key = ObjectFeatureUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
-            if (bookmarkedPojo == null) {
-                throw new IllegalArgumentException(String.format(
+            if (bookmarkedPojo == null)
+				throw new IllegalArgumentException(String.format(
                     "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
-            }
             var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
             var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
-            if (targetPojoSpec == null) {
-                throw new IllegalArgumentException(String.format(
+            if (targetPojoSpec == null)
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' is not part of the metamodel (has class '%s')",
                     refValue, targetPojoClass.getCanonicalName()));
-            }
-            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
-                throw new IllegalArgumentException(String.format(
+            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo()))
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
                     refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
-            }
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
@@ -226,11 +215,10 @@ public class RichAction
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                if (objectSpecArg == null) {
-                    throw new IllegalArgumentException(String.format(
+                if (objectSpecArg == null)
+					throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
                             elementType.logicalTypeName()));
-                }
                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -291,9 +279,8 @@ public class RichAction
 
     @Override
     protected void addDataFetchersForChildren() {
-        if(hidden == null) {
-            return;
-        }
+        if(hidden == null)
+			return;
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
         validate.addDataFetcher(this);

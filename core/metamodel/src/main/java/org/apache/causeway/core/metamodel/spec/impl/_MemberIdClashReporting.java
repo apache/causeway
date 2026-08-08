@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -51,8 +52,9 @@ class _MemberIdClashReporting {
     void flagAnyMemberIdClashes(
             final ObjectSpecification declaringType,
             final Iterable<? extends ObjectMember> regularMembers,
-            final Iterable<? extends ObjectMember> mixedInMembers) {
+            final List<? extends ObjectMember> mixedInMembers) {
 
+    	if(mixedInMembers.isEmpty()) return; // nothing to check
         if(declaringType.isAbstract()) return; // skip abstract types
 
         var memberIdCollector = new MemberIdCollector();
@@ -74,11 +76,15 @@ class _MemberIdClashReporting {
         /** Optionally returns a member with the same member-id, based on whether previously collected. */
         public Optional<ObjectMember> collect(final ObjectMember objectMember) {
             if(objectMember.isAction()) {
-                if(actionIds==null) this.actionIds = new HashMap<>();
+                if(actionIds==null) {
+					this.actionIds = new HashMap<>();
+				}
                 return Optional.ofNullable(actionIds.put(objectMember.getId(), objectMember));
             }
             if(objectMember.isPropertyOrCollection()) {
-                if(associationIds==null) this.associationIds = new HashMap<>();
+                if(associationIds==null) {
+					this.associationIds = new HashMap<>();
+				}
                 return Optional.ofNullable(associationIds.put(objectMember.getId(), objectMember));
             }
             throw _Exceptions.unmatchedCase(String.format("framework bug: unmatched feature %s", objectMember));

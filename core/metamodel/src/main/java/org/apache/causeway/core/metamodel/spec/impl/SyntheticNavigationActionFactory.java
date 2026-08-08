@@ -19,24 +19,23 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.util.ClassUtils;
-
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForScalarReferenceNavigation;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionValidationFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.CssClassFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.DisabledFacetForEmptyParentedCollectionNavigation;
@@ -46,10 +45,11 @@ import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFa
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutGroupFacetForScalarReferenceNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.LayoutOrderFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParamNamedFacetForParentedCollectionNavigation;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ParentedCollectionNavigationFacetDefault;
+import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ScalarReferenceNavigationFacetDefault;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
-import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -58,13 +58,19 @@ import org.apache.causeway.core.metamodel.facets.properties.autocomplete.Propert
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.springframework.util.ClassUtils;
 
-final class SyntheticNavigationActionFactory {
+record SyntheticNavigationActionFactory(
+		ObjectSpecificationInternal ownerSpec,
+		List<ObjectAssociation> regularAssociations,
+		List<ObjectAssociation> mixedInAssociations,
+		List<ObjectAction> regularActions,
+		List<ObjectActionMixedIn> mixedInActions) {
 
     static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
 
@@ -76,22 +82,32 @@ final class SyntheticNavigationActionFactory {
             "datanucleusVersionLong",
             "datanucleusVersionTimestamp");
 
-    private SyntheticNavigationActionFactory() {
+	List<ObjectAction> synthesizeNavigationActions() {
+        var existingActionIds = Stream.concat(regularActions.stream(), mixedInActions.stream())
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        var existingSyntheticActionIds = Stream.concat(regularActions.stream(), mixedInActions.stream())
+                .filter(action -> action.lookupFacet(ParentedCollectionNavigationFacet.class).isPresent()
+                        || action.lookupFacet(ScalarReferenceNavigationFacet.class).isPresent())
+                .map(ObjectAction::getId)
+                .collect(Collectors.toSet());
+        var syntheticActions = createFor(
+        				Stream.concat(regularAssociations.stream(), mixedInAssociations.stream()).toList(),
+                        existingActionIds,
+                        existingSyntheticActionIds)
+                .toList();
+        return syntheticActions;
     }
 
-    static Stream<ObjectAction> createFor(
-            final MetaModelContext mmc,
-            final ObjectSpecification ownerSpec,
-            final Stream<ObjectAssociation> associations,
+    private Stream<ObjectAction> createFor(
+            final List<ObjectAssociation> candidates,
             final Set<String> existingActionIds,
             final Set<String> existingSyntheticActionIds) {
 
         if (!(ownerSpec.isEntity() || ownerSpec.isViewModel())
-                || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.getCorrespondingClass())) {
-            return Stream.empty();
-        }
+                || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.getCorrespondingClass()))
+			return Stream.empty();
 
-        var candidates = associations.toList();
         var generatedIds = new HashSet<String>();
 
         return Stream.concat(
@@ -102,7 +118,7 @@ final class SyntheticNavigationActionFactory {
                                 .filter(collection -> eligible(ownerSpec, collection))
                                 .filter(collection -> !existingSyntheticActionIds.contains(
                                         ACTION_ID_PREFIX + collection.getId()))
-                                .map(collection -> createCollectionAction(mmc, ownerSpec, collection)),
+                                .map(collection -> createCollectionAction(ownerSpec, collection)),
                         candidates.stream()
                                 .filter(ObjectAssociation::isOneToOneAssociation)
                                 .map(ObjectAssociation::getSpecialization)
@@ -110,12 +126,11 @@ final class SyntheticNavigationActionFactory {
                                 .filter(reference -> eligible(ownerSpec, reference))
                                 .filter(reference -> !existingSyntheticActionIds.contains(
                                         ACTION_ID_PREFIX + reference.getId()))
-                                .map(reference -> createReferenceAction(mmc, ownerSpec, reference)))
+                                .map(reference -> createReferenceAction(ownerSpec, reference)))
                 .peek(action -> {
-                    if (existingActionIds.contains(action.getId()) || !generatedIds.add(action.getId())) {
-                        throw new IllegalStateException("Action id '%s' is reserved for synthetic navigation"
+                    if (existingActionIds.contains(action.getId()) || !generatedIds.add(action.getId()))
+						throw new IllegalStateException("Action id '%s' is reserved for synthetic navigation"
                                 .formatted(action.getId()));
-                    }
                 });
     }
 
@@ -136,7 +151,6 @@ final class SyntheticNavigationActionFactory {
     }
 
     private static ObjectAction createCollectionAction(
-            final MetaModelContext mmc,
             final ObjectSpecification ownerSpec,
             final OneToManyAssociation collection) {
 
@@ -150,14 +164,14 @@ final class SyntheticNavigationActionFactory {
                 .map(ObjectAssociation::getId)
                 .toArray(String[]::new);
         var facetedMethod = FacetedMethod.createSyntheticAction(
-                mmc,
+        		ownerSpec.getMetaModelContext(),
                 ownerSpec.getCorrespondingClass(),
                 ACTION_ID_PREFIX + collection.getId(),
                 collection.getElementType().getCorrespondingClass(),
                 parameterTypes,
                 parameterNames);
 
-        installCommonFacets(mmc, facetedMethod);
+        installCommonFacets(facetedMethod);
         FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionNavigation(
                 collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
         FacetUtil.addFacet(new LayoutOrderFacetForParentedCollectionNavigation(collection, facetedMethod));
@@ -173,19 +187,18 @@ final class SyntheticNavigationActionFactory {
     }
 
     private static ObjectAction createReferenceAction(
-            final MetaModelContext mmc,
             final ObjectSpecification ownerSpec,
             final OneToOneAssociation reference) {
 
         var facetedMethod = FacetedMethod.createSyntheticAction(
-                mmc,
+        		ownerSpec.getMetaModelContext(),
                 ownerSpec.getCorrespondingClass(),
                 ACTION_ID_PREFIX + reference.getId(),
                 reference.getElementType().getCorrespondingClass(),
                 new Class<?>[0],
                 new String[0]);
 
-        installCommonFacets(mmc, facetedMethod);
+        installCommonFacets(facetedMethod);
         FacetUtil.addFacet(new LayoutGroupFacetForScalarReferenceNavigation(
                 reference.getId(), reference.getCanonicalFriendlyName(), facetedMethod));
         FacetUtil.addFacet(new ScalarReferenceNavigationFacetDefault(reference, facetedMethod));
@@ -197,7 +210,6 @@ final class SyntheticNavigationActionFactory {
     }
 
     private static void installCommonFacets(
-            final MetaModelContext mmc,
             final FacetedMethod facetedMethod) {
         FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod));
         FacetUtil.addFacet(new CssClassFacetForParentedCollectionNavigation(facetedMethod));
@@ -206,8 +218,8 @@ final class SyntheticNavigationActionFactory {
                 "synthetic navigation", SemanticsOf.SAFE, facetedMethod));
         FacetUtil.addFacetIfPresent(CommandPublishingFacetForActionAnnotation.create(
                 Optional.empty(),
-                mmc.getConfiguration(),
-                mmc.getServiceInjector(),
+                facetedMethod.getConfiguration(),
+                facetedMethod.getServiceInjector(),
                 facetedMethod));
     }
 
@@ -219,6 +231,10 @@ final class SyntheticNavigationActionFactory {
                 collection.getFeatureIdentifier(),
                 parentPlaceholder,
                 AssociationsLookup.AVAILABLE);
+        var elementType = (ObjectSpecificationInternal)collection.getElementType();
+        if(!elementType.isFullyIntrospected()) {
+			elementType.introspectFully();
+		}
         return collection.getElementType()
                 .streamAssociationsForColumnRendering(columnQuery)
                 .filter(SyntheticNavigationActionFactory::eligibleFilterProperty)
@@ -228,9 +244,8 @@ final class SyntheticNavigationActionFactory {
     private static boolean eligibleFilterProperty(final ObjectAssociation property) {
         if (!property.isOneToOneAssociation()
                 || EXCLUDED_PARAMETER_PROPERTY_IDS.contains(property.getId())
-                || property.getElementType() == null) {
-            return false;
-        }
+                || property.getElementType() == null)
+			return false;
         var elementType = property.getElementType();
         if (elementType.isValue()) {
             var type = elementType.getCorrespondingClass();

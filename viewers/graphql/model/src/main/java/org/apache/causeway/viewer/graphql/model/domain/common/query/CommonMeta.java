@@ -94,7 +94,7 @@ public class CommonMeta extends ElementCustom {
     }
 
     private boolean isEntity() {
-        return holder.getObjectSpecification().getBeanSort() == BeanSort.ENTITY;
+        return holder.getObjectSpecification().beanSort() == BeanSort.ENTITY;
     }
 
     @Override

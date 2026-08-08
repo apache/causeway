@@ -53,4 +53,26 @@ class MixinFacetAbstract_Test {
         Assertions.assertThat(candidate).isTrue();
     }
 
+    public record MixinAsRecord(
+    		SimpleObject mixee) {
+    	public int prop() { return 0; }
+    }
+
+    @Test
+    void mixinAsRecord() throws Exception {
+        // given
+        var constructor = MixinAsRecord.class.getConstructor(SimpleObject.class);
+        var facet = new MixinFacetAbstract(
+        		MixinAsRecord.class, "prop", constructor, null) {};
+
+        var propMethod = _GenericResolver.testing
+                .resolveMethod(MixinAsRecord.class, "prop");
+
+        // when
+        var candidate = facet.isCandidateForMain(propMethod);
+
+        // then
+        Assertions.assertThat(candidate).isTrue();
+    }
+
 }

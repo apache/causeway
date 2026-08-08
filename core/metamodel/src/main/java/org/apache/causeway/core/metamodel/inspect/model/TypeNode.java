@@ -60,7 +60,7 @@ implements MMNode, Serializable {
     public void putDetails(final Details details) {
         var spec = spec().orElse(null);
         if(spec==null) return;
-        details.put("Bean Sort", spec.getBeanSort().name());
+        details.put("Bean Sort", spec.beanSort().name());
         details.put("Simple Name", spec.logicalType().logicalSimpleName());
         details.put("Namespace", spec.logicalType().namespace());
         details.put("Corresponding Class", spec.getCorrespondingClass().getName());
@@ -72,7 +72,7 @@ implements MMNode, Serializable {
 	        .forEach(interfc->details.put(
 	        		"Interface",
 	        		interfc.getCorrespondingClass().getName()));
-        switch (spec.getBeanSort()) {
+        switch (spec.beanSort()) {
             case ENTITY, ABSTRACT -> {
                 if(!spec.getCorrespondingClass().isInterface()) {
                     var classCache = _ClassCache.getInstance();

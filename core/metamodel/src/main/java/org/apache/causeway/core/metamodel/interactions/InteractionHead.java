@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -29,6 +26,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Model that holds the objects involved with the interaction.
@@ -47,9 +46,9 @@ public record InteractionHead(
          * where {@code target} is the mixin instance.
          */
         ManagedObject target) {
-    
+
     // -- FACTORIES
-    
+
     /** Regular case, when owner equals target. (no mixin) */
     public static InteractionHead regular(final ManagedObject owner) {
         return new InteractionHead(owner, owner);
@@ -59,20 +58,18 @@ public record InteractionHead(
     public static InteractionHead mixin(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
         return new InteractionHead(owner, target);
     }
-    
+
     // canonical constructor with consistency checks
     public InteractionHead(
         final ManagedObject owner,
         final ManagedObject target) {
         if(ManagedObjects.isSpecified(owner)
-            && owner.objSpec().getBeanSort().isMixin()) {
-            throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
-        }
+            && owner.objSpec().beanSort().isMixin())
+			throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
         if(ManagedObjects.isSpecified(target)
-            && target.objSpec().getBeanSort().isMixin()
-            && target.getPojo()==null) {
-            throw _Exceptions.unrecoverable("target not spec. %s", target);
-        }
+            && target.objSpec().beanSort().isMixin()
+            && target.getPojo()==null)
+			throw _Exceptions.unrecoverable("target not spec. %s", target);
         this.owner = owner;
         this.target = target;
     }
@@ -89,35 +86,32 @@ public record InteractionHead(
                 && logicalMemberIdentifierFor(objectMember)
                     .equals(command.getLogicalMemberIdentifier());
     }
-    
+
     public String logicalMemberIdentifierFor(final ObjectMember objectMember) {
         if (!objectMember.isMixedIn()
                 && objectMember instanceof ObjectAction objectAction
-                && objectAction.isDeclaredOnMixin()) {
-            // corner case when the objectMember is an ObjectActionDefault but corresponds to a mixin main  
-            return logicalMemberIdentifierFor(owner().objSpec(), 
+                && objectAction.isDeclaredOnMixin())
+			// corner case when the objectMember is an ObjectActionDefault but corresponds to a mixin main
+            return logicalMemberIdentifierFor(owner().objSpec(),
                 objectMember.getProgrammingModel()
                     .mixinNamingStrategy()
                     .memberId(objectAction.getFeatureIdentifier().logicalType().correspondingClass()));
-        }            
-        if(objectMember instanceof ObjectAction act) {
-            return logicalMemberIdentifierFor(act.getDeclaringType(), act.getFeatureIdentifier().memberLogicalName());
-        }
-        if(objectMember instanceof OneToOneAssociation prop) {
-            return logicalMemberIdentifierFor(prop.getDeclaringType(), prop.getFeatureIdentifier().memberLogicalName());
-        }
-        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");    
+        if(objectMember instanceof ObjectAction act)
+			return logicalMemberIdentifierFor(act.getDeclaringType(), act.getFeatureIdentifier().memberLogicalName());
+        if(objectMember instanceof OneToOneAssociation prop)
+			return logicalMemberIdentifierFor(prop.getDeclaringType(), prop.getFeatureIdentifier().memberLogicalName());
+        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
     }
-    
+
     /**
      * Whether this head corresponds to a mixin.
      */
     public boolean isMixin() {
         return target.objSpec().isMixin();
     }
-    
+
     // -- HELPER
-    
+
     private String logicalMemberIdentifierFor(final ObjectSpecification onType, final String memberId) {
         return onType.logicalTypeName() + "#" + memberId;
     }

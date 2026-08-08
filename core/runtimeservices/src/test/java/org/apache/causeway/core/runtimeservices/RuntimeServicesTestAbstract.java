@@ -82,11 +82,9 @@ implements HasMetaModelContext {
 
         mmcBuilder.singletonProvider(
                 SingletonBeanProvider
-                .forTestingLazy(MenuBarsLoaderService.class, ()->{
-                    return new MenuBarsLoaderServiceDefault(
-                            menubarsLayoutXmlResourceRef,
-                            CommonMimeType.XML); // format under test
-                }));
+                .forTestingLazy(MenuBarsLoaderService.class, () -> new MenuBarsLoaderServiceDefault(
+				        menubarsLayoutXmlResourceRef,
+				        CommonMimeType.XML)));
 
         mmcBuilder.singletonProvider(
                 SingletonBeanProvider
@@ -112,7 +110,6 @@ implements HasMetaModelContext {
     @AfterEach
     final void tearDown() throws Exception {
         onTearDown();
-        metaModelContext.getSpecificationLoader().disposeMetaModel();
         metaModelContext = null;
     }
 

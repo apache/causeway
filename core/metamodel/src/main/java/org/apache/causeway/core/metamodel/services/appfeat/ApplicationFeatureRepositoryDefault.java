@@ -332,8 +332,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
         var excluded = spec.isMixin()
                 || spec.isAbstract()
-                || spec.getBeanSort().isVetoed()
-                || spec.getBeanSort().isUnknown()
+                || spec.beanSort().isVetoed()
+                || spec.beanSort().isUnknown()
                 || isBuiltIn(spec)
                 || isHidden(spec);
 
@@ -341,8 +341,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
             log.debug("{} excluded because: abstract:{} vetoed:{} unknown-sort:{} builtIn:{} hidden:{}",
                     spec.getCorrespondingClass().getSimpleName(),
                     spec.isAbstract(),
-                    spec.getBeanSort().isVetoed(),
-                    spec.getBeanSort().isUnknown(),
+                    spec.beanSort().isVetoed(),
+                    spec.beanSort().isUnknown(),
                     isBuiltIn(spec),
                     isHidden(spec)
                     );

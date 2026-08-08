@@ -25,7 +25,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Provides capability to translate or ignore classes.
+ * Provides capability to ignore or map classes.
  */
 public interface ClassSubstitutor {
 

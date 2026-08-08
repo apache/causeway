@@ -18,19 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -54,6 +47,12 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -91,7 +90,7 @@ public class SimpleAction
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
 
         var objectSpecification = objectAction.getReturnType();
-        switch (objectSpecification.getBeanSort()){
+        switch (objectSpecification.beanSort()){
 
             case COLLECTION:
 
@@ -145,17 +144,15 @@ public class SimpleAction
                     Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
-                    switch (elementType.getBeanSort()) {
+                    switch (elementType.beanSort()) {
 
                         case VALUE:
                             return adaptValue(oap, argumentValue, context);
 
                         case ENTITY:
                         case VIEW_MODEL:
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            // fall through
+                            if (argumentValue == null)
+							 return ManagedObject.empty(elementType);
 
                         case ABSTRACT:
                             // if the parameter is abstract, we still attempt to figure out the arguments.
@@ -180,7 +177,7 @@ public class SimpleAction
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.getBeanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
                     }
                 });
     }
@@ -191,9 +188,8 @@ public class SimpleAction
             final Context context) {
 
         var elementType = oap.getElementType();
-        if (argumentValue == null) {
-            return ManagedObject.empty(elementType);
-        }
+        if (argumentValue == null)
+			return ManagedObject.empty(elementType);
 
         var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
@@ -211,22 +207,19 @@ public class SimpleAction
         if (refValue != null) {
             String key = ObjectFeatureUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
-            if (bookmarkedPojo == null) {
-                throw new IllegalArgumentException(String.format(
+            if (bookmarkedPojo == null)
+				throw new IllegalArgumentException(String.format(
                     "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
-            }
             var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
             var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
-            if (targetPojoSpec == null) {
-                throw new IllegalArgumentException(String.format(
+            if (targetPojoSpec == null)
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' is not part of the metamodel (has class '%s')",
                     refValue, targetPojoClass.getCanonicalName()));
-            }
-            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
-                throw new IllegalArgumentException(String.format(
+            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo()))
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
                     refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
-            }
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
@@ -236,11 +229,10 @@ public class SimpleAction
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                if (objectSpecArg == null) {
-                    throw new IllegalArgumentException(String.format(
+                if (objectSpecArg == null)
+					throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
                             elementType.logicalTypeName()));
-                }
                  bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -301,30 +293,26 @@ public class SimpleAction
         var environment = new Environment.For(dataFetchingEnvironment);
 
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
-        }
+        if (objectSpecification == null)
+			return null;
 
         var objectAction = getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(objectAction.getFeatureIdentifier());
 
         var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+        if (usableConsent.isVetoed())
+			throw new DisabledException(objectAction.getFeatureIdentifier());
 
         var head = objectAction.interactionHead(managedObject);
         var argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+        if (validityConsent.isVetoed())
+			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();

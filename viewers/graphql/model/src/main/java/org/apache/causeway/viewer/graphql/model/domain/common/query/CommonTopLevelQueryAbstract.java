@@ -48,28 +48,26 @@ public abstract class CommonTopLevelQueryAbstract
         this.schemaStrategy = schemaStrategy;
 
         context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-
-                case ABSTRACT:
-                case VIEW_MODEL:
-                case ENTITY:
+            switch (objectSpec.beanSort()) {
+                case ABSTRACT, VIEW_MODEL, ENTITY -> {
                     var gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
                     addChildField(gqlvDomainObject.newField());
                     domainObjects.add(gqlvDomainObject);
-                    break;
-
+                }
+                default -> {}
             }
         });
 
         // add services to top-level query
         context.objectSpecifications().forEach(objectSpec -> {
-            switch (objectSpec.getBeanSort()) {
-                case MANAGED_BEAN_CONTRIBUTING: // @DomainService
+            switch (objectSpec.beanSort()) {
+                case MANAGED_BEAN_CONTRIBUTING -> { // @DomainService
                     context.serviceRegistry.lookupBeanById(objectSpec.logicalTypeName())
                             .ifPresent(servicePojo ->
                                     domainServices.add(
                                             addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
-                    break;
+                }
+                default -> {}
             }
         });
     }

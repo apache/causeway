@@ -23,8 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -32,10 +30,11 @@ import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -47,15 +46,13 @@ public final class MmSpecUtils {
      */
     public ManagedObject enforceMostSpecificSpecOn(final @NonNull ManagedObject obj) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(obj)
-                || ManagedObjects.isPacked(obj)) {
-            return obj;
-        }
+                || ManagedObjects.isPacked(obj))
+			return obj;
         var pojo = ManagedObjects.peekAtPojoOf(obj);
         var requiredType = pojo.getClass();
         var currentSpec = obj.objSpec();
-        if(currentSpec.getCorrespondingClass().equals(requiredType)) {
-            return obj;
-        }
+        if(currentSpec.getCorrespondingClass().equals(requiredType))
+			return obj;
         return ManagedObject.adaptSingular(currentSpec.getSpecificationLoader(), pojo);
     }
 
@@ -94,7 +91,7 @@ public final class MmSpecUtils {
         specs
                 .stream()
                 .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.logicalType()));
+                .forEach(spec->specsBySort.putElement(spec.beanSort().name(), spec.logicalType()));
 
         // export the list-multi-map to YAML format
         var sb = new StringBuilder();

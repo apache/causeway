@@ -153,10 +153,10 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionTypes, MixedIn mixedIn);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionScopes, MixedIn mixedIn);
 
-    default Stream<ObjectAction> streamDeclaredActions(final ActionScope type, final MixedIn mixedIn) {
-        return streamDeclaredActions(ImmutableEnumSet.of(type), mixedIn);
+    default Stream<ObjectAction> streamDeclaredActions(final ActionScope actionScope, final MixedIn mixedIn) {
+        return streamDeclaredActions(ImmutableEnumSet.of(actionScope), mixedIn);
     }
 
     default Stream<ObjectAction> streamDeclaredActions(final MixedIn mixedIn) {

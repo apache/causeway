@@ -18,7 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Streams;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public interface Hierarchical {
 
@@ -52,5 +60,48 @@ public interface Hierarchical {
     default boolean isTypeHierarchyRoot() {
         return superclass()==null;
     }
+
+	static <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType,
+			final FacetHolder facetHolder,
+			final Hierarchical hierarchical) {
+        // lookup facet holder's facet
+		Stream<T> facets1 = facetHolder.lookupFacet(facetType).stream();
+
+        // lookup all interfaces
+		Stream<T> facets2 = _NullSafe.stream(hierarchical.interfaces())
+                .filter(_NullSafe::isPresent) // just in case
+                .flatMap(interfaceSpec->interfaceSpec.lookupFacet(facetType).stream());
+
+        // search up the inheritance hierarchy
+		Stream<T> facets3 = _NullSafe.streamNullable(hierarchical.superclass())
+                .flatMap(superSpec->superSpec.lookupFacet(facetType).stream());
+
+		Stream<T> facetsCombined = _Streams.<T>concat(facets1, facets2, facets3);
+
+		// local class, declared inside this method body, so it is not publicly exposed via this interface
+		// while the test method is called, collects the first occurrence of a fallback facet
+		class FallbackFacetFilter<Q extends Facet> implements Predicate<Q> {
+	        Q fallback;
+
+	        @Override
+	        public boolean test(final Q facet) {
+	            if(facet==null)
+					return false;
+	            if(!facet.precedence().isFallback())
+					return true;
+	            if(fallback == null) {
+	                fallback = facet;
+	            }
+	            return false;
+	        }
+	    }
+
+        var filter = new FallbackFacetFilter<T>();
+
+        return Optional.ofNullable(facetsCombined
+                .filter(filter)
+                .findFirst()
+                .orElse(filter.fallback));
+	}
 
 }

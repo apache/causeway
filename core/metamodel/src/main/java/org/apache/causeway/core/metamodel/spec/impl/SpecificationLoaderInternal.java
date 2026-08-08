@@ -19,12 +19,6 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Optional;
-import java.util.function.Supplier;
-
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -33,8 +27,12 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import jakarta.inject.Named;
 
 interface SpecificationLoaderInternal extends SpecificationLoader {
 
@@ -61,9 +59,8 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
             final @Nullable String logicalTypeName,
             final @NonNull IntrospectionRequest request) {
 
-        if(_Strings.isNullOrEmpty(logicalTypeName)) {
-            return null;
-        }
+        if(_Strings.isNullOrEmpty(logicalTypeName))
+			return null;
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
                     loadSpecification(logicalType.correspondingClass(), request))
@@ -153,15 +150,13 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
         if(logicalType==null) return Optional.empty();
         var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER);
         return spec != null
-                ? Optional.of(spec.getBeanSort())
+                ? Optional.of(spec.beanSort())
                 : Optional.empty();
     }
 
     /**
      * queue {@code objectSpec} for later validation
-     * @param objectSpec
-     * @param introspectionContextProvider
      */
-    void validateLater(ObjectSpecification objectSpec, Supplier<String> introspectionContextProvider);
+    void validateLater(ObjectSpecification objectSpec);
 
 }

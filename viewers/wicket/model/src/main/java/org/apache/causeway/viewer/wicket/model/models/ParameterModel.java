@@ -28,9 +28,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.attrib.HasUiParameter;
 import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 /**
  * Wraps a {@link UiParameterWkt}.
@@ -66,9 +66,8 @@ implements HasUiParameter {
     public String validate(final @NonNull ManagedObject proposedArg) {
         //TODO[CAUSEWAY-3764] workaround for org.apache.wicket.markup.html.form.upload.FileUpload leaking into the meta-model
         //  find the root cause then clean-up
-        if(proposedArg.objSpec().getBeanSort().isUnknown()) {
-            return null;
-        }
+        if(proposedArg.objSpec().beanSort().isUnknown())
+			return null;
         proposedValue().getValue().setValue(proposedArg); // updates the pending parameter value
 
         //TODO [CAUSEWAY-3753] for some reason the ParameterModel.isValidationFeedbackActive() flag is not yet active,

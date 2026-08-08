@@ -18,12 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -32,25 +35,47 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 /** package private utility */
 final class _MemberSortingUtils {
 
-    // -- ASSOCIATION SORTING
+	// -- ASSOCIATION SORTING
 
-    static List<ObjectAssociation> sortAssociationsIntoList(final Stream<ObjectAssociation> associations) {
-        var deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
-        var orderedAssociations = _Lists.<ObjectAssociation> newArrayList();
-        sortAssociations(deweyOrderSet, orderedAssociations);
-        return orderedAssociations;
+    static List<ObjectAssociation> associationsInOrder(
+    		final ObjectSpecification objSpec,
+    		final List<? extends ObjectAssociation> regularAssociations,
+            final List<? extends ObjectAssociation> mixedInAssociations) {
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(objSpec, regularAssociations, mixedInAssociations); // do before sorting
+        return sortAssociationsIntoList(Stream.concat(
+                regularAssociations.stream(),
+                mixedInAssociations.stream()));
     }
 
     // -- ACTION SORTING
 
-    static List<ObjectAction> sortActionsIntoList(final Stream<ObjectAction> actions) {
-        var deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
-        var orderedActions = _Lists.<ObjectAction>newArrayList();
-        sortActions(deweyOrderSet, orderedActions);
-        return orderedActions;
+    static  List<ObjectAction> actionsInOrder(
+    		final ObjectSpecification objSpec,
+    		final List<? extends ObjectAction> regularActions,
+            final List<? extends ObjectAction> mixedInActions,
+            final List<? extends ObjectAction> syntheticActions) {
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(objSpec, regularActions, mixedInActions); // do before sorting
+        return sortActionsIntoList(_Streams.concat(
+        		regularActions.stream(),
+        		mixedInActions.stream(),
+        		syntheticActions.stream()));
     }
 
     // -- HELPER
+
+    private static List<ObjectAssociation> sortAssociationsIntoList(final Stream<ObjectAssociation> associations) {
+    	var deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
+    	var orderedAssociations = new ArrayList<ObjectAssociation>();
+    	sortAssociations(deweyOrderSet, orderedAssociations);
+    	return orderedAssociations;
+    }
+
+    private static List<ObjectAction> sortActionsIntoList(final Stream<ObjectAction> actions) {
+    	var deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
+    	var orderedActions = new ArrayList<ObjectAction>();
+    	sortActions(deweyOrderSet, orderedActions);
+    	return orderedActions;
+    }
 
     private static void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
         for (final Object element : orderSet) {
@@ -58,30 +83,25 @@ final class _MemberSortingUtils {
                 associationsToAppendTo.add((ObjectAssociation) element);
             } else if (element instanceof OneToOneAssociation) {
                 associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof DeweyOrderSet) {
+            } else if (element instanceof DeweyOrderSet childOrderSet) {
                 // just flatten.
-                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
                 sortAssociations(childOrderSet, associationsToAppendTo);
-            } else {
-                throw new UnknownTypeException(element);
-            }
+            } else
+				throw new UnknownTypeException(element);
         }
     }
 
     private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
         for (var element : orderSet) {
-            if(element instanceof ObjectAction) {
-                var objectAction = (ObjectAction) element;
+            if(element instanceof ObjectAction objectAction) {
                 actionsToAppendTo.add(objectAction);
             }
-            else if (element instanceof DeweyOrderSet) {
-                var deweyOrderSet = ((DeweyOrderSet) element);
+            else if (element instanceof DeweyOrderSet deweyOrderSet) {
                 var actions = _Lists.<ObjectAction>newArrayList();
                 sortActions(deweyOrderSet, actions);
                 actionsToAppendTo.addAll(actions);
-            } else {
-                throw new UnknownTypeException(element);
-            }
+            } else
+				throw new UnknownTypeException(element);
         }
     }
 

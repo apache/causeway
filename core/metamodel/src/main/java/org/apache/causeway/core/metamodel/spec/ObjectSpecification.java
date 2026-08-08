@@ -26,9 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -50,7 +47,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -68,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -78,6 +75,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 
@@ -104,7 +103,7 @@ extends
     class Comparators{
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
-                Comparator.comparing(ObjectSpecification::getBeanSort)
+                Comparator.comparing(ObjectSpecification::beanSort)
                     .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
@@ -208,7 +207,7 @@ extends
      * Corresponds to {@link DomainService#aliased()} and
      * {@link DomainObject#aliased()}.
      */
-    Can<LogicalType> getAliases();
+    Can<LogicalType> aliases();
 
     /**
      * Returns the (singular) name for objects of this specification.
@@ -226,14 +225,6 @@ extends
      * {@link ObjectDescribedFacet}; is not necessarily immutable.
      */
     String getDescription();
-
-    /**
-     * Returns a help string or lookup reference, if any, of the specification.
-     * <p>
-     * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
-     * is not necessarily immutable.
-     */
-    String getHelp();
 
     /**
      * Returns the title to display of target adapter, rendered within the context
@@ -278,11 +269,11 @@ extends
     /**
      * @since 2.0
      */
-    BeanSort getBeanSort();
+    BeanSort beanSort();
 
     /**
-     * Optionally the mixin sort {@link Contributing},
-     * based on whether the corresponding class is a mixin type.
+     * Optionally how the Mixin is {@link Contributing} (as Action, Property or Collection),
+     * based on whether the corresponding class is a Mixin type.
      * @since 2.0
      */
     Optional<Contributing> contributing();
@@ -293,32 +284,46 @@ extends
      * Create an {@link InteractionContext} representing an attempt to read the
      * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(
-            ManagedObject targetObjectAdapter,
-            InteractionInitiatedBy invocationMethod);
+    default ObjectTitleContext createTitleInteractionContext(
+            final ManagedObject targetObjectAdapter,
+            final InteractionInitiatedBy invocationMethod) {
+    	return new ObjectTitleContext(getFeatureIdentifier(), targetObjectAdapter, invocationMethod);
+    }
 
     // -- VALIDITY
 
     // internal API
-    ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    /**
+     * Create an {@link InteractionContext} representing an attempt to save the
+     * object.
+     */
+    default ObjectValidityContext createValidityInteractionContext(
+    		final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    	return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
-    Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    default Consent isValid(
+    		final ManagedObject targetAdapter,
+    		final InteractionInitiatedBy interactionInitiatedBy) {
+    	return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
+    }
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
-    InteractionResult isValidResult(
+    default InteractionResult isValidResult(
             final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        var validityContext =
+                createValidityInteractionContext(
+                        targetAdapter, interactionInitiatedBy);
+        return InteractionUtils.isValidResult(this, validityContext);
+    }
 
     // -- FACETS
 
@@ -345,7 +350,7 @@ extends
      * @see #isSingular()
      */
     default boolean isPlural() {
-        return getBeanSort().isCollection();
+        return beanSort().isCollection();
     }
 
     /**
@@ -355,7 +360,7 @@ extends
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 || valueFacet().isPresent();
     }
 
@@ -363,7 +368,7 @@ extends
      * Whether objects of this type are composite values.
      */
     default boolean isCompositeValue() {
-        return getBeanSort().isValue()
+        return beanSort().isValue()
                 && valueFacet().map(ValueFacet::isCompositeValueType).orElse(false);
     }
 
@@ -411,7 +416,7 @@ extends
     boolean isDomainService();
 
     default boolean isMixin() {
-        return getBeanSort().isMixin();
+        return beanSort().isMixin();
     }
 
     /**
@@ -439,7 +444,7 @@ extends
     }
 
     default boolean isAbstract() {
-        return getBeanSort().isAbstract();
+        return beanSort().isAbstract();
     }
 
     /**
@@ -458,8 +463,8 @@ extends
      * Includes abstract types that have {@link EntityFacet}.
      */
     default boolean isEntity() {
-        return getBeanSort().isEntity()
-                || (getBeanSort().isAbstract()
+        return beanSort().isEntity()
+                || (beanSort().isAbstract()
                         && entityFacet().isPresent());
     }
 
@@ -467,8 +472,8 @@ extends
      * Includes abstract types that have {@link ViewModelFacet}.
      */
     default boolean isViewModel() {
-        return getBeanSort().isViewModel()
-                || (getBeanSort().isAbstract()
+        return beanSort().isViewModel()
+                || (beanSort().isAbstract()
                         && viewmodelFacet().isPresent());
     }
 
@@ -501,13 +506,13 @@ extends
     }
 
     /**
-     * @see #getBeanSort()
+     * @see #beanSort()
      */
     default boolean isEntityOrViewModelOrAbstract() {
         // optimized, no need to check facets
-        return getBeanSort().isViewModel()
-                || getBeanSort().isEntity()
-                || getBeanSort().isAbstract();
+        return beanSort().isViewModel()
+                || beanSort().isEntity()
+                || beanSort().isAbstract();
     }
 
     /**

@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -36,6 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.hmac.Memento;
 import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.jspecify.annotations.NonNull;
 
 public final class ViewModelFacetForDomainObjectAnnotation
 extends SecureViewModelFacet {
@@ -60,14 +59,13 @@ extends SecureViewModelFacet {
                         //[CAUSEWAY-3068] consider what the BeanTypeClassifier has come up with
                         final boolean isClassifiedAsViewModel =
                             _Casts.castTo(ObjectSpecification.class, holder)
-                            .map(ObjectSpecification::getBeanSort)
+                            .map(ObjectSpecification::beanSort)
                             .map(BeanSort::isViewModel)
                             .orElse(false);
 
-                        if(!isClassifiedAsViewModel) {
-                            // not a ViewModel, so no ViewModelFacet
+                        if(!isClassifiedAsViewModel)
+							// not a ViewModel, so no ViewModelFacet
                             return null;
-                        }
                         // else fall through
                     case VIEW_MODEL:
                         return new ViewModelFacetForDomainObjectAnnotation(mementoContext, holder);
@@ -152,7 +150,7 @@ extends SecureViewModelFacet {
                 // ignore read-only
                 .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
                 // ignore those explicitly annotated as @Property(snapshot = Snapshot.EXCLUDED)
-                .filter(property->property.isIncludedWithSnapshots());
+                .filter(OneToOneAssociation::isIncludedWithSnapshots);
     }
 
 }

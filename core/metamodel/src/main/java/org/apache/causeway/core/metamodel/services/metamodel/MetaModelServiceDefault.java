@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,15 +27,6 @@ import java.util.TreeSet;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -71,6 +63,13 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 /**
  * Default implementation of {@link MetaModelService}.
@@ -101,7 +100,7 @@ public record MetaModelServiceDefault(
         specificationLoader().specForLogicalType(logicalType)
                 .ifPresent(objectSpecification -> {
                     logicalTypes.add(logicalType);
-                    objectSpecification.getAliases().stream().forEach(logicalTypes::add);
+                    objectSpecification.aliases().stream().forEach(logicalTypes::add);
                 });
         return Can.ofCollection(logicalTypes);
     }
@@ -130,7 +129,7 @@ public record MetaModelServiceDefault(
 
         var specifications = specificationLoader().snapshotSpecifications();
 
-        final List<DomainMember> rows = _Lists.newArrayList();
+        final List<DomainMember> rows = new ArrayList<>();
         for (final ObjectSpecification spec : specifications) {
             if (exclude(spec)) {
                 continue;
@@ -184,7 +183,7 @@ public record MetaModelServiceDefault(
         if(objectSpec == null)
 			return BeanSort.UNKNOWN;
 
-        if(objectSpec.getBeanSort().isUnknown()
+        if(objectSpec.beanSort().isUnknown()
                 && !(mode == Mode.RELAXED))
 			throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
@@ -192,7 +191,7 @@ public record MetaModelServiceDefault(
                     domainType.getName()
                     ));
 
-        return objectSpec.getBeanSort();
+        return objectSpec.beanSort();
 
     }
 
@@ -263,7 +262,7 @@ public record MetaModelServiceDefault(
         var objectSpecs = specificationLoader()
                 .snapshotSpecifications()
                 .stream()
-                .filter(spec->filter.test(spec.getBeanSort(), spec.logicalType()))
+                .filter(spec->filter.test(spec.beanSort(), spec.logicalType()))
                 .collect(Collectors.toList());
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs));

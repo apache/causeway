@@ -28,8 +28,6 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
@@ -55,6 +53,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0
@@ -68,7 +67,7 @@ extends MetaModelValidatorAbstract {
     ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution(final MetaModelContext mmc) {
         super(mmc, spec->((spec instanceof ObjectSpecificationDefault)
             && !spec.isAbstract()
-            && !spec.getBeanSort().isManagedBeanNotContributing()
+            && !spec.beanSort().isManagedBeanNotContributing()
             && !spec.isValue()));
         this.classCache = _ClassCache.getInstance();
     }
@@ -188,15 +187,15 @@ extends MetaModelValidatorAbstract {
             final @NonNull Set<ResolvedMethod> alreadyReported) {
 
         if(spec.isAbstract()
-                || spec.getBeanSort().isManagedBeanNotContributing()
+                || spec.beanSort().isManagedBeanNotContributing()
                 || spec.isValue()
                 || spec.getIntrospectionPolicy()
                     .getSupportMethodAnnotationPolicy()
                     .isSupportMethodAnnotationsRequired())
             return; // ignore
 
-        var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
-            ? specDefault.getPotentialOrphans()
+        var potentialOrphans = spec instanceof ObjectSpecificationInternal internalSpec
+            ? internalSpec.potentialOrphans()
             : Collections.<ResolvedMethod>emptySet();
         if(potentialOrphans.isEmpty()) return; // nothing to do
 
