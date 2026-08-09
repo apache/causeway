@@ -1,0 +1,481 @@
+16833838789|2026-07-13 14:07:27 +0100|Dan Haywood|Merge pull request #3678 from apache/CAUSEWAY-4042
+d87d39b81d9|2026-07-03 13:51:37 +0100|Dan Haywood|CAUSEWAY-4042 : removes nextPage, prevoiusPage, increases limit
+f941cd60a09|2026-07-03 13:43:16 +0100|Dan Haywood|CAUSEWAY-4042 : fixes columnOrder
+071cdf77975|2026-07-03 13:13:14 +0100|Dan Haywood|CAUSEWAY-4042 : larger multiples
+dc0aee6c8b8|2026-07-03 11:23:04 +0100|Dan Haywood|CAUSEWAY-4042: refines
+8efd1dd6772|2026-07-03 10:36:18 +0100|Dan Haywood|CAUSEWAY-4042: refining openTarget, adds actualTarget
+8ed3c8c4e5d|2026-07-02 15:00:43 +0100|Dan Haywood|CAUSEWAY-4042: fixes disableAct for ReplayableCommand_openTarget
+621420449b1|2026-07-02 14:13:24 +0100|Dan Haywood|CAUSEWAY-4042: disables failing unit tests, too coupled?
+d4792183740|2026-07-02 14:01:18 +0100|Dan Haywood|CAUSEWAY-4042 : minor polishing
+6075f978367|2026-06-30 17:15:48 +0100|Dan Haywood|CAUSEWAY-4042 : makes AppFeat implement marker RefData
+904ffaea553|2026-06-30 06:56:04 +0100|Dan Haywood|Merge pull request #3660 from apache/CAUSEWAY-4042
+102fbb50cd3|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042: registers ReplayableCommand.openTarget as a mixin
+da9b73c2cc2|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042: cosmetics
+9a9d4444d17|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042: clear cache in new xactn, preserve message if possible
+0d5ee322b17|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042 : further adjustments
+622ed00ba0c|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042 : don't throw away failure to replay
+3f128a7a791|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042: even if fails to execute, eg prereqs, don't rollback instead handle replay error and return success
+c1177675725|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042: fixes call when checking action visibility
+065ca38aede|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4042 : adds checks to service, new config property
+d5cdc5da369|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: isolate mixin domain event facets
+b0566a287a6|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: add OpenSpec for isolating mixin domain events
+13c67c8b674|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: removes INLINE navigation-action synthesis; POST_PROCESS is now the only path
+53444a675a0|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: adds full-boot integ test for navigation-action synthesis; fixes stale-snapshot in INLINE
+8f8df808199|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: tests POST_PROCESS navigation-action synthesis; gates per-spec (not via isEnabled)
+359de942386|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: adds POST_PROCESS navigation-action synthesis strategy
+25b0b7ee646|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: guards navigation-action synthesis against re-entrancy (StackOverflow fix)
+63af23cfd26|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: refines CommandManager utility actions
+95ee45c0a18|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: introduces a little caching
+2a9d6bc848a|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: fixes mapping service for result
+4bfe67498c8|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: fixes unit tests
+e5cc546c1d6|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: optionally remap when export sequence; simplify replayOrRetrySelected, rename
+eb2ba8a5c73|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039 : save result adapter even if view model
+471e3ca2019|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: replay selected no longer 'are you sure'
+e70bcee4463|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: record result of a view model
+be94576b88f|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039 : fixes for copyCommandExportDto
+6c0e6406b72|2026-06-30 06:33:41 +0100|Dan Haywood|CAUSEWAY-4039: removes validation for 'export', @Import's it
+73ee2fc20ae|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: adds 'export'
+ea1f3fa79b8|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: adds guards
+6e2893496e5|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: adds NPE guard for export; fixes bug in remapped
+5eff75444f9|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: updates with actuals on export
+a78d5251a90|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: cosmetic
+85c33a237ad|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: minor UI improvements and bug fixes
+4a00fe940db|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: fixes unit tests
+b315ac8bd66|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: reverts syncing of the result/exception, that was invalid.  Cosmetic improvements in UI
+a2c95a96ced|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: adds guards for 'replayOrRetryNext'
+af4a36c97a7|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: removes unused repository queries, fixes/disables stale tests
+c9b628ea667|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: refinements (2)
+4dc312016b4|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: refinements
+5c202b8da42|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: fixes orphan
+486796c17b0|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: merges CommandManagerExport and CommandManagerReplay into CommandManager
+cce505a5fef|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: fixes up (disables some) unit tests for command replay
+d51595c7426|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: removed unused finders
+1b5c7a4a45e|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: removes EXPORTABLE replay state, simplifies actions a little
+9b946ff28f3|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: makes CommandManagerReplay also be a known participants tracker
+d679cf841a8|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: moves KnownParticipants validator to CommandManagerAbstract
+68ba09f87a3|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: reworks ReplayableCommand to use ReplayableCommandParticipantTracker
+e3205755f49|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: renames ReplayableCommand#isExportable to isKnownParticipants
+bf8aab454ab|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: renames ReplayableCommand#isReplayable to isDoOp
+b4c61174a31|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: more consolidation into superclass
+0b60796ef48|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: baseline, limit and state moved to abstract
+4cba54588a0|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: managers now inherit from abstract
+f136e0e6224|2026-06-30 06:33:40 +0100|Dan Haywood|CAUSEWAY-4039: moves injected services into ReplayContext
+0d2aaed3f4c|2026-06-30 06:33:39 +0100|Dan Haywood|CAUSEWAY-4039: renames CommandExport/ReplayManager, introduces stub abstract superclass
+63b57a98183|2026-06-30 06:33:39 +0100|Dan Haywood|CAUSEWAY-4024: updates the timestamp properly within the DTO
+ebbc326f0a1|2026-06-30 06:30:40 +0100|Dan Haywood|Merge pull request #3247 from apache/CAUSEWAY-3891
+cc49cb5c701|2026-06-17 11:27:36 +0100|Dan Haywood|Merge pull request #3625 from apache/CAUSEWAY-4038
+d80cda55d2f|2026-06-17 10:32:03 +0100|Dan Haywood|CAUSEWAY-4038: surfaces 'target' for ReplayableCommand
+d90085d5c47|2026-06-17 10:20:56 +0100|Dan Haywood|CAUSEWAY-4038: archives navigate-to parameter OpenSpec change
+7a8d749f2b2|2026-06-16 23:23:17 +0100|Dan Haywood|CAUSEWAY-4038: defers navigate-to ordering and pads replay args
+8ef5fc9d55d|2026-06-16 16:21:37 +0100|Dan Haywood|Merge pull request #3624 from apache/CAUSEWAY-4038
+9937366e891|2026-06-16 06:57:35 +0100|Dan Haywood|CAUSEWAY-4038 : reworks ordering of params once more
+db291cd28a5|2026-06-15 23:51:22 +0100|Dan Haywood|CAUSEWAY-4038 : also hides 'navigate to' params if property is hidden WHERE.REFERENCES_PARENT
+0953577396f|2026-06-15 19:03:49 +0100|Dan Haywood|CAUSEWAY-4038: fixes ordering and boolean check
+8c28ac019a1|2026-06-15 18:17:46 +0100|Dan Haywood|CAUSEWAY-4038 : commits impl, to test
+3d709d9a350|2026-06-15 17:59:56 +0100|Dan Haywood|CAUSEWAY-4033: proposes generated navigate-to parameter improvements
+375d41a1412|2026-06-14 22:09:25 +0100|Dan Haywood|Merge pull request #3610 from apache/CAUSEWAY-4033
+fe2589aa552|2026-06-14 16:31:34 +0100|Dan Haywood|CAUSEWAY-4033: archives property edit recording change
+f775e73ea10|2026-06-14 16:30:11 +0100|Dan Haywood|CAUSEWAY-4033: records property edits during recording
+7331ffd4707|2026-06-14 08:19:10 +0100|Dan Haywood|CAUSEWAY-4033: proposes recording property edits
+6ff92b17ffa|2026-06-14 07:12:09 +0100|Dan Haywood|Merge pull request #3609 from apache/CAUSEWAY-4037
+4bc7b2c9f25|2026-06-12 16:38:01 +0100|Dan Haywood|CAUSEWAY-4037: makes 'saveForReplay' idempotent
+0bb8c01c4ae|2026-06-12 16:21:27 +0100|Dan Haywood|Merge pull request #3608 from apache/CAUSEWAY-4034
+213f0fee770|2026-06-11 20:36:36 +0100|Dan Haywood|CAUSEWAY-4034 : fix for import
+588a24ad8b8|2026-06-11 12:44:18 +0100|Dan Haywood|CAUSEWAY-4034 : implements RefData for some entities
+6f1fd26926c|2026-06-11 12:03:54 +0100|Dan Haywood|CAUSEWAY-4034 : moves RefData marker into correct package
+bd05ada0bde|2026-06-11 11:18:36 +0100|Dan Haywood|CAUSEWAY-4034 : support view models as results of commands
+34a7dfdf3a9|2026-06-10 19:33:25 +0100|Dan Haywood|Revert "Reapply "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT"""
+6878cc51b16|2026-06-10 19:20:50 +0100|Dan Haywood|CAUSEWAY-4034: adds guard to avoid duplicate synthetic actions being created
+067e3ba4565|2026-06-10 18:21:31 +0100|Dan Haywood|CAUSEWAY-4034 : hacks validator - skip _navigate_to actions
+4f896068cc1|2026-06-10 14:31:29 +0100|Dan Haywood|Reapply "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT""
+76b459998ff|2026-06-10 09:39:20 +0100|Dan Haywood|CAUSEWAY-4034: adds dummy entity for jpa weaving
+f43a035eab8|2026-06-09 22:55:17 +0100|Dan Haywood|Revert "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT""
+5416e8ee642|2026-06-09 08:44:57 +0100|Dan Haywood|CAUSEWAY-4034: archives delete replay mappings change
+79031ec0fea|2026-06-09 08:40:54 +0100|Dan Haywood|CAUSEWAY-4034: adds delete replay mappings action
+d1d2baa6d4b|2026-06-09 07:08:40 +0100|Dan Haywood|CAUSEWAY-4034: proposes delete replay mappings action
+5df2556c7c8|2026-06-08 20:11:26 +0100|Dan Haywood|CAUSEWAY-4016: archives excluded command deletion
+1097786fe1e|2026-06-08 20:09:21 +0100|Dan Haywood|CAUSEWAY-4016: archives single list result command log
+b460f3013f3|2026-06-08 20:05:45 +0100|Dan Haywood|CAUSEWAY-4016: archives replay background command guard
+fdfa56d2cfa|2026-06-08 20:04:10 +0100|Dan Haywood|CAUSEWAY-4016: prevents replay while background work pending
+47915988427|2026-06-08 19:31:12 +0100|Dan Haywood|CAUSEWAY-4016: proposes replay background command guard
+e75023db017|2026-06-08 19:27:03 +0100|Dan Haywood|CAUSEWAY-4016: archives pending background command guard
+af00a69dca3|2026-06-08 19:26:17 +0100|Dan Haywood|CAUSEWAY-4016: rejects commands while background work pending
+9ef65cc9310|2026-06-08 19:20:15 +0100|Dan Haywood|CAUSEWAY-4016: proposes pending background command guard
+142903de754|2026-06-08 19:11:07 +0100|Dan Haywood|updates agent instructions
+9c1cfe36ea6|2026-06-08 19:11:00 +0100|Dan Haywood|CAUSEWAY-4033: archives suppressing useless safe replayable commands
+b6261a19f62|2026-06-08 19:10:57 +0100|Dan Haywood|CAUSEWAY-4033: suppresses useless safe replayable commands
+227ded718de|2026-06-08 19:10:52 +0100|Dan Haywood|CAUSEWAY-4033: proposes suppressing useless safe replayable commands
+ab190a212a0|2026-06-08 17:32:04 +0100|Dan Haywood|CAUSEWAY-4032: archives default refdata marker service
+ab2e4a2d410|2026-06-08 16:05:33 +0100|Dan Haywood|CAUSEWAY-4032: adds default refdata marker service
+e9420f1b175|2026-06-08 15:03:58 +0100|Dan Haywood|CAUSEWAY-4032: proposes default refdata marker service
+8ce7b76a30a|2026-06-08 14:52:46 +0100|Dan Haywood|CAUSEWAY-4032: archives refdata replay arguments
+99305108a91|2026-06-08 14:51:30 +0100|Dan Haywood|CAUSEWAY-4032: adds refdata replay argument SPI
+e2db6987387|2026-06-08 14:27:26 +0100|Dan Haywood|CAUSEWAY-4032: proposes refdata replay arguments
+1dcb955f839|2026-06-08 14:19:01 +0100|Dan Haywood|CAUSEWAY-4031: archives replayable command navigation change
+66aafa882f9|2026-06-08 14:17:12 +0100|Dan Haywood|CAUSEWAY-4031: updates replayable command cosmetics
+de0e81de024|2026-06-08 14:08:44 +0100|Dan Haywood|CAUSEWAY-4031: adds replayable command navigation improvements
+4d54d08babb|2026-06-08 13:52:00 +0100|Dan Haywood|CAUSEWAY-4031: proposes replayable command navigation improvements
+c69fe6dd96d|2026-06-08 13:33:08 +0100|Dan Haywood|CAUSEWAY-4030: completes singleton list command export validation
+e10272418e5|2026-06-08 13:20:22 +0100|Dan Haywood|CAUSEWAY-4030: captures singleton list command results
+2c1770b85e5|2026-06-08 12:56:45 +0100|Dan Haywood|CAUSEWAY-4030: proposes singleton list command results
+8d93a2a7b43|2026-06-08 12:49:11 +0100|Dan Haywood|CAUSEWAY-4029: archives move commands down action change
+efd9cbe60f7|2026-06-08 12:46:28 +0100|Dan Haywood|CAUSEWAY-4029: updates command movement action icons
+817817206e5|2026-06-08 12:44:14 +0100|Dan Haywood|CAUSEWAY-4029: adds directional command movement actions
+56fce353983|2026-06-08 12:20:21 +0100|Dan Haywood|CAUSEWAY-4029: proposes move commands down action
+ad87aab2ae2|2026-06-08 12:08:25 +0100|Dan Haywood|CAUSEWAY-4029: archives remove make selected exportable action change
+ea438afc7ee|2026-06-08 12:08:08 +0100|Dan Haywood|CAUSEWAY-4029: removes make selected exportable action
+f93a8d5b139|2026-06-08 12:03:07 +0100|Dan Haywood|CAUSEWAY-4029: proposes removing make selected exportable action
+bd9a047f0e9|2026-06-08 12:00:52 +0100|Dan Haywood|CAUSEWAY-4029: archives autoselect exportable commands change
+2932b6ae142|2026-06-08 11:59:26 +0100|Dan Haywood|CAUSEWAY-4029: autoselects exportable commands for export
+a1fe5c70a94|2026-06-08 11:52:18 +0100|Dan Haywood|CAUSEWAY-4029: proposes autoselecting exportable commands
+2a70c164d3d|2026-06-08 11:46:46 +0100|Dan Haywood|CAUSEWAY-4028: adds deletion of excluded commands
+ca4ee60f4b8|2026-06-08 11:39:52 +0100|Dan Haywood|CAUSEWAY-4028: proposes deleting excluded commands
+ea7f10c1beb|2026-06-08 11:34:07 +0100|Dan Haywood|CAUSEWAY-4027: archives command restoration change
+d1b44cb8ea1|2026-06-08 11:34:07 +0100|Dan Haywood|CAUSEWAY-4027: adds command restoration from excluded commands
+f30fba9d8dc|2026-06-08 11:34:07 +0100|Dan Haywood|CAUSEWAY-4027: proposes restoring excluded commands
+e1f85a51b46|2026-06-08 11:20:56 +0100|Dan Haywood|CAUSEWAY-4026: archives command exclusion change
+7fabedde10b|2026-06-08 11:19:06 +0100|Dan Haywood|CAUSEWAY-4026: adds command exclusion from export manager
+a33034b6a3d|2026-06-08 11:07:20 +0100|Dan Haywood|CAUSEWAY-4026: proposes excluding recorded commands
+b78af57e5a3|2026-06-08 10:57:22 +0100|Dan Haywood|CAUSEWAY-4026: archives first command domain service export change
+5889abc5cb1|2026-06-08 10:56:36 +0100|Dan Haywood|CAUSEWAY-4026: validates property edit export targets
+44c866ba9fb|2026-06-08 10:39:38 +0100|Dan Haywood|CAUSEWAY-4026: adds first command domain service export proposal
+0e89cd62ae3|2026-06-08 10:33:45 +0100|Dan Haywood|CAUSEWAY-4026: archives replayable command exportability change
+980a4fb3e86|2026-06-08 10:31:26 +0100|Dan Haywood|CAUSEWAY-4026: updates command export validation messages
+da7dfbe8ba1|2026-06-08 10:27:51 +0100|Dan Haywood|CAUSEWAY-4026: updates replayable command exportability layout
+6630069d1d1|2026-06-08 10:24:31 +0100|Dan Haywood|CAUSEWAY-4026: adds replayable command exportability
+0640d4c82e3|2026-06-08 09:58:14 +0100|Dan Haywood|CAUSEWAY-4026: adds replayable command exportability proposal
+fd047a20351|2026-06-08 08:57:22 +0100|Dan Haywood|CAUSEWAY-4025: archives command export manager simplification
+5847584e389|2026-06-08 08:56:49 +0100|Dan Haywood|CAUSEWAY-4025: simplifies command export manager commands
+aec566684aa|2026-06-08 08:41:44 +0100|Dan Haywood|CAUSEWAY-4025: adds command export manager simplification proposal
+41442a180ca|2026-06-08 08:36:07 +0100|Dan Haywood|CAUSEWAY-4024: archives squash-timing command movement change
+34781cd951c|2026-06-08 08:35:17 +0100|Dan Haywood|CAUSEWAY-4024: adds squash timings to command movement
+ab66e07ac0f|2026-06-08 08:18:15 +0100|Dan Haywood|CAUSEWAY-4024: adds squash-timing move-command proposal
+3c7231109c9|2026-06-08 08:14:15 +0100|Dan Haywood|CAUSEWAY-4024: archives recording support guard spec
+612f494f898|2026-06-08 08:14:02 +0100|Dan Haywood|CAUSEWAY-4024: guards command movement by recording support
+2cc7abb0c3c|2026-06-08 08:08:00 +0100|Dan Haywood|CAUSEWAY-4024: adds recording support guard proposal
+b1ed0ea04f3|2026-06-08 08:03:12 +0100|Dan Haywood|CAUSEWAY-4024: archives move commands action spec
+e72acaf4340|2026-06-08 08:02:39 +0100|Dan Haywood|CAUSEWAY-4024: adds command export move commands action
+594d265f2c3|2026-06-08 07:48:00 +0100|Dan Haywood|CAUSEWAY-4024: adds move commands action proposal
+26fc9235650|2026-06-08 07:37:02 +0100|Dan Haywood|CAUSEWAY-4023: archives recording support export validation guard
+a3f8fe27d7a|2026-06-08 07:31:33 +0100|Dan Haywood|CAUSEWAY-4023: proposes recording support export validation guard
+856dae61956|2026-06-08 07:15:37 +0100|Dan Haywood|CAUSEWAY-4023: aligns replay sync specs
+9901a2f3995|2026-06-08 07:03:05 +0100|Dan Haywood|CAUSEWAY-4023: simplifies impl.
+18361b29054|2026-06-08 06:56:07 +0100|Dan Haywood|CAUSEWAY-4023: adds replay command sync tests
+e761dd1b644|2026-06-08 06:17:08 +0100|Dan Haywood|CAUSEWAY-4023: archives replay command DTO preservation change
+a130e08bb39|2026-06-08 06:06:43 +0100|Dan Haywood|CAUSEWAY-4023: refactors replay execution metadata sync
+01f51258bc2|2026-06-08 06:02:12 +0100|Dan Haywood|CAUSEWAY-4023: preserves replay command DTOs during sync
+a496aec1094|2026-06-08 05:43:16 +0100|Dan Haywood|CAUSEWAY-4023: proposes preserving replay command DTOs
+32b71da96e9|2026-06-08 05:37:14 +0100|Dan Haywood|CAUSEWAY-4017: archives known action parameter export change
+6f7ce4aa2ce|2026-06-08 05:36:47 +0100|Dan Haywood|CAUSEWAY-4017: validates known action parameters on export
+92691f00e09|2026-06-08 05:13:43 +0100|Dan Haywood|CAUSEWAY-4017: proposes requiring known action parameters
+c2b8157800f|2026-06-07 22:49:18 +0100|Dan Haywood|CAUSEWAY-4017: archives known action target export change
+9902240932a|2026-06-07 22:45:57 +0100|Dan Haywood|CAUSEWAY-4017: validates known action targets on export
+ec6bf603d6b|2026-06-07 22:16:55 +0100|Dan Haywood|CAUSEWAY-4017: proposes requiring known action targets
+acb5fd964bc|2026-06-07 20:50:23 +0100|Dan Haywood|CAUSEWAY-4022: archives undefined replay retry change
+cee1887826f|2026-06-07 20:49:54 +0100|Dan Haywood|CAUSEWAY-4022: disables undefined replay retry
+982e92143f5|2026-06-07 20:41:16 +0100|Dan Haywood|CAUSEWAY-4022: proposes disabling undefined replay retry
+ecbc087d5b0|2026-06-07 20:30:04 +0100|Dan Haywood|CAUSEWAY-4019: archives navigate-to reference synthetic action
+0158e7619f8|2026-06-07 20:29:28 +0100|Dan Haywood|CAUSEWAY-4019: adds navigate-to reference synthetic action
+bd1c6ec4841|2026-06-07 20:04:13 +0100|Dan Haywood|CAUSEWAY-4019: proposes navigate-to reference synthetic action
+f84ecaad6fa|2026-06-07 17:54:38 +0100|Dan Haywood|CAUSEWAY-4020: archives remove navigate synthetic target parameter
+441f1e110d2|2026-06-07 17:42:48 +0100|Dan Haywood|CAUSEWAY-4020: removes navigate synthetic target parameter
+c8a798d5b3b|2026-06-07 17:11:40 +0100|Dan Haywood|CAUSEWAY-4020: adds proposal to remove navigate target parameter
+6eea7c46801|2026-06-07 17:04:48 +0100|Dan Haywood|CAUSEWAY-4015: moves command logging events to applib
+deba6448366|2026-06-07 16:54:37 +0100|Dan Haywood|CAUSEWAY-4015: proposes moving command logging events to applib
+22412e44da7|2026-06-07 16:52:09 +0100|Dan Haywood|CAUSEWAY-4015: suppresses initial fixture command logging
+01f5d875c2f|2026-06-07 16:36:01 +0100|Dan Haywood|CAUSEWAY-4015: proposes suppressing initial fixture command logging
+f3450ea2e53|2026-06-07 16:30:13 +0100|Dan Haywood|CAUSEWAY-4021: renames selector action to navigate
+69254a00e03|2026-06-07 16:20:51 +0100|Dan Haywood|CAUSEWAY-4021: proposes renaming selector action to navigate
+cbb65727d50|2026-06-07 16:14:28 +0100|Dan Haywood|CAUSEWAY-4018: archives recording suppression for replay objects
+eadaa134f42|2026-06-07 16:14:28 +0100|Dan Haywood|CAUSEWAY-4018: suppresses recording for replay objects
+2d557e3bdab|2026-06-07 16:14:28 +0100|Dan Haywood|CAUSEWAY-4018: proposes recording suppression for replay objects
+551ccdf7586|2026-06-07 15:48:16 +0100|Dan Haywood|CAUSEWAY-4014: archives readable replay participant mementos
+6e67a5c59fa|2026-06-07 15:47:34 +0100|Dan Haywood|CAUSEWAY-4014: simplifies replay participant mementos
+fda65b61597|2026-06-07 15:39:54 +0100|Dan Haywood|CAUSEWAY-4014: proposes readable replay participant mementos
+66eaa3706dd|2026-06-07 15:30:38 +0100|Dan Haywood|CAUSEWAY-4014: archives replayable command participant layout refinements
+180d28ceaac|2026-06-07 15:29:31 +0100|Dan Haywood|CAUSEWAY-4014: refines replayable command participant layout
+e0d25e7e468|2026-06-07 14:01:44 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command participant layout refinements
+80cf592a836|2026-06-07 13:50:55 +0100|Dan Haywood|CAUSEWAY-4014: archives removing replayable command open actions
+e9a5ad2b57b|2026-06-07 13:50:16 +0100|Dan Haywood|CAUSEWAY-4014: removes replayable command open actions
+a1be1272430|2026-06-07 13:43:36 +0100|Dan Haywood|CAUSEWAY-4014: proposes removing replayable command open actions
+42df423cc60|2026-06-07 13:36:30 +0100|Dan Haywood|CAUSEWAY-4014: archives replayable command open result action
+30b090dd72d|2026-06-07 13:35:23 +0100|Dan Haywood|CAUSEWAY-4014: adds replayable command open result action
+407ac6239aa|2026-06-07 13:21:40 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command open result action
+9aa8d627649|2026-06-07 13:18:30 +0100|Dan Haywood|CAUSEWAY-4014: archives replayable command open argument action
+f285b946335|2026-06-07 13:17:46 +0100|Dan Haywood|CAUSEWAY-4014: adds replayable command open argument action
+73a3ed4d541|2026-06-07 13:00:05 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command open argument action
+20fb0cd9cde|2026-06-07 12:54:58 +0100|Dan Haywood|CAUSEWAY-4014: archives replayable command participant argument rename
+5efa01b30d2|2026-06-07 12:54:08 +0100|Dan Haywood|CAUSEWAY-4014: renames replayable command participant parameter
+3d03042149a|2026-06-07 12:49:52 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command participant argument rename
+99cc4410bcb|2026-06-07 12:13:30 +0100|Dan Haywood|CAUSEWAY-4014: adds replayable command open target action
+75d4788f437|2026-06-07 12:08:25 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command open target refinement
+e4de27feaf1|2026-06-07 12:03:37 +0100|Dan Haywood|CAUSEWAY-4014: refines replayable command participant actuals
+ca008a833e7|2026-06-07 11:58:02 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command participant refinements
+e5bf9694d91|2026-06-07 11:50:08 +0100|Dan Haywood|CAUSEWAY-4014: removes replayable command target cosmetics
+f0d2e954623|2026-06-07 11:33:24 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable command cosmetics
+1fd8e282098|2026-06-07 11:29:15 +0100|Dan Haywood|CAUSEWAY-4014: updates replayable command participants
+26233de37e7|2026-06-07 10:51:49 +0100|Dan Haywood|CAUSEWAY-4014: adds replayable remappings table
+fab419a908e|2026-06-07 10:08:36 +0100|Dan Haywood|CAUSEWAY-4014: proposes replayable remappings table
+afbcee2042e|2026-06-07 10:02:24 +0100|Dan Haywood|CAUSEWAY-4014: adds replay mapping delete action
+7a2661456c3|2026-06-07 09:30:21 +0100|Dan Haywood|CAUSEWAY-4014: proposes replay mapping delete action
+d95b9858ee4|2026-06-07 09:27:02 +0100|Dan Haywood|CAUSEWAY-4014: captures replay mapping command interaction id
+425228138a2|2026-06-07 09:12:38 +0100|Dan Haywood|CAUSEWAY-4014: proposes replay mapping command interaction id
+3643318a65b|2026-06-07 07:59:32 +0100|Dan Haywood|CAUSEWAY-4014: adds replay mapping finders
+a60eb15a105|2026-06-07 07:36:24 +0100|Dan Haywood|CAUSEWAY-4014: proposes replay mapping finders
+765736d5457|2026-06-07 07:33:06 +0100|Dan Haywood|CAUSEWAY-4014: records all replay results
+76bd6240c22|2026-06-07 07:22:47 +0100|Dan Haywood|CAUSEWAY-4014: proposes recording all replay results
+ccf457013d2|2026-06-07 07:12:41 +0100|Dan Haywood|CAUSEWAY-4013: archives replayable command result display
+f9c7562b9f9|2026-06-07 07:12:25 +0100|Dan Haywood|CAUSEWAY-4013: shows replayable command export dto
+a046d1157dd|2026-06-07 06:59:29 +0100|Dan Haywood|CAUSEWAY-4013: adds replayable command result proposal
+84b8ab512cf|2026-06-07 06:55:28 +0100|Dan Haywood|CAUSEWAY-4012: archives empty selector actions
+cb053d525da|2026-06-07 06:55:11 +0100|Dan Haywood|CAUSEWAY-4012: disables empty selector actions
+8ab946ceb29|2026-06-07 06:43:45 +0100|Dan Haywood|CAUSEWAY-4012: adds empty selector action proposal
+978c714b661|2026-06-07 06:40:53 +0100|Dan Haywood|CAUSEWAY-4012: archives view model selector actions
+db7a12070db|2026-06-07 06:40:40 +0100|Dan Haywood|CAUSEWAY-4012: allows view model selector actions
+682ec1fd680|2026-06-07 06:36:59 +0100|Dan Haywood|CAUSEWAY-4012: adds view model selector action proposal
+30ff05549fe|2026-06-07 06:30:19 +0100|Dan Haywood|CAUSEWAY-4012: archives selector action styling
+2ace4fd0e27|2026-06-07 06:29:55 +0100|Dan Haywood|CAUSEWAY-4012: adds selector action styling
+370b82a02f6|2026-06-06 15:30:28 +0100|Dan Haywood|CAUSEWAY-4012: adds selector action styling proposal
+c98018ce0b1|2026-06-06 15:25:56 +0100|Dan Haywood|CAUSEWAY-4012: archives selector reference parameters
+80f43d531fd|2026-06-06 15:25:41 +0100|Dan Haywood|CAUSEWAY-4012: allows selector reference parameters
+74f6eb1545a|2026-06-06 14:48:49 +0100|Dan Haywood|CAUSEWAY-4012: adds selector reference parameter proposal
+e3320a8ef3f|2026-06-06 09:15:37 +0100|Dan Haywood|CAUSEWAY-4012: archives command export result rename
+96b9bad976f|2026-06-06 09:15:23 +0100|Dan Haywood|CAUSEWAY-4012: renames command export result metadata
+3cc1de0e4bd|2026-06-06 06:48:44 +0100|Dan Haywood|CAUSEWAY-4012: adds command export result rename proposal
+cc961609dc0|2026-06-06 06:44:47 +0100|Dan Haywood|CAUSEWAY-4012: archives selector partial matching
+32da54a23f2|2026-06-06 06:44:34 +0100|Dan Haywood|CAUSEWAY-4012: allows selector string partial matching
+b4b63e85b85|2026-06-06 06:32:24 +0100|Dan Haywood|CAUSEWAY-4012: adds selector partial match proposal
+b2ea1919627|2026-06-06 06:28:56 +0100|Dan Haywood|CAUSEWAY-4012: archives selector prefix rename
+e8ad5f96922|2026-06-06 06:28:38 +0100|Dan Haywood|CAUSEWAY-4012: renames selector action prefix
+5000754bf4a|2026-06-06 06:19:33 +0100|Dan Haywood|CAUSEWAY-4012: adds selector prefix rename proposal
+28066e5ea85|2026-06-06 06:13:41 +0100|Dan Haywood|CAUSEWAY-4012: archives selector parameter column limit
+48d913e1f0c|2026-06-06 06:07:38 +0100|Dan Haywood|CAUSEWAY-4012: limits selector parameters to collection columns
+0c5b0de4c25|2026-06-05 17:28:31 +0100|Dan Haywood|CAUSEWAY-4012: adds command recording support enum
+1aff7932cdd|2026-06-05 17:15:13 +0100|Dan Haywood|CAUSEWAY-4012: adds recording support proposal
+07c71a32a11|2026-06-05 17:14:19 +0100|Dan Haywood|CAUSEWAY-4012: archives selector export support
+ccd5ee53ee6|2026-06-05 16:49:38 +0100|Dan Haywood|CAUSEWAY-4012: adds selector export proposal
+fd6da410ce7|2026-06-05 15:57:09 +0100|Dan Haywood|CAUSEWAY-4012: excludes selector metadata parameters
+7a781c96d23|2026-06-05 15:43:20 +0100|Dan Haywood|CAUSEWAY-4012: adds selector parameter omission proposal
+e8521b45488|2026-06-05 14:14:34 +0100|Dan Haywood|CAUSEWAY-4012: refactors parented selector utilities
+b0973874cc1|2026-06-05 14:04:07 +0100|Dan Haywood|CAUSEWAY-4012: cleans up selector action support
+e16671ec6b9|2026-06-05 13:52:11 +0100|Dan Haywood|CAUSEWAY-4012: fixes selector actions for mixin collections
+3c7d816b34a|2026-06-05 12:12:05 +0100|Dan Haywood|CAUSEWAY-4012: archives selector single row validation
+92fd5573a35|2026-06-05 12:11:51 +0100|Dan Haywood|CAUSEWAY-4012: validates selector single row matches
+8b114d649aa|2026-06-05 11:52:40 +0100|Dan Haywood|CAUSEWAY-4012: adds proposal for selector single row validation
+e26bf9d6699|2026-06-05 11:42:54 +0100|Dan Haywood|CAUSEWAY-4012: archives selector parent parameter refinement
+ca61aa6febb|2026-06-05 11:42:40 +0100|Dan Haywood|CAUSEWAY-4012: fixes selector parent parameter to action target
+a65ab885a8e|2026-06-05 11:28:48 +0100|Dan Haywood|CAUSEWAY-4012: adds proposal for selector parent parameter refinement
+b5478cc0d8e|2026-06-05 11:15:58 +0100|Dan Haywood|CAUSEWAY-4012: archives selector action layout refinement
+80a2edb033b|2026-06-05 11:15:08 +0100|Dan Haywood|CAUSEWAY-4012: refines parented collection selector action layout
+a08f03221fb|2026-06-05 11:10:57 +0100|Dan Haywood|CAUSEWAY-4012: adds proposal for selector action layout refinement
+a8c75175047|2026-06-05 10:56:29 +0100|Dan Haywood|CAUSEWAY-4012: archives parented collection selector action change
+d36942329ce|2026-06-05 10:56:11 +0100|Dan Haywood|CAUSEWAY-4012: adds config-gated parented collection selector actions
+f0a4913dac4|2026-06-05 09:00:34 +0100|Dan Haywood|CAUSEWAY-4012: adds proposal for parented collection selector actions
+82dbe3b83db|2026-06-05 08:51:08 +0100|Dan Haywood|CAUSEWAY-4012: adds session handover prompt
+1ce6df8c17d|2026-06-05 08:46:35 +0100|Dan Haywood|CAUSEWAY-4012: adds session handoff skill
+980fe909c36|2026-06-05 08:43:39 +0100|Dan Haywood|CAUSEWAY-4012: archives safe action command publishing change
+e6205b618db|2026-06-05 08:40:21 +0100|Dan Haywood|CAUSEWAY-4012: aligns safe action command publishing specs
+08fd941a6c9|2026-06-05 08:38:52 +0100|Dan Haywood|CAUSEWAY-4012: adds safe action command publishing
+0ff27c3cfb6|2026-06-05 06:25:34 +0100|Dan Haywood|CAUSEWAY-4012: adds proposal for safe finder command logging
+593494c2c44|2026-06-05 06:22:05 +0100|Dan Haywood|Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT"
+7ad268db198|2026-06-04 23:47:08 +0100|Dan Haywood|Revert "temporarily renames ${revision} -> 2.2.0-SNAPSHOT"
+bbaf736e1c8|2026-06-04 23:45:37 +0100|Dan Haywood|CAUSEWAY-4010: archives persistent replay mapping listener
+71e19a88e3b|2026-06-04 23:45:14 +0100|Dan Haywood|CAUSEWAY-4010: updates persistent replay mapping proposal docs
+f9297f27f8f|2026-06-04 23:44:57 +0100|Dan Haywood|CAUSEWAY-4010: refines persistent replay mapping listener
+d9f918630ed|2026-06-04 23:11:46 +0100|Dan Haywood|CAUSEWAY-4010: adds persistent replay mapping listener
+6126259a95a|2026-06-04 21:43:42 +0100|Dan Haywood|CAUSEWAY-4010: proposes persistent replay mapping listener
+5c6d9580ccc|2026-06-04 19:13:43 +0100|Dan Haywood|CAUSEWAY-4010: archives replay conflict handling configuration
+81498882797|2026-06-04 19:13:26 +0100|Dan Haywood|CAUSEWAY-4010: adds replay conflict handling configuration
+af587f88e6a|2026-06-04 19:06:35 +0100|Dan Haywood|CAUSEWAY-4010: proposes replay conflict handling configuration
+cdfe0dbd4ef|2026-06-04 18:54:29 +0100|Dan Haywood|CAUSEWAY-4010: archives replay conflict failure handling
+8c508a40e47|2026-06-04 18:53:55 +0100|Dan Haywood|CAUSEWAY-4010: fails replay on conflicting result mappings
+8d2e611d5a6|2026-06-04 18:28:51 +0100|Dan Haywood|CAUSEWAY-4010: proposes replay conflict failure handling
+a59b9ba0511|2026-06-04 18:23:58 +0100|Dan Haywood|CAUSEWAY-4010: updates OpenSpec apply commit policy
+b0deefe5b9a|2026-06-04 18:13:03 +0100|Dan Haywood|CAUSEWAY-4010: archives default command replay mapping listener
+612af06f099|2026-06-04 18:11:47 +0100|Dan Haywood|CAUSEWAY-4010: adds default command replay mapping listener
+f473ad54214|2026-06-04 17:37:17 +0100|Dan Haywood|CAUSEWAY-4010: proposes default command replay mapping listener
+a81f15a3ab8|2026-06-04 17:30:24 +0100|Dan Haywood|CAUSEWAY-4010: fixes command log replay state initialization
+50c9b8ccbc5|2026-06-04 17:11:14 +0100|Dan Haywood|CAUSEWAY-4010: updates agent session handoff guidance
+6733cc1abbe|2026-06-04 17:10:33 +0100|Dan Haywood|CAUSEWAY-4010: archives listener SPI remap simplification
+d6b26043b83|2026-06-04 17:10:03 +0100|Dan Haywood|CAUSEWAY-4010: simplifies command replay remapping SPI
+f90779fe0ec|2026-06-04 16:50:13 +0100|Dan Haywood|CAUSEWAY-4010: proposes listener SPI remap simplification
+40374aecae2|2026-06-04 16:43:01 +0100|Dan Haywood|CAUSEWAY-4010: archives command replay input remapping
+23751efd5e3|2026-06-04 16:41:29 +0100|Dan Haywood|CAUSEWAY-4010: ensures that the CommandLogEntry's result ...
+8d681115069|2026-06-04 15:35:18 +0100|Dan Haywood|CAUSEWAY-4010: adds command replay input remapping
+97bc016a4a6|2026-06-04 15:27:25 +0100|Dan Haywood|CAUSEWAY-4010: proposes command replay input remapping
+492ddd3ebef|2026-06-04 15:17:32 +0100|Dan Haywood|CAUSEWAY-4010: archives replay result mapping change
+43da447403c|2026-06-04 15:05:54 +0100|Dan Haywood|CAUSEWAY-4010: adds replay result mapping SPI
+546677e60f4|2026-06-04 14:32:55 +0100|Dan Haywood|CAUSEWAY-4011: improves paging, cosmetics.
+988db33cfae|2026-06-04 14:30:01 +0100|Dan Haywood|CAUSEWAY-4010: archives command import rework and proposes replay result mapping
+d20b57357fa|2026-06-04 13:22:26 +0100|Dan Haywood|CAUSEWAY-4010: reworks command import manager
+e9cd5566234|2026-06-04 13:13:15 +0100|Dan Haywood|CAUSEWAY-4010: proposes command import manager rework
+0632e377b20|2026-06-04 13:04:24 +0100|Dan Haywood|temporarily renames ${revision} -> 2.2.0-SNAPSHOT
+4afabc169af|2026-06-04 13:04:24 +0100|Dan Haywood|CAUSEWAY-4010: archives returned object command export change
+517051b871e|2026-06-04 13:04:24 +0100|Dan Haywood|CAUSEWAY-4010: extends export to include 'returnedObject'
+a78d27cbe30|2026-06-04 13:04:24 +0100|Dan Haywood|CAUSEWAY-4010: proposes extending yaml to include returned object
+f73dd8f60d1|2026-06-04 13:04:24 +0100|Dan Haywood|CAUSEWAY-4010: ran openspec init
+6af965f0e37|2026-06-04 13:04:24 +0100|Dan Haywood|CAUSEWAY-4011: improves paging, cosmetics.
+ef8902ce159|2026-06-04 10:34:22 +0100|Dan Haywood|CAUSEWAY-4011: improves paging
+54ec82d26fc|2026-06-04 10:33:28 +0100|Dan Haywood|CAUSEWAY-4011: cosmetic fixes
+31eabda528c|2026-06-04 10:33:22 +0100|Dan Haywood|CAUSEWAY-4011: changes delimiter for view model
+a92ec645d14|2026-06-04 10:32:37 +0100|Dan Haywood|CAUSEWAY-4011: enhances CommandExportManager
+e7ff0d71730|2026-06-04 10:32:10 +0100|Dan Haywood|CAUSEWAY-4011: removes some dead code; simplifies impl
+05ea2c79fcb|2026-06-04 10:32:03 +0100|Dan Haywood|CAUSEWAY-4011: moves inner actions for CommandExport/ReplayManager
+4ff4a8fb207|2026-05-28 12:34:37 +0200|andi-huber|CAUSEWAY-3997: [v2] backports col. order patching fixes
+140b45369cb|2026-05-22 17:10:33 +0100|Dan Haywood|Merge pull request #3567 from apache/3998-v2
+f3462d7cf99|2026-05-22 17:10:04 +0100|Dan Haywood|CAUSEWAY-3998: cosmetics
+0cdf3aed320|2026-05-22 14:36:34 +0100|Dan Haywood|3998-v2: cosmetics
+d110b0b6d15|2026-05-22 11:21:54 +0100|Dan Haywood|CAUSEWAY-3998: refinements
+28c98ed6d68|2026-05-22 11:16:12 +0100|Dan Haywood|CAUSEWAY-3998: refinements
+830d2a293a9|2026-05-22 07:20:32 +0100|Dan Haywood|CAUSEWAY-3998 : minor polishing for replay manager
+2e5d8ad759f|2026-05-22 07:20:00 +0100|Dan Haywood|Merge pull request #3566 from apache/3997-v2.col.ord.patch
+396e9e2fda8|2026-05-21 09:29:34 +0100|andi-huber|CAUSEWAY-3997: [v2] fix for potentially wrong Where context (backport)
+18dc1fe839a|2026-05-21 09:29:34 +0100|andi-huber|CAUSEWAY-3997: [v2] backports column order patching
+dfe121ed66a|2026-05-21 09:29:34 +0100|andi-huber|CAUSEWAY-3997: [v2] backports Listing
+47167916d2c|2026-05-21 08:46:21 +0200|andi-huber|CAUSEWAY-4002: [CI] v2: potential NPE in org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault.disposeMetaModel()
+90950bdde32|2026-05-21 08:27:09 +0200|andi-huber|CAUSEWAY-4002: [CI] v2: enforce single thread build (T 1)
+e7bbbe5e924|2026-05-21 08:08:52 +0200|andi-huber|CAUSEWAY-4002: [CI] v2: try with java 21, newest maven, newest lombok
+bbab91cdb7b|2026-05-12 12:15:45 +0200|andi-huber|[Causeway-3998] [v2] disables failing parser test (not strictly required)
+703432fa76c|2026-05-12 11:25:46 +0200|andi-huber|[v2] refine disabling of collection summary view (+changelog)
+5f91fe27e5d|2026-05-12 11:19:28 +0200|andi-huber|[v2] allows disabling of collection summary view via env var
+f5accdd9bb0|2026-05-06 22:33:51 +0100|Dan Haywood|Merge pull request #3542 from apache/CAUSEWAY-3998
+df0e09b47c6|2026-05-06 22:33:12 +0100|Dan Haywood|CAUSEWAY-3998: fixes layout
+f99ed18d31e|2026-05-06 21:43:43 +0100|Dan Haywood|CAUSEWAY-3998: refactors to a mixin, lookup bookmark
+7bd38dd1980|2026-05-06 16:27:53 +0100|Dan Haywood|CAUSEWAY-3998: adds openTarget to ReplayableCommand
+dd57db1d5fe|2026-05-06 12:42:35 +0100|Dan Haywood|CAUSEWAY-3998 : makes CommandExportManager similar to CommandReplayManager
+ad96570ac5b|2026-05-06 10:41:06 +0100|Dan Haywood|CAUSEWAY-3998 : moves baseline to oldest when import
+a06d92a56a5|2026-05-06 10:05:29 +0100|Dan Haywood|CAUSEWAY-3998 : adds CommandReplayManager#replayOrRetryNext
+fba2137a910|2026-04-29 11:32:00 +0200|andi-huber|CAUSEWAY-3989: [v2] javadoc fix
+08d729be530|2026-04-29 11:29:16 +0200|andi-huber|CAUSEWAY-3989: [v2] backport proper replay-state persisting
+8b9e1cef352|2026-04-28 07:03:17 +0200|andi-huber|CAUSEWAY-3989: [v2] manager usability improvements
+86d43d03786|2026-04-28 06:42:40 +0200|andi-huber|[v2] decommission replay incubator
+35ed039a40b|2026-04-28 06:36:10 +0200|Andi Huber|Merge pull request #3535 from apache/3996-layout.patch.v2
+85d9142f00b|2026-04-28 06:32:49 +0200|andi-huber|CAUSEWAY-3996: [v2] backports in-memory layout patching
+a105742ebcc|2026-04-28 05:43:57 +0200|andi-huber|CAUSEWAY-3996: changelog (adoc)
+2ac3cd3c66d|2026-04-24 18:03:48 +0100|Dan Haywood|CAUSEWAY-3989: fixes unit test, module-info
+13bdd47f8d8|2026-04-24 17:48:49 +0100|Dan Haywood|Merge pull request #3518 from apache/CAUSEWAY-3989
+8a7673a9b77|2026-04-24 16:19:47 +0100|Dan Haywood|JDOJPA-300 : runs each replayable command in its own transaction
+98e24ee1ad2|2026-04-24 16:16:17 +0100|Dan Haywood|CAUSEWAY-3989: removes unnecessary zipping of YAML blob in CommandExportManager
+b28d78d1b48|2026-04-24 11:54:59 +0100|Dan Haywood|CAUSEWAY-3989: refactors YAML processing in CommandDtoUtils to use multidoc format.
+9ec212d71fd|2026-04-24 11:49:19 +0100|Dan Haywood|CAUSEWAY-3989: refactors YAML tests to use Approvals for verification and adds approved YAML outputs
+7f3ba4ec54a|2026-04-24 11:41:14 +0100|Dan Haywood|CAUSEWAY-3989: adds support for converting lists to UTF8 encoded YAML with specified marshalling modes
+5f2e6f44bd6|2026-04-24 11:30:26 +0100|Dan Haywood|CAUSEWAY-3989: adds test case for handling trailing empty documents in YAML command DTO
+b29b16aea96|2026-04-24 11:28:25 +0100|Dan Haywood|CAUSEWAY-3989: enhances YAML command DTO processing with multi-document support and adds corresponding tests
+1f4cd23be37|2026-04-24 10:50:16 +0100|Dan Haywood|Merge pull request #3517 from apache/CAUSEWAY-3989
+187f9ca14e6|2026-04-24 10:43:25 +0100|Dan Haywood|CAUSEWAY-3989: [v2] adds test to demo bug
+feb7dfc7f5d|2026-04-24 10:42:46 +0100|Dan Haywood|CAUSEWAY-3989 : fixes compile issue
+4f624297612|2026-04-24 08:56:24 +0100|Dan Haywood|CAUSEWAY-3989: [v2] ensures ReplayContext is not picked up as a MM class from ReplayableCommand
+6a551daa8ce|2026-04-19 20:52:39 +0200|andi-huber|CAUSEWAY-3989: [v2] using png icon screenshots from v4
+bee1e1ffff5|2026-04-18 07:29:28 +0200|andi-huber|CAUSEWAY-3989: [v2] backport simplification (no bookmark service)
+f97bdafde7e|2026-04-18 06:11:06 +0200|andi-huber|CAUSEWAY-3989: [v2] backports missing named queries
+fecb25bd986|2026-04-18 05:32:41 +0200|andi-huber|CAUSEWAY-3989: [v2] fix flipped logic in export filter
+3e30275592c|2026-04-18 05:00:51 +0200|andi-huber|CAUSEWAY-3989: [v2] backport of command replay feature
+339ce1088d8|2026-04-17 15:33:48 +0200|andi-huber|CAUSEWAY-3995: immediately after MM init, clear all layout caches
+89b83486b89|2026-04-02 12:32:01 +0200|andi-huber|CAUSEWAY-3985: updates changelog
+7a239733d4f|2026-04-02 12:27:17 +0200|andi-huber|CAUSEWAY-3985: [v2] Backport Table Column Sorting to be only enabled if Comparable
+2da0d02fb89|2026-03-26 15:24:17 +0100|andi-huber|CAUSEWAY-3983: [v2] removes tab content when always hidden (backport)
+59dc7ae33d0|2026-03-22 15:10:59 +0000|Dan Haywood|Merge pull request #3465 from apache/TURNDP-184
+e1169095990|2026-03-22 11:44:15 +0000|Dan Haywood|adds in support for update only (annot, unit tests, change to listener impl)
+c34fbb2ceeb|2026-03-13 11:51:34 +0100|andi-huber|CAUSEWAY-3976: [v2] backport: allow client URL rewrite only if origin is considered the same based on what the server-side thinks
+7999f7cbf9f|2026-03-12 14:19:33 +0100|andi-huber|CAUSEWAY-3976: [v2] backport, enhances client side javascript code, that helps with handling redirects
+773fd356eac|2026-03-12 12:06:07 +0100|andi-huber|CAUSEWAY-3979: deprecates RoutingServiceDefault
+2f33343eab7|2026-03-11 20:13:41 +0100|andi-huber|CAUSEWAY-3973: [v2] makes the backport a non-breaking change for consuming apps (part 2)
+b8bb5bd4304|2026-03-11 19:25:07 +0100|andi-huber|CAUSEWAY-3973: [v2] makes the backport a non-breaking change for consuming apps
+ce099ce4d9f|2026-03-11 19:01:33 +0100|andi-huber|CAUSEWAY-2445: [v2] CI preconfigure compiler plugin in causeway-app-starter-parent
+66e2dcd55ac|2026-03-11 18:34:59 +0100|andi-huber|CAUSEWAY-2445: [v2] CI enables mvn 4 build
+81352c2f542|2026-03-06 14:24:11 +0100|Andi Huber|Merge pull request #3435 from apache/3973-backport.layout.switch
+fbfe54d234a|2026-03-06 14:23:40 +0100|andi-huber|CAUSEWAY-3973: [v2] removes temp file from prev. commits
+25747587287|2026-03-06 14:17:34 +0100|andi-huber|CAUSEWAY-3973: [v2] makes FacetRank thread-safe
+fc277b04ad2|2026-03-06 13:47:30 +0100|andi-huber|CAUSEWAY-3973: [v2] entity pages honoring layout variants
+16e2a7fa68a|2026-03-06 13:06:29 +0100|andi-huber|CAUSEWAY-3973: [v2] work on backport of simplified grid loading (4)
+f64eb8e8a0f|2026-03-06 12:35:07 +0100|andi-huber|CAUSEWAY-3973: [v2] work on backport of simplified grid loading (3)
+bd8abfb4556|2026-03-06 10:37:17 +0100|andi-huber|CAUSEWAY-3973: [v2] work on backport of simplified grid loading (2)
+b9f8590c824|2026-03-06 10:09:11 +0100|andi-huber|CAUSEWAY-3973: [v2] work on backport of simplified grid loading (1)
+9c9b3db6abc|2026-03-06 09:25:27 +0100|andi-huber|CAUSEWAY-3973: [v2] backports layout switching tests
+1900ca6db45|2026-03-06 08:24:19 +0100|andi-huber|CAUSEWAY-3973: [v2] support for layout variant export in Object_downloadLayout
+a7ca3cbf47d|2026-03-06 08:04:24 +0100|andi-huber|CAUSEWAY-3973: [v2] converts remaining Facets to be qualified
+a145f5fee30|2026-03-06 07:45:45 +0100|andi-huber|CAUSEWAY-3973: [v2] refactors Grid to store LayoutKeys on loading
+58bae9faf5a|2026-03-05 11:29:19 +0100|andi-huber|CAUSEWAY-3973: [v2] backports all Qualified Facets
+009be0bcc27|2026-03-05 10:01:47 +0100|andi-huber|CAUSEWAY-3973: [v2] backports new FacetRanking
+3970963b0bc|2026-03-05 06:32:28 +0100|andi-huber|CAUSEWAY-3973: [v2] Backport Layout Switching Fixes (adoc)
+eda2d7f67c8|2026-03-04 17:25:17 +0100|andi-huber|CAUSEWAY-3969: updates changelog
+cc3ac8a74d3|2026-03-04 17:14:14 +0100|andi-huber|CAUSEWAY-3972: fixes test in prev. commit
+6469afd148f|2026-03-04 16:57:19 +0100|andi-huber|CAUSEWAY-3972: simplifies test; comments
+90b381d10d2|2026-03-04 16:57:18 +0100|andi-huber|CAUSEWAY-3972: fixes _Oneshot deadlock potential
+553ea57ef8a|2026-02-23 07:55:15 +0100|andi-huber|CAUSEWAY-3969: [v2] minor JpaWeavingSafeguard cleanup
+5f11d66f12e|2026-02-20 10:40:37 +0100|andi-huber|CAUSEWAY-3969: [v2] minor backport fix (not affecting existing code)
+72884ff8761|2026-02-19 11:06:04 +0100|andi-huber|CAUSEWAY-3969: [v2] backports JPA Weaving Safeguard from v4
+0a4da19c46f|2026-02-19 09:32:25 +0100|andi-huber|CAUSEWAY-3970: [v2] Bump Eclipselink Version 2.7.15 -> 2.7.16
+bebd570322e|2026-02-18 07:44:28 +0100|andi-huber|CAUSEWAY-2445: [v2] remove unused profile (CI Maintenance)
+912baab5838|2026-02-18 07:33:23 +0100|Andi Huber|Merge pull request #3408 from apache/3968-v2.weaving
+eebcfff7f2f|2026-02-17 18:14:09 +0100|andi-huber|CAUSEWAY-3968: [v2] update build instructions
+7dd0bfb602e|2026-02-17 17:54:29 +0100|andi-huber|CAUSEWAY-3968: [v2] veto dummies for being added to Causeway meta-model
+4a76008f88c|2026-02-17 17:44:27 +0100|andi-huber|CAUSEWAY-3968: [v2] workaround for code breaking weaving on JDK ?..21..25
+79de3027f26|2026-02-17 14:10:21 +0100|andi-huber|CAUSEWAY-3968: [v2] removes potentially interfering lombok.val
+9f846eb29e6|2026-02-17 13:05:43 +0100|andi-huber|CAUSEWAY-3968: test fixes (excel-fixture)
+695228a50ac|2026-02-17 11:56:48 +0100|andi-huber|CAUSEWAY-3968: [v2] backports simpler method filter strategy (meta-model)
+17519957090|2026-02-17 11:09:20 +0100|andi-huber|CAUSEWAY-3968: [v2] adds abstract classes to reflective weaving verification tests
+71d1f636dc3|2026-02-17 10:56:49 +0100|andi-huber|CAUSEWAY-3968: [v2] fixes outdated persistence schemas
+54db133988d|2026-02-17 10:42:04 +0100|andi-huber|CAUSEWAY-3968: [v2] adds missing entity id fields to dummies
+f6c8fcaff0a|2026-02-17 09:29:40 +0100|andi-huber|CAUSEWAY-3968: [v2] pom fixes, test backports
+4e995bc4eef|2026-02-17 08:34:28 +0100|andi-huber|CAUSEWAY-3968: [v2] prepare static weaving support (secman)
+84a277a4117|2026-02-17 08:06:53 +0100|andi-huber|CAUSEWAY-3968: [v2] prepare for static weaving support
+bf933ba33bb|2026-01-25 07:14:09 +0100|Andi Huber|Merge pull request #3360 from apache/3957-tablerow.action.backport
+7bd2c13e40c|2026-01-23 14:41:35 +0100|andi-huber|CAUSEWAY-3957: [v2] restored actions args for collection mementos
+9ee8f0e0f79|2026-01-23 14:20:31 +0100|andi-huber|CAUSEWAY-3957: [v2] honor deprecations
+c62a838f607|2026-01-23 13:58:19 +0100|andi-huber|CAUSEWAY-3957: [v2] backports FormExecutor
+03cc976e3f8|2026-01-23 10:21:37 +0100|andi-huber|CAUSEWAY-3957: [v2] removes unused imports
+cb15d1101a6|2026-01-23 10:04:48 +0100|andi-huber|CAUSEWAY-3957: [v2] backporting ActionLink
+b50bebe9e59|2026-01-22 11:31:26 +0100|andi-huber|CAUSEWAY-3957: cleaning up duplicated code
+06d32cfaf93|2026-01-22 11:23:39 +0100|andi-huber|CAUSEWAY-3957: [v2] backports _StableValue
+9bedbc8c377|2026-01-22 10:26:16 +0100|andi-huber|CAUSEWAY-3957: [v2] adds table's action column (backport)
+d27066bee00|2026-01-20 06:59:14 +0100|andi-huber|[v2] adds to changelog (docs)
+fb240e090af|2026-01-20 05:40:06 +0100|andi-huber|[v2] README: adds table of contents (docs)
+14f7f1c793b|2026-01-19 16:08:09 +0100|andi-huber|[v2] fleshes out deployment for the ci instructions (docs)
+9f4042124f3|2026-01-19 14:34:22 +0100|andi-huber|[v2] fleshes out parts of the ci instructions (docs)
+44b91739828|2026-01-19 12:06:08 +0100|andi-huber|[v2] adds changelog (docs)
+05be5d6229d|2026-01-18 21:24:21 +0100|andi-huber|CAUSEWAY-3950: [v2] typo in prev. commit (backport from v4)
+51f9ef0c18d|2026-01-18 19:57:51 +0100|andi-huber|CAUSEWAY-3950: [v2] allows specific mime types to be excluded from file upload preview (backport from v4)
+0ecf81e950b|2026-01-18 18:03:50 +0100|andi-huber|CAUSEWAY-3958: [v2] Clob content is required to be UTF-8 (backport from v4)
+87f8e9aa08c|2026-01-16 21:58:25 +0100|andi-huber|CAUSEWAY-3952: [v2] adds missing piece for CI friendly revision (CI)
+a09944c6b6d|2026-01-16 13:20:10 +0100|andi-huber|CAUSEWAY-3952: [v2] attempts starter-parent fix (pom 2nd attempt)
+f1ee1378ba1|2026-01-16 13:05:32 +0100|andi-huber|CAUSEWAY-3952: [v2] attempts starter-parent fix (pom)
+4108a8aa68c|2026-01-16 10:55:12 +0100|andi-huber|CAUSEWAY-3952: [v2] typo
+0a445e19251|2026-01-16 10:47:21 +0100|andi-huber|CAUSEWAY-3952: [v2] adds build instructions to README
+8d5eaa14726|2026-01-16 09:47:03 +0100|andi-huber|CAUSEWAY-3952: [v2] switch zulu->temurin (CI)
+af5be5e43e1|2026-01-16 09:26:49 +0100|andi-huber|CAUSEWAY-3952: [v2] bumps archunit 1.3.0->1.3.2
+140c7d54525|2026-01-16 08:50:30 +0100|andi-huber|CAUSEWAY-3952: [v2] adds revision var where missing (pom)
+c13b416e36a|2026-01-16 08:33:48 +0100|andi-huber|CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 4th attempt)
+1aeb113ec08|2026-01-16 08:15:27 +0100|andi-huber|CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 3rd attempt)
+bf59b75109f|2026-01-16 08:08:03 +0100|andi-huber|CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 2nd attempt)
+7c9bf4da384|2026-01-16 08:03:24 +0100|andi-huber|CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI)
+9bc10d5399d|2026-01-16 07:33:28 +0100|andi-huber|CAUSEWAY-3952: [v2] updates README w/ decommission statement
+a2f979e231c|2026-01-15 14:19:06 +0100|Andi Huber|Merge pull request #3352 from apache/CAUSEWAY-3955
+8f3dcba430e|2026-01-15 14:00:54 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in Identifier (part 2)
+094a691c9d3|2026-01-15 13:54:08 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in Identifier
+3311c949f6a|2026-01-15 13:45:44 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in ValueSemanticsProvider
+445a656c234|2026-01-15 13:41:33 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in HasLogicalType
+67bbbc09aaf|2026-01-15 13:26:33 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in LogicalType
+6b8d9a6ac07|2026-01-15 13:19:05 +0100|andi-huber|CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in HasObjectSpecification
+f9358ec22de|2026-01-15 13:00:21 +0100|andi-huber|CAUSEWAY-3955: [v2] adds java doc to ease migration
+b9b3b4dfc67|2026-01-15 12:42:31 +0100|andi-huber|CAUSEWAY-3955: deprecates out-dated API in HasObjectSpecification (v2)
+ae416463825|2026-01-15 12:42:31 +0100|andi-huber|CAUSEWAY-3955: deprecates out-dated API (Identifier, LogicalType)
+9ba1276c902|2026-01-15 12:15:46 +0100|andi-huber|CAUSEWAY-3952: [v2] try build with JDK 17->21 (CI actually)
+3b8e1278f07|2026-01-15 12:12:54 +0100|andi-huber|CAUSEWAY-3952: [v2] try build with JDK 17->21 (CI)
+c587725f110|2026-01-15 11:45:50 +0100|andi-huber|CAUSEWAY-3952: updates version 2.0.0-SNAPSHOT -> 2.2.0-SNAPSHOT (v2)
+ed16bfb504e|2026-01-15 08:25:23 +0100|andi-huber|CAUSEWAY-3952: removes unused profiles (v2)
+6b8fbd7a09c|2026-01-14 17:25:26 +0100|andi-huber|CAUSEWAY-3956: try to build/test v2 (CI part 3)
+a8d059e972b|2026-01-14 17:24:13 +0100|andi-huber|CAUSEWAY-3956: try to build/test v2 (CI part 2)
+ccc2b307fd8|2026-01-14 17:20:56 +0100|andi-huber|CAUSEWAY-3956: try to build/test v2 (CI)
+4120c3d1394|2026-01-13 18:42:15 +0100|andi-huber|CAUSEWAY-3951: fixes unresolvable type cast (backport from main)
+6279ca7b936|2026-01-13 18:40:54 +0100|andi-huber|CAUSEWAY-3951: fixes missing transitive module dep. (backport from main)
+21b0e9abad8|2026-01-13 18:35:54 +0100|andi-huber|CAUSEWAY-3951: fixes name clash error in MenuAction Panel (eclipse)
+3eba5042723|2026-01-13 13:54:23 +0100|andi-huber|CAUSEWAY-3950: disables preview for uploaded files (wicket)
+ed1b7f781f5|2025-11-19 10:26:15 +0000|Dan Haywood|CAUSEWAY-3945 : backports remove cache for table downloads also
+538c8c9e4d2|2025-11-19 10:19:58 +0000|Dan Haywood|CAUSEWAY-3891: backports fix from main
+216fb0113bd|2025-11-11 10:55:10 +0000|Dan Haywood|Merge pull request #3235 from apache/CAUSEWAY-3942-maintenance-branch
+8c82c453b36|2025-11-11 10:41:17 +0000|Dan Haywood|CAUSEWAY-3942: backport to javax.inject (from jakarta..)
+fbc5a14e908|2025-11-11 10:12:08 +0000|Dan Haywood|CAUSEWAY-3942: adds facet factory to remove _persistence_ methods
+2ee47c44e1f|2025-07-22 11:33:50 +0100|Dan Haywood|Merge pull request #3038 from apache/CAUSEWAY-3899
+385ff1462a9|2025-07-22 11:32:36 +0100|Dan Haywood|CAUSEWAY-3899: adds guard for DomainChangeRecord
+99aa1bfbae2|2025-07-22 11:30:28 +0100|Dan Haywood|Merge pull request #2926 from apache/CAUSEWAY-3883

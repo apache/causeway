@@ -1,0 +1,495 @@
+# Clean-room chronological commit ledger
+
+This ledger was derived from Git history beginning at `65d64cd85b7` and does not use prior reconciliation analyses.
+
+Each line records one maintenance commit in chronological topological order and justifies its classification.
+
+`BEHAVIOR` means the commit contributes to a genuine final behavior and is covered by the audit claims.
+
+`SKIP-BACKPORT` means the behavior already originated on main, with a cited antecedent or chained series.
+
+`SKIP-V2-CI-DEP` means the change is confined to the v2 toolchain, dependency line, weaving, CI, or removed adapter.
+
+`SKIP-NONBEHAVIOR` means the commit has no independent final runtime/API behavior.
+
+- 001 `99aa1bfbae28` [CAUSEWAY-3883] `SKIP-BACKPORT` — Merge pull request #2926 from apache/CAUSEWAY-3883 — The merge imports the CAUSEWAY-3883 wrapper/async rewrite already developed on main in `e98123755f2`, `350f629d651`, `6d2ac1406c8`, and final wait fix `4f8c1e0af1c`; its second parent is the fixed base itself.
+- 002 `385ff1462a95` [CAUSEWAY-3899] `SKIP-BACKPORT` — CAUSEWAY-3899: adds guard for DomainChangeRecord — DomainChangeRecord` guard and test match main antecedent `d09906aa937`.
+- 003 `2ee47c44e1f3` [CAUSEWAY-3899] `SKIP-BACKPORT` — Merge pull request #3038 from apache/CAUSEWAY-3899 — The first-parent merge delta integrates the same `DomainChangeRecord` change from row 2/main `d09906aa937`.
+- 004 `fbc5a14e9083` [CAUSEWAY-3942] `SKIP-BACKPORT` — CAUSEWAY-3942: adds facet factory to remove _persistence_ methods — EclipseLink `_persistence_` method filtering and JPA/JDO programming-model wiring backport main `5876df13198`; JDO wiring is the v2 architecture adaptation.
+- 005 `8c82c453b36c` [CAUSEWAY-3942] `SKIP-BACKPORT` — CAUSEWAY-3942: backport to javax.inject (from jakarta..) — This only adapts main `5876df13198` from `jakarta.inject` to v2 `javax.inject`.
+- 006 `216fb0113bd5` [CAUSEWAY-3942] `SKIP-BACKPORT` — Merge pull request #3235 from apache/CAUSEWAY-3942-maintenance-branch — The merge integrates rows 4–5, whose main antecedent is `5876df13198`; main later moved the same filtering earlier into `_ClassCache` in `5f967d57b47`.
+- 007 `3eba50427232` [CAUSEWAY-3950] `SKIP-BACKPORT` — CAUSEWAY-3950: disables preview for uploaded files (wicket) — Wicket upload preview disabling is the v2 port of main `fd5c2eaf3d1`.
+- 008 `21b0e9abad89` [CAUSEWAY-3951] `SKIP-BACKPORT` — CAUSEWAY-3951: fixes name clash error in MenuAction Panel (eclipse) — MenuActionPanel extends PanelBase<Object>` is the package-adapted main change from `ba05dbadf3d`; it resolves compilation without runtime semantics.
+- 009 `6279ca7b9362` [CAUSEWAY-3951] `SKIP-BACKPORT` — CAUSEWAY-3951: fixes missing transitive module dep. (backport from main) — QueryDSL transitive module requirements match main `ccae92dfed7`.
+- 010 `4120c3d13943` [CAUSEWAY-3951] `SKIP-BACKPORT` — CAUSEWAY-3951: fixes unresolvable type cast (backport from main) — JpaEntityFacet.selectFrom(Class<T>)` matches main `aaf7284576a`, apart from `javax`/`jakarta`.
+- 011 `ccc2b307fd8e` [CAUSEWAY-3956] `SKIP-V2-CI-DEP` — CAUSEWAY-3956: try to build/test v2 (CI) — Only `.github/dependabot.yml` and v2 workflow files are removed/renamed or adjusted.
+- 012 `a8d059e972bf` [CAUSEWAY-3956] `SKIP-V2-CI-DEP` — CAUSEWAY-3956: try to build/test v2 (CI part 2) — Only `.github/workflows/ci-build-artifacts-no-push-maven.yml` changes.
+- 013 `6b8fbd7a09c5` [CAUSEWAY-3956] `SKIP-V2-CI-DEP` — CAUSEWAY-3956: try to build/test v2 (CI part 3) — Only the v2 Maven CI workflow changes.
+- 014 `ed16bfb504ea` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: removes unused profiles (v2) — Only obsolete profiles in root `pom.xml` and `bom/pom.xml` are removed.
+- 015 `c587725f110a` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: updates version 2.0.0-SNAPSHOT -> 2.2.0-SNAPSHOT (v2) — This updates versions across module POMs and removes the unwired `incubator/core/jsr303/**` sketch; its parent tree had no external reference to that incubator module.
+- 016 `3b8e1278f07d` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] try build with JDK 17->21 (CI) — Only `.github/workflows/ci-build-artifacts-no-push-maven.yml` and `ci-v2-verify.yml` are touched for JDK selection.
+- 017 `9ba1276c9021` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] try build with JDK 17->21 (CI actually) — Only `ci-v2-verify.yml` changes.
+- 018 `ae4164638258` [CAUSEWAY-3955] `SKIP-BACKPORT` — CAUSEWAY-3955: deprecates out-dated API (Identifier, LogicalType) — Fluent `Identifier`/`LogicalType`/`HasLogicalType`/`ValueSemanticsProvider.Context` APIs and deprecated bean accessors reproduce main’s earlier record migration in `28281379a4c`, `8ef5e3e7f9a`, and `21882076a19`.
+- 019 `b9b3b4dfc67d` [CAUSEWAY-3955] `SKIP-BACKPORT` — CAUSEWAY-3955: deprecates out-dated API in HasObjectSpecification (v2) — HasObjectSpecification.objSpec()` and `ValueDecomposition` optional-side accessors backport main changes from `1fa3c492432` and `21882076a19`.
+- 020 `f9358ec22def` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] adds java doc to ease migration — JavaDoc-only migration guidance for the APIs in rows 18–19.
+- 021 `6b8d9a6ac077` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in HasObjectSpecification — Mechanical internal replacement of deprecated `getSpecification()` calls with `objSpec()`; tests only follow the rename.
+- 022 `67bbbc09aafc` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in LogicalType — Mechanical replacement of `LogicalType` bean getters with fluent accessors, with corresponding compile/tests and no changed return semantics.
+- 023 `445a656c2344` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in HasLogicalType — Mechanical replacement of `HasLogicalType` deprecated accessors across core, viewers, and tests.
+- 024 `3311c949f6a8` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in ValueSemanticsProvider — Mechanical use of fluent `ValueSemanticsProvider.Context` accessors; no serialization or value-semantic branch changes.
+- 025 `094a691c9d39` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in Identifier — Mechanical `Identifier` getter-to-record-style accessor migration across consumers and tests.
+- 026 `8f3dcba430ed` [CAUSEWAY-3955] `SKIP-NONBEHAVIOR` — CAUSEWAY-3955: [v2] refactors internally no longer to use deprecations in Identifier (part 2) — Final mechanical `Identifier` consumer cleanup with no behavioral branch change.
+- 027 `a2f979e231cc` [CAUSEWAY-3955] `SKIP-BACKPORT` — Merge pull request #3352 from apache/CAUSEWAY-3955 — The first-parent merge delta integrates the API migration from rows 18–26, whose main antecedents are `28281379a4c`, `8ef5e3e7f9a`, `1fa3c492432`, and `21882076a19`.
+- 028 `9bc10d5399df` [CAUSEWAY-3952] `SKIP-NONBEHAVIOR` — CAUSEWAY-3952: [v2] updates README w/ decommission statement — README decommission notice plus deletion of the Antora documentation tree; no production or test behavior.
+- 029 `7c9bf4da384b` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI) — CI-friendly `${revision}` conversion across `ci-v2-verify.yml` and module POMs only.
+- 030 `bf59b75109fa` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 2nd attempt) — Only `ci-v2-verify.yml` changes.
+- 031 `1aeb113ec080` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 3rd attempt) — Only `scripts/ci/build-artifacts.sh` changes.
+- 032 `c13b416e36ab` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] CI-friendly revisioned build (CI 4th attempt) — Only `core/pom.xml`, `starters/pom.xml`, and the CI build script change.
+- 033 `140c7d545251` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] adds revision var where missing (pom) — Adds the revision variable to `bom/pom.xml`, root `pom.xml`, and `starters/pom.xml`.
+- 034 `af5be5e43e13` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] bumps archunit 1.3.0->1.3.2 — ArchUnit test/build dependency bump in `bom/pom.xml` plus CI workflow adjustment.
+- 035 `8d5eaa147263` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] switch zulu->temurin (CI) — CI JDK distribution change in `ci-v2-verify.yml` and associated BOM setting.
+- 036 `0a445e19251b` [CAUSEWAY-3952] `SKIP-NONBEHAVIOR` — CAUSEWAY-3952: [v2] adds build instructions to README — README build instructions only.
+- 037 `4108a8aa68ce` [CAUSEWAY-3952] `SKIP-NONBEHAVIOR` — CAUSEWAY-3952: [v2] typo — README typo only.
+- 038 `f1ee1378ba14` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] attempts starter-parent fix (pom) — Starter-parent build attempt in `starters/pom.xml`, accompanied by README text.
+- 039 `a09944c6b6df` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] attempts starter-parent fix (pom 2nd attempt) — Follow-up starter-parent changes in root and starter POMs.
+- 040 `87f8e9aa08c8` [CAUSEWAY-3952] `SKIP-V2-CI-DEP` — CAUSEWAY-3952: [v2] adds missing piece for CI friendly revision (CI) — CI-friendly revision fix in root `pom.xml`, with README documentation.
+- 041 `0ecf81e950bb` [CAUSEWAY-3958] `SKIP-BACKPORT` — CAUSEWAY-3958: [v2] Clob content is required to be UTF-8 (backport from v4) — UTF-8 byte rendering of Wicket `Clob` downloads backports main `b0a8187ef4a`.
+- 042 `51f9ef0c18d8` [CAUSEWAY-3950] `SKIP-BACKPORT` — CAUSEWAY-3950: [v2] allows specific mime types to be excluded from file upload preview (backport from v4) — Configurable preview type/MIME exclusion and Wicket wiring backport main `a901d07df41`.
+- 043 `05be5d6229d7` [CAUSEWAY-3950] `SKIP-BACKPORT` — CAUSEWAY-3950: [v2] typo in prev. commit (backport from v4) — Corrects the default from `"object"` to `"text/csv"`, which is already the default in main `a901d07df41`.
+- 044 `44b91739828a` [NO-ISSUE] `SKIP-NONBEHAVIOR` — [v2] adds changelog (docs) — README and `adoc/*instructions/changelog*` documentation only.
+- 045 `9f4042124f3c` [NO-ISSUE] `SKIP-NONBEHAVIOR` — [v2] fleshes out parts of the ci instructions (docs) — CI instructions documentation only.
+- 046 `14f7f1c793bc` [NO-ISSUE] `SKIP-NONBEHAVIOR` — [v2] fleshes out deployment for the ci instructions (docs) — Deployment instructions documentation only.
+- 047 `fb240e090afa` [NO-ISSUE] `SKIP-NONBEHAVIOR` — [v2] README: adds table of contents (docs) — README/build-instructions table of contents only.
+- 048 `d27066bee008` [NO-ISSUE] `SKIP-NONBEHAVIOR` — [v2] adds to changelog (docs) — Changelog and CI-instructions documentation only.
+- 049 `9bedbc8c377a` [CAUSEWAY-3957] `SKIP-BACKPORT` — CAUSEWAY-3957: [v2] adds table's action column (backport) — Table-row action column backports main’s CAUSEWAY-3815 sequence `dcbec39cc4d`, `54dbbee8f46`, `7b856f6f67f`, and `b38fd1822cd`.
+- 050 `06d32cfaf931` [CAUSEWAY-3957] `SKIP-BACKPORT` — CAUSEWAY-3957: [v2] backports _StableValue — _StableValue` and its ActionColumn use backport main `7ad20dc3950`, `0fe7edc2929`, and `275cab25656`.
+- 051 `b50bebe9e594` [CAUSEWAY-3957] `SKIP-NONBEHAVIOR` — CAUSEWAY-3957: cleaning up duplicated code — Consolidates duplicate association-column code into `_MembersAsColumns`; no final column-selection rule changes.
+- 052 `cb15d1101a69` [CAUSEWAY-3957] `SKIP-BACKPORT` — CAUSEWAY-3957: [v2] backporting ActionLink — Action-link/menu model backport follows main `e22d2236c1a`, `dee33dac282`, `18f5a5702b4`, and related CAUSEWAY-3815 routing work.
+- 053 `03cc976e3f8c` [CAUSEWAY-3957] `SKIP-NONBEHAVIOR` — CAUSEWAY-3957: [v2] removes unused imports — Removes unused imports across 34 production/test files only.
+- 054 `c62a838f607f` [CAUSEWAY-3957] `SKIP-BACKPORT` — CAUSEWAY-3957: [v2] backports FormExecutor — Form execution and result-routing machinery is ported from main’s `b3c64893213`, `852475c6e44`, `a38986a7b74`, and subsequent Wicket architecture.
+- 055 `9ee8f0e0f79e` [CAUSEWAY-3957] `SKIP-NONBEHAVIOR` — CAUSEWAY-3957: [v2] honor deprecations — Mechanical replacement of deprecated `Blob`, `Clob`, and `NamedWithMimeType` getters with equivalent fluent accessors.
+- 056 `7bd2c13e40c3` [CAUSEWAY-3957] `SKIP-NONBEHAVIOR` — CAUSEWAY-3957: [v2] restored actions args for collection mementos — Restores action arguments accidentally dropped during the port; pre-port `d27066bee008` already passed `act.snapshotArgs()`, so this preserves baseline rather than adding final behavior.
+- 057 `bf933ba33bb3` [NO-ISSUE] `SKIP-BACKPORT` — Merge pull request #3360 from apache/3957-tablerow.action.backport — The first-parent merge integrates rows 49–56; rows 49, 50, 52, and 54 cite main antecedents `dcbec39cc4d`, `54dbbee8f46`, `7b856f6f67f`, `b38fd1822cd`, `7ad20dc3950`, `0fe7edc2929`, `275cab25656`, `e22d2236c1a`, `dee33dac282`, `18f5a5702b4`, `b3c64893213`, `852475c6e44`, and `a38986a7b74`.
+- 058 `84a277a41173` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] prepare for static weaving support — Adds EclipseLink weaving plugin configuration, `.build-jpa-enhance` markers, and v2 dummy concrete entities; these are packaging/enhancement support analogous to main CAUSEWAY-3959.
+- 059 `4e995bc4eef5` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] prepare static weaving support (secman) — Adds four SecMan dummy entities solely so v2 abstract entity classes are seen by the static weaver; their JavaDoc explicitly says v4 interfaces make them unnecessary.
+- 060 `f6c8fcaff0ac` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] pom fixes, test backports — Adds `_ClassCache.isByteCodeEnhanced`, regression-test dependencies, and `VerifyExtensionEntitiesAreEnhancedTest`; this verifies release weaving and does not alter domain execution.
+- 061 `54db133988d7` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] adds missing entity id fields to dummies — Added `.build-jpa-enhance` markers and synthetic JPA IDs to nine deprecated dummy entities solely so EclipseLink can weave v2 abstract applib classes.
+- 062 `71d1f636dc36` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] fixes outdated persistence schemas — Updated the fixture `persistence.xml` schemas in Excel, PDF.js, and fake-data modules for the v2 EclipseLink build.
+- 063 `175199570905` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] adds abstract classes to reflective weaving verification tests — Extended only `VerifyExtensionEntitiesAreEnhancedTest` to verify v2 abstract extension classes.
+- 064 `695228a50acf` [CAUSEWAY-3968] `SKIP-BACKPORT` — CAUSEWAY-3968: [v2] backports simpler method filter strategy (meta-model) — Moved `_persistence_` filtering into `_ClassCache`, already implemented on main by `5f967d57b47`.
+- 065 `9f846eb29e61` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: test fixes (excel-fixture) — Adjusted the v2 weaving regression module and disabled an unavailable JPA Excel fixture.
+- 066 `79de3027f26f` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] removes potentially interfering lombok.val — Replaced `lombok.val` and qualified a dummy superclass solely to avoid v2 static-weaver interference.
+- 067 `4a76008f88c7` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] workaround for code breaking weaving on JDK ?..21..25 — Moved unchanged permission-sort logic into `_WeavingWorkaround` because v2 EclipseLink weaving failed on selected JDKs.
+- 068 `7dd0bfb602e6` [CAUSEWAY-3968] `SKIP-V2-CI-DEP` — CAUSEWAY-3968: [v2] veto dummies for being added to Causeway meta-model — Added `@Domain.Exclude` to weaving-only dummy entities so they do not enter the application metamodel.
+- 069 `eebcfff7f2f1` [CAUSEWAY-3968] `SKIP-NONBEHAVIOR` — CAUSEWAY-3968: [v2] update build instructions — Build instructions and changelog only.
+- 070 `912baab58382` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3408 from apache/3968-v2.weaving — Merge-only integration of the CAUSEWAY-3968 weaving branch.
+- 071 `bebd570322e2` [CAUSEWAY-2445] `SKIP-V2-CI-DEP` — CAUSEWAY-2445: [v2] remove unused profile (CI Maintenance) — Removed the unused `module-ext-secman` Maven profile from the root POM.
+- 072 `0a4da19c46ff` [CAUSEWAY-3970] `SKIP-V2-CI-DEP` — CAUSEWAY-3970: [v2] Bump Eclipselink Version 2.7.15 -> 2.7.16 — Bumped v2 EclipseLink from 2.7.15 to 2.7.16 in `bom/pom.xml`; main uses the separate EclipseLink 4 line.
+- 073 `72884ff87617` [CAUSEWAY-3969] `SKIP-BACKPORT` — CAUSEWAY-3969: [v2] backports JPA Weaving Safeguard from v4 — Backported the JPA weaving safeguard represented on main by `730a93b98f9`, `24efe7a7963`, `1fa379101d0`, `7b141fcddf4`, and `8ecfc78ecb7`.
+- 074 `5f11d66f12e8` [CAUSEWAY-3969] `SKIP-BACKPORT` — CAUSEWAY-3969: [v2] minor backport fix (not affecting existing code) — This v2 adaptation and documentation correction belongs to the weaving safeguard backport in row 73, whose main antecedents are `730a93b98f9`, `24efe7a7963`, `1fa379101d0`, `7b141fcddf4`, and `8ecfc78ecb7`.
+- 075 `553ea57ef8ac` [CAUSEWAY-3969] `SKIP-BACKPORT` — CAUSEWAY-3969: [v2] minor JpaWeavingSafeguard cleanup — This private-helper cleanup belongs to the weaving safeguard backport in rows 73–74 and adds no behavior beyond those cited main antecedents.
+- 076 `90b381d10d2b` [CAUSEWAY-3972] `SKIP-BACKPORT` — CAUSEWAY-3972: fixes _Oneshot deadlock potential — Exact main antecedent `1dd2f5c3efc` replaces `_Oneshot`’s lock with `AtomicInteger` to avoid callback deadlock.
+- 077 `6469afd148fb` [CAUSEWAY-3972] `SKIP-BACKPORT` — CAUSEWAY-3972: simplifies test; comments — Test-only continuation of main antecedent `bb6a6766e7e`.
+- 078 `cc3ac8a74d31` [CAUSEWAY-3972] `SKIP-BACKPORT` — CAUSEWAY-3972: fixes test in prev. commit — Test correction from main antecedent `e1382c51f3b`.
+- 079 `eda2d7f67c85` [CAUSEWAY-3969] `SKIP-NONBEHAVIOR` — CAUSEWAY-3969: updates changelog — Changelog only.
+- 080 `3970963b0bc8` [CAUSEWAY-3973] `SKIP-NONBEHAVIOR` — CAUSEWAY-3973: [v2] Backport Layout Switching Fixes (adoc) — Changelog entry for the forthcoming layout backport.
+- 081 `009be0bcc273` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] backports new FacetRanking — Backported qualified facet ranking from main’s `1e046eb661a`, `107c509ca0b`, `17fc76c8745`, `53c8ecbf5ce`, and `9d3e8fb56fd`.
+- 082 `58bae9faf5aa` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] backports all Qualified Facets — Applied qualified layout facets already finalized by main’s `9d3e8fb56fd` and associated CAUSEWAY-3971 series.
+- 083 `a145f5fee30b` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] refactors Grid to store LayoutKeys on loading — Backported layout-key storage and loading semantics present in main through `d4fb2f44396` and `fd510f6a545`.
+- 084 `a7ca3cbf47d6` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] converts remaining Facets to be qualified — This property-layout facet conversion is part of the qualified-facet backport in rows 81–86, whose cited main antecedents include `1e046eb661a`, `107c509ca0b`, `17fc76c8745`, `53c8ecbf5ce`, and `9d3e8fb56fd`.
+- 085 `1900ca6db458` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] support for layout variant export in Object_downloadLayout — Backported layout-variant export support from main antecedent `bc4b64f8224`.
+- 086 `9c9b3db6abc6` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] backports layout switching tests — Backported CAUSEWAY-3971 switching tests and supporting utilities from `97fcdbce1ee`, `c835998dc1f`, `6344fe353e8`, and `66ea5157d39`.
+- 087 `b9f8590c824c` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] work on backport of simplified grid loading (1) — First v2 adaptation of main’s simplified grid-loading architecture, chiefly `9746304b624` and `012be077069`.
+- 088 `bd8abfb45564` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] work on backport of simplified grid loading (2) — This is the second v2 adaptation in the main grid-loader backport begun at row 87, whose cited main antecedents are `9746304b624` and `012be077069`.
+- 089 `f64eb8e8a0fb` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] work on backport of simplified grid loading (3) — Third adaptation, moving loading, marshalling, resource lookup, and caching toward main’s `9746304b624`/`2e3dbf39be9` design.
+- 090 `16e2a7fa68a5` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] work on backport of simplified grid loading (4) — This finalizes the grid-loader backport in rows 87–90, whose cited main antecedents include `9746304b624`, `012be077069`, and `2e3dbf39be9`.
+- 091 `fc277b04ad27` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] entity pages honoring layout variants — Made Wicket entity pages establish and clear the qualified layout context, already represented by main’s `d8a7bb68f4b`, `26915bbef6f`, and `c2cd43b1c7d`.
+- 092 `25747587287d` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] makes FacetRank thread-safe — Exact main antecedent `dc58d8d9e3d` makes `FacetRank` thread-safe.
+- 093 `fbfe54d234a9` [CAUSEWAY-3973] `SKIP-NONBEHAVIOR` — CAUSEWAY-3973: [v2] removes temp file from prev. commits — Removed a temporary 40,533-line approval file.
+- 094 `81352c2f542d` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3435 from apache/3973-backport.layout.switch — Merge-only integration of the layout-switching backport.
+- 095 `66e2dcd55ac9` [CAUSEWAY-2445] `SKIP-V2-CI-DEP` — CAUSEWAY-2445: [v2] CI enables mvn 4 build — Maven 4 build compatibility changes confined to `bom/pom.xml`, `mavendeps/pom.xml`, and `starters/pom.xml`.
+- 096 `ce099ce4d9f` [CAUSEWAY-2445] `SKIP-V2-CI-DEP` — CAUSEWAY-2445: [v2] CI preconfigure compiler plugin in causeway-app-starter-parent — Preconfigured the compiler plugin in the v2 starter parent for Maven 4.
+- 097 `b8bb5bd4304e` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] makes the backport a non-breaking change for consuming apps — This adds deprecated v2 source-compatibility aliases around the canonical main `LayoutResource` API cited in row 98 as main commits `9746304b624` and `2e3dbf39be9`.
+- 098 `2f33343eab7d` [CAUSEWAY-3973] `SKIP-BACKPORT` — CAUSEWAY-3973: [v2] makes the backport a non-breaking change for consuming apps (part 2) — Completed those v2 covariance adapters; main already owns the canonical API introduced by `9746304b624` and `2e3dbf39be9`.
+- 099 `773fd356eac5` [CAUSEWAY-3979] `SKIP-BACKPORT` — CAUSEWAY-3979: deprecates RoutingServiceDefault — Deprecation already present on main as `d0799d247a3`.
+- 100 `7999f7cbf9f8` [CAUSEWAY-3976] `SKIP-BACKPORT` — CAUSEWAY-3976: [v2] backport, enhances client side javascript code, that helps with handling redirects — Initial reverse-proxy JavaScript redirect helper from main antecedent `e939e99f650`.
+- 101 `c34fbb2ceeb4` [CAUSEWAY-3976] `SKIP-BACKPORT` — CAUSEWAY-3976: [v2] backport: allow client URL rewrite only if origin is considered the same based on what the server-side thinks — Same-origin server/client redirect decision from main antecedent `dea34403967`.
+- 102 `e11690959908` [NO-ISSUE] `BEHAVIOR:UPDATES-ONLY-PUBLISHING` — adds in support for update only (annot, unit tests, change to listener impl) — Introduced `Publishing.ENABLED_FOR_UPDATES_ONLY` and lifecycle-specific entity-change publication.
+- 103 `59dc7ae33d07` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3465 from apache/TURNDP-184 — Merge-only integration of index 102.
+- 104 `2da0d02fb89d` [CAUSEWAY-3983] `SKIP-BACKPORT` — CAUSEWAY-3983: [v2] removes tab content when always hidden (backport) — Hidden-only tab removal already present on main as `cda70da2c75`.
+- 105 `7a239733d4f2` [CAUSEWAY-3985] `SKIP-BACKPORT` — CAUSEWAY-3985: [v2] Backport Table Column Sorting to be only enabled if Comparable — Comparable-only Wicket column sorting is older main behavior from `356e72ea928`.
+- 106 `89b83486b89c` [CAUSEWAY-3985] `SKIP-NONBEHAVIOR` — CAUSEWAY-3985: updates changelog — Changelog only.
+- 107 `339ce1088d8b` [CAUSEWAY-3995] `SKIP-BACKPORT` — CAUSEWAY-3995: immediately after MM init, clear all layout caches — Layout-cache clearing is the same-day main fix `1b263b56d78`.
+- 108 `3e30275592c1` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] backport of command replay feature — Backported the pre-existing main command-replay and command-YAML series beginning with `2159a0432d3`, `5a854b07c15`, `2724d4416b4`, `08ddf31157d`, and `31210372a3a`.
+- 109 `fecb25bd9860` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] fix flipped logic in export filter — Exact flipped export-filter fix from main antecedent `f3eb5479ee5`.
+- 110 `f97bdafde7e2` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] backports missing named queries — This restores named queries required by the command-replay backport in rows 108–112; row 108 cites main antecedents `2159a0432d3`, `5a854b07c15`, `2724d4416b4`, `08ddf31157d`, and `31210372a3a`.
+- 111 `bee1e1ffff5a` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] backport simplification (no bookmark service) — Removed BookmarkService dependence as already done by main `4e8e31edada`.
+- 112 `6a551daa8ce6` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] using png icon screenshots from v4 — Reused v4 replay-state icon assets and icon-selection semantics, including main antecedent `651f2ca58e9`.
+- 113 `4f624297612e` [CAUSEWAY-3989] `BEHAVIOR:REPLAY-MANAGERS` — CAUSEWAY-3989: [v2] ensures ReplayContext is not picked up as a MM class from ReplayableCommand — Reworked replay/export managers, registration, timestamp filtering, repository queries, replay-state transitions, and view-model boundaries.
+- 114 `feb7dfc7f5d6` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — CAUSEWAY-3989 : fixes compile issue — Test compile correction associated with `REPLAY-MANAGERS`.
+- 115 `187f9ca14e62` [CAUSEWAY-3989] `BEHAVIOR:COMMAND-YAML-FIDELITY` — CAUSEWAY-3989: [v2] adds test to demo bug — Added timezone-independent `XMLGregorianCalendar` serialization and round-trip handling for command parameter date/time types.
+- 116 `1f4cd23be376` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — Merge pull request #3517 from apache/CAUSEWAY-3989 — Merge-only integration of the command-replay branch.
+- 117 `b29b16aea96b` [CAUSEWAY-3989] `BEHAVIOR:COMMAND-YAML-MULTIDOC` — CAUSEWAY-3989: enhances YAML command DTO processing with multi-document support and adds corresponding tests — Added YAML-list fallback, multi-document command parsing, null-document filtering, and direct YAML import.
+- 118 `5f2e6f44bd6c` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — CAUSEWAY-3989: adds test case for handling trailing empty documents in YAML command DTO — Test-only specification that a trailing empty YAML document must be ignored, associated with `COMMAND-YAML-MULTIDOC`.
+- 119 `7f3ba4ec54a0` [CAUSEWAY-3989] `BEHAVIOR:YAML-OUTPUT-MODES` — CAUSEWAY-3989: adds support for converting lists to UTF8 encoded YAML with specified marshalling modes — Added public list serialization in either YAML-list or multi-document form.
+- 120 `9ec212d71fd5` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — CAUSEWAY-3989: refactors YAML tests to use Approvals for verification and adds approved YAML outputs — Approval-test refactor and snapshots associated with `YAML-OUTPUT-MODES`.
+- 121 `b28d78d1b484` [CAUSEWAY-3989] `BEHAVIOR:C1-COMMAND-YAML-API` — CAUSEWAY-3989: refactors YAML processing in CommandDtoUtils to use multidoc format. — Changes `CommandDtoUtils.toYaml` from YAML-list to multi-document output and adds the corresponding YAML dependency/module access.
+- 122 `98e24ee1ad28` [CAUSEWAY-3989] `BEHAVIOR:C2-PLAIN-YAML-TRANSFER` — CAUSEWAY-3989: removes unnecessary zipping of YAML blob in CommandExportManager — Command exports become ordinary uncompressed YAML rather than zipped blobs.
+- 123 `8a7673a9b77f` [NO-ISSUE] `BEHAVIOR:C3-REPLAY-TRANSACTIONS` — JDOJPA-300 : runs each replayable command in its own transaction — Executes every replay in `REQUIRES_NEW` through `TransactionService`.
+- 124 `13bdd47f8d89` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — Merge pull request #3518 from apache/CAUSEWAY-3989 — Merge-only commit for PR #3518 with no independent edit beyond its merged parents.
+- 125 `2ac3cd3c66d2` [CAUSEWAY-3989] `BEHAVIOR:C1-COMMAND-YAML-API` — CAUSEWAY-3989: fixes unit test, module-info — Opens `org.apache.causeway.applib.util.schema` to Jackson and updates tests/snapshots for multi-document output.
+- 126 `a105742ebccd` [CAUSEWAY-3996] `SKIP-NONBEHAVIOR` — CAUSEWAY-3996: changelog (adoc) — Changelog-only edit in `adoc/changelog.adoc`.
+- 127 `85d9142f00bf` [CAUSEWAY-3996] `SKIP-BACKPORT` — CAUSEWAY-3996: [v2] backports in-memory layout patching — Explicit v2 backport of main’s CAUSEWAY-3996 layout-patching series, notably `576ad21c0ee`, `61818179a4d`, `4fd522b2f22`, and merge `d4746f38f42`; remaining deltas are import/test approvals.
+- 128 `35ed039a40b9` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3535 from apache/3996-layout.patch.v2 — Merge-only PR #3535 commit.
+- 129 `86d43d03786d` [NO-ISSUE] `SKIP-V2-CI-DEP` — [v2] decommission replay incubator — Decommissions the v2 incubator build by changing `bom/pom.xml`, root/incubator poms, and performing 100%-similarity source moves to `retired/`; no Java implementation changed.
+- 130 `8b9e1cef3528` [CAUSEWAY-3989] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3989: [v2] manager usability improvements — Returns YAML as a `Clob`, accepts `.yml,.yaml`, and refines manager filtering and descriptions.
+- 131 `08d729be5309` [CAUSEWAY-3989] `SKIP-BACKPORT` — CAUSEWAY-3989: [v2] backport proper replay-state persisting — Explicit backport of main’s replay-state persistence commits `9395e3f5841` and `513bd7069cd`.
+- 132 `fba2137a9109` [CAUSEWAY-3989] `SKIP-NONBEHAVIOR` — CAUSEWAY-3989: [v2] javadoc fix — Javadoc-only correction in `ReplayableCommand`.
+- 133 `a06d92a56a5` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998 : adds CommandReplayManager#replayOrRetryNext — Adds the “replay or retry next/oldest” manager action and its guards.
+- 134 `ad96570ac5b1` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998 : moves baseline to oldest when import — Import can move the baseline to the oldest imported command, defaulting to true.
+- 135 `dd57db1d5fe5` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998 : makes CommandExportManager similar to CommandReplayManager — Aligns export/replay baseline controls and manager presentation.
+- 136 `7bd38dd1980d` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998: adds openTarget to ReplayableCommand — Adds an open-target action to `ReplayableCommand`.
+- 137 `f99ed18d31ed` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998: refactors to a mixin, lookup bookmark — Corrects open-target resolution to use `BookmarkService`.
+- 138 `df0e09b47c6e` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998: fixes layout — Wires `openTarget` into the fallback layout.
+- 139 `f5accdd9bb08` [CAUSEWAY-3998] `SKIP-NONBEHAVIOR` — Merge pull request #3542 from apache/CAUSEWAY-3998 — Merge-only PR #3542 commit.
+- 140 `5f91fe27e5d6` [NO-ISSUE] `BEHAVIOR:C5-SUMMARY-ENV` — [v2] allows disabling of collection summary view via env var — Adds environment-variable disabling of Wicket’s collection summary view.
+- 141 `703432fa76c5` [NO-ISSUE] `BEHAVIOR:C5-SUMMARY-ENV` — [v2] refine disabling of collection summary view (+changelog) — Refines disabling to require case-insensitive value `true` and documents the variable.
+- 142 `bbab91cdb7b0` [CAUSEWAY-3998] `SKIP-NONBEHAVIOR` — [Causeway-3998] [v2] disables failing parser test (not strictly required) — Disables the trailing-empty-document parser test and performs import cleanup; the test belongs to C1.
+- 143 `e7bbbe5e924f` [CAUSEWAY-4002] `SKIP-V2-CI-DEP` — CAUSEWAY-4002: [CI] v2: try with java 21, newest maven, newest lombok — Changes only `.github/workflows/ci-v2-verify.yml` JDK, Maven, and Lombok versions.
+- 144 `90950bdde32e` [CAUSEWAY-4002] `SKIP-V2-CI-DEP` — CAUSEWAY-4002: [CI] v2: enforce single thread build (T 1) — Changes only `.github/workflows/ci-v2-verify.yml` build threading and reproducibility options.
+- 145 `47167916d2ce` [CAUSEWAY-4002] `SKIP-BACKPORT` — CAUSEWAY-4002: [CI] v2: potential NPE in org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault.disposeMetaModel() — Main antecedent `0bf08ca664e` (“make service selection lifecycle-safe”) contains the same null-safe `ServiceRegistryDefault.select` behavior.
+- 146 `dfe121ed66a9` [CAUSEWAY-3997] `SKIP-BACKPORT` — CAUSEWAY-3997: [v2] backports Listing — Backports `Listing` and `Can.join` from main, principally `8658941fa9c` plus later `03c17f0d837`, `77733545164`, and `ce006c784d6`.
+- 147 `18dc1fe839a2` [CAUSEWAY-3997] `SKIP-BACKPORT` — CAUSEWAY-3997: [v2] backports column order patching — Explicit column-order-patching backport of main’s CAUSEWAY-3997 series from `2fc2ee1103e` through `760f9f811a7`/`ce006c784d6`.
+- 148 `396e9e2fda88` [CAUSEWAY-3997] `SKIP-BACKPORT` — CAUSEWAY-3997: [v2] fix for potentially wrong Where context (backport) — Explicit backport of main commit `e969fbefd14`, correcting standalone versus parented `Where` contexts.
+- 149 `2e5d8ad759f8` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3566 from apache/3997-v2.col.ord.patch — Merge-only PR #3566 commit.
+- 150 `830d2a293a9` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998 : minor polishing for replay manager — Menu entry can optionally import YAML immediately, and open-target becomes a separate mixin.
+- 151 `28c98ed6d688` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998: refinements — Registers open-target and makes initial YAML upload optional in the replay-manager menu action.
+- 152 `d110b0b6d157` [CAUSEWAY-3998] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-3998: refinements — Adds separately wired object-form and table-row open-target actions and relaxes replay/retry presentation.
+- 153 `0cdf3aed320b` [NO-ISSUE] `SKIP-NONBEHAVIOR` — 3998-v2: cosmetics — Presentation sequences, colours, descriptions, and association cosmetics only.
+- 154 `f3462d7cf995` [CAUSEWAY-3998] `SKIP-NONBEHAVIOR` — CAUSEWAY-3998: cosmetics — Icon and sequence cosmetics only.
+- 155 `140b45369cb7` [NO-ISSUE] `SKIP-NONBEHAVIOR` — Merge pull request #3567 from apache/3998-v2 — Merge-only PR #3567 commit.
+- 156 `4ff4a8fb207a` [CAUSEWAY-3997] `SKIP-BACKPORT` — CAUSEWAY-3997: [v2] backports col. order patching fixes — Explicit CAUSEWAY-3997 fix backport corresponding to main `8cca9f75378`, `58db632dc7a`, and `a433a29248a`, including standalone lookup and parented fallback.
+- 157 `05ea2c79fcb5` [CAUSEWAY-4011] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-4011: moves inner actions for CommandExport/ReplayManager — Extracts manager actions into registered mixins and introduces reusable baseline controls retained by the final manager architecture.
+- 158 `e7ff0d71730b` [CAUSEWAY-4011] `SKIP-NONBEHAVIOR` — CAUSEWAY-4011: removes some dead code; simplifies impl — Dead-code removal and equivalent helper simplification.
+- 159 `a92ec645d14f` [CAUSEWAY-4011] `BEHAVIOR:C6-MANAGER-PAGING` — CAUSEWAY-4011: enhances CommandExportManager — Adds bounded before/after repository queries, manager limit/mode state, and next/previous paging controls.
+- 160 `31eabda528c4` [CAUSEWAY-4011] `BEHAVIOR:C6-MANAGER-PAGING` — CAUSEWAY-4011: changes delimiter for view model — Changes the serialized manager-state delimiter to `--`, affecting view-model mementos.
+- 161 `54ec82d26fce` [CAUSEWAY-4011] `SKIP-NONBEHAVIOR` — CAUSEWAY-4011: cosmetic fixes — Layout positioning, labels, and action naming cosmetics only.
+- 162 `ef8902ce159c` [CAUSEWAY-4011] `BEHAVIOR:C6-MANAGER-PAGING` — CAUSEWAY-4011: improves paging — Registers the paging, mode, and limit mixins, making the implementation reachable.
+- 163 `6af965f0e37a` [CAUSEWAY-4011] `BEHAVIOR:C6-MANAGER-PAGING` — CAUSEWAY-4011: improves paging, cosmetics. — Fixes previous-page traversal, enforces limit range 1–100, and completes paging controls.
+- 164 `f73dd8f60d15` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: ran openspec init — Adds only Pi/OpenSpec prompts, skills, and configuration.
+- 165 `a78d27cbe303` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes extending yaml to include returned object — OpenSpec proposal/design/tasks only.
+- 166 `517051b871e0` [CAUSEWAY-4010] `BEHAVIOR:C7-RESULT-ENVELOPE` — CAUSEWAY-4010: extends export to include 'returnedObject' — Exports command YAML in an envelope carrying optional returned-result bookmark metadata and keeps legacy import compatibility.
+- 167 `4afabc169af6` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives returned object command export change — Archives specifications and adds an approval snapshot associated with C7.
+- 168 `0632e377b20c` [NO-ISSUE] `SKIP-V2-CI-DEP` — temporarily renames ${revision} -> 2.2.0-SNAPSHOT — Temporarily replaces `${revision}` with `2.2.0-SNAPSHOT` across 217 poms; no production source changes.
+- 169 `e9cd55662347` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes command import manager rework — OpenSpec proposal/design/tasks only.
+- 170 `d20b57357fa2` [CAUSEWAY-4010] `BEHAVIOR:C7-RESULT-ENVELOPE` — CAUSEWAY-4010: reworks command import manager — Replay import retains envelope result bookmarks, persists them on imported entries, and rejects YAML-list roots.
+- 171 `988db33cfaef` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives command import rework and proposes replay result mapping — Archives one OpenSpec change and proposes the next; no implementation delta.
+- 172 `546677e60f4d` [CAUSEWAY-4011] `BEHAVIOR:C4-REPLAY-UX` — CAUSEWAY-4011: improves paging, cosmetics. — Registers `CommandReplayManager_replayOrRetryNext`, completing action wiring.
+- 173 `43da447403c9` [CAUSEWAY-4010] `BEHAVIOR:C8-REPLAY-MAPPING` — CAUSEWAY-4010: adds replay result mapping SPI — Adds and wires replay-result mapping notification after successful replay.
+- 174 `492ddd3ebefb` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives replay result mapping change — OpenSpec archive/specification and agent-instruction changes only.
+- 175 `97bc016a4a6d` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes command replay input remapping — OpenSpec proposal/design/tasks only.
+- 176 `8d681115069c` [CAUSEWAY-4010] `BEHAVIOR:C8-REPLAY-MAPPING` — CAUSEWAY-4010: adds command replay input remapping — Adds replay-time target/reference remapping on a copied `CommandDto` and preserves recorded DTO data.
+- 177 `23751efd5e3c` [CAUSEWAY-4010] `BEHAVIOR:C8-REPLAY-MAPPING` — CAUSEWAY-4010: ensures that the CommandLogEntry's result ... — Prevents replay synchronization from overwriting the imported recorded result needed for mapping.
+- 178 `40374aecae2e` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives command replay input remapping — OpenSpec archive/specification changes only.
+- 179 `f90779fe0ec0` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes listener SPI remap simplification — OpenSpec proposal/design/tasks only.
+- 180 `d6b26043b834` [CAUSEWAY-4010] `BEHAVIOR:C8-REPLAY-MAPPING` — CAUSEWAY-4010: simplifies command replay remapping SPI — Consolidates target/reference remapping into one SPI method and makes result notification optional by default.
+- 181 `6733cc1abbe2` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives listener SPI remap simplification — OpenSpec archival and consolidated-spec updates only.
+- 182 `50c9b8ccbc5c` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: updates agent session handoff guidance — AGENTS.md` handoff guidance only.
+- 183 `a81f15a3ab8e` [CAUSEWAY-4010] `BEHAVIOR:SYNC` — CAUSEWAY-4010: fixes command log replay state initialization — Makes command-log replay-state initialization null-safe during `CommandLogEntry.sync`.
+- 184 `f473ad54214b` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes default command replay mapping listener — Proposal, design, specification, and task documents only.
+- 185 `612af06f0994` [CAUSEWAY-4010] `BEHAVIOR:RMAP-DEFAULT` — CAUSEWAY-4010: adds default command replay mapping listener — Adds and wires the default in-memory replay-result mapping listener; its tests specify default creation and custom-bean backoff.
+- 186 `b0deefe5b9a9` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives default command replay mapping listener — OpenSpec archival and consolidated-spec updates only.
+- 187 `a59b9ba0511c` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: updates OpenSpec apply commit policy — AGENTS.md` policy guidance only.
+- 188 `8d2e611d5a63` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes replay conflict failure handling — Replay-conflict proposal/design/specification only.
+- 189 `8c508a40e475` [CAUSEWAY-4010] `BEHAVIOR:RMAP-FAIL` — CAUSEWAY-4010: fails replay on conflicting result mappings — Makes listener notification transactional, rejects conflicting mappings, and initially propagates listener failure as replay failure; tests specify those outcomes.
+- 190 `cdfe0dbd4ef1` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives replay conflict failure handling — OpenSpec archival and consolidated-spec updates only.
+- 191 `af587f88e6a2` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes replay conflict handling configuration — Conflict-policy proposal/design/specification only.
+- 192 `814988827975` [CAUSEWAY-4010] `BEHAVIOR:RMAP-DEFAULT` — CAUSEWAY-4010: adds replay conflict handling configuration — Adds `THROW_EXCEPTION` versus `LOG_AND_CONTINUE` conflict configuration and wires it into the default listener.
+- 193 `5c6d9580ccca` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives replay conflict handling configuration — OpenSpec archival and consolidated-spec updates only.
+- 194 `6126259a95a4` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: proposes persistent replay mapping listener — Persistent-listener proposal/design/specification only.
+- 195 `d9f918630ed6` [CAUSEWAY-4010] `BEHAVIOR:RPERSIST` — CAUSEWAY-4010: adds persistent replay mapping listener — Adds configurable persistent mapping storage, repositories, entities, menu access, JPA/JDO wiring, and tests.
+- 196 `f9297f27f8f4` [CAUSEWAY-4010] `BEHAVIOR:RMAP-DEFAULT` — CAUSEWAY-4010: refines persistent replay mapping listener — Renames the in-memory implementation, finalizes strategy conditions, and changes persistent storage to converted bookmark columns.
+- 197 `71e19a88e3b8` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: updates persistent replay mapping proposal docs — Proposal design text only.
+- 198 `bbaf736e1c8e` [CAUSEWAY-4010] `SKIP-NONBEHAVIOR` — CAUSEWAY-4010: archives persistent replay mapping listener — OpenSpec archival and consolidated-spec updates only.
+- 199 `7ad268db1989` [NO-ISSUE] `SKIP-V2-CI-DEP` — Revert "temporarily renames ${revision} -> 2.2.0-SNAPSHOT" — Reverts explicit `2.2.0-SNAPSHOT` versions to `${revision}` across all 217 packet-listed Maven POMs under root, api, bom, commons, core, extensions, mavendeps, persistence, regressiontests, retired, security, starters, testing, valuetypes, and viewers; no production source changes.
+- 200 `593494c2c444` [NO-ISSUE] `SKIP-V2-CI-DEP` — Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT" — Reapplies explicit `2.2.0-SNAPSHOT` versions in the same 217 POMs; this is v2 release-build maintenance with no runtime behavior.
+- 201 `0ff27c3cfb6b` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds proposal for safe finder command logging — Safe-finder command-logging proposal/design/specification only.
+- 202 `08fd941a6c99` [CAUSEWAY-4012] `BEHAVIOR:RECORD-GATE` — CAUSEWAY-4012: adds safe action command publishing — Adds default-off safe-action command publishing through the normal command-publishing facet model; integration tests specify result recording and no duplication.
+- 203 `e6205b618db9` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: aligns safe action command publishing specs — Specification alignment and rename only.
+- 204 `980fe909c365` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives safe action command publishing change — OpenSpec archival and consolidated-spec updates only.
+- 205 `1ce6df8c17db` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds session handoff skill — Pi session-handoff skill documentation only.
+- 206 `82dbe3b83dba` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds session handover prompt — Pi session-handover prompt only.
+- 207 `f0a4913dac4b` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds proposal for parented collection selector actions — Parented-selector proposal/design/specification only.
+- 208 `d36942329cec` [CAUSEWAY-4012] `BEHAVIOR:NAV-CORE` — CAUSEWAY-4012: adds config-gated parented collection selector actions — Adds config-gated synthetic safe selector actions, virtual methods, invocation facets, parameters, and metamodel wiring; tests specify matching and gating.
+- 209 `a8c75175047d` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives parented collection selector action change — OpenSpec archival and consolidated-spec updates only.
+- 210 `a08f03221fb0` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds proposal for selector action layout refinement — Selector-layout proposal/design/specification only.
+- 211 `80a2edb033b4` [CAUSEWAY-4012] `BEHAVIOR:NAV-CORE` — CAUSEWAY-4012: refines parented collection selector action layout — Associates the action with its collection layout group and gives it a stable display name.
+- 212 `b5478cc0d8e1` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector action layout refinement — OpenSpec archival and consolidated-spec updates only.
+- 213 `a65ab885a8e1` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds proposal for selector parent parameter refinement — Parent-parameter refinement proposal/design/specification only.
+- 214 `ca61aa6febbb` [CAUSEWAY-4012] `BEHAVIOR:NAV-CORE` — CAUSEWAY-4012: fixes selector parent parameter to action target — Defaults and fixes the parent argument to the action target; later final behavior removes the explicit parent parameter while retaining target-based access.
+- 215 `e26bf9d6699a` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector parent parameter refinement — OpenSpec archival and consolidated-spec updates only.
+- 216 `8b114d649aa1` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds proposal for selector single row validation — Single-row validation proposal/design/specification only.
+- 217 `92fd5573a355` [CAUSEWAY-4012] `BEHAVIOR:NAV-CORE` — CAUSEWAY-4012: validates selector single row matches — Adds pre-invocation exactly-one validation and recoverable no-match/ambiguous-match failures.
+- 218 `3c7d816b34a6` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector single row validation — OpenSpec archival and consolidated-spec updates only.
+- 219 `e16671ec6b9c` [CAUSEWAY-4012] `BEHAVIOR:NAV-CORE` — CAUSEWAY-4012: fixes selector actions for mixin collections — Synthesizes navigation actions for mixed-in collections regardless of association/action loading order.
+- 220 `b0973874cc1f` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: cleans up selector action support — Removes unused constructor/signature data and performs behavior-neutral cleanup.
+- 221 `e8521b45488b` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: refactors parented selector utilities — Relocates the factory utility, performs a 99%-similar matching-utility rename, and renames tests without changing specified behavior.
+- 222 `7a781c96d23b` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector parameter omission proposal — Selector-parameter omission proposal/design/specification only.
+- 223 `fd6da410ce7d` [CAUSEWAY-4012] `BEHAVIOR:NAV-PARAM` — CAUSEWAY-4012: excludes selector metadata parameters — Omits metadata/system properties and Blob/Clob values from generated selector parameters; tests enumerate the exclusions.
+- 224 `ccd5ee53ee61` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector export proposal — Selector-export proposal/design/specification only.
+- 225 `07c71a32a116` [CAUSEWAY-4012] `BEHAVIOR:NAV-PUBLISH` — CAUSEWAY-4012: archives selector export support — Makes synthetic selector invocation participate in command publication and capture a bookmarkable result; tests specify enabled and disabled paths.
+- 226 `1aff7932cdd5` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds recording support proposal — Recording-support enum proposal/design/specification only.
+- 227 `0c5b0de4c251` [CAUSEWAY-4012] `BEHAVIOR:RECORD-GATE` — CAUSEWAY-4012: adds command recording support enum — Replaces two booleans with default-off `RecordingSupport` and uses it for safe publication and synthetic-action creation.
+- 228 `48d913e1f0ca` [CAUSEWAY-4012] `BEHAVIOR:NAV-PARAM` — CAUSEWAY-4012: limits selector parameters to collection columns — Restricts and orders parameters according to visible parented-table columns.
+- 229 `28066e5ea859` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector parameter column limit — OpenSpec archival and consolidated-spec updates only.
+- 230 `5000754bf4a5` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector prefix rename proposal — Selector-prefix rename proposal/design/specification only.
+- 231 `e8ad5f969221` [CAUSEWAY-4012] `BEHAVIOR:NAV-ID` — CAUSEWAY-4012: renames selector action prefix — Changes the deterministic selector member-id prefix; this evolved again in final maintenance.
+- 232 `b2ea19196275` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector prefix rename — OpenSpec archival and consolidated-spec updates only.
+- 233 `b4b63e85b859` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector partial match proposal — Partial-string matching proposal/design/specification only.
+- 234 `32da54a23f2f` [CAUSEWAY-4012] `BEHAVIOR:NAV-PARAM` — CAUSEWAY-4012: allows selector string partial matching — Uses substring matching for string filters while retaining exact equality for other values.
+- 235 `cc961609dc06` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector partial matching — OpenSpec archival and consolidated-spec updates only.
+- 236 `3cc1de0e4bd2` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds command export result rename proposal — Command-result metadata rename proposal/design/specification only.
+- 237 `96b9bad976f0` [CAUSEWAY-4012] `BEHAVIOR:YAML-RESULT` — CAUSEWAY-4012: renames command export result metadata — Renames exported metadata to `result.type`/`result.id`, preserves it on replay import, and deliberately ignores legacy `returnedObject`.
+- 238 `e3320a8ef3fa` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives command export result rename — OpenSpec archival and consolidated-spec updates only.
+- 239 `74f6eb1545ac` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector reference parameter proposal — Selector-reference-parameter proposal/design/specification only.
+- 240 `80f43d531fd9` [CAUSEWAY-4012] `BEHAVIOR:NAV-PARAM` — CAUSEWAY-4012: allows selector reference parameters — Adds eligible bounded/choices/autocomplete reference filters with exact-reference matching.
+- 241 `c98018ce0b1` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector reference parameters — OpenSpec archival and active-spec documentation only for selector reference parameters.
+- 242 `370b82a02f6` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds selector action styling proposal — Selector-action styling proposal, design, specification, and tasks only.
+- 243 `2ace4fd0e27` [CAUSEWAY-4012] `BEHAVIOR:NAV-STYLE` — CAUSEWAY-4012: adds selector action styling — Installs default outline-button and hand-point-left facets on synthetic collection actions; its test specifies those defaults.
+- 244 `30ff05549f` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives selector action styling — Archives NAV-STYLE documentation and updates the active specification only.
+- 245 `682ec1fd680` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds view model selector action proposal — View-model selector-action proposal and planning documents only.
+- 246 `db7a12070db` [CAUSEWAY-4012] `BEHAVIOR:NAV-VIEWMODEL` — CAUSEWAY-4012: allows view model selector actions — Extends synthetic collection navigation eligibility from entities to view models; tests cover both.
+- 247 `978c714b661` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives view model selector actions — Archives NAV-VIEWMODEL documentation and updates the active specification only.
+- 248 `8ab946ceb29` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: adds empty selector action proposal — Empty-selector disabling proposal and planning documents only.
+- 249 `cb053d525da` [CAUSEWAY-4012] `BEHAVIOR:NAV-EMPTY` — CAUSEWAY-4012: disables empty selector actions — Adds and wires a disabled facet when the associated collection has no rows; its test specifies the veto.
+- 250 `84b8ab512cf` [CAUSEWAY-4012] `SKIP-NONBEHAVIOR` — CAUSEWAY-4012: archives empty selector actions — Archives NAV-EMPTY documentation and updates the active specification only.
+- 251 `a046d1157dd` [CAUSEWAY-4013] `SKIP-NONBEHAVIOR` — CAUSEWAY-4013: adds replayable command result proposal — Replayable-command result-display proposal and planning documents only.
+- 252 `f9c7562b9f9` [CAUSEWAY-4013] `BEHAVIOR:REPLAY-DTO-RESULT` — CAUSEWAY-4013: shows replayable command export dto — Changes ReplayableCommand DTO display to YAML for CommandExportDto, including the recorded result; tests specify round-trip display.
+- 253 `ccf457013d2` [CAUSEWAY-4013] `SKIP-NONBEHAVIOR` — CAUSEWAY-4013: archives replayable command result display — Archives REPLAY-DTO-RESULT documentation and updates the active specification only.
+- 254 `76bd6240c22` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes recording all replay results — Replay-result recording proposal and planning documents only.
+- 255 `765736d5457` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-MAPPING-ALL` — CAUSEWAY-4014: records all replay results — Renames the listener API to lookup/onReplayResult and records identity mappings instead of dropping them; associated unit and integration tests specify this.
+- 256 `a60eb15a105` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replay mapping finders — Replay-mapping finder proposal and planning documents only.
+- 257 `3643318a65b` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-MAPPING-FINDERS` — CAUSEWAY-4014: adds replay mapping finders — Adds repository queries and prototyping menu finders for all, changed, recorded-bookmark, and actual-bookmark mappings; tests cover repository and menu paths.
+- 258 `425228138a2` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replay mapping command interaction id — Replay-mapping interaction-ID proposal and planning documents only.
+- 259 `d95b9858ee4` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-MAPPING-INTERACTION` — CAUSEWAY-4014: captures replay mapping command interaction id — Captures the replayed command interaction UUID in in-memory and persistent mappings and exposes it in the domain model and persistence adapters.
+- 260 `7a2661456c3` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replay mapping delete action — Replay-mapping delete-action proposal and planning documents only.
+- 261 `afbcee2042e` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-MAPPING-DELETE` — CAUSEWAY-4014: adds replay mapping delete action — Adds, registers, lays out, and tests per-mapping deletion.
+- 262 `fab419a908e` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable remappings table — Replayable-remappings table proposal and planning documents only.
+- 263 `26233de37e7` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: adds replayable remappings table — Introduces replay participant rows and a ReplayableCommand collection for target, reference-argument, and result mappings.
+- 264 `1fd8e282098` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: updates replayable command participants — Refines the initial remappings table into the final participants projection and updates its tests and layout.
+- 265 `f0d2e954623` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command cosmetics — Replayable-command cosmetics proposal and planning documents only.
+- 266 `e5bf9694d91` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-TARGET-PRESENTATION` — CAUSEWAY-4014: removes replayable command target cosmetics — Removes visible target-type/target-ID cosmetics and changes the title to use the recorded target prefix; deletion of open-target actions was later reversed.
+- 267 `ca008a833e7` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command participant refinements — Replay-participant refinement proposal and planning documents only.
+- 268 `e4de27feaf1` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: refines replayable command participant actuals — Defines role-sensitive actual-bookmark fallback behavior and tests pending versus successful replay.
+- 269 `75d4788f437` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command open target refinement — Open-target action proposal and planning documents only.
+- 270 `99cc4410bcb` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: adds replayable command open target action — Transient open-target implementation removed by index 281; the final branch later introduces a separately evolved target action.
+- 271 `3d03042149a` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command participant argument rename — Participant argument-rename proposal and planning documents only.
+- 272 `5efa01b30d2` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: renames replayable command participant parameter — Renames the participant object-link property from parameter to argument in API metadata, layout, and tests.
+- 273 `20fb0cd9cde` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives replayable command participant argument rename — Archives the participant argument-rename documentation only.
+- 274 `73a3ed4d541` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command open argument action — Open-argument action proposal and planning documents only.
+- 275 `f285b946335` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: adds replayable command open argument action — Transient open-argument implementation and tests removed by index 281, with no final open-argument action.
+- 276 `9aa8d627649` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives replayable command open argument action — Archives the transient open-argument action documentation only.
+- 277 `407ac6239aa` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command open result action — Open-result action proposal and planning documents only.
+- 278 `30b090dd72d` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: adds replayable command open result action — Transient open-result implementation and tests removed by index 281, with no final open-result action.
+- 279 `42df423cc60` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives replayable command open result action — Archives the transient open-result action documentation only.
+- 280 `a1be1272430` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes removing replayable command open actions — Proposal to remove the three transient participant-open actions.
+- 281 `e9a5ad2b57b` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: removes replayable command open actions — Rollback of indices 270, 275, and 278; it leaves no independent final argument/result behavior.
+- 282 `80cf592a836` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives removing replayable command open actions — Archives documentation for removal of the transient open actions.
+- 283 `e0d25e7e468` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes replayable command participant layout refinements — Participant-layout proposal plus a planning screenshot; no runtime implementation.
+- 284 `180d28ceaac` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: refines replayable command participant layout — Adds role-specific object-link visibility, replay-command backlink, title, and three-column participant layout; tests specify the presentation.
+- 285 `66eaa3706dd` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives replayable command participant layout refinements — Archives participant-layout documentation and updates the active specification only.
+- 286 `fda65b61597` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: proposes readable replay participant mementos — Readable participant-memento proposal and planning documents only.
+- 287 `6e67a5c59fa` [CAUSEWAY-4014] `BEHAVIOR:REPLAY-PARTICIPANTS` — CAUSEWAY-4014: simplifies replay participant mementos — Replaces bookmark-bearing serialized mementos with readable interaction/role/argument identifiers and rehydrates current derived state.
+- 288 `551ccdf7586` [CAUSEWAY-4014] `SKIP-NONBEHAVIOR` — CAUSEWAY-4014: archives readable replay participant mementos — Archives readable-memento documentation and updates the active specification only.
+- 289 `2d557e3bdab` [CAUSEWAY-4018] `SKIP-NONBEHAVIOR` — CAUSEWAY-4018: proposes recording suppression for replay objects — Command-recording suppression proposal and planning documents only.
+- 290 `eadaa134f42` [CAUSEWAY-4018] `BEHAVIOR:RECORDING-SUPPRESSION` — CAUSEWAY-4018: suppresses recording for replay objects — Adds the marker API, suppresses command publication for marked owner/target objects, suppresses synthetic navigation, and marks replay-domain objects.
+- 291 `cbb65727d50` [CAUSEWAY-4018] `SKIP-NONBEHAVIOR` — CAUSEWAY-4018: archives recording suppression for replay objects — Archives recording-suppression documentation and updates active specifications only.
+- 292 `69254a00e03` [CAUSEWAY-4021] `SKIP-NONBEHAVIOR` — CAUSEWAY-4021: proposes renaming selector action to navigate — Selector-to-navigation rename proposal and planning documents only.
+- 293 `f3450ea2e53` [CAUSEWAY-4021] `BEHAVIOR:NAV-FINAL-API` — CAUSEWAY-4021: renames selector action to navigate — Renames selector classes/facets/actions to navigation, changes the label to Navigate To, and changes the synthetic logical member identifier.
+- 294 `01f5d875c2f` [CAUSEWAY-4015] `SKIP-NONBEHAVIOR` — CAUSEWAY-4015: proposes suppressing initial fixture command logging — Initial-fixture logging-suppression proposal and planning documents only.
+- 295 `22412e44da7` [CAUSEWAY-4015] `BEHAVIOR:FIXTURE-LOGGING-PAUSE` — CAUSEWAY-4015: suppresses initial fixture command logging — Adds nested pause state and brackets initial fixture installation with pause/resume events so fixture commands are not persisted.
+- 296 `deba6448366` [CAUSEWAY-4015] `SKIP-NONBEHAVIOR` — CAUSEWAY-4015: proposes moving command logging events to applib — Proposal to move pause/resume events into the public applib API.
+- 297 `6eea7c46801` [CAUSEWAY-4015] `BEHAVIOR:FIXTURE-LOGGING-PAUSE` — CAUSEWAY-4015: moves command logging events to applib — Publishes PauseCommandLoggingEvent and ResumeCommandLoggingEvent from applib and rewires fixtures and the commandlog listener to them.
+- 298 `c8a798d5b3` [CAUSEWAY-4020] `SKIP-NONBEHAVIOR` — CAUSEWAY-4020: adds proposal to remove navigate target parameter — Proposal to remove the synthetic navigation target parameter.
+- 299 `441f1e110d2` [CAUSEWAY-4020] `BEHAVIOR:NAV-FINAL-API` — CAUSEWAY-4020: removes navigate synthetic target parameter — Removes the redundant mandatory parent parameter and its choices/default/disabled facets from collection navigation.
+- 300 `f84ecaad6fa` [CAUSEWAY-4020] `SKIP-NONBEHAVIOR` — CAUSEWAY-4020: archives remove navigate synthetic target parameter — Archives target-parameter-removal documentation and updates the active specification only.
+- 301 `bd1c6ec4841` [CAUSEWAY-4019] `SKIP-NONBEHAVIOR` — CAUSEWAY-4019: proposes navigate-to reference synthetic action — OpenSpec proposal and design only for scalar-reference navigation.
+- 302 `0158e7619f8` [CAUSEWAY-4019] `BEHAVIOR:B1` — CAUSEWAY-4019: adds navigate-to reference synthetic action — Adds and wires synthetic parameterless navigation actions for scalar references.
+- 303 `ecbc087d5b0` [CAUSEWAY-4019] `SKIP-NONBEHAVIOR` — CAUSEWAY-4019: archives navigate-to reference synthetic action — Archives the proposal and updates specifications only.
+- 304 `982e92143f5` [CAUSEWAY-4022] `SKIP-NONBEHAVIOR` — CAUSEWAY-4022: proposes disabling undefined replay retry — OpenSpec proposal only for replay-state gating.
+- 305 `cee1887826f` [CAUSEWAY-4022] `BEHAVIOR:B2` — CAUSEWAY-4022: disables undefined replay retry — Restricts replay/retry to PENDING, OK, or FAILED and guards direct invocation.
+- 306 `acb5fd964bc` [CAUSEWAY-4022] `SKIP-NONBEHAVIOR` — CAUSEWAY-4022: archives undefined replay retry change — Archives the replay-state proposal and updates specifications only.
+- 307 `ec6bf603d6b` [CAUSEWAY-4017] `SKIP-NONBEHAVIOR` — CAUSEWAY-4017: proposes requiring known action targets — OpenSpec proposal only for known action targets.
+- 308 `9902240932a` [CAUSEWAY-4017] `BEHAVIOR:B3` — CAUSEWAY-4017: validates known action targets on export — Validates action targets against roots and earlier command results before export.
+- 309 `c2b8157800f` [CAUSEWAY-4017] `SKIP-NONBEHAVIOR` — CAUSEWAY-4017: archives known action target export change — Archives the known-target proposal and updates specifications only.
+- 310 `92691f00e09` [CAUSEWAY-4017] `SKIP-NONBEHAVIOR` — CAUSEWAY-4017: proposes requiring known action parameters — OpenSpec proposal only for known action parameters.
+- 311 `6f7ce4aa2ce` [CAUSEWAY-4017] `BEHAVIOR:B3` — CAUSEWAY-4017: validates known action parameters on export — Extends export validation to reference-valued action parameters.
+- 312 `32b71da96e9` [CAUSEWAY-4017] `SKIP-NONBEHAVIOR` — CAUSEWAY-4017: archives known action parameter export change — Archives the known-parameter proposal and updates specifications only.
+- 313 `a496aec1094` [CAUSEWAY-4023] `SKIP-NONBEHAVIOR` — CAUSEWAY-4023: proposes preserving replay command DTOs — OpenSpec proposal only for preserving replay DTOs.
+- 314 `01f51258bc2` [CAUSEWAY-4023] `BEHAVIOR:B4` — CAUSEWAY-4023: preserves replay command DTOs during sync — Prevents replay lifecycle callbacks from replacing imported DTO and recorded outcome data.
+- 315 `a130e08bb39` [CAUSEWAY-4023] `BEHAVIOR:B4` — CAUSEWAY-4023: refactors replay execution metadata sync — Moves replay-aware preservation into `CommandLogEntry` synchronization.
+- 316 `e761dd1b644` [CAUSEWAY-4023] `SKIP-NONBEHAVIOR` — CAUSEWAY-4023: archives replay command DTO preservation change — Archives the DTO-preservation proposal and updates specifications only.
+- 317 `18361b29054` [CAUSEWAY-4023] `SKIP-NONBEHAVIOR` — CAUSEWAY-4023: adds replay command sync tests — Test-only expansion specifying B4’s preservation behavior.
+- 318 `9901a2f3995` [CAUSEWAY-4023] `BEHAVIOR:B4` — CAUSEWAY-4023: simplifies impl. — Finalizes synchronization as timing-first with an early return for replay lifecycle states.
+- 319 `856dae61956` [CAUSEWAY-4023] `SKIP-NONBEHAVIOR` — CAUSEWAY-4023: aligns replay sync specs — Specification alignment only.
+- 320 `a3f8fe27d7a` [CAUSEWAY-4023] `SKIP-NONBEHAVIOR` — CAUSEWAY-4023: proposes recording support export validation guard — OpenSpec proposal only for the recording-support validation guard.
+- 321 `26fc9235650` [CAUSEWAY-4023] `BEHAVIOR:B3` — CAUSEWAY-4023: archives recording support export validation guard — Makes known-participant export validation conditional on command-log recording support.
+- 322 `594d265f2c3` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: adds move commands action proposal — OpenSpec proposal only for command movement.
+- 323 `e72acaf4340` [CAUSEWAY-4024] `BEHAVIOR:B6` — CAUSEWAY-4024: adds command export move commands action — Adds command reordering by retimestamping selected entries and their DTOs.
+- 324 `b1ed0ea04f3` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: archives move commands action spec — Archives the movement proposal and updates specifications only.
+- 325 `2cc7abb0c3c` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: adds recording support guard proposal — OpenSpec proposal only for guarding movement.
+- 326 `612f494f898` [CAUSEWAY-4024] `BEHAVIOR:B6` — CAUSEWAY-4024: guards command movement by recording support — Disables command movement when recording support is unavailable.
+- 327 `3c7231109c9` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: archives recording support guard spec — Archives the movement guard specification only.
+- 328 `ab66e07ac0f` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: adds squash-timing move-command proposal — OpenSpec proposal only for squash timing.
+- 329 `34781cd951c` [CAUSEWAY-4024] `BEHAVIOR:B6` — CAUSEWAY-4024: adds squash timings to command movement — Adds optional one-second squash timing while otherwise preserving qualifying gaps.
+- 330 `41442a180ca` [CAUSEWAY-4024] `SKIP-NONBEHAVIOR` — CAUSEWAY-4024: archives squash-timing command movement change — Archives the squash-timing change and updates specifications only.
+- 331 `aec566684aa` [CAUSEWAY-4025] `SKIP-NONBEHAVIOR` — CAUSEWAY-4025: adds command export manager simplification proposal — OpenSpec proposal only for manager simplification.
+- 332 `5847584e389` [CAUSEWAY-4025] `BEHAVIOR:B5` — CAUSEWAY-4025: simplifies command export manager commands — Replaces export/unexport modes and state-filtered collections with a unified foreground command list.
+- 333 `fd047a20351` [CAUSEWAY-4025] `SKIP-NONBEHAVIOR` — CAUSEWAY-4025: archives command export manager simplification — Archives the manager simplification and updates specifications only.
+- 334 `0640d4c82e3` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: adds replayable command exportability proposal — OpenSpec proposal only for command exportability.
+- 335 `6630069d1d1` [CAUSEWAY-4026] `BEHAVIOR:B3` — CAUSEWAY-4026: adds replayable command exportability — Exposes contextual command exportability based on known participants.
+- 336 `da7dfbe8ba1` [CAUSEWAY-4026] `BEHAVIOR:B3` — CAUSEWAY-4026: updates replayable command exportability layout — Exposes the contextual exportability indicator in command tables and layout.
+- 337 `980a4fb3e86` [CAUSEWAY-4026] `BEHAVIOR:B3` — CAUSEWAY-4026: updates command export validation messages — Changes user-visible unknown-target and unknown-parameter validation messages.
+- 338 `0e89cd62ae3` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: archives replayable command exportability change — Archives the exportability proposal and updates specifications only.
+- 339 `44c866ba9fb` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: adds first command domain service export proposal — OpenSpec proposal only for first-command root requirements.
+- 340 `5889abc5cb1` [CAUSEWAY-4026] `BEHAVIOR:B3` — CAUSEWAY-4026: validates property edit export targets — Applies participant validation to property-edit command targets as well as actions.
+- 341 `b78af57e5a3` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: archives first command domain service export change — Archives the first-command root change and updates specifications only.
+- 342 `a33034b6a3d` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: proposes excluding recorded commands — OpenSpec proposal only for excluding commands.
+- 343 `7fabedde10b` [CAUSEWAY-4026] `BEHAVIOR:B8` — CAUSEWAY-4026: adds command exclusion from export manager — Adds exclusion from the active export sequence using `ReplayState.EXCLUDED`.
+- 344 `e1f85a51b46` [CAUSEWAY-4026] `SKIP-NONBEHAVIOR` — CAUSEWAY-4026: archives command exclusion change — Archives the exclusion proposal and updates specifications only.
+- 345 `f30fba9d8dc` [CAUSEWAY-4027] `SKIP-NONBEHAVIOR` — CAUSEWAY-4027: proposes restoring excluded commands — OpenSpec proposal only for restoring excluded commands.
+- 346 `d1b44cb8ea1` [CAUSEWAY-4027] `BEHAVIOR:B8` — CAUSEWAY-4027: adds command restoration from excluded commands — Adds restoration of excluded commands to the active sequence.
+- 347 `ea7f10c1beb` [CAUSEWAY-4027] `SKIP-NONBEHAVIOR` — CAUSEWAY-4027: archives command restoration change — Archives the restoration proposal and updates specifications only.
+- 348 `ca4ee60f4b8` [CAUSEWAY-4028] `SKIP-NONBEHAVIOR` — CAUSEWAY-4028: proposes deleting excluded commands — OpenSpec proposal only for deleting excluded commands.
+- 349 `2a70c164d3d` [CAUSEWAY-4028] `BEHAVIOR:B8` — CAUSEWAY-4028: adds deletion of excluded commands — Adds validated permanent deletion of excluded command-log entries.
+- 350 `a1fe5c70a94` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: proposes autoselecting exportable commands — OpenSpec proposal only for automatic export selection.
+- 351 `2932b6ae142` [CAUSEWAY-4029] `BEHAVIOR:B7` — CAUSEWAY-4029: autoselects exportable commands for export — Defaults export to commands currently known/exportable in manager order.
+- 352 `bd9a047f0e9` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: archives autoselect exportable commands change — Archives the automatic-selection change and updates specifications only.
+- 353 `f93a8d5b139` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: proposes removing make selected exportable action — OpenSpec proposal only for removing the bulk make-exportable action.
+- 354 `ea438afc7ee` [CAUSEWAY-4029] `BEHAVIOR:B9` — CAUSEWAY-4029: removes make selected exportable action — Removes the command-manager bulk `makeSelectedExportable` action and its registration.
+- 355 `ad87aab2ae2` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: archives remove make selected exportable action change — Archives the action-removal change and updates specifications only.
+- 356 `56fce353983` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: proposes move commands down action — OpenSpec proposal only for directional movement.
+- 357 `817817206e5` [CAUSEWAY-4029] `BEHAVIOR:B6` — CAUSEWAY-4029: adds directional command movement actions — Refactors movement into shared support and directional actions, from which final movement behavior evolved.
+- 358 `efd9cbe60f7` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: updates command movement action icons — Cosmetic action icons and sequence metadata that do not survive final maintenance behavior.
+- 359 `8d93a2a7b43` [CAUSEWAY-4029] `SKIP-NONBEHAVIOR` — CAUSEWAY-4029: archives move commands down action change — Archives the directional movement change and updates specifications only.
+- 360 `2c1770b85e5` [CAUSEWAY-4030] `SKIP-NONBEHAVIOR` — CAUSEWAY-4030: proposes singleton list command results — OpenSpec proposal only for singleton-list command results, with no implementation in this slice.
+- 361 `e10272418e5` [CAUSEWAY-4030] `BEHAVIOR:C1` — CAUSEWAY-4030: captures singleton list command results — Captures a bookmark when an action returns a singleton packed/list result.
+- 362 `c69fe6dd96d` [CAUSEWAY-4030] `BEHAVIOR:C1` — CAUSEWAY-4030: completes singleton list command export validation — Refines known-participant validation and its user-facing export failure messages.
+- 363 `4d54d08babb` [CAUSEWAY-4031] `SKIP-NONBEHAVIOR` — CAUSEWAY-4031: proposes replayable command navigation improvements — OpenSpec proposal/design/tasks only for C2.
+- 364 `de0e81de024` [CAUSEWAY-4031] `BEHAVIOR:C2` — CAUSEWAY-4031: adds replayable command navigation improvements — Adds previous/next replayable-command navigation, result-presence display, and participant fallback refinements.
+- 365 `66aafa882f9` [CAUSEWAY-4031] `BEHAVIOR:C2` — CAUSEWAY-4031: updates replayable command cosmetics — Registers the navigation mixins and wires their layout and table presentation.
+- 366 `1dcb955f839` [CAUSEWAY-4031] `SKIP-NONBEHAVIOR` — CAUSEWAY-4031: archives replayable command navigation change — OpenSpec archival and spec updates only for C2.
+- 367 `e2db6987387` [CAUSEWAY-4032] `SKIP-NONBEHAVIOR` — CAUSEWAY-4032: proposes refdata replay arguments — OpenSpec proposal/design/tasks only for C3.
+- 368 `99305108a91` [CAUSEWAY-4032] `BEHAVIOR:C3` — CAUSEWAY-4032: adds refdata replay argument SPI — Introduces the reference-data SPI and accepts classified bookmarks as command-export roots.
+- 369 `8ce7b76a30a` [CAUSEWAY-4032] `SKIP-NONBEHAVIOR` — CAUSEWAY-4032: archives refdata replay arguments — OpenSpec archival and spec updates only for C3.
+- 370 `e9420f1b175` [CAUSEWAY-4032] `SKIP-NONBEHAVIOR` — CAUSEWAY-4032: proposes default refdata marker service — OpenSpec proposal/design/tasks only for C3’s default marker implementation.
+- 371 `ab2e4a2d410` [CAUSEWAY-4032] `BEHAVIOR:C3` — CAUSEWAY-4032: adds default refdata marker service — Adds and registers the default `RefData`-based reference-data classifier.
+- 372 `ab190a212a0` [CAUSEWAY-4032] `SKIP-NONBEHAVIOR` — CAUSEWAY-4032: archives default refdata marker service — OpenSpec archival and spec updates only for C3.
+- 373 `227ded718de` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — CAUSEWAY-4033: proposes suppressing useless safe replayable commands — OpenSpec proposal/design/tasks only for C4.
+- 374 `b6261a19f62` [CAUSEWAY-4033] `BEHAVIOR:C4` — CAUSEWAY-4033: suppresses useless safe replayable commands — Omits resultless safe actions from general export/replay projections and adjacent navigation.
+- 375 `9c1cfe36ea6` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — CAUSEWAY-4033: archives suppressing useless safe replayable commands — OpenSpec archival and spec updates only for C4.
+- 376 `142903de754` [NO-ISSUE] `SKIP-NONBEHAVIOR` — updates agent instructions — Agent-instruction documentation only in `AGENTS.md`.
+- 377 `9ef65cc9310` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: proposes pending background command guard — OpenSpec proposal/design/tasks only for C5.
+- 378 `af00a69dca3` [CAUSEWAY-4016] `BEHAVIOR:C5` — CAUSEWAY-4016: rejects commands while background work pending — Rejects new recorded foreground commands while background commands remain pending.
+- 379 `e75023db017` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: archives pending background command guard — OpenSpec archival and spec updates only for C5.
+- 380 `47915988427` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: proposes replay background command guard — OpenSpec proposal/design/tasks only for C5’s replay guard.
+- 381 `fdfa56d2cfa` [CAUSEWAY-4016] `BEHAVIOR:C5` — CAUSEWAY-4016: prevents replay while background work pending — Disables and defensively stops replay while background commands are pending.
+- 382 `b460f3013f3` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: archives replay background command guard — OpenSpec archival and spec updates only for C5.
+- 383 `1097786fe1e` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: archives single list result command log — Archives the C1 OpenSpec change; no production delta.
+- 384 `5df2556c7c8` [CAUSEWAY-4016] `SKIP-NONBEHAVIOR` — CAUSEWAY-4016: archives excluded command deletion — Archives an earlier excluded-command deletion change; no production delta.
+- 385 `d1d2baa6d4b` [CAUSEWAY-4034] `SKIP-NONBEHAVIOR` — CAUSEWAY-4034: proposes delete replay mappings action — OpenSpec proposal/design/tasks only for C6.
+- 386 `79031ec0fea` [CAUSEWAY-4034] `BEHAVIOR:C6` — CAUSEWAY-4034: adds delete replay mappings action — Adds the menu action and repository API for deleting all replay-result mappings.
+- 387 `5416e8ee642` [CAUSEWAY-4034] `SKIP-NONBEHAVIOR` — CAUSEWAY-4034: archives delete replay mappings change — OpenSpec archival and spec updates only for C6.
+- 388 `f43a035eab8` [NO-ISSUE] `SKIP-V2-CI-DEP` — Revert "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT"" — Changes `${revision}`/`2.2.0-SNAPSHOT` references across 217 Maven POMs, including root `pom.xml`; no product source is implicated.
+- 389 `76b459998ff` [CAUSEWAY-4034] `SKIP-V2-CI-DEP` — CAUSEWAY-4034: adds dummy entity for jpa weaving — Adds `CommandReplayResultMappingDummy.java` solely to trigger v2 EclipseLink static weaving; its own comment says it is unnecessary in 4.x after abstract classes became interfaces.
+- 390 `4f896068cc1` [NO-ISSUE] `SKIP-V2-CI-DEP` — Reapply "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT"" — Reapplies the same 217-POM v2 snapshot-version substitution from row 388.
+- 391 `067e3ba4565` [CAUSEWAY-4034] `BEHAVIOR:C7,C12` — CAUSEWAY-4034 : hacks validator - skip _navigate_to actions — Separates collection/scalar synthetic action identifiers and adjusts overloaded-action validation for framework-generated actions.
+- 392 `6878cc51b16` [CAUSEWAY-4034] `BEHAVIOR:C7` — CAUSEWAY-4034: adds guard to avoid duplicate synthetic actions being created — Prevents inherited associations from creating duplicate synthetic navigation actions.
+- 393 `34a7dfdf3a9` [NO-ISSUE] `SKIP-V2-CI-DEP` — Revert "Reapply "Reapply "temporarily renames ${revision} -> 2.2.0-SNAPSHOT""" — Reverts the same 217-POM snapshot-version substitution; no runtime source is touched.
+- 394 `bd05ada0bde` [CAUSEWAY-4034] `BEHAVIOR:C8` — CAUSEWAY-4034 : support view models as results of commands — Makes Secman manager view models bookmarkable/reconstructable so they can be command results.
+- 395 `6f1fd26926c` [CAUSEWAY-4034] `BEHAVIOR:C3` — CAUSEWAY-4034 : moves RefData marker into correct package — Intermediate public-package relocation of `RefData`.
+- 396 `588a24ad8b8` [CAUSEWAY-4034] `BEHAVIOR:C3` — CAUSEWAY-4034 : implements RefData for some entities — Moves `RefData` into applib and marks Secman permission, role, tenancy, and user types as reference data.
+- 397 `213f0fee770` [CAUSEWAY-4034] `SKIP-V2-CI-DEP` — CAUSEWAY-4034 : fix for import — JDO-only datastore-identity/import correction in `persistence-jdo/.../CommandReplayResultMapping.java`; v4 has no JDO adapter.
+- 398 `0bb8c01c4ae` [CAUSEWAY-4034] `SKIP-NONBEHAVIOR` — Merge pull request #3608 from apache/CAUSEWAY-4034 — Merge-only integration of second parent `213f0fee770`; the merge tree has zero allowed-path delta from that second parent.
+- 399 `4bc7b2c9f25` [CAUSEWAY-4037] `BEHAVIOR:C9` — CAUSEWAY-4037: makes 'saveForReplay' idempotent — Makes `saveForReplay` idempotent by interaction ID.
+- 400 `6ff92b17ffa` [CAUSEWAY-4037] `SKIP-NONBEHAVIOR` — Merge pull request #3609 from apache/CAUSEWAY-4037 — Merge-only integration of row 399; zero allowed-path delta from second parent `4bc7b2c9f25`.
+- 401 `7331ffd4707` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — CAUSEWAY-4033: proposes recording property edits — OpenSpec proposal/design/tasks only for C10.
+- 402 `f775e73ea10` [CAUSEWAY-4033] `BEHAVIOR:C10` — CAUSEWAY-4033: records property edits during recording — Enables command publishing for property edits whenever command-log recording support is enabled; accompanying tests specify recording and suppression behavior.
+- 403 `fe2589aa552` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — CAUSEWAY-4033: archives property edit recording change — OpenSpec archival and spec updates only for C10.
+- 404 `375d41a1412` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — Merge pull request #3610 from apache/CAUSEWAY-4033 — Merge-only integration of second parent `fe2589aa552`; zero allowed-path delta from that parent.
+- 405 `3d709d9a350` [CAUSEWAY-4033] `SKIP-NONBEHAVIOR` — CAUSEWAY-4033: proposes generated navigate-to parameter improvements — OpenSpec proposal/design/tasks only for C11/C12.
+- 406 `8c28ac019a1` [CAUSEWAY-4038] `BEHAVIOR:C11` — CAUSEWAY-4038 : commits impl, to test — Derives generated navigation parameters from rendered columns and normalizes primitive parameter types.
+- 407 `0953577396f` [CAUSEWAY-4038] `BEHAVIOR:C11` — CAUSEWAY-4038: fixes ordering and boolean check — Corrects parameter eligibility and ordering.
+- 408 `db291cd28a5` [CAUSEWAY-4038] `BEHAVIOR:C11` — CAUSEWAY-4038 : also hides 'navigate to' params if property is hidden WHERE.REFERENCES_PARENT — Excludes properties hidden at `Where.REFERENCES_PARENT`.
+- 409 `9937366e891` [CAUSEWAY-4038] `BEHAVIOR:C11` — CAUSEWAY-4038 : reworks ordering of params once more — Establishes the final member-order-plus-ID parameter ordering.
+- 410 `8ef5fc9d55d` [CAUSEWAY-4038] `SKIP-NONBEHAVIOR` — Merge pull request #3624 from apache/CAUSEWAY-4038 — Merge-only integration of second parent `9937366e891`; zero allowed-path delta from that parent.
+- 411 `7a8d749f2b2` [CAUSEWAY-4038] `BEHAVIOR:C11,C12` — CAUSEWAY-4038: defers navigate-to ordering and pads replay args — Defers synthetic action layout order to its collection and replays old DTOs by parameter name while padding missing arguments.
+- 412 `d90085d5c47` [CAUSEWAY-4038] `SKIP-NONBEHAVIOR` — CAUSEWAY-4038: archives navigate-to parameter OpenSpec change — OpenSpec archival and spec updates only for C11/C12.
+- 413 `d80cda55d2f` [CAUSEWAY-4038] `BEHAVIOR:C13` — CAUSEWAY-4038: surfaces 'target' for ReplayableCommand — Exposes the command target as a top-level `ReplayableCommand` table property.
+- 414 `cc49cb5c701` [CAUSEWAY-4038] `SKIP-NONBEHAVIOR` — Merge pull request #3625 from apache/CAUSEWAY-4038 — Merge-only integration of second parent `d80cda55d2f`; zero allowed-path delta from that parent.
+- 415 `538c8c9e4d2` [CAUSEWAY-3891] `SKIP-BACKPORT` — CAUSEWAY-3891: backports fix from main — Backports PDF URL cache invalidation already present on main through `5fbcdd60daba` and the exact MD5 refinement in main-history merge `d589bafcdb3e`.
+- 416 `ed1b7f781f5` [CAUSEWAY-3945] `SKIP-BACKPORT` — CAUSEWAY-3945 : backports remove cache for table downloads also — Backports zero cache duration for table/file downloads from main commit `1fc1e2fb81d2`.
+- 417 `ebbc326f0a1` [CAUSEWAY-3891] `SKIP-BACKPORT` — Merge pull request #3247 from apache/CAUSEWAY-3891 — This merge contains only the two backports in rows 415–416, whose main antecedents are `5fbcdd60daba`, `d589bafcdb3e`, and `1fc1e2fb81d2`.
+- 418 `63b57a98183` [CAUSEWAY-4024] `BEHAVIOR:C14` — CAUSEWAY-4024: updates the timestamp properly within the DTO — Deep-copies a command DTO before updating its timestamp during command movement.
+- 419 `0d2aaed3f4c` [CAUSEWAY-4039] `BEHAVIOR:C15` — CAUSEWAY-4039: renames CommandExport/ReplayManager, introduces stub abstract superclass — Renames the export/replay manager API and introduces their common abstraction.
+- 420 `f136e0e6224` [CAUSEWAY-4039] `BEHAVIOR:C15` — CAUSEWAY-4039: moves injected services into ReplayContext — Centralizes manager dependencies in the registered `ReplayContext`.
+- 421 `4cba54588a02` [CAUSEWAY-4039] `SKIP-NONBEHAVIOR` — CAUSEWAY-4039: managers now inherit from abstract — Introduces empty tracker inheritance as an internal consolidation step with no standalone final behavior.
+- 422 `0b60796ef484` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: baseline, limit and state moved to abstract — Moves manager baseline, limit, and memento state into shared manager infrastructure.
+- 423 `b4c61174a311` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: more consolidation into superclass — Generalizes the limit action and applies common manager defaults and public construction.
+- 424 `bf8aab454aba` [CAUSEWAY-4039] `SKIP-NONBEHAVIOR` — CAUSEWAY-4039: renames ReplayableCommand#isReplayable to isDoOp — Renames the package-private replay eligibility helper to `isDoOp` without changing its predicate.
+- 425 `e3205755f49f` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: renames ReplayableCommand#isExportable to isKnownParticipants — Replaces the exportability projection with the known-participants projection and API.
+- 426 `68ba09f87a3a` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: reworks ReplayableCommand to use ReplayableCommandParticipantTracker — Makes participant tracking generic and changes absent tracking from nullable to false.
+- 427 `d679cf841a89` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: moves KnownParticipants validator to CommandManagerAbstract — Centralizes known-participant validation and resolves domain services through the metamodel.
+- 428 `9b946ff28f34` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: makes CommandManagerReplay also be a known participants tracker — Gives replay management the same chronological participant tracking as export management.
+- 429 `1b5c7a4a45e7` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: removes EXPORTABLE replay state, simplifies actions a little — Removes `ReplayState.EXPORTED` and replaces export-specific state actions with exclusion/restoration behavior.
+- 430 `d51595c7426b` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: removed unused finders — Removes obsolete public repository finder APIs from the final command workflow.
+- 431 `cce505a5fef2` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: fixes up (disables some) unit tests for command replay — Stops export from mutating entries to `EXPORTED` and centralizes replay context behavior despite also disabling stale tests.
+- 432 `486796c17b0f` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: merges CommandManagerExport and CommandManagerReplay into CommandManager — Replaces separate export and replay managers with the unified `CommandManager` and unified action set.
+- 433 `5c202b8da42a` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: fixes orphan — Repairs mixin registration and excluded-command validation after manager consolidation.
+- 434 `4dc312016b4b` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: refinements — Refines manager movement and action choices, while its temporary result synchronization is later reverted.
+- 435 `c9b628ea667a` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: refinements (2) — Defines the final excluded, pending/failed, and recorded/replayed repository collections.
+- 436 `af4a36c97a73` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: removes unused repository queries, fixes/disables stale tests — Removes stale repository APIs and changes recent-command lookup to target rather than target-or-result.
+- 437 `a2c95a96ced5` [CAUSEWAY-4039] `BEHAVIOR:B11` — CAUSEWAY-4039: adds guards for 'replayOrRetryNext' — Adds replay-next sequence and known-participant guards and defines guarded multi-command replay presentation.
+- 438 `b315ac8bd66a` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: reverts syncing of the result/exception, that was invalid.  Cosmetic improvements in UI — Finalizes collection names, movement spacing, and correctly reverts result/exception synchronization.
+- 439 `4a00fe940db5` [CAUSEWAY-4039] `SKIP-NONBEHAVIOR` — CAUSEWAY-4039: fixes unit tests — Test-only corrections associated with B1.
+- 440 `85c33a237adb` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: minor UI improvements and bug fixes — Adds the final target presentation, abbreviated target, layouts, and table-row command actions.
+- 441 `a78d5251a904` [CAUSEWAY-4039] `SKIP-NONBEHAVIOR` — CAUSEWAY-4039: cosmetic — Cosmetic column visibility and abbreviation-length changes associated with B1.
+- 442 `5eff75444f9b` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: updates with actuals on export — Adds result-bearing exports, actual bookmark remapping, sequence export, and participant actuals.
+- 443 `6e2893496e54` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: adds NPE guard for export; fixes bug in remapped — Adds null guards and corrects remapped export participant handling.
+- 444 `ea1f3fa79b83` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: adds guards — Makes export remapping operate on an independent DTO copy and remaps exported results.
+- 445 `73ee2fc20ae1` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: adds 'export' — Adds per-command YAML export and its command-log-entry navigation.
+- 446 `6c0e6406b724` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: removes validation for 'export', @Import's it — Registers per-command export and intentionally removes its known-participant validation.
+- 447 `be94576b88f0` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039 : fixes for copyCommandExportDto — Repairs `CommandExportDto` copying and bookmark-result copying.
+- 448 `e70bcee44634` [CAUSEWAY-4039] `BEHAVIOR:B3` — CAUSEWAY-4039: record result of a view model — Records bookmarkable view-model results as command results.
+- 449 `471e3ca20194` [CAUSEWAY-4039] `BEHAVIOR:B11` — CAUSEWAY-4039: replay selected no longer 'are you sure' — Removes the confirmation prompt from the replay-selected workflow that evolves into replay-multiple.
+- 450 `eb2ba8a5c739` [CAUSEWAY-4039] `BEHAVIOR:B3` — CAUSEWAY-4039 : save result adapter even if view model — Preserves result adapters for view models and synthetic collection/reference navigation.
+- 451 `e5cc546c1d6a` [CAUSEWAY-4039] `BEHAVIOR:B2,B11` — CAUSEWAY-4039: optionally remap when export sequence; simplify replayOrRetrySelected, rename — Makes sequence remapping optional and replaces selected replay with bounded replay-multiple.
+- 452 `4bfe67498c89` [CAUSEWAY-4039] `BEHAVIOR:B3` — CAUSEWAY-4039: fixes unit tests — Adds production null guards for synthetic navigation result capture alongside test support.
+- 453 `2a9d6bc848af` [CAUSEWAY-4039] `BEHAVIOR:B2` — CAUSEWAY-4039: fixes mapping service for result — Fixes the copied export result being written to the wrong DTO.
+- 454 `95ee45c0a18c` [CAUSEWAY-4039] `BEHAVIOR:B4` — CAUSEWAY-4039: introduces a little caching — Adds cached command-entry and domain-service lookups through `QueryResultsCache`.
+- 455 `63af23cfd263` [CAUSEWAY-4039] `BEHAVIOR:B1` — CAUSEWAY-4039: refines CommandManager utility actions — Finalizes utility-action associations and removes stale default selection behavior.
+- 456 `25b0b7ee6468` [CAUSEWAY-4039] `BEHAVIOR:B5` — CAUSEWAY-4039: guards navigation-action synthesis against re-entrancy (StackOverflow fix) — Guards navigation-action synthesis with `_Oneshot` to prevent recursive stack overflow.
+- 457 `359de942386a` [CAUSEWAY-4039] `BEHAVIOR:B5` — CAUSEWAY-4039: adds POST_PROCESS navigation-action synthesis strategy — Introduces post-process navigation synthesis and wires its metamodel postprocessor.
+- 458 `8f8df808199e` [CAUSEWAY-4039] `BEHAVIOR:B5` — CAUSEWAY-4039: tests POST_PROCESS navigation-action synthesis; gates per-spec (not via isEnabled) — Moves synthesis gating to each specification and adds cyclic and own-association tests.
+- 459 `53444a675a01` [CAUSEWAY-4039] `BEHAVIOR:B5` — CAUSEWAY-4039: adds full-boot integ test for navigation-action synthesis; fixes stale-snapshot in INLINE — Fixes stale association snapshots and adds full-boot cyclic navigation tests.
+- 460 `13c67c8b674b` [CAUSEWAY-4039] `BEHAVIOR:B5` — CAUSEWAY-4039: removes INLINE navigation-action synthesis; POST_PROCESS is now the only path — Removes inline synthesis so post-processing is the sole final synthesis path.
+- 461 `b0566a287a65` [CAUSEWAY-4039] `SKIP-NONBEHAVIOR` — CAUSEWAY-4039: add OpenSpec for isolating mixin domain events — OpenSpec planning and design only for B6.
+- 462 `d5cdc5da3697` [CAUSEWAY-4039] `BEHAVIOR:B6` — CAUSEWAY-4039: isolate mixin domain event facets — Installs mixee-specific action, property, collection, and invocation facets without mutating shared mixin facets.
+- 463 `065ca38aede9` [CAUSEWAY-4042] `BEHAVIOR:B7` — CAUSEWAY-4042 : adds checks to service, new config property — Adds configurable action/property advisor checking to command DTO execution.
+- 464 `c11776757256` [CAUSEWAY-4042] `BEHAVIOR:B7` — CAUSEWAY-4042: fixes call when checking action visibility — Corrects action visibility and usability checks to use the actual target adapter.
+- 465 `3f128a7a7910` [CAUSEWAY-4042] `BEHAVIOR:B8` — CAUSEWAY-4042: even if fails to execute, eg prereqs, don't rollback instead handle replay error and return success — Converts handled replay failures to success and persists categorized replay analysis without rolling back the caller.
+- 466 `622ed00ba0c6` [CAUSEWAY-4042] `BEHAVIOR:B8` — CAUSEWAY-4042 : don't throw away failure to replay — Incrementally restructures replay outcome capture so replay failures are retained.
+- 467 `0d5ee322b170` [CAUSEWAY-4042] `BEHAVIOR:B8` — CAUSEWAY-4042 : further adjustments — Finalizes separate failure persistence transactions while preserving the returned replay outcome.
+- 468 `9a9d4444d172` [CAUSEWAY-4042] `BEHAVIOR:B4,B7,B8` — CAUSEWAY-4042: clear cache in new xactn, preserve message if possible — Clears query caches at replay transaction boundaries and preserves advisor veto messages.
+- 469 `da9b73c2cc2e` [CAUSEWAY-4042] `BEHAVIOR:B10` — CAUSEWAY-4042: cosmetics — Adds target/failure projection state and the initial open-target action.
+- 470 `102fbb50cd31` [CAUSEWAY-4042] `BEHAVIOR:B10` — CAUSEWAY-4042: registers ReplayableCommand.openTarget as a mixin — Registers open-target and removes obsolete replay profile constants.
+- 471 `904ffaea5538` [CAUSEWAY-4042] `SKIP-NONBEHAVIOR` — Merge pull request #3660 from apache/CAUSEWAY-4042 — Merge-only commit whose first-parent content is represented by indices 421–470.
+- 472 `6075f978367a` [CAUSEWAY-4042] `BEHAVIOR:B9` — CAUSEWAY-4042 : makes AppFeat implement marker RefData — Marks security `ApplicationFeatureChoices.AppFeat` as reference data.
+- 473 `d47921837405` [CAUSEWAY-4042] `BEHAVIOR:B2,B10` — CAUSEWAY-4042 : minor polishing — Splits export and open-target into registered panel/table-row mixins.
+- 474 `621420449b1f` [CAUSEWAY-4042] `SKIP-NONBEHAVIOR` — CAUSEWAY-4042: disables failing unit tests, too coupled? — Test-only disabling of coupled replay tests associated with B8 and B10.
+- 475 `8ed3c8c4e5d2` [CAUSEWAY-4042] `BEHAVIOR:B10` — CAUSEWAY-4042: fixes disableAct for ReplayableCommand_openTarget — Fixes the inverted open-target disable condition.
+- 476 `8efd1dd67724` [CAUSEWAY-4042] `BEHAVIOR:B10` — CAUSEWAY-4042: refining openTarget, adds actualTarget — Adds actual-target projection and recorded-versus-actual target navigation.
+- 477 `dc0aee6c8b8f` [CAUSEWAY-4042] `BEHAVIOR:B10` — CAUSEWAY-4042: refines — Finalizes recorded and actual target properties and table columns.
+- 478 `071cdf779758` [CAUSEWAY-4042] `BEHAVIOR:B11` — CAUSEWAY-4042 : larger multiples — Adds replay-multiple limits of 80, 160, and 320.
+- 479 `f941cd60a094` [CAUSEWAY-4042] `SKIP-NONBEHAVIOR` — CAUSEWAY-4042 : fixes columnOrder — Column-order-only presentation correction associated with B10.
+- 480 `d87d39b81d9b` [CAUSEWAY-4042] `BEHAVIOR:B1,B11` — CAUSEWAY-4042 : removes nextPage, prevoiusPage, increases limit — Removes manager paging actions and changes the default manager limit to 100.
+- 481 `168338387893` [CAUSEWAY-4042] `SKIP-NONBEHAVIOR` — Merge pull request #3678 from apache/CAUSEWAY-4042 — Merge-only commit whose first-parent content is represented by indices 473–480.
