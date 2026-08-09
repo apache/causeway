@@ -20,7 +20,6 @@ package org.apache.causeway.core.config.progmodel;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.time.OffsetDateTime;
@@ -35,12 +34,6 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Repository;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -52,21 +45,19 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._ClassCache.ClassModelHead;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -200,29 +191,57 @@ public final class ProgrammingModelConstants {
          * Assuming, mixins do have a public single argument constructor,
          * that receive an instance of the mixee's type.
          */
-        PUBLIC_SINGLE_ARG_RECEIVING_MIXEE;
+    	PUBLIC_SINGLE_ARG_RECEIVING_MIXEE {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructors(cls)
+                        .filter(ResolvedConstructor::isSingleArg))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+		},
+        PUBLIC_WITH_INJECT_SEMANTICS {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructorsWithInjectSemantics(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+        },
+        PUBLIC_ANY {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructors(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
+        };
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public <T> Constructor<T> getConstructorElseFail(
-                final @NonNull Class<T> mixinClass,
-                final @NonNull Class<?> mixeeClass) {
-            return _Casts.uncheckedCast(_Reflect
-                        .getPublicConstructors(mixinClass)
-                        .filter(paramCount(1).and(paramAssignableFrom(0, mixeeClass)))
-                    .getSingleton()
-                    .orElseThrow(()->_Exceptions.illegalArgument(
-                            "Failed to locate constructor in '%s' to instantiate,"
-                            + "when using type '%s' as first argument",
-                            mixinClass.getName(), mixinClass.getName())));
+    	public final Can<ResolvedConstructor> getAll(final Class<?> cls) {
+            return streamAll(cls).collect(Can.toCan());
         }
+        public final Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
+            return streamAll(cls).findFirst();
+        }
+        public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public <T> Can<Constructor<T>> getConstructors(final Class<T> candidateMixinType) {
-            var mixinContructors = _Reflect
-                    .getPublicConstructors(candidateMixinType)
-                    .filter(paramCount(1));
-            return _Casts.uncheckedCast(mixinContructors);
-        }
+//        // while this enum only has a single value, we just provide a (quasi) static method here
+//        public <T> Constructor<T> getConstructorElseFail(
+//                final @NonNull Class<T> mixinClass,
+//                final @NonNull Class<?> mixeeClass) {
+//            return _Casts.uncheckedCast(_Reflect
+//                        .getPublicConstructors(mixinClass)
+//                        .filter(paramCount(1).and(paramAssignableFrom(0, mixeeClass)))
+//                    .getSingleton()
+//                    .orElseThrow(()->_Exceptions.illegalArgument(
+//                            "Failed to locate constructor in '%s' to instantiate,"
+//                            + "when using type '%s' as first argument",
+//                            mixinClass.getName(), mixinClass.getName())));
+//        }
+
     }
 
     // -- LIFECYCLE CALLBACKS
@@ -445,6 +464,12 @@ public final class ProgrammingModelConstants {
                 + "has synthesized (effective) annotation @Domain.Include, "
                 + "is assumed to represent or support a property, collection or action. "
                 + "Unmet constraint(s): ${unmetConstraints}"),
+        MIXIN_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS(
+        		"${type}: Mixin contract violation: there must be at most one public constructor that has inject semantics, "
+        				+ "but found ${found}."),
+        MIXIN_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS(
+        		"${type}: Mixin contract violation: in absence of inject semantics there must be exactly one public constructor, "
+        				+ "but found ${found}."),
         VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
                 "${type}: has multiple incompatible annotations/interfaces indicating that "
                 + "it is a recreatable object of some sort (${facetA} and ${facetB})"),
@@ -595,10 +620,10 @@ public final class ProgrammingModelConstants {
                         .orElse(Stream.empty());
             }
         };
-        public Can<ResolvedConstructor> getAll(final Class<?> cls) {
+        public final Can<ResolvedConstructor> getAll(final Class<?> cls) {
             return streamAll(cls).collect(Can.toCan());
         }
-        public Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
+        public final Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
             return streamAll(cls).findFirst();
         }
         public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);

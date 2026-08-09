@@ -18,18 +18,27 @@
  */
 package org.apache.causeway.testdomain.model.good;
 
+import java.util.Objects;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 /**
- * For (test) mixin descriptions see {@link ProperMixinContribution}.
+ * For (test) mixin as Java record, see {@link ProperMixinContribution}.
  */
-//TODO WIP //@Action
-public record ProperMixinContribution_actionRecord(
+@Action
+public record ProperMixinContribution_actionRecord1(
 		ProperMixinContribution mixee) {
 
-    //@Action(semantics = SemanticsOf.SAFE)
-    private Blob act() {
+	// throws if not properly initialized
+	public ProperMixinContribution_actionRecord1 {
+		Objects.requireNonNull(mixee);
+	}
+
+	@MemberSupport
+    public Blob act() {
         return Blob.of("sample", CommonMimeType.BIN, null);
     }
 

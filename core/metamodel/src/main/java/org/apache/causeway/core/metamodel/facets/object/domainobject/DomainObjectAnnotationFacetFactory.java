@@ -70,7 +70,7 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.Edi
 import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -94,9 +94,6 @@ extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
     ObjectTypeFacetFactory {
-
-    private final MetaModelValidatorForMixinTypes mixinTypeValidator =
-            new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
     // self-managed injection point resolving via constructor ..
     @Inject HmacAuthority hmacAuthority;
@@ -355,12 +352,11 @@ implements
 
         var mixinDomainObjectIfAny =
                 domainObjectIfAny
-                .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
+                .filter(domainObject -> domainObject.nature() == Nature.MIXIN);
 
         addFacetIfPresent(
-                MixinFacetForDomainObjectAnnotation
-                    .create(mixinDomainObjectIfAny, cls, facetHolder));
+                MixinFacetImpl
+                    .createForDomainObjectAnnotation(mixinDomainObjectIfAny, cls, facetHolder));
 
     }
 

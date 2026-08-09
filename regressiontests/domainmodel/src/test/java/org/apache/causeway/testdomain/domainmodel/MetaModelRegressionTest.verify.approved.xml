@@ -53,9 +53,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.MixinConcrete"/>
@@ -5630,9 +5630,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.ProperChoicesWhenActionHasParamSupportingMethod_remove"/>
@@ -7232,9 +7232,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.ProperChoicesWhenActionHasParamSupportingMethod_remove"/>
@@ -32915,9 +32915,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action1"/>
@@ -33240,9 +33240,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action2"/>
@@ -33554,9 +33554,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action3"/>
@@ -33882,9 +33882,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action4"/>
@@ -34210,9 +34210,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action5"/>
@@ -34397,9 +34397,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_action6"/>
@@ -34717,9 +34717,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="coll"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1"/>
@@ -34939,9 +34939,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="coll"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2"/>
@@ -35161,9 +35161,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_COLLECTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="coll"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3"/>
@@ -35362,9 +35362,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="prop"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1"/>
@@ -35593,9 +35593,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="prop"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2"/>
@@ -35824,9 +35824,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_PROPERTY"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="prop"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3"/>
@@ -36760,6 +36760,180 @@
                 <mml:returnType>org.apache.causeway.applib.value.Blob</mml:returnType>
                 <mml:params/>
             </mml:act>
+            <mml:act id="actionRecord1" mixedIn="true">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionDomainEventFacet"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1"/>
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+                        <mml:attr name="intent.act" value="EXECUTE"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1.act()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+                        <mml:attr name="contributing" value="AS_ACTION"/>
+                        <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+                        <mml:attr name="facet" value="ActionSemanticsFacet"/>
+                        <mml:attr name="origin" value="FallbackToNonIdempotent"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="NON_IDEMPOTENT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1#act()]"/>
+                        <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                        <mml:attr name="originalText" value="Action Record1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="translated" value="Action Record1"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="value" value="table"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
+                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="sequence" value="9"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+                        <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:returnType>org.apache.causeway.applib.value.Blob</mml:returnType>
+                <mml:params/>
+            </mml:act>
+            <mml:act id="actionRecord2" mixedIn="true">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionDomainEventFacet"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+                        <mml:attr name="intent.act" value="EXECUTE"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.act()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+                        <mml:attr name="contributing" value="AS_ACTION"/>
+                        <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+                        <mml:attr name="facet" value="ActionSemanticsFacet"/>
+                        <mml:attr name="origin" value="FallbackToNonIdempotent"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="NON_IDEMPOTENT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2#act()]"/>
+                        <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                        <mml:attr name="originalText" value="Action Record2"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="translated" value="Action Record2"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="value" value="table"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
+                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="sequence" value="10"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+                        <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:returnType>org.apache.causeway.applib.value.Blob</mml:returnType>
+                <mml:params/>
+            </mml:act>
             <mml:act id="downloadColumnOrderTxtFilesAsZip" mixedIn="true">
                 <mml:facets>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
@@ -37393,7 +37567,7 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
                         <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
                         <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="9"/>
+                        <mml:attr name="sequence" value="11"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
@@ -38076,9 +38250,9 @@
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1"/>
@@ -38254,9 +38428,9 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1a"/>
@@ -38432,9 +38606,9 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1b"/>
@@ -38610,9 +38784,9 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2"/>
@@ -38788,9 +38962,9 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3"/>
@@ -38966,9 +39140,9 @@
                 <mml:attr name="introspection" value="ANNOTATION_OPTIONAL"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4"/>
@@ -39144,9 +39318,9 @@
                 <mml:attr name="introspection" value="ANNOTATION_REQUIRED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5"/>
@@ -39322,9 +39496,9 @@
                 <mml:attr name="introspection" value="ENCAPSULATION_ENABLED"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6"/>
@@ -39414,6 +39588,650 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.SafeEnabledByRecordingSupport"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+                        <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:returnType>org.apache.causeway.applib.value.Blob</mml:returnType>
+                <mml:params/>
+            </mml:act>
+        </mml:actions>
+    </mml:domainClassDto>
+    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1">
+        <mml:facets>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1#]"/>
+                <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                <mml:attr name="originalText" value="Proper Mixin Contribution_action Record1"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="translated" value="Proper Mixin Contribution_action Record1"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="LoadedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="PersistedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="PersistingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="RemovingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="UpdatedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="UpdatingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="facet" value="BSGridFacet.NoLayout"/>
+                <mml:attr name="precedence" value="LOW"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
+                <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
+                <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
+                <mml:attr name="contributing" value="AS_ACTION"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
+                <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+                <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                <mml:attr name="facet" value="PagedFacetFromConfiguration"/>
+                <mml:attr name="precedence" value="INFERRED"/>
+                <mml:attr name="value" value="25"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
+                <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod">
+                <mml:attr name="facet" value="TitleFacetFromToStringMethod"/>
+                <mml:attr name="intent.toString" value="UI_HINT"/>
+                <mml:attr name="methods" value="public final java.lang.String org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1.toString()"/>
+                <mml:attr name="precedence" value="INFERRED"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForJavaRecord">
+                <mml:attr name="facet" value="ViewModelFacetForJavaRecord"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+        </mml:facets>
+        <mml:properties>
+            <mml:prop id="mixee" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
+                        <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
+                        <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="reason" value="Disabled, property has no setter."/>
+                        <mml:attr name="semantics" value="DISABLED"/>
+                        <mml:attr name="where" value="ANYWHERE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                        <mml:attr name="navigatedType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                        <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                        <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                        <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1"/>
+                        <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="intent.mixee" value="ACCESSOR"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.testdomain.model.good.ProperMixinContribution org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1.mixee()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
+                        <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="PropertyDomainEventFacet"/>
+                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                        <mml:attr name="facet" value="PropertyValidateFacetDefault"/>
+                        <mml:attr name="interactionAdvisors" value="Validating"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.causeway.testdomain.model.good.ProperMixinContribution</mml:type>
+            </mml:prop>
+        </mml:properties>
+        <mml:collections/>
+        <mml:actions>
+            <mml:act id="act" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionDomainEventFacet"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1"/>
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+                        <mml:attr name="intent.act" value="EXECUTE"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1.act()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+                        <mml:attr name="contributing" value="AS_ACTION"/>
+                        <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+                        <mml:attr name="facet" value="ActionSemanticsFacet"/>
+                        <mml:attr name="origin" value="FallbackToNonIdempotent"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="NON_IDEMPOTENT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1#act()]"/>
+                        <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                        <mml:attr name="originalText" value="Action Record1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="translated" value="Action Record1"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="value" value="table"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForActionFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
+                        <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:returnType>org.apache.causeway.applib.value.Blob</mml:returnType>
+                <mml:params/>
+            </mml:act>
+        </mml:actions>
+    </mml:domainClassDto>
+    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2">
+        <mml:facets>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2#]"/>
+                <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                <mml:attr name="originalText" value="Proper Mixin Contribution_action Record2"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="translated" value="Proper Mixin Contribution_action Record2"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="LoadedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="PersistedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="PersistingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="RemovingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="UpdatedLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation">
+                <mml:attr name="facet" value="UpdatingLifecycleEventFacetForDomainObjectAnnotation"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="facet" value="BSGridFacet.NoLayout"/>
+                <mml:attr name="precedence" value="LOW"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
+                <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
+                <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                <mml:attr name="precedence" value="HIGH"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
+                <mml:attr name="contributing" value="AS_ACTION"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
+                <mml:attr name="mainMethodName" value="act"/>
+                <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+                <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
+                <mml:attr name="interactionAdvisors" value="Validating"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                <mml:attr name="facet" value="PagedFacetFromConfiguration"/>
+                <mml:attr name="precedence" value="INFERRED"/>
+                <mml:attr name="value" value="25"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured">
+                <mml:attr name="facet" value="EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
+                <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod">
+                <mml:attr name="facet" value="TitleFacetFromToStringMethod"/>
+                <mml:attr name="intent.toString" value="UI_HINT"/>
+                <mml:attr name="methods" value="public final java.lang.String org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.toString()"/>
+                <mml:attr name="precedence" value="INFERRED"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForJavaRecord">
+                <mml:attr name="facet" value="ViewModelFacetForJavaRecord"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+            <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                <mml:attr name="precedence" value="DEFAULT"/>
+            </mml:facet>
+        </mml:facets>
+        <mml:properties>
+            <mml:prop id="factoryService" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
+                        <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
+                        <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="reason" value="Disabled, property has no setter."/>
+                        <mml:attr name="semantics" value="DISABLED"/>
+                        <mml:attr name="where" value="ANYWHERE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                        <mml:attr name="navigatedType" value="org.apache.causeway.applib.services.factory.FactoryService"/>
+                        <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.applib.services.factory.FactoryService"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                        <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                        <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                        <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="intent.factoryService" value="ACCESSOR"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.services.factory.FactoryService org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.factoryService()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
+                        <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="PropertyDomainEventFacet"/>
+                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                        <mml:attr name="facet" value="PropertyValidateFacetDefault"/>
+                        <mml:attr name="interactionAdvisors" value="Validating"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.causeway.applib.services.factory.FactoryService</mml:type>
+            </mml:prop>
+            <mml:prop id="mixee" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
+                        <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
+                        <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="reason" value="Disabled, property has no setter."/>
+                        <mml:attr name="semantics" value="DISABLED"/>
+                        <mml:attr name="where" value="ANYWHERE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                        <mml:attr name="navigatedType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                        <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                        <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                        <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                        <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="intent.mixee" value="ACCESSOR"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.testdomain.model.good.ProperMixinContribution org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.mixee()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
+                        <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="PropertyDomainEventFacet"/>
+                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                        <mml:attr name="facet" value="PropertyValidateFacetDefault"/>
+                        <mml:attr name="interactionAdvisors" value="Validating"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.causeway.testdomain.model.good.ProperMixinContribution</mml:type>
+            </mml:prop>
+            <mml:prop id="repositoryService" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
+                        <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
+                        <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="reason" value="Disabled, property has no setter."/>
+                        <mml:attr name="semantics" value="DISABLED"/>
+                        <mml:attr name="where" value="ANYWHERE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+                        <mml:attr name="navigatedType" value="org.apache.causeway.applib.services.repository.RepositoryService"/>
+                        <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.applib.services.repository.RepositoryService"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForPropertyFromConfiguration.None">
+                        <mml:attr name="facet" value="ExecutionPublishingFacetForPropertyFromConfiguration.None"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+                        <mml:attr name="facet" value="PromptStyleFacet"/>
+                        <mml:attr name="origin" value="Configuration"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="promptStyle" value="INLINE"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                        <mml:attr name="facet" value="LabelAtFacetFromLayoutConfiguration"/>
+                        <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                        <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="intent.repositoryService" value="ACCESSOR"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.services.repository.RepositoryService org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.repositoryService()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
+                        <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="PropertyDomainEventFacet"/>
+                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                        <mml:attr name="facet" value="PropertyValidateFacetDefault"/>
+                        <mml:attr name="interactionAdvisors" value="Validating"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet" value="AuthorizationFacetImpl"/>
+                        <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.causeway.applib.services.repository.RepositoryService</mml:type>
+            </mml:prop>
+        </mml:properties>
+        <mml:collections/>
+        <mml:actions>
+            <mml:act id="act" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionDomainEventFacet"/>
+                        <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2"/>
+                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+                        <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
+                        <mml:attr name="intent.act" value="EXECUTE"/>
+                        <mml:attr name="isPostable" value="true"/>
+                        <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2.act()"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
+                        <mml:attr name="contributing" value="AS_ACTION"/>
+                        <mml:attr name="facet" value="ContributingFacetAbstract.1"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+                        <mml:attr name="facet" value="ActionSemanticsFacet"/>
+                        <mml:attr name="origin" value="FallbackToNonIdempotent"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="value" value="NON_IDEMPOTENT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
+                        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2#act()]"/>
+                        <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
+                        <mml:attr name="originalText" value="Action Record2"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="translated" value="Action Record2"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet" value="DefaultViewFacetAsConfigured"/>
+                        <mml:attr name="precedence" value="LOW"/>
+                        <mml:attr name="value" value="table"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes" value="!imperative"/>
+                        <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
+                        <mml:attr name="position" value="!imperative"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
+                        <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionFromConfiguration.None">
@@ -48699,9 +49517,9 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl">
                 <mml:attr name="contributing" value="AS_ACTION"/>
-                <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
+                <mml:attr name="facet" value="MixinFacetImpl"/>
                 <mml:attr name="mainMethodName" value="act"/>
                 <mml:attr name="mixeeType" value="org.apache.causeway.testdomain.model.good.ProperServiceWithMixin"/>
                 <mml:attr name="mixinType" value="org.apache.causeway.testdomain.model.good.ProperServiceWithMixin.Now"/>

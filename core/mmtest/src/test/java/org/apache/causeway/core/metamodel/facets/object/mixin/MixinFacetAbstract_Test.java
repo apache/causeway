@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.mixin;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import org.apache.causeway.commons.internal.reflection._GenericResolver;
 
 class MixinFacetAbstract_Test {
 
@@ -40,8 +39,8 @@ class MixinFacetAbstract_Test {
 
         // given
         var constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
-        var facet = new MixinFacetAbstract(
-                Collection_numberOfChildren.class, "prop", constructor, null) {};
+        var facet = MixinFacetImpl.forTesting(
+                Collection_numberOfChildren.class, "prop", constructor);
 
         var propMethodInSubclass = _GenericResolver.testing
                 .resolveMethod(SimpleObject_numberOfChildren.class, "prop");
@@ -62,8 +61,8 @@ class MixinFacetAbstract_Test {
     void mixinAsRecord() throws Exception {
         // given
         var constructor = MixinAsRecord.class.getConstructor(SimpleObject.class);
-        var facet = new MixinFacetAbstract(
-        		MixinAsRecord.class, "prop", constructor, null) {};
+        var facet = MixinFacetImpl.forTesting(
+        		MixinAsRecord.class, "prop", constructor);
 
         var propMethod = _GenericResolver.testing
                 .resolveMethod(MixinAsRecord.class, "prop");

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -60,7 +60,7 @@ record RegularMemberFactory(
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */
         	spec.mixinFacet()
-	            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+	            .flatMap(mixinFacet->_Casts.castTo(MixinFacetImpl.class, mixinFacet))
 	            .ifPresent(mixinFacetAbstract->
 	                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
 

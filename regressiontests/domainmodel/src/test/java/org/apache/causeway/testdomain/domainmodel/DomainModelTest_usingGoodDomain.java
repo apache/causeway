@@ -35,6 +35,7 @@ import org.apache.causeway.applib.annotation.Introspection.MemberAnnotationPolic
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.Config;
@@ -98,7 +99,8 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
-import org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord1;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_actionRecord2;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsOptional;
 import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelWithAnnotationsRequired;
@@ -112,7 +114,6 @@ import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -152,6 +153,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
     @Inject private DomainObjectTesterFactory testerFactory;
+    @Inject private FactoryService factoryService;
 
     void debug() {
         var config = Config.builder().build()
@@ -1009,9 +1011,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @ParameterizedTest
     @ValueSource(classes = {
-            ProperMixinContribution_actionRecord.class
+            ProperMixinContribution_actionRecord1.class,
+            ProperMixinContribution_actionRecord2.class,
     })
-    @Disabled("WIP")
     void record_as_mixin(final Class<?> mixinClass) {
 
         final String actionName = _Strings.splitThenStream(mixinClass.getSimpleName(), "_")
@@ -1019,10 +1021,15 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 .orElseThrow();
 
         var mixinSpec = specificationLoader.specForTypeElseFail(mixinClass);
+        assertTrue(mixinSpec.isMixin());
 
         var vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
         assertHasAction(vmSpec, actionName); // contributed action
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
+
+        // verify we can instantiate the mixin
+        var mixinInstance = factoryService.mixin(mixinClass, new ProperMixinContribution());
+        assertNotNull(mixinInstance);
     }
 
     // -- JAVA RECORD AS VIEWMODEL
