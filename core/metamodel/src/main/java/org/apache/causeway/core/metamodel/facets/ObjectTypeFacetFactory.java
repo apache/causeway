@@ -27,20 +27,21 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
  */
 public interface ObjectTypeFacetFactory extends FacetFactory {
 
+	void process(ProcessObjectTypeContext processObjectTypeContext);
+
     public record ProcessObjectTypeContext(
     		Class<?> cls,
             FacetHolder facetHolder)
-    implements ProcessWithClsContext<FacetHolder> {
+    implements
+    	ProcessWithClsContext<FacetHolder> {
 
-        @Override
-        public IntrospectionPolicy introspectionPolicy() {
+        @Override public IntrospectionPolicy introspectionPolicy() {
             throw _Exceptions.unsupportedOperation(
                     "ProcessObjectTypeContext does not support getIntrospectionPolicy() "
                     + "as the IntrospectionPolicy is not yet available this early "
                     + "in the meta-model processing stage.");
         }
-    }
 
-    void process(ProcessObjectTypeContext processObjectTypeContext);
+    }
 
 }

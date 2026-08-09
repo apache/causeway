@@ -63,9 +63,31 @@ import org.springframework.core.MethodParameter;
  */
 public interface FacetFactory {
 
+	/**
+	 * The {@link FeatureType}(s) this facet factory can create
+	 * {@link Facet}(s) for.
+	 *
+	 * <p> Used to reduce the number of {@link FacetFactory}(s)
+	 * that are queried when building up the meta-model.
+	 */
+	ImmutableEnumSet<FeatureType> getFeatureTypes();
+
+	/**
+	 * Process the class, and return the correctly setup annotation if present.
+	 */
+	void process(ProcessClassContext processClassContext);
+	/**
+	 * Process the method, and return the correctly setup annotation if present.
+	 */
+	void process(ProcessMethodContext processMethodContext);
+	/**
+	 * Process the parameters of the method, and return the correctly setup
+	 * annotation if present.
+	 */
+	void processParams(ProcessParameterContext processParameterContext);
+
 	@FunctionalInterface
 	interface HasMethodRemover extends MethodRemover {
-
         MethodRemover methodRemover();
 
         @Override default void removeMethod(final ResolvedMethod method) {
@@ -80,7 +102,6 @@ public interface FacetFactory {
     }
 
     interface ProcessWithClsContext<T extends FacetHolder> {
-
     	T facetHolder();
 
         /**
@@ -103,10 +124,8 @@ public interface FacetFactory {
         }
     }
 
-
     interface ProcessWithMethodContext<T extends FacetHolder>
     extends ProcessWithClsContext<T> {
-
     	MethodFacade methodFacade();
 
     	/**
@@ -122,18 +141,6 @@ public interface FacetFactory {
     		return false;
     	}
     }
-
-    /**
-     * The {@link FeatureType feature type}s that this facet factory can create
-     * {@link Facet}s for.
-     *
-     * <p>
-     * Used by the Java 8 Reflector's <tt>ProgrammingModel</tt> to reduce the
-     * number of {@link FacetFactory factory}s that are queried when building up
-     * the meta-model.
-     *
-     */
-    ImmutableEnumSet<FeatureType> getFeatureTypes();
 
     // -- PROCESS CLASS
 
@@ -155,13 +162,7 @@ public interface FacetFactory {
             return new ProcessClassContext(
                     cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
         }
-
     }
-
-    /**
-     * Process the class, and return the correctly setup annotation if present.
-     */
-    void process(ProcessClassContext processClassContext);
 
     // -- PROCESS METHOD
 
@@ -287,11 +288,6 @@ public interface FacetFactory {
 
     }
 
-    /**
-     * Process the method, and return the correctly setup annotation if present.
-     */
-    void process(ProcessMethodContext processMethodContext);
-
     // -- PROCESS PARAM
 
     public record ProcessParameterContext(
@@ -341,11 +337,5 @@ public interface FacetFactory {
         }
 
     }
-
-    /**
-     * Process the parameters of the method, and return the correctly setup
-     * annotation if present.
-     */
-    void processParams(ProcessParameterContext processParameterContext);
 
 }
