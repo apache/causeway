@@ -272,7 +272,6 @@ implements
     		.forEach(it->((IntrospectionStateHandler)it)
     			.introspectFully());
 
-
         // create associations and actions
 
         var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);

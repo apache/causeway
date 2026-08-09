@@ -124,7 +124,8 @@ implements
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
         facetProcessor
-        	.process(introspectedClass(), introspectionPolicy(), methodRemover, internalSpec);
+        	.process(introspectedClass(), introspectionPolicy(), methodRemover, internalSpec,
+        			internalSpec.specLoaderInternal()::loadSpecificationTypeOnly);
     }
 
     /**

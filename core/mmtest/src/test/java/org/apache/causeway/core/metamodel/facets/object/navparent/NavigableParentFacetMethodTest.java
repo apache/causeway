@@ -18,23 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.navparent;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class NavigableParentFacetMethodTest {
 
-    private Mocking mocking = new Mocking();
+    private final Mocking mocking = new Mocking();
     private NavigableParentFacet facet;
     private FacetHolder simpleFacetHolder;
     private ManagedObject mockOwningAdapter;
@@ -57,7 +58,9 @@ class NavigableParentFacetMethodTest {
 
         var navigableParentMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
-        facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
+
+        var pcc = ProcessClassContext.forTesting(pojo.getClass(), null, simpleFacetHolder);
+        facet = NavigableParentFacetViaMethod.create(pcc, navigableParentMethod)
                 .orElse(null);
 
         mockOwningAdapter = mocking.asViewmodel(pojo);

@@ -148,7 +148,8 @@ public interface FacetFactory {
     		Class<?> cls,
             IntrospectionPolicy introspectionPolicy,
             MethodRemover methodRemover,
-            FacetHolder facetHolder)
+            FacetHolder facetHolder,
+            Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction)
     implements
     	ProcessWithClsContext<FacetHolder>, HasMethodRemover {
 
@@ -160,7 +161,14 @@ public interface FacetFactory {
                 final MethodRemover methodRemover,
                 final FacetHolder facetHolder) {
             return new ProcessClassContext(
-                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder,
+                    _JUnitSupport.loadSpecificationTypeOnlyFunction(facetHolder.getSpecificationLoader()));
+        }
+
+        // -- SPEC
+
+        public @Nullable ObjectSpecification loadSpecificationTypeOnly(@Nullable final Class<?> domainType) {
+        	return loadSpecificationTypeOnlyFunction.apply(domainType);
         }
     }
 
@@ -264,7 +272,7 @@ public interface FacetFactory {
 
         // -- SPEC
 
-        public @Nullable ObjectSpecification loadSpecificationTypeOnly(@Nullable final Class<?> domainType) {
+		public @Nullable ObjectSpecification loadSpecificationTypeOnly(@Nullable final Class<?> domainType) {
         	return loadSpecificationTypeOnlyFunction.apply(domainType);
         }
 

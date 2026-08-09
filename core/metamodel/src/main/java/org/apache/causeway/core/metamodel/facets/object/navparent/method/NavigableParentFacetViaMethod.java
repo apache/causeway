@@ -28,6 +28,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -42,11 +43,13 @@ extends NavigableParentFacetAbstract {
     private final MethodHandle methodHandle;
 
     public static Optional<NavigableParentFacet> create(
-            final @NonNull Class<?> processedClass,
-            final @NonNull ResolvedMethod method,
-            final @NonNull FacetHolder facetHolder) {
+            final @NonNull ProcessClassContext processClassContext,
+            final @NonNull ResolvedMethod method) {
 
-        return validateNavigableParentType(processedClass, method, facetHolder)
+    	final Class<?> processedClass = processClassContext.cls();
+        final FacetHolder facetHolder = processClassContext.facetHolder();
+
+        return validateNavigableParentType(processClassContext, method)
         .fold(
             // failure
             deficiency->{
@@ -89,11 +92,10 @@ extends NavigableParentFacetAbstract {
 
     /** Returns either the MethodHandle to use or a deficiency message. */
     private static Either<String, MethodHandle> validateNavigableParentType(
-            final @NonNull Class<?> processedClass,
-            final @NonNull ResolvedMethod method,
-            final @NonNull FacetHolder holder) {
+            final @NonNull ProcessClassContext processClassContext,
+            final @NonNull ResolvedMethod method) {
 
-        var navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
+        var navigableParentSpec = processClassContext.loadSpecificationTypeOnly(method.returnType());
         if(navigableParentSpec==null)
 			return Either.left("vetoed");
         if(navigableParentSpec.isPlural())

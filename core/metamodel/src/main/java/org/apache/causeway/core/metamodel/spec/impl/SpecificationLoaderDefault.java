@@ -31,6 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
@@ -288,19 +289,34 @@ implements
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
         this.phase = Phase.AFTER_MIXINS;
 
-        //TODO  expected no entities fully introspected yet. however, some postprocessors, that
-        // run on mixin-spec have the sideeffect of fully introspecting other types e.g. by asking for the
+        //TODO good for abstract types, but cannot be decided for interfaces,
+        // as those could in theory be shared with mixins and domain-types
+        var mixinTypeHierarchyMembers = specs.mixinSpecs.stream()
+	    	.flatMap(ObjectSpecificationInternal::streamTypeHierarchy)
+	    	.filter(spec->!spec.isMixin())
+	    	.collect(Collectors.toSet());
+
+        //TODO expected no domain objects fully introspected yet. however, some facet/post processors, that
+        // run on mixin-spec have the side effect of fully introspecting other types e.g. by asking for the
         // members's element type
-        cache.values().stream()
+        long brokenSpecCount = cache.values().stream()
+    		.filter(spec->!spec.getCorrespondingClass().getName().startsWith("java."))
         	.filter(spec->!spec.isMixin())
         	.filter(spec->!spec.isValue())
         	.filter(ObjectSpecificationInternal::isFullyIntrospected)
-        	.forEach(spec->{
-    			log.warn("type (non-mixin, non-value) found fully introspected after mixin introspection {}"
-    					+ " - reload triggered", spec.getCorrespondingClass());
-    			//invalidateCache(spec.getCorrespondingClass());
+        	.filter(spec->!mixinTypeHierarchyMembers.contains(spec))
+        	.filter(spec->{
+        		var msg = "type (non-mixin, non-value) found fully introspected after mixin introspection %s - reload triggered"
+        				.formatted(spec.getCorrespondingClass());
+    			log.warn(msg);
+    			return true;
     			//reloadSpecification(spec.getCorrespondingClass());
-        	});
+        	}).count();
+        if(brokenSpecCount>0)
+        	//TODO for now we fail hard, because Spec reloading is not consistently supported yet
+        	// that is currently we evict the spec from the cache but the Spec reference must stay constant
+			throw _Exceptions.illegalState("brokenSpecCount=%d", brokenSpecCount);
+
 
         introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL); //TODO no mixins required either
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),

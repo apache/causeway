@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
@@ -63,7 +62,6 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.cls();
-        final FacetHolder facetHolder = processClassContext.facetHolder();
 
         // Starting from the current domain-object class, we search down the object
         // inheritance hierarchy (super class, super super class, ...), until we find
@@ -99,7 +97,7 @@ implements MetaModelRefiner {
 			return; // no parent resolvable
 
         addFacetIfPresent(
-                NavigableParentFacetViaMethod.create(cls, method, facetHolder));
+                NavigableParentFacetViaMethod.create(processClassContext, method));
     }
 
     private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){

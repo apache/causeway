@@ -242,12 +242,14 @@ implements HasMetaModelContext {
             final Class<?> cls,
             final IntrospectionPolicy introspectionPolicy,
             final MethodRemover methodRemover,
-            final FacetHolder facetHolder) {
+            final FacetHolder facetHolder,
+            final Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction) {
         var ctx = new ProcessClassContext(
                 cls,
                 introspectionPolicy,
                 removerElseNoopRemover(methodRemover),
-                facetHolder);
+                facetHolder,
+                loadSpecificationTypeOnlyFunction);
 
         factoriesByFeatureType.getOrElseEmpty(FeatureType.OBJECT)
             .forEach(facetFactory->facetFactory.process(ctx));
