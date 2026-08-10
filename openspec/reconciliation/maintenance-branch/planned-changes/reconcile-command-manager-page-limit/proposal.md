@@ -1,3 +1,6 @@
+> **Execution note:** a constant, a validation bound, and a launcher default; **`medium` reasoning effort** is
+> sufficient.
+
 ## Why
 
 Child change 10 of the maintenance-branch → main final reconciliation

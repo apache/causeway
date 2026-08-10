@@ -1,3 +1,6 @@
+> **Execution note:** small, self-contained backport (one repository-method guard); **`medium` reasoning effort**
+> is sufficient.
+
 ## Why
 
 Child change 4 of the maintenance-branch → main final reconciliation

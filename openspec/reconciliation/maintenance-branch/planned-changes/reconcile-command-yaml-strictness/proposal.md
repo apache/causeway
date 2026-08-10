@@ -1,3 +1,6 @@
+> **Execution note:** reroutes the legacy importer to the existing strict decoder; **`medium` reasoning effort**
+> is sufficient.
+
 ## Why
 
 Child change 8 of the maintenance-branch → main final reconciliation
