@@ -94,6 +94,36 @@ implements
         return actionDomainEventFacet;
     }
 
+    /**
+     * Creates a mixee-specific (object-type-specific) overlay facet for a mixed-in action, honoring the
+     * mixee's {@code @DomainObject} action domain-event default. Returns empty when the mixee declares no
+     * such default. The overlay is {@link Facet#isObjectTypeSpecific() object-type-specific} so it is
+     * installed on the mixed-in member's local facet holder rather than the shared mixin facet holder.
+     */
+    public static Optional<ActionDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        facetHolder));
+    }
+
+    private static class ObjectTypeSpecific extends ActionDomainEventFacet {
+        protected ObjectTypeSpecific(
+                final Class<? extends ActionDomainEvent<?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, holder);
+        }
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     // -- CONSTRUCTION
 
     private final TranslationService translationService;
