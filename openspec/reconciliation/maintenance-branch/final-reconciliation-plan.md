@@ -159,11 +159,16 @@ dependency. Adjacent small slices (e.g. 4, 5, 10) may be combined at the impleme
 finding retains its own spec delta and acceptance evidence.
 
 Because the repository permits only **one active OpenSpec change at a time**, only one of these lives under
-`openspec/changes/` at any moment. Slice 1 (`reconcile-mixin-domain-event-isolation`) is the current active change.
-Slices 2–4 are drafted ready-to-promote under `planned-changes/` in this programme directory — each is a complete
-change folder (`proposal.md` / `design.md` / `tasks.md` / `specs/`) that is moved into `openspec/changes/`
-verbatim, and re-validated, when its turn comes. Slices 5–10 are specified by the tables above and are drafted
-when the preceding slice is archived.
+`openspec/changes/` at any moment. Slices 2–10 are drafted ready-to-promote under `planned-changes/` in this
+programme directory — each is a complete change folder (`proposal.md` / `design.md` / `tasks.md` / `specs/`) that
+is moved into `openspec/changes/` verbatim, and re-validated, when its turn comes.
+
+### Progress
+
+| Slice | Status | Evidence |
+|---|---|---|
+| 1 `reconcile-mixin-domain-event-isolation` (MA-1) | **Archived** | spec `openspec/specs/mixin-domain-event-isolation/`; archive `openspec/changes/archive/2026-08-10-reconcile-mixin-domain-event-isolation/`; impl commit `f7d8b5e474f`; `core/metamodel`+`core/mmtest` green under JDK 21 (937 tests, 0 failures) |
+| 2–10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
 
