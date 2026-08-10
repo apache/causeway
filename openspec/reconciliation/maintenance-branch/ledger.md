@@ -86,7 +86,14 @@
 
 ## Open questions
 
-None.
+The first wave above ported every capability the consolidated maintenance specs described. Subsequent
+independent audits (second/third/fourth opinions) and two meta-analyses found a **second wave** of genuine
+discrepancies — concentrated in maintenance work that post-dated those specs (CAUSEWAY-4042, the CAUSEWAY-4039
+tail, the CAUSEWAY-4037/4038 replay strands) and in general-metamodel / loose `[v2]` commits outside the
+command-log capability graph. That canonical set (MA-1 … MA-16), its re-anchoring to current HEAD after the
+PR #3697 / CAUSEWAY-4044 merge, the product decisions taken, and the completing child-change sequence are
+recorded in `final-reconciliation-plan.md`. The programme is **not yet behaviourally complete** until those
+child changes are archived or their findings explicitly waived.
 
 ## Acceptance evidence policy
 

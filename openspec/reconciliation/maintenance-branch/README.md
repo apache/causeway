@@ -58,7 +58,9 @@ Archived changes and commits remain supporting evidence for implementation inten
 ## Durable programme artifacts
 
 - `dependency-graph.md` records capability nodes, dependency edges, specification mappings, architectural adaptations, and implementation order.
-- `ledger.md` records the current capability classifications and planned reconciliation slices.
+- `ledger.md` records the current capability classifications and the reconciliation slices completed in the first wave.
+- `final-reconciliation-plan.md` is the master plan for **completing** the reconciliation. It freezes the canonical second-wave discrepancy set (MA-1 … MA-16) found by the second/third/fourth opinions and the two meta-analyses, re-anchors every finding to current HEAD (accounting for the PR #3697 / CAUSEWAY-4044 merge that post-dated the audits), records the product decisions taken, and defines the sequence of child changes that finish the programme.
+- `second-opinion/`, `third-opinion/`, `fourth-opinion/`, `meta-analysis-1/`, and `meta-analysis-2/` hold the independent audits and their reconciliation.
 
 ## Workflow
 
