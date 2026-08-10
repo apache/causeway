@@ -1,3 +1,6 @@
+> **Execution note:** two mixins reusing the existing bulk-export building blocks; **`medium` reasoning effort**
+> is sufficient.
+
 ## Why
 
 Child change 7 of the maintenance-branch → main final reconciliation

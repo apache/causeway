@@ -33,10 +33,10 @@ Slice 1 (`reconcile-mixin-domain-event-isolation`, MA-1) is **archived** (spec s
 `openspec/specs/mixin-domain-event-isolation/`; change under `openspec/changes/archive/`). Slices 2–10 remain
 drafted here; there is currently **no active change**, so the next slice can be promoted whenever wanted.
 
-> **Effort:** most slices are mechanical and fine at the default reasoning effort. Slices **2**
+> **Effort:** every proposal carries a recommended reasoning-effort note. Slices **2**
 > (`reconcile-synthetic-navigation-replay`, MA-5) and **3** (`reconcile-replay-failure-continuation`, MA-3) touch
-> subtle metamodel/replay semantics and should ideally be implemented with **`high`** effort (each proposal
-> repeats this note).
+> subtle metamodel/replay semantics and are recommended at **`high`** effort; the remaining slices (4–10) are
+> mechanical and well-scoped, and are fine at **`medium`**.
 
 Note: slices 6 and 7 both target `replayable-command-projection`, and slices 4 and 8 both target
 `command-result-metadata`. Because only one change is active at a time they are applied sequentially, and each

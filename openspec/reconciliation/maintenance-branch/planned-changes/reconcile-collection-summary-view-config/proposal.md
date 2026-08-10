@@ -1,3 +1,6 @@
+> **Execution note:** one config property plus a factory short-circuit; **`medium` reasoning effort** is
+> sufficient.
+
 ## Why
 
 Child change 9 of the maintenance-branch → main final reconciliation

@@ -1,3 +1,6 @@
+> **Execution note:** several self-contained presentation fixes reusing existing infrastructure; **`medium`
+> reasoning effort** is sufficient.
+
 ## Why
 
 Child change 6 of the maintenance-branch → main final reconciliation

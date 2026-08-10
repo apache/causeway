@@ -1,3 +1,6 @@
+> **Execution note:** one `implements` clause plus tests, reusing the existing default classifier; **`medium`
+> reasoning effort** is sufficient.
+
 ## Why
 
 Child change 5 of the maintenance-branch → main final reconciliation
