@@ -32,6 +32,11 @@ change or validated until it is promoted.
 Slice 1 (`reconcile-mixin-domain-event-isolation`, MA-1) is already the active change under `openspec/changes/`.
 All ten slices of the final reconciliation are therefore drafted end-to-end: slice 1 active, slices 2–10 here.
 
+> **Effort:** most slices are mechanical and fine at the default reasoning effort. Slices **2**
+> (`reconcile-synthetic-navigation-replay`, MA-5) and **3** (`reconcile-replay-failure-continuation`, MA-3) touch
+> subtle metamodel/replay semantics and should ideally be implemented with **`high`** effort (each proposal
+> repeats this note).
+
 Note: slices 6 and 7 both target `replayable-command-projection`, and slices 4 and 8 both target
 `command-result-metadata`. Because only one change is active at a time they are applied sequentially, and each
 touches distinct requirements — but when promoting the second of each pair, rebase its delta onto the
