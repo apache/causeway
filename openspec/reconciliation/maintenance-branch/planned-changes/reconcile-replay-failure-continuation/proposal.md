@@ -1,3 +1,7 @@
+> **Execution note:** this slice changes subtle replay-failure semantics (`mapFailureToSuccess`, `REQUIRES_NEW`
+> transaction boundaries, batch continuation) and reverses a previously-shipped v4 spec scenario. It should ideally
+> be implemented with **`high` reasoning effort** rather than the default.
+
 ## Why
 
 Child change 3 of the maintenance-branch → main final reconciliation

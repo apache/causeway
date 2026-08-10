@@ -1,3 +1,7 @@
+> **Execution note:** this slice touches subtle metamodel synthesis (`SyntheticNavigationActionFactory`) and
+> runtime replay-argument reconstruction (`CommandExecutorServiceDefault`). It should ideally be implemented with
+> **`high` reasoning effort** rather than the default.
+
 ## Why
 
 Child change 2 of the maintenance-branch → main final reconciliation
