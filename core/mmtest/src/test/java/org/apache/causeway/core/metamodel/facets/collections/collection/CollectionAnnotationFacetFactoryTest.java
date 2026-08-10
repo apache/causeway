@@ -299,9 +299,14 @@ extends FacetFactoryTestAbstract {
                 processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessCollection(mixeeSpec, mixedInColl);
 
-                // then
+                // then - the mixee's object-level default is installed as a per-mixee overlay on the mixed-in
+                // member, while the shared mixin faceted method is left at its default (no shared mutation).
+                var mixedInEvent = mixedInColl.lookupFacet(CollectionDomainEventFacet.class).orElseThrow();
+                assertEquals(EventTypeOrigin.ANNOTATED_OBJECT, mixedInEvent.getEventTypeOrigin());
+                assertThat(mixedInEvent.getEventType(),
+                        CausewayMatchers.classEqualTo(Customer.OrdersShowingDomainEvent.class));
                 assertHasCollectionDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_OBJECT, Customer.OrdersShowingDomainEvent.class);
+                        EventTypeOrigin.DEFAULT, CollectionDomainEvent.Default.class);
             });
         }
 

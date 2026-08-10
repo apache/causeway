@@ -33,6 +33,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -176,9 +177,24 @@ implements MixedInAction {
             }
         }
 
-        return mixinAction.executeInternal(
-                head, argumentAdapters,
-                interactionInitiatedBy);
+        return hasLocalActionInvocationFacet()
+                ? this.executeInternal(
+                        head, argumentAdapters,
+                        interactionInitiatedBy)
+                : mixinAction.executeInternal(
+                        head, argumentAdapters,
+                        interactionInitiatedBy);
+    }
+
+    /**
+     * Whether a mixee-specific {@link ActionInvocationFacet} has been installed on this mixed-in action's
+     * local facet holder (by {@code SynthesizeDomainEventsForMixinPostProcessor}), distinct from the shared
+     * mixin action's facet. When present, execution must route through this member so the mixee-specific
+     * domain-event type is posted.
+     */
+    private boolean hasLocalActionInvocationFacet() {
+        return this.getFacet(ActionInvocationFacet.class)
+                != mixinAction.getFacet(ActionInvocationFacet.class);
     }
 
     @Override

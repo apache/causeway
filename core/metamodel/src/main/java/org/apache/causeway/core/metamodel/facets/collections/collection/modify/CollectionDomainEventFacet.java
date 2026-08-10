@@ -80,6 +80,36 @@ implements HidingInteractionAdvisor {
         return collectionDomainEventFacet;
     }
 
+    /**
+     * Creates a mixee-specific (object-type-specific) overlay facet for a mixed-in collection, honoring the
+     * mixee's {@code @DomainObject} collection domain-event default. Returns empty when the mixee declares no
+     * such default. The overlay is {@link Facet#isObjectTypeSpecific() object-type-specific} so it is
+     * installed on the mixed-in member's local facet holder rather than the shared mixin facet holder.
+     */
+    public static Optional<CollectionDomainEventFacet> createObjectTypeSpecificForMixin(
+            final @NonNull ObjectSpecification mixeeSpec,
+            final @NonNull FacetHolder facetHolder) {
+        return mixeeSpec
+                .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                .map(facetOnMixee -> new ObjectTypeSpecific(
+                        facetOnMixee.getEventType(),
+                        EventTypeOrigin.ANNOTATED_OBJECT,
+                        facetHolder));
+    }
+
+    private static class ObjectTypeSpecific extends CollectionDomainEventFacet {
+        protected ObjectTypeSpecific(
+                final Class<? extends CollectionDomainEvent<?, ?>> eventType,
+                final EventTypeOrigin eventTypeOrigin,
+                final FacetHolder holder) {
+            super(eventType, eventTypeOrigin, holder);
+        }
+        @Override
+        public boolean isObjectTypeSpecific() {
+            return true;
+        }
+    }
+
     // -- CONSTRUCTION
 
     private final DomainEventHelper domainEventHelper;

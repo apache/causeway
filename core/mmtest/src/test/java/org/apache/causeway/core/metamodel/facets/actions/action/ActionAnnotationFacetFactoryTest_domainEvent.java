@@ -37,6 +37,8 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 
 import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
@@ -62,6 +64,28 @@ extends ActionAnnotationFacetFactoryTest {
         assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
 
         var invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+        assertNotNull(invocationFacet);
+        assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
+        var invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
+        assertEquals(eventTypeOrigin, invocationFacetImpl.getEventTypeOrigin());
+        assertThat(invocationFacetImpl.getEventType(), classEqualTo(eventType));
+    }
+
+    /**
+     * Asserts the event type observed <i>on the mixed-in member itself</i> (its local, object-type-specific
+     * overlay), as opposed to the shared mixin faceted method. Used to verify per-mixee isolation.
+     */
+    private void assertMixedInActionHasEvent(
+            final ObjectAction mixedInAct,
+            final EventTypeOrigin eventTypeOrigin,
+            final Class<? extends ActionDomainEvent<?>> eventType) {
+
+        var domainEventFacet = mixedInAct.getFacet(ActionDomainEventFacet.class);
+        assertNotNull(domainEventFacet);
+        assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
+        assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
+
+        var invocationFacet = mixedInAct.getFacet(ActionInvocationFacet.class);
         assertNotNull(invocationFacet);
         assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
         var invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
@@ -225,7 +249,7 @@ extends ActionAnnotationFacetFactoryTest {
         });
     }
 
-    @Test //TODO[CAUSEWAY-3409]
+    @Test
     void withActionDomainEvent_mixedIn_annotatedOnMixeeType() {
         var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
@@ -250,9 +274,59 @@ extends ActionAnnotationFacetFactoryTest {
             processDomainEvent(facetFactory, processMethodContext);
             postProcessor.postProcessAction(mixeeSpec, mixedInAct);
 
-            // then
-            assertHasActionDomainEventFacet(facetedMethod,
+            // then - the mixee's object-level default is installed as a per-mixee overlay on the mixed-in
+            // member, while the shared mixin faceted method is left at its default (no shared mutation).
+            assertMixedInActionHasEvent(mixedInAct,
                     EventTypeOrigin.ANNOTATED_OBJECT, Customer.SomeActionDomainEvent.class);
+            assertHasActionDomainEventFacet(facetedMethod,
+                    EventTypeOrigin.DEFAULT, ActionDomainEvent.Default.class);
+
+        });
+    }
+
+    @Test
+    void withActionDomainEvent_mixedIn_isolatedAcrossMixees() {
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+        // given: two mixees declaring different object-level action domain-event defaults ...
+        @DomainObject(actionDomainEvent = Mixee1.Event1.class)
+        class Mixee1 {
+            class Event1 extends ActionDomainEvent<Object> {}
+        }
+        @DomainObject(actionDomainEvent = Mixee2.Event2.class)
+        class Mixee2 {
+            class Event2 extends ActionDomainEvent<Object> {}
+        }
+        // ... contributed by one shared, un-annotated mixin
+        @Action
+        @RequiredArgsConstructor
+        @SuppressWarnings("unused")
+        class SharedMixin {
+            final Object mixee;
+            @MemberSupport
+            public void act() { }
+        }
+
+        actionScenarioMixedIn(Mixee1.class, SharedMixin.class,
+                (processMethodContext, mixee1Spec, facetedMethod, mixedInAct1)->{
+
+            // and: a second mixed-in action for Mixee2 layered over the SAME shared mixin faceted method
+            var mixinSpec = getSpecificationLoader().loadSpecification(SharedMixin.class);
+            var mixee2Spec = getSpecificationLoader().loadSpecification(Mixee2.class);
+            var mixedInAct2 = _JUnitSupport.mixedInActionforMixinMain(mixee2Spec, mixinSpec, "act", facetedMethod);
+
+            // when
+            processDomainEvent(facetFactory, processMethodContext);
+            postProcessor.postProcessAction(mixee1Spec, mixedInAct1);
+            postProcessor.postProcessAction(mixee2Spec, mixedInAct2);
+
+            // then: each mixee's mixed-in action posts ITS OWN object-level event ...
+            assertMixedInActionHasEvent(mixedInAct1, EventTypeOrigin.ANNOTATED_OBJECT, Mixee1.Event1.class);
+            assertMixedInActionHasEvent(mixedInAct2, EventTypeOrigin.ANNOTATED_OBJECT, Mixee2.Event2.class);
+
+            // ... and the shared mixin faceted method is never mutated (no last-writer-wins pollution)
+            assertHasActionDomainEventFacet(facetedMethod,
+                    EventTypeOrigin.DEFAULT, ActionDomainEvent.Default.class);
 
         });
     }
