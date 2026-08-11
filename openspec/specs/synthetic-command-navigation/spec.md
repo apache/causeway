@@ -1,100 +1,41 @@
 ## Purpose
 
 Defines configuration-gated synthetic navigation actions for parented collections and scalar references, including deterministic metadata, recording suppression, parameter derivation, usability, validation, invocation, and disabled-mode compatibility.
-
 ## Requirements
 ### Requirement: Framework synthesizes selector actions for parented collections
-The system SHALL provide the `causeway.extensions.command-log.recording-support` configuration property that controls command-log recording support behavior.
-The `recording-support` property SHALL be an enum with values `ENABLED` and `DISABLED`.
-The system SHALL default `recording-support` to `DISABLED`.
-When `recording-support` is `ENABLED`, the system SHALL synthesize a safe metamodel `ObjectAction` for each eligible parented collection association whose owning type does not implement the command recording suppression marker interface.
-When `recording-support` is `DISABLED`, the system MUST NOT synthesize parented collection selector actions.
-When a parented collection association's owning type implements the command recording suppression marker interface, the system MUST NOT synthesize a parented collection selector action for that association.
-The system MUST NOT require or use a separate `causeway.extensions.command-log.parented-collection-selector-actions-enabled` boolean property to enable synthetic parented collection selector action creation.
-An eligible parented collection association SHALL be allowed when its owning type is an entity or view model and its element type is an entity, view model, or abstract domain type.
-The synthetic action SHALL represent navigation from the collection owner to one selected collection element.
+
+The system SHALL provide the `causeway.extensions.command-log.recording-support` configuration property that
+controls command-log recording support behavior. The `recording-support` property SHALL be an enum with values
+`ENABLED` and `DISABLED`, defaulting to `DISABLED`. When `recording-support` is `ENABLED`, the system SHALL
+synthesize a safe metamodel `ObjectAction` for each eligible parented collection association whose owning type
+does not implement the command recording suppression marker interface; when `DISABLED`, or when the owning type
+implements that marker, the system MUST NOT synthesize the selector action.
+
 The synthetic action SHALL have a deterministic identifier that does not collide with developer-authored actions.
-The synthetic action identifier SHALL use the reserved prefix `__causeway_navigate_to_` followed by the associated parented collection id.
-The synthetic action SHALL be distinguishable from developer-authored actions by framework metadata.
-The synthetic action SHALL be associated with the parented collection through layout metadata equivalent to `@ActionLayout(associateWith=...)`.
-The synthetic action SHALL have the display name `Navigate To` through name metadata equivalent to `@ActionLayout(named="Navigate To")`.
-The synthetic action SHALL have action layout CSS class metadata equivalent to `@ActionLayout(cssClass="btn-outline-secondary")`.
-The synthetic action SHALL have action layout Font Awesome metadata equivalent to `@ActionLayout(cssClassFa="hand-point-left")`.
+**The synthetic parented-collection selector action identifier SHALL use the reserved prefix
+`__causeway_navigate_to_one_of_` followed by the associated parented collection id** (distinguishing it from the
+scalar-reference navigation identifier, which uses `__causeway_navigate_to_` followed by the reference id). The
+remaining synthesis behavior — eligibility, layout association, display name `Navigate To`, CSS/Font-Awesome
+styling, and marker suppression — is unchanged.
 
-#### Scenario: Synthetic action is not available by default
-- **GIVEN** a domain object type has a parented collection of child entities
-- **AND** command-log recording support is not configured
-- **WHEN** the framework fully introspects the domain object type
-- **THEN** the metamodel does not include a synthetic selector action for that collection
+> Promotion note: the existing requirement's other SHALL statements and all its scenarios are preserved
+> verbatim; only the collection id form and the deterministic-id scenario's prefix assertion change to
+> `__causeway_navigate_to_one_of_`.
 
-#### Scenario: Synthetic action is available when recording support is enabled for an entity-owned parented collection
-- **GIVEN** an entity type has a parented collection of child entities
-- **AND** command-log recording support is `ENABLED`
-- **AND** the entity type does not implement the command recording suppression marker interface
-- **WHEN** the framework fully introspects the entity type
-- **THEN** the metamodel includes a synthetic safe action for navigating to one element from that collection
-- **AND** the synthetic action is associated with the collection owner type
+#### Scenario: Synthetic collection selector action id uses the one-of infix
 
-#### Scenario: Synthetic action is available when recording support is enabled for a view-model-owned parented collection
-- **GIVEN** a view model type has a parented collection of child entities
-- **AND** command-log recording support is `ENABLED`
-- **AND** the view model type does not implement the command recording suppression marker interface
-- **WHEN** the framework fully introspects the view model type
-- **THEN** the metamodel includes a synthetic safe action for navigating to one element from that collection
-- **AND** the synthetic action is associated with the collection owner type
-
-#### Scenario: Synthetic action is not added for marked entity type
-- **GIVEN** an entity type has a parented collection of child entities
-- **AND** command-log recording support is `ENABLED`
-- **AND** the entity type implements the command recording suppression marker interface
-- **WHEN** the framework fully introspects the entity type
-- **THEN** the metamodel does not include a synthetic selector action for that collection
-
-#### Scenario: Synthetic action is not added for marked view model type
-- **GIVEN** a view model type has a parented collection of child entities
-- **AND** command-log recording support is `ENABLED`
-- **AND** the view model type implements the command recording suppression marker interface
-- **WHEN** the framework fully introspects the view model type
-- **THEN** the metamodel does not include a synthetic selector action for that collection
-
-#### Scenario: Synthetic action id is deterministic
-- **GIVEN** the framework introspects the same parented collection in two application runs
-- **WHEN** the synthetic selector action is created in each run
-- **THEN** both actions have the same action identifier
-- **AND** the identifier uses the reserved prefix `__causeway_navigate_to_`
-- **AND** the identifier is reserved so it does not conflict with application action ids
-
-#### Scenario: Ordinary action lists can identify synthetic actions
-- **WHEN** a viewer or metamodel exporter enumerates actions for a type
-- **THEN** it can determine whether a listed action is a synthetic parented collection selector action
-
-#### Scenario: Synthetic action is associated with its parented collection
 - **GIVEN** an entity type `Lease` has a parented collection `items`
 - **AND** command-log recording support is `ENABLED`
 - **AND** `Lease` does not implement the command recording suppression marker interface
 - **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action has layout association metadata for collection id `items`
+- **THEN** the action identifier is `__causeway_navigate_to_one_of_items`
 
-#### Scenario: Synthetic action display name is Navigate To
-- **GIVEN** an entity type `Lease` has a parented collection `items`
-- **AND** command-log recording support is `ENABLED`
-- **AND** `Lease` does not implement the command recording suppression marker interface
-- **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action display name is `Navigate To`
+#### Scenario: Scalar-reference navigation id is unchanged
 
-#### Scenario: Synthetic action uses secondary button styling
-- **GIVEN** an entity type `Lease` has a parented collection `items`
+- **GIVEN** an entity type has a scalar reference property `owner`
 - **AND** command-log recording support is `ENABLED`
-- **AND** `Lease` does not implement the command recording suppression marker interface
-- **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action has CSS class metadata of `btn-outline-secondary`
-
-#### Scenario: Synthetic action uses select navigation icon styling
-- **GIVEN** an entity type `Lease` has a parented collection `items`
-- **AND** command-log recording support is `ENABLED`
-- **AND** `Lease` does not implement the command recording suppression marker interface
-- **WHEN** the framework synthesizes the selector action for `items`
-- **THEN** the action has Font Awesome metadata of `hand-point-left`
+- **WHEN** the framework synthesizes the navigate-to action for `owner`
+- **THEN** the action identifier is `__causeway_navigate_to_owner`
 
 ### Requirement: Selector actions expose parent and scalar child parameters
 The synthetic selector action MUST NOT define a parameter for the current action target.
@@ -493,3 +434,37 @@ The synthetic selector action MUST NOT fall back to child property declaration o
 - **AND** `attachment` is not eligible as a generated selector filter parameter
 - **WHEN** the framework synthesizes the selector action for `Lease.items`
 - **THEN** the generated filter parameters appear in the order `name`, `checkbox`, and `sequence`
+
+### Requirement: Recorded synthetic collection-navigation commands remain replayable
+
+The system SHALL replay a command recorded against a synthetic parented-collection selector action even when the
+collection's filter columns — and therefore the selector action's parameters — have been added, removed, or
+reordered between recording and replay. For a synthetic collection-navigation action, the system SHALL bind each
+recorded command DTO parameter to the current action parameter that has the same parameter id, falling back to
+the same friendly name, rather than by position. Any current selector parameter that has no corresponding
+recorded DTO parameter SHALL be padded with an empty/no-op filter value. Ordinary (non-synthetic) action replay
+SHALL continue to bind arguments positionally.
+
+Because replay matches by parameter identity, the exact set, order, and derivation of the selector's filter
+parameters need not match between the recording and replay environments. Causeway 4 therefore retains its
+established column-order parameter derivation (see "Selector action parameter prompts follow parented collection
+column order") rather than adopting the maintenance member-order derivation or an additional
+`Where.REFERENCES_PARENT` filter exclusion; those are accepted v4 adaptations whose replay impact is absorbed by
+the identity-based binding above.
+
+#### Scenario: Collection-navigation command recorded on an earlier metamodel replays
+
+- **GIVEN** a command DTO recorded against a synthetic collection selector with id `__causeway_navigate_to_one_of_items`
+- **WHEN** the command is replayed on a system that synthesizes the same selector id
+- **THEN** the action is resolved and executed
+- **AND** replay does not fail with an unknown-action error
+
+#### Scenario: Replay tolerates a changed filter-column set
+
+- **GIVEN** a recorded collection-navigation command whose DTO parameters differ from the current selector's
+  parameters because the collection's columns were added, removed, or reordered
+- **WHEN** the command is replayed
+- **THEN** each recorded parameter binds to the current parameter with the same id or friendly name
+- **AND** any current parameter absent from the DTO is padded with an empty filter value
+- **AND** the correct child object is selected
+
