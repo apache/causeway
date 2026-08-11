@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.command;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -210,7 +212,7 @@ public record CommandExecutorServiceDefault(
 
             // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
             // it will switch the targetAdapter to be the mixedInAdapter transparently
-            var argAdapters = argAdaptersFor(actionDto);
+            var argAdapters = argAdaptersFor(actionDto, objectAction);
 
             var interactionHead = objectAction.interactionHead(targetAdapter);
 
@@ -438,12 +440,64 @@ public record CommandExecutorServiceDefault(
 //               name.equalsIgnoreCase("token");
 //    }
 
+    /**
+     * Reserved id prefix for a synthetic parented-collection selector ("navigate to one of") action.
+     * <p>
+     * Must match {@code SyntheticNavigationActionFactory.COLLECTION_ACTION_ID_PREFIX} in core-metamodel (that
+     * package-private constant is not on this module's classpath). The prefix is serialized into the command
+     * DTO, so a recorded collection-navigation command is recognised here on replay.
+     */
+    private static final String PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX = "__causeway_navigate_to_one_of_";
+
+    private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto, final ObjectAction objectAction) {
+        if (objectAction.getId().startsWith(PARENTED_COLLECTION_NAVIGATION_ACTION_ID_PREFIX)) {
+            return argAdaptersForParentedCollectionNavigation(actionDto, objectAction, valueMarshaller);
+        }
+        return argAdaptersFor(actionDto);
+    }
+
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         var actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
         IndexedFunction<ParamDto, ManagedObject> paramDtoManagedObjectIndexedFunction = (i, paramDto) ->
                 valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased(paramDtoManagedObjectIndexedFunction)).collect(Can.toCan());
+    }
+
+    /**
+     * Reconstructs replay arguments for a synthetic parented-collection selector action.
+     * <p>
+     * Such an action's parameters are the collection's optional column filters, which can be added, removed, or
+     * reordered between the time a command is recorded and the time it is replayed. Rather than bind positionally
+     * (which would silently mis-align on any such change), each current action parameter is matched to the
+     * recorded DTO parameter with the same stable id (falling back to friendly name); any current parameter with
+     * no corresponding recorded parameter is padded with an empty/unselected value.
+     * <p>
+     * Package-private and static to allow focused testing.
+     */
+    static Can<ManagedObject> argAdaptersForParentedCollectionNavigation(
+            final ActionDto actionDto,
+            final ObjectAction objectAction,
+            final SchemaValueMarshaller valueMarshaller) {
+
+        var actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
+
+        var paramDtoByName = new HashMap<String, ParamDto>();
+        streamParamDtosFrom(actionDto)
+                .filter(paramDto -> paramDto.getName() != null)
+                .forEach(paramDto -> paramDtoByName.putIfAbsent(paramDto.getName(), paramDto));
+
+        var actionParameters = objectAction.getParameters();
+        var argAdapters = new ArrayList<ManagedObject>(actionParameters.size());
+        for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
+            var actionParameter = actionParameters.getElseFail(paramNum);
+            var paramDto = Optional.ofNullable(paramDtoByName.get(actionParameter.getId()))
+                    .orElseGet(() -> paramDtoByName.get(actionParameter.getCanonicalFriendlyName()));
+            argAdapters.add(paramDto != null
+                    ? valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(paramNum), paramDto)
+                    : ManagedObject.empty(actionParameter.getElementType()));
+        }
+        return argAdapters.stream().collect(Can.toCan());
     }
 
     private static Stream<ParamDto> streamParamDtosFrom(final ActionDto actionDto) {

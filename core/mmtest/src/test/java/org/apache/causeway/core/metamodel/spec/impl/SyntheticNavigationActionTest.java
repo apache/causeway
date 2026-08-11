@@ -230,7 +230,7 @@ class SyntheticNavigationActionTest {
         var mmc = context(true, true);
         var spec = mmc.getSpecificationLoader().specForTypeElseFail(Lease.class);
 
-        assertThat(spec.getAction("__causeway_navigate_to_items")).isPresent();
+        assertThat(spec.getAction("__causeway_navigate_to_one_of_items")).isPresent();
     }
 
     @Test
@@ -254,7 +254,7 @@ class SyntheticNavigationActionTest {
         var spec = mmc.getSpecificationLoader().specForTypeElseFail(Lease.class);
         Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
         assertThat(spec.streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(action -> action.getId().equals("__causeway_navigate_to_items"))
+                .filter(action -> action.getId().equals("__causeway_navigate_to_one_of_items"))
                 .count()).isEqualTo(1L);
     }
 
@@ -262,7 +262,7 @@ class SyntheticNavigationActionTest {
     void collection_action_has_stable_safe_framework_metadata_and_normal_publication() {
         var action = action(context(true), Lease.class, "items").orElseThrow();
 
-        assertThat(action.getId()).isEqualTo("__causeway_navigate_to_items");
+        assertThat(action.getId()).isEqualTo("__causeway_navigate_to_one_of_items");
         assertThat(action.getCanonicalFriendlyName()).isEqualTo("Navigate To");
         assertThat(action.getSemantics()).isEqualTo(SemanticsOf.SAFE);
         assertThat(action.lookupFacet(ParentedCollectionNavigationFacet.class)).isPresent();
@@ -425,7 +425,9 @@ class SyntheticNavigationActionTest {
             final String associationId) {
         ObjectSpecification spec = mmc.getSpecificationLoader().specForTypeElseFail(ownerType);
         Assertions.assertTrue(((ObjectSpecificationInternal)spec).isFullyIntrospected());
-        return spec.getAction(SyntheticNavigationActionFactory.ACTION_ID_PREFIX + associationId);
+        // collection selectors use the "one of" prefix; scalar-reference navigation uses the plain prefix.
+        return spec.getAction(SyntheticNavigationActionFactory.COLLECTION_ACTION_ID_PREFIX + associationId)
+                .or(() -> spec.getAction(SyntheticNavigationActionFactory.ACTION_ID_PREFIX + associationId));
     }
 
     private static Can<ManagedObject> arguments(

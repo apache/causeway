@@ -74,6 +74,16 @@ record SyntheticNavigationActionFactory(
 
     static final String ACTION_ID_PREFIX = "__causeway_navigate_to_";
 
+    /**
+     * Reserved id prefix for a parented-collection selector ("navigate to one of") action. Distinct from the
+     * scalar-reference {@link #ACTION_ID_PREFIX} so the two synthetic forms are disambiguated in the serialized
+     * command DTO (and so a collection command can be replayed compatibly). Note this value <i>starts with</i>
+     * {@link #ACTION_ID_PREFIX}.
+     * <p>
+     * Kept in sync with {@code CommandExecutorServiceDefault}'s replay-side copy of this prefix.
+     */
+    static final String COLLECTION_ACTION_ID_PREFIX = ACTION_ID_PREFIX + "one_of_";
+
     private static final Set<String> EXCLUDED_PARAMETER_PROPERTY_IDS = Set.of(
             "logicalTypeName",
             "id",
@@ -117,7 +127,7 @@ record SyntheticNavigationActionFactory(
                                 .flatMap(specialization -> specialization.right().stream())
                                 .filter(collection -> eligible(ownerSpec, collection))
                                 .filter(collection -> !existingSyntheticActionIds.contains(
-                                        ACTION_ID_PREFIX + collection.getId()))
+                                        COLLECTION_ACTION_ID_PREFIX + collection.getId()))
                                 .map(collection -> createCollectionAction(ownerSpec, collection)),
                         candidates.stream()
                                 .filter(ObjectAssociation::isOneToOneAssociation)
@@ -166,7 +176,7 @@ record SyntheticNavigationActionFactory(
         var facetedMethod = FacetedMethod.createSyntheticAction(
         		ownerSpec.getMetaModelContext(),
                 ownerSpec.getCorrespondingClass(),
-                ACTION_ID_PREFIX + collection.getId(),
+                COLLECTION_ACTION_ID_PREFIX + collection.getId(),
                 collection.getElementType().getCorrespondingClass(),
                 parameterTypes,
                 parameterNames);
