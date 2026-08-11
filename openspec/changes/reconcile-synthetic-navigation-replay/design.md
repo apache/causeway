@@ -70,23 +70,34 @@ DTO `ParamDto` to a current action parameter by parameter id, falling back to fr
 empty/no-op value for any current filter parameter with no corresponding DTO parameter. All other actions keep
 positional `argAdaptersFor`.
 
-### Parameter derivation refinements (fold in G9, G11)
+### Parameter derivation refinements (G9, G11) — DEFERRED as accepted v4 adaptations
 
-- **G9:** exclude a filter property hidden at `Where.REFERENCES_PARENT` from the synthesized filter parameters
-  (the current `_MembersAsColumns` path honours `Where.PARENTED_TABLES` and parent-reference removal but not the
-  separate `REFERENCES_PARENT` veto).
-- **G11:** order the filter parameters by member-order sequence then id, so the recorded and replayed parameter
-  orders agree even when the element type declares a grid (the current path can use grid-occurrence order).
+On re-verification against current HEAD, both are **not** ported:
 
-These two are low-severity but belong with the id/binding fix because they shape the same parameter set that
-replay must align.
+- **G11 (member-order parameter ordering) conflicts with a deliberate, shipped Causeway 4 decision.** The
+  `synthetic-command-navigation` spec already contains the requirement *"Selector action parameter prompts follow
+  parented collection column order"* (with scenarios), and `SyntheticNavigationActionTest.collection_parameters_follow_columns_...`
+  asserts exactly that order. Adopting maintenance's `byMemberOrderSequence` ordering would reverse that v4
+  choice and break the test — for no replay benefit, because…
+- **…the identity-based replay binding (above) makes parameter set/order irrelevant to replay.** A recorded
+  command's parameters are matched to the current action by id/friendly name and padded, so the recording and
+  replay environments need not derive the same parameter set or order. This subsumes **G9** (the extra
+  `Where.REFERENCES_PARENT` exclusion) as well: whether or not such a property appears as a filter parameter,
+  replay aligns by identity and pads. G9 would also risk changing Causeway 4's column-derived parameter set
+  (`streamAssociationsForColumnRendering`), which is exercised by the same test.
+
+Both are therefore recorded as accepted Causeway 4 adaptations (per the programme's adaptation policy) rather than
+gaps. The meta-analyses rate both LOW severity and explicitly note they are subsumed by the argument-binding fix.
+The P0 replay-compatibility behaviour (stable `one_of_` id + identity-based argument reconstruction) is delivered
+in full.
 
 ### CAUSEWAY-4044 interaction
 
-The factory is now a record and column/parameter selection flows through `_MembersAsColumns`. Re-verify the
-current column-derivation entry points before editing, and apply the id and ordering changes within that
-structure rather than reintroducing the pre-4044 shape. `CommandExecutorServiceDefault` is unaffected by the
-merge (0-diff vs the audited head), so its replay-path edits are as the audits described.
+The factory is now a record and column/parameter selection flows through `_MembersAsColumns`; the id change is
+applied within that structure (a new `COLLECTION_ACTION_ID_PREFIX` constant) rather than reintroducing the
+pre-4044 shape, and the column-order parameter derivation is left intact (see the G9/G11 decision above).
+`CommandExecutorServiceDefault` is unaffected by the merge (0-diff vs the audited head), so its replay-path edits
+are as the audits described.
 
 ## Acceptance evidence
 

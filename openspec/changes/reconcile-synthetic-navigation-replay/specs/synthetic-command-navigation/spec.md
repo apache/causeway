@@ -61,9 +61,12 @@ the same friendly name, rather than by position. Any current selector parameter 
 recorded DTO parameter SHALL be padded with an empty/no-op filter value. Ordinary (non-synthetic) action replay
 SHALL continue to bind arguments positionally.
 
-The system SHALL derive the selector's filter parameters excluding any filter property hidden at
-`Where.REFERENCES_PARENT`, and SHALL order those parameters by member-order sequence and then by id, so that a
-recorded parameter set aligns deterministically with the current metamodel.
+Because replay matches by parameter identity, the exact set, order, and derivation of the selector's filter
+parameters need not match between the recording and replay environments. Causeway 4 therefore retains its
+established column-order parameter derivation (see "Selector action parameter prompts follow parented collection
+column order") rather than adopting the maintenance member-order derivation or an additional
+`Where.REFERENCES_PARENT` filter exclusion; those are accepted v4 adaptations whose replay impact is absorbed by
+the identity-based binding above.
 
 #### Scenario: Collection-navigation command recorded on an earlier metamodel replays
 
@@ -80,9 +83,3 @@ recorded parameter set aligns deterministically with the current metamodel.
 - **THEN** each recorded parameter binds to the current parameter with the same id or friendly name
 - **AND** any current parameter absent from the DTO is padded with an empty filter value
 - **AND** the correct child object is selected
-
-#### Scenario: A parent-referencing filter property is excluded from selector parameters
-
-- **GIVEN** a parented collection whose element type has a property hidden at `Where.REFERENCES_PARENT`
-- **WHEN** the framework synthesizes the selector action
-- **THEN** that property is not a selector filter parameter
