@@ -30,8 +30,9 @@ change or validated until it is promoted.
 | slice 10 | `reconcile-command-manager-page-limit` | MA-16 (D-C) | MODIFIED `unified-command-manager` |
 
 Slice 1 (`reconcile-mixin-domain-event-isolation`, MA-1) is **archived** (spec synced to
-`openspec/specs/mixin-domain-event-isolation/`; change under `openspec/changes/archive/`). Slices 2–10 remain
-drafted here; there is currently **no active change**, so the next slice can be promoted whenever wanted.
+`openspec/specs/mixin-domain-event-isolation/`; change under `openspec/changes/archive/`). Slice 2
+(`reconcile-synthetic-navigation-replay`, MA-5) has been **promoted to the active change** under
+`openspec/changes/` and is no longer in this directory. Slices 3–10 remain drafted here.
 
 > **Effort:** every proposal carries a recommended reasoning-effort note. Slices **2**
 > (`reconcile-synthetic-navigation-replay`, MA-5) and **3** (`reconcile-replay-failure-continuation`, MA-3) touch

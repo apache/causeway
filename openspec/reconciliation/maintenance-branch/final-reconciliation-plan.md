@@ -168,7 +168,8 @@ is moved into `openspec/changes/` verbatim, and re-validated, when its turn come
 | Slice | Status | Evidence |
 |---|---|---|
 | 1 `reconcile-mixin-domain-event-isolation` (MA-1) | **Archived** | spec `openspec/specs/mixin-domain-event-isolation/`; archive `openspec/changes/archive/2026-08-10-reconcile-mixin-domain-event-isolation/`; impl commit `f7d8b5e474f`; `core/metamodel`+`core/mmtest` green under JDK 21 (937 tests, 0 failures) |
-| 2–10 | Drafted (not started) | `planned-changes/` |
+| 2 `reconcile-synthetic-navigation-replay` (MA-5) | **In progress** (active change) | promoted to `openspec/changes/`; proposal validated strict |
+| 3–10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
 
