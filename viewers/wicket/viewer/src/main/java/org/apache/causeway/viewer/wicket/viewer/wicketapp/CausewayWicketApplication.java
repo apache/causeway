@@ -24,30 +24,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
-import jakarta.inject.Inject;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.IPageFactory;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.markup.head.ResourceAggregator;
-import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.RequestCycleSettings;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
@@ -74,7 +50,30 @@ import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStartHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStopHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
+import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.IPageFactory;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.markup.head.ResourceAggregator;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.RequestCycleSettings;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -175,7 +174,9 @@ implements
         super.init();
 
         // initialize Spring Dependency Injection for wicket
-        var springInjector = new SpringComponentInjector(this);
+        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        var springInjector = new SpringComponentInjector(this, context, false); //workaround https://github.com/raphw/byte-buddy/issues/1915#issuecomment-4901692009
+        //var springInjector = new SpringComponentInjector(this); //origin
         getComponentInstantiationListeners().add(springInjector);
 
         // self managed dependency injection
