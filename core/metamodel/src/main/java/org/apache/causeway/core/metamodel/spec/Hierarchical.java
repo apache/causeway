@@ -30,27 +30,16 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public interface Hierarchical {
 
-    /**
+    final static Hierarchical EMPTY = new Hierarchical() {
+		@Override public ObjectSpecification superclass() { return null; }
+		@Override public Can<ObjectSpecification> interfaces() { return Can.empty(); }
+	};
+
+	/**
      * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
     Can<ObjectSpecification> interfaces();
-
-    /**
-     * Whether <code>this</code> specification represents the same specification,
-     * or a subclass of the specified <code>other</code> specification.
-     * <p>
-     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
-     * {@link Class#isAssignableFrom(Class) Java's}
-     * <tt>superType.isAssignableFrom(subType)</tt>.
-     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
-     */
-    boolean isOfType(ObjectSpecification other);
-
-    /**
-     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
-     */
-    boolean isOfTypeResolvePrimitive(ObjectSpecification other);
 
     /**
      * Get the specification for this specification's class's superclass.

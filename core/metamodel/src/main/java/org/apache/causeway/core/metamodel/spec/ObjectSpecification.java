@@ -77,6 +77,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -647,6 +648,34 @@ extends
      */
     default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
         return Stream.concat(streamTypeHierarchy(), interfaces().stream());
+    }
+
+    /**
+     * Whether <code>this</code> specification represents the same specification,
+     * or a subclass of the specified <code>other</code> specification.
+     * <p>
+     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
+     * {@link Class#isAssignableFrom(Class) Java's}
+     * <tt>superType.isAssignableFrom(subType)</tt>.
+     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
+     */
+    default boolean isOfType(final ObjectSpecification other) {
+    	var thisClass = this.getCorrespondingClass();
+    	var otherClass = other.getCorrespondingClass();
+
+    	return thisClass == otherClass
+    			|| otherClass.isAssignableFrom(thisClass);
+    }
+
+    /**
+     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
+     */
+    default boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
+        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
+        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
+
+        return thisClass == otherClass
+                || otherClass.isAssignableFrom(thisClass);
     }
 
     // -- COMMON SUPER TYPE FINDER

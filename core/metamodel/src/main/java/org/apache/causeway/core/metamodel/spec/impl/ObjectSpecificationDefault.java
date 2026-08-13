@@ -18,17 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -77,12 +74,10 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.jspecify.annotations.NonNull;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -99,7 +94,6 @@ implements
     // -- CONSTRUCTION
 
     private final FacetedMethodsFactory facetedMethodsFactory;
-    private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
 
@@ -120,6 +114,8 @@ implements
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
     @Getter @Accessors(fluent = true)
     private MemberCatalog memberCatalog = MemberCatalog.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private Hierarchical hierarchical = Hierarchical.EMPTY;
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
     		_Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
@@ -130,14 +126,6 @@ implements
     /** not API, used for validation */
     @Getter @Accessors(fluent = true)
     private final Set<ResolvedMethod> potentialOrphans = new HashSet<>();
-
-    private final List<ObjectSpecification> interfaces = new ArrayList<>();
-
-    // defensive immutable lazy copy of interfaces
-    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
-    		_Lazy.threadSafe(()->Can.ofCollection(interfaces));
-
-    private ObjectSpecification superclassSpec;
 
     private ValueFacet<?> valueFacet;
     private EntityFacet entityFacet;
@@ -172,7 +160,6 @@ implements
             Identifier.classIdentifier(logicalType()));
 
         this.postProcessor = postProcessor;
-        this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
         facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
@@ -185,9 +172,12 @@ implements
         this.facetedMethodsFactory =
                 new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
 
+        final var hierarchicalFactory =
+        		new HierarchicalFactory(specLoaderInternal(), classSubstitutorRegistry, facetHolder);
+
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
-        			introspectTypeHierarchy();
+        			introspectTypeHierarchy(hierarchicalFactory);
         	        invalidateCachedFacets();
         		},
         		()->{
@@ -212,6 +202,8 @@ implements
 	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
 	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
 	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
+	@Override public ObjectSpecification superclass() { return hierarchical.superclass(); }
+    @Override public Can<ObjectSpecification> interfaces() { return hierarchical.interfaces(); }
 
     // -- CONTRACT
 
@@ -233,23 +225,17 @@ implements
                 : superclass().getFullIdentifier());
     }
 
-    private void introspectTypeHierarchy() {
-
+    private void introspectTypeHierarchy(final HierarchicalFactory hierarchicalFactory) {
         facetedMethodsFactory.introspectClass();
 
         // name
         addNamedFacetIfRequired();
 
         // go no further if a value
-        if(this.isValue()) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
-            }
-            return;
-        }
+        if(this.isValue())
+			return;
 
-        loadSpecOfSuperclass(getCorrespondingClass().getSuperclass());
-        loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
+        this.hierarchical = hierarchicalFactory.createHierarchical(getCorrespondingClass());
     }
 
     private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer) {
@@ -326,69 +312,6 @@ implements
     @Override
     public Optional<ObjectSpecification> explicitElementSpec() {
         return elementSpecification.get();
-    }
-
-    private void loadSpecOfSuperclass(final Class<?> superclass) {
-        if (superclass == null)
-			return;
-
-        this.superclassSpec = specLoaderInternal().loadSpecificationTypeOnly(superclass);
-        if (superclassSpec != null
-        		&& log.isDebugEnabled()) {
-            log.debug("  Superclass {}", superclass.getName());
-        }
-    }
-
-    private void loadSpecOfInterfaces(final Class<?>[] interfaces) {
-    	if(interfaces==null)
-			return;
-
-    	var classCache = _ClassCache.getInstance();
-
-        final List<ObjectSpecification> interfaceSpecList = Stream.of(interfaces)
-    		// pre-filter common interfaces (performance)
-        	.filter(interfaceType->!interfaceType.getName().startsWith("java."))
-        	//--
-        	.map(interfaceType->{
-        		var substitution = classSubstitutorRegistry.getSubstitution(interfaceType);
-                return substitution.isReplace()
-                		? substitution.replacement()
-        				: substitution.isNeverIntrospect()
-    	    				? null
-    	    				: interfaceType;
-        	})
-        	.filter(Objects::nonNull)
-        	.filter(interfaceType->classCache.head(interfaceType).hasAnnotation(DomainObject.class))
-        	.map(specLoaderInternal()::loadSpecificationTypeOnly)
-        	.filter(Objects::nonNull)
-        	.toList();
-
-        if(!interfaceSpecList.isEmpty()) {
-        	if(interfaceSpecList.size()>1) {
-              ValidationFailure.raiseFormatted(facetHolder,
-            		  "Cannot use @DomainObject on more than one interface, as inherited by: %s",
-            		  getCorrespondingClass().getName());
-        	}
-        	if (superclassSpec != null) {
-        		var superType = superclassSpec.getCorrespondingClass();
-        		if(classCache.head(superType).hasAnnotation(DomainObject.class)) {
-        			ValidationFailure.raiseFormatted(facetHolder,
-                  		  "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by: %s",
-                  		  getCorrespondingClass().getName());
-        		}
-        	}
-
-//debug
-//        	System.err.println("%s".formatted(getCorrespondingClass().getName()));
-//        	interfaceSpecList.forEach(i->{
-//        		System.err.println("- %s".formatted(i.getCorrespondingClass().getName()));
-//        	});
-        	synchronized(unmodifiableInterfaces) {
-                this.interfaces.clear();
-                this.interfaces.addAll(interfaceSpecList);
-                unmodifiableInterfaces.clear();
-            }
-        }
     }
 
     private void invalidateCachedFacets() {
@@ -494,26 +417,6 @@ implements
             .map(FaLayersProvider::getLayers);
     }
 
-    // -- HIERARCHICAL
-
-    @Override
-    public boolean isOfType(final ObjectSpecification other) {
-        var thisClass = this.getCorrespondingClass();
-        var otherClass = other.getCorrespondingClass();
-
-        return thisClass == otherClass
-                || otherClass.isAssignableFrom(thisClass);
-    }
-
-    @Override
-    public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
-        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
-        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
-
-        return thisClass == otherClass
-                || otherClass.isAssignableFrom(thisClass);
-    }
-
     // -- NAME, DESCRIPTION, PERSISTABILITY
 
     @Override
@@ -547,22 +450,10 @@ implements
 
     @Override
     public <Q extends Facet> Optional<Q> lookupFacet(final Class<Q> facetType) {
-        synchronized(unmodifiableInterfaces) {
-        	return Hierarchical.lookupFacet(facetType, facetHolder, this);
-        }
+        return Hierarchical.lookupFacet(facetType, facetHolder, this);
     }
 
     // -- INHERITED
-
-    @Override
-    public ObjectSpecification superclass() {
-        return superclassSpec;
-    }
-
-    @Override
-    public Can<ObjectSpecification> interfaces() {
-        return unmodifiableInterfaces.get();
-    }
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
@@ -590,7 +481,7 @@ implements
 				typeMeta,
 				getFeatureType(),
 				facetHolder,
-				this,//Hierarchical,
+				hierarchical,
 				objectActionContainer,
 				objectAssociationContainer,
 				getServiceRegistry().select(EntityTitleSubscriber.class),

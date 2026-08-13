@@ -109,12 +109,6 @@ implements
     @Override public Can<ObjectSpecification> interfaces() {
         return hierarchical.interfaces();
     }
-    @Override public boolean isOfType(final ObjectSpecification other) {
-        return hierarchical.isOfType(other);
-    }
-    @Override public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
-        return hierarchical.isOfTypeResolvePrimitive(other);
-    }
     @Override public ObjectSpecification superclass() {
         return hierarchical.superclass();
     }
