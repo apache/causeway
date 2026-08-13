@@ -156,15 +156,14 @@ identified
         module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.53</swagger-core.version>
 
-        <wicket.version>10.10.0</wicket.version>
+        <wicket.version>10.9.1</wicket.version>
         <wicket-bootstrap.version>7.0.14</wicket-bootstrap.version> <!--
         de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>4.0.14</wicket-webjars.version> <!--
         de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--
         as served by wicket via webjars -->
-        <wicketstuff.version>10.10.0</wicketstuff.version> <!--
-        org.wicketstuff:wicketstuff-select2 !!! 10.9.1 is broken wait for fix -->
+        <wicketstuff.version>10.9.2</wicketstuff.version>
 
         <!-- OTHER -->
 
