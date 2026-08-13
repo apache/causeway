@@ -156,8 +156,18 @@ public record CommandReplayManager(
                 final boolean moveBaselineToOldest) {
             var yamlDs = commandsYaml.asDataSource();
 
-            final List<CommandDto> commandDtos = CommandDtoUtils.fromYaml(yamlDs);
-            commandDtos.forEach(commandLogEntryRepository()::saveForReplay);
+            // strict decode: accepts the wrapped-export and legacy multi-document forms and fails (rather than
+            // silently importing nothing) on unparseable input, matching the unified importer.
+            final var imported = CommandDtoUtils.fromYamlForReplay(yamlDs);
+            final List<CommandDto> commandDtos = imported.stream()
+                    .map(CommandDtoUtils.ImportedCommandDto::getCommand)
+                    .toList();
+            imported.forEach(value -> {
+                final var entry = commandLogEntryRepository().saveForReplay(value.getCommand());
+                if (value.getResult() != null) {
+                    entry.setResult(value.getResult());
+                }
+            });
 
             return moveBaselineToOldest
                 ? oldestTimestamp(commandDtos)
