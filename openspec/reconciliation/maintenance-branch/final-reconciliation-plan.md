@@ -171,7 +171,8 @@ is moved into `openspec/changes/` verbatim, and re-validated, when its turn come
 | 2 `reconcile-synthetic-navigation-replay` (MA-5) | **Archived** | spec synced to `openspec/specs/synthetic-command-navigation/`; archive `openspec/changes/archive/2026-08-11-reconcile-synthetic-navigation-replay/`; impl commit `78e2e636126`; `core/mmtest`+`core/runtimeservices` green under JDK 21 (988 tests, 0 failures). G9/G11 parameter-derivation refinements deferred as accepted v4 adaptations (conflict with the shipped column-order spec; subsumed by identity-based replay binding) |
 | 3 `reconcile-replay-failure-continuation` (MA-3, MA-13) | **Archived** | specs synced (`command-replay-background-completion`, `replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-replay-failure-continuation/`; impl commit `731e1b75fb5`; commandlog applib green under JDK 21 (154 tests, 0 failures) + JPA replay integ (3, 0). MA-14 (queryResultsCache clear) intentionally not ported — no replay cache on main |
 | 4 `reconcile-replay-import-idempotency` (MA-2) | **Archived** | spec synced (`command-result-metadata`); archive `openspec/changes/archive/2026-08-13-reconcile-replay-import-idempotency/`; impl commit `6bffce726e0`; commandlog applib green under JDK 21 (157 tests, 0 failures) |
-| 5–10 | Drafted (not started) | `planned-changes/` |
+| 5 `reconcile-appfeat-reference-data` (MA-4) | **Archived** | spec synced (`command-export-refdata-marker`); archive `openspec/changes/archive/2026-08-13-reconcile-appfeat-reference-data/`; impl commit `0b38b62fed8`; secman applib green under JDK 21 |
+| 6–10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
 
