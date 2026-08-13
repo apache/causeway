@@ -202,8 +202,8 @@ implements
 	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
 	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
 	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
-	@Override public ObjectSpecification superclass() { return hierarchical.superclass(); }
-    @Override public Can<ObjectSpecification> interfaces() { return hierarchical.interfaces(); }
+	@Override public Optional<ObjectSpecification> superSpec() { return hierarchical.superSpec(); }
+    @Override public Can<ObjectSpecification> interfaceSpecs() { return hierarchical.interfaceSpecs(); }
 
     // -- CONTRACT
 
@@ -220,9 +220,9 @@ implements
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), beanSort().name(), superclass() == null
+            .formatted(getFullIdentifier(), beanSort().name(), superSpec().isEmpty()
                 ? "Object"
-                : superclass().getFullIdentifier());
+                : superSpec().get().getFullIdentifier());
     }
 
     private void introspectTypeHierarchy(final HierarchicalFactory hierarchicalFactory) {
@@ -276,12 +276,12 @@ implements
 
         this.objectAssociationContainer = new AssociationContainer(
         		_MemberSortingUtils.associationsInOrder(this, regularAssociations, mixedInAssociations),
-        		superclass(),
+        		superSpec().orElse(null),
         		this);
         this.objectActionContainer = new ActionContainer(
         		_MemberSortingUtils.actionsInOrder(this, regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
-        		superclass());
+        		superSpec().orElse(null));
 
         //TODO? can we run mixin creation without triggering full introspection of other types ... if(!isMixin()) {
 		postProcessor.postProcess(this);

@@ -106,12 +106,8 @@ implements
 
     // -- HIERARCHICAL
 
-    @Override public Can<ObjectSpecification> interfaces() {
-        return hierarchical.interfaces();
-    }
-    @Override public ObjectSpecification superclass() {
-        return hierarchical.superclass();
-    }
+    @Override public Optional<ObjectSpecification> superSpec() { return hierarchical.superSpec(); }
+    @Override public Can<ObjectSpecification> interfaceSpecs() { return hierarchical.interfaceSpecs(); }
 
     // -- ACTION CONTAINER
 
@@ -167,9 +163,9 @@ implements
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), beanSort().name(), superclass() == null
+            .formatted(getFullIdentifier(), beanSort().name(), superSpec().isEmpty()
                 ? "Object"
-                : superclass().getFullIdentifier());
+                : superSpec().get().getFullIdentifier());
     }
 
     // -- COMPONENTS AND GETTERS

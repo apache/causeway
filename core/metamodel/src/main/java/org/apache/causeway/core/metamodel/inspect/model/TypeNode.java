@@ -64,11 +64,11 @@ implements MMNode, Serializable {
         details.put("Simple Name", spec.logicalType().logicalSimpleName());
         details.put("Namespace", spec.logicalType().namespace());
         details.put("Corresponding Class", spec.getCorrespondingClass().getName());
-        Optional.ofNullable(spec.superclass())
+        spec.superSpec()
 	        .ifPresent(superType->{
 	        	details.put("Super Type", superType.getCorrespondingClass().getName());
 	        });
-        spec.interfaces().stream()
+        spec.interfaceSpecs()
 	        .forEach(interfc->details.put(
 	        		"Interface",
 	        		interfc.getCorrespondingClass().getName()));
@@ -90,8 +90,8 @@ implements MMNode, Serializable {
 
         return _Streams.<MMNode>concat(
             Stream.of(
-            		MMNodeFactory.superType(spec.superclass(), this),
-            		MMNodeFactory.interfaceGroup(spec.interfaces(), this),
+            		MMNodeFactory.superType(spec.superSpec().orElse(null), this),
+            		MMNodeFactory.interfaceGroup(spec.interfaceSpecs(), this),
                     MMNodeFactory.facetGroup(spec.streamFacets(), this))
             	.filter(Objects::nonNull),
             spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED)

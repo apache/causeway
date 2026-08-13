@@ -723,9 +723,11 @@ implements
         }
     }
 
+    @Deprecated
     private void invalidateCache(final Class<?> cls) {
         var substitute = classSubstitutorRegistry.getSubstitution(cls);
-        if(substitute.isNeverIntrospect()) return;
+        if(substitute.isNeverIntrospect())
+        	return;
 
         var objSpec =
                 loadSpecification(substitute.apply(cls), IntrospectionRequest.FULL);
@@ -733,7 +735,7 @@ implements
         while(objSpec != null) {
             var type = objSpec.getCorrespondingClass();
             cache.remove(type);
-            objSpec = objSpec.superclass();
+            objSpec = objSpec.superSpec().orElse(null);
         }
     }
 

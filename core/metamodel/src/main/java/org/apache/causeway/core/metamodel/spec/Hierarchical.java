@@ -31,23 +31,38 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 public interface Hierarchical {
 
     final static Hierarchical EMPTY = new Hierarchical() {
-		@Override public ObjectSpecification superclass() { return null; }
-		@Override public Can<ObjectSpecification> interfaces() { return Can.empty(); }
+		@Override public Optional<ObjectSpecification> superSpec() { return Optional.empty(); }
+		@Override public Can<ObjectSpecification> interfaceSpecs() { return Can.empty(); }
 	};
+
+	record HierarchicalRecord(
+			Optional<ObjectSpecification> superSpec,
+			Can<ObjectSpecification> interfaceSpecs)
+	implements Hierarchical {
+		public HierarchicalRecord {
+			superSpec = superSpec!=null
+					? superSpec
+					: Optional.empty();
+			interfaceSpecs = interfaceSpecs!=null
+					? interfaceSpecs
+					: Can.empty();
+		}
+	}
 
 	/**
      * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
-    Can<ObjectSpecification> interfaces();
+    Can<ObjectSpecification> interfaceSpecs();
 
     /**
      * Get the specification for this specification's class's superclass.
      */
-    ObjectSpecification superclass();
+    Optional<ObjectSpecification> superSpec();
+
 
     default boolean isTypeHierarchyRoot() {
-        return superclass()==null;
+        return superSpec().isEmpty();
     }
 
 	static <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType,
@@ -57,12 +72,12 @@ public interface Hierarchical {
 		Stream<T> facets1 = facetHolder.lookupFacet(facetType).stream();
 
         // lookup all interfaces
-		Stream<T> facets2 = _NullSafe.stream(hierarchical.interfaces())
+		Stream<T> facets2 = hierarchical.interfaceSpecs().stream()
                 .filter(_NullSafe::isPresent) // just in case
                 .flatMap(interfaceSpec->interfaceSpec.lookupFacet(facetType).stream());
 
         // search up the inheritance hierarchy
-		Stream<T> facets3 = _NullSafe.streamNullable(hierarchical.superclass())
+		Stream<T> facets3 = hierarchical.superSpec().stream()
                 .flatMap(superSpec->superSpec.lookupFacet(facetType).stream());
 
 		Stream<T> facetsCombined = _Streams.<T>concat(facets1, facets2, facets3);

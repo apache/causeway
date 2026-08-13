@@ -29,6 +29,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
+import org.apache.causeway.core.metamodel.spec.Hierarchical.HierarchicalRecord;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.jspecify.annotations.Nullable;
@@ -49,23 +50,6 @@ record HierarchicalFactory(
 	}
 
 	// -- HELPER
-
-	private record HierarchicalRecord(
-			Optional<ObjectSpecification> superSpec,
-			Can<ObjectSpecification> interfaceSpecs)
-	implements Hierarchical {
-
-		@Override
-		public Can<ObjectSpecification> interfaces() {
-			return interfaceSpecs;
-		}
-
-		@Override
-		public ObjectSpecification superclass() {
-			return superSpec.orElse(null);
-		}
-
-	}
 
     private Can<ObjectSpecification> loadInterfaces(final Class<?> cls) {
     	final Class<?>[] interfaces = cls.getInterfaces();

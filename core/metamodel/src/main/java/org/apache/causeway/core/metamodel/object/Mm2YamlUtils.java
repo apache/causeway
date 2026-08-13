@@ -106,7 +106,7 @@ public final class Mm2YamlUtils {
 			specs.stream().sorted()
 				.forEach(spec->writer.writeln("- {class=%s%s, ract={%s}, rass={%s}}",
 						spec.getFullIdentifier(),
-						formatSuper(spec.superclass()),
+						formatSuper(spec.superSpec().orElse(null)),
 						formatRegularActions(spec),
 						formatRegularAssociations(spec)
 						));

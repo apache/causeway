@@ -35,7 +35,6 @@ import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -636,8 +635,8 @@ extends
      * @since 2.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
-        return superclass()!=null
-                ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
+        return superSpec().isPresent()
+                ? Stream.concat(Stream.of(this), superSpec().get().streamTypeHierarchy())
                 : Stream.of(this);
     }
 
@@ -647,7 +646,7 @@ extends
      * @since 4.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
-        return Stream.concat(streamTypeHierarchy(), interfaces().stream());
+        return Stream.concat(streamTypeHierarchy(), interfaceSpecs().stream());
     }
 
     /**
@@ -695,9 +694,9 @@ extends
             return b;
         // assuming the algorithm is correct: if non of the above is true,
         // we must be able to walk up the tree on both branches
-        _Assert.assertNotNull(a.superclass());
-        _Assert.assertNotNull(b.superclass());
-        return commonSuperType(a.superclass(), b.superclass());
+        var superA = a.superSpec().orElseThrow();
+        var superB = b.superSpec().orElseThrow();
+        return commonSuperType(superA, superB);
     }
 
     // -- VALUE SEMANTICS SUPPORT
