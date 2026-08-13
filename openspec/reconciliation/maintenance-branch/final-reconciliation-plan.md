@@ -169,7 +169,7 @@ is moved into `openspec/changes/` verbatim, and re-validated, when its turn come
 |---|---|---|
 | 1 `reconcile-mixin-domain-event-isolation` (MA-1) | **Archived** | spec `openspec/specs/mixin-domain-event-isolation/`; archive `openspec/changes/archive/2026-08-10-reconcile-mixin-domain-event-isolation/`; impl commit `f7d8b5e474f`; `core/metamodel`+`core/mmtest` green under JDK 21 (937 tests, 0 failures) |
 | 2 `reconcile-synthetic-navigation-replay` (MA-5) | **Archived** | spec synced to `openspec/specs/synthetic-command-navigation/`; archive `openspec/changes/archive/2026-08-11-reconcile-synthetic-navigation-replay/`; impl commit `78e2e636126`; `core/mmtest`+`core/runtimeservices` green under JDK 21 (988 tests, 0 failures). G9/G11 parameter-derivation refinements deferred as accepted v4 adaptations (conflict with the shipped column-order spec; subsumed by identity-based replay binding) |
-| 3 `reconcile-replay-failure-continuation` (MA-3) | **In progress** (active change) | promoted to `openspec/changes/`; proposal validated strict |
+| 3 `reconcile-replay-failure-continuation` (MA-3, MA-13) | **Archived** | specs synced (`command-replay-background-completion`, `replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-replay-failure-continuation/`; impl commit `731e1b75fb5`; commandlog applib green under JDK 21 (154 tests, 0 failures) + JPA replay integ (3, 0). MA-14 (queryResultsCache clear) intentionally not ported — no replay cache on main |
 | 4–10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
