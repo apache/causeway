@@ -642,6 +642,8 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
         } else {
             setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.FAILED);
             setReplayStateFailureReason(_Strings.trimmed(analysis, 255));
+            // also retain the fuller failure detail on the exception field
+            setException(analysis);
         }
 
     }

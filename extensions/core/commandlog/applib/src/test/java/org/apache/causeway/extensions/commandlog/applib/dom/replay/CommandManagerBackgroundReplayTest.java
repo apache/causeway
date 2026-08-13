@@ -146,15 +146,18 @@ class CommandManagerBackgroundReplayTest {
     }
 
     @Test
-    void boundedReplayStopsAfterFailure() {
+    void boundedReplayContinuesAfterRecordedFailure() {
         var fixture = fixture(2, true);
         fixture.failNextExecution().set(true);
 
         new CommandManager_replayOrRetryMultiple(fixture.manager())
                 .act(CommandManager_replayOrRetryMultiple.Limit.ALL);
 
-        assertThat(fixture.executions()).hasValue(1);
-        assertThat(fixture.entries().get(1).state()).hasValue(ReplayState.PENDING);
+        // the first command fails, but the failure is recorded and mapped to success, so the batch
+        // continues to the second command instead of halting on the first failure.
+        assertThat(fixture.executions()).hasValue(2);
+        verify(fixture.entries().get(0).entry()).saveAnalysis("replay failed");
+        assertThat(fixture.entries().get(1).state()).hasValue(ReplayState.OK);
     }
 
     @Test

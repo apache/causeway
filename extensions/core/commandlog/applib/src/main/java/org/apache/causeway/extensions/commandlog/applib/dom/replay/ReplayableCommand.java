@@ -50,6 +50,9 @@ import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
+import org.apache.causeway.applib.services.wrapper.DisabledException;
+import org.apache.causeway.applib.services.wrapper.HiddenException;
+import org.apache.causeway.applib.services.wrapper.InvalidException;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -515,12 +518,15 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
                     .valueAsNullableElseFail();
                 onReplaySuccess(actualResult);
                 return actualResult;
+            })
+            // a handled replay failure is recorded (in its own transaction) and mapped to a successful
+            // outcome, so that a bounded/multiple replay continues to the next command rather than halting
+            // the whole batch on the first failure.
+            .mapFailureToSuccess(ex -> {
+                replayContext.transactionService()
+                    .runTransactional(Propagation.REQUIRES_NEW, () -> onReplayError(ex));
+                return null;
             });
-
-        tryResultBookmark.accept(
-            ex -> replayContext.transactionService()
-                .runTransactional(Propagation.REQUIRES_NEW, () -> onReplayError(ex)),
-            __ -> { });
 
         // in any outcome case (OK or FAILED) the ReplayState may have changed, hence invalidate local cache
         invalidateCachedRecord();
@@ -556,11 +562,24 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
     }
 
     /**
-     * Handles the replay error case.
+     * Handles the replay error case: records the failure analysis on the entry (which persists the
+     * {@link ReplayState#FAILED} state, the failure reason, and the exception), classified with a typed
+     * prefix so the recorded reason distinguishes a hidden/disabled target from invalid input.
      */
     private void onReplayError(final Throwable ex) {
         commandLogEntry() // refetch from persistence
-            .ifPresent(entry->entry.saveAnalysis(ex.toString()));
+            .ifPresent(entry->entry.saveAnalysis(typedAnalysisPrefix(ex) + messageOf(ex)));
+    }
+    private static String typedAnalysisPrefix(final Throwable ex) {
+        if(ex instanceof HiddenException
+                || ex instanceof DisabledException) return "Disabled: ";
+        if(ex instanceof InvalidException) return "Invalid: ";
+        return "";
+    }
+    private static String messageOf(final Throwable ex) {
+        return ex.getMessage() != null
+                ? ex.getMessage()
+                : ex.toString();
     }
     /**
      * Handles the happy replay case.

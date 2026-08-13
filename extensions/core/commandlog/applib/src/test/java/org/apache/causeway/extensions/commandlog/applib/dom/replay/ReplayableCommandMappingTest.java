@@ -31,6 +31,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
+import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -137,7 +138,7 @@ class ReplayableCommandMappingTest {
     }
 
     @Test
-    void failedCommandExecutionDoesNotNotifyResult() {
+    void failedCommandExecutionRecordsAnalysisAndMapsToSuccess() {
         var listener = mock(CommandReplayMappingListener.class);
         var fixture = fixture(
             new ImmediateTransactionService(), UUID.randomUUID(), bookmark("demo.Customer", "1"),
@@ -149,12 +150,14 @@ class ReplayableCommandMappingTest {
 
         var result = fixture.replayableCommand().tryReplayOrRetry();
 
-        assertThat(result.isFailure()).isTrue();
+        // a handled replay failure is mapped to success so a batch continues; the failure is recorded
+        assertThat(result.isSuccess()).isTrue();
+        verify(fixture.commandLogEntry()).saveAnalysis("execution failed");
         verify(listener, never()).onReplayResult(any(), any(), any());
     }
 
     @Test
-    void notificationFailureFailsReplayAndRecordsAnalysis() {
+    void notificationFailureRecordsAnalysisAndMapsToSuccess() {
         var listener = mock(CommandReplayMappingListener.class);
         var recordedResult = bookmark("demo.Invoice", "1");
         var actualResult = bookmark("demo.Invoice", "2");
@@ -169,8 +172,29 @@ class ReplayableCommandMappingTest {
 
         var result = fixture.replayableCommand().tryReplayOrRetry();
 
-        assertThat(result.isFailure()).isTrue();
-        verify(fixture.commandLogEntry()).saveAnalysis("java.lang.IllegalStateException: mapping rejected");
+        // the recorded failure no longer halts the batch: the outcome is a success, with the analysis recorded
+        assertThat(result.isSuccess()).isTrue();
+        verify(fixture.commandLogEntry()).saveAnalysis("mapping rejected");
+    }
+
+    @Test
+    void disabledFailureIsRecordedWithTypedPrefix() {
+        var listener = mock(CommandReplayMappingListener.class);
+        var fixture = fixture(
+            new ImmediateTransactionService(), UUID.randomUUID(), bookmark("demo.Customer", "1"),
+            bookmark("demo.Invoice", "1"), listener, bookmark("demo.Invoice", "2"));
+        var disabled = mock(DisabledException.class);
+        when(disabled.getMessage()).thenReturn("not allowed");
+        when(fixture.commandExecutorService().executeCommand(
+            org.mockito.ArgumentMatchers.eq(InteractionContextPolicy.SWITCH_USER_AND_TIME),
+            any(CommandDto.class)))
+            .thenReturn(Try.failure(disabled));
+
+        var result = fixture.replayableCommand().tryReplayOrRetry();
+
+        // a hidden/disabled advisor failure is classified with a typed prefix in the recorded analysis
+        assertThat(result.isSuccess()).isTrue();
+        verify(fixture.commandLogEntry()).saveAnalysis("Disabled: not allowed");
     }
 
     private static Fixture fixture(

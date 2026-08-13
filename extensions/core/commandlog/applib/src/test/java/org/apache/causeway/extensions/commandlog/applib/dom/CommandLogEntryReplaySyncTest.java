@@ -20,11 +20,13 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.sql.Timestamp;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import org.apache.causeway.applib.services.command.Command;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -55,5 +57,27 @@ class CommandLogEntryReplaySyncTest {
         verify(entry, never()).setException(command.getException());
         verify(entry, never()).setUsername(command.getUsername());
         verify(entry, never()).setTimestamp(command.getTimestamp());
+    }
+
+    @Test
+    void saveAnalysisRecordsFailedStateReasonAndException() {
+        var entry = mock(CommandLogEntry.class, CALLS_REAL_METHODS);
+
+        entry.saveAnalysis("Disabled: not allowed");
+
+        verify(entry).setReplayState(ReplayState.FAILED);
+        verify(entry).setReplayStateFailureReason("Disabled: not allowed");
+        verify(entry).setException("Disabled: not allowed");
+    }
+
+    @Test
+    void saveAnalysisWithNullMarksOkAndDoesNotRecordFailure() {
+        var entry = mock(CommandLogEntry.class, CALLS_REAL_METHODS);
+
+        entry.saveAnalysis(null);
+
+        verify(entry).setReplayState(ReplayState.OK);
+        verify(entry, never()).setReplayStateFailureReason(anyString());
+        verify(entry, never()).setException(anyString());
     }
 }
