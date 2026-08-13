@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -25,8 +29,9 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         sequence = "0.3", associateWith = "target",
-        describedAs = "Opens the underlying Target"
+        describedAs = "Opens the recorded or actual target"
 )
 @RequiredArgsConstructor
 public class ReplayableCommand_openTarget {
@@ -46,22 +51,56 @@ public class ReplayableCommand_openTarget {
     public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_openTarget> {
     }
 
-    @Inject private BookmarkService bookmarkService;
+    public enum TargetType {
+        RECORDED,
+        ACTUAL
+    }
+
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
-    public Object act() {
-        return replayableCommand.commandLogEntry()
-            .map(CommandLogEntry::getTarget)
-            .flatMap(bookmark -> bookmarkService.lookup(bookmark))
-            .orElse(null);
+    public Object act(final TargetType targetType) {
+        final var bookmarkStr = targetType == TargetType.RECORDED
+                ? replayableCommand.getTarget()
+                : replayableCommand.getActualTarget();
+        return domainObject(targetType, bookmarkStr);
     }
 
     @MemberSupport
     public String disableAct() {
-        return replayableCommand.commandLogEntry().isEmpty()
-            ? "No corresponding CommandLogEntry"
-            : null;
+        return choicesTargetType().isEmpty() ? "No targets found." : null;
     }
+
+    @MemberSupport
+    public List<TargetType> choicesTargetType() {
+        var choices = new ArrayList<TargetType>();
+        if (replayableCommand.getTarget() != null) {
+            choices.add(TargetType.RECORDED);
+        }
+        if (replayableCommand.getActualTarget() != null) {
+            choices.add(TargetType.ACTUAL);
+        }
+        return choices;
+    }
+
+    @MemberSupport
+    public TargetType defaultTargetType() {
+        return choicesTargetType().stream().findFirst().orElse(TargetType.RECORDED);
+    }
+
+    private Object domainObject(final TargetType targetType, final String bookmarkStr) {
+        final var domainObjectIfAny = Optional.ofNullable(bookmarkStr)
+                .flatMap(Bookmark::parse)
+                .flatMap(bookmark -> bookmarkService.lookup(bookmark));
+        if (domainObjectIfAny.isPresent()) {
+            return domainObjectIfAny.get();
+        }
+        messageService.informUser(String.format(
+                "Unable to open %s target '%s'", targetType.name().toLowerCase(), bookmarkStr));
+        return null;
+    }
+
+    @Inject private BookmarkService bookmarkService;
+    @Inject private MessageService messageService;
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import java.util.List;
+
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -26,8 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         named = "Open Target",
-        describedAs = "Opens the underlying Target",
+        describedAs = "Opens the recorded or actual target",
         hidden = Where.OBJECT_FORMS // table row action.
 )
 @RequiredArgsConstructor
@@ -48,20 +49,32 @@ public class ReplayableCommand_openTargetTR {
     public static class DomainEvent extends ReplayableCommand.ActionDomainEvent<ReplayableCommand_openTargetTR> {
     }
 
-    @Inject private BookmarkService bookmarkService;
     private final ReplayableCommand replayableCommand;
 
     @MemberSupport
-    public Object act() {
-        return replayableCommand.commandLogEntry()
-                .map(CommandLogEntry::getTarget)
-                .flatMap(bookmark -> bookmarkService.lookup(bookmark))
-                .orElse(null);
+    public Object act(final ReplayableCommand_openTarget.TargetType targetType) {
+        return mixin().act(targetType);
     }
 
     @MemberSupport
     public String disableAct() {
-        return replayableCommand.commandLogEntry().isEmpty() ? "No corresponding CommandLogEntry" : null;
+        return mixin().disableAct();
     }
+
+    @MemberSupport
+    public List<ReplayableCommand_openTarget.TargetType> choicesTargetType() {
+        return mixin().choicesTargetType();
+    }
+
+    @MemberSupport
+    public ReplayableCommand_openTarget.TargetType defaultTargetType() {
+        return mixin().defaultTargetType();
+    }
+
+    private ReplayableCommand_openTarget mixin() {
+        return factoryService.mixin(ReplayableCommand_openTarget.class, replayableCommand);
+    }
+
+    @Inject private FactoryService factoryService;
 
 }

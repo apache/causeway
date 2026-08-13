@@ -51,6 +51,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.command.CommandExecutorService.InteractionContextPolicy;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
 import org.apache.causeway.commons.functional.Try;
@@ -154,7 +155,9 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
 
     @ObjectSupport public String title() {
         final var timestamp = getTimestampIfAny().map(ChronoZonedDateTime::toInstant).map(Instant::toString).map(x -> " @ " + x).orElse("");
-        return getTargetType() + ":" + getTargetId() + " #" + getMember() + timestamp;
+        // use the complete recorded target bookmark (not the abbreviated getTargetId) so the title is unambiguous
+        return recordedTargetBookmarkStrIfAny().orElseGet(() -> getTargetType() + ":" + getTargetId())
+                + " #" + getMember() + timestamp;
     }
 
     @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
@@ -209,6 +212,45 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
             .map(OidDto::getId)
             .map(id->_Strings.ellipsifyAtEnd(id, 10, "..."))
             .orElse(null);
+    }
+
+    @Programmatic
+    Optional<Bookmark> recordedTargetBookmarkIfAny() {
+        return commandRecord()
+            .map(CommandRecord::commandDto)
+            .map(commandDto->commandDto.getTargets().getOid().get(0))
+            .map(Bookmark::forOidDto);
+    }
+
+    @Programmatic
+    Optional<String> recordedTargetBookmarkStrIfAny() {
+        return recordedTargetBookmarkIfAny().map(Bookmark::stringify);
+    }
+
+    @Programmatic
+    Optional<Bookmark> actualTargetBookmarkIfAny() {
+        return recordedTargetBookmarkIfAny()
+            .flatMap(recorded->actualBookmarkFor(Role.TARGET, recorded, getReplayState()));
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "2.1",
+            fieldSetId = "details",
+            hidden = Where.PARENTED_TABLES,
+            describedAs = "Recorded target of the original (replayable) Command")
+    public String getTarget() {
+        return recordedTargetBookmarkStrIfAny().orElse(null);
+    }
+
+    @Property
+    @PropertyLayout(
+            sequence = "2.2",
+            fieldSetId = "details",
+            hidden = Where.PARENTED_TABLES,
+            describedAs = "Actual target of the command after replay mapping (falls back to the recorded target)")
+    public String getActualTarget() {
+        return actualTargetBookmarkIfAny().map(Bookmark::stringify).orElse(null);
     }
 
     @Property
@@ -349,11 +391,14 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
             final Role role,
             final Bookmark recordedBookmark,
             final ReplayState replayState) {
-        if (role == Role.RESULT && replayState != ReplayState.OK) {
+        // a recorded-only command (replay state UNDEFINED, never replayed) is treated as executed-ok, so its
+        // recorded bookmark is its actual bookmark; a result participant still exposes none until executed-ok.
+        final boolean executedOk = replayState != null && replayState.isExecutedOk();
+        if (role == Role.RESULT && !executedOk) {
             return Optional.empty();
         }
         return replayContext.resultRemappingService().lookup(recordedBookmark)
-                .or(() -> replayState == ReplayState.OK
+                .or(() -> executedOk
                         ? Optional.of(recordedBookmark)
                         : Optional.empty());
     }
@@ -364,11 +409,14 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
             fieldSetId = "dto",
             hidden = Where.ALL_TABLES,
             labelPosition = LabelPosition.NONE,
-            describedAs = "DTO of the original (replayable) Command")
+            describedAs = "Export DTO of the original (replayable) Command")
     public AsciiDoc getDto() {
-        return commandRecord()
-            .map(CommandRecord::commandDto)
-            .map(commandDto->YamlUtils.toStringUtf8(commandDto,
+        return commandLogEntry()
+            .filter(commandLogEntry->commandLogEntry.getCommandDto()!=null)
+            .map(commandLogEntry->CommandDtoUtils.CommandExportDto.of(
+                commandLogEntry.getCommandDto(),
+                commandLogEntry.getResult()))
+            .map(commandExportDto->YamlUtils.toStringUtf8(commandExportDto,
                 JsonUtils::onlyIncludeNonNull))
             .map(yaml->new AsciiDocBuilder()
                     .append(doc->AsciiDocFactory.sourceBlock(doc, "yaml", yaml))

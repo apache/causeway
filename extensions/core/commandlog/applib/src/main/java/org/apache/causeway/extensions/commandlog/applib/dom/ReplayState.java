@@ -74,6 +74,16 @@ public enum ReplayState {
                 || this == ReplayState.EXCLUDED;
     }
 
+    /**
+     * Whether the command is considered to have executed successfully: either a recorded-only command that was
+     * never replayed ({@link #UNDEFINED}), or one that replayed successfully ({@link #OK}). Used to decide when a
+     * participant's recorded bookmark may stand in as its actual bookmark.
+     */
+    public boolean isExecutedOk() {
+        return this == ReplayState.UNDEFINED
+                || this == ReplayState.OK;
+    }
+
     // -- NULL SAFE
 
     public static boolean isExportable(final @Nullable ReplayState replayState) {

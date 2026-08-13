@@ -90,15 +90,14 @@ class ReplayableCommandPresentationTest {
     }
 
     @Test
-    void moduleRegistersParticipantAndNavigationButNotLegacyTargetMixins() {
+    void moduleRegistersParticipantNavigationAndRecordedActualTargetMixins() {
         var imports = List.of(CausewayModuleExtCommandLogApplib.class
                 .getAnnotation(Import.class).value());
 
         assertThat(imports).contains(
                 ReplayableCommandParticipant.class,
                 ReplayableCommand_previous.class,
-                ReplayableCommand_next.class);
-        assertThat(imports).doesNotContain(
+                ReplayableCommand_next.class,
                 ReplayableCommand_openTarget.class,
                 ReplayableCommand_openTargetTR.class);
     }
