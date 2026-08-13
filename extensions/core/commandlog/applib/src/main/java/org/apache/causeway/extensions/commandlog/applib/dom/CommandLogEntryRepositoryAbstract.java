@@ -335,6 +335,15 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     @Override
     public C saveForReplay(final CommandDto commandToReplay) {
+        // idempotent per interaction id: re-importing/re-saving a command that already exists returns the
+        // existing entry rather than creating a duplicate (the command-log primary key is the interaction id).
+        final C existing = interactionIdOf(commandToReplay)
+                .map(this::findByInteractionIdElseNull)
+                .orElse(null);
+        if (existing != null) {
+            return existing;
+        }
+
         final C entity = factoryService.detachedEntity(commandLogEntryClass);
         entity.init(commandToReplay, ReplayState.PENDING, 0);
         entity.setParentInteractionId(null); // n/a for replay
@@ -343,6 +352,17 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         persist(entity);
 
         return entity;
+    }
+
+    private static Optional<UUID> interactionIdOf(final CommandDto commandDto) {
+        return Optional.ofNullable(commandDto.getInteractionId())
+                .flatMap(id -> {
+                    try {
+                        return Optional.of(UUID.fromString(id));
+                    } catch (final IllegalArgumentException ex) {
+                        return Optional.empty();
+                    }
+                });
     }
 
     @Override
