@@ -639,7 +639,7 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        if(phase == Phase.NO_MIXINS_YET
+        if(phase == Phase.INTROSPECTING_MIXINS
         		&& request==IntrospectionRequest.FULL
         		&& !spec.isMixin()) {
         	// don't allow the side-effect of fully introspecting other types during mixin introspection
