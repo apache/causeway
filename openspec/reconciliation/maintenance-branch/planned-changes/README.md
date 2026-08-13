@@ -32,9 +32,7 @@ change or validated until it is promoted.
 Slices 1 (`reconcile-mixin-domain-event-isolation`, MA-1) and 2 (`reconcile-synthetic-navigation-replay`, MA-5)
 are **archived** (specs synced under `openspec/specs/`; changes under `openspec/changes/archive/`), as is slice 3
 (`reconcile-replay-failure-continuation`, MA-3/MA-13), slice 4 (`reconcile-replay-import-idempotency`, MA-2), and
-slice 5 (`reconcile-appfeat-reference-data`, MA-4). Slices 6–10 remain drafted here (all recommended at `medium`
-effort); there is currently **no active change**. The next is slice 6
-(`reconcile-replayable-command-presentation`, MA-6/7/8/9).
+slice 5 (`reconcile-appfeat-reference-data`, MA-4) and slice 6 (`reconcile-replayable-command-presentation`, MA-6/7/8/9). Slices 7–10 remain drafted here (all recommended at `medium` effort); there is currently **no active change**. The next is slice 7 (`reconcile-per-command-export`, MA-10).
 
 > **Effort:** every proposal carries a recommended reasoning-effort note. Slices **2**
 > (`reconcile-synthetic-navigation-replay`, MA-5) and **3** (`reconcile-replay-failure-continuation`, MA-3) touch

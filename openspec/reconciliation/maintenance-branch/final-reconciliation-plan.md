@@ -172,7 +172,8 @@ is moved into `openspec/changes/` verbatim, and re-validated, when its turn come
 | 3 `reconcile-replay-failure-continuation` (MA-3, MA-13) | **Archived** | specs synced (`command-replay-background-completion`, `replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-replay-failure-continuation/`; impl commit `731e1b75fb5`; commandlog applib green under JDK 21 (154 tests, 0 failures) + JPA replay integ (3, 0). MA-14 (queryResultsCache clear) intentionally not ported — no replay cache on main |
 | 4 `reconcile-replay-import-idempotency` (MA-2) | **Archived** | spec synced (`command-result-metadata`); archive `openspec/changes/archive/2026-08-13-reconcile-replay-import-idempotency/`; impl commit `6bffce726e0`; commandlog applib green under JDK 21 (157 tests, 0 failures) |
 | 5 `reconcile-appfeat-reference-data` (MA-4) | **Archived** | spec synced (`command-export-refdata-marker`); archive `openspec/changes/archive/2026-08-13-reconcile-appfeat-reference-data/`; impl commit `0b38b62fed8`; secman applib green under JDK 21 |
-| 6–10 | Drafted (not started) | `planned-changes/` |
+| 6 `reconcile-replayable-command-presentation` (MA-6/7/8/9) | **Archived** | spec synced (`replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-replayable-command-presentation/`; impl commit `fd5c3d05c41`; commandlog applib green under JDK 21 (161 tests, 0 failures) |
+| 7–10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
 
