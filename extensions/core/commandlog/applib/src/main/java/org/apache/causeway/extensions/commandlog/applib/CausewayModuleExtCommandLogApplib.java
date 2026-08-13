@@ -65,6 +65,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayContext
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommandParticipant;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_delete;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_excludeFromReplay;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_export;
+import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_exportTR;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_makeExportable;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_next;
 import org.apache.causeway.extensions.commandlog.applib.dom.replay.ReplayableCommand_openCommandLogEntry;
@@ -103,6 +105,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogEntry_siblingCommands.class,
         CommandReplayResultMapping_delete.class,
         ReplayableCommand_makeExportable.class,
+        ReplayableCommand_export.class,
+        ReplayableCommand_exportTR.class,
         ReplayableCommand_openCommandLogEntry.class,
         ReplayableCommand_openTarget.class,
         ReplayableCommand_openTargetTR.class,
