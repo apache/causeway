@@ -31,6 +31,7 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Nature;
@@ -121,7 +122,8 @@ public class ApplicationFeatureChoices {
     public static class AppFeat
     implements
         Comparable<AppFeat>,
-        ViewModel {
+        ViewModel,
+        RefData {
 
         public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
 

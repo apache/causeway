@@ -23,6 +23,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.domain.RefData;
+import org.apache.causeway.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
@@ -40,6 +41,13 @@ class ReferenceDataContractTest {
                 ApplicationTenancy.class,
                 ApplicationPermission.class))
                 .allMatch(RefData.class::isAssignableFrom);
+    }
+
+    @Test
+    void permissionFeatureReferenceViewModelIsStableReferenceData() {
+        // AppFeat is the reference view-model for permission-feature choices; commands whose target or
+        // reference parameter is an AppFeat bookmark must be recognised as export participants.
+        assertThat(RefData.class.isAssignableFrom(ApplicationFeatureChoices.AppFeat.class)).isTrue();
     }
 
     @Test
