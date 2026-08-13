@@ -58,6 +58,9 @@ the _Metamodel_ is bootstrapped.
 
 . List of Mixin classes must be final once the Metamodel introspection starts. 
 For any mixin discovered later, we log a warning.
+. Mixins shall support class inheritance, but any _Interfaces_ a Mixin inherits are ignored. 
+Meaning since _Interfaces_ are allowed to be _Mixees_, we are not fully introspecting those during Mixin
+introspection phase.
 . The Spec Loader is required to mix in members from above list to all Specs, 
 except Value-, Abstract-types and Mixins.
 . Mixins that apply to java.lang.Object are not mixed in to service-types

@@ -235,12 +235,12 @@ implements
     }
 
     enum Phase {
-    	BEFORE_MIXINS,
-    	DURING_MIXINS,
-    	AFTER_MIXINS,
+    	NO_MIXINS_YET,
+    	INTROSPECTING_MIXINS,
+    	MIXINS_READY,
     }
 
-    Phase phase = Phase.BEFORE_MIXINS;
+    Phase phase = Phase.NO_MIXINS_YET;
 
     /**
      * Initializes and wires up, and primes the cache based on any service
@@ -276,18 +276,18 @@ implements
                 valueTypesFromProviders.stream(),
                 causewayBeanTypeRegistry.streamScannedTypes())
             // prime (up to NOT_INTROSPECTED)
-            .map(this::primeSpecification)
+            .map(this::register)
             .forEach(specs::collect);
 
         introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
         introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
         //this.mixinSpecStreamer = MixinSpecStreamer.EMPTY;
         //this.mixinSpecStreamer = new MixinSpecStreamerOnTheFly(this, causewayBeanTypeRegistry);
-        this.phase = Phase.DURING_MIXINS;
+        this.phase = Phase.INTROSPECTING_MIXINS;
         introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
         // lock down mixins, also assuming none of the previously fully introspected types need any mixins
         this.mixinSpecStreamer = new MixinSpecStreamerEager(this, causewayBeanTypeRegistry);
-        this.phase = Phase.AFTER_MIXINS;
+        this.phase = Phase.MIXINS_READY;
 
         //TODO good for abstract types, but cannot be decided for interfaces,
         // as those could in theory be shared with mixins and domain-types
@@ -612,7 +612,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationInternal primeSpecification(
+    private ObjectSpecificationInternal register(
             final @NonNull CausewayBeanMetaData typeMeta) {
         return loadSpecificationNullable(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
@@ -629,7 +629,8 @@ implements
         	return null;
 
         var substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isNeverIntrospect()) return null; // never inspect
+        if (substitute.isNeverIntrospect())
+        	return null; // never inspect
 
         var substitutedType = substitute.apply(type);
 
@@ -638,7 +639,7 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        if(phase == Phase.DURING_MIXINS
+        if(phase == Phase.NO_MIXINS_YET
         		&& request==IntrospectionRequest.FULL
         		&& !spec.isMixin()) {
         	// don't allow the side-effect of fully introspecting other types during mixin introspection
