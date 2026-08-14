@@ -30,17 +30,22 @@ ObjectSpecification loadSpecification(Class<?> cls)
 This is the core data structure representing a class's meta data within the _Metamodel_.
 
 - *Stateful Wrapper*: It is designed as a wrapper around internal, potentially mutable data. This allows the system to maintain consistent references even when underlying information is refreshed or updated.
-- *FacetHolder*: It holds various facets of the class definition
+- *FacetHolder*: It holds various `Facet`(s) of the class definition
 - *ObjectActionContainer* and *ObjectAssociationContainer* hold class member meta data. Members are either _regular_, _mixed-in_ or _synthetic_.
+
+Multiple lifecycle states can be identified for an `ObjectSpecification` during _Metamodel_ initialization:
+
+. REGISTERED: We have an `ObjectSpecification` that at least has an identity to be shared, but is not yet populated with meta-data.
+. TYPE-ONLY: The `ObjectSpecification` has its type specific _Facets_ (really?) and its super _Spec_ and interface _Spec_ references populated, 
+while those super types don't require to be introspected yet, just registered so we have stable references.
+. FULLY-INTROSPECTED: _Facets_ as well as regular and mixed-in _Members_ were added to the _Spec_.
 
 [source,java]
 .ObjectSpecification
 ----
 // inherited from Hierarchical ...
-Can<ObjectSpecification> interfaces(); 
-boolean isOfType(ObjectSpecification other);
-boolean isOfTypeResolvePrimitive(ObjectSpecification other);
 ObjectSpecification superclass();
+Can<ObjectSpecification> interfaces(); 
 
 FacetHolder getFacetHolder(); // inherited from HasFacetHolder
 FeatureType getFeatureType(); // inherited from Specification
