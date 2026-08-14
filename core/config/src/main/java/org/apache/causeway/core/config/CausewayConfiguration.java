@@ -2786,6 +2786,17 @@ public record CausewayConfiguration(
             boolean actionColumnEnabled,
 
             /**
+             * Whether the collection &quot;summary&quot; view (which totals the <code>BigDecimal</code> columns of
+             * the collection's element type) should be disabled.
+             *
+             * <p>When <code>true</code>, the summary view is never offered, even for collections whose element type
+             * has a <code>BigDecimal</code> property. Defaults to <code>false</code> (the summary view applies as
+             * before).
+             */
+            @DefaultValue("false")
+            boolean summaryViewDisabled,
+
+            /**
              * Whether actions, that on click will show a dialog,
              * should be indicated by a trailing ellipsis on the action's label.
              *

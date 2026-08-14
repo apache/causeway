@@ -59,13 +59,20 @@ implements CollectionContentsAsFactory {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        final boolean hasAnyBigDecProperty =
+        final boolean applies =
             _Casts.castTo(CollectionModel.class, model)
                 .map(CollectionModel::getElementType)
-                .map((final ObjectSpecification elementSpec)->elementSpec.streamAssociations(MixedIn.EXCLUDED)
-                        .anyMatch(OF_TYPE_BIGDECIMAL))
+                .map((final ObjectSpecification elementSpec)->
+                        !isSummaryViewDisabled(elementSpec)
+                        && elementSpec.streamAssociations(MixedIn.EXCLUDED)
+                                .anyMatch(OF_TYPE_BIGDECIMAL))
                 .orElse(false);
-        return appliesIf(hasAnyBigDecProperty);
+        return appliesIf(applies);
+    }
+
+    private static boolean isSummaryViewDisabled(final ObjectSpecification elementSpec) {
+        return elementSpec.getMetaModelContext().getConfiguration()
+                .viewer().wicket().summaryViewDisabled();
     }
 
     @Override
