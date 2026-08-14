@@ -175,7 +175,8 @@ is moved into `openspec/changes/` verbatim, and re-validated, when its turn come
 | 6 `reconcile-replayable-command-presentation` (MA-6/7/8/9) | **Archived** | spec synced (`replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-replayable-command-presentation/`; impl commit `fd5c3d05c41`; commandlog applib green under JDK 21 (161 tests, 0 failures) |
 | 7 `reconcile-per-command-export` (MA-10) | **Archived** | spec synced (`replayable-command-projection`); archive `openspec/changes/archive/2026-08-13-reconcile-per-command-export/`; impl commit `f8c591a65c7`; commandlog applib green under JDK 21 (163 tests, 0 failures) |
 | 8 `reconcile-command-yaml-strictness` (MA-11) | **Archived** | spec synced (`command-result-metadata`); archive `openspec/changes/archive/2026-08-13-reconcile-command-yaml-strictness/`; impl commit `8f63362dfcb`; commandlog applib green under JDK 21 (165 tests, 0 failures) |
-| 9–10 | Drafted (not started) | `planned-changes/` |
+| 9 `reconcile-collection-summary-view-config` (MA-12) | **Archived** | NEW spec `collection-summary-view-config`; archive `openspec/changes/archive/2026-08-14-reconcile-collection-summary-view-config/`; impl commit `5a2f497405d`; core/config green (2 tests), viewers/wicket/ui compiles |
+| 10 | Drafted (not started) | `planned-changes/` |
 
 ## Acceptance and verification policy
 
