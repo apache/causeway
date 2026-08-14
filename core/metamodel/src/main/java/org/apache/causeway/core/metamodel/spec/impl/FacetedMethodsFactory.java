@@ -23,20 +23,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -59,50 +53,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 record FacetedMethodsFactory(
 	    ObjectSpecificationInternal internalSpec,
-	    ConcurrentMethodRemover methodRemover,
+	    MethodRemover methodRemover,
 	    FacetProcessor facetProcessor,
 	    ClassSubstitutorRegistry classSubstitutorRegistry)
 implements
     HasSpecificationLoaderInternal,
     HasMetaModelContext {
 
-    private record ConcurrentMethodRemover(
-    		/* thread-safe */
-    		Set<ResolvedMethod> methodsRemaining) implements MethodRemover {
-
-    	static ConcurrentMethodRemover forInternalSpec(final ObjectSpecificationInternal internalSpec) {
-    		return new ConcurrentMethodRemover((internalSpec.getIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                    ? _ClassCache.getInstance().streamResolvedMethods(internalSpec.getCorrespondingClass())
-                    : _ClassCache.getInstance().streamPublicMethods(internalSpec.getCorrespondingClass()))
-				.collect(Collectors.toCollection(ConcurrentHashMap::newKeySet)));
-    	}
-
-        @Override public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
-            methodsRemaining.removeIf(method -> {
-                var doRemove = removeIf.test(method);
-                if(doRemove) {
-                    onRemoval.accept(method);
-                }
-                return doRemove;
-            });
-        }
-        @Override public void removeMethod(final ResolvedMethod method) {
-            if(method==null) return;
-            methodsRemaining.remove(method);
-        }
-        @Override public Can<ResolvedMethod> snapshotMethodsRemaining() {
-            return Can.ofCollection(methodsRemaining);
-        }
-        private Stream<ResolvedMethod> streamRemaining() {
-        	return methodsRemaining.stream();
-        }
-    }
-
     FacetedMethodsFactory(
             final ObjectSpecificationInternal internalSpec,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
-    	this(internalSpec, ConcurrentMethodRemover.forInternalSpec(internalSpec), facetProcessor, classSubstitutorRegistry);
+    	this(internalSpec,
+    			MethodRemover.createMethodRemover(internalSpec.getCorrespondingClass(), internalSpec.getIntrospectionPolicy()),
+    			facetProcessor,
+    			classSubstitutorRegistry);
     }
 
     FacetedMethodsFactory {
@@ -172,13 +137,6 @@ implements
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, associationFacetedMethods::add);
 
         return associationFacetedMethods.stream();
-    }
-
-    /**
-     * exposed for debugging purposes
-     */
-    public Can<ResolvedMethod> snapshotMethodsRemaining() {
-    	return methodRemover.snapshotMethodsRemaining();
     }
 
     @Override

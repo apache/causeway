@@ -18,10 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
@@ -64,28 +69,69 @@ public interface MethodRemover {
     void removeMethod(ResolvedMethod method);
 
     /**
-     * Returns a defensive copy of the current internal state.
-     * @apiNote introduced for debugging purposes
+     * Returns a stream of the currently remaining methods.
      */
-    Can<ResolvedMethod> snapshotMethodsRemaining();
+    Stream<ResolvedMethod> streamRemaining();
 
     // -- NOOP IMPLEMENTATION
 
     public static final MethodRemover NOOP = new MethodRemover() {
-
-        @Override
-        public void removeMethod(final ResolvedMethod method) {
-        }
-
-        @Override
-        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
-        }
-
-        @Override
-        public Can<ResolvedMethod> snapshotMethodsRemaining() {
-            return Can.empty();
-        }
-
+        @Override public void removeMethod(final ResolvedMethod method) { }
+        @Override public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) { }
+        @Override public Stream<ResolvedMethod> streamRemaining() { return Stream.empty(); }
     };
+
+    // -- FACTORY
+
+    /**
+     * Creates a thread-safe method remover.
+     *
+     * @implNote has side-effects on the {@link _ClassCache}
+     */
+    public static MethodRemover createMethodRemover(
+			final Class<?> introspectedClass,
+			final IntrospectionPolicy introspectionPolicy) {
+		return new ConcurrentMethodRemover((introspectionPolicy.getEncapsulationPolicy().isEncapsulatedMembersSupported()
+                ? _ClassCache.getInstance().streamResolvedMethods(introspectedClass)
+                : _ClassCache.getInstance().streamPublicMethods(introspectedClass))
+			.collect(Collectors.toCollection(ConcurrentHashMap::newKeySet)));
+	}
+
+    record ConcurrentMethodRemover(
+    		/* thread-safe */
+    		Set<ResolvedMethod> methodsRemaining) implements MethodRemover {
+
+        @Override public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
+            methodsRemaining.removeIf(method -> {
+                var doRemove = removeIf.test(method);
+                if(doRemove) {
+                    onRemoval.accept(method);
+                }
+                return doRemove;
+            });
+        }
+        @Override public void removeMethod(final ResolvedMethod method) {
+            if(method==null) return;
+            methodsRemaining.remove(method);
+        }
+        @Override public Stream<ResolvedMethod> streamRemaining() {
+            return methodsRemaining.stream();
+        }
+    }
+
+	@FunctionalInterface
+	interface HasMethodRemover extends MethodRemover {
+        MethodRemover methodRemover();
+
+        @Override default void removeMethod(final ResolvedMethod method) {
+            methodRemover().removeMethod(method);
+        }
+        @Override default void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
+            methodRemover().removeMethods(filter, onRemoval);
+        }
+        @Override default Stream<ResolvedMethod> streamRemaining() {
+            return methodRemover().streamRemaining();
+        }
+    }
 
 }
