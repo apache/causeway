@@ -92,8 +92,12 @@ discrepancies — concentrated in maintenance work that post-dated those specs (
 tail, the CAUSEWAY-4037/4038 replay strands) and in general-metamodel / loose `[v2]` commits outside the
 command-log capability graph. That canonical set (MA-1 … MA-16), its re-anchoring to current HEAD after the
 PR #3697 / CAUSEWAY-4044 merge, the product decisions taken, and the completing child-change sequence are
-recorded in `final-reconciliation-plan.md`. The programme is **not yet behaviourally complete** until those
-child changes are archived or their findings explicitly waived.
+recorded in `final-reconciliation-plan.md`.
+
+**Update: the second wave is now complete.** All ten completing child changes have been implemented, verified
+under JDK 21, and archived (see `final-reconciliation-plan.md` §Progress). MA-14 and the other "Non-issues" were
+accepted as v4 adaptations, and the four product decisions (D-A … D-D) were taken and implemented. The forward
+port is behaviourally complete at the audited branch heads, re-anchored to current HEAD.
 
 ## Acceptance evidence policy
 
