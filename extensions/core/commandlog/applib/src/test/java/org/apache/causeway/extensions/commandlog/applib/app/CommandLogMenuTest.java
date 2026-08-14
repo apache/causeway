@@ -135,7 +135,8 @@ class CommandLogMenuTest {
         assertThat(action.defaultBaseline()).isEqualTo(Timestamp.from(Instant.parse("2026-08-06T10:00:00Z")));
         var manager = action.act(action.defaultBaseline());
         assertThat(manager.getBaseline()).isEqualTo(action.defaultBaseline());
-        assertThat(manager.getLimit()).isEqualTo(CommandManager.DEFAULT_LIMIT);
+        // the standard menu opens the manager at the maximum page limit
+        assertThat(manager.getLimit()).isEqualTo(CommandManager.MAX_LIMIT);
         assertThat(menu.new exportManager().hideAct()).isTrue();
         assertThat(menu.new replayManager().hideAct()).isTrue();
     }

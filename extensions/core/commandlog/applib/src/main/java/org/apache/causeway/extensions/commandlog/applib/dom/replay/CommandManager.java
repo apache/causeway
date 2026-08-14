@@ -52,6 +52,7 @@ public class CommandManager implements ViewModel, HasBaseline, HasLimit, Command
     public static final String LOGICAL_TYPE_NAME =
             CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandManager";
     public static final int DEFAULT_LIMIT = 100;
+    public static final int MAX_LIMIT = 320;
 
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
@@ -202,7 +203,8 @@ public class CommandManager implements ViewModel, HasBaseline, HasLimit, Command
     }
 
     private static int normalizeLimit(final int candidate) {
-        return candidate > 0 ? candidate : DEFAULT_LIMIT;
+        // a non-positive limit falls back to the default; any positive limit is capped at the maximum.
+        return candidate > 0 ? Math.min(candidate, MAX_LIMIT) : DEFAULT_LIMIT;
     }
 
     public record State(Timestamp timestamp, int limit) {

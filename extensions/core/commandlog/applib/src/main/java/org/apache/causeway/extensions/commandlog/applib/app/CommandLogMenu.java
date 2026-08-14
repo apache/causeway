@@ -100,7 +100,7 @@ public class CommandLogMenu {
         @MemberSupport public CommandManager act(
                 @ParameterLayout(describedAs = "Only foreground commands at or after this timestamp are shown")
                 final Timestamp baseline) {
-            return new CommandManager(baseline, CommandManager.DEFAULT_LIMIT, replayContext);
+            return new CommandManager(baseline, CommandManager.MAX_LIMIT, replayContext);
         }
 
         @MemberSupport public Timestamp defaultBaseline() {

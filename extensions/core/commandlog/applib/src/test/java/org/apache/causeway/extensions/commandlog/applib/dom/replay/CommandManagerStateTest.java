@@ -84,6 +84,25 @@ class CommandManagerStateTest {
         assertSafeSuppressed(HasLimit_changeLimit.class);
     }
 
+    @Test
+    void limitAboveMaximumIsCappedAndNonPositiveUsesDefault() {
+        assertThat(new CommandManager(BASELINE, 500, null).getLimit()).isEqualTo(CommandManager.MAX_LIMIT);
+        assertThat(new CommandManager(BASELINE, CommandManager.MAX_LIMIT, null).getLimit())
+                .isEqualTo(CommandManager.MAX_LIMIT);
+        assertThat(new CommandManager(BASELINE, 50, null).getLimit()).isEqualTo(50);
+        assertThat(new CommandManager(BASELINE, 0, null).getLimit()).isEqualTo(CommandManager.DEFAULT_LIMIT);
+    }
+
+    @Test
+    void changeLimitAcceptsOneToMaximumAndRejectsOutOfRange() {
+        var changeLimit = new HasLimit_changeLimit(new CommandManager(BASELINE, 50, null));
+
+        assertThat(changeLimit.validateNewLimit(1)).isNull();
+        assertThat(changeLimit.validateNewLimit(CommandManager.MAX_LIMIT)).isNull();
+        assertThat(changeLimit.validateNewLimit(0)).isNotNull();
+        assertThat(changeLimit.validateNewLimit(CommandManager.MAX_LIMIT + 1)).isNotNull();
+    }
+
     private static void assertSafeSuppressed(final Class<?> type) {
         var action = type.getAnnotation(Action.class);
         assertThat(action.semantics()).isEqualTo(SemanticsOf.SAFE);

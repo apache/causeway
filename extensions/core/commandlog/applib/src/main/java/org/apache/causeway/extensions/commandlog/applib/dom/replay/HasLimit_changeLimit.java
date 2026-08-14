@@ -48,6 +48,8 @@ public class HasLimit_changeLimit {
     }
 
     @MemberSupport public String validateNewLimit(final int newLimit) {
-        return newLimit > 0 ? null : "Limit must be positive";
+        return newLimit >= 1 && newLimit <= CommandManager.MAX_LIMIT
+                ? null
+                : "Limit must be between 1 and " + CommandManager.MAX_LIMIT;
     }
 }
