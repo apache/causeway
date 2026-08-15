@@ -135,3 +135,59 @@ The read-only component library SHALL operate without requiring HTMX or another 
 - **WHEN** a plain HTML page composes an object context, header, properties, action affordances, and collection
 - **THEN** the components discover and render their semantics through the shared GraphQL client
 - **AND** all navigation and action requests are available as standard semantic custom events
+
+### Requirement: Executable vanilla-HTML acceptance composition
+The read-only component slice SHALL extend the existing `sample-html` application as an executable acceptance fixture using the packaged web-component artifact and the real same-origin rich GraphQL endpoint.
+
+#### Scenario: Existing sample contract remains stable
+- **WHEN** the extended sample application is started
+- **THEN** `/sample-html/index.html`, `/causeway-webcomponents/index.mjs`, and `/graphql` remain available from the same origin
+- **AND** the root logical type, bookmark `s_sample-1`, existing `data-testid` selectors, and `data-state` readiness contract remain valid
+- **AND** the page requires no npm build, HTMX, Playwright, or frontend-framework runtime
+
+#### Scenario: Complete read-only custom page
+- **WHEN** the sample page reaches `data-state="ready"`
+- **THEN** it composes the object header, scalar and enum values, null presentation, object link, action affordances, populated collection with declared columns, and empty collection through the public semantic components
+- **AND** hidden members render no semantic content while disabled members expose their reasons accessibly
+
+### Requirement: Deterministic representative sample domain
+The executable sample SHALL provide stable domain data covering the representative rich-schema semantics required by the read-only components.
+
+#### Scenario: Representative root members
+- **WHEN** the root object `causeway.webcomponents.sample.SampleObject:s_sample-1` is read
+- **THEN** its existing `name`, `code`, and `secret` semantics remain deterministic
+- **AND** `status` provides an enum value, `notes` is null, and `relatedObject` identifies a stable related object
+- **AND** `inspect` is a visible enabled action, `archive` is a visible disabled action with a reason, and `hiddenAction` is hidden
+
+#### Scenario: Representative collections
+- **WHEN** the sample's `relatedObjects` collection is activated
+- **THEN** it returns stable related objects with deterministic `name` and `code` column values
+- **AND** their returned metadata and selected columns can hydrate row object contexts
+- **WHEN** the sample's `emptyRelatedObjects` collection is activated
+- **THEN** it returns the accessible empty state
+
+### Requirement: Expanded browser-automation contract
+The extended sample SHALL expose additive stable browser hooks for observing the new read-only components and their semantic events without depending on incidental generated markup.
+
+#### Scenario: Stable read-only selectors
+- **WHEN** automation inspects the extended sample page
+- **THEN** it can address `property-status`, `property-notes`, `property-related-object`, `object-link-related-object`, `action-inspect`, `action-archive`, `action-hidden`, `collection-related-objects`, `collection-empty-related-objects`, `column-related-name`, and `column-related-code` through `data-testid`
+- **AND** all foundation selectors remain available
+
+#### Scenario: Observable semantic requests
+- **WHEN** the sample receives a navigation or action-request event from an enabled component
+- **THEN** plain application JavaScript reports its semantic payload through `[data-testid="sample-event"]`
+- **AND** the sample does not impose routing, prompt, or invocation behavior
+
+### Requirement: Automated executable-sample verification
+The Maven build SHALL continue to exercise the expanded sample application against its packaged page, modules, deterministic data, and real rich GraphQL endpoint.
+
+#### Scenario: Real read-only GraphQL contract
+- **WHEN** random-port integration verification calls the running `/graphql` endpoint
+- **THEN** GraphQL Java-compatible targeted introspection resolves the root and reachable read-only wrapper types without a bad-faith introspection rejection
+- **AND** rich object and collection operations return the deterministic enum, null, reference, action-state, collection, row, and empty-collection semantics
+
+#### Scenario: Real-browser readiness smoke check
+- **WHEN** the packaged sample page is loaded in a real browser during final verification
+- **THEN** it reaches `data-state="ready"`, renders the representative visible and disabled states, suppresses hidden semantic content, and publishes semantic event diagnostics
+- **AND** its GraphQL requests succeed without browser console errors
