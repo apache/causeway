@@ -171,10 +171,10 @@ implements HasMetaModelContext {
     public List<ResolvedMethod> findAndRemovePropertyAccessors(
             final MethodRemover methodRemover) {
         var propertyAccessors = new ArrayList<ResolvedMethod>();
-        for (var facetFactory : propertyAccessorFactories) {
-            methodRemover.removeMethods(facetFactory::isAssociationAccessor, propertyAccessors::add);
-        }
-        return propertyAccessors;
+        propertyAccessorFactories
+        	.forEach(factory->
+            	methodRemover.removeMethods(factory::isAssociationAccessor, propertyAccessors::add));
+        return Collections.unmodifiableList(propertyAccessors);
     }
 
     /**
@@ -185,10 +185,9 @@ implements HasMetaModelContext {
     public List<ResolvedMethod> findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover) {
         var collectionAccessors = new ArrayList<ResolvedMethod>();
-        for (var facetFactory : collectionAccessorFactories) {
-            methodRemover.removeMethods(facetFactory::isAssociationAccessor, collectionAccessors::add);
-        }
-        return collectionAccessors;
+        collectionAccessorFactories.forEach(factory->
+            methodRemover.removeMethods(factory::isAssociationAccessor, collectionAccessors::add));
+        return Collections.unmodifiableList(collectionAccessors);
     }
 
     /**

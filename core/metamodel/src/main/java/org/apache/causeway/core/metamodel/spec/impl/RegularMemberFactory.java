@@ -33,12 +33,14 @@ record RegularMemberFactory(
 
 	Stream<ObjectAssociation> createAssociations() {
         return factory.createAssociationFacetedMethods()
+    		.stream()
             .map(this::createAssociation)
             .filter(_NullSafe::isPresent);
     }
 
     Stream<ObjectAction> createActions() {
     	return factory.createActionFacetedMethods()
+			.stream()
 			.map(this::createAction)
 			.filter(_NullSafe::isPresent);
     }

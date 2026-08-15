@@ -20,7 +20,6 @@ package org.apache.causeway.core.mmtestsupport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -63,7 +62,7 @@ public record MethodRemover_forTesting(
     }
 
     @Override
-    public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
+    public void removeMethods(final Predicate<ResolvedMethod> filter) {
         removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
     }
 
