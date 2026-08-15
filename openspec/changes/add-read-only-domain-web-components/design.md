@@ -3,6 +3,7 @@
 The foundation change introduces the GraphQL client provider, semantic object context, coordinated read projection, object header, and a narrow scalar-property probe.
 This change turns that probe into a coherent read-only component library suitable for declarative custom pages and later generic composition.
 The components must preserve Causeway semantics while remaining consumable from plain HTML and frontend frameworks.
+The existing `sample-html` application provides the executable same-origin fixture in which the complete read-only vocabulary will be demonstrated against the real rich GraphQL endpoint.
 
 ## Goals / Non-Goals
 
@@ -14,6 +15,7 @@ The components must preserve Causeway semantics while remaining consumable from 
 - Support object navigation and lazy read-only collections.
 - Reuse hydrated GraphQL results across nested object contexts.
 - Provide accessible and styleable framework-neutral markup.
+- Validate the complete read-only composition through the packaged modules, deterministic data, stable hooks, and readiness contract of `sample-html`.
 
 **Non-Goals:**
 
@@ -38,6 +40,7 @@ This keeps custom pages readable and independent of GraphQL document syntax whil
 Read-only components will register semantic requirements and render observable context state.
 They will not create independent GraphQL clients or issue uncoordinated object requests.
 Collection components will use a context-owned secondary collection operation because collection content can be large and should not permanently expand the primary object projection.
+Schema discovery will retain the foundation's GraphQL Java-compatible strategy of independent cached one-type introspection operations rather than repeating `__Type.fields` in a batched introspection document.
 
 ### Select value renderers through a registry
 
@@ -79,6 +82,19 @@ A disabled member will remain representable where useful and will expose its rea
 A member-path GraphQL error will be rendered by that member without replacing successful siblings.
 Unsupported types will produce an explicit diagnostic placeholder in development behavior rather than silently disappearing.
 
+### Use `sample-html` as the executable acceptance fixture
+
+The existing `/sample-html/index.html` page will evolve from its foundation probe into a representative custom read-only domain page without introducing HTMX, a frontend framework, or an npm build.
+The existing logical type, persisted identifier, bookmark `s_sample-1`, object title, route, selectors, and `data-state` readiness behavior will remain stable.
+
+The deterministic domain will add an enum property, a null property, an object-valued property, stable related objects, visible enabled and disabled action semantics, a hidden action, a populated object collection with declared columns, and an empty collection.
+The page will use the new semantic components for those members and will expose additional stable `data-testid` hooks for values, object links, actions, collections, columns, and an event-diagnostic outlet.
+Navigation and action-request events will be observed by plain application JavaScript and reported without imposing routing, prompts, or invocation.
+
+Random-port integration tests will continue to verify the packaged page and ECMAScript modules, and will exercise targeted introspection plus deterministic object and collection reads against the running `/graphql` endpoint.
+A manual real-browser smoke check will verify that the page reaches `ready`, renders the representative states, hides hidden members, and publishes semantic events without console failures.
+Playwright remains deferred, but the expanded stable hooks will preserve a direct path to later automated browser coverage.
+
 ## Risks / Trade-offs
 
 - [Light DOM provides weaker style isolation] → Document stable host classes and keep generated markup narrow and semantic.
@@ -87,11 +103,13 @@ Unsupported types will produce an explicit diagnostic placeholder in development
 - [Hydrated row contexts can become stale] → Retain object version metadata and let any row context perform a complete active-projection refresh.
 - [Action affordances without invocation may feel incomplete] → Keep their event contract stable so the interaction change can add the standard prompt controller without changing page composition.
 - [Frontend frameworks differ in custom-event handling] → Use bubbling and composed standard events and provide interoperability examples rather than framework-specific public wrappers.
+- [An acceptance fixture can grow into a second generic viewer] → Keep `sample-html` deterministic and page-specific, use it only to prove public component contracts, and defer routing and generic composition.
 
 ## Migration Plan
 
 This is additive to the foundation package.
 The minimal foundation property element will evolve into the richer read-only contract while retaining its semantic `member` configuration.
+The existing `sample-html` route, root bookmark, selectors, and readiness behavior will remain valid while additive domain data and hooks exercise the new components.
 No existing Causeway viewer is replaced or enabled by default.
 
 ## Open Questions
