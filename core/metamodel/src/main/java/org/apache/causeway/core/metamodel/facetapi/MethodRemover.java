@@ -69,7 +69,6 @@ public interface MethodRemover {
      * Collects pickings of type T into a List and removes all picked methods.
      * @param methodPicker optionally returns a T for a {@link ResolvedMethod}.
      * 		Picking happens in presence of T.
-     * @param onPicking receives any picked T
      */
     default <T> List<T> pickMethods(
             final Function<ResolvedMethod, Optional<T>> methodPicker) {

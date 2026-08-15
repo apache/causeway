@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -93,11 +92,12 @@ implements
 
     // -- CONSTRUCTION
 
-    private final FacetedMethodsFactory facetedMethodsFactory;
+    private final FacetedMethodsFactory facetedMethodsFactory; //TODO in support of reloading, this factory should be recreated, as it holds a MethodRemover that is stateful
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
 
-    @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
+    @Getter(onMethod_ = {@Override})
+    private final FacetHolder facetHolder;
 
     @Getter @Accessors(fluent = true)
 	private final IntrospectionStateHandler introspectionStateHandler;
@@ -122,10 +122,6 @@ implements
     				.map(TypeOfFacet::elementSpec));
 
     private final PostProcessor postProcessor;
-
-    /** not API, used for validation */
-    @Getter @Accessors(fluent = true)
-    private final Set<ResolvedMethod> potentialOrphans = new HashSet<>();
 
     private ValueFacet<?> valueFacet;
     private EntityFacet entityFacet;
@@ -204,6 +200,7 @@ implements
 	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
 	@Override public Optional<ObjectSpecification> superSpec() { return hierarchical.superSpec(); }
     @Override public Can<ObjectSpecification> interfaceSpecs() { return hierarchical.interfaceSpecs(); }
+    @Override public Set<ResolvedMethod> potentialOrphans() { return facetedMethodsFactory.potentialOrphans(); }
 
     // -- CONTRACT
 

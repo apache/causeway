@@ -47,6 +47,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -360,7 +361,8 @@ implements
             setMetamodelFullyIntrospected(true);
         }
 
-        //perf .. log.info("\n{}", profiler);
+        //perf ..
+        log.info("\n{}", Profiler.getInstance());
     }
 
 

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -35,14 +35,14 @@ record RegularMemberFactory(
         return factory.createAssociationFacetedMethods()
     		.stream()
             .map(this::createAssociation)
-            .filter(_NullSafe::isPresent);
+            .filter(Objects::nonNull);
     }
 
     Stream<ObjectAction> createActions() {
     	return factory.createActionFacetedMethods()
 			.stream()
 			.map(this::createAction)
-			.filter(_NullSafe::isPresent);
+			.filter(Objects::nonNull);
     }
 
     // -- HELPER

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -51,14 +52,15 @@ import org.jspecify.annotations.Nullable;
 
 import lombok.extern.slf4j.Slf4j;
 
-// has side-effects: calls specloader
+// has side-effects: calls specloader, potentially modifies the class cache
 @Slf4j
 record FacetedMethodsFactory(
 	    ObjectSpecificationInternal internalSpec,
 	    FacetProcessor facetProcessor,
 	    ClassSubstitutorRegistry classSubstitutorRegistry,
 	    MethodRemover methodRemover,
-	    Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction)
+	    Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction,
+	    Set<ResolvedMethod> potentialOrphans)
 implements
     HasSpecificationLoaderInternal,
     HasMetaModelContext {
@@ -71,7 +73,8 @@ implements
     			facetProcessor,
     			classSubstitutorRegistry,
     			MethodRemover.createMethodRemover(internalSpec.getCorrespondingClass(), internalSpec.getIntrospectionPolicy()),
-    			internalSpec.specLoaderInternal()::loadSpecificationTypeOnly);
+    			internalSpec.specLoaderInternal()::loadSpecificationTypeOnly,
+    			new HashSet<>());
     }
 
     FacetedMethodsFactory {
@@ -115,6 +118,10 @@ implements
         if (log.isDebugEnabled()) {
             log.debug("introspecting(policy={}) {}: properties and collections", introspectionPolicy(), introspectedClass().getName());
         }
+        // optimization, not strictly required
+        if(methodRemover instanceof MethodRemover.ConcurrentMethodRemover concurrentMethodRemover
+        		&& concurrentMethodRemover.methodsRemaining().isEmpty())
+			return List.of();
 
         var associationCandidateMethods = new HashSet<ResolvedMethod>();
         facetProcessor.findAssociationCandidateGetters(
@@ -284,7 +291,7 @@ implements
         // exclude those that have eg. reserved prefixes
         if (facetProcessor.recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
-        	internalSpec.potentialOrphans().add(actionMethod);
+        	potentialOrphans.add(actionMethod);
             return false;
         }
 
