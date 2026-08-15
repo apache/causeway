@@ -64,7 +64,7 @@ extends MetaModelValidatorAbstract {
     private final _ClassCache classCache;
 
     ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution(final MetaModelContext mmc) {
-        super(mmc, spec->((spec instanceof ObjectSpecificationDefault)
+        super(mmc, spec->((spec instanceof ObjectSpecificationInternal)
             && !spec.isAbstract()
             && !spec.beanSort().isManagedBeanNotContributing()
             && !spec.isValue()));

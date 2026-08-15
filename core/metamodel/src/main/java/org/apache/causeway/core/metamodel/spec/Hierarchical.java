@@ -60,9 +60,25 @@ public interface Hierarchical {
      */
     Optional<ObjectSpecification> superSpec();
 
-
     default boolean isTypeHierarchyRoot() {
         return superSpec().isEmpty();
+    }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with superSpec.
+     */
+    default Stream<ObjectSpecification> streamSuperTypeHierarchy() {
+        return superSpec()
+        		.map(superSpec->Stream.concat(Stream.of(superSpec), superSpec.streamSuperTypeHierarchy()))
+        		.orElseGet(Stream::empty);
+    }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with superSpec,
+     * then includes all (collected) interfaces at the end.
+     */
+    default Stream<ObjectSpecification> streamSuperTypeHierarchyAndInterfaces() {
+        return Stream.concat(streamSuperTypeHierarchy(), interfaceSpecs().stream());
     }
 
 	static <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType,

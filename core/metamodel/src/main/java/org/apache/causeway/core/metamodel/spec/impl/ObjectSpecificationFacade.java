@@ -32,23 +32,27 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
+import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
@@ -68,22 +72,24 @@ import org.springframework.util.StringUtils;
  */
 record ObjectSpecificationFacade(
 		CausewayBeanMetaData typeMeta,
-        FeatureType featureType,
-        Can<EntityTitleSubscriber> titleSubscribers,
+        boolean isDomainService,
+    	boolean isInjectable,
+    	Can<EntityTitleSubscriber> titleSubscribers,
+        /** mutable meta data */
         AtomicReference<ObjectMetaData> objectMetaDataRef)
 implements
 	ObjectSpecification,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
 
-	public record ObjectMetaData(
+	record ObjectMetaData(
+			CausewayBeanMetaData typeMeta,
 			IntrospectionPolicy introspectionPolicy,
 			FacetHolder facetHolder,
-			Hierarchical hierarchical,
 			Can<LogicalType> aliases,
+			Hierarchical hierarchical,
 			ObjectActionContainer actionContainer,
 	        ObjectAssociationContainer associationContainer,
-	        MemberCatalog memberCatalog,
 	    	Optional<ValueFacet<?>> valueFacet,
 	    	Optional<EntityFacet> entityFacet,
 	    	Optional<ViewModelFacet> viewmodelFacet,
@@ -96,12 +102,52 @@ implements
 	    	Optional<FaFacet> faFacet,
 	    	Optional<NavigableParentFacet> navigableParentFacet,
 	    	Optional<CssClassFacet> cssClassFacet,
-	    	boolean isDomainService,
-	    	boolean isInjectable,
 	    	boolean isParented,
 			boolean isImmutable,
 			boolean isHidden,
 	    	Map<ResolvedMethod, ObjectMember> membersByMethod) {
+
+		ObjectMetaData(
+				final CausewayBeanMetaData typeMeta,
+				final IntrospectionPolicy introspectionPolicy,
+				final FacetHolder facetHolder,
+				final Hierarchical hierarchical,
+				final ObjectActionContainer actionContainer,
+		        final ObjectAssociationContainer associationContainer,
+		    	final Map<ResolvedMethod, ObjectMember> membersByMethod) {
+			this(typeMeta, introspectionPolicy, facetHolder,
+					facetHolder.lookupFacet(AliasedFacet.class)
+						.map(AliasedFacet::getAliases)
+						.orElseGet(Can::empty),
+					hierarchical, actionContainer, associationContainer,
+					_Casts.uncheckedCast(facetHolder.lookupFacet(ValueFacet.class)),
+			    	facetHolder.lookupFacet(EntityFacet.class),
+			    	facetHolder.lookupFacet(ViewModelFacet.class),
+			    	facetHolder.lookupFacet(MixinFacet.class),
+			    	facetHolder.lookupFacet(ObjectNamedFacet.class),
+			    	facetHolder.lookupFacet(ObjectDescribedFacet.class),
+			    	facetHolder.lookupFacet(TypeOfFacet.class),
+			    	facetHolder.lookupNonFallbackFacet(TitleFacet.class),
+			    	facetHolder.lookupFacet(IconFacet.class),
+			    	facetHolder.lookupFacet(FaFacet.class),
+			    	facetHolder.lookupFacet(NavigableParentFacet.class),
+			    	facetHolder.lookupFacet(CssClassFacet.class),
+			    	facetHolder.containsFacet(ParentedCollectionFacet.class),
+					facetHolder.containsFacet(ImmutableFacet.class),
+					facetHolder.containsFacet(HiddenFacet.class),
+					membersByMethod);
+		}
+
+	}
+
+	ObjectSpecificationFacade(
+			final CausewayBeanMetaData typeMeta,
+			final boolean isDomainService,
+	    	final boolean isInjectable,
+	        final Can<EntityTitleSubscriber> titleSubscribers,
+	        final ObjectMetaData objectMetaData) {
+		this(typeMeta, isDomainService, isInjectable,
+				titleSubscribers, new AtomicReference<>(objectMetaData));
 	}
 
     // -- SPECIFICATION
@@ -125,7 +171,7 @@ implements
 
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
     @Override public IntrospectionPolicy introspectionPolicy() { return objectMetaData().introspectionPolicy(); }
-    @Override public Class<?> correspondingClass() { return typeMeta.getCorrespondingClass(); }
+    @Override public Class<?> correspondingClass() { return typeMeta.correspondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
 	@Override public String fullIdentifier() { return correspondingClass().getName(); }
 	@Override public String shortIdentifier() { return logicalType().logicalSimpleName(); }
@@ -139,8 +185,6 @@ implements
 	@Override public boolean isParented() { return objectMetaData().isParented(); }
 	@Override public boolean isImmutable() { return objectMetaData().isImmutable(); }
 	@Override public boolean isHidden() { return objectMetaData().isHidden(); }
-	@Override public boolean isInjectable() { return objectMetaData().isInjectable(); }
-	@Override public boolean isDomainService() { return objectMetaData().isDomainService(); }
 
 	// -- MEMBER LOOKUP
 
@@ -162,7 +206,7 @@ implements
 
 	@Override
 	public Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
-		return memberCatalog().lookupMember(method);
+		return Optional.ofNullable(objectMetaData().membersByMethod.get(method));
 	}
 
 	// -- INFERRED FROM FACETS
@@ -191,7 +235,7 @@ implements
             }
         }
         return "%s%s"
-    		.formatted(objectMetaData().isInjectable
+    		.formatted(isInjectable
 	                ? ""
 	                : "Untitled ",
                 getSingularName());
@@ -260,7 +304,6 @@ implements
 
     private ObjectMetaData objectMetaData() { return objectMetaDataRef.get(); }
     private Hierarchical hierarchical() { return objectMetaData().hierarchical(); }
-    private MemberCatalog memberCatalog() { return objectMetaData().memberCatalog(); }
 
 	private Optional<FontAwesomeLayers> faLayers(final ManagedObject domainObject){
         return objectMetaData().faFacet
@@ -278,9 +321,8 @@ implements
 		titleRenderRequest
 			.object()
 			.getBookmark()
-			.ifPresent(bookmark ->
-			titleSubscribers
-			.forEach(subscriber -> subscriber.entityTitleIs(bookmark, titleString)));
+			.ifPresent(bookmark -> titleSubscribers
+				.forEach(subscriber -> subscriber.entityTitleIs(bookmark, titleString)));
 	}
 
 }

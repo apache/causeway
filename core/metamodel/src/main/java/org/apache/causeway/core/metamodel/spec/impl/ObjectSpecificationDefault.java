@@ -95,6 +95,7 @@ implements
     private final FacetedMethodsFactory facetedMethodsFactory; //TODO in support of reloading, this factory should be recreated, as it holds a MethodRemover that is stateful
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
+    private final Can<EntityTitleSubscriber> titleSubscribers;
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final FacetHolder facetHolder;
@@ -133,15 +134,12 @@ implements
     private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
-    @Getter(lazy = true)
-    private final Can<EntityTitleSubscriber> titleSubscribers =
-    	getServiceRegistry().select(EntityTitleSubscriber.class);
-
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
             final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry,
+            final @NonNull Can<EntityTitleSubscriber> titleSubscribers,
             final @NonNull Supplier<MixinSpecStreamer> mixinSpecStreamerSupplier) {
 
         final MetaModelContext mmc = facetProcessor.getMetaModelContext();
@@ -150,6 +148,7 @@ implements
     	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(mmc.getServiceRegistry()));
     	this.isDomainServiceLazy = _Lazy.threadSafe(()->
         	_ClassCache.getInstance().head(correspondingClass()).hasAnnotation(DomainService.class));
+    	this.titleSubscribers = titleSubscribers;
 
         this.facetHolder = FacetHolder.simple(
             mmc,
@@ -158,7 +157,7 @@ implements
         this.postProcessor = postProcessor;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
-        facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
+        facetProcessor.processObjectType(typeMeta.correspondingClass(), this);
 
         // naturally supports attribute inheritance from the type's hierarchy
         this.introspectionPolicy = lookupFacet(IntrospectionPolicyFacet.class)
@@ -188,7 +187,7 @@ implements
 
 	@Override public FeatureType featureType() { return FeatureType.OBJECT; }
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
-    @Override public Class<?> correspondingClass() { return typeMeta.getCorrespondingClass(); }
+    @Override public Class<?> correspondingClass() { return typeMeta.correspondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
 	@Override public String fullIdentifier() { return correspondingClass().getName(); }
 	@Override public String shortIdentifier() { return logicalType().logicalSimpleName(); }
@@ -251,13 +250,13 @@ implements
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-    	streamTypeHierarchyAndInterfaces()
+    	streamSuperTypeHierarchyAndInterfaces()
     		.forEach(it->((IntrospectionStateHandler)it)
     			.introspectFully());
 
         // create associations and actions
 
-        var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
+        var regularMemberFactory = new RegularMemberFactory(mixinFacet(), facetedMethodsFactory);
         var regularAssociations = regularMemberFactory.createAssociations().toList();
         var regularActions = regularMemberFactory.createActions().toList();
 
@@ -475,7 +474,6 @@ implements
 		//WIP
 		return new ObjectSpecificationRecord(
 				typeMeta,
-				featureType(),
 				facetHolder,
 				hierarchical,
 				objectActionContainer,
@@ -513,7 +511,7 @@ implements
 
     	var managedObject = titleRenderRequest.object();
     	managedObject.getBookmark().ifPresent(bookmark -> {
-    		getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
+    		titleSubscribers.stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
     	});
     }
 }

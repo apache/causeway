@@ -44,6 +44,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -113,6 +114,8 @@ extends
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
             s1.shortIdentifier().compareToIgnoreCase(s2.shortIdentifier());
     }
+
+    @Override default FeatureType featureType() { return FeatureType.OBJECT; }
 
     IntrospectionPolicy introspectionPolicy();
 
@@ -635,9 +638,7 @@ extends
      * @since 2.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
-        return superSpec().isPresent()
-                ? Stream.concat(Stream.of(this), superSpec().get().streamTypeHierarchy())
-                : Stream.of(this);
+        return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchy());
     }
 
     /**
@@ -646,7 +647,7 @@ extends
      * @since 4.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
-        return Stream.concat(streamTypeHierarchy(), interfaceSpecs().stream());
+    	return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchyAndInterfaces());
     }
 
     /**

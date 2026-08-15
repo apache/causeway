@@ -40,7 +40,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
@@ -70,7 +69,6 @@ import org.springframework.util.StringUtils;
 //TODO WIP
 public record ObjectSpecificationRecord(
 		CausewayBeanMetaData typeMeta,
-        FeatureType featureType,
         FacetHolder facetHolder,
         Hierarchical hierarchical,
         ObjectActionContainer actionContainer,
@@ -166,7 +164,7 @@ implements
     // -- COMPONENTS AND GETTERS
 
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
-    @Override public Class<?> correspondingClass() { return typeMeta.getCorrespondingClass(); }
+    @Override public Class<?> correspondingClass() { return typeMeta.correspondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
 	@Override public String fullIdentifier() { return correspondingClass().getName(); }
 	@Override public String shortIdentifier() { return logicalType().logicalSimpleName(); }

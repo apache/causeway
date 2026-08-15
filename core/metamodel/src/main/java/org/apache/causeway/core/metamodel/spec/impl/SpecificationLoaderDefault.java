@@ -71,6 +71,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
 import org.jspecify.annotations.NonNull;
@@ -120,6 +121,8 @@ implements
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
+    private final _Lazy<Can<EntityTitleSubscriber>> titleSubscribersLazy;
+
     private PostProcessor postProcessor;
     private MixinSpecStreamer mixinSpecStreamer = MixinSpecStreamer.EMPTY;
     //perf... private final Profiler profiler = Profiler.getInstance();
@@ -160,6 +163,8 @@ implements
         this.valueSemanticsResolver = valueSemanticsRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
         this.parallel = causewayConfiguration.core().metaModel().introspector().parallelize();
+        this.titleSubscribersLazy =
+        		_Lazy.threadSafe(()->serviceRegistry.select(EntityTitleSubscriber.class));
     }
 
     /** JUnit Test Support */
@@ -328,7 +333,7 @@ implements
 
         var snapshot = snapshotSpecifications();
         snapshot.stream()
-	        .filter(ObjectSpecificationInternal::isMixin)
+	        .filter(ObjectSpecification::isMixin)
 	        .filter(spec->!spec.isFullyIntrospected())
 	        .forEach(spec->{
 	        	log.warn("Mixin was missing during first pass {}."
@@ -617,7 +622,7 @@ implements
     private ObjectSpecificationInternal register(
             final @NonNull CausewayBeanMetaData typeMeta) {
         return loadSpecificationNullable(
-                typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
+                typeMeta.correspondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
 
     }
 
@@ -679,8 +684,16 @@ implements
                 facetProcessor,
                 postProcessor,
                 classSubstitutorRegistry,
+                titleSubscribersLazy.get(),
                 ()->mixinSpecStreamer);
         return objectSpec;
+//TODO WIP
+//        var objectMetaDataFactory = new ObjectMetaDataFactory(facetProcessor);
+//    	boolean isDomainService = _ClassCache.getInstance().head(typeMeta.correspondingClass()).hasAnnotation(DomainService.class);
+//    	boolean isInjectable = typeMeta.isInjectable(serviceRegistry);
+//
+//        return new ObjectSpecificationFacade(typeMeta, isDomainService, isInjectable,
+//        		titleSubscribersLazy.get(), objectMetaDataFactory.register(typeMeta));
     }
 
     private void introspectSequential(

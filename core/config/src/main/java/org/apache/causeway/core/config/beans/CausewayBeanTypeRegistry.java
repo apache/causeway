@@ -69,7 +69,7 @@ public class CausewayBeanTypeRegistry {
 
         scannedTypes.forEach(typeMeta->{
 
-            var cls = typeMeta.getCorrespondingClass();
+            var cls = typeMeta.correspondingClass();
 
             scannedTypesByClass.put(cls, typeMeta);
 
@@ -132,14 +132,14 @@ public class CausewayBeanTypeRegistry {
         if(selectedStack==null || !selectedStack.isPresent()) return Stream.empty();
         return entities.stream()
                 .filter(typeMeta->typeMeta.persistenceStack()==selectedStack)
-                .<Class<?>>map(CausewayBeanMetaData::getCorrespondingClass);
+                .<Class<?>>map(CausewayBeanMetaData::correspondingClass);
     }
 
     // -- LOOKUP
 
     public Optional<String> lookupDomainServiceNameForType(final Class<?> type) {
         return Optional.ofNullable(domainServices.get(type))
-                .map(CausewayBeanMetaData::getBeanName);
+                .map(CausewayBeanMetaData::beanName);
     }
 
     public boolean containsManagedBeansContributing(final @NonNull Class<?> type) {
