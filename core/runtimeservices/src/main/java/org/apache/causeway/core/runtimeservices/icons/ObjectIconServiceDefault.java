@@ -106,15 +106,15 @@ implements ObjectIconService {
     // -- HELPER
 
     private ObjectIcon embedded(final ObjectSpecification objSpec, final EmbeddedIconResource embeddedIconResource) {
-        return new ObjectIconEmbedded(objSpec.getCorrespondingClass().getSimpleName(), embeddedIconResource.dataUri());
+        return new ObjectIconEmbedded(objSpec.correspondingClass().getSimpleName(), embeddedIconResource.dataUri());
     }
 
     private ObjectIcon fa(final ObjectSpecification objSpec, final FontAwesomeIconResource faIconResource) {
-        return new ObjectIconFa(objSpec.getCorrespondingClass().getSimpleName(), faIconResource.faLayers());
+        return new ObjectIconFa(objSpec.correspondingClass().getSimpleName(), faIconResource.faLayers());
     }
 
     private ObjectIcon suffixed(final ObjectSpecification objSpec, final ClassPathIconResource cpIconResource) {
-        var domainClass = objSpec.getCorrespondingClass();
+        var domainClass = objSpec.correspondingClass();
         var iconResourceKey = StringUtils.hasLength(cpIconResource.suffix())
             ? domainClass.getName() + "-" + cpIconResource.suffix()
             : domainClass.getName();
@@ -144,7 +144,7 @@ implements ObjectIconService {
             final ObjectSpecification spec,
             final Optional<String> iconName) {
 
-        var domainClass = spec.getCorrespondingClass();
+        var domainClass = spec.correspondingClass();
         var iconNameSuffixIfAny = iconName.orElse(null);
         var iconResourceNameNoExt = _Strings.isNotEmpty(iconNameSuffixIfAny)
                 ? domainClass.getSimpleName() + "-" + iconNameSuffixIfAny

@@ -58,7 +58,7 @@ extends MetaModelValidatorAbstract {
                     spec,
                     ProgrammingModelConstants.MessageTemplate.UNKNONW_SORT_WITH_ACTION
                         .builder()
-                        .addVariable("type", spec.getCorrespondingClass().getName())
+                        .addVariable("type", spec.correspondingClass().getName())
                         .addVariable("actions", actionIds)
                         .addVariable("actionCount", numActions)
                         .buildMessage());

@@ -87,7 +87,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
 
         var prerenderedTitle = spec.isValue()
             // if value type, then support translation only for enums
-            ? spec.getCorrespondingClass().isEnum()
+            ? spec.correspondingClass().isEnum()
                 ? mo.getTranslationService().translate(TranslationContext.empty(), MmValueUtils.titleStringForValueType(feature, mo))
                 : MmValueUtils.titleStringForValueType(feature, mo)
             : mo.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(mo));

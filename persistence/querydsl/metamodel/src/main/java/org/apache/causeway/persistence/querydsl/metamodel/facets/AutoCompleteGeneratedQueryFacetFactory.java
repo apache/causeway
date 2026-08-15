@@ -116,7 +116,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
                 .filter(AutoCompleteUsingQueryDslFacet.class::isInstance)
                 .map(AutoCompleteUsingQueryDslFacet.class::cast)
                 .orElseGet(() -> {
-                    var newFacet = new AutoCompleteUsingQueryDslFacet(declaringSpec.getCorrespondingClass(), declaringSpec, null, null, null, null, queryDslSupport());
+                    var newFacet = new AutoCompleteUsingQueryDslFacet(declaringSpec.correspondingClass(), declaringSpec, null, null, null, null, queryDslSupport());
                     declaringSpec.addFacet(newFacet);
                     return newFacet;
                 });

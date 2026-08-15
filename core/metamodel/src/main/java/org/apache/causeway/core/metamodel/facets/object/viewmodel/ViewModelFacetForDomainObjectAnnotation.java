@@ -108,7 +108,7 @@ extends SecureViewModelFacet {
 
             var propertyId = property.getId();
             var propertySpec = property.getElementType();
-            var propertyType = propertySpec.getCorrespondingClass();
+            var propertyType = propertySpec.correspondingClass();
             var propertyPojo = memento.get(propertyId, propertyType);
             final ManagedObject propertyValue = propertyPojo!=null
                     ? objectManager.adapt(propertyPojo)

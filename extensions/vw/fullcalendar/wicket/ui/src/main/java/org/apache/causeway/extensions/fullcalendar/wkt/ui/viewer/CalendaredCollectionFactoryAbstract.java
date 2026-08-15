@@ -50,7 +50,7 @@ implements
         final CollectionModel entityCollectionModel = (CollectionModel) model;
 
         final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
-        final Class<?> correspondingClass = elementSpec.getCorrespondingClass();
+        final Class<?> correspondingClass = elementSpec.correspondingClass();
 
         return appliesIf(type.isAssignableFrom(correspondingClass));
     }

@@ -51,7 +51,7 @@ public final class MmSpecUtils {
         var pojo = ManagedObjects.peekAtPojoOf(obj);
         var requiredType = pojo.getClass();
         var currentSpec = obj.objSpec();
-        if(currentSpec.getCorrespondingClass().equals(requiredType))
+        if(currentSpec.correspondingClass().equals(requiredType))
 			return obj;
         return ManagedObject.adaptSingular(currentSpec.getSpecificationLoader(), pojo);
     }
@@ -64,7 +64,7 @@ public final class MmSpecUtils {
     public ObjectSpecification quicklyResolveObjectSpecification(
             final @NonNull ObjectSpecification guess,
             final @NonNull Class<?> requiredType) {
-        return guess.getCorrespondingClass().equals(requiredType)
+        return guess.correspondingClass().equals(requiredType)
                 // when successful guess
                 ? guess
                 // else lookup
@@ -113,7 +113,7 @@ public final class MmSpecUtils {
      */
     public boolean isJavaRecord(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
-        return spec.getCorrespondingClass().isRecord();
+        return spec.correspondingClass().isRecord();
     }
 
     /**
@@ -124,7 +124,7 @@ public final class MmSpecUtils {
     public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
         return getFixtureScriptClass()
-            .map(fixtureScriptClass->fixtureScriptClass.isAssignableFrom(spec.getCorrespondingClass()))
+            .map(fixtureScriptClass->fixtureScriptClass.isAssignableFrom(spec.correspondingClass()))
             .orElse(false);
     }
 

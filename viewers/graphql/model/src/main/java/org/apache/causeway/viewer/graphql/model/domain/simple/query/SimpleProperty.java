@@ -179,11 +179,11 @@ public class SimpleProperty
     }
 
     private static boolean isBlob(OneToOneAssociation otoa) {
-        return otoa.getElementType().getCorrespondingClass() == Blob.class;
+        return otoa.getElementType().correspondingClass() == Blob.class;
     }
 
     private static boolean isClob(OneToOneAssociation otoa) {
-        return otoa.getElementType().getCorrespondingClass() == Clob.class;
+        return otoa.getElementType().correspondingClass() == Clob.class;
     }
 
     @Override

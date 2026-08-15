@@ -96,13 +96,13 @@ implements
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final FacetHolder facetHolder;
 
     @Getter @Accessors(fluent = true)
 	private final IntrospectionStateHandler introspectionStateHandler;
 
-    @Getter(onMethod_={@Override})
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final IntrospectionPolicy introspectionPolicy;
 
     @Getter @Accessors(fluent = true)
@@ -149,7 +149,7 @@ implements
     	this.typeMeta = typeMeta;
     	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(mmc.getServiceRegistry()));
     	this.isDomainServiceLazy = _Lazy.threadSafe(()->
-        	_ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
+        	_ClassCache.getInstance().head(correspondingClass()).hasAnnotation(DomainService.class));
 
         this.facetHolder = FacetHolder.simple(
             mmc,
@@ -162,7 +162,7 @@ implements
 
         // naturally supports attribute inheritance from the type's hierarchy
         this.introspectionPolicy = lookupFacet(IntrospectionPolicyFacet.class)
-                .map(IntrospectionPolicyFacet::getIntrospectionPolicy)
+                .map(IntrospectionPolicyFacet::introspectionPolicy)
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
         this.facetedMethodsFactory =
@@ -186,12 +186,12 @@ implements
 
     // --
 
-	@Override public FeatureType getFeatureType() { return FeatureType.OBJECT; }
+	@Override public FeatureType featureType() { return FeatureType.OBJECT; }
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
-    @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
+    @Override public Class<?> correspondingClass() { return typeMeta.getCorrespondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
-	@Override public String getFullIdentifier() { return getCorrespondingClass().getName(); }
-	@Override public String getShortIdentifier() { return logicalType().logicalSimpleName(); }
+	@Override public String fullIdentifier() { return correspondingClass().getName(); }
+	@Override public String shortIdentifier() { return logicalType().logicalSimpleName(); }
 //	@Override public Can<LogicalType> getAliases() { return aliases().get(); }
 	@Override public boolean isDomainService() { return isDomainServiceLazy.get(); }
 	@Override public boolean isInjectable() { return isInjectableLazy.get(); }
@@ -206,20 +206,20 @@ implements
 
     @Override
     public int hashCode() {
-        return getCorrespondingClass().hashCode();
+        return correspondingClass().hashCode();
     }
     @Override
     public boolean equals(final Object o) {
         return (o instanceof ObjectSpecification other)
-            ? Objects.equals(this.getCorrespondingClass(), other.getCorrespondingClass())
+            ? Objects.equals(this.correspondingClass(), other.correspondingClass())
             : false;
     }
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), beanSort().name(), superSpec().isEmpty()
+            .formatted(fullIdentifier(), beanSort().name(), superSpec().isEmpty()
                 ? "Object"
-                : superSpec().get().getFullIdentifier());
+                : superSpec().get().fullIdentifier());
     }
 
     private void introspectTypeHierarchy(final HierarchicalFactory hierarchicalFactory) {
@@ -232,7 +232,7 @@ implements
         if(this.isValue())
 			return;
 
-        this.hierarchical = hierarchicalFactory.createHierarchical(getCorrespondingClass());
+        this.hierarchical = hierarchicalFactory.createHierarchical(correspondingClass());
     }
 
     private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer) {
@@ -242,12 +242,12 @@ implements
                 || this.beanSort().isVetoed()
                 || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for {} type {}", this.beanSort(), getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.beanSort(), fullIdentifier());
             }
             return;
         }
         Assert.isTrue(!isFullyIntrospected(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
-        		.formatted(getFullIdentifier()));
+        		.formatted(fullIdentifier()));
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
@@ -293,13 +293,13 @@ implements
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
-                    _Strings.asNaturalName.apply(getShortIdentifier()),
+                    _Strings.asNaturalName.apply(shortIdentifier()),
                     this));
         }
     }
 
     @Override
-    public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
+    public Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
     	introspectFully();
     	return memberCatalog.lookupMember(method);
     }
@@ -421,9 +421,8 @@ implements
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(ObjectNamedFacet::translated)
             // unexpected code reach, however keep for JUnit testing
-            .orElseGet(()->String.format(
-                    "(%s has neither title- nor object-named-facet)",
-                    getFullIdentifier()));
+            .orElseGet(()->"(%s has neither title- nor object-named-facet)"
+            	.formatted(fullIdentifier()));
     }
 
     /**
@@ -453,7 +452,7 @@ implements
     // -- INHERITED
 
     @Override
-    public Optional<? extends ObjectMember> getMember(final String memberId) {
+    public Optional<? extends ObjectMember> lookupMember(final String memberId) {
     	introspectFully();
 
         if(_Strings.isEmpty(memberId))
@@ -476,7 +475,7 @@ implements
 		//WIP
 		return new ObjectSpecificationRecord(
 				typeMeta,
-				getFeatureType(),
+				featureType(),
 				facetHolder,
 				hierarchical,
 				objectActionContainer,

@@ -37,7 +37,7 @@ abstract class ObjectAssociationAbstract
 extends ObjectMemberAbstract
 implements ObjectAssociation {
     private static final long serialVersionUID = 1L;
-    
+
     private final ObjectSpecification elementType;
 
     protected ObjectAssociationAbstract(
@@ -47,9 +47,8 @@ implements ObjectAssociation {
             final ObjectSpecification elementType) {
 
         super(featureIdentifier, facetedMethod, featureType);
-        if (elementType == null) {
-            throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
-        }
+        if (elementType == null)
+			throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         this.elementType = elementType;
     }
 
@@ -61,7 +60,7 @@ implements ObjectAssociation {
     }
 
     @Override
-    public FacetHolder getFacetHolder() {
+    public FacetHolder facetHolder() {
         return getFacetedMethod();
     }
 

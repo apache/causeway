@@ -249,7 +249,7 @@ extends ContentNegotiationServiceAbstract {
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
                 var dto = dtoForValue(returnedAdapter)
-                        .orElseGet(()->elementAdapter.objSpec().getCorrespondingClass());
+                        .orElseGet(()->elementAdapter.objSpec().correspondingClass());
                 return dto;
             })
             .forEach(rootRepresentation::arrayAdd);

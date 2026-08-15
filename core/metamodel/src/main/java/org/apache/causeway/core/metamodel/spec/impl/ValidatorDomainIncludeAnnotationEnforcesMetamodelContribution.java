@@ -74,7 +74,7 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        final Class<?> type = spec.getCorrespondingClass();
+        final Class<?> type = spec.correspondingClass();
         final var internalSpec = (ObjectSpecificationInternal) spec;
 
         // methods picked up by the framework
@@ -120,7 +120,7 @@ extends MetaModelValidatorAbstract {
             .filter(Predicate.not(memberMethods::contains))
             .filter(Predicate.not(supportMethods::contains))
             // filter away classic getters, that shadow record components
-            .filter(spec.getCorrespondingClass().isRecord()
+            .filter(spec.correspondingClass().isRecord()
                 ? Predicate.not(AccessorSemantics::isGetter)
                 : _Predicates.alwaysTrue())
             .collect(Collectors.toCollection(HashSet::new));
@@ -155,7 +155,7 @@ extends MetaModelValidatorAbstract {
         //var type = spec.getCorrespondingClass();
         var unmetContraints = new ArrayList<String>();
 
-        if(!spec.getIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
+        if(!spec.introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 && !MethodUtil.isPublic(method)) {
             unmetContraints.add("method must be 'public'");
             return unmetContraints; // don't check any further
@@ -193,7 +193,7 @@ extends MetaModelValidatorAbstract {
         if(spec.isAbstract()
                 || spec.beanSort().isManagedBeanNotContributing()
                 || spec.isValue()
-                || spec.getIntrospectionPolicy()
+                || spec.introspectionPolicy()
                     .getSupportMethodAnnotationPolicy()
                     .isSupportMethodAnnotationsRequired())
             return; // ignore

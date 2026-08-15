@@ -116,7 +116,7 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            var cls = spec.getCorrespondingClass();
+            var cls = spec.correspondingClass();
 
             if(!spec.lookupFacet(NavigableParentFacet.class).isPresent())
 				return; // skip check

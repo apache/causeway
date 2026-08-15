@@ -26,13 +26,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.Assertions;
-import org.opentest4j.AssertionFailedError;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -43,8 +36,12 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Assertions;
+import org.opentest4j.AssertionFailedError;
+
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -73,7 +70,7 @@ public class DomainModelValidator {
             specificationLoader.createMetaModel();
             if(log.isDebugEnabled()) {
                 specificationLoader.forEach(spec->{
-                    log.debug("loaded: " + spec.getFullIdentifier());
+                    log.debug("loaded: " + spec.fullIdentifier());
                 });
             }
         }
@@ -84,15 +81,12 @@ public class DomainModelValidator {
 
     private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment causewaySystemEnvironment) {
         final IntrospectionMode mode = configuration.core().metaModel().introspector().mode();
-        switch (mode) {
-            case FULL:
-                return false;
-            case LAZY_UNLESS_PRODUCTION:
-                return causewaySystemEnvironment.isPrototyping();
-            case LAZY:
-            default:
-                return true;
-        }
+        return switch (mode) {
+		case FULL -> false;
+		case LAZY_UNLESS_PRODUCTION -> causewaySystemEnvironment.isPrototyping();
+		case LAZY -> true;
+		default -> true;
+		};
     }
 
     /**
@@ -155,7 +149,7 @@ public class DomainModelValidator {
             throw new AssertionFailedError(msg);
         }
     }
-    
+
     /**
      * JUnit support
      */
@@ -220,7 +214,7 @@ public class DomainModelValidator {
             var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     classIdentifiers.stream()
-                    .flatMap(identifier->streamFailuresMatchingOriginatingIdentifier(identifier))
+                    .flatMap(this::streamFailuresMatchingOriginatingIdentifier)
                     .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);

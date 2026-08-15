@@ -105,7 +105,7 @@ public final class Mm2YamlUtils {
 			writer.writeln("%s (count=%d):", name, specs.size());
 			specs.stream().sorted()
 				.forEach(spec->writer.writeln("- {class=%s%s, ract={%s}, rass={%s}}",
-						spec.getFullIdentifier(),
+						spec.fullIdentifier(),
 						formatSuper(spec.superSpec().orElse(null)),
 						formatRegularActions(spec),
 						formatRegularAssociations(spec)
@@ -114,10 +114,10 @@ public final class Mm2YamlUtils {
 
 		private String formatSuper(@Nullable final ObjectSpecification spec) {
 			return spec == null
-					|| spec.getCorrespondingClass().equals(java.lang.Record.class)
-					|| spec.getCorrespondingClass().equals(java.lang.Object.class)
+					|| spec.correspondingClass().equals(java.lang.Record.class)
+					|| spec.correspondingClass().equals(java.lang.Object.class)
 	                ? ""
-	                : ", super=" + spec.getFullIdentifier();
+	                : ", super=" + spec.fullIdentifier();
 		}
 
 		private String formatRegularActions(final ObjectSpecification spec) {

@@ -485,7 +485,7 @@ public final class Facets {
         return valueSerializer(objectSpec, requiredType)
             .orElseThrow(()->_Exceptions.illegalArgument(
                     "ObjectSpec is expected to have a ValueFacet<%s>",
-                    objectSpec.getCorrespondingClass().getName()));
+                    objectSpec.correspondingClass().getName()));
     }
 
     // -- HELPER

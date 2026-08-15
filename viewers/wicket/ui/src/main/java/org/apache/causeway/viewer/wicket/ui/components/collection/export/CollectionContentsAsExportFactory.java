@@ -59,7 +59,7 @@ implements CollectionContentsAsFactory {
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
         return (model instanceof CollectionModel collectionModel)
-            ? tabularExporter.appliesTo(collectionModel.getElementType().getCorrespondingClass())
+            ? tabularExporter.appliesTo(collectionModel.getElementType().correspondingClass())
                 ? ApplicationAdvice.APPLIES
                 : ApplicationAdvice.DOES_NOT_APPLY
             : ApplicationAdvice.DOES_NOT_APPLY;

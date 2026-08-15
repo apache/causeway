@@ -185,8 +185,8 @@ public record DataTable(
     public DataTable withDataElementsFrom(final @Nullable DataTable otherTable) {
         if(otherTable==null) return this;
         { // sanity check
-            var thisType = otherTable.elementType().getCorrespondingClass();
-            var otherType = this.elementType().getCorrespondingClass();
+            var thisType = otherTable.elementType().correspondingClass();
+            var otherType = this.elementType().correspondingClass();
             _Assert.assertEquals(thisType, otherType, ()->
                     String.format("Other tables's element-type %s must match the this table's element-type %s.",
                             otherType,
@@ -225,7 +225,7 @@ public record DataTable(
      * @see #withDataElements(Iterable)
      */
     public DataTable withEntities() {
-        var query = Query.allInstances(elementType.getCorrespondingClass());
+        var query = Query.allInstances(elementType.correspondingClass());
         return withEntities(query);
     }
 
@@ -237,7 +237,7 @@ public record DataTable(
     public DataTable withEntities(final Query<?> query) {
         { // sanity check
             var requestType = query.getResultType();
-            var resultType = elementType().getCorrespondingClass();
+            var resultType = elementType().correspondingClass();
             _Assert.assertEquals(requestType, resultType, ()->
                     String.format("Query's result-type %s must match the table's element-type %s.",
                             requestType,
@@ -352,7 +352,7 @@ public record DataTable(
         private final @NonNull Can<String> columnIds;
 
         private SerializationProxy(final DataTable dataTable) {
-            this.elementTypeClass = dataTable.elementType().getCorrespondingClass();
+            this.elementTypeClass = dataTable.elementType().correspondingClass();
             this.rowElementBookmarks = dataTable.streamDataElements()
                     .map(ManagedObject::getBookmarkElseFail)
                     .collect(Can.toCan());

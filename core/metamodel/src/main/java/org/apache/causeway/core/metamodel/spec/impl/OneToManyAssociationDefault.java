@@ -68,7 +68,7 @@ implements OneToManyAssociation {
     @Getter(onMethod_={@Override}, lazy = true)
     private final ResolvedType typeOfAnyCardinality = resolveTypeOfAnyCardinality();
     private ResolvedType resolveTypeOfAnyCardinality() {
-        return Facets.typeOfAnyCardinality(getFacetHolder())
+        return Facets.typeOfAnyCardinality(facetHolder())
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar feature must have a TypeOfFacet"));
     }
@@ -175,7 +175,7 @@ implements OneToManyAssociation {
         str.append(",");
         str.append("type", getElementType() == null
                 ? "unknown"
-                : getElementType().getShortIdentifier());
+                : getElementType().shortIdentifier());
         return str.toString();
     }
 

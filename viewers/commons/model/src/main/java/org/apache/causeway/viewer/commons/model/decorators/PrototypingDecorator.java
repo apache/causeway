@@ -46,7 +46,7 @@ public interface PrototypingDecorator<T, R> {
             Supplier<Stream<Facet>> facetStreamProvider) {
 
         public static PrototypingDecorationModel of(final ManagedAction managedAction) {
-            Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();
+            Class<?> featureType = managedAction.getAction().getReturnType().correspondingClass();
             String featureShortLabel = managedAction.getFriendlyName();
             String featureFullLabel = String.format("%s: %s",
                     managedAction.getMemberType(),

@@ -153,7 +153,7 @@ permits
      * Create default viewmodel instance (without any {@link Bookmark} available).
      */
     protected ManagedObject createViewmodel(final @NonNull ObjectSpecification spec) {
-        return ManagedObject.viewmodel(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()),
+        return ManagedObject.viewmodel(spec, ClassExtensions.newInstance(spec.correspondingClass()),
             Optional.empty());
     }
 

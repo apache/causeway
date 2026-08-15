@@ -103,7 +103,7 @@ public class SimpleAction
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, objectInteractor.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
+                            objectSpecificationOfCollectionElement.fullIdentifier(),
                             objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
@@ -177,7 +177,7 @@ public class SimpleAction
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.fullIdentifier(), elementType.beanSort()));
                     }
                 });
     }
@@ -225,7 +225,7 @@ public class SimpleAction
 
         var idValue = (String)argumentValue.get("id");
         if (idValue != null) {
-            Class<?> paramClass = elementType.getCorrespondingClass();
+            Class<?> paramClass = elementType.correspondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");

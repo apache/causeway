@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.param;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -50,6 +48,8 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.util.Facets;
 
+import jakarta.inject.Inject;
+
 /**
  * Does post-processing of
  * {@link ActionParameterDefaultsFacet} and {@link ActionParameterChoicesFacet},
@@ -75,9 +75,8 @@ extends MetaModelPostProcessorAbstract {
         //  eg to emit an outbox event for integration)
         if (Facets.hiddenWhere(objectAction)
                   .filter(where -> where == Where.EVERYWHERE)
-                  .isPresent()) {
-            return;
-        }
+                  .isPresent())
+			return;
 
         if(!hasChoicesOrAutoComplete(param)) {
 
@@ -85,35 +84,29 @@ extends MetaModelPostProcessorAbstract {
                     .addFacetIfPresent(
                         ActionParameterChoicesFacetFromAction
                             .create(objectAction, objectSpecification, param))
-                    .isPresent()) {
-
-                /* ActionParameterChoicesFacetFromAction has precedence over
+                    .isPresent())
+				/* ActionParameterChoicesFacetFromAction has precedence over
                  * ActionParameterChoicesFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
-            }
 
             if(FacetUtil
                     .addFacetIfPresent(
                         ActionParameterChoicesFacetFromElementType
                             .create(param))
-                    .isPresent()) {
-
-                /* ActionParameterChoicesFacetFromElementType has precedence over
+                    .isPresent())
+				/* ActionParameterChoicesFacetFromElementType has precedence over
                  * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
-            }
 
             if(FacetUtil
                     .addFacetIfPresent(
                             ActionParameterAutoCompleteFacetFromElementType
                                 .create(param))
-                    .isPresent()) {
-
-                /* skips validation below */
+                    .isPresent())
+				/* skips validation below */
                 return;
-            }
 
         }
 
@@ -234,10 +227,9 @@ extends MetaModelPostProcessorAbstract {
     private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
         var elementType = param.getElementType();
         if(elementType == null
-                || !elementType.beanSort().policy().isAllowedAsMemberElementType()) {
-            // ignore, as these cases are covered later by meta-model validation
+                || !elementType.beanSort().policy().isAllowedAsMemberElementType())
+			// ignore, as these cases are covered later by meta-model validation
             return;
-        }
         if(elementType.isEntityOrViewModel()
                 || param.isPlural()) {
             if(!hasChoicesOrAutoComplete(param)) {
@@ -267,7 +259,7 @@ extends MetaModelPostProcessorAbstract {
 
                 ValidationFailure.raiseFormatted(param,
                         ProgrammingModelConstants.MessageTemplate.PARAMETER_HAS_UNSUPPORTED_COLLECTION_TYPE.builder()
-                            .addVariable("type", objectSpec.getFullIdentifier())
+                            .addVariable("type", objectSpec.fullIdentifier())
                             .addVariable("action", objectAction.getId())
                             .addVariable("paramIndex", param.getParameterIndex())
                             .buildMessage());
@@ -281,7 +273,7 @@ extends MetaModelPostProcessorAbstract {
 
             throw _Exceptions.unrecoverable(
                             messageFormat,
-                            objectSpec.getFullIdentifier(),
+                            objectSpec.fullIdentifier(),
                             objectAction.getId(),
                             param.getParameterIndex());
 

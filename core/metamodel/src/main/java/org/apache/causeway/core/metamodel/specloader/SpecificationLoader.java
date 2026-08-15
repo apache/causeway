@@ -169,7 +169,7 @@ public interface SpecificationLoader {
         var typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
         if(typeSpec==null)
             return Optional.empty();
-        var member = typeSpec.getMember(featureIdentifier.memberLogicalName()).orElse(null);
+        var member = typeSpec.lookupMember(featureIdentifier.memberLogicalName()).orElse(null);
         if(member==null)
             return Optional.empty();
 

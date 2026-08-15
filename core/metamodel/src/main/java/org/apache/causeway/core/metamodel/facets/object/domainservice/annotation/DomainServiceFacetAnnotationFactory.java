@@ -73,7 +73,7 @@ implements MetaModelRefiner {
                     "%s: services can only have actions ('%s' config property), "
                     + "not properties or collections; "
                     + "annotate with @Programmatic if required. Found: %s",
-                    spec.getFullIdentifier(),
+                    spec.fullIdentifier(),
                     "'causeway.core.meta-model.validator.serviceActionsOnly'",
                     associationNames);
         });

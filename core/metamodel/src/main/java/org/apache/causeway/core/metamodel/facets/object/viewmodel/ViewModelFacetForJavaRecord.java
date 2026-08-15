@@ -74,7 +74,7 @@ extends SecureViewModelFacet {
         // throws on de-marshalling failure
         var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
-        var recordComponentPojos = streamRecordComponents(viewmodelSpec.getCorrespondingClass())
+        var recordComponentPojos = streamRecordComponents(viewmodelSpec.correspondingClass())
             .map(recComp->memento.get(recComp.getName(), recComp.getType()))
             .toArray();
 

@@ -547,14 +547,14 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters().getElseFail(i).getElementType().getShortIdentifier());
+            sb.append(getParameters().getElseFail(i).getElementType().shortIdentifier());
         }
         sb.append("}]");
         return sb.toString();
     }
 
     @Override
-    public FacetHolder getFacetHolder() {
+    public FacetHolder facetHolder() {
         return super.getFacetedMethod();
     }
 

@@ -26,9 +26,10 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public abstract class IntrospectionPolicyFacetAbstract
 extends FacetAbstract
@@ -38,7 +39,7 @@ implements IntrospectionPolicyFacet {
         return IntrospectionPolicyFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull Introspection introspection;
 
     protected IntrospectionPolicyFacetAbstract(
@@ -56,7 +57,7 @@ implements IntrospectionPolicyFacet {
     }
 
     @Override
-    public final IntrospectionPolicy getIntrospectionPolicy() {
+    public final IntrospectionPolicy introspectionPolicy() {
         return switch(introspection) {
             case ENCAPSULATION_ENABLED -> IntrospectionPolicy.ENCAPSULATION_ENABLED;
             case ANNOTATION_OPTIONAL -> IntrospectionPolicy.ANNOTATION_OPTIONAL;

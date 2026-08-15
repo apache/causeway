@@ -31,10 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 public sealed interface TypedFacetHolder extends HasFacetHolder
 permits FacetedMethod, FacetedMethodParameter {
 
-    FacetHolder facetHolder();
     FeatureType featureType();
     ResolvedType resolvedType();
 
-    @Override
-    default FacetHolder getFacetHolder() { return facetHolder(); }
 }

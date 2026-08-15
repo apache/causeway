@@ -20,13 +20,6 @@ package org.apache.causeway.core.runtimeservices.command;
 
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
@@ -49,6 +42,12 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Default implementation of {@link CommandDtoFactory}.
@@ -132,7 +131,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             actionParameter.getFeatureIdentifier();
 
-            if(actionParameter.getFeatureType() != FeatureType.ACTION_PARAMETER_PLURAL) {
+            if(actionParameter.featureType() != FeatureType.ACTION_PARAMETER_PLURAL) {
                 //scalar
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {

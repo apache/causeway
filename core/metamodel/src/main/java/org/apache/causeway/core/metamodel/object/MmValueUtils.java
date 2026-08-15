@@ -80,12 +80,12 @@ public class MmValueUtils {
         var spec = mo.objSpec();
         var valueFacet = spec.valueFacet().orElse(null);
         if(valueFacet==null)
-            return "missing ValueFacet %s".formatted(spec.getCorrespondingClass());
+            return "missing ValueFacet %s".formatted(spec.correspondingClass());
 
         @SuppressWarnings("unchecked")
         var renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
         if(renderer==null)
-            return "missing Renderer %s".formatted(spec.getCorrespondingClass());
+            return "missing Renderer %s".formatted(spec.correspondingClass());
 
         return renderingFun.render(renderer, valueFacet.createValueSemanticsContext(feature), mo.getPojo());
     }

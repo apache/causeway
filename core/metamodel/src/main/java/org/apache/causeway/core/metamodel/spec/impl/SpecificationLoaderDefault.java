@@ -217,7 +217,7 @@ implements
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
             switch (spec.beanSort()) {
-                case VALUE -> valueSpecs.put(spec.getCorrespondingClass(), spec);
+                case VALUE -> valueSpecs.put(spec.correspondingClass(), spec);
                 case MANAGED_BEAN_CONTRIBUTING -> domainServiceSpecs.add(spec);
                 case MIXIN -> mixinSpecs.add(spec);
                 case ENTITY -> entitySpecs.add(spec);
@@ -301,14 +301,14 @@ implements
         // run on mixin-spec have the side effect of fully introspecting other types e.g. by asking for the
         // members's element type
         long brokenSpecCount = cache.values().stream()
-    		.filter(spec->!spec.getCorrespondingClass().getName().startsWith("java."))
+    		.filter(spec->!spec.correspondingClass().getName().startsWith("java."))
         	.filter(spec->!spec.isMixin())
         	.filter(spec->!spec.isValue())
         	.filter(ObjectSpecificationInternal::isFullyIntrospected)
         	.filter(spec->!mixinTypeHierarchyMembers.contains(spec))
         	.filter(spec->{
         		var msg = "type (non-mixin, non-value) found fully introspected after mixin introspection %s - reload triggered"
-        				.formatted(spec.getCorrespondingClass());
+        				.formatted(spec.correspondingClass());
     			log.warn(msg);
     			return true;
     			//reloadSpecification(spec.getCorrespondingClass());
@@ -466,7 +466,7 @@ implements
             return;
 
         if(log.isInfoEnabled()) {
-            log.info("re-validation triggered for {}", objectSpec.getFullIdentifier());
+            log.info("re-validation triggered for {}", objectSpec.fullIdentifier());
         }
 
         // validators might discover new specs
@@ -735,7 +735,7 @@ implements
                 loadSpecification(substitute.apply(cls), IntrospectionRequest.FULL);
 
         while(objSpec != null) {
-            var type = objSpec.getCorrespondingClass();
+            var type = objSpec.correspondingClass();
             cache.remove(type);
             objSpec = objSpec.superSpec().orElse(null);
         }

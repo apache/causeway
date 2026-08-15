@@ -100,7 +100,7 @@ public class SitemapServiceDefault implements SitemapService {
                     var actionReturnType = menuAction.getReturnType();
                     var actionElementType = menuAction.getElementType();
 
-                    if(actionElementType.getCorrespondingClass()==void.class) {
+                    if(actionElementType.correspondingClass()==void.class) {
                         adoc.append("WARNING: ");
                     }
                     if(actionReturnType.isPlural()) {
@@ -117,7 +117,7 @@ public class SitemapServiceDefault implements SitemapService {
                         }
                     };
 
-                    var grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
+                    var grid = specificationLoader.specForType(actionElementType.correspondingClass())
                                 .flatMap(mo->Facets.bootstrapGrid(mo))
                                 .orElse(null);
                     grid.visit(new BSElementVisitor() {

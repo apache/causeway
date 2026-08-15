@@ -163,7 +163,7 @@ public class RichAction
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.fullIdentifier(), elementType.beanSort()));
                     }
                 });
     }
@@ -211,7 +211,7 @@ public class RichAction
 
         var idValue = (String)argumentValue.get("id");
         if (idValue != null) {
-            Class<?> paramClass = elementType.getCorrespondingClass();
+            Class<?> paramClass = elementType.correspondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");

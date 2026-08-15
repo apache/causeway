@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-
 import org.jspecify.annotations.NonNull;
 
 public class ActionParameterChoicesFacetFromAction
@@ -52,7 +51,7 @@ extends ActionParameterChoicesFacetAbstract {
                 // param type must be assignable from types returned by choices
                 .filter(coll->coll.getElementType().isOfType(param.getElementType()))
                 .map(coll->
-                    new ActionParameterChoicesFacetFromAction(coll, param.getFacetHolder()));
+                    new ActionParameterChoicesFacetFromAction(coll, param.facetHolder()));
     }
 
     private final OneToManyAssociation choicesFromCollection;

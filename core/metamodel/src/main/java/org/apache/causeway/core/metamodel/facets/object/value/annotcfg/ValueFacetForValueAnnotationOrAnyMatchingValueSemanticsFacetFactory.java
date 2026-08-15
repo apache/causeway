@@ -139,10 +139,10 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
 
         _Assert.assertTrue(valueSpec.valueFacet().isPresent(), ()->"value facet not created for %s (provider-count=%d)"
-                    .formatted(valueSpec.getCorrespondingClass().getName(),
+                    .formatted(valueSpec.correspondingClass().getName(),
                             valueSemanticsProviders.size()));
         _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
-        _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.getCorrespondingClass()));
+        _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.correspondingClass()));
 
         return valueFacet;
     }

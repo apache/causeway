@@ -42,7 +42,7 @@ class MMNodeFactory {
 
     TypeNode superType(@Nullable ObjectSpecification superSpec, MMNode parentNodeNotUsed) {
     	if(superSpec==null
-    			|| superSpec.getCorrespondingClass().equals(Object.class))
+    			|| superSpec.correspondingClass().equals(Object.class))
     		return null;
 		return new TypeNode(superSpec, true);
 	}

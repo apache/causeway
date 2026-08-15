@@ -68,7 +68,7 @@ extends MetaModelValidatorAbstract {
                     spec,
                     ProgrammingModelConstants.MessageTemplate.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
                     .builder()
-                    .addVariable("type", spec.getCorrespondingClass().getName())
+                    .addVariable("type", spec.correspondingClass().getName())
                     .addVariable("overloadedNames", overloadedNames.toString())
                     .buildMessage());
         }

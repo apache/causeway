@@ -74,10 +74,10 @@ implements
             var logicalType = objectSpec.logicalType();
 
             if(logicalType.className().equals(logicalType.logicalName())
-                    && !_ClassCache.getInstance().isNamed(objectSpec.getCorrespondingClass())) {
+                    && !_ClassCache.getInstance().isNamed(objectSpec.correspondingClass())) {
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
                         .builder()
-                        .addVariable("type", objectSpec.getFullIdentifier())
+                        .addVariable("type", objectSpec.fullIdentifier())
                         .addVariable("beanSort", objectSpec.beanSort().name())
                         .addVariable("configProperty", "causeway.core.meta-model.validator.explicit-logical-type-names")
                         .buildMessage());
@@ -97,7 +97,7 @@ implements
         if (objectSpec.isViewModel())
 			// with
             // skip JAXB DTOs
-            return objectSpec.getCorrespondingClass().getAnnotation(XmlType.class) != null;
+            return objectSpec.correspondingClass().getAnnotation(XmlType.class) != null;
         if (objectSpec.isInjectable()) {
             // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
             if(!objectSpec.isDomainService()) return true;

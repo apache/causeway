@@ -33,7 +33,7 @@ interface MixinSpecStreamer {
 		return streamMixinSpecs()
 				.filter(mixinSpec-> mixinSpec != mixeeSpec)
 				.filter(mixinSpec-> mixinSpec.mixinFacet()
-						.map(mixinFacet->mixinFacet.isMixinFor(mixeeSpec.getCorrespondingClass()))
+						.map(mixinFacet->mixinFacet.isMixinFor(mixeeSpec.correspondingClass()))
 						.orElse(false));
 	}
 

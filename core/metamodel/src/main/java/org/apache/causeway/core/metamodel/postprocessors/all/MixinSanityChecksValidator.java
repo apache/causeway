@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import jakarta.inject.Inject;
 
 /**
  * Checks various preconditions for a sane meta-model.
@@ -67,7 +67,7 @@ implements
             ValidationFailure.raiseFormatted(objSpec,
                     ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_TYPE
                         .builder()
-                        .addVariable("type", objSpec.getCorrespondingClass().getName())
+                        .addVariable("type", objSpec.correspondingClass().getName())
                         .buildMessage());
             return;
         }
@@ -88,7 +88,7 @@ implements
         if(contributing==null) return; // skip if already failed earlier
         if(act.isMixedIn()) return; // don't process mixed in actions (that were mixed in to the mixin under validation)
         checkMixinMainMethod(objSpec, act.getFeatureIdentifier());
-        checkMixinSort(objSpec, (FacetedMethod) act.getFacetHolder());
+        checkMixinSort(objSpec, (FacetedMethod) act.facetHolder());
     }
 
     // -- HELPER
@@ -103,7 +103,7 @@ implements
             ValidationFailure.raiseFormatted(objSpec,
                     ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_SORT
                         .builder()
-                        .addVariable("type", objSpec.getCorrespondingClass().getName())
+                        .addVariable("type", objSpec.correspondingClass().getName())
                         .addVariable("expectedContributing", expectedContributing.name())
                         .addVariable("actualContributing", actualContributing.name())
                         .buildMessage());
@@ -119,7 +119,7 @@ implements
             ValidationFailure.raiseFormatted(objSpec,
                     ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_MAIN
                         .builder()
-                        .addVariable("type", objSpec.getCorrespondingClass().getName())
+                        .addVariable("type", objSpec.correspondingClass().getName())
                         .addVariable("expectedMethodName", expectedMethodName)
                         .addVariable("actualMethodName", actualMethodName)
                         .buildMessage());

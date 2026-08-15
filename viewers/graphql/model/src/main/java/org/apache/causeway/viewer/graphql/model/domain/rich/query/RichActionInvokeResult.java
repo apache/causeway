@@ -81,7 +81,7 @@ public class RichActionInvokeResult extends Element {
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, actionInteractor.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
+                            objectSpecificationOfCollectionElement.fullIdentifier(),
                             objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }

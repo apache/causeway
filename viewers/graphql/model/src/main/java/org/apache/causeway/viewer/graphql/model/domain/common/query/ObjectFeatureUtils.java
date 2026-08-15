@@ -50,36 +50,32 @@ public class ObjectFeatureUtils {
         if (refValue != null) {
             String key = keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
-            if (bookmarkedPojo == null) {
-                throw new IllegalArgumentException(String.format(
+            if (bookmarkedPojo == null)
+				throw new IllegalArgumentException(String.format(
                     "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
-            }
             var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
             var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
-            if (targetPojoSpec == null) {
-                throw new IllegalArgumentException(String.format(
+            if (targetPojoSpec == null)
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' is not part of the metamodel (has class '%s')",
                     refValue, targetPojoClass.getCanonicalName()));
-            }
-            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
-                throw new IllegalArgumentException(String.format(
+            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo()))
+				throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
                     refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
-            }
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
         var idValue = (String)argumentValue.get("id");
         if (idValue != null) {
-            Class<?> paramClass = elementType.getCorrespondingClass();
+            Class<?> paramClass = elementType.correspondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                if (objectSpecArg == null) {
-                    throw new IllegalArgumentException(String.format(
+                if (objectSpecArg == null)
+					throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
                             elementType.logicalTypeName()));
-                }
                  bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -117,10 +113,8 @@ public class ObjectFeatureUtils {
 
                         case ENTITY:
                         case VIEW_MODEL:
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            // fall through
+                            if (argumentValue == null)
+							 return ManagedObject.empty(elementType);
 
                         case ABSTRACT:
                             // if the parameter is abstract, we still attempt to figure out the arguments.
@@ -145,7 +139,7 @@ public class ObjectFeatureUtils {
                         case UNKNOWN:
                         default:
                             throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
+                                    "Cannot handle an input type for %s; beanSort is %s", elementType.fullIdentifier(), elementType.beanSort()));
                     }
                 });
     }
@@ -156,9 +150,8 @@ public class ObjectFeatureUtils {
             final Context context) {
 
         var elementType = oap.getElementType();
-        if (argumentValue == null) {
-            return ManagedObject.empty(elementType);
-        }
+        if (argumentValue == null)
+			return ManagedObject.empty(elementType);
 
         var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);

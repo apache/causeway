@@ -125,7 +125,7 @@ extends AttributePanelWithFormField<T> {
             String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
                     this.getClass().getSimpleName(),
                     attributeModel().getIdentifier(),
-                    attributeModel().getElementType().getCorrespondingClass(),
+                    attributeModel().getElementType().correspondingClass(),
                     type));
     }
 

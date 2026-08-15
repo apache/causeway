@@ -63,7 +63,7 @@ extends SecureViewModelFacet {
             final @NonNull ObjectSpecification viewmodelSpec,
             final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
-        Class<? extends Serializable> expectedType = _Casts.uncheckedCast(viewmodelSpec.getCorrespondingClass());
+        Class<? extends Serializable> expectedType = _Casts.uncheckedCast(viewmodelSpec.correspondingClass());
         return _Serializables.read(expectedType, trustedBookmarkIdAsBytes);
     }
 

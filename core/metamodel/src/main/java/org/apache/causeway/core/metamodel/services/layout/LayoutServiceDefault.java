@@ -22,14 +22,6 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -56,7 +48,12 @@ import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGrid
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -126,7 +123,7 @@ implements LayoutService {
         var zipBuilder = ZipUtils.zipEntryBuilder();
 
         for (var objectSpec : domainObjectSpecs) {
-            var domainClass = objectSpec.getCorrespondingClass();
+            var domainClass = objectSpec.correspondingClass();
 
             tryGridToFormatted(new LayoutKey(domainClass), style, format)
                 .accept(
@@ -202,7 +199,7 @@ implements LayoutService {
     private static String zipEntryNameFor(
             final ObjectSpecification objectSpec,
             final CommonMimeType format) {
-        final String fqn = objectSpec.getFullIdentifier();
+        final String fqn = objectSpec.fullIdentifier();
         return fqn.replace(".", File.separator)
                 + ".layout."
                 + format.proposedFileExtensions().getFirstElseFail();

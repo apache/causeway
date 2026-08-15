@@ -235,14 +235,14 @@ implements MetaModelRefiner {
                     && !propertyOrCollection.containsFacet(XmlTransientFacet.class)
                     && !elementTypeSpec.containsFacet(XmlJavaTypeAdapterFacet.class)) {
 
-                var elementType = elementTypeSpec.getCorrespondingClass();
+                var elementType = elementTypeSpec.correspondingClass();
                 ValidationFailure.raiseFormatted(
                         propertyOrCollection,
                         "JAXB view model '%s' %s '%s' is of entity type '%s', "
                         + "but is not annotated with @XmlJavaTypeAdapter. "
                         + "The referenced entity types must be annotated with "
                         + "@XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.%s.class) or equivalent.",
-                        objectSpec.getFullIdentifier(),
+                        objectSpec.fullIdentifier(),
                         elementTypeSpec.isSingular()
                             ? "@Property"
                             : "@Collection",
@@ -266,7 +266,7 @@ implements MetaModelRefiner {
                 final ObjectAssociation propertyOrCollection) {
 
             var elementTypeSpec = propertyOrCollection.getElementType();
-            var elementType = elementTypeSpec.getCorrespondingClass();
+            var elementType = elementTypeSpec.correspondingClass();
             if (dateType.isAssignableFrom(elementType)
                     && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
                     && !propertyOrCollection.containsFacet(XmlTransientFacet.class)) {
@@ -279,7 +279,7 @@ implements MetaModelRefiner {
                         + "@XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.XxxJaxbAdapters.XxxToStringAdapter.class) "
                         + "or equivalent, "
                         + "or be ignored by being annotated with @XmlTransient.",
-                        objectSpec.getFullIdentifier(),
+                        objectSpec.fullIdentifier(),
                         elementTypeSpec.isSingular()
                             ? "@Property"
                             : "@Collection",
@@ -298,7 +298,7 @@ implements MetaModelRefiner {
             if(objectSpec.isAbstract()) {
                 ValidationFailure.raise(
                         objectSpec,
-                        String.format("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier())
+                        String.format("JAXB view model '%s' is abstract", objectSpec.fullIdentifier())
                         );
             }
         }
@@ -309,22 +309,22 @@ implements MetaModelRefiner {
         void validate(
                 final ObjectSpecification objectSpec) {
 
-            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+            final Class<?> correspondingClass = objectSpec.correspondingClass();
             if(correspondingClass.isAnonymousClass()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is an anonymous class",
-                        objectSpec.getFullIdentifier());
+                        objectSpec.fullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is a local class",
-                        objectSpec.getFullIdentifier());
+                        objectSpec.fullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is an non-static inner class",
-                        objectSpec.getFullIdentifier());
+                        objectSpec.fullIdentifier());
             }
         }
     }
@@ -333,7 +333,7 @@ implements MetaModelRefiner {
         @Override
         void validate(final ObjectSpecification objectSpec) {
 
-            var correspondingClass = objectSpec.getCorrespondingClass();
+            var correspondingClass = objectSpec.correspondingClass();
 
             var publicNoArgConstructors = _Reflect
                     .getPublicConstructors(correspondingClass)
@@ -350,12 +350,12 @@ implements MetaModelRefiner {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' has a no-arg constructor, however it is not public",
-                        objectSpec.getFullIdentifier());
+                        objectSpec.fullIdentifier());
             } else {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' does not have a public no-arg constructor",
-                        objectSpec.getFullIdentifier());
+                        objectSpec.fullIdentifier());
             }
         }
     }

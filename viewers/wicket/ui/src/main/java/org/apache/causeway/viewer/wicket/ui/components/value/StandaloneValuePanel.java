@@ -74,7 +74,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     // -- HELPER
 
     private boolean isProbablySimpleInlineHtml(final ObjectSpecification valueSpec) {
-        var cls = valueSpec.getCorrespondingClass();
+        var cls = valueSpec.correspondingClass();
 
         return PredefinedSerializables.isPredefinedSerializable(cls)
                 || BufferedImage.class.equals(cls)

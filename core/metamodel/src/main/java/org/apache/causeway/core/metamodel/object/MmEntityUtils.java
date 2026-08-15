@@ -84,7 +84,7 @@ public final class MmEntityUtils {
         var spec = managedObject.objSpec();
         if(!spec.isEntity())
 			throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
-                    spec.getCorrespondingClass(),
+                    spec.correspondingClass(),
                     spec.beanSort());
     }
 

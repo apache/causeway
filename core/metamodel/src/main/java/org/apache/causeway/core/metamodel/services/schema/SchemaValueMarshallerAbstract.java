@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.Identifier.Type;
 import org.apache.causeway.applib.id.LogicalType;
@@ -58,6 +55,8 @@ import org.apache.causeway.schema.common.v2.ValueDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.SneakyThrows;
 
@@ -75,7 +74,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                 final Class<T> correspondingClass,
                 final ObjectFeature feature) {
             return new Context<>(correspondingClass, feature,
-                    feature.getFeatureType().isCollection()
+                    feature.featureType().isCollection()
                         ? ValueType.COLLECTION
                         : ValueType.REFERENCE,
                     /*semantics*/null, Optional.empty());
@@ -107,7 +106,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ManagedObject value) {
 
         var feature = objectAction;
-        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var elementTypeAsClass = feature.getElementType().correspondingClass();
         var context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValue(context, new ValueWithTypeDto(), value));
@@ -121,7 +120,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull Can<ManagedObject> value) {
 
         var feature = objectAction;
-        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var elementTypeAsClass = feature.getElementType().correspondingClass();
         var context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValues(context, new ValueWithTypeDto(), value));
@@ -135,10 +134,10 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ManagedObject value) {
 
         var feature = property;
-        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var elementTypeAsClass = feature.getElementType().correspondingClass();
 
         // guard against property not being a scalar
-        _Assert.assertEquals(elementTypeAsClass, property.getElementType().getCorrespondingClass());
+        _Assert.assertEquals(elementTypeAsClass, property.getElementType().correspondingClass());
 
         var context = newContext(elementTypeAsClass, feature);
         propertyDto.setNewValue(
@@ -152,10 +151,10 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectActionParameter actionParameter,
             final @NonNull ManagedObject value) {
 
-        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR);
+        _Assert.assertTrue(actionParameter.featureType() == FeatureType.ACTION_PARAMETER_SINGULAR);
 
         var feature = actionParameter;
-        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var elementTypeAsClass = feature.getElementType().correspondingClass();
         var context = newContext(elementTypeAsClass, feature);
 
         //          ValueType valueType = valueWrapper.getValueType();
@@ -175,10 +174,10 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectActionParameter actionParameter,
             final @NonNull Can<ManagedObject> values) {
 
-        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL);
+        _Assert.assertTrue(actionParameter.featureType() == FeatureType.ACTION_PARAMETER_PLURAL);
 
         var feature = actionParameter;
-        var valueCls = feature.getElementType().getCorrespondingClass();
+        var valueCls = feature.getElementType().correspondingClass();
         var context = newContext(valueCls, feature);
 
         recordValues(context, paramDto, values);
@@ -256,7 +255,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                 .keepAfter("#")
                 .getValue();
         var typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
-        var logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
+        var logicalType = LogicalType.eager(typeSpec.correspondingClass(), logicalTypeName);
 
         if(identifierType.isAction()) {
             return Identifier.actionIdentifier(logicalType, memberId);
@@ -380,7 +379,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                     ? ManagedObject.packed(feature.getElementType(), Can.empty())
                     : ManagedObject.empty(feature.getElementType());
 
-        var valueCls = feature.getElementType().getCorrespondingClass();
+        var valueCls = feature.getElementType().correspondingClass();
 
         var recoveredValueOrReference = feature.getElementType().isValue()
                 ? recoverValue(newContext(valueCls, feature), valueWithTypeDto, cardinalityConstraint)

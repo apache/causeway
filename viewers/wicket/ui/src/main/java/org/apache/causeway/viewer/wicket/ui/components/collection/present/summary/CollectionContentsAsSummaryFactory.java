@@ -50,7 +50,7 @@ implements CollectionContentsAsFactory {
     static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
         var objectSpec = objectAssoc.getElementType();
         return objectSpec.isValue()
-                && objectSpec.getCorrespondingClass().equals(BigDecimal.class);
+                && objectSpec.correspondingClass().equals(BigDecimal.class);
     };
 
     public CollectionContentsAsSummaryFactory() {

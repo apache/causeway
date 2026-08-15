@@ -76,7 +76,7 @@ public class TypeMapperDefault implements TypeMapper {
     public Object unmarshal(
             final Object gqlValue,
             final ObjectSpecification targetObjectSpec) {
-        var correspondingClass = targetObjectSpec.getCorrespondingClass();
+        var correspondingClass = targetObjectSpec.correspondingClass();
         if (correspondingClass.isEnum())
 			return gqlValue;
         return scalarMapper.unmarshal(gqlValue, correspondingClass);
@@ -103,7 +103,7 @@ public class TypeMapperDefault implements TypeMapper {
     }
 
     private GraphQLOutputType scalarTypePossiblyOptional(final OneToOneFeature oneToOneFeature, final ObjectSpecification otoaObjectSpec) {
-        GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.getCorrespondingClass());
+        GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.correspondingClass());
         return oneToOneFeature.isOptional()
                 ? scalarType
                 : nonNull(scalarType);
@@ -117,7 +117,7 @@ public class TypeMapperDefault implements TypeMapper {
 
         return switch (objectSpecification.beanSort()){
             case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
-            case VALUE -> outputTypeFor(objectSpecification.getCorrespondingClass());
+            case VALUE -> outputTypeFor(objectSpecification.correspondingClass());
             case COLLECTION -> null; // should be noop
             default -> Scalars.GraphQLString; // for now
         };
@@ -139,7 +139,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VIEW_MODEL, ENTITY ->
                 GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
             case VALUE ->
-                GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
+                GraphQLList.list(outputTypeFor(elementType.correspondingClass()));
             default -> null;
         };
     }
@@ -162,13 +162,13 @@ public class TypeMapperDefault implements TypeMapper {
 
         {   // guard introduced to intercept interfaces, which otherwise seem to break schema creation
             // due to missing type reference for given name
-            var elementClass = elementObjectSpec.getCorrespondingClass();
+            var elementClass = elementObjectSpec.correspondingClass();
             if(elementClass.isInterface()) return inputTypeFor(elementClass);
         }
 
         return switch (elementObjectSpec.beanSort()) {
             case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
-            case VALUE -> inputTypeFor(elementObjectSpec.getCorrespondingClass());
+            case VALUE -> inputTypeFor(elementObjectSpec.correspondingClass());
             case COLLECTION ->
                 throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
             default -> Scalars.GraphQLString; // for now
@@ -189,9 +189,9 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType){
         return switch (elementType.beanSort()) {
             case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
-            case VALUE -> inputTypeFor(elementType.getCorrespondingClass());
+            case VALUE -> inputTypeFor(elementType.correspondingClass());
             case COLLECTION ->
-                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
+                throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.fullIdentifier()));
             default -> Scalars.GraphQLString; // for now
         };
     }

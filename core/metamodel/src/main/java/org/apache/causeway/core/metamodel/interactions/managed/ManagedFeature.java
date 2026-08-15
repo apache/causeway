@@ -54,7 +54,7 @@ permits ManagedMember, ManagedParameter {
      * For actions this is the action's return type.
      */
     default Class<?> getElementClass() {
-        return getElementType().getCorrespondingClass();
+        return getElementType().correspondingClass();
     }
 
     ObjectFeature getMetaModel();

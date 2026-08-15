@@ -115,11 +115,11 @@ public class RichProperty
     }
 
     private boolean isBlob() {
-        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Blob.class;
+        return getOneToOneAssociation().getElementType().correspondingClass() == Blob.class;
     }
 
     private boolean isClob() {
-        return getOneToOneAssociation().getElementType().getCorrespondingClass() == Clob.class;
+        return getOneToOneAssociation().getElementType().correspondingClass() == Clob.class;
     }
 
     @Override

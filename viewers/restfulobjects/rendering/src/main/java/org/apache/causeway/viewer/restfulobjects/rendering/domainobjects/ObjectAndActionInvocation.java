@@ -69,7 +69,7 @@ public class ObjectAndActionInvocation {
 
         var returnTypeSpec = this.action.getReturnType();
 
-        if (returnTypeSpec.getCorrespondingClass() == void.class) {
+        if (returnTypeSpec.correspondingClass() == void.class) {
             return ActionResultRepresentation.ResultType.VOID;
         }
 

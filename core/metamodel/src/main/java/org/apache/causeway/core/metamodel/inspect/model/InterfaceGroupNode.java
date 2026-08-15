@@ -45,8 +45,8 @@ final class InterfaceGroupNode implements MMNode {
     public void putDetails(Details details) {
     	interfaces.stream()
             .forEach(interfc->details.put(
-            		interfc.getCorrespondingClass().getSimpleName(), 
-            		interfc.getCorrespondingClass().getName()));
+            		interfc.correspondingClass().getSimpleName(), 
+            		interfc.correspondingClass().getName()));
     }
 
     // -- TREE NODE STUFF

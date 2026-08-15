@@ -53,7 +53,7 @@ public record HiddenTypeFacetFromAuthorization(
          * and it is the case that any interface when PROTOTYPING has some Object_ actions mixed in,
          * but not necessarily in production.
          */
-        if(spec.getCorrespondingClass().isInterface()) return null;
+        if(spec.correspondingClass().isInterface()) return null;
 
         var hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));

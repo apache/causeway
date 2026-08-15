@@ -50,7 +50,7 @@ implements IConverter<T> {
             final @NonNull ViewOrEditMode scalarRepresentation) {
         super(propOrParam, scalarRepresentation);
         this.type = type;
-        this.resolvedType = ClassUtils.resolvePrimitiveIfNecessary(propOrParam.getElementType().getCorrespondingClass());
+        this.resolvedType = ClassUtils.resolvePrimitiveIfNecessary(propOrParam.getElementType().correspondingClass());
         _Assert.assertTypeIsInstanceOf(resolvedType, type);
     }
 

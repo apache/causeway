@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.param;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -30,6 +28,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.inject.Inject;
 
 public class TypicalLengthFromTypePostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -44,25 +44,23 @@ extends MetaModelPostProcessorAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
-            return;
-        }
+        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class))
+			return;
         parameter
             .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
                             TypicalLengthFacetOnParameterFromType
-                            .createWhilePostprocessing(typicalLengthFacet, parameter.getFacetHolder())));
+                            .createWhilePostprocessing(typicalLengthFacet, parameter.facetHolder())));
     }
 
     @Override
     public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
-            return;
-        }
+        if(property.containsNonFallbackFacet(TypicalLengthFacet.class))
+			return;
         property
             .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)

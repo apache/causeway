@@ -162,7 +162,7 @@ public final class ManagedObjects {
     public boolean isInstanceOf(
             final @Nullable ManagedObject object,
             final @NonNull ObjectSpecification elementType) {
-        var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+        var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.correspondingClass());
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
             return true;
         }
@@ -170,7 +170,7 @@ public final class ManagedObjects {
             return ((PackedManagedObject)object).unpack().stream()
             .allMatch(element->isInstanceOf(element, elementType));
         }
-        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
+        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().correspondingClass());
         return upperBound.isAssignableFrom(objectActualType);
     }
 
@@ -347,7 +347,7 @@ public final class ManagedObjects {
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
 
-        var expectedType = elementSpec.getCorrespondingClass();
+        var expectedType = elementSpec.correspondingClass();
         if(expectedType.isPrimitive()) {
             return ManagedObject.value(elementSpec, ClassExtensions.toDefault(expectedType));
         }

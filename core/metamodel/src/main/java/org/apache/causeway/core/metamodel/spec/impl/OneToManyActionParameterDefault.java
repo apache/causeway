@@ -43,7 +43,7 @@ implements OneToManyActionParameter {
     @Getter(onMethod_={@Override}, lazy = true)
     private final ResolvedType typeOfAnyCardinality = resolveTypeOfAnyCardinality();
     private ResolvedType resolveTypeOfAnyCardinality() {
-        return Facets.typeOfAnyCardinality(getFacetHolder())
+        return Facets.typeOfAnyCardinality(facetHolder())
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar feature must have a TypeOfFacet"));
     }

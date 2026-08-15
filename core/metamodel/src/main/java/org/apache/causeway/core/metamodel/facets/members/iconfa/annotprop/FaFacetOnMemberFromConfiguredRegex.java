@@ -151,7 +151,7 @@ public record FaFacetOnMemberFromConfiguredRegex(
                         objectSpecification,
                         objectSpecification
                             .getFactoryService()
-                            .mixin(objectSpecification.getCorrespondingClass(), domainObject.getPojo()))
+                            .mixin(objectSpecification.correspondingClass(), domainObject.getPojo()))
                 : domainObject;
     }
 

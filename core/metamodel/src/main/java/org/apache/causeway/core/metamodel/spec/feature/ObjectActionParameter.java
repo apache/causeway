@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -37,8 +35,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
@@ -59,11 +58,11 @@ extends ObjectFeature, CurrentHolder {
     int getParameterIndex();
 
     default boolean isSingular() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_SINGULAR;
+        return featureType()==FeatureType.ACTION_PARAMETER_SINGULAR;
     }
 
     default boolean isPlural() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_PLURAL;
+        return featureType()==FeatureType.ACTION_PARAMETER_PLURAL;
     }
 
     /**

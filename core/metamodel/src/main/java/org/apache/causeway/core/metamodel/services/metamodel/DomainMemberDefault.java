@@ -23,11 +23,6 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -53,6 +48,11 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "domain-member")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -111,7 +111,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getClassName() {
-        final String fullIdentifier = spec.getFullIdentifier();
+        final String fullIdentifier = spec.fullIdentifier();
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0 && lastDot < fullIdentifier.length()-1
                 ?fullIdentifier.substring(lastDot+1,fullIdentifier.length())
@@ -120,7 +120,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getPackageName() {
-        final String fullIdentifier = spec.getFullIdentifier();
+        final String fullIdentifier = spec.fullIdentifier();
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0?fullIdentifier.substring(0,lastDot):fullIdentifier;
     }
@@ -151,7 +151,7 @@ public class DomainMemberDefault implements DomainMember {
             final MixedInMember mixedInMember = (MixedInMember) this.member;
 
             final ObjectSpecification mixinType = mixedInMember.getMixinType();
-            return mixinType.getCorrespondingClass().getSimpleName();
+            return mixinType.correspondingClass().getSimpleName();
         }
         return "";
     }
@@ -189,11 +189,11 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getAutoComplete() {
-        if(memberType == MemberType.PROPERTY) {
-            return interpretRowAndFacet(PropertyAutoCompleteFacet.class);
-        } else if(memberType == MemberType.COLLECTION) {
-            return "";
-        } else {
+        if(memberType == MemberType.PROPERTY)
+			return interpretRowAndFacet(PropertyAutoCompleteFacet.class);
+		else if(memberType == MemberType.COLLECTION)
+			return "";
+		else {
             var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
@@ -206,11 +206,11 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getDefault() {
-        if(memberType == MemberType.PROPERTY) {
-            return interpretRowAndFacet(PropertyDefaultFacet.class);
-        } else if(memberType == MemberType.COLLECTION) {
-            return "";
-        } else {
+        if(memberType == MemberType.PROPERTY)
+			return interpretRowAndFacet(PropertyDefaultFacet.class);
+		else if(memberType == MemberType.COLLECTION)
+			return "";
+		else {
             var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
@@ -225,13 +225,12 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getValidate() {
-        if(memberType == MemberType.PROPERTY) {
-            return interpretRowAndFacet(PropertyValidateFacet.class);
-        } else if(memberType == MemberType.COLLECTION) {
-            return String.join(";", _Sets.newTreeSet());
-        } else {
-            return interpretRowAndFacet(ActionValidationFacet.class);
-        }
+        if(memberType == MemberType.PROPERTY)
+			return interpretRowAndFacet(PropertyValidateFacet.class);
+		else if(memberType == MemberType.COLLECTION)
+			return String.join(";", _Sets.newTreeSet());
+		else
+			return interpretRowAndFacet(ActionValidationFacet.class);
     }
 
     // -- COMPARATOR
@@ -260,20 +259,14 @@ public class DomainMemberDefault implements DomainMember {
 
     private static String interpretFacet(final Facet facet) {
         if (facet == null
-                || facet.precedence().isFallback()) {
-            return "";
-        }
-        if (facet instanceof ImperativeFacet) {
-            ImperativeFacet imperativeFacet = (ImperativeFacet) facet;
+                || facet.precedence().isFallback())
+			return "";
+        if (facet instanceof ImperativeFacet imperativeFacet) {
             return imperativeFacet.getMethods().getFirstElseFail().getName();
         }
         final String name = facet.getClass().getSimpleName();
-        if (ignore(name)) {
-            return "";
-        }
-        //[ahuber] not sure why abbreviated, so I disabled abbreviation
-        //        final String abbr = StringExtensions.toAbbreviation(name);
-        //        return abbr.length()>0 ? abbr : name;
+        if (ignore(name))
+		 return "";
 
         return name;
     }

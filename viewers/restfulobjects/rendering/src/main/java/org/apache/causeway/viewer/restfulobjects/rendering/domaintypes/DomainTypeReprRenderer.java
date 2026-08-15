@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
 
-import tools.jackson.databind.node.NullNode;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -30,6 +28,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
+import tools.jackson.databind.node.NullNode;
 
 public class DomainTypeReprRenderer
 extends ReprRendererAbstract<ObjectSpecification> {
@@ -68,9 +68,8 @@ extends ReprRendererAbstract<ObjectSpecification> {
     @Override
     public JsonRepresentation render() {
 
-        if (objectSpecification == null) {
-            throw new IllegalStateException("ObjectSpecification not specified");
-        }
+        if (objectSpecification == null)
+			throw new IllegalStateException("ObjectSpecification not specified");
 
         // self
         if (includesSelf) {
@@ -81,7 +80,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
             getLinks().arrayAdd(layoutLink);
         }
 
-        representation.mapPutString("canonicalName", objectSpecification.getFullIdentifier());
+        representation.mapPutString("canonicalName", objectSpecification.fullIdentifier());
         addMembers();
 
         addTypeActions();

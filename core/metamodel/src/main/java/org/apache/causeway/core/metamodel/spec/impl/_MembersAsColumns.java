@@ -110,7 +110,7 @@ record _MembersAsColumns(
             .filter(columnQuery.isStandalone()
 				? _Predicates.alwaysTrue()
 				: ObjectAssociation.Predicates.referencesParent(columnQuery.parentObject().objSpec()).negate())
-            .filter(assoc->hideColumnUsingSpi(assoc, elementType.getCorrespondingClass()))
+            .filter(assoc->hideColumnUsingSpi(assoc, elementType.correspondingClass()))
             .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
 		return assocById;
@@ -214,12 +214,12 @@ record _MembersAsColumns(
             .map(tableColumnOrderService->
                 columnQuery.isStandalone()
                 ? tableColumnOrderService.orderStandalone(
-                        elementType.getCorrespondingClass(),
+                        elementType.correspondingClass(),
                         assocIdsInOrder)
                 : tableColumnOrderService.orderParented(
                 		columnQuery.parentObject().getPojo(),
                         columnQuery.memberIdentifier().memberLogicalName(),
-                        elementType.getCorrespondingClass(),
+                        elementType.correspondingClass(),
                         assocIdsInOrder))
             .filter(Objects::nonNull)
             .findFirst()

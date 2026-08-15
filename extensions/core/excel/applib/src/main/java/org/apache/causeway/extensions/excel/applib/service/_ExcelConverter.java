@@ -420,7 +420,7 @@ class _ExcelConverter {
                             final String propertyName = cellMarshaller.getStringCellValue(cell);
                             final OneToOneAssociation property = getAssociation(objectSpec, propertyName);
                             if (property != null) {
-                                final Class<?> propertyType = property.getElementType().getCorrespondingClass();
+                                final Class<?> propertyType = property.getElementType().correspondingClass();
                                 propertyByColumn.put(columnIndex, new Property(propertyName, property, propertyType));
                             }
                         }

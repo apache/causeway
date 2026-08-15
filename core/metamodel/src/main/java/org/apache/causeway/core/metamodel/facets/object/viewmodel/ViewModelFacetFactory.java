@@ -114,7 +114,7 @@ implements
                 ValidationFailure.raiseFormatted(objectSpec,
                         ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
                             .builder()
-                            .addVariable("type", objectSpec.getCorrespondingClass().getName())
+                            .addVariable("type", objectSpec.correspondingClass().getName())
                             .buildMessage());
             }
 
@@ -126,7 +126,7 @@ implements
                     ValidationFailure.raiseFormatted(objectSpec,
                             ProgrammingModelConstants.MessageTemplate.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
                                 .builder()
-                                .addVariable("type", objectSpec.getFullIdentifier())
+                                .addVariable("type", objectSpec.fullIdentifier())
                                 .addVariable("facetA", a.getClass().getSimpleName())
                                 .addVariable("facetB", b.getClass().getSimpleName())
                                 .buildMessage());

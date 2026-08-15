@@ -30,8 +30,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -43,6 +41,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.jspecify.annotations.Nullable;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -82,7 +81,7 @@ record OpenApiModelFactory(
             final Tagger tagger,
             final ClassExcluder classExcluder,
             final ValueSchemaFactory valuePropertyFactory) {
-    	this(basePath, visibility, specificationLoader, tagger, classExcluder, valuePropertyFactory, 
+    	this(basePath, visibility, specificationLoader, tagger, classExcluder, valuePropertyFactory,
     			new LinkedHashSet<>(), new LinkedHashSet<>());
     }
 
@@ -142,7 +141,7 @@ record OpenApiModelFactory(
         return _paths;
     }
 
-    void appendServicePathsAndDefinitions(OpenAPI oa3) {
+    void appendServicePathsAndDefinitions(final OpenAPI oa3) {
 
         for (var spec : specificationLoader.snapshotSpecifications()) {
 
@@ -169,7 +168,7 @@ record OpenApiModelFactory(
         }
     }
 
-    void appendObjectPathsAndDefinitions(OpenAPI oa3) {
+    void appendObjectPathsAndDefinitions(final OpenAPI oa3) {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
         for (final ObjectSpecification objectSpec : specificationLoader.snapshotSpecifications()) {
@@ -214,7 +213,7 @@ record OpenApiModelFactory(
         }
     }
 
-    void appendRestfulObjectsSupportingPathsAndDefinitions(OpenAPI oa3) {
+    void appendRestfulObjectsSupportingPathsAndDefinitions(final OpenAPI oa3) {
 
         final String tag = "… asf restful objects supporting resources";
 
@@ -287,7 +286,7 @@ record OpenApiModelFactory(
                 .addRequiredItem("roles"));
     }
 
-    void appendLinkModelDefinition(OpenAPI oa3) {
+    void appendLinkModelDefinition(final OpenAPI oa3) {
         oa3.getComponents().addSchemas("LinkRepr",
                 new ObjectSchema()
                 .addProperty("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
@@ -311,7 +310,7 @@ record OpenApiModelFactory(
 
     }
 
-    void appendServicePath(OpenAPI oa3, final ObjectSpecification objectSpec) {
+    void appendServicePath(final OpenAPI oa3, final ObjectSpecification objectSpec) {
 
         final String serviceId = objectSpec.logicalTypeName();
 
@@ -338,7 +337,7 @@ record OpenApiModelFactory(
         addDefinition(oa3, serviceModelDefinition, model);
     }
 
-    ObjectSchema appendObjectPathAndModelDefinitions(OpenAPI oa3, final ObjectSpecification objectSpec) {
+    ObjectSchema appendObjectPathAndModelDefinitions(final OpenAPI oa3, final ObjectSpecification objectSpec) {
 
         final String logicalTypeName = objectSpec.logicalTypeName();
 
@@ -408,7 +407,7 @@ record OpenApiModelFactory(
     }
 
     void appendServiceActionInvokePath(
-    		OpenAPI oa3,
+    		final OpenAPI oa3,
             final ObjectSpecification serviceSpec,
             final ObjectAction serviceAction) {
 
@@ -480,7 +479,7 @@ record OpenApiModelFactory(
     }
 
     void appendCollectionTo(
-    		OpenAPI oa3,
+    		final OpenAPI oa3,
             final ObjectSpecification objectSpec,
             final OneToManyAssociation collection) {
 
@@ -507,7 +506,7 @@ record OpenApiModelFactory(
     }
 
     void appendObjectActionInvokePath(
-    		OpenAPI oa3,
+    		final OpenAPI oa3,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction) {
 
@@ -583,7 +582,7 @@ record OpenApiModelFactory(
 
     }
 
-    void appendDefinitionsForOrphanedReferences(OpenAPI oa3) {
+    void appendDefinitionsForOrphanedReferences(final OpenAPI oa3) {
         for (String reference : getReferencesWithoutDefinition()) {
             oa3.getComponents().addSchemas(reference, new Schema<>());
         }
@@ -599,7 +598,7 @@ record OpenApiModelFactory(
     private ArraySchema arrayPropertyOf(final ObjectSpecification objectSpecification) {
         final ArraySchema arrayProperty = new ArraySchema();
         if(objectSpecification != null
-                && objectSpecification.getCorrespondingClass() != Object.class) {
+                && objectSpecification.correspondingClass() != Object.class) {
             arrayProperty
             .description("List of " + objectSpecification.logicalTypeName())
             .items(schemaFor(objectSpecification));
@@ -611,28 +610,24 @@ record OpenApiModelFactory(
 
     private Schema<?> schemaFor(final @Nullable ObjectSpecification specification) {
         var cls = specification!=null
-                ? specification.getCorrespondingClass()
+                ? specification.correspondingClass()
                 : null;
         if(cls == null
                 || void.class.equals(cls)
                 || Void.class.equals(cls)
-                || java.lang.Object.class.equals(cls)) {
-            return new ObjectSchema();
-        }
+                || java.lang.Object.class.equals(cls))
+			return new ObjectSchema();
         if(specification.isPlural()) {
             var elementSpec = Facets.elementSpec(specification).orElse(null);
-            if(elementSpec != null) {
-                return arrayPropertyOf(elementSpec);
-            }
+            if(elementSpec != null)
+				return arrayPropertyOf(elementSpec);
         }
-        if(cls.isEnum()) {
-            return valueSchemaFactory.schemaForValue(specification).orElseThrow();
-        }
+        if(cls.isEnum())
+			return valueSchemaFactory.schemaForValue(specification).orElseThrow();
         if(specification.isValue()) {
             var valueSchema = valueSchemaFactory.schemaForValue(specification);
-            if(valueSchema.isPresent()) {
-                return valueSchema.get();
-            }
+            if(valueSchema.isPresent())
+				return valueSchema.get();
         }
         return newRefProperty(specification.logicalTypeName() + "Repr");
     }
@@ -644,7 +639,7 @@ record OpenApiModelFactory(
             final List<OneToManyAssociation> objectCollections) {
 
         final String logicalTypeName = objectSpecification.logicalTypeName();
-        final String className = objectSpecification.getFullIdentifier();
+        final String className = objectSpecification.fullIdentifier();
 
         model
         .description(String.format("%s (%s)", logicalTypeName, className));
@@ -654,7 +649,7 @@ record OpenApiModelFactory(
                     objectProperty.getId(),
                     valueSchemaFactory.schemaForValue(objectProperty.getElementType())
                         // else assume this is a reference to an entity/view model, meaning we use an href
-                        .orElseGet(()->refToHrefModel()));
+                        .orElseGet(OpenApiModelFactory::refToHrefModel));
         }
 
         for (OneToManyAssociation objectCollection : objectCollections) {
@@ -729,7 +724,7 @@ record OpenApiModelFactory(
         return _OpenApi.refSchema(model);
     }
 
-    private void addDefinition(OpenAPI oa3, final String key, final Schema<?> model) {
+    private void addDefinition(final OpenAPI oa3, final String key, final Schema<?> model) {
         addSwaggerDefinition(key);
         oa3.getComponents().addSchemas(key, model);
     }

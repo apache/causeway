@@ -43,7 +43,7 @@ public class MmAssertionUtils {
         var pojo = ManagedObjects.peekAtPojoOf(obj);
         var requiredType = pojo.getClass();
         var actualSpec = obj.objSpec();
-        _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
+        _Assert.assertEquals(requiredType, actualSpec.correspondingClass());
     }
 
     public void assertExactType(
@@ -88,8 +88,8 @@ public class MmAssertionUtils {
             if(ManagedObjects.isInstanceOf(object, elementType)) {
                 return object;
             }
-            var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
+            var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.correspondingClass());
+            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().correspondingClass());
             throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),

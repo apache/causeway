@@ -307,7 +307,7 @@ public interface ObjectAction extends ObjectMember {
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
-                Class<?> cls = returnType.getCorrespondingClass();
+                Class<?> cls = returnType.correspondingClass();
                 if (Blob.class.isAssignableFrom(cls)
                         || Clob.class.isAssignableFrom(cls)) {
                     return true;

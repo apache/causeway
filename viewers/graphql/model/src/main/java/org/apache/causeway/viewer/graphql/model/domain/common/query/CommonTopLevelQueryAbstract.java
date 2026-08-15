@@ -74,7 +74,7 @@ public abstract class CommonTopLevelQueryAbstract
     public static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
         var superclasses = new ArrayList<ObjectSpecification>();
         ObjectSpecification superclass = objectSpecification.superSpec().orElse(null);
-        while (superclass != null && superclass.getCorrespondingClass() != Object.class) {
+        while (superclass != null && superclass.correspondingClass() != Object.class) {
             superclasses.add(0, superclass);
             superclass = superclass.superSpec().orElse(null);
         }

@@ -68,7 +68,7 @@ implements GenericColumn, HasMetaModelContext {
             final String sortColumn) {
         super(columnNameModel, sortColumn);
         this.elementTypeRef = new _StableValue<>(elementType);
-        this.elementClass = elementType.getCorrespondingClass();
+        this.elementClass = elementType.correspondingClass();
         this.componentRegistryRef = new _StableValue<>();
     }
 

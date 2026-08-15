@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -41,8 +39,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -71,7 +71,7 @@ implements MixedInAction {
     /**
      * Hold facets rather than delegate to the mixin action
      */
-    @Getter(onMethod = @__(@Override))
+    @Getter(onMethod = @__(@Override)) @Accessors(fluent = true)
     private final FacetHolder facetHolder;
 
     public ObjectActionMixedIn(
@@ -82,7 +82,7 @@ implements MixedInAction {
 
         super(Identifier.actionIdentifier(
                     LogicalType.eager(
-                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.correspondingClass(),
                             mixeeSpec.logicalTypeName()),
                     _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().memberParameterClassNames()),

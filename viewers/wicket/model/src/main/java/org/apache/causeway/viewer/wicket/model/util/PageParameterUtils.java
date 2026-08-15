@@ -21,16 +21,6 @@ package org.apache.causeway.viewer.wicket.model.util;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.wicket.core.request.handler.IPageRequestHandler;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
@@ -43,8 +33,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -183,7 +181,7 @@ public class PageParameterUtils {
 
         var actionOnTypeSpec = objectAction.getDeclaringType();
         if (actionOnTypeSpec != null) {
-            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.fullIdentifier());
         }
 
         var actionId = determineActionId(objectAction);
@@ -194,18 +192,16 @@ public class PageParameterUtils {
 
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getFeatureIdentifier();
-        if (identifier != null) {
-            return identifier.getMemberNameAndParameterClassNamesIdentityString();
-        }
+        if (identifier != null)
+			return identifier.getMemberNameAndParameterClassNamesIdentityString();
         // fallback (used for action sets)
         return objectAction.getId();
     }
 
     private static final String NULL_ARG = "$nullArg$";
     private String encodeArg(final ManagedObject adapter) {
-        if(adapter == null) {
-            return NULL_ARG;
-        }
+        if(adapter == null)
+			return NULL_ARG;
         return ManagedObjects.stringify(adapter).orElse(null);
     }
 
@@ -214,9 +210,8 @@ public class PageParameterUtils {
             final @NonNull MetaModelContext mmc,
             final ObjectSpecification objSpec,
             final String encoded) {
-        if(NULL_ARG.equals(encoded)) {
-            return null;
-        }
+        if(NULL_ARG.equals(encoded))
+			return null;
         try {
             return Bookmark.parseUrlEncoded(encoded)
                     .flatMap(mmc.getObjectManager()::loadObject)

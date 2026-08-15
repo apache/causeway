@@ -38,6 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
  */
 public interface Specification extends HasFacetHolder {
 
-    FeatureType getFeatureType();
+    FeatureType featureType();
 
 }

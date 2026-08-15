@@ -170,7 +170,7 @@ public record MetaModelServiceDefault(
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
-        final String className = spec.getFullIdentifier();
+        final String className = spec.fullIdentifier();
         return className.startsWith("java");
     }
 
@@ -187,7 +187,7 @@ public record MetaModelServiceDefault(
                 && !(mode == Mode.RELAXED))
 			throw new IllegalArgumentException(String.format(
                     "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
-                    objectSpec.getFullIdentifier(),
+                    objectSpec.fullIdentifier(),
                     domainType.getName()
                     ));
 
@@ -202,15 +202,15 @@ public record MetaModelServiceDefault(
 
         final Class<?> domainType = switch (mode) {
         case RELAXED -> specificationLoader().specForBookmark(bookmark)
-                        .map(ObjectSpecification::getCorrespondingClass)
+                        .map(ObjectSpecification::correspondingClass)
                         .orElse(null);
         case STRICT -> specificationLoader().specForBookmark(bookmark)
-                        .map(ObjectSpecification::getCorrespondingClass)
+                        .map(ObjectSpecification::correspondingClass)
                         .orElseThrow(()->_Exceptions
                                 .noSuchElement("Cannot resolve logical type name %s to a java class",
                                         bookmark.logicalTypeName()));
         default -> specificationLoader().specForBookmark(bookmark)
-                        .map(ObjectSpecification::getCorrespondingClass)
+                        .map(ObjectSpecification::correspondingClass)
                         .orElseThrow(()->_Exceptions
                                 .noSuchElement("Cannot resolve logical type name %s to a java class",
                                         bookmark.logicalTypeName()));
@@ -230,7 +230,7 @@ public record MetaModelServiceDefault(
         final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
         if(spec == null)
 			return null;
-        final ObjectMember objectMemberIfAny = spec.getMember(featureId.getLogicalMemberName()).orElse(null);
+        final ObjectMember objectMemberIfAny = spec.lookupMember(featureId.getLogicalMemberName()).orElse(null);
         if (objectMemberIfAny == null)
 			return null;
         final CommandPublishingFacet commandPublishingFacet = objectMemberIfAny.lookupFacet(CommandPublishingFacet.class)
@@ -301,7 +301,7 @@ public record MetaModelServiceDefault(
             .specForType(domainType)
             .stream()
             .flatMap(ObjectSpecification::streamTypeHierarchyAndInterfaces)
-            .filter(spec->!spec.getCorrespondingClass().equals(Object.class))
+            .filter(spec->!spec.correspondingClass().equals(Object.class))
             .map(ObjectSpecification::getFeatureIdentifier);
     }
 

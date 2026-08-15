@@ -89,7 +89,7 @@ final class _Util {
             }
         }
 
-        final Class<?> correspondingClass = specification.getCorrespondingClass();
+        final Class<?> correspondingClass = specification.correspondingClass();
         return Collection.class.isAssignableFrom(correspondingClass) ||
                 correspondingClass.isArray() ||
                 correspondingClass == void.class ||

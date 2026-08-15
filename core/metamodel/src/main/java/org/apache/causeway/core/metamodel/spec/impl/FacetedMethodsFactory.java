@@ -72,19 +72,19 @@ implements
     	this(internalSpec,
     			facetProcessor,
     			classSubstitutorRegistry,
-    			MethodRemover.createMethodRemover(internalSpec.getCorrespondingClass(), internalSpec.getIntrospectionPolicy()),
+    			MethodRemover.createMethodRemover(internalSpec.correspondingClass(), internalSpec.introspectionPolicy()),
     			internalSpec.specLoaderInternal()::loadSpecificationTypeOnly,
     			new HashSet<>());
     }
 
     FacetedMethodsFactory {
     	if (log.isDebugEnabled()) {
-            log.debug("creating {} for {}", this.getClass().getSimpleName(), internalSpec.getFullIdentifier());
+            log.debug("creating {} for {}", this.getClass().getSimpleName(), internalSpec.fullIdentifier());
         }
     }
 
     Class<?> introspectedClass() {
-    	return internalSpec.getCorrespondingClass();
+    	return internalSpec.correspondingClass();
     }
 
     public void introspectClass() {
@@ -338,7 +338,7 @@ implements
     }
 
     private IntrospectionPolicy introspectionPolicy() {
-        return internalSpec.getIntrospectionPolicy();
+        return internalSpec.introspectionPolicy();
     }
 
 }

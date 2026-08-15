@@ -41,6 +41,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 class OneToManyAssociationMixedIn
 extends OneToManyAssociationDefault
@@ -70,7 +71,7 @@ implements MixedInMember {
      * Hold facets rather than delegate to the mixin action (different types might use layout metadata to position
      * the mixin in different ways)
      */
-    @Getter(onMethod = @__(@Override))
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final FacetHolder facetHolder;
 
     private static ObjectSpecification typeOfSpec(
@@ -182,7 +183,7 @@ implements MixedInMember {
             final ObjectActionDefault mixinAction) {
         return Identifier.collectionIdentifier(
                 LogicalType.eager(
-                        mixeeSpec.getCorrespondingClass(),
+                        mixeeSpec.correspondingClass(),
                         mixeeSpec.logicalTypeName()),
                 _MixedInMemberNamingStrategy.mixinMemberId(mixinAction));
     }

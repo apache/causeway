@@ -51,7 +51,7 @@ implements MixinSpecStreamer {
 	@Override
 	public Stream<ObjectSpecification> streamMixinSpecsFor(final ObjectSpecification mixeeSpec) {
 		return mixeeSpec.streamTypeHierarchyAndInterfaces()
-			.map(ObjectSpecification::getCorrespondingClass)
+			.map(ObjectSpecification::correspondingClass)
 			.flatMap(mixinsByMixeeClass::streamElements);
 	}
 

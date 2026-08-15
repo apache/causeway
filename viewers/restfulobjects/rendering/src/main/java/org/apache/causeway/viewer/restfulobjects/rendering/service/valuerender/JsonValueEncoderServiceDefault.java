@@ -80,7 +80,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(!spec.isValue()) throw new IllegalArgumentException("Representation must be of a value");
 
         // primitive representation checks (ignoring value-semantics)
-        var valueClass = spec.getCorrespondingClass();
+        var valueClass = spec.correspondingClass();
         if(ClassUtils.isPrimitiveOrWrapper(valueClass)) {
             var primitiveWrapper = ClassUtils.resolvePrimitiveIfNecessary(valueClass);
             if(Boolean.class.equals(primitiveWrapper)) {
@@ -108,7 +108,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final ObjectSpecification spec,
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
-        var valueClass = spec.getCorrespondingClass();
+        var valueClass = spec.correspondingClass();
         var valueSerializer = Facets.valueSerializerElseFail(spec, valueClass);
 
         // handle values that are represented as maps
@@ -132,7 +132,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
 
-        var valueClass = spec.getCorrespondingClass();
+        var valueClass = spec.correspondingClass();
         return Optional.ofNullable(converterByClass
                 .get(ClassUtils.resolvePrimitiveIfNecessary(valueClass)))
             .map(jsonValueConverter->jsonValueConverter.recoverValueAsPojo(valueRepr, context))
@@ -165,7 +165,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final Context context) {
 
         var valueSpec = valueAdapter.objSpec();
-        var valueClass = valueSpec.getCorrespondingClass();
+        var valueClass = valueSpec.correspondingClass();
         var jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
             jsonValueConverter.appendValueAndFormat(valueAdapter, context, repr);
@@ -219,7 +219,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
             return Optional.empty();
         }
-        var valueClass = valueAdapter.objSpec().getCorrespondingClass();
+        var valueClass = valueAdapter.objSpec().correspondingClass();
         var decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.objSpec(), valueClass)
                 .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
         if(decompositionIfAny.isEmpty()) {
@@ -229,8 +229,8 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
                     + "that implements ValueComposer<{}>}",
                     valueSpec.logicalTypeName(),
-                    valueSpec.getCorrespondingClass().getSimpleName(),
-                    valueSpec.getCorrespondingClass().getSimpleName());
+                    valueSpec.correspondingClass().getSimpleName(),
+                    valueSpec.correspondingClass().getSimpleName());
         }
         return decompositionIfAny;
     }
@@ -240,7 +240,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
         var objectSpec = adapter.objSpec();
-        var cls = objectSpec.getCorrespondingClass();
+        var cls = objectSpec.correspondingClass();
 
         var jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {

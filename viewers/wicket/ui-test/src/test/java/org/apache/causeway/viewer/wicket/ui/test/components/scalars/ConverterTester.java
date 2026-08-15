@@ -132,7 +132,7 @@ public class ConverterTester<T extends Serializable> {
             final ViewOrEditMode representation) {
         var customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         var prop = customerSpec.getPropertyElseFail("value");
-        var propType = (Class<T>) prop.getElementType().getCorrespondingClass();
+        var propType = (Class<T>) prop.getElementType().correspondingClass();
         return new ConverterBasedOnValueSemantics<>(propType, prop, representation);
     }
 

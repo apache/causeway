@@ -59,7 +59,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(domainClass,
                 String.format("%s: %s",
                         specification.logicalTypeName(),
-                        config().abbrev(specification.getCorrespondingClass())));
+                        config().abbrev(specification.correspondingClass())));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(actionType,
             String.format("%s(...): %s%s",
                     action.getId(),
-                    config().abbrev(action.getReturnType().getCorrespondingClass()),
+                    config().abbrev(action.getReturnType().correspondingClass()),
                     titleSuffix(action.isMixedIn())));
     }
 
@@ -79,7 +79,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
                 String.format("%s: %s",
                         parameter.getId(),
                         parameter.isSingular()
-                        ? config().abbrev(parameter.getElementType().getCorrespondingClass())
+                        ? config().abbrev(parameter.getElementType().correspondingClass())
                         : renderTypeOf((OneToManyFeature) parameter, config()))
                 );
     }
@@ -90,7 +90,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(propertyType,
                 String.format("%s: %s%s",
                         property.getId(),
-                        config().abbrev(property.getElementType().getCorrespondingClass()),
+                        config().abbrev(property.getElementType().correspondingClass()),
                         titleSuffix(property.isMixedIn())));
     }
 

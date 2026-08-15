@@ -152,7 +152,7 @@ public class DomainObjectPage extends PageAbstract {
 
         var layoutKey = Facets.gridPreload(objectSpec, objectAdapter)
             .map(BSGrid::layoutKey)
-            .orElseGet(()->new LayoutKey(objectSpec.getCorrespondingClass()));
+            .orElseGet(()->new LayoutKey(objectSpec.correspondingClass()));
 
         // imposes filters on FacetRanking in the current thread's context
         // needs to happen in cooperation with installing any layout variant specific facets via Facets.gridPreload(..) above

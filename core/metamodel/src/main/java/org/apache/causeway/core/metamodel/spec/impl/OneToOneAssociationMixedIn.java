@@ -38,6 +38,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 class OneToOneAssociationMixedIn
 extends OneToOneAssociationDefault
@@ -64,7 +65,7 @@ implements MixedInMember {
     /**
      * Hold facets rather than delegate to the contributed action.
      */
-    @Getter(onMethod = @__(@Override))
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final FacetHolder facetHolder;
 
     public OneToOneAssociationMixedIn(
@@ -112,9 +113,8 @@ implements MixedInMember {
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where().isAlways()) {
-            return originalFacet;
-        }
+                originalFacet.where().isAlways())
+			return originalFacet;
         // ensure that the contributed association is always disabled
         return new DisabledFacetForContributee(VetoReason.mixedinProperty(), this);
     }
@@ -166,7 +166,7 @@ implements MixedInMember {
             final ObjectActionDefault mixinAction) {
         return Identifier.propertyIdentifier(
                     LogicalType.eager(
-                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.correspondingClass(),
                             mixeeSpec.logicalTypeName()),
                     _MixedInMemberNamingStrategy.mixinMemberId(mixinAction));
     }

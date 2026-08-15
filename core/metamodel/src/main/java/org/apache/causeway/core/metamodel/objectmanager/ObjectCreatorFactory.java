@@ -66,7 +66,7 @@ record ObjectCreatorFactory() {
             log.debug("creating instance of {}", spec);
 
             var pojo = instantiate(spec); // can only be a scalar
-            if(Specification.class.isAssignableFrom(spec.getCorrespondingClass())
+            if(Specification.class.isAssignableFrom(spec.correspondingClass())
                     || !spec.isValue()) {
                 spec.getServiceInjector().injectServicesInto(pojo);
             }
@@ -86,21 +86,19 @@ record ObjectCreatorFactory() {
         //  -- HELPER
 
         private Object instantiate(final ObjectSpecification spec) {
-            var type = spec.getCorrespondingClass();
-            if (type.isArray()) {
-                return Array.newInstance(type.getComponentType(), 0);
-            }
+            var type = spec.correspondingClass();
+            if (type.isArray())
+				return Array.newInstance(type.getComponentType(), 0);
 
-            if (Modifier.isAbstract(type.getModifiers())) {
-                throw _Exceptions.unrecoverable("Cannot create an instance of an abstract class: " + type);
-            }
+            if (Modifier.isAbstract(type.getModifiers()))
+				throw _Exceptions.unrecoverable("Cannot create an instance of an abstract class: " + type);
 
             try {
                 var newInstance = _InstanceUtil.createInstance(type);
                 return newInstance;
             } catch (Exception  e) {
                 throw _Exceptions.unrecoverable(e,
-                        "Failed to create instance of type %s", spec.getFullIdentifier());
+                        "Failed to create instance of type %s", spec.fullIdentifier());
             }
         }
 
