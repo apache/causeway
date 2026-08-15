@@ -134,10 +134,56 @@ The foundation SHALL provide a minimal object-header component and scalar read-o
 ### Requirement: Framework-neutral consumption
 The public foundation SHALL use web-platform custom elements, attributes, JavaScript properties, and semantic custom events without requiring HTMX or another host framework runtime.
 
-#### Scenario: Plain HTML demonstrator
-- **WHEN** the foundation demonstrator is loaded using plain HTML and ECMAScript modules
+#### Scenario: Vanilla HTML application
+- **WHEN** the `sample-html` application loads its page using plain HTML and ECMAScript modules
 - **THEN** its GraphQL client, object context, object header, and property components operate without HTMX, React, Vue, Svelte, or an equivalent host framework
 
 #### Scenario: Structured service injection
 - **WHEN** a host framework supplies an executor or context through a JavaScript property
 - **THEN** the supplied service is used without requiring framework-specific public component APIs
+
+### Requirement: Executable vanilla-HTML sample
+The first vertical slice SHALL include a bootable `sample-html` Causeway application that consumes the packaged foundation artifact through a real rich GraphQL endpoint.
+
+#### Scenario: Same-origin packaged consumption
+- **WHEN** the sample application is started
+- **THEN** `/sample-html/index.html`, the packaged ECMAScript modules, and `/graphql` are served from the same application origin
+- **AND** the page loads the modules from the foundation artifact rather than from copied source files
+
+#### Scenario: No frontend build runtime
+- **WHEN** the sample page is built and served
+- **THEN** it uses vanilla HTML, native custom elements, ECMAScript modules, and plain CSS without npm build tooling or a host frontend framework
+
+### Requirement: Deterministic sample object
+The sample application SHALL provide deterministic domain data suitable for repeatable component and endpoint verification.
+
+#### Scenario: Stable sample identity
+- **WHEN** the sample application starts with its normal or test configuration
+- **THEN** a sample entity with a documented stable logical type and string identifier is available through the rich GraphQL object lookup
+
+#### Scenario: Representative read semantics
+- **WHEN** the stable sample entity is queried
+- **THEN** its schema and data provide predictable title, version, visible property, hidden property, and disabled property semantics
+
+### Requirement: Browser-automation contract
+The sample application SHALL expose stable browser-facing hooks so browser automation can observe component readiness and semantic output without depending on incidental markup.
+
+#### Scenario: Stable sample route and selectors
+- **WHEN** automation opens `/sample-html/index.html`
+- **THEN** the page exposes documented semantic `data-testid` selectors for the sample application, object context, object header, and rendered properties
+
+#### Scenario: Observable readiness
+- **WHEN** the object context changes state
+- **THEN** the sample page reflects the semantic context state on a documented readiness marker that automation can wait for
+
+### Requirement: Automated sample integration verification
+The Maven build SHALL exercise the runnable sample application against its packaged page, modules, deterministic data, and real GraphQL endpoint.
+
+#### Scenario: Application and resource smoke test
+- **WHEN** the sample integration test starts the application on a random port
+- **THEN** the sample HTML page and packaged ECMAScript entry module are served successfully
+
+#### Scenario: Real GraphQL contract test
+- **WHEN** the sample integration test calls the running `/graphql` endpoint
+- **THEN** targeted standard introspection resolves the sample object's generated rich-schema types
+- **AND** a rich-schema object lookup returns the deterministic object's metadata and property state
