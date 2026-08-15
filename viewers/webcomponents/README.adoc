@@ -1,0 +1,342 @@
+= Causeway Web Components
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The Causeway web-component modules provide framework-neutral browser components backed by the Causeway rich GraphQL schema.
+The foundation module includes a GraphQL client provider, coordinated object contexts, an object header, and scalar read-only properties.
+It deliberately has no dependency on HTMX, React, Vue, Svelte, or a browser component-authoring framework.
+
+This page explains how to run the automated verification and how to exercise the components manually against a Causeway application.
+
+== Prerequisites
+
+The Maven build requires JDK 17 or later.
+The dependency-free browser tests use the Node.js built-in test runner.
+Manual end-to-end verification requires a Causeway application exposing the rich GraphQL schema.
+
+== Automated verification
+
+Run all commands from the repository root unless a command explicitly changes directory.
+
+=== Web-component Maven lifecycle
+
+Select a JDK 17 or later installation and run the complete module verification:
+
+[source,shell]
+----
+export JAVA_HOME="$HOME/.sdkman/candidates/java/17.0.18-tem"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+mvn -f viewers/webcomponents/pom.xml clean verify
+----
+
+A successful run reports the Node test totals and completes both Maven modules:
+
+[source,text]
+----
+tests 27
+pass 27
+fail 0
+BUILD SUCCESS
+----
+
+The exact test count can increase as further components are added.
+A non-zero failed-test count or Maven `BUILD FAILURE` indicates that verification has not passed.
+
+=== Direct browser-package tests
+
+The browser package can be tested independently of Maven:
+
+[source,shell]
+----
+cd viewers/webcomponents/foundation
+node --test --test-concurrency=1
+----
+
+The tests cover generated rich-schema naming, targeted introspection, schema diagnostics, executor behavior, selection coordination, cancellation, partial errors, component lifecycle, context propagation, and integrated state distribution.
+
+=== Related GraphQL modules
+
+Run the GraphQL model and viewer tests to detect incompatibilities with the endpoint consumed by the components:
+
+[source,shell]
+----
+mvn -f viewers/graphql/pom.xml -pl model,viewer test
+----
+
+=== BOM, source, and OpenSpec checks
+
+Validate the dependency-management entry, source formatting, and active OpenSpec change:
+
+[source,shell]
+----
+mvn -f bom/pom.xml validate
+
+git diff --check
+
+openspec validate establish-graphql-web-component-foundation --strict
+----
+
+The OpenSpec command should report:
+
+[source,text]
+----
+Change 'establish-graphql-web-component-foundation' is valid
+----
+
+=== Packaged browser resources
+
+After `mvn verify`, inspect the foundation artifact to confirm that the browser modules were packaged as servlet resources:
+
+[source,shell]
+----
+jar tf viewers/webcomponents/foundation/target/causeway-viewer-webcomponents-foundation-*-SNAPSHOT.jar \
+  | grep 'META-INF/resources/causeway-webcomponents/'
+----
+
+The listing should include `META-INF/resources/causeway-webcomponents/index.mjs` and its imported modules.
+
+== Manual browser verification
+
+The preferred manual test serves the page and GraphQL endpoint from the same Causeway application origin.
+This avoids cross-origin and authentication-cookie differences that can obscure component behavior.
+
+The repository provides `viewers/webcomponents/sample-html` as the standard executable vanilla-HTML verification application.
+It supplies deterministic JPA/H2 data, the real rich GraphQL endpoint, packaged foundation modules, and stable hooks for future Playwright tests.
+See link:sample-html/README.adoc[`sample-html/README.adoc`] for its run commands and automation contract.
+
+=== Install the local artifact
+
+When testing from a source checkout, install the web-component artifact into the local Maven repository:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml install
+----
+
+Add the foundation artifact to the application under test:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-webcomponents-foundation</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+----
+
+The artifact exposes its entry module as a standard `META-INF/resources` resource:
+
+[source,text]
+----
+/causeway-webcomponents/index.mjs
+----
+
+=== Configure the GraphQL schema
+
+The component defaults assume a combined schema whose rich API is beneath the `rich` query field.
+A representative application configuration is:
+
+[source,properties]
+----
+causeway.viewer.graphql.schema-style=SIMPLE_AND_RICH
+spring.graphql.path=/graphql
+----
+
+`RICH_AND_SIMPLE` also places the rich API beneath its configured top-level field.
+The default rich top-level field name is `rich`.
+
+If the application uses `RICH_ONLY`, the generated object lookup fields are at the query root.
+Set an empty `rich-root-field` attribute in that case:
+
+[source,html]
+----
+<causeway-graphql-client
+    endpoint="/graphql"
+    rich-root-field="">
+</causeway-graphql-client>
+----
+
+If the application customizes the rich top-level field or lookup grammar, configure the provider's `rich-root-field`, `lookup-argument-name`, `object-field-prefix`, and `object-field-suffix` attributes to match.
+The Causeway defaults for lookup are argument name `object`, an empty field-name prefix, and an empty field-name suffix.
+
+=== Create a same-origin test page
+
+Serve a temporary page from the Causeway application with markup similar to the following:
+
+[source,html]
+----
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Causeway web-component verification</title>
+  <script type="module" src="/causeway-webcomponents/index.mjs"></script>
+</head>
+<body>
+  <causeway-graphql-client endpoint="/graphql">
+    <causeway-object-context
+        logical-type="university.dept.Department"
+        object-id="1">
+      <causeway-object-header></causeway-object-header>
+      <causeway-property member="name"></causeway-property>
+      <causeway-property member="code"></causeway-property>
+    </causeway-object-context>
+  </causeway-graphql-client>
+</body>
+</html>
+----
+
+Replace the example logical type, object identifier, and member names with values present in the application under test.
+The logical type is the Causeway logical type name, not the generated GraphQL type name.
+The object identifier is the identifier accepted by the rich GraphQL lookup input.
+
+A source-tree version of this page is available at `viewers/webcomponents/foundation/demo/index.html`.
+That page imports the unbundled modules directly and expects a same-origin `/graphql` endpoint.
+
+=== Standalone static serving
+
+For module-loading checks, the source-tree demonstrator can be served directly:
+
+[source,shell]
+----
+cd viewers/webcomponents/foundation
+python3 -m http.server 8081
+----
+
+Open `http://localhost:8081/demo/`.
+This arrangement does not itself provide `/graphql`.
+To use a GraphQL service on another origin, set an absolute endpoint and configure CORS and authentication appropriately, or inject a custom executor that uses the application's networking policy.
+For realistic authentication behavior, same-origin serving is usually simpler.
+
+== Manual inspection checklist
+
+=== Rendered content
+
+Verify that the object title and identity are rendered by `<causeway-object-header>`.
+Verify that each visible property has a label and an `<output>` value.
+Verify that values containing markup-like characters are escaped rather than interpreted as HTML.
+Verify that hidden properties produce no visible content.
+Verify that disabled properties expose `aria-disabled="true"` and their disabled reason.
+Verify that component errors are rendered with `role="alert"`.
+
+=== Initial network activity
+
+Open the browser developer tools and inspect the GraphQL POST requests.
+The initial load should perform a small series of operations named `CausewayDescribeTypes` using targeted `__type` introspection.
+It should not download and inspect the complete GraphQL schema.
+
+After schema discovery, one operation named `CausewayReadObject` should contain the combined active selection for the object header and all properties mounted during the initial rendering turn.
+For the example page, that object operation should include `_meta`, `name`, and `code` selections.
+There should not be one object operation per component.
+
+=== Context and component state events
+
+Register listeners in the browser console:
+
+[source,javascript]
+----
+document.addEventListener(
+  'causeway-object-context-state-change',
+  event => console.log('context', event.detail.state)
+);
+
+document.addEventListener(
+  'causeway-component-state-change',
+  event => console.log('component', event.detail.state)
+);
+----
+
+Refresh the active object projection from the browser console:
+
+[source,javascript]
+----
+document
+  .querySelector('causeway-object-context')
+  .context
+  .refresh();
+----
+
+The context should move through `object-loading` and then `ready` or `partial-error`.
+A transport or schema failure with no usable object data should produce `terminal-error`.
+
+=== Schema-cache reuse
+
+After the first context becomes ready, create another context for an object of the same logical type:
+
+[source,javascript]
+----
+const provider = document.querySelector('causeway-graphql-client');
+const original = document.querySelector('causeway-object-context');
+const second = original.cloneNode(true);
+
+second.setAttribute('object-id', '2');
+provider.append(second);
+----
+
+The second context should execute its own object read while reusing the first context's schema description.
+The network log should therefore show one additional `CausewayReadObject` operation but no repeated introspection for that generated object type.
+The two context elements should retain independent object state.
+
+=== Delta loading
+
+To observe projection growth clearly, start with a page containing the header and only the `name` property.
+After it becomes ready, mount another property:
+
+[source,javascript]
+----
+const context = document.querySelector('causeway-object-context');
+const property = document.createElement('causeway-property');
+
+property.setAttribute('member', 'code');
+context.append(property);
+----
+
+The context should issue one delta object operation containing the newly required `code` selection rather than refetching `name` and `_meta`.
+A later explicit `refresh()` should execute the complete currently active projection.
+
+=== Partial errors
+
+Use an object or authorization scenario in which one member fails while another succeeds.
+The successful member should retain and render its data.
+The failing member should receive the member-relative GraphQL error and render its error state.
+The enclosing object context should report `partial-error` rather than discarding the successful snapshot.
+
+== Troubleshooting
+
+=== Maven rejects the Java version
+
+The repository enforcer requires JDK 17 or later.
+If Maven reports an older detected JDK, update both `JAVA_HOME` and the leading entry in `PATH` before rerunning the build.
+
+=== Generated object type is not found
+
+Confirm that `logical-type` contains the exact Causeway logical type name.
+Do not supply a generated name beginning with `rich__`.
+Confirm that the application's GraphQL API scope includes the domain type.
+
+=== GraphQL validation reports an unknown lookup field
+
+Confirm whether the application uses a combined schema or `RICH_ONLY`.
+Confirm the configured rich top-level field and lookup argument, prefix, and suffix settings.
+Adjust the `<causeway-graphql-client>` attributes to match those settings.
+
+=== Requests are rejected or redirected
+
+Prefer a page served from the same application origin as `/graphql`.
+For a cross-origin page, configure CORS explicitly and inject an executor if credentials, CSRF handling, or application-specific headers are required.
+
+=== The page remains empty
+
+Inspect `causeway-object-context-state-change` events and the GraphQL response body.
+Check for `terminal-error`, an unsupported member, a hidden member, or a missing object.
+Verify that `/causeway-webcomponents/index.mjs` and all imported `.mjs` resources return JavaScript rather than an HTML error page.
+
+== Additional foundation documentation
+
+`viewers/webcomponents/foundation/USAGE.adoc` documents package consumption, executor injection, context coordination, observable states, and the current deliberate exclusions in more detail.
+`viewers/webcomponents/foundation/README.adoc` provides a short module-level summary.
+
+This file intentionally uses Antora-compatible AsciiDoc structure so that it can later be moved into an Antora `pages` directory and added to the main documentation navigation.
+When that happens, source-tree path references should be replaced with Antora `xref` targets.
