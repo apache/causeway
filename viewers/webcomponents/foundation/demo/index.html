@@ -1,0 +1,47 @@
+<!doctype html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Causeway web-component foundation</title>
+  <script type="module" src="../src/index.mjs"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 60rem; }
+    causeway-object-header, causeway-property { display: block; margin-block: 1rem; }
+    .causeway-property-label { display: inline-block; font-weight: 600; min-width: 12rem; }
+    .causeway-error { color: #a00; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Causeway rich GraphQL web components</h1>
+    <p>This plain HTML page has no HTMX or frontend framework dependency.</p>
+
+    <causeway-graphql-client endpoint="/graphql">
+      <causeway-object-context logical-type="university.dept.Department" object-id="1">
+        <causeway-object-header></causeway-object-header>
+        <causeway-property member="name"></causeway-property>
+        <causeway-property member="code"></causeway-property>
+      </causeway-object-context>
+    </causeway-graphql-client>
+  </main>
+</body>
+</html>
