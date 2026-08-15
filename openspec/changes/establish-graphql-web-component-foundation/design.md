@@ -15,6 +15,7 @@ The public contracts must remain usable from plain HTML and interoperable with H
 - Let descendant components register semantic data requirements without constructing GraphQL documents.
 - Coordinate registered requirements as one evolving object read projection.
 - Demonstrate the contract through a minimal object header and read-only property component.
+- Provide a runnable vanilla-HTML sample application that validates packaged browser resources against a real rich GraphQL endpoint and deterministic domain data.
 - Define stable framework-neutral context, state, loading, and error boundaries for later components.
 
 **Non-Goals:**
@@ -24,6 +25,7 @@ The public contracts must remain usable from plain HTML and interoperable with H
 - Collection rendering, paging, sorting, or filtering.
 - Generic page composition, HTMX navigation, or Causeway layout interpretation.
 - Framework-specific wrappers.
+- Playwright browser automation, while preserving a stable application URL, selectors, and readiness contract for a follow-on change.
 - A new GraphQL member-list or metamodel endpoint.
 - Changes to the existing rich GraphQL schema.
 - Persistent cross-session schema or object-state caching.
@@ -107,6 +109,23 @@ The demonstrator will mount a header and multiple properties below one object co
 
 These components are deliberately narrow probes of the context contract rather than the complete component library.
 
+### Validate usage through a runnable vanilla-HTML sample
+
+A sibling Maven module named `sample-html` will provide a bootable Causeway Spring Boot application rather than relying only on static files and mocked GraphQL responses.
+Its frontend will use vanilla HTML, native custom elements, ECMAScript modules, and plain CSS without npm build tooling, HTMX, or a frontend framework.
+The application will depend on the foundation artifact and serve its packaged `META-INF/resources` modules, the sample page, and the rich GraphQL endpoint from the same origin.
+
+The sample domain will use JPA with an in-memory H2 database and deterministic startup data.
+A minimal entity with a stable string identifier will exercise object identity, title, version metadata, visible properties, and representative hidden or disabled state without requiring an external database.
+
+The sample page will have a stable route, semantic `data-testid` hooks, and an observable readiness marker derived from object-context state events.
+Those contracts will let later Playwright tests wait for and inspect behavior without redesigning the sample application.
+Future technology-specific samples can be introduced as sibling modules such as `sample-htmx` and `sample-react`; a shared sample domain can be extracted when a second sample creates actual duplication.
+
+A random-port Spring Boot integration test will verify application startup, HTML delivery, packaged ECMAScript module delivery, targeted standard introspection, and a real rich-schema object lookup against the deterministic object.
+The dependency-free component tests remain responsible for detailed browser-component state behavior until Playwright coverage is added in a follow-on change.
+The sample artifact is an executable integration fixture and will not be deployed as a production library.
+
 ### Keep public APIs framework-neutral
 
 Public element configuration will use standard attributes for simple declarative values and JavaScript properties for structured values and injected services.
@@ -125,12 +144,14 @@ The implementation may select build-time tooling, but consumers will receive sta
 - [GraphQL partial errors can complicate component state] → Preserve data and errors separately and route errors using GraphQL response paths.
 - [Authentication differs between host applications] → Put request execution behind an injected executor and retain no cross-user persistent object cache.
 - [The initial components may over-constrain later visual design] → Keep them minimal, use semantic state contracts, and avoid committing the foundation to a design system or Shadow DOM styling policy.
+- [A runnable sample application could become a second product or slow the reactor] → Keep its domain and page deliberately small, skip deployment, and limit current automation to focused startup and HTTP integration checks.
+- [HTTP integration tests do not prove browser rendering] → Retain dependency-free component integration tests now and expose stable sample URLs, selectors, and readiness state for later Playwright coverage.
 
 ## Migration Plan
 
 This is additive and has no migration requirement for existing viewers or applications.
-The foundation will be introduced as an opt-in browser package and demonstrator.
-Removal or rollback consists of removing that package and its module registration without changing the existing GraphQL endpoint.
+The foundation will be introduced as an opt-in browser package and a non-deployed `sample-html` application.
+Removal or rollback consists of removing the browser package and sample module registration without changing the existing GraphQL endpoint.
 
 ## Open Questions
 
