@@ -1,0 +1,144 @@
+= Vanilla HTML Web-Component Sample
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `sample-html` module is a runnable Causeway Spring Boot application for validating the framework-neutral web-component foundation against a real rich GraphQL endpoint.
+Its frontend uses vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
+It has no npm build, HTMX, or frontend-framework dependency.
+
+== Application architecture
+
+The application uses the Causeway GraphQL viewer, Causeway JPA persistence with EclipseLink, an in-memory H2 database, security bypass for local verification, and the packaged web-component foundation artifact.
+The sample HTML, foundation modules, and `/graphql` endpoint are served from the same origin.
+
+The module is an executable integration fixture and is skipped during Maven install and deployment.
+
+== Build and run
+
+JDK 17 or later is required.
+From the repository root, build the foundation and executable sample jar together:
+
+[source,shell]
+----
+export JAVA_HOME="$HOME/.sdkman/candidates/java/17.0.18-tem"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+mvn -f viewers/webcomponents/pom.xml -pl sample-html -am package
+----
+
+Run the repackaged Spring Boot jar:
+
+[source,shell]
+----
+java -jar viewers/webcomponents/sample-html/target/causeway-viewer-webcomponents-sample-html-4.0.0-SNAPSHOT.jar
+----
+
+Open:
+
+[source,text]
+----
+http://localhost:8080/sample-html/index.html
+----
+
+The page imports the foundation entry module from `/causeway-webcomponents/index.mjs` and sends GraphQL operations to `/graphql`.
+
+== Deterministic sample data
+
+The application creates one JPA entity during startup.
+Its stable identity and expected values are:
+
+[cols="1,2"]
+|===
+|Contract |Value
+
+|Logical type
+|`causeway.webcomponents.sample.SampleObject`
+
+|Persisted string identifier
+|`sample-1`
+
+|Causeway bookmark and component `object-id`
+|`s_sample-1`
+
+|Title
+|`Framework-neutral components [WC-001]`
+
+|Visible property
+|`name = Framework-neutral components`
+
+|Disabled property
+|`code = WC-001`, disabled because `The sample code is fixed.`
+
+|Hidden property
+|`secret = Hidden sample value`
+|===
+
+The `s_` prefix is Causeway's string-identifier encoding used by bookmarks and rich GraphQL object lookups.
+The `_meta.version` value is supplied through the JPA `HasVersion` contract.
+
+== Browser-automation contract
+
+The stable page URL is `/sample-html/index.html`.
+The following selectors are intended as public test hooks for future browser automation:
+
+[cols="1,2"]
+|===
+|Selector |Meaning
+
+|`[data-testid="sample-app"]`
+|Application readiness boundary
+
+|`[data-testid="sample-state"]`
+|Live textual context state
+
+|`[data-testid="graphql-client"]`
+|GraphQL client provider
+
+|`[data-testid="sample-object"]`
+|Object context for the deterministic entity
+
+|`[data-testid="object-header"]`
+|Rendered object header
+
+|`[data-testid="property-name"]`
+|Visible property
+
+|`[data-testid="property-code"]`
+|Disabled property
+
+|`[data-testid="property-secret"]`
+|Hidden property element
+|===
+
+`[data-testid="sample-app"]` exposes the latest semantic object-context status through its `data-state` attribute.
+Automation should wait for `data-state="ready"` or fail with the diagnostic state when it becomes `partial-error` or `terminal-error`.
+The application also updates `aria-busy` during `schema-loading` and `object-loading`.
+
+A future Playwright test can therefore begin with a wait equivalent to:
+
+[source,javascript]
+----
+await page.goto('/sample-html/index.html');
+await page.locator('[data-testid="sample-app"][data-state="ready"]').waitFor();
+----
+
+Playwright itself is intentionally not introduced by this slice.
+
+== Automated integration verification
+
+Run the foundation and sample tests from the repository root:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -pl sample-html -am test
+----
+
+The sample integration test starts the application on a random port and verifies:
+
+* `/sample-html/index.html` is delivered with the documented selectors.
+* `/causeway-webcomponents/index.mjs` is delivered from the foundation dependency.
+* Targeted `__type` introspection resolves `rich__causeway_webcomponents_sample_SampleObject`.
+* A real rich GraphQL object lookup resolves `s_sample-1`.
+* Object metadata, version, title, visible state, disabled state, and hidden state have their deterministic values.
+
+The foundation's dependency-free Node tests continue to verify detailed component behavior without requiring a browser process.

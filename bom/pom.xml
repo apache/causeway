@@ -559,6 +559,21 @@ identified
 
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-webcomponents</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-webcomponents-foundation</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
