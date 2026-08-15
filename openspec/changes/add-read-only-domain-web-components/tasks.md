@@ -45,3 +45,13 @@
 - [ ] 7.2 Add integration tests against representative rich GraphQL responses for all supported read-only member kinds and value renderers.
 - [ ] 7.3 Document semantic composition, renderer extension, collection activation, row hydration, navigation events, action-request events, and known collection-size limitations.
 - [ ] 7.4 Run browser tests, relevant Maven tests, accessibility checks, formatting checks, and strict OpenSpec validation, and resolve all failures.
+
+## 8. Executable Vanilla-HTML Acceptance Application
+
+- [ ] 8.1 Extend the deterministic `sample-html` JPA domain while preserving `s_sample-1`, adding enum, null, object-reference, enabled-action, disabled-action, hidden-action, populated-collection, empty-collection, and stable row-column semantics.
+- [ ] 8.2 Extend the real-endpoint GraphQL contract tests to cover GraphQL Java-compatible one-type introspection and deterministic object, action-state, collection, row-hydration, and empty-collection responses.
+- [ ] 8.3 Expand `/sample-html/index.html` to compose the public value, object-link, action, collection, and collection-column components while retaining all foundation selectors and readiness behavior.
+- [ ] 8.4 Add the documented stable `data-testid` hooks and plain-JavaScript navigation and action-request event diagnostics without adding routing, prompting, invocation, HTMX, Playwright, or a frontend build.
+- [ ] 8.5 Extend random-port integration tests to verify the expanded page, packaged ECMAScript modules, stable hooks, and deterministic rich GraphQL responses.
+- [ ] 8.6 Update the sample manual-verification documentation with the added data, selectors, expected read-only states, collection activation, and event-observation steps.
+- [ ] 8.7 Run the packaged sample in a real browser, verify `data-state="ready"`, visible, disabled, hidden, collection, and semantic-event behavior without console errors, then run final Maven, formatting, and strict OpenSpec verification.

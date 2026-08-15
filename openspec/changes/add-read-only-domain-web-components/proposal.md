@@ -14,6 +14,7 @@ A reusable object, property, value, action, collection, and navigation layer is 
 - Publish framework-neutral semantic navigation and action-request events.
 - Define accessible loading, empty, hidden, disabled, unsupported-value, and partial-error behavior.
 - Provide plain-HTML examples that compose the components without HTMX or another frontend framework.
+- Extend the executable `sample-html` application as the acceptance fixture for the complete read-only vocabulary, using deterministic domain data, the real rich GraphQL endpoint, packaged modules, stable browser hooks, and the existing readiness contract.
 
 ## Capabilities
 
@@ -30,4 +31,5 @@ None.
 - Expands the browser component package created by `graphql-web-component-context`.
 - Establishes public component names, attributes, properties, slots, events, accessibility behavior, and renderer-extension contracts.
 - Uses the existing context, schema cache, requirement model, and rich GraphQL endpoint.
-- Does not add property editing, action invocation, generic page composition, collection paging, or an HTMX dependency.
+- Expands `viewers/webcomponents/sample-html` without changing its stable route, original sample bookmark, same-origin architecture, or no-frontend-build constraint.
+- Does not add property editing, action invocation, generic page composition, collection paging, Playwright, or an HTMX dependency.
