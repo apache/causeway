@@ -50,10 +50,10 @@
 
 ## 8. Executable Vanilla-HTML Sample Application
 
-- [ ] 8.1 Add `viewers/webcomponents/sample-html` to the Maven reactor as a non-deployed executable Causeway Spring Boot application with GraphQL, JPA/H2, and the foundation artifact.
-- [ ] 8.2 Implement a minimal deterministic JPA sample domain and startup data with a stable string identifier, title, version, visible property, hidden property, and disabled property semantics.
-- [ ] 8.3 Add `/sample-html/index.html` using the packaged ECMAScript modules, same-origin `/graphql`, semantic `data-testid` hooks, and an observable context-state readiness marker.
-- [ ] 8.4 Add random-port integration tests proving application startup and delivery of the sample HTML and packaged ECMAScript modules.
-- [ ] 8.5 Add integration tests proving targeted introspection and rich object lookup against the running endpoint and deterministic sample object.
-- [ ] 8.6 Document how to run the sample manually and the stable URL, data, selector, and readiness contracts reserved for future Playwright tests.
-- [ ] 8.7 Run the browser tests, sample integration tests, relevant Maven verification, formatting checks, and strict OpenSpec validation.
+- [x] 8.1 Add `viewers/webcomponents/sample-html` to the Maven reactor as a non-deployed executable Causeway Spring Boot application with GraphQL, JPA/H2, and the foundation artifact.
+- [x] 8.2 Implement a minimal deterministic JPA sample domain and startup data with a stable string identifier, title, version, visible property, hidden property, and disabled property semantics.
+- [x] 8.3 Add `/sample-html/index.html` using the packaged ECMAScript modules, same-origin `/graphql`, semantic `data-testid` hooks, and an observable context-state readiness marker.
+- [x] 8.4 Add random-port integration tests proving application startup and delivery of the sample HTML and packaged ECMAScript modules.
+- [x] 8.5 Add integration tests proving targeted introspection and rich object lookup against the running endpoint and deterministic sample object.
+- [x] 8.6 Document how to run the sample manually and the stable URL, data, selector, and readiness contracts reserved for future Playwright tests.
+- [x] 8.7 Run the browser tests, sample integration tests, relevant Maven verification, formatting checks, and strict OpenSpec validation.

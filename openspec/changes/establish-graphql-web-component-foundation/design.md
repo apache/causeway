@@ -137,7 +137,7 @@ The implementation may select build-time tooling, but consumers will receive sta
 ## Risks / Trade-offs
 
 - [Generated schema naming changes could break discovery] → Centralize the grammar, test it against representative generated schemas, and fail with a diagnostic that identifies the unrecognized type or field.
-- [Targeted introspection may require several round trips] → Batch known reachable type names with aliases and cache results across object contexts.
+- [Targeted introspection may require several round trips] → Issue independent one-type introspection operations concurrently and cache results across object contexts, avoiding repeated `__Type.fields` selections that GraphQL Java rejects as bad-faith introspection.
 - [Requirement registration may cause request churn during rendering] → Defer compilation until the current rendering turn has settled and cancel superseded requests.
 - [Merged snapshots can contain fields read at different moments after delta loads] → Treat invalidation and explicit refresh as complete active-projection reads and expose object version metadata with the snapshot.
 - [A coordinated query can become too large] → Keep interaction-specific and expensive collection operations outside the primary projection and allow inactive registrations to be released.
