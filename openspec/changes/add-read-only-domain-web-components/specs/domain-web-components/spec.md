@@ -147,7 +147,8 @@ The read-only component slice SHALL extend the existing `sample-html` applicatio
 
 #### Scenario: Complete read-only custom page
 - **WHEN** the sample page reaches `data-state="ready"`
-- **THEN** it composes the object header, scalar and enum values, null presentation, object link, action affordances, populated collection with declared columns, and empty collection through the public semantic components
+- **THEN** it composes the object header, text, numeric, boolean, and enum values, null presentation, object link, action affordances, populated collection with declared columns, and empty collection through the public semantic components
+- **AND** the page groups those components into labelled object-summary, property, action, collection, and event-diagnostic sections
 - **AND** hidden members render no semantic content while disabled members expose their reasons accessibly
 
 ### Requirement: Deterministic representative sample domain
@@ -156,7 +157,9 @@ The executable sample SHALL provide stable domain data covering the representati
 #### Scenario: Representative root members
 - **WHEN** the root object `causeway.webcomponents.sample.SampleObject:s_sample-1` is read
 - **THEN** its existing `name`, `code`, and `secret` semantics remain deterministic
+- **AND** `summary` provides representative text, `capacity` provides a numeric value, and `featured` provides a boolean value
 - **AND** `status` provides an enum value, `notes` is null, and `relatedObject` identifies a stable related object
+- **AND** ordinary properties are enabled while `code`, `relatedObject`, and `archive` retain deterministic disabled semantics and reasons
 - **AND** `inspect` is a visible enabled action, `archive` is a visible disabled action with a reason, and `hiddenAction` is hidden
 
 #### Scenario: Representative collections
@@ -171,13 +174,39 @@ The extended sample SHALL expose additive stable browser hooks for observing the
 
 #### Scenario: Stable read-only selectors
 - **WHEN** automation inspects the extended sample page
-- **THEN** it can address `property-status`, `property-notes`, `property-related-object`, `object-link-related-object`, `action-inspect`, `action-archive`, `action-hidden`, `collection-related-objects`, `collection-empty-related-objects`, `column-related-name`, and `column-related-code` through `data-testid`
+- **THEN** it can address `property-summary`, `property-capacity`, `property-featured`, `property-status`, `property-notes`, `property-related-object`, `object-link-related-object`, `action-inspect`, `action-archive`, `action-hidden`, `collection-related-objects`, `collection-empty-related-objects`, `column-related-name`, and `column-related-code` through `data-testid`
+- **AND** it can address `section-object-summary`, `section-properties`, `section-actions`, `section-collections`, `section-events`, `sample-coverage`, and `collection-related-count` without depending on incidental generated markup
 - **AND** all foundation selectors remain available
 
 #### Scenario: Observable semantic requests
 - **WHEN** the sample receives a navigation or action-request event from an enabled component
 - **THEN** plain application JavaScript reports its semantic payload through `[data-testid="sample-event"]`
 - **AND** the sample does not impose routing, prompt, or invocation behavior
+
+### Requirement: Illustrative vanilla-HTML reference presentation
+The executable sample SHALL present the deterministic component composition as an understandable, responsive, and accessible reference page without becoming a generic viewer.
+
+#### Scenario: Structured reference showcase
+- **WHEN** a user opens the sample page
+- **THEN** the object summary, representative properties, action affordances, collections, and diagnostics appear in clearly labelled visual sections
+- **AND** page-specific explanatory copy distinguishes enabled, disabled, null, reference, empty, and hidden coverage
+- **AND** every domain value and member state continues to be rendered by the public semantic components
+
+#### Scenario: Hidden-state coverage remains understandable
+- **WHEN** the secret property and hidden action omit their semantic content
+- **THEN** a static coverage guide explains that hidden members are intentionally absent
+- **AND** the guide does not reveal, reproduce, or synthesize the hidden property value
+
+#### Scenario: Responsive accessible application theme
+- **WHEN** the sample is viewed with a narrow or wide viewport and a light or dark color scheme
+- **THEN** its cards, typography, controls, diagnostics, and collection table remain readable and keyboard operable
+- **AND** the page passes the configured accessibility contrast and semantic-markup checks
+
+#### Scenario: Visible collection and event diagnostics
+- **WHEN** the populated collection finishes loading
+- **THEN** the page reports its deterministic row count through `[data-testid="collection-related-count"]`
+- **WHEN** an enabled navigation or action request is published
+- **THEN** the diagnostics section makes the latest semantic payload visibly identifiable through the existing `[data-testid="sample-event"]` hook
 
 ### Requirement: Automated executable-sample verification
 The Maven build SHALL continue to exercise the expanded sample application against its packaged page, modules, deterministic data, and real rich GraphQL endpoint.
@@ -189,5 +218,6 @@ The Maven build SHALL continue to exercise the expanded sample application again
 
 #### Scenario: Real-browser readiness smoke check
 - **WHEN** the packaged sample page is loaded in a real browser during final verification
-- **THEN** it reaches `data-state="ready"`, renders the representative visible and disabled states, suppresses hidden semantic content, and publishes semantic event diagnostics
+- **THEN** it reaches `data-state="ready"`, renders the representative visible and disabled states, suppresses hidden semantic content, displays the sectioned reference presentation, and publishes semantic event and collection diagnostics
 - **AND** its GraphQL requests succeed without browser console errors
+- **AND** automated accessibility auditing reports no configured accessibility failures
