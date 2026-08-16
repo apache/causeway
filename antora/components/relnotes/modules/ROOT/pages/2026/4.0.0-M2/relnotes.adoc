@@ -13,13 +13,17 @@ Notable changes in this release:
 
 - Mitigates https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408]
 - By default on application start a random HMAC secret (32 bytes) is generated, to digitally sign _Viewmodel Bookmarks_ (URLs).
-The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as _Base64_ encoded byte array, like e.g.
-`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=`
-A minimum of 16 bytes is required, we recommend 32.
+The HMAC secret can also be set via environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes). 
+A minimum of 16 bytes is required, we recommend 32. (eg. `-13,4,0, ...`) 
 https://issues.apache.org/jira/browse/CAUSEWAY-3988[CAUSEWAY-3988]
 +
+[IMPORTANT]
+====
+With the next release, parsing environment variable `causeway_hmac_sha256` as comma separated list of signed integers (bytes) is no longer supported, we replaced that with a _Base64_ encoded byte array, like e.g.
+-`gogmem5YXl0IQzw/kB0tkcxTN9y07Cnf3s1kP4WIf3g=`
+
 [source,java]
-.32 byte HMAC Generator
+.32 byte HMAC Generator:
 ----
 import org.apache.causeway.commons.internal.base._Bytes;
 //..
@@ -28,6 +32,7 @@ SecureRandom.getInstanceStrong().nextBytes(secret);
 var hmacBase64 = _Bytes.stringifyUtf8Base64(secret);
 System.out.println(hmacBase64);
 ----
+====
 
 - [Programming Model] Support for Property Clear Methods was removed https://issues.apache.org/jira/browse/CAUSEWAY-3984[CAUSEWAY-3984]
 
