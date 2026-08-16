@@ -114,6 +114,8 @@ record SyntheticNavigationActionFactory(
             final Set<String> existingActionIds,
             final Set<String> existingSyntheticActionIds) {
 
+    	final Class<?> ownerType = ownerSpec.correspondingClass();
+
         if (!(ownerSpec.isEntity() || ownerSpec.isViewModel())
                 || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.correspondingClass()))
 			return Stream.empty();
@@ -125,7 +127,7 @@ record SyntheticNavigationActionFactory(
                                 .filter(ObjectAssociation::isOneToManyAssociation)
                                 .map(ObjectAssociation::getSpecialization)
                                 .flatMap(specialization -> specialization.right().stream())
-                                .filter(collection -> eligible(ownerSpec, collection))
+                                .filter(collection -> eligible(ownerType, collection))
                                 .filter(collection -> !existingSyntheticActionIds.contains(
                                         COLLECTION_ACTION_ID_PREFIX + collection.getId()))
                                 .map(collection -> createCollectionAction(ownerSpec, collection)),
@@ -133,7 +135,7 @@ record SyntheticNavigationActionFactory(
                                 .filter(ObjectAssociation::isOneToOneAssociation)
                                 .map(ObjectAssociation::getSpecialization)
                                 .flatMap(specialization -> specialization.left().stream())
-                                .filter(reference -> eligible(ownerSpec, reference))
+                                .filter(reference -> eligible(ownerType, reference))
                                 .filter(reference -> !existingSyntheticActionIds.contains(
                                         ACTION_ID_PREFIX + reference.getId()))
                                 .map(reference -> createReferenceAction(ownerSpec, reference)))
@@ -145,17 +147,17 @@ record SyntheticNavigationActionFactory(
     }
 
     private static boolean eligible(
-            final ObjectSpecification ownerSpec,
+            final Class<?> ownerType,
             final OneToManyAssociation collection) {
-        return ownerSpec == collection.getDeclaringType()
+        return ownerType.equals(collection.getDeclaringType().getClass())
                 && collection.getElementType() != null
                 && collection.getElementType().isEntityOrViewModelOrAbstract();
     }
 
     private static boolean eligible(
-            final ObjectSpecification ownerSpec,
+    		final Class<?> ownerType,
             final OneToOneAssociation reference) {
-        return ownerSpec == reference.getDeclaringType()
+        return ownerType.equals(reference.getDeclaringType().correspondingClass())
                 && reference.getElementType() != null
                 && reference.getElementType().isEntityOrViewModelOrAbstract();
     }
@@ -203,7 +205,7 @@ record SyntheticNavigationActionFactory(
             final OneToOneAssociation reference) {
 
         var facetedMethod = FacetedMethod.createSyntheticAction(
-        		ownerSpec.getMetaModelContext(),
+        		reference.getMetaModelContext(),
                 ownerSpec.correspondingClass(),
                 ACTION_ID_PREFIX + reference.getId(),
                 reference.getElementType().correspondingClass(),
