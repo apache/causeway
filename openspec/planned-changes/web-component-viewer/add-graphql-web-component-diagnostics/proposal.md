@@ -3,6 +3,7 @@
 The web-component foundation deliberately hides GraphQL document construction behind semantic clients and object contexts, which is the right application contract but makes development-time troubleshooting harder.
 Developers currently need browser network tools to understand which targeted introspection, object-read, validation, mutation, collection, or action operation ran and what GraphQL response drove the resulting component state.
 An opt-in structured diagnostic stream and reusable diagnostic panel will make that behavior observable without coupling the semantic components to a frontend framework or enabling remote telemetry.
+Its non-disclosure boundary is reinforced by `coverage-matrix.yaml` entries `REF-SECURITY-01`, `REF-SECURITY-02`, `REF-RESOURCE-02`, and `REF-RESOURCE-03`.
 
 ## What Changes
 

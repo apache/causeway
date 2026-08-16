@@ -1,13 +1,14 @@
 ## 1. Viewer Module and Route Contracts
 
-- [ ] 1.1 Establish the optional viewer module, browser asset packaging, HTMX dependency, default theme, demonstration application, and explicit enablement path.
-- [ ] 1.2 Define canonical bookmark route encoding, route parsing, object-page fragment contracts, and semantic navigation-event handling.
-- [ ] 1.3 Add route tests for encoded logical types and identifiers, direct links, refresh, malformed routes, not-found objects, and access-denied outcomes.
+- [ ] 1.1 Verify matrix entries `REF-VIEWER-01`, `REF-COMPONENT-01`, `REF-COMPONENT-02`, `REF-HOME-01`, and `REF-MENU-01` and all accepted P0 or P1 prerequisites are complete.
+- [ ] 1.2 Establish the optional viewer module, browser asset packaging, HTMX dependency, default theme, demonstration application, and explicit enablement path.
+- [ ] 1.3 Define canonical bookmark route encoding, route parsing, object-page fragment contracts, and semantic navigation-event handling.
+- [ ] 1.4 Add route tests for encoded logical types and identifiers, direct links, refresh, malformed routes, not-found objects, and access-denied outcomes.
 
 ## 2. HTMX Shell and Application Entry
 
 - [ ] 2.1 Implement the stable HTMX application shell, `<causeway-menubars>` placement, object-page region, loading indicators, and fragment transitions.
-- [ ] 2.2 Connect menu service-action results and discovered home-page action to replaceable viewer navigation and result policy.
+- [ ] 2.2 Connect menu service-action results and the discovered home-page object or action to replaceable viewer navigation and result policy.
 - [ ] 2.3 Verify application-entry state survives object-fragment replacement and invalidates only under its documented context.
 - [ ] 2.4 Verify HTMX handles only shell and fragment lifecycle while menu components own menu layout and service-action semantics.
 
@@ -15,7 +16,7 @@
 
 - [ ] 3.1 Translate semantic object navigation events from object links, object actions, and service actions into canonical HTMX route requests.
 - [ ] 3.2 Implement back, forward, direct-load, refresh, and superseded-page behavior without leaking obsolete context responses.
-- [ ] 3.3 Define initial shell and home-page policy for applications with present, absent, hidden, invalid, or object-returning home actions.
+- [ ] 3.3 Define initial shell and home-page policy for applications with present, absent, hidden, invalid, object, or action home entries.
 
 ## 4. Page Definition Resolution
 

@@ -1,22 +1,26 @@
 ## Why
 
-Rich GraphQL exposes contributing domain services and their actions, but a generic application shell cannot currently recover Causeway's primary, secondary, and tertiary menu structure or identify the configured home-page action through an explicit application-entry contract.
-The reference application supplies `menubars.layout.xml`, service-action ordering and grouping, and home-page behavior that should be available without coupling clients to Wicket or exposing metamodel internals.
+The executable reference-application analysis found one `@HomePage` view model and a three-level menu-bars layout containing 14 menus, 58 sections, and 197 service-action entries.
+The rich root exposes 58 service-menu types but no menu-bar entry point and no indication that `demo.Homepage` is the configured home object.
+The normal home object lookup still requires identity and fails when called without it.
+
+The evidence is recorded in `coverage-matrix.yaml` entries `REF-MENU-01` and `REF-HOME-01`.
 
 ## What Changes
 
-- Add a rich GraphQL application-entry contract that identifies the current menu-bars layout resource or equivalent structured source.
-- Expose primary, secondary, and tertiary menu semantics, ordered menus and sections, service-action references, labels, descriptions, and icons permitted by policy.
-- Resolve menu entries to existing rich service-action parameter, validation, invocation, hidden, disabled, and result contracts.
-- Identify the configured home-page action and its owning service where available.
-- Define authorization filtering, empty-menu behavior, caching, localization, stale-resource, and malformed-layout behavior.
-- Avoid duplicating service-action execution or prescribing frontend navigation.
+- Add a targeted rich GraphQL application-entry root capability.
+- Return an authorized reference to the effective menu-bars layout as the canonical structural source.
+- Preserve primary, secondary, tertiary, menu, section, ordering, and service-action references in that resource rather than duplicating them as a second GraphQL tree.
+- Resolve each menu entry to the existing rich service-action contract.
+- Identify and resolve the configured home-page object, or identify a configured home service action where that form is supported.
+- Define authorization filtering, empty-menu behavior, caching, localization, malformed-layout diagnostics, and generated fallback behavior.
+- Avoid prescribing frontend rendering, automatic home invocation, routing, or result navigation.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `rich-graphql-application-entry-points`: Defines framework-neutral rich GraphQL discovery of Causeway menu bars, service-action entries, and the configured home-page action.
+- `rich-graphql-application-entry-points`: Defines framework-neutral rich GraphQL discovery of Causeway menu bars and configured home-page semantics.
 
 ### Modified Capabilities
 
@@ -24,7 +28,7 @@ None.
 
 ## Impact
 
-- Affects rich GraphQL root metadata, menu-bars layout resource exposure or adaptation, service-action resolution, home-page discovery, tests, and documentation.
-- Depends on the completed reference-app analysis and rich member metadata needed for local labels and hints.
-- Is a prerequisite for `<causeway-menubars>` and its primary, secondary, and tertiary components.
-- Does not implement menus, routing, authentication screens, or a viewer shell.
+- Affects rich GraphQL root metadata, secured menu-layout resource exposure, home-page resolution, service-action references, tests, and documentation.
+- Depends on completed reference-app analysis, corrected object interaction and polymorphic output, and corrected structural resource links.
+- Is a prerequisite for `<causeway-menubars>` and the generic application shell.
+- Does not depend on broad rich member metadata and does not implement menus, routes, authentication screens, or a viewer shell.
