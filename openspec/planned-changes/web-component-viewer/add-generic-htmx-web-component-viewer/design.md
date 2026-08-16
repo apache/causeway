@@ -1,115 +1,105 @@
 ## Context
 
-The preceding changes establish a framework-neutral GraphQL client, object context, semantic domain components, and complete property and action interaction behavior.
-Those components are sufficient for application developers to build custom pages, but they do not provide routes or automatic composition for an application with no custom frontend.
-This change adds an optional reference viewer that uses HTMX for its application shell and page lifecycle while continuing to delegate all Causeway member semantics and GraphQL execution to the component library.
+The preceding changes establish a framework-neutral GraphQL client, object context, semantic member components, a layout-aware `<causeway-object>`, and `<causeway-menubars>` with primary, secondary, and tertiary subcomponents.
+Those components are sufficient for application developers to build custom pages and shells, but they do not provide routes, browser history, HTMX fragment lifecycle, or default page selection.
+This change adds an optional reference viewer while delegating all domain, menu, grid, interaction, and GraphQL behavior to the component library.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
+- Provide an application shell containing framework-neutral Causeway menu bars.
 - Provide directly addressable generic domain-object pages.
-- Compose a useful default page from standard GraphQL introspection and optional Causeway layout resources.
+- Use `<causeway-object>` as the default object page beneath one route context.
 - Use HTMX for shell navigation, history, and fragment replacement without adding HTMX to component contracts.
-- Allow a logical type to replace the generic page with an application page composed from the same semantic components.
+- Allow a logical type to replace the default object page with an application page composed from the same semantic components.
 - Preserve loading, partial-error, terminal-error, interaction, and navigation semantics across page transitions.
-- Provide a reference theme and accessible page structure.
+- Provide replaceable home-page, navigation, result, and theme policies.
 
 **Non-Goals:**
 
 - Requiring HTMX for direct component-library consumers.
 - Replacing the GraphQL schema with server-side metamodel access.
-- Reimplementing property, action, parameter, collection, value, validation, or mutation semantics in the viewer.
-- Full parity with Wicket application menus, home pages, authentication pages, standalone values, or every extension component.
+- Parsing object grid or menu-bars layout resources in the viewer.
+- Reimplementing property, action, collection, object composition, menu interaction, value, validation, or mutation semantics.
+- Full parity with authentication pages, standalone values, or every extension component.
 - A general-purpose frontend framework.
-- Server-side rendering of complete object state.
+- Server-side rendering of complete domain state.
 
 ## Decisions
 
 ### Keep HTMX above the semantic component layer
 
-HTMX will manage viewer routes, browser history, page-shell regions, loading indicators, and HTML fragment transitions.
-The loaded fragments will compose semantic custom elements, and their nearest GraphQL client and object contexts will continue to own introspection, reads, interactions, and mutations.
+HTMX manages viewer routes, browser history, page-shell regions, loading indicators, and HTML fragment transitions.
+The shell and fragments compose semantic custom elements, whose GraphQL client and contexts continue to own application-entry reads, object reads, interactions, and mutations.
 
-The generic viewer will not add HTMX attributes to the public component contract and will not require an HTMX-to-GraphQL transport extension.
-Another application can therefore replace the entire viewer layer while reusing the same component library.
+The viewer does not add HTMX attributes to public component contracts and does not require an HTMX-to-GraphQL transport extension.
+Another application can therefore replace the viewer while reusing the same components.
+
+### Compose menu bars in the stable shell
+
+The stable application shell contains `<causeway-menubars>` outside the replaceable object-page region.
+Menu service actions publish semantic results, and the viewer's replaceable result and navigation policy decides whether to navigate, update a region, or leave the result to an application handler.
+The shell may invoke the discovered home-page action according to configured viewer policy, but the menu component never does so automatically.
 
 ### Use bookmark-based canonical object routes
 
-A canonical viewer route will encode the logical type name and object identifier as separate safely encoded path values.
-The viewer will listen for bubbling semantic navigation events from object links and action results, map their target bookmark to that route, and load the object-page fragment through HTMX with history enabled.
-Direct navigation, refresh, back, and forward will resolve the same page state.
+A canonical viewer route encodes logical type and object identifier as separate safely encoded path values.
+The viewer listens for semantic navigation events from object links, object actions, and service actions, maps target bookmarks to routes, and loads object fragments through HTMX with history enabled.
+Direct navigation, refresh, back, and forward resolve the same state.
 
-Routing remains a viewer concern, so component events continue to carry semantic bookmarks rather than URLs.
+Routing remains a viewer concern, so component events carry semantic bookmarks rather than viewer URLs.
 
-### Keep route fragments free of metamodel knowledge
+### Keep route fragments free of metamodel and layout knowledge
 
-The object route handler will validate and encode route values and return the viewer page shell containing a GraphQL client, one object context, and a page resolver.
-It will not enumerate members or query Causeway metamodel services.
-The browser-side page resolver will use the object context's cached schema description for both custom-page selection and generic composition.
+The object route handler validates route values and returns a fragment containing a GraphQL client association, one object context, and a page resolver.
+It does not enumerate members or query metamodel services.
+The default definition places `<causeway-object>` beneath the route context and lets that component obtain schema and layout data through public contracts.
 
-This keeps GraphQL introspection as the only member-discovery mechanism and avoids a privileged HTML backend.
-
-### Resolve custom pages before generic composition
+### Resolve custom pages before the default object component
 
 Applications may register a page template or page factory keyed by Causeway logical type name.
-The page resolver will choose the most specific exact logical-type registration and otherwise use the generic page definition.
-Both custom and generic definitions will render beneath the route's existing object context.
+The resolver chooses the exact logical-type registration and otherwise renders `<causeway-object>`.
+Both custom and default definitions remain beneath the same route object context.
 
-A custom definition can compose standard properties, actions, collections, ordinary HTML, and application custom elements without reimplementing GraphQL execution.
-The registration API belongs to the HTMX viewer and does not constrain applications that use React, Vue, Svelte, or another composition layer instead.
-
-### Build generic pages from introspected member fields
-
-The generic composer will enumerate properties, actions, and collections from the semantic type description derived from GraphQL introspection.
-It will create standard member elements by semantic ID.
-It will not request a GraphQL member-list metadata field and will not encode GraphQL documents in the generated page definition.
-
-Dynamic hidden and disabled decisions remain owned by the created member components and object context.
-
-### Prefer the Causeway grid with a deterministic fallback
-
-When object metadata provides an enabled grid resource, the viewer will fetch and parse the Causeway layout and map recognized member references into page regions, groups, and ordering.
-Unsupported layout instructions will generate diagnostics and fall back locally where possible.
-If the resource is forbidden, absent, unreachable, or unusable, the viewer will compose a conventional page with object header, actions, properties, and collections in deterministic schema order.
-
-The first implementation will treat layout as composition information and will not duplicate member runtime semantics from the grid.
+A custom definition can compose standard properties, actions, collections, `<causeway-object>`, ordinary HTML, and application custom elements without reimplementing GraphQL execution.
+The registry belongs to the optional viewer and does not constrain other frameworks.
 
 ### Preserve one route-level object context
 
-The HTMX object fragment will contain one object context that survives page-definition selection and owns every generic or custom descendant requirement.
-Switching between generic and custom definitions for the same route will release disconnected requirements and register the new definition's needs.
-Navigating to a different bookmark will create a new context generation and prevent old responses from rendering into the new page.
+The HTMX object fragment contains one object context that owns every default or custom descendant requirement.
+Switching page definitions releases disconnected requirements and registers the new definition's needs.
+Navigating to a different bookmark creates a new context generation and prevents obsolete responses from rendering into the new page.
 
-### Treat interaction results as viewer policy
+### Treat interaction results and home page as viewer policy
 
-The viewer will provide default handling for semantic object, collection, scalar, and void action results.
-Object results may navigate according to the default navigation policy, while scalar and collection results may render in a result region.
-Applications can override this policy without replacing action components or context commands.
+The viewer provides replaceable handling for semantic object, collection, scalar, and void action results from object and menu actions.
+Object results may navigate by default, while scalar and collection results may render in a result region.
+The configured home-page action may supply the initial route or result according to policy.
+Applications can replace these decisions without replacing action or menu components.
 
 ### Ship as an optional Causeway viewer module
 
-The HTMX viewer, route handler, assets, and default theme will be enabled explicitly and will coexist with the existing GraphQL, REST, and Wicket viewers.
-Its server-side module will serve shells and static or template fragments but will not become an alternative domain API.
+The HTMX viewer, route handler, assets, shell, and default theme are enabled explicitly and coexist with GraphQL, REST, and Wicket viewers.
+Its server module serves shells and fragments but does not become an alternative domain API.
 
 ## Risks / Trade-offs
 
-- [HTMX may appear incidental because components own GraphQL] → Define its responsibility clearly around routes, history, shells, fragments, and transitions rather than forcing it into data transport.
-- [Layout XML can contain presentation semantics not supported by the new components] → Implement a documented supported subset, preserve diagnostics, and provide deterministic fallback composition.
-- [Large schemas can produce very large generic pages] → Use targeted introspection, lazy collections, collapsible regions, and component requirement release.
-- [Custom page factories can become framework-specific] → Keep them isolated to the optional viewer and require only standard DOM output beneath the semantic object context.
-- [Route encoding can expose malformed bookmarks] → Encode path segments, validate route input, and rely on GraphQL object lookup for authorization and existence.
-- [Existing viewer parity can expand scope indefinitely] → Limit the first viewer capability to bookmark-addressable domain-object pages and record additional shells as separate changes.
+- [HTMX may appear incidental] → Define its responsibility around routes, history, shell, fragments, and transitions rather than data semantics.
+- [Stable menu shell and changing route fragments have different lifecycles] → Keep application-entry state outside the replaced object region and define invalidation explicitly.
+- [Custom pages can bypass high-level components] → Permit deliberate low-level composition while requiring one shared route context.
+- [Action results can originate from shell or object page] → Route all semantic results through scoped replaceable viewer policy.
+- [Viewer parity can expand indefinitely] → Limit the initial capability to menu shell, home policy, and bookmark-addressable object pages.
 
 ## Migration Plan
 
 The viewer is additive and disabled unless its module is included.
 Applications can enable it alongside existing viewers, link to selected object routes, and incrementally register custom pages.
-Rollback removes the optional module or routes without changing the GraphQL endpoint or component library.
+Rollback removes the optional module or routes without changing GraphQL or component contracts.
 
 ## Open Questions
 
-- Should the first route handler return server templates, static shell fragments, or both as equivalent page-definition sources?
-- What subset of the Causeway grid format is essential for the initial generic page to feel representative?
-- Which default action-result navigation rules best match Causeway expectations without surprising custom applications?
-- Should the initial viewer include a minimal service-action entry page, or remain strictly object-route driven?
+- Should the first route handler return server templates, static shell fragments, or both?
+- Should the default home-page policy invoke the configured action or first render a neutral shell state?
+- Which default action-result navigation rules best match Causeway expectations?
+- Should custom page registrations be able to replace only object content while retaining standard object header placement?
