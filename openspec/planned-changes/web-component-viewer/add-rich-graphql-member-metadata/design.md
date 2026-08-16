@@ -2,70 +2,78 @@
 
 Current wrappers expose datatype, value, hidden, disabled, choices, autocomplete, validation, and invocation behavior.
 GraphQL field descriptions may carry a Causeway description or friendly label, but a client cannot reliably distinguish the two.
-Property layout constraints, action prompt and association hints, and collection presentation semantics are not available as local structured metadata.
 
-Grid and menu layout XML already describe complete page and application structure.
-The new metadata must complement those resources, support components used outside a full layout, and avoid a duplicate API that enumerates every member.
+The executable effective-grid probe found names, descriptions, action positions, property attributes, icon classes, field sets, columns, and unreferenced placement in the XML resource.
+Adding those same fields to every rich wrapper would increase an already 21,142-type schema and recreate part of the grid metamodel.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - Expose canonical friendly names and descriptions independently.
-- Expose confirmed framework-neutral constraints and hints on known wrappers.
-- Support fallback composition when a complete layout is unavailable.
-- Preserve dynamic hidden and disabled behavior as authoritative.
+- Expose a small confirmed set of editor-neutral local constraints on known property and parameter wrappers.
+- Support standalone components and fallback rendering when no grid is available.
+- Preserve dynamic hidden, disabled, validation, and invocation behavior as authoritative.
 - Remain discoverable by targeted GraphQL introspection.
 
 **Non-Goals:**
 
 - Returning annotation instances or metamodel objects.
 - Adding a second member-list endpoint.
-- Duplicating the complete grid or menu layout beneath object reads.
-- Requiring clients to obey CSS, prompt, or redirect hints.
-- Reproducing Wicket-only rendering behavior.
+- Duplicating rows, columns, tabs, field sets, menu sections, ordering, or unreferenced placement.
+- Duplicating action positions, prompt style, redirect policy, icons, CSS, table decorators, page-size presentation, sorting hints, or sequence from layouts.
+- Reproducing Wicket rendering behavior.
 
 ## Decisions
 
-### Extend known-member wrappers
+### Extend only known wrappers
 
-Metadata fields live beneath the existing property, action, parameter, collection, object-meta, and service shapes.
-Clients first discover semantic member IDs through standard introspection and request metadata only for wrappers they use.
-This keeps metadata additive and targeted.
+Local metadata fields live beneath existing property, action, parameter, collection, object-meta, or service shapes where evidence justifies them.
+Clients first discover semantic member IDs through standard targeted introspection and request metadata only for wrappers they use.
+No aggregate metadata catalogue or member-list field is added.
 
-### Separate semantic constraints from optional presentation hints
+### Separate names and descriptions
 
-Validation-related information such as optionality, maximum length, regular-expression intent, accepted files, and datatype constraints is distinguished from optional hints such as multiline, typical length, label position, prompt style, icon, CSS class, and redirect preference.
-Server validation remains authoritative in all cases.
+A canonical friendly name and a distinct description are independent nullable values.
+A missing description does not automatically duplicate the friendly name.
+Existing GraphQL field descriptions remain compatible and may continue to provide concise schema documentation.
 
-### Keep structural layout in resources
+Localized runtime values use request-context locale and documented cache behavior.
+Schema-level static descriptions are not treated as the sole localized contract.
 
-Grid resources remain responsible for rows, columns, tabs, field sets, explicit member references, and unreferenced-member placement.
-Menu resources remain responsible for primary, secondary, tertiary, menu, section, and service-action structure.
-Wrapper metadata supplies local labels, descriptions, constraints, icons, and fallback ordering.
+### Admit only local editor-neutral constraints
 
-### Publish stable semantic values
+The accepted initial set is limited to constraints or simple text-editing semantics not already expressed by GraphQL input types and needed by standalone property or parameter editors.
+Candidate fields include maximum length, regular-expression intent, accepted-file values, multiline, and typical length when confirmed by metamodel facets.
 
-Enum-like metadata uses stable GraphQL enum or documented string values rather than Java enum names leaking accidentally.
-Missing facets return null or documented defaults.
-Authorization-sensitive metadata is omitted with the member when hidden and never reveals policy rules.
+GraphQL nullability remains the canonical structural requiredness signal.
+Server validation remains authoritative even when a client uses constraints proactively.
+
+### Keep structural and viewer hints in resources
+
+Effective grid XML owns member placement, action positions, page grouping, layout order, icons, CSS, prompt-related presentation, collection presentation, and fallback placement.
+Effective menu XML owns bars, menus, sections, entries, labels, and structural ordering.
+Wicket decorators, redirect behavior, repainting, and CSS implementation details remain excluded.
+
+### Preserve authorization boundaries
+
+New local metadata does not expose values, authorization rules, or disabled-reason internals.
+A hidden wrapper reveals no more static identity than established schema introspection already reveals and returns no sensitive runtime metadata beyond the documented hidden contract.
 
 ## Risks / Trade-offs
 
-- [Metadata breadth can recreate the metamodel] → Admit only fields justified by the coverage analysis and generic client requirements.
-- [Hints may be viewer-specific] → Mark them optional and preserve client freedom to ignore them.
-- [Static metadata can conflict with dynamic state] → Keep hidden, disabled, validation, and invocation outcomes authoritative at runtime.
-- [Schema size can grow] → Use reusable descriptor types and targeted introspection rather than aggregate metadata payloads.
+- [Small metadata may omit useful hints] → Add fields only after another concrete framework-neutral client requirement and matrix evidence.
+- [Runtime localization can affect caching] → Scope wrapper metadata reads by locale and avoid treating schema descriptions as mutable localized state.
+- [Static metadata can conflict with dynamic state] → Keep hidden, disabled, validation, and invocation outcomes authoritative.
+- [Descriptor types can enlarge the schema] → Reuse narrow shapes and measure schema-size and startup deltas.
 
 ## Migration Plan
 
-All fields are additive.
-Existing descriptions and operations remain valid.
-Clients may adopt canonical names and descriptors incrementally.
+All accepted fields are additive.
+Existing descriptions, generated names, and operations remain valid.
+Clients may adopt independent labels and constraints incrementally.
 
 ## Open Questions
 
-- Which CSS and redirect hints are sufficiently framework-neutral to expose?
-- Should sequence be numeric, lexical, or a normalized sortable key?
-- Which metadata belongs at generated GraphQL field level versus runtime wrapper level?
-- How should translated friendly names and descriptions interact with schema caching?
+- Whether multiline and typical length belong in the first local constraint shape or remain grid-only until a standalone editor requires them.
+- Whether common name and description fields should use one reusable metadata type or direct fields on each wrapper to minimize generated type count.

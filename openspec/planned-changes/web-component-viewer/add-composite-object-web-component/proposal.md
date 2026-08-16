@@ -2,6 +2,7 @@
 
 Applications can currently compose object headers, properties, actions, and collections explicitly, but every generic consumer must repeat member discovery, layout-resource parsing, fallback placement, and accessibility work.
 A framework-neutral `<causeway-object>` component should provide the high-level semantic object projection and decompose it into the established lower-level components using the effective Causeway grid layout.
+The evidence is recorded in `coverage-matrix.yaml` entries `REF-LAYOUT-01`, `REF-COMPONENT-01`, `REF-METADATA-02`, and `REF-COLLECTION-02`.
 
 ## What Changes
 
@@ -26,6 +27,6 @@ None.
 ## Impact
 
 - Affects the web-component foundation module, layout parsing, component registration, styling, tests, sample HTML, and documentation.
-- Depends on the reference-app analysis and consumes rich member metadata and collection windowing when available.
+- Depends on corrected object interaction, safe structural resource links, and the completed reference-app analysis; it prefers bounded collection windows and consumes narrow member metadata when available.
 - Does not require HTMX and does not own routes, browser history, or application menus.
 - Preserves explicit low-level component composition for applications that do not want automatic object layout.

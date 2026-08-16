@@ -1,16 +1,19 @@
 ## Why
 
-The preliminary reference-app audit found standard, Causeway, custom, and resource value types that are not uniformly reversible through the rich GraphQL schema.
-The generic object marshaller can make output appear readable as a string while returning raw GraphQL input without reconstructing the declared Java value, and specialized Blob and Clob property reads do not yet define a uniform update and action contract.
-Clients need explicit, discoverable value semantics rather than accidental string coercion.
+The executable reference-application analysis confirmed that generic GraphQL `String` fallback does not reconstruct declared Java values for `LocalDateTime`, `URL`, Blob, Clob, or a custom `ComplexNumber`.
+The same source equivalence class includes `java.util.Date`, `java.sql.Date`, and `java.sql.Timestamp`, for which the current viewer has no explicit marshaller.
+Clients need reversible schema shapes and explicit extension or rejection behavior rather than input fields that accept strings and fail only during invocation.
+
+The evidence is recorded in `coverage-matrix.yaml` entries `REF-VALUE-02`, `REF-VALUE-03`, and `REF-RESOURCE-01`.
+Resource URL and policy safety are handled first by `fix-rich-graphql-resource-link-safety` under entries `REF-RESOURCE-02` and `REF-RESOURCE-03`.
 
 ## What Changes
 
-- Add canonical reversible marshalling for confirmed missing standard reference-app datatypes.
-- Replace silent input-capable object-string fallback with explicit supported or unsupported capability behavior.
-- Add an editor-neutral rich datatype descriptor covering logical type, representation category, input and output shape, canonical format, constraints, and resource behavior.
-- Define extension contracts for Causeway and application custom values.
-- Define consistent Blob, Clob, file, and other supported resource contracts across property reads, updates, action parameters, and action results.
+- Add canonical reversible marshalling for the confirmed missing standard reference-application datatype equivalence class.
+- Replace silent input-capable object-string fallback with explicit supported, output-only, or unsupported behavior.
+- Make canonical value formats and GraphQL shapes discoverable through the generated scalar, input, output, and existing rich datatype identities.
+- Define extension contracts for Causeway and application custom values without inferring constructors from `toString()`.
+- Define consistent Blob, Clob, file, and accepted resource input or result semantics above the corrected resource-link policy.
 - Preserve strict non-disclosure for passwords, hidden values, and unsupported opaque values.
 - Add round-trip, invalid-input, size, media-type, compatibility, and targeted-introspection tests.
 
@@ -18,7 +21,7 @@ Clients need explicit, discoverable value semantics rather than accidental strin
 
 ### New Capabilities
 
-- `rich-graphql-value-semantics`: Defines reversible and discoverable rich GraphQL contracts for standard, Causeway, custom, and resource values.
+- `rich-graphql-value-semantics`: Defines reversible and discoverable rich GraphQL contracts for standard, custom, and resource values.
 
 ### Modified Capabilities
 
@@ -26,7 +29,7 @@ None.
 
 ## Impact
 
-- Affects GraphQL scalar marshallers, type mapping, rich datatype wrappers, property mutation, action invocation and results, resource policies, tests, and documentation.
-- Depends on the completed reference-app analysis and may be narrowed by its evidence.
+- Affects GraphQL scalar marshallers, type mapping, property mutation, action invocation and results, resource transfer strategy, tests, and documentation.
+- Depends on completed reference-application analysis, corrected object argument conversion, and corrected resource-link safety.
 - May require a compatibility mode for applications relying on arbitrary raw-string fallback input.
-- Does not implement browser editors or resource widgets.
+- Does not implement browser editors, resource widgets, member metadata, or collection windowing.

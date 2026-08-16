@@ -10,41 +10,46 @@ Every rich GraphQL property or action input advertised as supported SHALL recons
 
 #### Scenario: No reversible strategy exists
 - **WHEN** an input-capable member uses a value type without a reversible strategy
-- **THEN** schema construction or capability discovery reports it as unsupported
+- **THEN** schema construction or capability discovery reports it as output-only or unsupported
 - **AND** GraphQL does not pass an arbitrary raw string as the domain value
 
-### Requirement: Discoverable editor-neutral value semantics
-Rich datatype metadata SHALL identify logical type, representation category, GraphQL input and output shape, canonical format, constraints, resource behavior, and extension ownership.
+### Requirement: Standard GraphQL value discovery
+Supported rich value semantics SHALL be discoverable through generated GraphQL scalar, input, and output types together with the existing rich datatype identity.
 
-#### Scenario: Client inspects a datatype
-- **WHEN** targeted introspection reaches a property or parameter datatype descriptor
-- **THEN** the client can distinguish text, boolean, numeric, temporal, enum, object-reference, resource, composite, and opaque semantics
-- **AND** no frontend widget is prescribed
+#### Scenario: Client inspects a supported datatype
+- **WHEN** targeted introspection reaches the GraphQL type used by a property or parameter
+- **THEN** the type shape or scalar documentation identifies its canonical representation
+- **AND** the rich datatype identity distinguishes declared semantics that share a scalar
+
+#### Scenario: Client discovers value support
+- **WHEN** a value has no input mapping
+- **THEN** the generated member does not imply reversible input capability
+- **AND** no duplicate global datatype catalogue is required
 
 ### Requirement: Canonical standard datatype support
-The default viewer SHALL provide deterministic coercion and serialization for the standard datatype set confirmed by the reference-app analysis.
+The default viewer SHALL provide deterministic coercion and serialization for the standard datatype set accepted from matrix entry `REF-VALUE-02`.
 
 #### Scenario: Temporal or URL value is valid
-- **WHEN** a confirmed temporal or URL value uses its canonical representation
-- **THEN** input and output preserve the documented value, precision, and timezone semantics
+- **WHEN** an accepted temporal or URL value uses its canonical representation
+- **THEN** input and output preserve the documented value, precision, date, offset, zone, and normalization semantics that apply
 
 #### Scenario: Standard value is malformed
 - **WHEN** a client submits malformed canonical input
 - **THEN** GraphQL returns a typed coercion error without invoking the domain member
 
 ### Requirement: Extensible custom values
-Applications SHALL be able to register an explicit reversible marshaller and datatype descriptor for a custom value.
+Applications SHALL be able to register an explicit reversible marshaller and GraphQL type mapping for a custom value.
 
 #### Scenario: Custom strategy is registered
-- **WHEN** an application registers a compatible strategy
+- **WHEN** an application registers compatible input and output behavior
 - **THEN** the rich schema advertises and uses that strategy for supported reads and inputs
 
 #### Scenario: Custom strategy is absent
 - **WHEN** an opaque custom value has no registered strategy
-- **THEN** the schema reports explicit unsupported capability rather than serializing it through `toString()`
+- **THEN** input is reported as unsupported rather than serialized and reconstructed through `toString()` guesses
 
 ### Requirement: Consistent resource-value capability
-Supported resource values SHALL use a consistent metadata and transfer contract across property reads, updates, action parameters, and action results.
+Supported resource values SHALL use a consistent metadata and bounded transfer contract across property reads, updates, action parameters, and action results.
 
 #### Scenario: Resource metadata is requested
 - **WHEN** a client inspects a supported resource value
@@ -60,7 +65,7 @@ Supported resource values SHALL use a consistent metadata and transfer contract 
 - **AND** the client receives an explicit capability or validation outcome
 
 ### Requirement: Sensitive values remain undisclosed
-Passwords, hidden values, and other configured sensitive values SHALL NOT be exposed through generic serialization, metadata, diagnostics, or errors.
+Passwords, hidden values, and other configured sensitive values SHALL NOT be exposed through generic serialization, metadata, resources, diagnostics, or errors.
 
 #### Scenario: Sensitive value lacks a public representation
 - **WHEN** GraphQL encounters a sensitive value

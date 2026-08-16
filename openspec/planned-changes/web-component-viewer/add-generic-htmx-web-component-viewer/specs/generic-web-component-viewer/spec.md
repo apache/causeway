@@ -86,7 +86,7 @@ The viewer SHALL leave application-entry reads, schema introspection, object rea
 - **AND** HTMX does not translate GraphQL JSON, construct domain operations, or parse Causeway layouts
 
 ### Requirement: Viewer interaction-result and home policy
-The viewer SHALL provide replaceable handling for semantic object, collection, scalar, and void results and for the discovered home-page action.
+The viewer SHALL provide replaceable handling for semantic object, collection, scalar, and void results and for the discovered home-page object or service action.
 
 #### Scenario: Object result uses default policy
 - **WHEN** default result policy receives a semantic object result
@@ -96,8 +96,12 @@ The viewer SHALL provide replaceable handling for semantic object, collection, s
 - **WHEN** an application registers a scoped result policy
 - **THEN** it receives the semantic result without replacing action or menu components
 
-#### Scenario: Home-page action is available
-- **WHEN** application-entry data identifies a home-page action
+#### Scenario: Home-page object is available
+- **WHEN** application-entry metadata identifies and resolves a home-page object
+- **THEN** configured viewer policy decides whether and when to route to or present it
+
+#### Scenario: Home-page service action is available
+- **WHEN** application-entry metadata identifies a home-page service action
 - **THEN** configured viewer policy decides whether and when to invoke it and present its result
 
 ### Requirement: Object-page lifecycle states
