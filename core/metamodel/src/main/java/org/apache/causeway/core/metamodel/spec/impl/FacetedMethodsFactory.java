@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -60,7 +59,7 @@ record FacetedMethodsFactory(
 	    ClassSubstitutorRegistry classSubstitutorRegistry,
 	    MethodRemover methodRemover,
 	    Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction,
-	    Set<ResolvedMethod> potentialOrphans)
+	    ConsistencyContext consistencyContext)
 implements
     HasMetaModelContext {
 
@@ -74,7 +73,7 @@ implements
     			classSubstitutorRegistry,
     			MethodRemover.createMethodRemover(internalSpec.correspondingClass(), internalSpec.introspectionPolicy()),
     			specLoaderInternal::loadSpecificationTypeOnly,
-    			new HashSet<>());
+    			internalSpec.consistencyContext());
     }
 
     FacetedMethodsFactory {
@@ -291,7 +290,7 @@ implements
         // exclude those that have eg. reserved prefixes
         if (facetProcessor.recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
-        	potentialOrphans.add(actionMethod);
+        	consistencyContext.potentialOrphans().add(actionMethod);
             return false;
         }
 

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
@@ -50,12 +50,12 @@ class _MemberIdClashReporting {
      * which in its own right helps with handling of method overriding (Java language terminology).
      */
     void flagAnyMemberIdClashes(
-            final ObjectSpecification declaringType,
+    		final CausewayBeanMetaData declaringType,
             final Iterable<? extends ObjectMember> regularMembers,
             final List<? extends ObjectMember> mixedInMembers) {
 
     	if(mixedInMembers.isEmpty()) return; // nothing to check
-        if(declaringType.isAbstract()) return; // skip abstract types
+        if(declaringType.beanSort().isAbstract()) return; // skip abstract types
 
         var memberIdCollector = new MemberIdCollector();
 

@@ -18,22 +18,28 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import java.util.Optional;
 
-/**
- * package private, implements {@link ObjectSpecification}
- * but is potentially in the process of being initialized.
- *
- * <p> How far we are in the initializing phases can be queried via {@link #introspectionState()}
- */
-sealed interface ObjectSpecificationInternal
-extends
-	ObjectSpecification
-permits
-	ObjectSpecificationFacade,
-	ObjectSpecificationDefault {
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
+import org.jspecify.annotations.NonNull;
 
-	ConsistencyContext consistencyContext();
-	boolean isFullyIntrospected();
+interface ObjectMetaDataView {
+
+	CausewayBeanMetaData typeMeta();
+	Identifier featureIdentifier(); // TODO potentially always OBJECT
+	ObjectAssociationContainer associationContainer();
+	<T extends Facet> Optional<T> lookupFacet(@NonNull Class<T> facetType);
+
+	default BeanSort beanSort() {
+		return typeMeta().beanSort();
+	}
+
+	default Class<?> correspondingClass() {
+		return typeMeta().correspondingClass();
+	}
 
 }

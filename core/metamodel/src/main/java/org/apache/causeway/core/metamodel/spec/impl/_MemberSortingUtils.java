@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Streams;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -38,10 +38,10 @@ final class _MemberSortingUtils {
 	// -- ASSOCIATION SORTING
 
     static List<ObjectAssociation> associationsInOrder(
-    		final ObjectSpecification objSpec,
+    		final CausewayBeanMetaData declaringType,
     		final List<? extends ObjectAssociation> regularAssociations,
             final List<? extends ObjectAssociation> mixedInAssociations) {
-    	_MemberIdClashReporting.flagAnyMemberIdClashes(objSpec, regularAssociations, mixedInAssociations); // do before sorting
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(declaringType, regularAssociations, mixedInAssociations); // do before sorting
         return sortAssociationsIntoList(Stream.concat(
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
@@ -50,11 +50,11 @@ final class _MemberSortingUtils {
     // -- ACTION SORTING
 
     static  List<ObjectAction> actionsInOrder(
-    		final ObjectSpecification objSpec,
+    		final CausewayBeanMetaData declaringType,
     		final List<? extends ObjectAction> regularActions,
             final List<? extends ObjectAction> mixedInActions,
             final List<? extends ObjectAction> syntheticActions) {
-    	_MemberIdClashReporting.flagAnyMemberIdClashes(objSpec, regularActions, mixedInActions); // do before sorting
+    	_MemberIdClashReporting.flagAnyMemberIdClashes(declaringType, regularActions, mixedInActions); // do before sorting
         return sortActionsIntoList(_Streams.concat(
         		regularActions.stream(),
         		mixedInActions.stream(),

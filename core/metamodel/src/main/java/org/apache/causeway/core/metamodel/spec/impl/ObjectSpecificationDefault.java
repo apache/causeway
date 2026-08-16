@@ -71,6 +71,7 @@ import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -260,6 +261,8 @@ implements
 
         // create associations and actions
 
+    	var view = toView();
+
         var regularMemberFactory = new RegularMemberFactory(mixinFacet(), facetedMethodsFactory);
         var regularAssociations = regularMemberFactory.createAssociations().toList();
         var regularActions = regularMemberFactory.createActions().toList();
@@ -275,18 +278,18 @@ implements
     		: List.<ObjectAction>of();
 
         this.objectAssociationContainer = new AssociationContainer(
-        		_MemberSortingUtils.associationsInOrder(this, regularAssociations, mixedInAssociations),
+        		_MemberSortingUtils.associationsInOrder(typeMeta, regularAssociations, mixedInAssociations),
         		superSpec().orElse(null),
-        		this);
+        		view);
         this.objectActionContainer = new ActionContainer(
-        		_MemberSortingUtils.actionsInOrder(this, regularActions, mixedInActions, syntheticActions),
+        		_MemberSortingUtils.actionsInOrder(typeMeta, regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
         		superSpec().orElse(null));
 
         //TODO? can we run mixin creation without triggering full introspection of other types ... if(!isMixin()) {
 		postProcessor.postProcess(this);
 		//}
-		this.memberCatalog = new MemberCatalog(this);
+		this.memberCatalog = new MemberCatalog(objectAssociationContainer, objectActionContainer);
 
         invalidateCachedFacets();
     }
@@ -474,6 +477,25 @@ implements
 
     // -- SHALLOW IMMUTABLE / EXPERIMENTAL
 
+	private ObjectMetaDataView toView() {
+		return new ObjectMetaDataView() {
+			@Override public CausewayBeanMetaData typeMeta() {
+				return typeMeta;
+			}
+			@Override public <T extends Facet> Optional<T> lookupFacet(@NonNull final Class<T> facetType) {
+				return ObjectSpecificationDefault.this.lookupFacet(facetType);
+			}
+			@Override public Identifier featureIdentifier() {
+				return ObjectSpecificationDefault.this.getFeatureIdentifier();
+			}
+			@Override
+			public ObjectAssociationContainer associationContainer() {
+				return ObjectSpecificationDefault.this.objectAssociationContainer();
+			}
+		};
+
+	}
+
 	public ObjectSpecificationRecord toUnmodifiable() {
 		//WIP
 		return new ObjectSpecificationRecord(
@@ -502,7 +524,7 @@ implements
 				isParented(),
 				isImmutable(),
 				isHidden(),
-				new MemberCatalog(this).membersByMethod());
+				new MemberCatalog(objectAssociationContainer, objectActionContainer).membersByMethod());
 	}
 
     // -- HELPER

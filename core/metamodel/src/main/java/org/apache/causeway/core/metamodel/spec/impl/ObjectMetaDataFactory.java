@@ -48,8 +48,25 @@ record ObjectMetaDataFactory(
 		FacetProcessor facetProcessor) {
 
 	ObjectMetaData transition(final ObjectMetaData objectMetaData, final IntrospectionRequest request) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return switch (request) {
+			case REGISTER -> objectMetaData;
+			case TYPE_ONLY -> {
+				if(objectMetaData instanceof ObjectMetaDataInitial registered) {
+					yield typeOnly(registered, null, null); //FIXME
+				}
+				yield objectMetaData;
+			}
+			case FULL -> {
+				if(objectMetaData instanceof ObjectMetaDataInitial registered) {
+					var typeOnly = typeOnly(registered, null, null); //FIXME
+					yield full(typeOnly, null, null, null); //FIXME
+				}
+				if(objectMetaData instanceof ObjectMetaDataTypeOnly typeOnly) {
+					yield full(typeOnly, null, null, null); //FIXME
+				}
+				yield objectMetaData;
+			}
+		};
 	}
 
 	ObjectMetaDataInitial register(final CausewayBeanMetaData typeMeta) {
@@ -116,7 +133,7 @@ record ObjectMetaDataFactory(
         // because members creation depends on presence of inherited members
         typeOnly.hierarchical().streamSuperTypeHierarchyAndInterfaces()
     		.map(ObjectSpecification::correspondingClass)
-    		.forEach(cls->specLoaderInternal.loadSpecification(cls, IntrospectionRequest.FULL));
+    		.forEach(cls->specLoaderInternal.loadSpecification(cls, IntrospectionRequest.FULL)); //TODO not a perfect match with LEGACY
 
         // create associations and actions
 
@@ -125,6 +142,8 @@ record ObjectMetaDataFactory(
         var regularActions = regularMemberFactory.createActions().toList();
 
         ObjectSpecificationInternal spec = null; //TODO refactor
+        ObjectMetaDataView metaDataView = null; //TODO refactor
+
 		var mixedInMemberFactory = new MixedInMemberFactory(spec, typeOnly.mixinFacet().isPresent()
         		? MixinSpecStreamer.EMPTY
 				: mixinSpecStreamer);
@@ -136,18 +155,18 @@ record ObjectMetaDataFactory(
     		: List.<ObjectAction>of();
 
         var objectAssociationContainer = new AssociationContainer(
-        		_MemberSortingUtils.associationsInOrder(spec, regularAssociations, mixedInAssociations),
+        		_MemberSortingUtils.associationsInOrder(typeMeta, regularAssociations, mixedInAssociations),
         		typeOnly.hierarchical().superSpec().orElse(null),
-        		spec);
+        		metaDataView);
         var objectActionContainer = new ActionContainer(
-        		_MemberSortingUtils.actionsInOrder(spec, regularActions, mixedInActions, syntheticActions),
+        		_MemberSortingUtils.actionsInOrder(typeMeta, regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(mmc().getSystemEnvironment()),
         		typeOnly.hierarchical().superSpec().orElse(null));
 
         //TODO? can we run mixin creation without triggering full introspection of other types ... if(!isMixin()) {
 		postProcessor.postProcess(spec);
 		//}
-		var memberCatalog = new MemberCatalog(spec);
+		var memberCatalog = new MemberCatalog(objectAssociationContainer, objectActionContainer);
 
 		return new ObjectMetaDataFull(
 				typeMeta,

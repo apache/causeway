@@ -31,6 +31,8 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 record MemberCatalog(
@@ -38,8 +40,10 @@ record MemberCatalog(
 
 	static MemberCatalog EMPTY = new MemberCatalog(Map.of());
 
-    MemberCatalog(final ObjectSpecificationInternal spec) {
-    	this(catalogMembersByMethod(Objects.requireNonNull(spec)));
+    MemberCatalog(
+    		final ObjectAssociationContainer associationContainer,
+    		final ObjectActionContainer actionContainer) {
+    	this(catalogMembersByMethod(Objects.requireNonNull(associationContainer), Objects.requireNonNull(actionContainer)));
 	}
 
 	Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
@@ -50,15 +54,17 @@ record MemberCatalog(
 
 	// -- HELPER
 
-	private static Map<ResolvedMethod, ObjectMember> catalogMembersByMethod(final ObjectSpecificationInternal spec) {
+	private static Map<ResolvedMethod, ObjectMember> catalogMembersByMethod(
+			final ObjectAssociationContainer associationContainer,
+			final ObjectActionContainer actionContainer) {
 		var membersByMethod = new HashMap<ResolvedMethod, ObjectMember>();
-		cataloguePropertiesAndCollections(spec, membersByMethod::put);
-		catalogueActions(spec, membersByMethod::put);
+		cataloguePropertiesAndCollections(associationContainer, membersByMethod::put);
+		catalogueActions(actionContainer, membersByMethod::put);
 		return Collections.unmodifiableMap(membersByMethod);
 	}
 
-    private static void cataloguePropertiesAndCollections(final ObjectSpecificationInternal spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
-        spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
+    private static void cataloguePropertiesAndCollections(final ObjectAssociationContainer associationContainer, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+    	associationContainer.streamDeclaredAssociations(MixedIn.EXCLUDED)
 	        .forEach(field->
 	            field.streamFacets(ImperativeFacet.class)
 	                .map(ImperativeFacet::getMethods)
@@ -68,8 +74,8 @@ record MemberCatalog(
 	                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
-    private static void catalogueActions(final ObjectSpecificationInternal spec, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
-    	spec.streamDeclaredActions(MixedIn.INCLUDED)
+    private static void catalogueActions(final ObjectActionContainer actionContainer, final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+    	actionContainer.streamDeclaredActions(MixedIn.INCLUDED)
 	        .forEach(userAction->
 	            userAction.streamFacets(ImperativeFacet.class)
 	                .map(ImperativeFacet::getMethods)

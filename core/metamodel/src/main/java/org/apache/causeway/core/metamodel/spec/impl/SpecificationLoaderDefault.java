@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
@@ -49,6 +50,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug.Profiler;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
@@ -112,6 +114,8 @@ class SpecificationLoaderDefault
 implements
     SpecificationLoaderInternal,
     ActionSemanticsResolver {
+
+	static final boolean LEGACY = true; //TODO remove when done migrating
 
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
@@ -678,21 +682,24 @@ implements
      */
     private ObjectSpecificationInternal createSpecification(
     		final CausewayBeanMetaData typeMeta) {
-        var objectSpec = new ObjectSpecificationDefault(
-                typeMeta,
-                facetProcessor,
-                postProcessor,
-                classSubstitutorRegistry,
-                titleSubscribersLazy.get(),
-                ()->mixinSpecStreamer);
-        return objectSpec;
-//TODO WIP
-//        var objectMetaDataFactory = new ObjectMetaDataFactory(facetProcessor);
-//    	boolean isDomainService = _ClassCache.getInstance().head(typeMeta.correspondingClass()).hasAnnotation(DomainService.class);
-//    	boolean isInjectable = typeMeta.isInjectable(serviceRegistry);
-//
-//        return new ObjectSpecificationFacade(typeMeta, isDomainService, isInjectable,
-//        		titleSubscribersLazy.get(), objectMetaDataFactory.register(typeMeta));
+
+    	if(LEGACY) {
+	        var objectSpec = new ObjectSpecificationDefault(
+	                typeMeta,
+	                facetProcessor,
+	                postProcessor,
+	                classSubstitutorRegistry,
+	                titleSubscribersLazy.get(),
+	                ()->mixinSpecStreamer);
+	        return objectSpec;
+    	}
+
+        var objectMetaDataFactory = new ObjectMetaDataFactory(this, facetProcessor); //TODO share instance
+    	boolean isDomainService = _ClassCache.getInstance().head(typeMeta.correspondingClass()).hasAnnotation(DomainService.class);
+    	boolean isInjectable = typeMeta.isInjectable(serviceRegistry);
+
+        return new ObjectSpecificationFacade(typeMeta, isDomainService, isInjectable,
+        		titleSubscribersLazy.get(), objectMetaDataFactory.register(typeMeta));
     }
 
     private void introspectSequential(

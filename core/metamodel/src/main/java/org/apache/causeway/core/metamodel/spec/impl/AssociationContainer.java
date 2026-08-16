@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
@@ -35,7 +35,7 @@ record AssociationContainer(
 		Can<ObjectAssociation> associationsInOrder,
 		ObjectAssociationContainer superContainer,
 		/** used for column rendering, null in the EMPTY case */
-		@Nullable ObjectSpecification correspondingSpec)
+		@Nullable ObjectMetaDataView elementType)
 implements ObjectAssociationContainer {
 
 	// e.g. used for value types
@@ -47,8 +47,8 @@ implements ObjectAssociationContainer {
 	AssociationContainer(
 			final List<ObjectAssociation> associationsInOrder,
 			final ObjectAssociationContainer superContainer,
-			final ObjectSpecification correspondingSpec) {
-		this(Can.ofCollection(associationsInOrder), superContainer, correspondingSpec);
+			ObjectMetaDataView elementType) {
+		this(Can.ofCollection(associationsInOrder), superContainer, elementType);
 	}
 
     @Override
@@ -90,10 +90,10 @@ implements ObjectAssociationContainer {
 
 	@Override
 	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final ColumnQuery columnQuery) {
-		if(correspondingSpec==null)
+		if(elementType==null)
 			return Stream.empty();
-		return new _MembersAsColumns(correspondingSpec.getMetaModelContext())
-			.streamAssociationsForColumnRendering(correspondingSpec, columnQuery);
+		return new _MembersAsColumns(MetaModelContext.instanceElseFail())
+			.streamAssociationsForColumnRendering(elementType, columnQuery);
 	}
 
 	@Override
