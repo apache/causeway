@@ -17,22 +17,34 @@
  * under the License.
  */
 
+import {CausewayActionElement} from './action-element.mjs';
+import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
+import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './collection-element.mjs';
+import {CausewayElementName} from './component-contracts.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
 import {CausewayObjectContextElement} from './object-context-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
+import {CausewayObjectLinkElement} from './object-link-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
+import {CausewayValueElement} from './value-element.mjs';
 
 const DEFINITIONS = Object.freeze([
-  ['causeway-graphql-client', CausewayGraphQLClientElement],
-  ['causeway-object-context', CausewayObjectContextElement],
-  ['causeway-object-header', CausewayObjectHeaderElement],
-  ['causeway-property', CausewayPropertyElement]
+  [CausewayElementName.GRAPHQL_CLIENT, CausewayGraphQLClientElement],
+  [CausewayElementName.OBJECT_CONTEXT, CausewayObjectContextElement],
+  [CausewayElementName.OBJECT_HEADER, CausewayObjectHeaderElement],
+  [CausewayElementName.PROPERTY, CausewayPropertyElement],
+  [CausewayElementName.VALUE, CausewayValueElement],
+  [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
+  [CausewayElementName.ACTION, CausewayActionElement],
+  [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
+  [CausewayElementName.COLLECTION, CausewayCollectionElement]
 ]);
 
 export function defineCausewayWebComponents(registry = globalThis.customElements) {
   if (!registry) {
     return;
   }
+  captureDeclarativeCollectionColumns();
   for (const [name, constructor] of DEFINITIONS) {
     if (!registry.get(name)) {
       registry.define(name, constructor);

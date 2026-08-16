@@ -38,6 +38,15 @@ test('targeted introspection classifies object members and caches the descriptio
   assert.equal(description.members.get('staffMembers').kind, 'collection');
   assert.equal(description.members.get('changeName').kind, 'action');
   assert.equal(description.members.get('name').fields.has('get'), true);
+  assert.equal(description.members.get('status').value.typeKind, 'ENUM');
+  assert.equal(description.members.get('chair').value.typeKind, 'OBJECT');
+  assert.equal(description.members.get('staffMembers').value.elementTypeRef.name, 'rich__university_staff_StaffMember');
+  assert.deepEqual(
+    description.members.get('prospectus').value.typeDescription.fields.map(field => field.name),
+    ['name', 'mimeType', 'bytes']
+  );
+  assert.equal(description.members.get('history').value.typeDescription.fields.some(field => field.name === 'chars'), true);
+  assert.equal(description.members.get('unsupportedValue').value.namedTypeName.endsWith('__gqlv_get'), true);
   assert.equal(description.types.has('rich__university_dept_StaffMember'), false);
   assert.ok(executor.introspectionCalls.length > 1);
   assert.equal(executor.introspectionCalls.every(call => Object.keys(call.variables).length === 1), true);

@@ -35,9 +35,23 @@
     <name>Apache Causeway Viewer - Web Components</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <!-- The reactor-wide spring-boot:run goal must ignore non-application modules. -->
+        <spring-boot.run.skip>true</spring-boot.run.skip>
+    </properties>
+
     <modules>
         <module>foundation</module>
         <module>sample-html</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>run-sample-html</id>
+            <build>
+                <defaultGoal>spring-boot:run</defaultGoal>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

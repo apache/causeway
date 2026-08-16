@@ -18,26 +18,38 @@
  */
 package org.apache.causeway.viewer.webcomponents.sample.html.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import jakarta.inject.Named;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 @Entity
 @Table(schema = "public", name = "WebComponentSampleObject")
 @Named(SampleObject.LOGICAL_TYPE_NAME)
-@DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
+@DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED, editing = Editing.ENABLED)
 @DomainObjectLayout(describedAs = "Deterministic domain object for web-component verification")
 public class SampleObject implements HasVersion<Long> {
 
@@ -47,7 +59,12 @@ public class SampleObject implements HasVersion<Long> {
     public static final String SAMPLE_NAME = "Framework-neutral components";
     public static final String SAMPLE_CODE = "WC-001";
     public static final String SAMPLE_SECRET = "Hidden sample value";
+    public static final String SAMPLE_SUMMARY = "A deterministic reference page composed entirely from semantic Causeway web components.";
+    public static final int SAMPLE_CAPACITY = 24;
+    public static final boolean SAMPLE_FEATURED = true;
+    public static final SampleStatus SAMPLE_STATUS = SampleStatus.ACTIVE;
     public static final String CODE_DISABLED_REASON = "The sample code is fixed.";
+    public static final String ARCHIVE_DISABLED_REASON = "Archiving is disabled in the read-only sample.";
 
     @Id
     @Column(name = "id", nullable = false, length = 40)
@@ -66,6 +83,25 @@ public class SampleObject implements HasVersion<Long> {
     @Column(name = "secret", nullable = false, length = 120)
     private String secret;
 
+    @Column(name = "summary", nullable = false, length = 240)
+    private String summary;
+
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
+
+    @Column(name = "featured", nullable = false)
+    private boolean featured;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private SampleStatus status;
+
+    @Column(name = "notes", length = 200)
+    private String notes;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SampleRelatedObject> relatedObjects = new ArrayList<>();
+
     protected SampleObject() {
     }
 
@@ -74,6 +110,11 @@ public class SampleObject implements HasVersion<Long> {
         this.name = name;
         this.code = code;
         this.secret = secret;
+        this.summary = SAMPLE_SUMMARY;
+        this.capacity = SAMPLE_CAPACITY;
+        this.featured = SAMPLE_FEATURED;
+        this.status = SAMPLE_STATUS;
+        this.notes = null;
     }
 
     @ObjectSupport
@@ -111,5 +152,81 @@ public class SampleObject implements HasVersion<Long> {
     @MemberSupport
     public boolean hideSecret() {
         return true;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(final String summary) {
+        this.summary = summary;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(final int capacity) {
+        this.capacity = capacity;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(final boolean featured) {
+        this.featured = featured;
+    }
+
+    public SampleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(final SampleStatus status) {
+        this.status = status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(final String notes) {
+        this.notes = notes;
+    }
+
+    public SampleRelatedObject getRelatedObject() {
+        return relatedObjects.isEmpty() ? null : relatedObjects.get(0);
+    }
+
+    public List<SampleRelatedObject> getRelatedObjects() {
+        return Collections.unmodifiableList(relatedObjects);
+    }
+
+    public List<SampleRelatedObject> getEmptyRelatedObjects() {
+        return Collections.emptyList();
+    }
+
+    @Programmatic
+    public void addRelatedObject(final String id, final String relatedName, final String relatedCode) {
+        relatedObjects.add(new SampleRelatedObject(id, this, relatedName, relatedCode));
+    }
+
+    public String inspect() {
+        return title();
+    }
+
+    public void archive() {
+        // Deliberately disabled by disableArchive(); the read-only sample never invokes this action.
+    }
+
+    @MemberSupport
+    public String disableArchive() {
+        return ARCHIVE_DISABLED_REASON;
+    }
+
+    @Action
+    @ActionLayout(hidden = Where.EVERYWHERE)
+    public void hiddenAction() {
+        // Deliberately hidden; the rich schema still exposes its hidden state.
     }
 }

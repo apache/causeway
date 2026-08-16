@@ -37,6 +37,8 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.webcomponents.sample.html</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/webcomponents/sample/html</git-plugin.propertiesDir>
+        <!-- Override the reactor default so the run profile starts this application only. -->
+        <spring-boot.run.skip>false</spring-boot.run.skip>
     </properties>
 
     <dependencies>

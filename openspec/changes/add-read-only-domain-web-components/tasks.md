@@ -58,10 +58,11 @@
 
 ## 9. Illustrative Sample Presentation
 
-- [ ] 9.1 Extend the deterministic root domain with `summary`, `capacity`, and `featured` text, numeric, and boolean values, and enable ordinary property semantics while preserving the deliberate disabled members.
-- [ ] 9.2 Restructure `/sample-html/index.html` into labelled object-summary, property, action, collection, and event-diagnostic sections with all existing selectors and readiness behavior preserved.
-- [ ] 9.3 Add responsive page-specific light and dark application-theme styling for cards, typography, focus, state explanations, diagnostics, controls, and collection tables without moving presentation policy into the component library.
-- [ ] 9.4 Add a visible coverage guide that explains enabled, disabled, null, reference, empty, and intentionally hidden semantics without revealing or synthesizing the hidden value.
-- [ ] 9.5 Expand the event diagnostics panel and add collection row-count reporting while preserving `[data-testid="sample-event"]` and avoiding routing, prompting, invocation, or generic composition.
-- [ ] 9.6 Extend random-port integration tests, stable-selector documentation, deterministic GraphQL assertions, and manual verification instructions for the richer reference presentation.
-- [ ] 9.7 Run the packaged reference page in narrow and wide browser viewports and light and dark modes, verify keyboard events, collection and hidden states, and diagnostics, then pass Lighthouse accessibility, Maven, formatting, and strict OpenSpec validation.
+- [x] 9.1 Extend the deterministic root domain with `summary`, `capacity`, and `featured` text, numeric, and boolean values, and enable ordinary property semantics while preserving the deliberate disabled members.
+- [x] 9.2 Restructure `/sample-html/index.html` into labelled object-summary, property, action, collection, and event-diagnostic sections with all existing selectors and readiness behavior preserved.
+- [x] 9.3 Add responsive page-specific light and dark application-theme styling for cards, typography, focus, state explanations, diagnostics, controls, and collection tables without moving presentation policy into the component library.
+- [x] 9.4 Add a visible coverage guide that explains enabled, disabled, null, reference, empty, and intentionally hidden semantics without revealing or synthesizing the hidden value.
+- [x] 9.5 Expand the event diagnostics panel and add collection row-count reporting while preserving `[data-testid="sample-event"]` and avoiding routing, prompting, invocation, or generic composition.
+- [x] 9.6 Extend random-port integration tests, stable-selector documentation, deterministic GraphQL assertions, and manual verification instructions for the richer reference presentation.
+- [x] 9.7 Run the packaged reference page in narrow and wide browser viewports and light and dark modes, verify keyboard events, collection and hidden states, and diagnostics, then pass Lighthouse accessibility, Maven, formatting, and strict OpenSpec validation.
+- [x] 9.8 Add and verify a reactor-safe Maven profile that starts the sample with `spring-boot:run`, including the foundation and GraphQL runtime, and update the sample README to make it the preferred manual launch path.

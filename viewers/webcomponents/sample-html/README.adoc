@@ -2,9 +2,9 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `sample-html` module is a runnable Causeway Spring Boot application for validating the framework-neutral web-component foundation against a real rich GraphQL endpoint.
-Its frontend uses vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
-It has no npm build, HTMX, or frontend-framework dependency.
+The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for the framework-neutral read-only web components against a real rich GraphQL endpoint.
+Its frontend uses a page-specific responsive application theme built with vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
+It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
 == Application architecture
 
@@ -16,36 +16,59 @@ The module is an executable integration fixture and is skipped during Maven inst
 == Build and run
 
 JDK 17 or later is required.
-From the repository root, build the foundation and executable sample jar together:
+The preferred development launch uses the reactor's `run-sample-html` Maven profile:
 
 [source,shell]
 ----
 export JAVA_HOME="$HOME/.sdkman/candidates/java/17.0.18-tem"
 export PATH="$JAVA_HOME/bin:$PATH"
 
-mvn -f viewers/webcomponents/pom.xml -pl sample-html -am package
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-html
 ----
 
-Run the repackaged Spring Boot jar:
+The profile selects `spring-boot:run` as its default goal, builds the foundation and sample in reactor order, skips the non-application reactor modules for the run goal, and starts only `sample-html`.
+Running from the reactor ensures that the foundation resources, Causeway GraphQL viewer, JPA persistence, H2 database, and security-bypass runtime are all present on the application classpath.
+Stop the application with `Ctrl+C`.
+
+To use a different port, pass the Spring Boot application argument through the Maven plugin:
 
 [source,shell]
 ----
-java -jar viewers/webcomponents/sample-html/target/causeway-viewer-webcomponents-sample-html-4.0.0-SNAPSHOT.jar
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-html \
+    -Dspring-boot.run.arguments=--server.port=19186
 ----
 
-Open:
+Open the corresponding page:
 
 [source,text]
 ----
 http://localhost:8080/sample-html/index.html
 ----
 
-The page imports the foundation entry module from `/causeway-webcomponents/index.mjs` and sends GraphQL operations to `/graphql`.
+For the port-override example, open `http://localhost:19186/sample-html/index.html` instead.
+The page imports the foundation entry module from `/causeway-webcomponents/index.mjs` and sends GraphQL operations to the same-origin `/graphql` endpoint.
+Wait for `[data-testid="sample-app"]` to reach `data-state="ready"`; `terminal-error` indicates that the required GraphQL schema or object query did not become available.
+
+=== Packaged-jar alternative
+
+To verify the packaged artifact rather than run from compiled classes, build the complete reactor first:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -pl sample-html -am package
+
+JAR=$(find viewers/webcomponents/sample-html/target \
+    -name 'causeway-viewer-webcomponents-sample-html-*.jar' \
+    ! -name '*-sources.jar' \
+    ! -name '*-javadoc.jar' \
+    ! -name '*.original' | head -1)
+java -jar "$JAR"
+----
 
 == Deterministic sample data
 
-The application creates one JPA entity during startup.
-Its stable identity and expected values are:
+The application creates one root JPA entity and two related JPA entities during startup.
+The root identity and expected values are:
 
 [cols="1,2"]
 |===
@@ -63,23 +86,84 @@ Its stable identity and expected values are:
 |Title
 |`Framework-neutral components [WC-001]`
 
-|Visible property
+|Visible scalar property
 |`name = Framework-neutral components`
 
-|Disabled property
+|Disabled scalar property
 |`code = WC-001`, disabled because `The sample code is fixed.`
 
 |Hidden property
-|`secret = Hidden sample value`
+|`secret` is present but its value is intentionally not reproduced by the page or this guide
+
+|Representative text
+|`summary = A deterministic reference page composed entirely from semantic Causeway web components.`
+
+|Representative number
+|`capacity = 24`
+
+|Representative boolean
+|`featured = true`
+
+|Enum property
+|`status = ACTIVE`
+
+|Null property
+|`notes = null`
+
+|Object-valued property
+|`relatedObject = causeway.webcomponents.sample.SampleRelatedObject:s_related-1`
+
+|Enabled action state
+|`inspect`, visible with no disabled reason
+
+|Disabled action state
+|`archive`, disabled because `Archiving is disabled in the read-only sample.`
+
+|Hidden action state
+|`hiddenAction`, present in the rich schema with `hidden = true`
 |===
 
+The populated `relatedObjects` collection contains these deterministic rows:
+
+[cols="1,1,2,1"]
+|===
+|Bookmark |Logical type |Name |Code
+
+|`s_related-1`
+|`causeway.webcomponents.sample.SampleRelatedObject`
+|`Schema-driven components`
+|`ROW-001`
+
+|`s_related-2`
+|`causeway.webcomponents.sample.SampleRelatedObject`
+|`Framework-neutral composition`
+|`ROW-002`
+|===
+
+The `emptyRelatedObjects` collection returns no rows.
 The `s_` prefix is Causeway's string-identifier encoding used by bookmarks and rich GraphQL object lookups.
-The `_meta.version` value is supplied through the JPA `HasVersion` contract.
+The `_meta.version` values are supplied through the JPA `HasVersion` contract.
+
+== Expected read-only page states
+
+The reference page groups semantic content into labelled object-summary, property, action, collection, and live-diagnostic cards.
+The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
+The `name`, `summary`, `capacity`, `featured`, `status`, null `notes`, and related-object link render through the standard value registry.
+Ordinary values are enabled at the Causeway metamodel level, while the `code` property, related-object property, and `archive` action display deliberate disabled reasons.
+The `secret` property and `hiddenAction` render no semantic content, and the coverage guide explains their absence without reproducing a hidden value.
+The `inspect` action renders an enabled native button but this read-only slice does not invoke it.
+
+Both collections are activated declaratively by the sample page.
+`relatedObjects` loads through a secondary context-owned operation and renders the declared `name` and `code` columns.
+Its returned metadata and wrapper data hydrate row contexts without repeating the selected object reads.
+The diagnostics card reports `2 rows loaded` through `collection-related-count`.
+`emptyRelatedObjects` renders the accessible `No items` status.
+The page-specific cards, typography, focus treatment, and collection framing adapt to narrow and wide viewports and light and dark color schemes.
 
 == Browser-automation contract
 
 The stable page URL is `/sample-html/index.html`.
-The following selectors are intended as public test hooks for future browser automation:
+The following selectors are intended as public test hooks for browser automation:
 
 [cols="1,2"]
 |===
@@ -95,19 +179,85 @@ The following selectors are intended as public test hooks for future browser aut
 |GraphQL client provider
 
 |`[data-testid="sample-object"]`
-|Object context for the deterministic entity
+|Object context for the deterministic root entity
+
+|`[data-testid="section-object-summary"]`
+|Semantic identity card
+
+|`[data-testid="section-properties"]`
+|Representative property card
+
+|`[data-testid="section-actions"]`
+|Read-only action card
+
+|`[data-testid="section-collections"]`
+|Populated and empty collection card
+
+|`[data-testid="section-events"]`
+|Live diagnostics card
+
+|`[data-testid="sample-coverage"]`
+|Static semantic coverage guide
 
 |`[data-testid="object-header"]`
 |Rendered object header
 
 |`[data-testid="property-name"]`
-|Visible property
+|Visible scalar property
 
 |`[data-testid="property-code"]`
-|Disabled property
+|Disabled scalar property
 
 |`[data-testid="property-secret"]`
-|Hidden property element
+|Hidden property host
+
+|`[data-testid="property-summary"]`
+|Representative text property
+
+|`[data-testid="property-capacity"]`
+|Representative numeric property
+
+|`[data-testid="property-featured"]`
+|Representative boolean property
+
+|`[data-testid="property-status"]`
+|Enum property
+
+|`[data-testid="property-notes"]`
+|Null property
+
+|`[data-testid="property-related-object"]`
+|Object-valued property
+
+|`[data-testid="object-link-related-object"]`
+|Generated semantic link for the object-valued property
+
+|`[data-testid="action-inspect"]`
+|Enabled read-only action affordance
+
+|`[data-testid="action-archive"]`
+|Disabled action affordance and reason
+
+|`[data-testid="action-hidden"]`
+|Hidden action host
+
+|`[data-testid="collection-related-objects"]`
+|Populated activated collection
+
+|`[data-testid="collection-empty-related-objects"]`
+|Empty activated collection
+
+|`[data-testid="column-related-name"]`
+|Stable populated-collection name-column heading
+
+|`[data-testid="column-related-code"]`
+|Stable populated-collection code-column heading
+
+|`[data-testid="sample-event"]`
+|Live semantic navigation and action-request diagnostic
+
+|`[data-testid="collection-related-count"]`
+|Live populated-collection row count
 |===
 
 `[data-testid="sample-app"]` exposes the latest semantic object-context status through its `data-state` attribute.
@@ -124,6 +274,29 @@ await page.locator('[data-testid="sample-app"][data-state="ready"]').waitFor();
 
 Playwright itself is intentionally not introduced by this slice.
 
+== Manual event verification
+
+Select the object link rendered inside `property-related-object`.
+The page prevents no routing, but the plain application listener reports `navigate:causeway.webcomponents.sample.SampleRelatedObject:s_related-1` through `sample-event`.
+
+Select the enabled `inspect` action.
+The component does not prompt or invoke GraphQL, but the page reports `action:inspect` through `sample-event`.
+The disabled `archive` action and hidden `hiddenAction` must not change that diagnostic.
+After the populated collection loads, `collection-related-count` reports `2 rows loaded`.
+
+== Manual browser checklist
+
+. Open `/sample-html/index.html` and wait for `sample-app[data-state="ready"]`.
+. Confirm the five labelled cards and static coverage guide are visible.
+. Confirm the object title, summary text, capacity `24`, featured `true`, `ACTIVE` enum, em-dash null presentation, and related-object title.
+. Confirm ordinary properties have no disabled reason while code, related object, and archive expose their deliberate reasons.
+. Confirm the secret value and hidden-action affordance are absent.
+. Confirm `relatedObjects` displays two rows with `Name` and `Code` headings and deterministic values.
+. Confirm `collection-related-count` displays `2 rows loaded` and `emptyRelatedObjects` displays `No items`.
+. Select the related-object link and enabled action with pointer and keyboard input and inspect `sample-event` after each.
+. Repeat at narrow and wide viewports and in light and dark color schemes.
+. Confirm all `/graphql` requests return HTTP 200, the browser console contains no errors, and the accessibility audit reports no failures.
+
 == Automated integration verification
 
 Run the foundation and sample tests from the repository root:
@@ -135,10 +308,13 @@ mvn -f viewers/webcomponents/pom.xml -pl sample-html -am test
 
 The sample integration test starts the application on a random port and verifies:
 
-* `/sample-html/index.html` is delivered with the documented selectors.
+* `/sample-html/index.html` is delivered with all documented selectors.
 * `/causeway-webcomponents/index.mjs` is delivered from the foundation dependency.
-* Targeted `__type` introspection resolves `rich__causeway_webcomponents_sample_SampleObject`.
+* Independent targeted `__type` operations resolve the root, enum-property, and collection wrapper types without triggering GraphQL Java's bad-faith introspection rejection.
 * A real rich GraphQL object lookup resolves `s_sample-1`.
-* Object metadata, version, title, visible state, disabled state, and hidden state have their deterministic values.
+* Object metadata, enabled ordinary properties, text, numeric, boolean, enum, null, reference, enabled-action, disabled-action, hidden-action, and hidden-property state have deterministic values.
+* The section, property, coverage, event, and collection-count hooks are present while the hidden value is absent from the page source.
+* A real secondary-shaped collection operation returns deterministic row metadata and selected `name` and `code` wrappers.
+* The empty collection returns zero rows.
 
-The foundation's dependency-free Node tests continue to verify detailed component behavior without requiring a browser process.
+The foundation's dependency-free Node tests verify detailed renderer selection, component lifecycle, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, row hydration reuse, and delta reads without requiring a browser process.

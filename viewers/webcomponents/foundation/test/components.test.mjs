@@ -40,7 +40,8 @@ test('property renders accessible ready, disabled, hidden and error states', () 
   assert.match(property.innerHTML, /<output/);
 
   property.renderComponentState(state({data: {hidden: false, disabled: 'Locked', get: 'Classics'}}));
-  assert.match(property.innerHTML, /aria-disabled="true"/);
+  assert.match(property.innerHTML, /data-disabled="true"/);
+  assert.match(property.innerHTML, /aria-describedby=/);
   assert.match(property.innerHTML, /Locked/);
 
   property.renderComponentState(state({data: {hidden: true, disabled: null, get: 'Secret'}}));

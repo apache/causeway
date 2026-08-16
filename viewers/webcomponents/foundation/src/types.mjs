@@ -88,6 +88,16 @@
  * @property {string|null} description
  * @property {string} generatedTypeName
  * @property {ReadonlyMap<string, GraphQLFieldDescription>} fields
+ * @property {SemanticValueDescription|null} value
+ */
+
+/**
+ * @typedef {Object} SemanticValueDescription
+ * @property {GraphQLTypeRef|null} typeRef
+ * @property {string|null} namedTypeName
+ * @property {string|null} typeKind
+ * @property {GraphQLTypeDescription|null} typeDescription
+ * @property {GraphQLTypeRef|null} elementTypeRef
  */
 
 /**
@@ -120,7 +130,19 @@
  */
 
 /**
- * @typedef {HeaderRequirement|PropertyRequirement} SemanticReadRequirement
+ * @typedef {Object} ActionRequirement
+ * @property {'action'} kind
+ * @property {string} member
+ */
+
+/**
+ * @typedef {Object} CollectionRequirement
+ * @property {'collection'} kind
+ * @property {string} member
+ */
+
+/**
+ * @typedef {HeaderRequirement|PropertyRequirement|ActionRequirement|CollectionRequirement} SemanticReadRequirement
  */
 
 /**

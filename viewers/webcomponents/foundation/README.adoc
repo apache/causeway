@@ -12,4 +12,6 @@
 This module packages framework-neutral ECMAScript modules that consume the Apache Causeway rich GraphQL schema.
 The Maven artifact exposes the modules below `META-INF/resources/causeway-webcomponents/` and runs its dependency-free test suite with the Node.js test runner.
 
+The package provides semantic object headers, properties, values, object links, read-only action affordances, lazy collections, declarative collection columns, hydrated row contexts, renderer extension, semantic events, and optional minimal styles.
 The foundation deliberately has no HTMX, React, Vue, Svelte, or browser component-authoring runtime dependency.
+See link:USAGE.adoc[USAGE.adoc] for the public component contracts, plain-HTML composition, renderer registration, collection activation and row hydration, accessibility and styling classes, semantic events, and current collection-size limitations.
