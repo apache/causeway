@@ -49,10 +49,11 @@ The collection remains inactive until its load button is selected or its `active
 
 == Public component contract
 
-The public vocabulary consists of `causeway-graphql-client`, `causeway-object-context`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-collection`, and `causeway-collection-column`.
+The public vocabulary consists of `causeway-graphql-client`, `causeway-object-context`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-collection`, and `causeway-collection-column`.
 `CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
 
 Member components use the `member` attribute and accept an optional `label` override.
+A property exposes interaction only when its `editable` attribute or property is enabled.
 Object links use `logical-type`, `object-id`, `title`, and `disabled`.
 Collections use `active` and declarative collection-column children.
 
@@ -155,13 +156,92 @@ Enabled activation publishes `causeway-navigation-request` with `{target: {logic
 The event bubbles, crosses composed component boundaries, and is cancelable.
 The component does not invent a URL or select a router.
 
-== Read-only actions
+== Property interactions and semantic editors
 
-`<causeway-action>` renders rich action `hidden` and `disabled` state but does not query parameters or invoke the action.
+A property remains read-only unless the application adds `editable`:
+
+[source,html]
+----
+<causeway-property member="summary" editable></causeway-property>
+----
+
+When the rich schema advertises a setter or top-level property mutation, the component prepares an editor lazily, resolves enum or dynamic choices, validates pending input, and executes the update through its object context.
+Cancel restores the authoritative value without a command.
+A successful save invalidates the complete active object projection so supporting-method changes are reflected by every mounted component.
+Hidden, disabled, query-only, and unsupported properties expose no enabled save path.
+
+The default editor registry covers text, numeric, boolean, enum, fixed-choice, and advertised autocomplete inputs.
+Applications can register a more-specific editor through `defaultEditorRegistry.register(...)`, or assign another `CausewayEditorRegistry` to a property's `editorRegistry` JavaScript property.
+Editors render and parse pending semantic values but never execute GraphQL independently.
+
+Object contexts expose `prepareProperty`, `propertyChoices`, `autoCompleteProperty`, `validateProperty`, and `updateProperty` for application-controlled interaction presentation.
+Transient choice, autocomplete, and validation generations are cancellable; mutating commands are serialized per object context.
+Property state and successful updates publish `causeway-property-interaction-state-change` and `causeway-property-updated`.
+
+== Actions and the standard interaction controller
+
+`<causeway-action>` continues to render rich action `hidden` and `disabled` state without querying parameters or invoking independently.
 An enabled native button publishes cancelable `causeway-action-request` with `{actionId, identity, context}`.
 A disabled action exposes its reason through `aria-describedby` and cannot publish a request.
 A hidden action renders no actionable content.
 Native button behavior supplies equivalent pointer, Enter-key, and Space-key activation without a duplicate keyboard handler.
+
+Place one empty interaction controller as a sibling of action components beneath their shared object context:
+
+[source,html]
+----
+<causeway-object-context logical-type="university.dept.Department" object-id="42">
+  <causeway-action member="inspect"></causeway-action>
+  <causeway-action member="changeName"></causeway-action>
+  <causeway-interaction-controller></causeway-interaction-controller>
+</causeway-object-context>
+----
+
+The controller observes unclaimed action requests at the shared parent boundary.
+A parameterless action invokes directly, while a parameterized action opens the standard accessible light-DOM modal prompt.
+The prompt resolves parameters in schema order and consumes advertised hidden, disabled, default, choices, autocomplete, datatype, and validation semantics.
+Changing a parameter recomputes dependent later semantics using the current pending values.
+Escape cancels an open prompt, and prompt completion restores focus to the originating action.
+
+An application claims an action by calling `preventDefault()` on `causeway-action-request`; the standard controller then does nothing:
+
+[source,javascript]
+----
+document.addEventListener('causeway-action-request', async event => {
+  if (event.detail.actionId !== 'applicationWorkflow') {
+    return;
+  }
+  event.preventDefault();
+  const result = await event.detail.context.invokeAction(
+    event.detail.actionId,
+    await openApplicationPrompt()
+  );
+  presentApplicationResult(result);
+});
+----
+
+Applications can replace the standard editor registry, prompt, or result presentation while retaining the semantic object commands.
+A custom editor registration receives semantic pending state and remains independent of transport:
+
+[source,javascript]
+----
+const release = defaultEditorRegistry.register({
+  id: 'application-code',
+  priority: 1000,
+  supports: state => state.name === 'code',
+  render: state => `<input class="app-code" value="${state.value ?? ''}">`,
+  parse: input => input.value.trim().toUpperCase()
+});
+----
+
+Custom prompts must preserve labels, validation associations, pending announcements, cancellation, focus restoration, and semantic result events.
+Call `release()` when the editor override is no longer required.
+The object context exposes `prepareAction`, `autoCompleteActionParameter`, `validateAction`, and `invokeAction` for those integrations.
+
+Safe actions use the advertised rich query invocation field.
+Mutating actions use the discovered top-level mutation when available, while a non-compliant query mutation is used only when that is the capability exposed by the configured API variant.
+Object, collection, scalar, and void outcomes are normalized and published through `causeway-action-result` without automatic navigation.
+The standard controller may render a local result summary; host routing remains responsible for object-result navigation.
 
 == Lazy collections and row hydration
 
@@ -191,10 +271,11 @@ GraphQL responses containing both data and errors preserve successful data and m
 The object-context element emits `causeway-object-context-state-change` with the semantic state and context.
 Consumer components emit `causeway-component-state-change` after rendering a requirement state.
 Collections additionally emit `causeway-collection-state-change` for secondary loading and result state.
+Properties emit interaction-state and updated events, while the action controller emits prompt-state and typed result events.
 These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
 
 Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
-Stable classes include `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
+Stable classes include `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
 
 `installCausewayComponentStyles()` installs the optional minimal stylesheet once.
 Applications can replace or override those rules with ordinary design-system CSS:
@@ -216,7 +297,7 @@ causeway-collection .causeway-collection-table {
 
 == Deliberate exclusions
 
-This slice does not provide property editing, action prompts or invocation, collection paging, generic page generation, routing, grid interpretation, HTMX integration, or persistent schema caching.
+This slice does not provide collection editing or paging, automatic action-result navigation, generic page generation, routing, grid interpretation, HTMX integration, or persistent schema caching.
 Those concerns belong to later changes and continue to consume the same semantic context and event contracts.
 
 == Demonstrator and tests

@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for the framework-neutral read-only web components against a real rich GraphQL endpoint.
+The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral read-only and interaction web components against a real rich GraphQL endpoint.
 Its frontend uses a page-specific responsive application theme built with vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
 It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
@@ -121,6 +121,21 @@ The root identity and expected values are:
 
 |Hidden action state
 |`hiddenAction`, present in the rich schema with `hidden = true`
+
+|Property validation
+|`summary` requires at least 12 characters and `capacity` must be between `1` and `100`
+
+|Safe scalar action
+|`inspect`, invoked through the rich query and returns the object title
+
+|Parameterized mutating action
+|`updateDetails(summary, status)`, with defaults, enum choices, validation, object result, and top-level mutation placement
+
+|Safe collection action
+|`findRelated(search)`, with autocomplete and a related-object collection result
+
+|Void mutating action
+|`clearNotes`, invoked through a top-level mutation and followed by context refresh
 |===
 
 The populated `relatedObjects` collection contains these deterministic rows:
@@ -144,14 +159,15 @@ The `emptyRelatedObjects` collection returns no rows.
 The `s_` prefix is Causeway's string-identifier encoding used by bookmarks and rich GraphQL object lookups.
 The `_meta.version` values are supplied through the JPA `HasVersion` contract.
 
-== Expected read-only page states
+== Expected page and interaction states
 
 The reference page groups semantic content into labelled object-summary, property, action, collection, and live-diagnostic cards.
 The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
 The `name`, `summary`, `capacity`, `featured`, `status`, null `notes`, and related-object link render through the standard value registry.
 Ordinary values are enabled at the Causeway metamodel level, while the `code` property, related-object property, and `archive` action display deliberate disabled reasons.
 The `secret` property and `hiddenAction` render no semantic content, and the coverage guide explains their absence without reproducing a hidden value.
-The `inspect` action renders an enabled native button but this read-only slice does not invoke it.
+The `summary`, `capacity`, `featured`, `status`, and `notes` properties expose explicit edit affordances, while the page remains read-only for every property without `editable`.
+The standard interaction controller invokes `inspect` directly, opens an accessible prompt for `updateDetails` and `findRelated`, executes `clearNotes`, and publishes typed semantic results without automatic navigation.
 
 Both collections are activated declaratively by the sample page.
 `relatedObjects` loads through a secondary context-owned operation and renders the declared `name` and `code` columns.
@@ -233,7 +249,19 @@ The following selectors are intended as public test hooks for browser automation
 |Generated semantic link for the object-valued property
 
 |`[data-testid="action-inspect"]`
-|Enabled read-only action affordance
+|Enabled safe scalar action
+
+|`[data-testid="action-update-details"]`
+|Parameterized mutating object-result action
+
+|`[data-testid="action-find-related"]`
+|Parameterized safe autocomplete and collection-result action
+
+|`[data-testid="action-clear-notes"]`
+|Mutating void-result action
+
+|`[data-testid="action-interaction-controller"]`
+|Standard interaction-controller host
 
 |`[data-testid="action-archive"]`
 |Disabled action affordance and reason
@@ -256,6 +284,27 @@ The following selectors are intended as public test hooks for browser automation
 |`[data-testid="sample-event"]`
 |Live semantic navigation and action-request diagnostic
 
+|`[data-testid="sample-interaction-event"]`
+|Latest property, prompt, invocation, or result state
+
+|`[data-testid="action-prompt"]`
+|Standard parameterized-action prompt while open
+
+|`[data-testid="action-prompt-parameter-summary"]`
+|`updateDetails` summary parameter editor
+
+|`[data-testid="action-prompt-parameter-status"]`
+|`updateDetails` enum parameter editor
+
+|`[data-testid="action-prompt-submit"]`
+|Prompt invocation control
+
+|`[data-testid="action-prompt-cancel"]`
+|Prompt cancellation control
+
+|`[data-testid="action-result"]`
+|Standard typed action-result presentation
+
 |`[data-testid="collection-related-count"]`
 |Live populated-collection row count
 |===
@@ -272,6 +321,7 @@ await page.goto('/sample-html/index.html');
 await page.locator('[data-testid="sample-app"][data-state="ready"]').waitFor();
 ----
 
+Each editable property derives additive hooks from its existing host selector: for example, `property-summary-edit`, `property-summary-editor`, `property-summary-save`, and `property-summary-cancel`.
 Playwright itself is intentionally not introduced by this slice.
 
 == Manual event verification
@@ -280,22 +330,36 @@ Select the object link rendered inside `property-related-object`.
 The page prevents no routing, but the plain application listener reports `navigate:causeway.webcomponents.sample.SampleRelatedObject:s_related-1` through `sample-event`.
 
 Select the enabled `inspect` action.
-The component does not prompt or invoke GraphQL, but the page reports `action:inspect` through `sample-event`.
-The disabled `archive` action and hidden `hiddenAction` must not change that diagnostic.
+The affordance first reports `action:inspect` through `sample-event`; the standard controller then invokes it and reports `result:inspect:scalar` through `sample-interaction-event`.
+Select `updateDetails` to open the standard prompt, observe its prompt states, and invoke a top-level mutation that reports `result:updateDetails:object`.
+The disabled `archive` action and hidden `hiddenAction` must not open a prompt or change the result diagnostic.
 After the populated collection loads, `collection-related-count` reports `2 rows loaded`.
 
 == Manual browser checklist
 
-. Open `/sample-html/index.html` and wait for `sample-app[data-state="ready"]`.
-. Confirm the five labelled cards and static coverage guide are visible.
-. Confirm the object title, summary text, capacity `24`, featured `true`, `ACTIVE` enum, em-dash null presentation, and related-object title.
-. Confirm ordinary properties have no disabled reason while code, related object, and archive expose their deliberate reasons.
-. Confirm the secret value and hidden-action affordance are absent.
-. Confirm `relatedObjects` displays two rows with `Name` and `Code` headings and deterministic values.
-. Confirm `collection-related-count` displays `2 rows loaded` and `emptyRelatedObjects` displays `No items`.
-. Select the related-object link and enabled action with pointer and keyboard input and inspect `sample-event` after each.
-. Repeat at narrow and wide viewports and in light and dark color schemes.
-. Confirm all `/graphql` requests return HTTP 200, the browser console contains no errors, and the accessibility audit reports no failures.
+. Start the sample with `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html` and wait for `Started SampleHtmlApplication`.
+. Probe `/graphql` directly as shown below, open `/sample-html/index.html`, and wait for `sample-app[data-state="ready"]`.
+. Confirm the five labelled cards, interaction controls, static coverage guide, existing read-only values, deliberate disabled reasons, hidden states, two collection rows, row count, and empty collection.
+. Select `Edit Summary`, cancel, and confirm that no mutation ran and the original value remains.
+. Enter a summary shorter than 12 characters, confirm the accessible validation reason and blocked Save control, then enter a valid value, save it, and confirm the refreshed semantic value.
+. Edit Capacity with `0` and confirm its range validation; cancel or restore `24`.
+. Edit Status, confirm `ACTIVE` and `PAUSED` choices, save a temporary choice, and restore `ACTIVE`.
+. Select `Inspect` and confirm a safe query, scalar result, semantic diagnostics, and no prompt.
+. Select `Update Details`, confirm defaults and enum choices, submit an invalid short summary, cancel once with Escape, then invoke valid values and confirm the object result and refreshed summary and status.
+. Select `Find Related`, type a search that exercises advertised autocomplete, invoke it, and confirm the collection result without navigation.
+. Select `Clear Notes` and confirm a void result and context refresh; confirm Archive remains disabled and the hidden action remains absent.
+. Repeat edit, cancel, prompt, and invoke flows with keyboard-only Tab, Enter, Space, and Escape operation and confirm focus returns to the originating control.
+. Repeat at narrow and wide viewports in light and dark color schemes.
+. Confirm property updates and mutating actions use top-level GraphQL mutations, safe actions use rich queries, every `/graphql` request succeeds, the browser console contains no errors, and the accessibility audit reports no failures.
+
+=== Recorded interaction verification
+
+On 2026-08-16 the exact Maven profile and direct GraphQL probe returned HTTP 200, and the page reached `sample-app[data-state="ready"]` with the stable read-only content intact.
+Pointer and keyboard checks covered property cancellation, invalid and corrected validation, authoritative save, enum choices, action defaults, autocomplete, invalid blocking, Escape cancellation, focus restoration, and disabled and hidden actions.
+The `inspect`, `updateDetails`, `findRelated`, and `clearNotes` flows produced scalar, object, collection, and void semantic results without automatic navigation.
+Network inspection confirmed rich queries for safe behavior, top-level mutations for property updates and mutating actions, typed enum and target variables, successful responses, and complete context refresh after mutation.
+Wide light-mode and narrow dark-mode checks remained usable and readable, with no application console errors.
+Lighthouse navigation audits scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.
 
 == Automated integration verification
 
@@ -313,8 +377,26 @@ The sample integration test starts the application on a random port and verifies
 * Independent targeted `__type` operations resolve the root, enum-property, and collection wrapper types without triggering GraphQL Java's bad-faith introspection rejection.
 * A real rich GraphQL object lookup resolves `s_sample-1`.
 * Object metadata, enabled ordinary properties, text, numeric, boolean, enum, null, reference, enabled-action, disabled-action, hidden-action, and hidden-property state have deterministic values.
-* The section, property, coverage, event, and collection-count hooks are present while the hidden value is absent from the page source.
+* Property validation, enum choices, top-level property mutation, safe query invocation, action defaults, autocomplete, action validation, mutating object result, safe collection result, void mutation, and authoritative restoration use the real endpoint.
+* The section, property, editor, action, prompt, result, coverage, event, and collection-count hooks are present while the hidden value is absent from the page source.
 * A real secondary-shaped collection operation returns deterministic row metadata and selected `name` and `code` wrappers.
 * The empty collection returns zero rows.
 
-The foundation's dependency-free Node tests verify detailed renderer selection, component lifecycle, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, row hydration reuse, and delta reads without requiring a browser process.
+The foundation's dependency-free Node tests verify renderer and editor selection, component lifecycle, semantic commands, property state transitions, action prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
+
+== GraphQL readiness probe and troubleshooting
+
+While the Maven run profile remains active, verify the same-origin endpoint directly:
+
+[source,shell]
+----
+curl -i \
+  -H 'Content-Type: application/json' \
+  --data '{"query":"query CausewayProbe { __typename }"}' \
+  http://localhost:8080/graphql
+----
+
+A healthy response is HTTP `200` with `{"data":{"__typename":"SimpleAndRich"}}`.
+If the page reaches `terminal-error`, first confirm the Maven output contains `Started SampleHtmlApplication`, check that port `8080` is not owned by an older process, run the probe, and hard-refresh with the browser cache disabled.
+Inspect `document.querySelector('[data-testid="sample-object"]').context.state.error` for the concrete schema or object failure.
+For interaction failures, inspect `sample-interaction-event`, the failing `/graphql` response, and the prompt or property alert before retrying.

@@ -23,6 +23,10 @@ export const OBJECT_CONTEXT_STATE_EVENT = 'causeway-object-context-state-change'
 export const COMPONENT_STATE_EVENT = 'causeway-component-state-change';
 export const NAVIGATION_REQUEST_EVENT = 'causeway-navigation-request';
 export const ACTION_REQUEST_EVENT = 'causeway-action-request';
+export const ACTION_PROMPT_STATE_EVENT = 'causeway-action-prompt-state-change';
+export const ACTION_RESULT_EVENT = 'causeway-action-result';
+export const PROPERTY_INTERACTION_STATE_EVENT = 'causeway-property-interaction-state-change';
+export const PROPERTY_UPDATED_EVENT = 'causeway-property-updated';
 export const COLLECTION_STATE_EVENT = 'causeway-collection-state-change';
 export const COLLECTION_CONFIGURATION_EVENT = 'causeway-collection-configuration-change';
 
