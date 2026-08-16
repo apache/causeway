@@ -200,7 +200,7 @@ implements CollectionCountProvider {
         elementType
         	.streamAssociationsForColumnRendering(new ColumnQuery(
 					collectionModel.getIdentifier(),
-					collectionModel.getParentObject().objSpec(),
+					collectionModel.getParentObject().objSpec().correspondingClass(),
 					AssociationsLookup.ENABLED))
             .map(ObjectAssociation::getSpecialization)
             .map(spez->spez.fold(

@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.spec.feature;
 
 import java.util.function.Predicate;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -33,6 +31,7 @@ import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -139,7 +138,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
                 var b = assoc.streamFacets()
-                        .filter(facet -> facet instanceof HiddenFacet)
+                        .filter(HiddenFacet.class::isInstance)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
                 return !b;
@@ -169,25 +168,29 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static Predicate<ObjectAssociation> referencesParent(
                 final @Nullable ObjectSpecification parentSpec) {
-            if(parentSpec == null) {
-                return _Predicates.alwaysFalse();
-            }
+        	return parentSpec != null
+    			? referencesParent(parentSpec.correspondingClass())
+				: _Predicates.alwaysFalse();
+        }
+
+        public static Predicate<ObjectAssociation> referencesParent(
+                final @Nullable Class<?> parentType) {
+            if(parentType == null)
+				return _Predicates.alwaysFalse();
             return (final ObjectAssociation assoc) -> {
-                    if(assoc.isCollection()) {
-                        // this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
+                    if(assoc.isCollection())
+						// this semantic doesn't apply to collections; https://github.com/apache/causeway/pull/1887#discussion_r1333919544
                         return false;
-                    }
                 ObjectSpecification childSpec = assoc.getElementType();
                 return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
-                            && equivalent(parentSpec, childSpec);
+                            && equivalent(parentType, childSpec.correspondingClass());
             };
         }
 
         /**
          * We allow either to be assignable to the other.
          *
-         * <p>
-         * Because both of these are valid scenarios:
+         * <p> Because both of these are valid scenarios:
          * <ul>
          *     <li>
          *         a child refers to an interface of its parent
@@ -198,10 +201,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          *         (eg Invoice -> InvoiceItem, with OutgoingInvoice -> OutgoingInvoiceItem).
          *     </li>
          * </ul>
-         * </p>
          */
-        private static boolean equivalent(final ObjectSpecification parentSpec, final ObjectSpecification childSpec) {
-            return parentSpec.isOfType(childSpec) || childSpec.isOfType(parentSpec);
+        private static boolean equivalent(final Class<?> a, final Class<?> b) {
+        	return a == b
+        			|| a.isAssignableFrom(b)
+        			|| b.isAssignableFrom(a);
         }
     }
 

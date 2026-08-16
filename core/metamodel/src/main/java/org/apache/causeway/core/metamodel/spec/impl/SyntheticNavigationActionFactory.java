@@ -161,10 +161,12 @@ record SyntheticNavigationActionFactory(
     }
 
     private static ObjectAction createCollectionAction(
-            final ObjectSpecification ownerSpec,
+    		final ObjectSpecification ownerSpec,
             final OneToManyAssociation collection) {
 
-        var filterProperties = filterPropertiesOf(ownerSpec, collection);
+    	final Class<?> ownerType = ownerSpec.correspondingClass();
+
+        var filterProperties = filterPropertiesOf(ownerType, collection);
         var parameterTypes = filterProperties.stream()
                 .map(ObjectAssociation::getElementType)
                 .map(ObjectSpecification::correspondingClass)
@@ -174,8 +176,8 @@ record SyntheticNavigationActionFactory(
                 .map(ObjectAssociation::getId)
                 .toArray(String[]::new);
         var facetedMethod = FacetedMethod.createSyntheticAction(
-        		ownerSpec.getMetaModelContext(),
-                ownerSpec.correspondingClass(),
+        		collection.getMetaModelContext(),
+        		ownerType,
                 COLLECTION_ACTION_ID_PREFIX + collection.getId(),
                 collection.getElementType().correspondingClass(),
                 parameterTypes,
@@ -234,16 +236,15 @@ record SyntheticNavigationActionFactory(
     }
 
     private static Can<ObjectAssociation> filterPropertiesOf(
-            final ObjectSpecification ownerSpec,
+            final Class<?> ownerType,
             final OneToManyAssociation collection) {
         var columnQuery = new ColumnQuery(
                 collection.getFeatureIdentifier(),
-                ownerSpec,
+                ownerType,
                 AssociationsLookup.AVAILABLE);
         var elementType = (ObjectSpecificationInternal)collection.getElementType();
         if(!elementType.isFullyIntrospected()) {
-        	var mmc = ownerSpec.getMetaModelContext();
-        	var specLoaderInternal = (SpecificationLoaderInternal) mmc.getSpecificationLoader();
+        	var specLoaderInternal = (SpecificationLoaderInternal) collection.getSpecificationLoader();
         	specLoaderInternal.loadSpecification(elementType.correspondingClass(), IntrospectionRequest.FULL);
 		}
         return collection.getElementType()

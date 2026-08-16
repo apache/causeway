@@ -326,7 +326,7 @@ public record MetaModelServiceDefault(
 			return Stream.empty();
 
         return elementType
-            .streamAssociationsForColumnRendering(new ColumnQuery(collectionId, parentMo.objSpec(), columnQueryMode))
+            .streamAssociationsForColumnRendering(new ColumnQuery(collectionId, parentMo.objSpec().correspondingClass(), columnQueryMode))
             .map(ObjectAssociation::getFeatureIdentifier);
     }
 

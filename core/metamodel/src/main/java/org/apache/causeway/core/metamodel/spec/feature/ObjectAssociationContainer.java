@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecificationException;
 import org.jspecify.annotations.Nullable;
 
@@ -145,13 +144,13 @@ public interface ObjectAssociationContainer {
      */
     record ColumnQuery(
     		@Nullable Identifier memberIdentifier,
-    		@Nullable ObjectSpecification parentObjectSpec,
+    		@Nullable Class<?> parentObjectType,
             AssociationsLookup mode) {
     	public static ColumnQuery forStandaloneTable(final AssociationsLookup mode) {
     		return new ColumnQuery(null, null, mode);
     	}
     	public ColumnQuery(final ManagedMember managedMember, final AssociationsLookup enabled) {
-			this(managedMember.getIdentifier(), managedMember.getOwner().objSpec(), enabled);
+			this(managedMember.getIdentifier(), managedMember.getOwner().objSpec().correspondingClass(), enabled);
 		}
     	/**
     	 * The collection variant (standalone or parented).

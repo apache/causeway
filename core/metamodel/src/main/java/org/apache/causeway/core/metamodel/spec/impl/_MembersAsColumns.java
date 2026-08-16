@@ -108,7 +108,7 @@ record _MembersAsColumns(
             .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(columnQuery.where()))
             .filter(columnQuery.isStandalone()
 				? _Predicates.alwaysTrue()
-				: ObjectAssociation.Predicates.referencesParent(columnQuery.parentObjectSpec()).negate())
+				: ObjectAssociation.Predicates.referencesParent(columnQuery.parentObjectType()).negate())
             .filter(assoc->hideColumnUsingSpi(assoc, elementType.typeMeta().correspondingClass()))
             .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
@@ -216,7 +216,7 @@ record _MembersAsColumns(
                         elementType.correspondingClass(),
                         assocIdsInOrder)
                 : tableColumnOrderService.orderParented(
-                		columnQuery.parentObjectSpec().correspondingClass(),
+                		columnQuery.parentObjectType(),
                         columnQuery.memberIdentifier().memberLogicalName(),
                         elementType.correspondingClass(),
                         assocIdsInOrder))
