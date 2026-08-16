@@ -1,143 +1,128 @@
 ## ADDED Requirements
 
-### Requirement: Optional HTMX object viewer
-The system SHALL provide an opt-in generic domain-object viewer that uses HTMX for application-shell navigation, history, page-region loading, and fragment transitions while using semantic web components for domain behavior.
+### Requirement: Optional HTMX application viewer
+The system SHALL provide an opt-in generic Causeway viewer that uses HTMX for application-shell navigation, history, page-region loading, and fragment transitions while using semantic web components for application and domain behavior.
 
 #### Scenario: Viewer is not enabled
 - **WHEN** an application does not include the generic HTMX viewer module
-- **THEN** existing GraphQL and other Causeway viewers continue to operate without the HTMX viewer routes or assets
+- **THEN** existing GraphQL and other Causeway viewers continue without the HTMX viewer routes or assets
 
 #### Scenario: Viewer is enabled
 - **WHEN** an application includes the generic HTMX viewer module
-- **THEN** its object routes, shell, assets, and default theme are available
-- **AND** the underlying semantic components retain their framework-neutral public contracts
+- **THEN** its shell, menu region, object routes, assets, and default theme are available
+- **AND** underlying semantic components retain framework-neutral public contracts
+
+### Requirement: Semantic menu-bar shell
+The viewer SHALL place `<causeway-menubars>` in its stable application shell and SHALL delegate menu structure and service-action interaction to that component vocabulary.
+
+#### Scenario: Shell loads
+- **WHEN** the viewer initializes with application-entry capability
+- **THEN** the stable shell renders semantic primary, secondary, and tertiary menu bars as available
+- **AND** object-fragment navigation does not reconstruct menu semantics in HTMX
+
+#### Scenario: Menu action returns an object
+- **WHEN** a service action publishes a semantic object result
+- **THEN** viewer policy may map its bookmark to a canonical object route
+- **AND** the menu component itself remains route-independent
 
 ### Requirement: Canonical bookmark object routes
-The viewer SHALL provide canonical object routes derived from a Causeway logical type name and object identifier.
+The viewer SHALL provide canonical object routes derived from Causeway logical type and object identifier.
 
 #### Scenario: Direct object navigation
-- **WHEN** a user opens a valid canonical object route directly
-- **THEN** the viewer creates a page fragment containing the corresponding semantic object context
+- **WHEN** a user opens a valid canonical object route
+- **THEN** the viewer creates a fragment containing the corresponding semantic object context
 - **AND** resolves its page definition
 
 #### Scenario: Semantic navigation event
-- **WHEN** an object link publishes a semantic navigation event
+- **WHEN** a semantic component publishes an object navigation event
 - **THEN** the viewer maps the target bookmark to the canonical route
 - **AND** loads it through HTMX with browser history enabled
 
 #### Scenario: Browser back and forward
-- **WHEN** a user navigates through object pages and then uses browser back or forward
-- **THEN** the viewer restores the object route and corresponding page definition consistently
+- **WHEN** a user navigates object pages and uses browser back or forward
+- **THEN** the viewer restores the route and corresponding page definition consistently
 
-### Requirement: GraphQL-only member discovery
-The generic viewer SHALL discover domain object members from the semantic schema description produced by standard GraphQL introspection and SHALL NOT require a duplicate member-list endpoint or direct metamodel access.
-
-#### Scenario: Generic page composition
-- **WHEN** no custom page is registered for a logical type
-- **THEN** the generic composer enumerates that type's introspected property, action, and collection fields
-- **AND** creates standard components identified by semantic member IDs
-
-#### Scenario: Route fragment generation
-- **WHEN** the server returns an object-page shell or fragment
-- **THEN** it supplies route identity and component composition infrastructure
-- **AND** does not enumerate members through Causeway metamodel services
-
-### Requirement: Per-logical-type page customization
-The viewer SHALL provide a page-definition resolver that selects an application page registered for the exact logical type and otherwise selects generic composition.
-
-#### Scenario: Custom page exists
-- **WHEN** an application has registered a page definition for the routed logical type
-- **THEN** the resolver renders that definition beneath the route's object context
+### Requirement: Default composite object page
+The default object-page definition SHALL render `<causeway-object>` beneath one route-level object context and SHALL NOT enumerate members or parse grid resources itself.
 
 #### Scenario: No custom page exists
-- **WHEN** no exact page registration exists
-- **THEN** the resolver renders the generic schema-driven page
+- **WHEN** no exact page definition is registered for the routed logical type
+- **THEN** the viewer renders `<causeway-object>` beneath the route context
+- **AND** delegates member discovery, layout interpretation, fallback composition, and member runtime semantics to the component library
+
+#### Scenario: Route fragment is generated
+- **WHEN** the server returns an object fragment
+- **THEN** it supplies route identity, one object context, and page-resolution infrastructure
+- **AND** does not enumerate members through metamodel services
+
+### Requirement: Per-logical-type page customization
+The viewer SHALL select an application page registered for the exact logical type and otherwise select the default composite object page.
+
+#### Scenario: Custom page exists
+- **WHEN** an application registers a page definition for the routed logical type
+- **THEN** the resolver renders that definition beneath the route object context
 
 #### Scenario: Custom page uses standard components
-- **WHEN** a custom page composes semantic properties, actions, and collections
-- **THEN** those components share the route's object context and standard GraphQL semantics
+- **WHEN** a custom page composes high-level or low-level semantic components
+- **THEN** they share the route context and established GraphQL semantics
 
 ### Requirement: Shared route-level object context
-Each rendered object route SHALL provide one authoritative object context shared by its generic or custom page definition.
+Each object route SHALL provide one authoritative object context shared by its default or custom page definition.
 
 #### Scenario: Page requirements are composed
-- **WHEN** generic or custom page components connect beneath the route context
-- **THEN** their semantic requirements contribute to that context's coordinated read projection
+- **WHEN** page components connect beneath the route context
+- **THEN** their requirements contribute to that context's coordinated projection
 
 #### Scenario: Navigation supersedes an old page
-- **WHEN** HTMX navigates the page region to a different bookmark while old GraphQL requests remain in flight
-- **THEN** responses belonging to the superseded context do not render into the new route
-
-### Requirement: Causeway layout interpretation
-The generic viewer SHALL use an available and usable Causeway grid resource to order and group recognized object members and SHALL provide a deterministic fallback when it cannot do so.
-
-#### Scenario: Grid resource is available
-- **WHEN** object metadata provides an accessible supported grid resource
-- **THEN** the generic composer maps recognized rows, columns, groups, properties, actions, and collections into page regions
-
-#### Scenario: Grid resource is absent or forbidden
-- **WHEN** no grid resource is exposed for the object
-- **THEN** the viewer renders its conventional deterministic object layout
-
-#### Scenario: Grid contains an unsupported instruction
-- **WHEN** the layout contains an instruction the viewer cannot interpret
-- **THEN** the viewer records a diagnostic
-- **AND** falls back for the affected region without discarding unrelated recognized layout content
-
-### Requirement: Conventional generic object layout
-The fallback generic page SHALL compose object header, action, property, and collection regions using deterministic schema-derived ordering and the standard semantic components.
-
-#### Scenario: Generic page has all member kinds
-- **WHEN** an object type exposes properties, actions, and collections and no usable grid is available
-- **THEN** the page renders a header followed by deterministic action, property, and collection regions
-- **AND** each member component retains its own dynamic hidden and disabled behavior
-
-#### Scenario: Member is dynamically hidden
-- **WHEN** a generically composed member is hidden for the current object and user
-- **THEN** its standard component omits its visible content without requiring the page composer to rebuild the schema-derived member list
+- **WHEN** HTMX navigates to another bookmark while old GraphQL requests remain in flight
+- **THEN** superseded responses do not render into the new route
 
 ### Requirement: HTMX-independent component data plane
-The generic viewer SHALL leave schema introspection, object reads, validation, choices, autocomplete, mutations, and action invocation to the GraphQL client, object contexts, and semantic domain components.
+The viewer SHALL leave application-entry reads, schema introspection, object reads, validation, choices, autocomplete, mutations, action invocation, grid interpretation, and menu interpretation to GraphQL contexts and semantic components.
 
 #### Scenario: Object fragment loads
-- **WHEN** HTMX loads an object-page fragment
-- **THEN** the fragment's semantic components obtain domain state through the GraphQL context contracts
-- **AND** HTMX does not translate GraphQL JSON or construct domain operations
+- **WHEN** HTMX loads an object fragment
+- **THEN** semantic components obtain domain state through GraphQL context contracts
+- **AND** HTMX does not translate GraphQL JSON, construct domain operations, or parse Causeway layouts
 
-### Requirement: Viewer interaction-result policy
-The viewer SHALL provide replaceable default handling for semantic object, collection, scalar, and void interaction results.
+### Requirement: Viewer interaction-result and home policy
+The viewer SHALL provide replaceable handling for semantic object, collection, scalar, and void results and for the discovered home-page action.
 
-#### Scenario: Action returns an object
-- **WHEN** the default result policy receives a semantic object result
+#### Scenario: Object result uses default policy
+- **WHEN** default result policy receives a semantic object result
 - **THEN** it may navigate to that object's canonical route according to documented policy
 
 #### Scenario: Application overrides result handling
-- **WHEN** an application registers a result policy for a scope or result kind
-- **THEN** that policy receives the semantic result without replacing the underlying action component or GraphQL command implementation
+- **WHEN** an application registers a scoped result policy
+- **THEN** it receives the semantic result without replacing action or menu components
+
+#### Scenario: Home-page action is available
+- **WHEN** application-entry data identifies a home-page action
+- **THEN** configured viewer policy decides whether and when to invoke it and present its result
 
 ### Requirement: Object-page lifecycle states
-The viewer SHALL provide accessible route-level loading, not-found, partial-error, terminal-error, and ready presentations while preserving member-local state where possible.
+The viewer SHALL provide accessible route-level loading, not-found, partial-error, terminal-error, and ready presentations while preserving component-local state where possible.
 
 #### Scenario: Object lookup is pending
-- **WHEN** a routed object context is loading its schema or object snapshot
+- **WHEN** a routed context is loading schema or object state
 - **THEN** the viewer presents an accessible page-level loading state
 
 #### Scenario: Object does not resolve
 - **WHEN** GraphQL cannot resolve the routed bookmark
-- **THEN** the viewer presents its not-found or access-denied outcome without rendering a stale previous object
+- **THEN** the viewer presents not-found or access-denied outcome without stale object content
 
 #### Scenario: One member has a partial error
 - **WHEN** the object context is ready with successful data and a member-path error
 - **THEN** the overall page remains usable
-- **AND** the standard member component presents the local error
+- **AND** the semantic child presents its local error
 
 ### Requirement: Viewer theming and accessibility
-The viewer SHALL ship a default theme and accessible page structure while permitting applications to customize semantic component and page-region styling.
+The viewer SHALL ship a default responsive theme and accessible shell structure while permitting applications to customize semantic components and page regions.
 
-#### Scenario: Default viewer page
+#### Scenario: Default viewer shell
 - **WHEN** an application enables the viewer without a custom theme
-- **THEN** object pages have usable responsive structure, visible focus, labelled regions, and keyboard-operable navigation and interactions
+- **THEN** menus and object pages have labelled landmarks, visible focus, responsive structure, and keyboard operation
 
 #### Scenario: Application theme
 - **WHEN** an application supplies viewer and semantic-component style overrides
-- **THEN** the light-DOM component and page contracts permit those styles without modifying viewer behavior
+- **THEN** documented light-DOM contracts permit those styles without modifying behavior

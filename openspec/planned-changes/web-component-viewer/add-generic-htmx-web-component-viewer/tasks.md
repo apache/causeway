@@ -4,51 +4,42 @@
 - [ ] 1.2 Define canonical bookmark route encoding, route parsing, object-page fragment contracts, and semantic navigation-event handling.
 - [ ] 1.3 Add route tests for encoded logical types and identifiers, direct links, refresh, malformed routes, not-found objects, and access-denied outcomes.
 
-## 2. HTMX Shell and Navigation
+## 2. HTMX Shell and Application Entry
 
-- [ ] 2.1 Implement the HTMX application shell, object-page region, loading indicators, fragment transitions, and browser-history integration.
-- [ ] 2.2 Implement translation of semantic object navigation events into canonical HTMX route requests.
-- [ ] 2.3 Implement back, forward, direct-load, refresh, and superseded-page behavior without leaking responses from obsolete object contexts.
-- [ ] 2.4 Verify that HTMX handles only shell and fragment lifecycle while semantic components continue to own GraphQL operations.
+- [ ] 2.1 Implement the stable HTMX application shell, `<causeway-menubars>` placement, object-page region, loading indicators, and fragment transitions.
+- [ ] 2.2 Connect menu service-action results and discovered home-page action to replaceable viewer navigation and result policy.
+- [ ] 2.3 Verify application-entry state survives object-fragment replacement and invalidates only under its documented context.
+- [ ] 2.4 Verify HTMX handles only shell and fragment lifecycle while menu components own menu layout and service-action semantics.
 
-## 3. Page Definition Resolution
+## 3. Navigation and History
 
-- [ ] 3.1 Implement the page-definition registry and deterministic exact-logical-type resolution contract.
-- [ ] 3.2 Implement application registration for custom templates or page factories beneath the route-level object context.
-- [ ] 3.3 Implement the generic page fallback when no custom registration exists.
-- [ ] 3.4 Test custom selection, generic fallback, requirement release when definitions change, and shared route-context behavior.
+- [ ] 3.1 Translate semantic object navigation events from object links, object actions, and service actions into canonical HTMX route requests.
+- [ ] 3.2 Implement back, forward, direct-load, refresh, and superseded-page behavior without leaking obsolete context responses.
+- [ ] 3.3 Define initial shell and home-page policy for applications with present, absent, hidden, invalid, or object-returning home actions.
 
-## 4. Generic Schema-Driven Composition
+## 4. Page Definition Resolution
 
-- [ ] 4.1 Implement enumeration and classification of properties, actions, and collections from the semantic type description produced by GraphQL introspection.
-- [ ] 4.2 Compose the standard object header, action, property, and collection components using semantic member IDs.
-- [ ] 4.3 Implement deterministic conventional member ordering and page regions for objects without a usable layout resource.
-- [ ] 4.4 Verify that dynamic hidden, disabled, loading, and member-error behavior remains delegated to standard components.
-- [ ] 4.5 Add integration tests proving that generic composition does not call a member-list endpoint or Causeway metamodel service.
+- [ ] 4.1 Implement the page-definition registry and deterministic exact-logical-type resolution contract.
+- [ ] 4.2 Implement application registration for custom templates or factories beneath the route-level object context.
+- [ ] 4.3 Implement the default definition using `<causeway-object>` rather than viewer-owned member enumeration or grid parsing.
+- [ ] 4.4 Test custom selection, default fallback, requirement release, shared route context, and explicit low-level custom composition.
 
-## 5. Causeway Layout Support
+## 5. Interaction Results and Page Lifecycle
 
-- [ ] 5.1 Define the initial supported Causeway grid subset and map its rows, columns, groups, properties, actions, and collections to viewer regions.
-- [ ] 5.2 Implement secure grid-resource retrieval through the URL supplied by rich object metadata.
-- [ ] 5.3 Implement layout parsing, recognized-member placement, unsupported-instruction diagnostics, and region-level fallback.
-- [ ] 5.4 Test complete layouts, partial layouts, missing members, unsupported instructions, forbidden resources, unreachable resources, and malformed resources.
+- [ ] 5.1 Implement replaceable default policies for semantic object, collection, scalar, and void results from page and shell actions.
+- [ ] 5.2 Implement page-level schema-loading, object-loading, ready, not-found, access-denied, terminal-error, and partial-error presentations.
+- [ ] 5.3 Ensure object results navigate only according to configured viewer policy and custom handlers can claim outcomes.
+- [ ] 5.4 Test result routing, non-object result regions, void refresh, partial member errors, terminal route errors, and menu-originated results.
 
-## 6. Interaction Results and Page Lifecycle
+## 6. Theme and Accessibility
 
-- [ ] 6.1 Implement replaceable default policies for semantic object, collection, scalar, and void action results.
-- [ ] 6.2 Implement page-level schema-loading, object-loading, ready, not-found, access-denied, terminal-error, and partial-error presentations.
-- [ ] 6.3 Ensure object results navigate only according to the configured viewer policy and custom result handlers can claim outcomes.
-- [ ] 6.4 Test action-result routing, non-object result regions, void refresh, partial member errors, and terminal route errors.
+- [ ] 6.1 Implement the responsive default shell and object-page theme using documented menu-bar, object, and member light-DOM hooks.
+- [ ] 6.2 Verify landmarks, headings, focus movement after HTMX navigation, loading announcements, route errors, menus, keyboard operation, and visible focus.
+- [ ] 6.3 Add an application theme and custom logical-type page example that reuse high-level and low-level semantic components.
 
-## 7. Theme and Accessibility
+## 7. Documentation and Verification
 
-- [ ] 7.1 Implement the responsive default viewer theme using the documented light-DOM semantic component and page-region contracts.
-- [ ] 7.2 Verify landmarks, headings, focus movement after HTMX navigation, loading announcements, route errors, keyboard operation, and visible focus.
-- [ ] 7.3 Add an application theme and custom logical-type page example that reuse the standard semantic components.
-
-## 8. Documentation and Verification
-
-- [ ] 8.1 Document viewer enablement, canonical routes, HTMX responsibilities, generic fallback, grid support, custom-page registration, result policies, and theming.
-- [ ] 8.2 Document the initial object-page scope and explicit non-parity with application menus, home pages, authentication pages, standalone values, and existing viewer extensions.
-- [ ] 8.3 Add end-to-end tests covering direct generic pages, grid-driven pages, custom pages, property edits, action invocation, collection navigation, history, and refresh.
-- [ ] 8.4 Run browser tests, relevant Maven and GraphQL viewer tests, accessibility checks, formatting checks, and strict OpenSpec validation, and resolve all failures.
+- [ ] 7.1 Document viewer enablement, canonical routes, HTMX responsibilities, menu shell, home policy, default `<causeway-object>`, custom-page registration, result policies, and theming.
+- [ ] 7.2 Document explicit non-parity with authentication pages, standalone values, and existing viewer extensions.
+- [ ] 7.3 Add end-to-end tests covering shell menus, direct object pages, grid-driven object composition, custom pages, interactions, collection navigation, history, and refresh.
+- [ ] 7.4 Run browser tests, relevant Maven and GraphQL tests, accessibility checks, formatting checks, and strict OpenSpec validation.
