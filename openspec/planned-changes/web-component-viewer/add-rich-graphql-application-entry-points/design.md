@@ -1,77 +1,90 @@
 ## Context
 
 Causeway's menu-bars model contains three semantic bars.
-Each bar contains ordered menus, each menu contains sections, and sections reference service actions by logical service type and action ID with optional names, descriptions, icons, and CSS hints.
-Applications may provide `menubars.layout.xml`, while runtime services can load, normalize, and marshal the effective menu model.
+Each bar contains ordered menus, each menu contains sections, and sections reference service actions by logical service type and action ID with optional names, descriptions, icons, and supported hints.
+Applications may provide `menubars.layout.xml`, while runtime services load and normalize the effective menu model.
 
-Current rich GraphQL top-level service fields make actions executable but do not identify their placement in the effective menu-bars model or the configured home-page action.
-A browser should not have to infer menus from schema order or call Wicket internals.
+The reference resource contains ten primary menus with 37 sections and 141 actions, three secondary menus with 17 sections and 48 actions, and one tertiary menu with four sections and eight actions.
+Current rich service fields make those actions executable but do not identify their placement.
+
+The reference home page is a `@HomePage` view-model type rather than a service action.
+The current normal rich object lookup requires an object input and cannot construct that configured home instance.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Discover effective primary, secondary, and tertiary menu structure.
-- Resolve each visible entry to existing rich service-action behavior.
-- Discover the configured home-page action.
+- Discover the authorized effective primary, secondary, and tertiary menu resource.
+- Keep the menu layout resource as the canonical structural source.
+- Resolve menu action references to established rich service-action behavior.
+- Discover and resolve the configured home-page object or supported home action.
 - Preserve ordering, labels, sections, icons, localization, and authorization outcomes.
 - Remain framework-neutral and suitable for targeted capability discovery.
 
 **Non-Goals:**
 
 - Rendering HTML menus.
+- Adding a duplicate structured GraphQL copy of the complete menu XML.
 - Replacing the existing domain-service action schema.
 - Exposing `MenuBarsService`, annotations, or metamodel objects directly.
-- Defining authentication, user profile, routing, or action-result navigation policy.
-- Requiring clients to honor optional CSS hints.
+- Defining authentication, user profile, routing, automatic home navigation, or action-result navigation policy.
+- Requiring clients to honor CSS hints.
 
 ## Decisions
 
-### Expose effective application-entry semantics
+### Add one targeted application-entry capability
 
-The contract represents the menu model after Causeway has loaded defaults or application layout and applied relevant metadata.
-It does not expose raw annotation instances or require clients to merge multiple sources.
-The final analysis decides whether GraphQL returns a secured layout resource reference, a structured wrapper, or both.
+The rich root exposes one discoverable application-entry field with optional menu-bars and home-page capabilities.
+Clients discover its type through targeted standard introspection.
+Existing object and service fields remain unchanged.
+
+### Keep menu structure in the effective resource
+
+The menu-bars capability returns a secured resource reference, media type, format version, and bounded generation or cache information.
+The referenced resource represents the effective primary, secondary, and tertiary menu model after Causeway has loaded explicit or generated fallback layout.
+
+GraphQL does not duplicate every bar, menu, section, and entry as another nested schema tree.
+The resource-link safety capability owns same-origin URL construction, structural resource policy, and dereference authorization.
 
 ### Keep service actions canonical
 
-A menu entry carries the logical service type and semantic action ID needed to address the existing rich service-action wrapper.
+Each menu resource entry carries the logical service type and semantic action ID needed to address the existing rich service-action wrapper.
 Hidden, disabled, parameter, validation, invocation, and result semantics remain owned by that wrapper.
-The application-entry contract does not introduce another invocation endpoint.
+The application-entry contract does not add another invocation endpoint.
 
-### Preserve three semantic bars
+Invalid menu references produce bounded diagnostics and do not prevent unrelated valid entries from being consumed.
+Optional presentation hints remain optional to clients.
 
-Primary, secondary, and tertiary remain explicit rather than arbitrary styling labels.
-Order within bars, menus, sections, and entries is stable according to the effective Causeway model.
-Missing or empty bars are represented without synthetic actions.
+### Filter current visibility without exposing policy
 
-### Filter by current visibility without exposing policy
+The effective resource omits entries hidden from the current request context or uses an equally non-disclosing effective representation.
+No authorization rules, hidden values, or disabled-reason internals are serialized into the menu resource.
+Caches are scoped by user or authorization context, locale, layout generation, and other inputs that affect effective menus.
 
-Entries unavailable to the current user are omitted or marked only according to the established hidden contract.
-No authorization rules or hidden action metadata are disclosed.
-Caches are scoped by all context that affects menu visibility or localization.
+### Represent home page by semantic kind
 
-### Represent home page as an action reference
+The home capability identifies whether the configured entry is an object or service action.
+For an object home page, it exposes the public logical type and a resolver that returns the current authorized concrete rich object through the corrected polymorphic output contract.
+For a supported action home page, it exposes the owning service logical type and semantic action ID and reuses the existing action wrapper.
 
-The home-page contract identifies the owning service and semantic action ID and then reuses existing rich service-action interaction.
-GraphQL does not prescribe whether a client invokes it automatically or how it displays or navigates to the result.
+A missing, hidden, invalid, or unresolvable home page returns documented absence or a bounded diagnostic.
+GraphQL does not automatically invoke, render, or navigate to it.
 
 ## Risks / Trade-offs
 
-- [Returning structured menus may duplicate XML] → Choose one canonical semantic model and use a resource plus targeted metadata only when each has a clear role.
-- [Menu visibility can be user-dependent] → Scope caches correctly and preserve dynamic service-action checks.
-- [Layout may reference missing actions] → Return bounded diagnostics and omit invalid entries without losing unrelated menus.
-- [Home-page invocation may have parameters unexpectedly] → Expose the actual action contract and let clients enforce their own landing-page policy.
+- [A resource requires client parsing] → Menu components own the supported format parser, while GraphQL avoids a duplicate structural API.
+- [Menu visibility can be user-dependent] → Scope resource generation and caches to authorization and locale context.
+- [Layout may reference missing actions] → Return bounded diagnostics and retain unrelated resource structure.
+- [Home object construction differs from identity lookup] → Use the framework's configured home-page resolver and return the standard rich concrete output.
+- [Generated fallback menus can change] → Return format and generation information and document cache invalidation.
 
 ## Migration Plan
 
 The application-entry root capability is additive.
-Existing service fields and invocations remain unchanged.
-Clients discover support before requesting menu or home-page data.
+Existing service fields, object lookups, and invocations remain unchanged.
+Clients discover support before requesting menu or home data.
 
 ## Open Questions
 
-- Should GraphQL expose the marshalled menu-bars resource, a structured shape, or both?
-- Where should localized menu labels be resolved relative to schema and resource caching?
-- Should disabled service actions remain visible in menu data or be resolved only when their wrapper is requested?
-- How should applications with no explicit menu-bars layout expose Causeway's generated fallback menus?
+- The stable format/version marker for current and future menu-bars XML namespaces.
+- Whether bounded invalid-reference diagnostics belong beside the application entry or only in opt-in GraphQL diagnostics.

@@ -2,72 +2,85 @@
 
 `RichCollectionGet` currently derives a list output type and adds no paging or ordering arguments.
 The web-component context can issue secondary collection operations, but those operations still receive the full list from GraphQL.
-The reference application contains configured page sizes, ordering, table presentation, and collections large enough to require bounded client payloads.
+The reference probe requested `CollectionLayoutPagedPage.children`, whose presentation page size is five, and received all 13 rows from an unargumented `get` field.
+
+The current Causeway collection association is generally materialized before GraphQL sees it.
+A cursor would therefore imply stability or persistence efficiency that the present programming model cannot guarantee.
+An additive offset window provides a bounded response with honest per-request consistency.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Bound collection response size deterministically.
-- Publish enough metadata for next, previous, and range presentation.
-- Preserve stable configured ordering.
-- Define behavior under concurrent changes and partial errors.
-- Retain existing clients through explicit compatibility policy.
+- Bound collection response rows deterministically.
+- Publish enough metadata for previous, next, and range presentation.
+- Preserve supported configured ordering before slicing.
+- Define per-request consistency and concurrent-change behavior.
+- Retain existing clients through an additive compatibility policy.
 
 **Non-Goals:**
 
 - Guaranteeing database-level paging for every domain collection.
+- Claiming stable cursor continuation across mutations.
 - Adding arbitrary unrestricted client sorting or filtering.
 - Defining the collection web-component UI.
-- Mixing collection layout hints into the window protocol.
+- Treating `@CollectionLayout(paged=...)` as a transport guarantee.
 
 ## Decisions
 
-### Select one semantic window abstraction
+### Add a dedicated offset window
 
-The analysis will choose offset and size, opaque cursor and size, or an additive combination based on executable behavior and compatibility.
-The public response includes requested position, returned count, continuation state, and total count only when it can be determined safely.
+Each eligible rich collection wrapper keeps its established `get` list and adds a `window(offset, size)` operation.
+`offset` is zero-based and defaults to zero.
+`size` is positive, required or given a documented bounded server default, and cannot exceed a configured hard maximum.
 
-### Apply deterministic ordering before window selection
+The result contains rows, requested offset, returned count, nullable total count, `hasPrevious`, and `hasNext`.
+An offset beyond the current authorized collection returns an empty window at that requested offset rather than silently substituting the last page.
 
-A configured Causeway comparator or ordering facet is applied consistently before a window is selected.
-Where stable ordering cannot be guaranteed, the response reports that limitation rather than implying cursor stability.
-Arbitrary GraphQL field-name sorting is excluded until an independently validated contract exists.
+### Apply deterministic ordering before slicing
 
-### Preserve unargumented reads temporarily
+A supported Causeway comparator or ordering facet is applied consistently before offset selection.
+Where deterministic ordering cannot be established, the result reports per-request ordering limitations and does not imply cross-request positional stability.
+Arbitrary GraphQL field-name sorting remains excluded.
 
-The established `get` field remains valid during migration.
-The new bounded shape is additive or provided through optional arguments with a response form that does not invalidate existing documents.
-The final schema shape is selected only after schema-compatibility tests.
+### Describe count and continuation honestly
 
-### Be explicit about server efficiency
+When the complete authorized collection is already materialized, `totalCount` is exact.
+If a future source can produce a bounded slice without a safe or efficient count, `totalCount` is null rather than zero.
+`hasNext` is derived from count when available or from bounded lookahead under a documented implementation.
 
-Response windowing always bounds serialized GraphQL rows.
-Instrumentation and documentation state whether the underlying collection was fully materialized before slicing.
-The capability does not claim persistence-level efficiency where the domain programming model cannot provide it.
+### Use per-request consistency
 
-### Define generation and stale behavior
+Each window reflects one execution-time view of the collection.
+Insertions, removals, or reordering between requests can shift offsets, and the public contract states that limitation.
+The object context continues to discard responses superseded by a newer local generation, but GraphQL does not claim a durable cursor generation.
 
-A response identifies the object or collection generation information available from the current context.
-Clients can discard superseded windows.
-Concurrent changes may alter counts or positions and are represented through documented consistency semantics rather than hidden retries.
+### Preserve unargumented reads
+
+The established `get` field remains schema-valid during migration.
+The new `window` field is additive and has a distinct response type, so existing documents keep their list shape.
+Components prefer `window` only after targeted introspection discovers it.
+
+### Be explicit about materialization
+
+Windowing always bounds serialized GraphQL rows.
+Instrumentation and documentation identify whether the full association was materialized before slicing.
+The capability does not claim persistence-level savings until a separate domain query source proves them.
 
 ## Risks / Trade-offs
 
-- [Offset windows drift under concurrent changes] → Prefer stable ordering and expose generation or consistency metadata; use cursors if analysis shows a sound implementation.
-- [Cursor windows can conceal full materialization] → Document retrieval behavior separately from response shape.
-- [Total count may be expensive] → Make it nullable or separately requested where necessary.
-- [Changing `get` return type would break clients] → Preserve the old field or use an additive window field selected by compatibility testing.
+- [Offset windows drift under concurrent changes] → State per-request consistency explicitly and avoid cursor claims.
+- [A full collection may still be materialized] → Bound response rows and expose materialization behavior separately from payload bounds.
+- [Total count may become expensive for future sources] → Keep count nullable and derive continuation without claiming zero.
+- [Legacy `get` remains unbounded] → Preserve compatibility while documentation and components prefer the bounded operation.
 
 ## Migration Plan
 
-Introduce the bounded contract additively.
-Update collection components to prefer bounded reads only after the server capability is discoverable.
+Introduce `window` additively on supported rich collection wrappers.
+Update object-context secondary operations and collection components to prefer it after capability discovery.
 Retain and document legacy unargumented reads for the compatibility period.
 
 ## Open Questions
 
-- Offset, cursor, or both?
-- Should count be part of every response, separately selected, or omitted when expensive?
-- Can Causeway collection facets expose stable comparator identity suitable for cursor continuation?
-- Should concurrent mutation return a stale-window error or simply updated continuation metadata?
+- The default and hard maximum window sizes and their configuration names.
+- Whether materialization behavior should be a stable enum field or bounded diagnostics and documentation only.

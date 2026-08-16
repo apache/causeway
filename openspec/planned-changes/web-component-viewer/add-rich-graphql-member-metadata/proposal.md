@@ -1,22 +1,24 @@
 ## Why
 
-The rich schema exposes behavioral member state and standard GraphQL descriptions, while many framework-neutral Causeway member semantics remain available only through annotations or layout resources.
-A client composing members individually needs canonical names, descriptions, constraints, invocation hints, and fallback ordering without treating a friendly name as a description or reproducing the complete metamodel.
+The executable reference-application analysis confirmed that GraphQL field descriptions can contain either a friendly name or `describedAs` text but cannot represent both independently.
+It also confirmed that effective grid XML already carries most member positions, grouping, labels, descriptions, icons, CSS hints, action positions, and property layout hints.
+The GraphQL change should therefore remain small and provide only independent local semantics needed by standalone components or deterministic fallback, without copying the grid vocabulary.
+
+The evidence is recorded in `coverage-matrix.yaml` entries `REF-METADATA-01` and `REF-METADATA-02`.
 
 ## What Changes
 
-- Add structured metadata to existing rich property, action, parameter, collection, object-meta, and service wrappers.
-- Separate canonical friendly names from descriptions.
-- Expose the framework-neutral subset of property constraints, editing hints, action semantics and prompt hints, collection presentation and ordering hints, icons, CSS hints, and fallback sequence information confirmed by analysis.
-- Retain `_meta.grid`, `_meta.layout`, and menu layout resources as the complete structural composition sources.
-- Continue discovering member identifiers through targeted standard GraphQL introspection without adding a duplicate member-list API.
-- Add authorization, compatibility, introspection, and reference-derived tests.
+- Add independently queryable canonical friendly name and description to existing known rich wrappers.
+- Add only confirmed local property and parameter constraints that a standalone editor needs, such as maximum length, regular-expression intent, accepted-file values, multiline, and typical length.
+- Preserve standard targeted introspection for member discovery and existing GraphQL input nullability for requiredness.
+- Keep positions, grouping, sequence, icons, CSS, prompt style, redirects, paging, sorting, and complete presentation structure in grid or menu resources.
+- Add localization, authorization, compatibility, and reference-derived tests.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `rich-graphql-member-metadata`: Defines structured framework-neutral metadata on known rich GraphQL object, service, property, action, parameter, and collection wrappers.
+- `rich-graphql-member-metadata`: Defines a narrow set of independent local names, descriptions, and editor-neutral constraints on known rich GraphQL wrappers.
 
 ### Modified Capabilities
 
@@ -24,7 +26,7 @@ None.
 
 ## Impact
 
-- Affects rich GraphQL wrapper types, metamodel facet adaptation, schema descriptions, tests, and documentation.
-- Depends on the completed reference-app analysis and may be narrowed by its classification.
-- Enables composite object and menu-bar components to render better labels, constraints, ordering, and fallback composition.
-- Does not serialize the complete Causeway metamodel or replace grid and menu layout resources.
+- Affects selected rich wrapper types, metamodel facet adaptation, schema descriptions, tests, and documentation.
+- Depends on completed reference-app analysis but is not a prerequisite for effective-grid object composition or menu-bar structure.
+- Improves standalone property, action, parameter, and collection components and fallback rendering when a layout resource is unavailable.
+- Does not serialize the complete Causeway metamodel or replace grid and menu resources.

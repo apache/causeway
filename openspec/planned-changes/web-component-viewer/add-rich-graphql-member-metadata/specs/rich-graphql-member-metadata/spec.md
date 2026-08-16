@@ -1,15 +1,15 @@
 ## ADDED Requirements
 
-### Requirement: Structured metadata on known wrappers
-Existing rich GraphQL object, service, property, action, parameter, and collection wrappers SHALL expose additive structured metadata justified by the reference-app analysis.
+### Requirement: Narrow local metadata on known wrappers
+Existing rich GraphQL wrappers SHALL expose only additive local metadata justified by matrix entries `REF-METADATA-01` and `REF-METADATA-02`.
 
-#### Scenario: Client addresses a known member
-- **WHEN** a client requests metadata beneath a known semantic member wrapper
-- **THEN** applicable constraints, semantics, and optional presentation hints are available as structured fields
+#### Scenario: Client addresses a known wrapper
+- **WHEN** a client requests accepted local metadata beneath a known semantic wrapper
+- **THEN** applicable names, descriptions, or editor-neutral constraints are available
 - **AND** absent semantics use documented null or default behavior
 
 ### Requirement: Independent friendly name and description
-Canonical friendly name and description SHALL be independently queryable and SHALL NOT depend on clients interpreting one GraphQL field description as both.
+Canonical friendly name and description SHALL be independently queryable and SHALL NOT require clients to interpret one GraphQL field description as both.
 
 #### Scenario: Member has both values
 - **WHEN** Causeway supplies a friendly name and a distinct description
@@ -18,57 +18,50 @@ Canonical friendly name and description SHALL be independently queryable and SHA
 #### Scenario: Only a friendly name exists
 - **WHEN** Causeway supplies no description
 - **THEN** the canonical friendly name remains available
-- **AND** the description does not duplicate it unless documented translation policy requires that result
+- **AND** the description remains absent unless documented localization produces a distinct value
 
-### Requirement: Property metadata
-Rich property metadata SHALL expose confirmed framework-neutral constraints and editing or navigation hints while preserving server validation authority.
+### Requirement: Standalone editor constraints
+Rich property and parameter metadata SHALL expose the accepted maximum-length, regular-expression, accepted-file, multiline, and typical-length semantics when present.
 
-#### Scenario: Constrained property is inspected
-- **WHEN** a property declares confirmed optionality, length, regular-expression, accepted-file, multiline, typical-length, label-position, or navigation semantics
-- **THEN** the applicable values are available as structured metadata
-- **AND** a client may use them without bypassing server validation
+#### Scenario: Constrained value is inspected
+- **WHEN** a known property or parameter declares an accepted local constraint
+- **THEN** the applicable value is available as structured metadata
+- **AND** server validation remains authoritative
 
-### Requirement: Action and parameter metadata
-Rich action and parameter metadata SHALL expose confirmed framework-neutral semantics and optional invocation or presentation hints.
+#### Scenario: Requiredness is inspected
+- **WHEN** a client needs structural nullability or requiredness
+- **THEN** it uses the generated GraphQL input type
+- **AND** no conflicting required flag is introduced
 
-#### Scenario: Action metadata is inspected
-- **WHEN** an action declares confirmed semantics, prompt style, association, position, sequence, icon, CSS, or redirect hints
-- **THEN** the applicable metadata is queryable independently from dynamic hidden and disabled state
+### Requirement: Structural metadata remains in resources
+Rich local metadata SHALL NOT duplicate complete grid or menu structure or resource-owned presentation hints.
 
-#### Scenario: Client ignores a hint
-- **WHEN** a client does not implement an optional action hint
-- **THEN** validation and invocation remain semantically correct
+#### Scenario: Client needs complete page structure
+- **WHEN** effective grid structure is available
+- **THEN** the client uses the grid resource for rows, columns, tabs, field sets, placement, ordering, icons, CSS, and action positions
 
-### Requirement: Collection metadata
-Rich collection metadata SHALL expose confirmed naming, presentation, configured page-size, ordering, sequence, icon, and CSS semantics where applicable.
+#### Scenario: Client needs complete application-menu structure
+- **WHEN** effective menu structure is available
+- **THEN** the client uses the menu resource for bars, menus, sections, entries, labels, hints, and ordering
 
-#### Scenario: Collection metadata is inspected
-- **WHEN** a collection has confirmed layout or ordering facets
-- **THEN** the wrapper returns the applicable local metadata
-- **AND** complete structural placement remains the responsibility of the grid resource
-
-### Requirement: No duplicate structural metadata API
-Member metadata SHALL complement standard introspection and layout resources rather than introduce a duplicate member list or complete layout serialization.
+### Requirement: Standard member discovery
+Member metadata SHALL complement standard introspection rather than introduce a duplicate member list or metamodel API.
 
 #### Scenario: Client discovers type members
 - **WHEN** a client needs property, action, and collection identifiers
 - **THEN** it uses standard targeted GraphQL introspection
-- **AND** no separate metamodel member-list field is required
-
-#### Scenario: Client needs complete page structure
-- **WHEN** complete grid or menu structure is available
-- **THEN** the client uses the referenced layout resource
-- **AND** wrapper metadata supplies only local semantics
+- **AND** no aggregate member-list field is required
 
 ### Requirement: Metadata authorization safety
-Structured metadata SHALL NOT reveal hidden members, sensitive values, or authorization policy rules.
+Local metadata SHALL NOT reveal sensitive values, disabled-reason internals, or authorization policy rules.
 
 #### Scenario: Member is hidden for the current user
 - **WHEN** runtime authorization hides a member
-- **THEN** metadata responses do not disclose sensitive member state beyond the established hidden contract
+- **THEN** metadata reveals no sensitive runtime state beyond the established hidden contract
+- **AND** static schema identity reveals no more than standard introspection already reveals
 
 ### Requirement: Backward-compatible metadata expansion
-Metadata additions SHALL preserve established generated names, field descriptions, query and mutation operations, and runtime behavioral fields.
+Metadata additions SHALL preserve established generated names, field descriptions, operations, and runtime behavioral fields.
 
 #### Scenario: Existing GraphQL client executes
 - **WHEN** a client uses an established document without new metadata fields

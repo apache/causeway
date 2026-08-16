@@ -40,7 +40,7 @@ Another application can therefore replace the viewer while reusing the same comp
 
 The stable application shell contains `<causeway-menubars>` outside the replaceable object-page region.
 Menu service actions publish semantic results, and the viewer's replaceable result and navigation policy decides whether to navigate, update a region, or leave the result to an application handler.
-The shell may invoke the discovered home-page action according to configured viewer policy, but the menu component never does so automatically.
+The shell may resolve a discovered home-page object or invoke a discovered home service action according to configured viewer policy, but the menu component never does so automatically.
 
 ### Use bookmark-based canonical object routes
 
@@ -75,7 +75,7 @@ Navigating to a different bookmark creates a new context generation and prevents
 
 The viewer provides replaceable handling for semantic object, collection, scalar, and void action results from object and menu actions.
 Object results may navigate by default, while scalar and collection results may render in a result region.
-The configured home-page action may supply the initial route or result according to policy.
+The configured home-page object or service action may supply the initial route or result according to policy.
 Applications can replace these decisions without replacing action or menu components.
 
 ### Ship as an optional Causeway viewer module
