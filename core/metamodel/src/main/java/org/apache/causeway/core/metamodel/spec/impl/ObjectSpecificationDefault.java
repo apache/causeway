@@ -69,7 +69,6 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -494,37 +493,6 @@ implements
 			}
 		};
 
-	}
-
-	public ObjectSpecificationRecord toUnmodifiable() {
-		//WIP
-		return new ObjectSpecificationRecord(
-				typeMeta,
-				facetHolder,
-				hierarchical,
-				objectActionContainer,
-				objectAssociationContainer,
-				getServiceRegistry().select(EntityTitleSubscriber.class),
-				introspectionPolicy,
-				aliases(),
-				valueFacet(),
-		    	entityFacet(),
-		    	viewmodelFacet(),
-		    	mixinFacet(),
-		    	lookupFacet(ObjectNamedFacet.class),
-		    	lookupFacet(ObjectDescribedFacet.class),
-		    	lookupFacet(TypeOfFacet.class),
-		    	lookupNonFallbackFacet(TitleFacet.class),
-		    	lookupFacet(IconFacet.class),
-		    	lookupFacet(FaFacet.class),
-		        lookupFacet(NavigableParentFacet.class),
-		        lookupFacet(CssClassFacet.class),
-				isDomainService(),
-				isInjectable(),
-				isParented(),
-				isImmutable(),
-				isHidden(),
-				new MemberCatalog(objectAssociationContainer, objectActionContainer).membersByMethod());
 	}
 
     // -- HELPER
