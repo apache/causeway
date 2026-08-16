@@ -30,12 +30,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-import jakarta.validation.constraints.Digits;
-
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -51,11 +45,11 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.commanddto.HasCommandDto;
 import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
@@ -70,7 +64,11 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.Digits;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -162,9 +160,8 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
         setCompletedAt(command.getCompletedAt());
 
         var replayState = getReplayState();
-        if(replayState != null && !replayState.isExportable() && !replayState.isExported()) {
-            return;
-        }
+        if(replayState != null && !replayState.isExportable() && !replayState.isExported())
+			return;
 
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
@@ -669,7 +666,7 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto, CommandR
         public TableColumnOrderDefault() { super(CommandLogEntry.class); }
 
         @Override
-        protected List<String> orderParented(final Object parent, final String collectionId, final List<String> propertyIds) {
+        protected List<String> orderParented(final Class<?> parentType, final String collectionId, final List<String> propertyIds) {
             return ordered(propertyIds);
         }
 

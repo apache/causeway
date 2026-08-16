@@ -23,15 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -39,7 +30,13 @@ import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -119,15 +116,13 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     @Nullable
     @Override
     public List<String> orderParented(
-            final Object domainObject,
+            final Class<?> parentType,
             final String collectionId,
             final Class<?> elementType,
             final List<String> associationIds) {
-
-        var domainClass = domainObject.getClass();
-        var resourceNames = buildResourceNames(domainClass, collectionId, elementType);
+        var resourceNames = buildResourceNames(parentType, collectionId, elementType);
         addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
-        var content = tryLoad(domainClass, resourceNames)
+        var content = tryLoad(parentType, resourceNames)
                 .orElse(null);
         return contentMatching(content, associationIds);
     }

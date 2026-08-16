@@ -56,7 +56,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFace
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -237,10 +236,9 @@ record SyntheticNavigationActionFactory(
     private static Can<ObjectAssociation> filterPropertiesOf(
             final ObjectSpecification ownerSpec,
             final OneToManyAssociation collection) {
-        var parentPlaceholder = ManagedObject.empty(ownerSpec);
         var columnQuery = new ColumnQuery(
                 collection.getFeatureIdentifier(),
-                parentPlaceholder,
+                ownerSpec,
                 AssociationsLookup.AVAILABLE);
         var elementType = (ObjectSpecificationInternal)collection.getElementType();
         if(!elementType.isFullyIntrospected()) {

@@ -23,12 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.CssResourceReference;
-
 import org.apache.causeway.applib.services.metamodel.MetaModelService.AssociationsLookup;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -55,6 +49,11 @@ import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolba
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link CollectionModel
@@ -201,7 +200,7 @@ implements CollectionCountProvider {
         elementType
         	.streamAssociationsForColumnRendering(new ColumnQuery(
 					collectionModel.getIdentifier(),
-					collectionModel.getParentObject(),
+					collectionModel.getParentObject().objSpec(),
 					AssociationsLookup.ENABLED))
             .map(ObjectAssociation::getSpecialization)
             .map(spez->spez.fold(

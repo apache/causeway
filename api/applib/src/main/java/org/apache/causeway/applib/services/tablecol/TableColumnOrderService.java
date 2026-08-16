@@ -64,10 +64,10 @@ import org.jspecify.annotations.Nullable;
 public interface TableColumnOrderService {
 
     /**
-     * For the parent collection owned by the specified parent and collection Id, return a list of association ids
+     * For the parented collection owned by the specified parent and collection Id, return a list of association ids
      * to be rendered as columns, in a particular order; those not included will be hidden.
      *
-     * @param parent - the parent object (eg an <i>Order</i>).
+     * @param parentType - the parent type (eg an <i>Order.class</i>).
      * @param collectionId - the logical member name that identifies the collection within its domain object type (eg <i>items</i>).
      * @param elementType - the class of the elements of the collection (eg <i>OrderItem</i>s in a collection of <i>Order#items</i>).
      * @param associationIds - the associations (properties or collections) of the element type that should be rendered in the parent object's collection
@@ -76,10 +76,10 @@ public interface TableColumnOrderService {
      */
     @Nullable
     List<String> orderParented(
-            final Object parent,
-            final String collectionId,
-            final Class<?> elementType,
-            final List<String> associationIds);
+    		Class<?> parentType,
+            String collectionId,
+            Class<?> elementType,
+            List<String> associationIds);
 
     /**
      * For the standalone collection of the specified type,  return a list of association ids to be rendered as columns,
@@ -92,7 +92,7 @@ public interface TableColumnOrderService {
      */
     @Nullable
     List<String> orderStandalone(
-            final Class<?> domainType,
-            final List<String> associationIds);
+            Class<?> domainType,
+            List<String> associationIds);
 
 }

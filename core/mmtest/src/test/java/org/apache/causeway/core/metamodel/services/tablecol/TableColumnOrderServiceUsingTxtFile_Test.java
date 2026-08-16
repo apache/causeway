@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.services.tablecol;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class TableColumnOrderServiceUsingTxtFile_Test {
 
@@ -44,7 +44,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void happy_case() {
             // when
-            var ordered = service.orderParented(new Customer(), "orders", Order.class,
+            var ordered = service.orderParented(Customer.class, "orders", Order.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
@@ -57,7 +57,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void fallback_to_fallback_file() {
             // when
-            var ordered = service.orderParented(new Customer(), "moreOrders", Order.class,
+            var ordered = service.orderParented(Customer.class, "moreOrders", Order.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
@@ -70,7 +70,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void fallback_to_wildcard_type() {
             // when
-            var ordered = service.orderParented(new Customer(), "otherOrders", Order4.class,
+            var ordered = service.orderParented(Customer.class, "otherOrders", Order4.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
@@ -83,7 +83,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void fallback_to_wildcard_fallback_type() {
             // when
-            var ordered = service.orderParented(new Customer(), "otherOrders", Order5.class,
+            var ordered = service.orderParented(Customer.class, "otherOrders", Order5.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
@@ -96,7 +96,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void fallback_to_element_type() {
             // when
-            var ordered = service.orderParented(new Customer(), "previousOrders", Order.class,
+            var ordered = service.orderParented(Customer.class, "previousOrders", Order.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));   // "orderDate" is not in the file being read
 
             // then
@@ -106,7 +106,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void missing_file() {
             // when
-            var ordered = service.orderParented(new Customer(), "nonExistent", Order2.class,
+            var ordered = service.orderParented(Customer.class, "nonExistent", Order2.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then

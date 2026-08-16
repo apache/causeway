@@ -25,29 +25,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.CommandRecordingSuppressed;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -160,7 +157,7 @@ public interface CommandReplayResultMapping extends CommandRecordingSuppressed {
 
         @Override
         protected List<String> orderParented(
-                final Object parent,
+        		final Class<?> parentType,
                 final String collectionId,
                 final List<String> propertyIds) {
             return ordered();

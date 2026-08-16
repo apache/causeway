@@ -27,12 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-import jakarta.validation.constraints.Digits;
-
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -60,7 +54,11 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.Digits;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -410,7 +408,7 @@ extends Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSe
         public TableColumnOrderDefault() { super(ExecutionLogEntry.class); }
 
         @Override
-        protected List<String> orderParented(final Object parent, final String collectionId, final List<String> propertyIds) {
+        protected List<String> orderParented(final Class<?> parentType, final String collectionId, final List<String> propertyIds) {
             return ordered(propertyIds);
         }
 
