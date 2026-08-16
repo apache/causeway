@@ -2,6 +2,7 @@
 
 Causeway applications organize service actions into primary, secondary, and tertiary menu bars, but the framework-neutral component vocabulary currently begins at bookmark-addressable domain objects.
 Applications should be able to render complete application menus or only one semantic bar without adopting HTMX or rebuilding menu-layout parsing and service-action interaction.
+The evidence is recorded in `coverage-matrix.yaml` entries `REF-MENU-01`, `REF-COMPONENT-02`, `REF-ACTION-03`, and `REF-ACTION-04`.
 
 ## What Changes
 
@@ -26,6 +27,6 @@ None.
 ## Impact
 
 - Affects the web-component foundation module, application-entry coordination, service-action interaction adaptation, styling, tests, sample HTML, and documentation.
-- Depends on `rich-graphql-application-entry-points`, rich member metadata, and established interaction components.
+- Depends on corrected service-action argument interaction, safe structural resource links, `rich-graphql-application-entry-points`, and the established interaction components; narrow rich member metadata is optional.
 - Uses the consistent element spelling `causeway-menubar-*`; no `causeway-menu-bar-secondary` alias is proposed initially.
 - Does not require HTMX and can be consumed by any host framework.

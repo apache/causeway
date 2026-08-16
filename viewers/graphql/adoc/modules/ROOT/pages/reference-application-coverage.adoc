@@ -1,0 +1,196 @@
+= Reference Application Coverage Analysis
+
+This page records an executable analysis of the rich GraphQL schema against the Apache Causeway reference application.
+It is analysis evidence rather than a promise that every reference-application presentation feature belongs in a framework-neutral GraphQL contract.
+
+== Scope and pinned inputs
+
+The reference application was pinned to commit `04cff95802de44d0ff5ac0802857f3bb2ffe8c3a`.
+The probe used the current locally built `4.0.0-SNAPSHOT` GraphQL artifacts and JDK 25.0.3.
+The source inventory covered 1,271 Java files, 276 layout XML files, 38 domain services, 351 domain-object annotations, 664 property annotations, 128 collection annotations, 612 action annotations, and 724 member-support methods.
+
+The corresponding machine-readable artifacts are:
+
+* `viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/coverage-matrix.yaml`
+* `viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/probe-summary.yaml`
+* `viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/probe-operations.graphql`
+* `viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/referenceapp-functional-probe.patch`
+
+The matrix entry IDs are stable references used by the follow-on OpenSpec proposals.
+
+== Reproducible probe method
+
+The analysis first installed the current GraphQL reactor artifacts.
+
+[source,bash]
+----
+JAVA_HOME=$HOME/.sdkman/candidates/java/25.0.3-tem \
+  mvn -pl viewers/graphql -am install -DskipTests
+----
+
+The pinned reference application contains a `wicket/jpa-and-graphql` directory that is not part of its normal reactor and had drifted from its current JPA application assembly.
+The analysis used a disposable checkout under `/tmp` and applied only temporary wiring changes there.
+Those changes aligned the child parent version, added the orphaned module to the reactor, used the JPA application as its dependency, selected `ReferenceAppWicketJpa` as the main class, imported `CausewayModuleViewerGraphqlViewer`, kept the dependency application thin, excluded Spring Boot's default logging binding, skipped missing build information, and enabled full annotation processing for Lombok under JDK 25.
+None of those external-checkout changes is a Causeway production change or a reference-application dependency.
+
+The functional server can be reproduced from the Causeway checkout root with the following commands.
+
+[source,bash]
+----
+REFERENCE_REV=04cff95802de44d0ff5ac0802857f3bb2ffe8c3a
+REFERENCE_DIR=/tmp/causeway-app-referenceapp
+export JAVA_HOME=$HOME/.sdkman/candidates/java/25.0.3-tem
+export PATH="$JAVA_HOME/bin:$PATH"
+
+rm -rf "$REFERENCE_DIR"
+git clone https://github.com/apache/causeway-app-referenceapp.git "$REFERENCE_DIR"
+git -C "$REFERENCE_DIR" checkout "$REFERENCE_REV"
+git -C "$REFERENCE_DIR" apply \
+  "$PWD/viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/referenceapp-functional-probe.patch"
+
+"$JAVA_HOME/bin/java" -version
+mvn -f "$REFERENCE_DIR/pom.xml" \
+  -pl wicket/jpa-and-graphql -am package \
+  -DskipTests -DbuildInfo.skip=true -Dmaven.compiler.proc=full
+
+"$JAVA_HOME/bin/java" -jar \
+  "$REFERENCE_DIR/wicket/jpa-and-graphql/target/reference-app-wicket-jpa-and-graphql-4.0.0-SNAPSHOT.jar"
+----
+
+The endpoint accepts the reference application's test account through HTTP Basic authentication, for example `sven:pass`.
+The resource-policy run additionally passes `--causeway.viewer.graphql.resources.response-type=DIRECT`.
+
+The authorization-sensitive probe ran first with the reference application's Secman configuration and the GraphQL import enabled, but without the bypass dependency, module import, or `analysisAuthorizorChooser` from the functional patch.
+The broader functional probe then selected the explicit authorization-bypass implementation in the disposable checkout so that schema behavior could be distinguished from application authorization policy.
+The server was started with `RICH_AND_SIMPLE` schema style and was queried over its real HTTP `/graphql` endpoint.
+
+The default resource policy and `DIRECT` resource policy were tested in separate server runs.
+Targeted one-type introspection operations were used for member details because the generated schema contains 21,142 types and broad repeated field introspection can trigger GraphQL Java's bad-faith introspection protection.
+
+== Schema baseline
+
+The generated endpoint reported `SimpleAndRich` as the query type and `Mutation` as the mutation type.
+The rich and simple roots each exposed 430 object or service lookup fields.
+The mutation root exposed 3,154 fields, while `logicalTypeNames__gqlv_enum` exposed 277 values.
+The complete schema contained 20,365 object types, 732 input-object types, 33 enum types, and 12 scalar types.
+
+This scale confirms that generic clients must use cached targeted introspection and request only the types needed for the active object context.
+It also makes generated type proliferation and startup cost relevant compatibility concerns for every proposed schema extension.
+
+== Confirmed coverage
+
+The current rich schema successfully covers representative domain services, concrete entities, concrete view models, mixin properties, mixin actions, dynamic hidden state, dynamic disabled state, scalar property reads, scalar property validation, action defaults, action choices, autocomplete, safe invocation, mutating invocation, and typed concrete collection rows.
+
+The safe-versus-mutating split remained visible in the schema.
+Safe actions used nested query `invoke` fields, while state-changing actions used generated top-level mutation fields.
+
+A scalar property validation probe returned the domain message `Not of working age [18-65]`.
+The corresponding invalid mutation was rejected as a GraphQL data-fetching error.
+
+Action choices returned seven male and six female television characters.
+Autocomplete for `ba` returned `Barbara`.
+A representative object-list action mutation succeeded when its separate validation field was not selected.
+
+The authorization probe reported the restricted action as hidden and did not execute it.
+The password parameter default was serialized as `suppressed`, and no clear-text password was observed.
+
+== Confirmed correctness gaps
+
+=== Object identity and interaction correctness
+
+Abstract entity input types require `logicalTypeName`, but the enum does not contain the concrete logical types used by representative JPA entities.
+A collection declared using the same abstract entity supertype omitted its `get` field entirely.
+These defects make otherwise generated entity and collection contracts unreachable from a generic client.
+
+Collection-valued action validation received raw `LinkedHashMap` values instead of unmarshalled domain objects and produced an HTTP 500 assertion failure.
+The representative bulk-action choices field also failed because its collection argument map was null.
+
+A valid property mutation against `PropertyMustSatisfyPage`, which is a memento view model, submitted age 30 but returned age 18 with the original identifier.
+Reloading that identifier also returned age 18.
+The mutation therefore appeared successful while making no observable state change.
+
+These findings are grouped as immediate object-interaction correctness work in matrix entries `REF-OBJECT-02`, `REF-PROP-02`, `REF-ACTION-03`, `REF-ACTION-04`, and `REF-COLLECTION-03`.
+
+=== Value and resource semantics
+
+The current explicit marshallers cover primitives, wrappers, strings, big numbers, selected Java-time values, UUID, enums, and void.
+Unregistered value types fall back to GraphQL `String` for both output and input.
+That fallback is readable in some cases but is not reversible.
+
+Executable action probes showed that strings advertised for `LocalDateTime`, `URL`, Blob, Clob, and a custom `ComplexNumber` were rejected because the resulting Java value remained a `String`.
+The same source inventory includes `java.util.Date`, `java.sql.Date`, and `java.sql.Timestamp`, for which no explicit current marshaller was found.
+
+The default `FORBIDDEN` resource policy correctly returned HTTP 403 from a manually normalized Blob resource path.
+However, Blob link fields remained present in the schema under that policy.
+With `DIRECT` policy, grid and icon resources returned HTTP 200 when their paths were manually normalized.
+
+Generated resource references began with `///graphql/object/`.
+A standards-compliant URL parser interprets that form as a protocol-relative URL whose host is `graphql`, rather than as a same-origin `/graphql` path.
+The defect affects value resources and object metadata resources such as grids and icons.
+
+Matrix entries `REF-RESOURCE-02` and `REF-RESOURCE-03` are immediate link-safety work.
+Matrix entries `REF-VALUE-02`, `REF-VALUE-03`, and `REF-RESOURCE-01` require explicit reversible representations rather than a generic raw-string promise.
+
+=== Collection scalability
+
+`CollectionLayoutPagedPage.children` declares a page size of five.
+Its rich `get` field had no arguments and returned all 13 rows.
+The wrapper exposed neither count nor continuation metadata.
+
+Presentation paging is not itself a GraphQL transport contract, but the fixture proves that current collection reads are unbounded.
+Matrix entry `REF-COLLECTION-02` therefore remains a distinct collection-windowing capability rather than a metadata-only change.
+
+=== Metadata and effective grids
+
+GraphQL field descriptions expose a useful friendly label or a useful `describedAs` value for representative members, but not both independently.
+Standalone rich member wrappers did not expose representative `fileAccept`, paging, sorting, prompt, or sequence semantics.
+
+The effective Causeway grid is substantially richer than the wrappers.
+With `DIRECT` resources enabled, the probe retrieved a 5,911-byte XML grid containing five rows, eight columns, six field sets, twenty actions, seven properties, and two collections.
+The grid also carried member names, descriptions, positions, icon classes, and other layout hints.
+
+The member-metadata proposal should therefore not duplicate the complete grid vocabulary.
+It should be narrowed to semantic constraints and independent labels or descriptions required by standalone components and deterministic fallback rendering.
+The composite object component should continue to treat the effective grid and `GridFallbackLayout.xml` as the structural sources.
+
+=== Application entry points
+
+The reference application defines one `@HomePage` and a three-level menu-bars layout.
+The menu layout contains ten primary menus with 37 sections and 141 actions, three secondary menus with 17 sections and 48 actions, and one tertiary menu with four sections and eight actions.
+
+The rich query root exposed 58 service-menu types but no menu-bar entry point.
+The only menu-bars-named mutation was the `LayoutServiceMenu` download utility action.
+The root exposed a normal `demo_Homepage(object: ...)` lookup but no indication that this type or an action is the configured application home page.
+Calling that normal object lookup without identity produced a data-fetching exception.
+
+Menu grouping and home-page designation therefore remain application-level GraphQL gaps rather than web-component parsing problems.
+
+== Explicit exclusions
+
+Wicket table decorators, Wicket redirect policies, CSS implementation details, and repainting behavior are not required framework-neutral GraphQL semantics.
+Some source annotations may later justify optional presentation hints, but they do not justify reproducing a Wicket contract.
+
+Domain events, command publishing, execution publishing, lifecycle callbacks, validation execution, authorization evaluation, and persistence semantics remain server-side behavior.
+GraphQL must enforce them during execution, but a browser component does not need a duplicate metadata model for their internal mechanics.
+
+The pinned reference application remains external evidence and must not become a normal Causeway reactor dependency.
+Reduced deterministic fixtures are required for accepted behavior.
+
+== Evidence-backed roadmap
+
+The analysis changes the provisional programme order.
+
+. Fix rich GraphQL object-interaction correctness for polymorphic identity, abstract collection output, collection-valued validation and choices, and memento view-model property mutation.
+. Fix resource-link safety by omitting forbidden links and producing valid same-origin references under enabled policies.
+. Add explicit reversible standard, resource, and registered custom-value semantics.
+. Add bounded collection windows and continuation metadata.
+. Add application entry points for the effective menu resource and configured home-page object or supported action.
+. Implement `<causeway-object>` after accepted value and collection capabilities, safe effective-grid retrieval, and correct object interactions.
+. Implement `<causeway-menubars>` after application entry points, safe menu-resource retrieval, and correct service-action inputs.
+. Narrow member metadata to independent standalone or fallback semantics not owned by grid or menu resources.
+. Refine diagnostics around the accepted executor, resource, and redaction behavior.
+. Revisit the generic HTMX viewer only after the semantic components and required rich GraphQL capabilities are complete.
+
+The first two roadmap items are correctness or safety work and have priority `P0` in the matrix.
+Value semantics, collection windowing, application entry points, composite rendering, and menu rendering are `P1` capabilities.
+Independent wrapper metadata and diagnostics are `P2` because effective grid and menu resources already cover much of the structural presentation vocabulary.

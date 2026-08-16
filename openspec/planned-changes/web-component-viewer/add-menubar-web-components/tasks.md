@@ -1,12 +1,14 @@
 ## 1. Public Vocabulary and Coordination
 
-- [ ] 1.1 Define contracts for `<causeway-menubars>` and primary, secondary, and tertiary bar elements.
-- [ ] 1.2 Define shared application-entry state, generation, caching, invalidation, standalone-bar, and declarative-child behavior.
-- [ ] 1.3 Register all elements and preserve pre-upgrade declarative bar children.
+- [ ] 1.1 Translate matrix entries `REF-MENU-01`, `REF-COMPONENT-02`, `REF-ACTION-03`, and `REF-ACTION-04` into menu-resource and service-action fixtures.
+- [ ] 1.2 Verify object-interaction, structural-resource, and application-entry prerequisites are complete.
+- [ ] 1.3 Define contracts for `<causeway-menubars>` and primary, secondary, and tertiary bar elements.
+- [ ] 1.4 Define shared application-entry state, generation, caching, invalidation, standalone-bar, and declarative-child behavior.
+- [ ] 1.5 Register all elements and preserve pre-upgrade declarative bar children.
 
 ## 2. Menu Layout and Service Actions
 
-- [ ] 2.1 Consume effective primary, secondary, tertiary, menu, section, and service-action data from rich GraphQL application entry points.
+- [ ] 2.1 Fetch and securely parse the effective primary, secondary, tertiary, menu, section, and service-action resource from rich GraphQL application entry points.
 - [ ] 2.2 Preserve ordering, labels, descriptions, icons, supported hints, and partial-layout diagnostics.
 - [ ] 2.3 Implement the service-action adapter over existing editor, prompt, choices, autocomplete, validation, invocation, cancellation, stale-response, and result primitives.
 - [ ] 2.4 Omit hidden entries, present disabled entries accessibly, and collapse empty sections, menus, and bars.

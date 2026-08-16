@@ -61,9 +61,15 @@ Pending implementation drafts may be revised, merged, split, or rejected as an o
 This change is documentation-only and requires no migration.
 Follow-on proposals are not promoted until the analysis records their prerequisites and compatibility impact.
 
-## Open Questions
+## Analysis Outcomes
 
-- Can the reference application run its GraphQL variant directly from the audited revision in the available build environment?
-- Which generated schema forms provide the clearest stable evidence without committing an impractically large snapshot?
-- Which presentation hints are framework-neutral enough to expose outside grid and menu resources?
-- Which custom values should be supported by default rather than through application extensions?
+The pinned checkout's orphaned GraphQL application does not run directly without disposable reactor, application-import, packaging, logging, annotation-processing, and security-chooser wiring recorded in the published runbook and patch.
+The normal Causeway build remains independent from that checkout.
+
+Targeted one-type introspection, representative operation documents, a compact probe summary, and the machine-readable matrix provide stable evidence without committing the generated 21,142-type schema.
+
+Effective grid and menu resources remain canonical for structural positions, grouping, ordering, icons, CSS hints, and presentation-specific behavior.
+Only independent friendly names, descriptions, and a narrow proven set of standalone editor constraints remain candidates for local rich wrapper metadata.
+
+Confirmed missing standard value equivalence classes are candidates for default marshallers.
+Application composite values such as `ComplexNumber` require explicit bidirectional registration, while opaque and sensitive values remain output-only or unsupported rather than receiving inferred `toString()` reconstruction.

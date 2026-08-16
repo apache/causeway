@@ -1,8 +1,10 @@
 ## 1. Public Contract and Layout Plan
 
-- [ ] 1.1 Define `<causeway-object>` attributes, context requirements, lifecycle states, events, diagnostics, and customization hooks.
-- [ ] 1.2 Define the immutable layout-plan model and member-allocation rules.
-- [ ] 1.3 Define the supported Causeway grid subset and canonical fallback plan derived from `GridFallbackLayout.xml`.
+- [ ] 1.1 Translate matrix entries `REF-LAYOUT-01`, `REF-COMPONENT-01`, `REF-METADATA-02`, and `REF-COLLECTION-02` into effective-grid, fallback, and collection fixtures.
+- [ ] 1.2 Verify corrected object interaction and safe structural resource-link prerequisites are complete.
+- [ ] 1.3 Define `<causeway-object>` attributes, context requirements, lifecycle states, events, diagnostics, and customization hooks.
+- [ ] 1.4 Define the immutable layout-plan model and member-allocation rules.
+- [ ] 1.5 Define the supported Causeway grid subset and canonical fallback plan derived from `GridFallbackLayout.xml`.
 
 ## 2. Secure Grid Retrieval and Parsing
 

@@ -5,12 +5,12 @@ The component library SHALL provide `<causeway-menubars>`, `<causeway-menubar-pr
 
 #### Scenario: Composite menu bars connect
 - **WHEN** `<causeway-menubars>` connects beneath a configured GraphQL client
-- **THEN** it obtains the effective application-entry projection once
+- **THEN** it obtains and securely parses the effective application-entry menu resource once
 - **AND** composes or coordinates present primary, secondary, and tertiary bar components in semantic order
 
 #### Scenario: One bar is used independently
 - **WHEN** an application uses a primary, secondary, or tertiary bar without the composite
-- **THEN** that component can obtain and render only its semantic bar through the same application-entry contract
+- **THEN** that component can obtain the same authorized resource and render only its semantic bar
 
 ### Requirement: Declarative and generated bar composition
 The composite SHALL preserve declaratively supplied semantic bar children and generate only required missing bar roles.
@@ -21,11 +21,16 @@ The composite SHALL preserve declaratively supplied semantic bar children and ge
 - **AND** does not generate duplicate bars for those roles
 
 #### Scenario: Effective bar is absent
-- **WHEN** application-entry data contains no visible entries for a bar
+- **WHEN** the effective menu resource contains no visible entries for a bar
 - **THEN** the composite does not expose an empty interactive landmark for that bar
 
-### Requirement: Effective menu structure rendering
-Each bar SHALL preserve the effective ordered menus, sections, service-action references, labels, descriptions, icons, and supported hints supplied by the application-entry contract.
+### Requirement: Secure effective menu structure rendering
+Each bar SHALL securely parse the documented menu-resource subset and preserve its effective ordered menus, sections, service-action references, labels, descriptions, icons, and supported hints.
+
+#### Scenario: Menu resource is parsed
+- **WHEN** a bar receives an authorized menu resource
+- **THEN** parsing disables external entities, executable markup, and cross-origin expansion
+- **AND** unsupported content produces a bounded diagnostic rather than executable DOM
 
 #### Scenario: Bar contains multiple menus and sections
 - **WHEN** a bar is rendered

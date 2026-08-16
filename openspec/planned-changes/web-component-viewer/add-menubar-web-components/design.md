@@ -13,7 +13,7 @@ Menu actions are top-level service actions, so menu components need an applicati
 
 - Render all three Causeway bars through one high-level component.
 - Allow each bar component to be used independently.
-- Load and share effective application-entry data once where possible.
+- Load, securely parse, and share the effective application-entry menu resource once where possible.
 - Preserve menus, sections, order, presentation metadata, visibility, and service-action semantics.
 - Reuse standard editors, prompts, validation, result events, and cancellation.
 - Provide accessible pointer, keyboard, desktop, and narrow-screen behavior.
@@ -36,9 +36,10 @@ The compound `menubar` spelling matches the Causeway MenuBars terminology and av
 
 ### Coordinate once and permit independent bars
 
-`<causeway-menubars>` obtains application-entry data from the nearest GraphQL client, owns one shared generation and cache scope, and composes or supplies data to the three child bar components.
-Declaratively supplied bar children are reused; missing bar children are generated in primary, secondary, tertiary order.
-A standalone bar can obtain its own application-entry projection from the nearest client under the same contract.
+`<causeway-menubars>` obtains application-entry metadata from the nearest GraphQL client, fetches the authorized effective menu resource, and owns one shared generation and cache scope.
+It parses only the documented menu-bars XML subset with external entities, executable markup, and cross-origin resource expansion disabled.
+Declaratively supplied bar children are reused; missing bar children are generated in primary, secondary, tertiary order and receive the shared immutable menu plan.
+A standalone bar can obtain and parse its own application-entry resource under the same contract.
 
 ### Adapt established interaction behavior to service actions
 
@@ -63,18 +64,19 @@ Primary, secondary, and tertiary are exposed as data and styling hooks rather th
 
 Service action results publish the same semantic scalar, object, collection, and void result events used by object actions.
 The host may navigate, render a result region, close a shell menu, or do nothing according to policy.
-The components never invoke a home-page action automatically.
+The components never resolve a home-page object or invoke a home service action automatically.
 
 ### Handle dynamic and partial states locally
 
-Hidden entries are omitted without revealing metadata.
+Entries already omitted by the authorized effective resource are never synthesized.
+Any entry whose canonical service-action wrapper reports hidden is omitted without rendering its label or state.
 Disabled entries remain represented according to established action semantics and explain their disabled reason accessibly.
 An invalid menu reference or one failed service action does not discard unrelated menus or bars.
 Empty sections, menus, and bars collapse in that order.
 
 ## Risks / Trade-offs
 
-- [Application-entry data can vary by user and locale] → Scope shared state and invalidation to the GraphQL execution context and application-entry generation.
+- [Application-entry resources can vary by user and locale] → Scope shared state and invalidation to the GraphQL execution context and application-entry generation.
 - [Menus can become keyboard traps] → Follow disclosure navigation patterns, rely on native controls, and test focus restoration and Escape extensively.
 - [Service actions lack object context] → Reuse interaction primitives through a dedicated service adapter rather than faking an object bookmark.
 - [Generated bars can conflict with declarative children] → Capture declarative bar children before custom-element upgrade and generate only missing roles.
@@ -91,4 +93,4 @@ The generic HTMX viewer can later place `<causeway-menubars>` in its shell witho
 - Should standalone bars share data through an explicit public application context element in a later proposal?
 - Should disabled actions remain visible in closed-menu counts?
 - Which ARIA disclosure or menubar pattern best matches responsive service-action menus without overloading arrow-key behavior?
-- Should the composite generate all three bars or only bars present in effective application-entry data?
+- Should the composite generate all three bars or only bars present in the effective menu resource?

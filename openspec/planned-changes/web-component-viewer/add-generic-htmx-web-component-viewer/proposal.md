@@ -2,6 +2,7 @@
 
 The semantic web-component library will provide complete layout-aware object and application-menu components, but users also need a usable default application shell with routes, history, fragment navigation, and page customization.
 An HTMX reference viewer will provide that shell while proving that framework-neutral components remain the sole implementation of domain and layout semantics.
+The evidence and ownership boundary are recorded in `coverage-matrix.yaml` entries `REF-VIEWER-01`, `REF-COMPONENT-01`, `REF-COMPONENT-02`, `REF-HOME-01`, and `REF-MENU-01`.
 
 ## What Changes
 
@@ -26,7 +27,7 @@ None.
 ## Impact
 
 - Adds an optional viewer module, browser assets, route and fragment handling, default theme, and demonstration application.
-- Depends on the archived context and member components plus the pending application-entry, composite-object, and menu-bar capabilities.
+- Depends on accepted P0 and P1 rich GraphQL coverage plus completed application-entry, composite-object, and menu-bar capabilities; narrow member metadata and diagnostics may be adopted independently.
 - Uses the public rich GraphQL endpoint and semantic component events; it does not access Causeway metamodel internals or parse layout resources itself.
 - Does not require applications using the component library to adopt HTMX.
 - Initially focuses on application shell and bookmark-addressable object pages rather than authentication pages, standalone values, or parity with every existing viewer extension.
