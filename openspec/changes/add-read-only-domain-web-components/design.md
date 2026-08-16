@@ -16,6 +16,7 @@ The existing `sample-html` application provides the executable same-origin fixtu
 - Reuse hydrated GraphQL results across nested object contexts.
 - Provide accessible and styleable framework-neutral markup.
 - Validate the complete read-only composition through the packaged modules, deterministic data, stable hooks, and readiness contract of `sample-html`.
+- Make `sample-html` an understandable page-specific reference showcase with representative scalar breadth, visual hierarchy, visible diagnostics, and accessible responsive styling.
 
 **Non-Goals:**
 
@@ -87,13 +88,31 @@ Unsupported types will produce an explicit diagnostic placeholder in development
 The existing `/sample-html/index.html` page will evolve from its foundation probe into a representative custom read-only domain page without introducing HTMX, a frontend framework, or an npm build.
 The existing logical type, persisted identifier, bookmark `s_sample-1`, object title, route, selectors, and `data-state` readiness behavior will remain stable.
 
-The deterministic domain will add an enum property, a null property, an object-valued property, stable related objects, visible enabled and disabled action semantics, a hidden action, a populated object collection with declared columns, and an empty collection.
-The page will use the new semantic components for those members and will expose additional stable `data-testid` hooks for values, object links, actions, collections, columns, and an event-diagnostic outlet.
+The deterministic domain will add text, numeric, boolean, enum, null, and object-valued properties, stable related objects, visible enabled and disabled action semantics, a hidden action, a populated object collection with declared columns, and an empty collection.
+Ordinary properties will expose enabled semantics so the deliberately disabled members remain clear demonstrations rather than making the entire page appear unavailable.
+The page will use the new semantic components for those members and will expose additional stable `data-testid` hooks for values, object links, actions, collections, columns, semantic sections, collection diagnostics, and an event-diagnostic outlet.
 Navigation and action-request events will be observed by plain application JavaScript and reported without imposing routing, prompts, or invocation.
 
 Random-port integration tests will continue to verify the packaged page and ECMAScript modules, and will exercise targeted introspection plus deterministic object and collection reads against the running `/graphql` endpoint.
 A manual real-browser smoke check will verify that the page reaches `ready`, renders the representative states, hides hidden members, and publishes semantic events without console failures.
 Playwright remains deferred, but the expanded stable hooks will preserve a direct path to later automated browser coverage.
+
+### Present the executable sample as a page-specific reference showcase
+
+The sample will wrap the semantic components in a deliberate page shell with separate object-summary, property, action, collection, and event-diagnostic sections.
+The shell will use page-specific plain CSS for responsive cards, spacing, typography, tables, focus treatment, and light and dark color schemes.
+The presentation will remain an application theme layered over stable light-DOM classes and will not add display policy to the component library solely for this fixture.
+
+The domain will add deterministic `summary`, `capacity`, and `featured` properties to demonstrate text, numeric, and boolean scalar rendering alongside the existing enum, null, and reference values.
+The root domain object will allow ordinary property editing at the metamodel level so those values are not all reported as disabled, while `code`, `relatedObject`, and `archive` retain deliberate disabled semantics.
+No editing control is introduced because the component slice remains read-only.
+
+A visible coverage guide will name the semantics represented on the page and explain that the secret property and hidden action are intentionally absent.
+The guide will never reproduce the secret value or replace the component state as the source of truth.
+A prominent diagnostics panel will retain `[data-testid="sample-event"]`, show the latest semantic navigation or action request, and report the populated collection row count from collection state events.
+
+New section and value hooks will be additive, while all previously documented selectors and `data-state="ready"` behavior remain stable.
+This page-specific structure is not metadata-driven, reusable generic composition, routing, or an alternative viewer.
 
 ## Risks / Trade-offs
 
@@ -104,6 +123,8 @@ Playwright remains deferred, but the expanded stable hooks will preserve a direc
 - [Action affordances without invocation may feel incomplete] → Keep their event contract stable so the interaction change can add the standard prompt controller without changing page composition.
 - [Frontend frameworks differ in custom-event handling] → Use bubbling and composed standard events and provide interoperability examples rather than framework-specific public wrappers.
 - [An acceptance fixture can grow into a second generic viewer] → Keep `sample-html` deterministic and page-specific, use it only to prove public component contracts, and defer routing and generic composition.
+- [A richer sample theme can obscure the component contract] → Keep all domain values and semantic state inside public components, limit page JavaScript to diagnostics, and use only ordinary light-DOM CSS overrides.
+- [Light and dark application colors can regress contrast] → Require automated accessibility auditing and keyboard smoke verification as final acceptance checks.
 
 ## Migration Plan
 
