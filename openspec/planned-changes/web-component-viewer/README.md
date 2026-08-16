@@ -2,8 +2,9 @@
 
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation` and read-only change `add-read-only-domain-web-components` are archived.
-The active change is `add-domain-web-component-interactions`, and the next queued draft is `add-generic-htmx-web-component-viewer`.
+The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, and interaction change `add-domain-web-component-interactions` are archived.
+No web-component viewer change is currently active.
+The next queued draft is `add-generic-htmx-web-component-viewer`, followed by the pending `add-graphql-web-component-diagnostics` draft.
 
 Each child directory is a complete change folder containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and its delta specifications.
 After the active change is implemented, synced, and archived, promote the next draft verbatim:
@@ -21,8 +22,9 @@ Review each draft against discoveries made by preceding changes and update stale
 | Order | Draft | Depends on | Capability impact |
 |---:|---|---|---|
 | 1 | `add-read-only-domain-web-components` *(archived)* | Archived `establish-graphql-web-component-foundation` | NEW `domain-web-components` |
-| 2 | `add-domain-web-component-interactions` *(active)* | Archived read-only component change | MODIFIED `domain-web-components` |
+| 2 | `add-domain-web-component-interactions` *(archived)* | Archived read-only component change | MODIFIED `domain-web-components` |
 | 3 | `add-generic-htmx-web-component-viewer` *(next)* | Archived foundation and component changes | NEW `generic-web-component-viewer` |
+| 4 | `add-graphql-web-component-diagnostics` *(pending)* | Archived foundation and component changes; queued after the generic viewer | NEW `graphql-web-component-diagnostics` |
 
 ## Programme constraints
 
