@@ -21,6 +21,11 @@ import {normalizeExecutor} from './graphql-executor.mjs';
 import {buildDescribeTypesOperation, fieldsByName, namedType, normalizeTypeDescription} from './introspection.mjs';
 import {RichSchemaNameError, RichSchemaNames} from './schema-names.mjs';
 import {buildObjectReadOperation} from './selection.mjs';
+import {
+  buildDescribeOperationRootsOperation,
+  buildMutationInteractionOperation,
+  buildObjectInteractionOperation
+} from './interaction-operations.mjs';
 
 export class CausewaySchemaError extends Error {
   constructor(code, message, details = {}) {
@@ -37,6 +42,8 @@ export class CausewayGraphQLClient {
     this.schemaNames = schemaNames;
     this.typeCache = new Map();
     this.objectDescriptionCache = new Map();
+    this.operationRootsPromise = null;
+    this.mutationDescriptionPromise = null;
   }
 
   describeObject(logicalTypeName) {
@@ -69,6 +76,50 @@ export class CausewayGraphQLClient {
     return new Map(uniqueNames.map((typeName, index) => [typeName, descriptions[index]]));
   }
 
+  async describeOperationRoots({signal} = {}) {
+    if (!this.operationRootsPromise) {
+      const operation = buildDescribeOperationRootsOperation();
+      this.operationRootsPromise = this.executor({
+        document: operation.document,
+        variables: operation.variables,
+        operationName: operation.operationName,
+        signal
+      }).then(response => {
+        if (response.errors?.length && !response.data) {
+          throw new CausewaySchemaError(
+            'OPERATION_ROOT_INTROSPECTION_FAILED',
+            response.errors.map(error => error.message).join('; '),
+            {errors: response.errors}
+          );
+        }
+        return Object.freeze({
+          queryTypeName: response.data?.__schema?.queryType?.name ?? null,
+          mutationTypeName: response.data?.__schema?.mutationType?.name ?? null
+        });
+      }).catch(error => {
+        this.operationRootsPromise = null;
+        throw error;
+      });
+    }
+    return this.operationRootsPromise;
+  }
+
+  async describeMutation({signal} = {}) {
+    if (!this.mutationDescriptionPromise) {
+      this.mutationDescriptionPromise = this.describeOperationRoots({signal}).then(async roots => {
+        if (!roots.mutationTypeName) {
+          return null;
+        }
+        const types = await this.describeTypes([roots.mutationTypeName], {signal});
+        return types.get(roots.mutationTypeName) ?? null;
+      }).catch(error => {
+        this.mutationDescriptionPromise = null;
+        throw error;
+      });
+    }
+    return this.mutationDescriptionPromise;
+  }
+
   async readObject({description, identity, selection, signal}) {
     const operation = buildObjectReadOperation({
       description,
@@ -91,9 +142,64 @@ export class CausewayGraphQLClient {
     });
   }
 
+  async executeObjectInteraction({description, identity, selection, operationName, signal}) {
+    const operation = buildObjectInteractionOperation({
+      description,
+      identity,
+      selection,
+      schemaNames: this.schemaNames,
+      operationName
+    });
+    const response = await this.executor({
+      document: operation.document,
+      variables: operation.variables,
+      operationName: operation.operationName,
+      signal
+    });
+    return Object.freeze({
+      data: valueAtPath(response.data, operation.objectPath) ?? null,
+      errors: normalizeErrors(response.errors, operation.objectPath),
+      operation
+    });
+  }
+
+  async executeMutationInteraction({
+    description,
+    mutationType,
+    fieldName,
+    args,
+    resultSelection,
+    operationName,
+    signal
+  }) {
+    const types = new Map(description.types);
+    types.set(mutationType.name, mutationType);
+    const operation = buildMutationInteractionOperation({
+      mutationType,
+      fieldName,
+      args,
+      resultSelection,
+      types,
+      operationName
+    });
+    const response = await this.executor({
+      document: operation.document,
+      variables: operation.variables,
+      operationName: operation.operationName,
+      signal
+    });
+    return Object.freeze({
+      data: valueAtPath(response.data, operation.resultPath) ?? null,
+      errors: normalizeErrors(response.errors, operation.resultPath),
+      operation
+    });
+  }
+
   clearSchemaCache() {
     this.typeCache.clear();
     this.objectDescriptionCache.clear();
+    this.operationRootsPromise = null;
+    this.mutationDescriptionPromise = null;
   }
 
   async #fetchTypes(typeNames, signal) {
@@ -144,10 +250,8 @@ export class CausewayGraphQLClient {
           );
         }
         describedTypes.set(typeName, typeDescription);
-        for (const field of typeDescription.fields) {
-          const nestedTypeName = namedType(field.type);
-          if (this.schemaNames.isReachableSupportType(generatedTypeName, nestedTypeName)
-              && !describedTypes.has(nestedTypeName)) {
+        for (const nestedTypeName of referencedInteractionTypeNames(typeDescription, generatedTypeName, this.schemaNames)) {
+          if (!describedTypes.has(nestedTypeName)) {
             next.add(nestedTypeName);
           }
         }
@@ -254,6 +358,25 @@ function directSupportTypeNames(objectType, generatedTypeName, schemaNames) {
     const typeName = namedType(field.type);
     if (schemaNames.isReachableSupportType(generatedTypeName, typeName)) {
       result.add(typeName);
+    }
+  }
+  return [...result];
+}
+
+function referencedInteractionTypeNames(typeDescription, generatedTypeName, schemaNames) {
+  const result = new Set();
+  const consider = typeRef => {
+    const typeName = namedType(typeRef);
+    const kind = innermostType(typeRef)?.kind;
+    if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)
+        || kind === 'ENUM' && typeName.startsWith('rich__'))) {
+      result.add(typeName);
+    }
+  };
+  for (const field of typeDescription.fields) {
+    consider(field.type);
+    for (const argument of field.args) {
+      consider(argument.type);
     }
   }
   return [...result];

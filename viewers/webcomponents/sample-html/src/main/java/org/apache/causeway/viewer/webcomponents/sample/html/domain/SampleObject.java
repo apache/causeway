@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
@@ -65,6 +66,9 @@ public class SampleObject implements HasVersion<Long> {
     public static final SampleStatus SAMPLE_STATUS = SampleStatus.ACTIVE;
     public static final String CODE_DISABLED_REASON = "The sample code is fixed.";
     public static final String ARCHIVE_DISABLED_REASON = "Archiving is disabled in the read-only sample.";
+    public static final String SUMMARY_VALIDATION_REASON = "Summary must contain at least 12 characters.";
+    public static final String CAPACITY_VALIDATION_REASON = "Capacity must be between 1 and 100.";
+    public static final String ACTION_VALIDATION_REASON = "Summary must contain at least 12 characters before updating details.";
 
     @Id
     @Column(name = "id", nullable = false, length = 40)
@@ -162,12 +166,26 @@ public class SampleObject implements HasVersion<Long> {
         this.summary = summary;
     }
 
+    @MemberSupport
+    public String validateSummary(final String summary) {
+        return summary == null || summary.trim().length() < 12
+                ? SUMMARY_VALIDATION_REASON
+                : null;
+    }
+
     public int getCapacity() {
         return capacity;
     }
 
     public void setCapacity(final int capacity) {
         this.capacity = capacity;
+    }
+
+    @MemberSupport
+    public String validateCapacity(final int capacity) {
+        return capacity < 1 || capacity > 100
+                ? CAPACITY_VALIDATION_REASON
+                : null;
     }
 
     public boolean isFeatured() {
@@ -211,8 +229,55 @@ public class SampleObject implements HasVersion<Long> {
         relatedObjects.add(new SampleRelatedObject(id, this, relatedName, relatedCode));
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
     public String inspect() {
         return title();
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public SampleObject updateDetails(final String summary, final SampleStatus status) {
+        this.summary = summary;
+        this.status = status;
+        return this;
+    }
+
+    @MemberSupport
+    public String default0UpdateDetails() {
+        return summary;
+    }
+
+    @MemberSupport
+    public SampleStatus default1UpdateDetails() {
+        return status;
+    }
+
+    @MemberSupport
+    public String validateUpdateDetails(final String summary, final SampleStatus status) {
+        return summary == null || summary.trim().length() < 12
+                ? ACTION_VALIDATION_REASON
+                : null;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<SampleRelatedObject> findRelated(final String search) {
+        final String normalized = search == null ? "" : search.toLowerCase();
+        return relatedObjects.stream()
+                .filter(related -> related.getName().toLowerCase().contains(normalized))
+                .toList();
+    }
+
+    @MemberSupport
+    public List<String> autoComplete0FindRelated(final String search) {
+        final String normalized = search == null ? "" : search.toLowerCase();
+        return relatedObjects.stream()
+                .map(SampleRelatedObject::getName)
+                .filter(name -> name.toLowerCase().contains(normalized))
+                .toList();
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public void clearNotes() {
+        this.notes = null;
     }
 
     public void archive() {

@@ -28,6 +28,40 @@ export const CAUSEWAY_COMPONENT_STYLES = `
 .causeway-collection-table {
   inline-size: 100%;
 }
+.causeway-property-editing,
+.causeway-action-prompt form {
+  display: grid;
+  gap: 0.6rem;
+}
+.causeway-property-editor-actions,
+.causeway-action-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.causeway-property-editor input:not([type="checkbox"]),
+.causeway-property-editor select,
+.causeway-action-parameter input:not([type="checkbox"]),
+.causeway-action-parameter select {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+}
+.causeway-action-prompt {
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  max-inline-size: min(36rem, calc(100vw - 2rem));
+  padding: 1rem;
+}
+.causeway-action-parameter {
+  display: grid;
+  gap: 0.25rem;
+  margin-block: 0.75rem;
+}
+.causeway-action-result {
+  margin-block: 1rem;
+  padding: 0.75rem;
+}
 .causeway-property-label,
 .causeway-collection-label {
   font-weight: 600;

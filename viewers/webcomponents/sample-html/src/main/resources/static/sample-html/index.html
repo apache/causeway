@@ -21,8 +21,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Executable vanilla HTML reference showcase for Apache Causeway read-only web components.">
-  <title>Causeway read-only web-component showcase</title>
+  <meta name="description" content="Executable vanilla HTML reference showcase for Apache Causeway semantic web-component rendering and interactions.">
+  <link rel="icon" href="data:,">
+  <title>Causeway web-component interaction showcase</title>
   <style id="sample-theme">
     :root {
       color-scheme: light dark;
@@ -306,6 +307,8 @@
     }
 
     causeway-action button,
+    causeway-property button,
+    causeway-interaction-controller button,
     [data-causeway-activate] {
       background: var(--sample-accent);
       border: 1px solid var(--sample-accent);
@@ -317,11 +320,48 @@
       padding: 0.6rem 0.95rem;
     }
 
-    causeway-action button:disabled {
+    causeway-action button:disabled,
+    causeway-property button:disabled,
+    causeway-interaction-controller button:disabled {
       background: var(--sample-surface-muted);
       border-color: var(--sample-border);
       color: var(--sample-muted);
       cursor: not-allowed;
+    }
+
+    .causeway-property-editor input:not([type="checkbox"]),
+    .causeway-property-editor select,
+    .causeway-action-parameter input:not([type="checkbox"]),
+    .causeway-action-parameter select {
+      background: var(--sample-surface);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.5rem;
+      color: var(--sample-text);
+      font: inherit;
+      padding: 0.6rem 0.7rem;
+    }
+
+    .causeway-property-editor-actions,
+    .causeway-action-prompt-actions {
+      margin-block-start: 0.65rem;
+    }
+
+    .causeway-action-prompt {
+      background: var(--sample-surface);
+      border-color: var(--sample-border);
+      box-shadow: var(--sample-shadow);
+      color: var(--sample-text);
+    }
+
+    .causeway-action-prompt::backdrop {
+      background: rgb(8 18 32 / 0.58);
+    }
+
+    .causeway-action-result {
+      background: var(--sample-surface-elevated);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.8rem;
+      color: var(--sample-text);
     }
 
     .sample-coverage-list {
@@ -511,8 +551,8 @@
     <header class="sample-hero">
       <div>
         <p class="sample-eyebrow">Apache Causeway · Vanilla HTML</p>
-        <h1>Read-only component showcase</h1>
-        <p class="sample-hero-copy">A deterministic domain page composed from native custom elements, packaged ECMAScript modules, and the same-origin rich GraphQL endpoint.</p>
+        <h1>Component interaction showcase</h1>
+        <p class="sample-hero-copy">A deterministic domain page for read-only rendering, property editing, action prompts, and semantic results using packaged native custom elements and the same-origin rich GraphQL endpoint.</p>
       </div>
       <div class="sample-readiness" aria-label="Object context state">
         <output data-testid="sample-state" aria-live="polite">booting</output>
@@ -541,12 +581,12 @@
               <p>The explanatory copy describes the fixture; component-rendered state remains the source of truth.</p>
             </div>
             <ul class="sample-coverage-list">
-              <li><strong>Enabled values</strong>Text, number, boolean, enum, and null values are readable without implying an edit control.</li>
+              <li><strong>Enabled values</strong>Text, number, boolean, enum, and null values remain readable, with explicit edit controls only where enabled.</li>
               <li><strong>Disabled semantics</strong>Code, object reference, and archive retain explicit reasons supplied by Causeway.</li>
               <li><strong>Semantic reference</strong>The related object publishes navigation intent without choosing a URL or router.</li>
               <li><strong>Collections</strong>One secondary operation returns two selected rows while a sibling demonstrates the empty state.</li>
               <li><strong>Intentionally hidden</strong>The secret property and hidden action produce no semantic content, and their hidden value is never repeated here.</li>
-              <li><strong>Framework neutral</strong>No HTMX, frontend framework, npm build, prompt, mutation, or action invocation is present.</li>
+              <li><strong>Framework-neutral interactions</strong>No HTMX, frontend framework, npm build, automatic routing, or component-owned GraphQL construction is present.</li>
             </ul>
           </aside>
 
@@ -559,11 +599,11 @@
             <div class="sample-property-grid">
               <causeway-property member="name" data-testid="property-name"></causeway-property>
               <causeway-property member="code" data-testid="property-code"></causeway-property>
-              <causeway-property member="summary" data-testid="property-summary"></causeway-property>
-              <causeway-property member="capacity" data-testid="property-capacity"></causeway-property>
-              <causeway-property member="featured" data-testid="property-featured"></causeway-property>
-              <causeway-property member="status" data-testid="property-status"></causeway-property>
-              <causeway-property member="notes" data-testid="property-notes"></causeway-property>
+              <causeway-property member="summary" editable data-testid="property-summary"></causeway-property>
+              <causeway-property member="capacity" editable data-testid="property-capacity"></causeway-property>
+              <causeway-property member="featured" editable data-testid="property-featured"></causeway-property>
+              <causeway-property member="status" editable data-testid="property-status"></causeway-property>
+              <causeway-property member="notes" editable data-testid="property-notes"></causeway-property>
               <causeway-property member="relatedObject" data-testid="property-related-object"></causeway-property>
               <causeway-property member="secret" data-testid="property-secret"></causeway-property>
             </div>
@@ -571,12 +611,15 @@
 
           <section class="sample-card sample-card-actions" data-testid="section-actions" aria-labelledby="sample-actions-heading">
             <div class="sample-section-heading">
-              <p class="sample-section-kicker">Read-only affordances</p>
+              <p class="sample-section-kicker">Semantic interaction controller</p>
               <h2 id="sample-actions-heading">Semantic actions</h2>
-              <p>Enabled selection publishes an event; disabled and hidden states cannot request an action.</p>
+              <p>Enabled requests are handled by the standard controller; disabled and hidden states remain unavailable.</p>
             </div>
-            <div class="sample-action-stack" aria-label="Read-only action affordances">
+            <div class="sample-action-stack" aria-label="Interactive action affordances">
               <causeway-action member="inspect" data-testid="action-inspect"></causeway-action>
+              <causeway-action member="updateDetails" data-testid="action-update-details"></causeway-action>
+              <causeway-action member="findRelated" data-testid="action-find-related"></causeway-action>
+              <causeway-action member="clearNotes" data-testid="action-clear-notes"></causeway-action>
               <causeway-action member="archive" data-testid="action-archive"></causeway-action>
               <causeway-action member="hiddenAction" data-testid="action-hidden"></causeway-action>
             </div>
@@ -592,6 +635,10 @@
               <div class="sample-diagnostic">
                 <span class="sample-diagnostic-label">Latest semantic request</span>
                 <output data-testid="sample-event" aria-live="polite">No semantic event</output>
+              </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Latest interaction state</span>
+                <output data-testid="sample-interaction-event" aria-live="polite">No interaction</output>
               </div>
               <div class="sample-diagnostic">
                 <span class="sample-diagnostic-label">Related collection</span>
@@ -619,16 +666,18 @@
             </div>
           </section>
         </div>
+        <causeway-interaction-controller data-testid="action-interaction-controller"></causeway-interaction-controller>
       </causeway-object-context>
     </causeway-graphql-client>
 
-    <footer class="sample-footer">Public semantic components · Same-origin GraphQL · No frontend build</footer>
+    <footer class="sample-footer">Public semantic components · Same-origin GraphQL interactions · No frontend build</footer>
   </main>
 
   <script type="module">
     const application = document.querySelector('[data-testid="sample-app"]');
     const stateOutput = document.querySelector('[data-testid="sample-state"]');
     const eventOutput = document.querySelector('[data-testid="sample-event"]');
+    const interactionOutput = document.querySelector('[data-testid="sample-interaction-event"]');
     const collectionCountOutput = document.querySelector('[data-testid="collection-related-count"]');
 
     const report = (output, value) => {
@@ -669,6 +718,24 @@
 
     application.addEventListener('causeway-action-request', event => {
       report(eventOutput, `action:${event.detail.actionId}`);
+    });
+
+    application.addEventListener('causeway-property-interaction-state-change', event => {
+      report(interactionOutput, `property:${event.detail.member}:${event.detail.status}`);
+    });
+
+    application.addEventListener('causeway-property-updated', event => {
+      report(interactionOutput, `property:${event.detail.member}:updated`);
+    });
+
+    application.addEventListener('causeway-action-prompt-state-change', event => {
+      report(interactionOutput, `action:${event.detail.actionId}:${event.detail.status}`);
+    });
+
+    application.addEventListener('causeway-action-result', event => {
+      const result = event.detail.result;
+      const value = result?.kind === 'scalar' ? `:${result.value}` : '';
+      report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}`);
     });
 
     const components = await import('/causeway-webcomponents/index.mjs');
