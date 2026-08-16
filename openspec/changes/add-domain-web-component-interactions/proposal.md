@@ -14,6 +14,9 @@ Adding a shared interaction layer will keep validation, choices, autocomplete, p
 - Normalize scalar, object, collection, and void action outcomes as semantic result and navigation events.
 - Add request sequencing, cancellation, mutation serialization, partial-error mapping, and conservative active-projection refresh.
 - Preserve application override points for custom editors, prompts, result presentation, and interaction orchestration.
+- Extend the existing `sample-html` reference showcase as the executable interaction acceptance fixture while preserving its route, bookmark, read-only selectors, responsive theme, same-origin architecture, and Maven run profile.
+- Add deterministic editable scalar and enum properties, validation and choice behavior, safe and mutating actions, parameter negotiation, representative result shapes, stable interaction diagnostics, and additive browser hooks to the sample.
+- Document and execute manual browser verification for save, cancel, validation, choices, autocomplete, action prompts, outcomes, keyboard focus, responsive themes, GraphQL operation placement, and context refresh.
 
 ## Capabilities
 
@@ -29,5 +32,7 @@ None.
 
 - Extends the existing domain web components and object-context command API.
 - Adds editor and action-parameter renderer contracts and standard prompt presentation.
+- Expands `viewers/webcomponents/sample-html` and its deterministic JPA domain, GraphQL integration assertions, stable selectors, event diagnostics, and manual-verification documentation.
 - Exercises rich GraphQL validation, choices, autocomplete, invocation, and mutation fields and may identify concrete grammar gaps for separate proposals.
-- Does not add generic page routing, HTMX composition, collection mutation, bulk actions, or speculative GraphQL metadata fields.
+- Keeps the web-component layer framework-neutral and uses the existing same-origin `/graphql` endpoint and `run-sample-html` Maven profile.
+- Does not add generic page routing, HTMX composition, collection mutation, bulk actions, Playwright, or speculative GraphQL metadata fields.

@@ -2,8 +2,8 @@
 
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation` is archived.
-The active change is `add-read-only-domain-web-components`, and the next queued draft is `add-domain-web-component-interactions`.
+The foundation change `establish-graphql-web-component-foundation` and read-only change `add-read-only-domain-web-components` are archived.
+The active change is `add-domain-web-component-interactions`, and the next queued draft is `add-generic-htmx-web-component-viewer`.
 
 Each child directory is a complete change folder containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and its delta specifications.
 After the active change is implemented, synced, and archived, promote the next draft verbatim:
@@ -20,9 +20,9 @@ Review each draft against discoveries made by preceding changes and update stale
 
 | Order | Draft | Depends on | Capability impact |
 |---:|---|---|---|
-| 1 | `add-read-only-domain-web-components` *(active)* | Archived `establish-graphql-web-component-foundation` | NEW `domain-web-components` |
-| 2 | `add-domain-web-component-interactions` *(next)* | Archived read-only component change | MODIFIED `domain-web-components` |
-| 3 | `add-generic-htmx-web-component-viewer` | Archived foundation and component changes | NEW `generic-web-component-viewer` |
+| 1 | `add-read-only-domain-web-components` *(archived)* | Archived `establish-graphql-web-component-foundation` | NEW `domain-web-components` |
+| 2 | `add-domain-web-component-interactions` *(active)* | Archived read-only component change | MODIFIED `domain-web-components` |
+| 3 | `add-generic-htmx-web-component-viewer` *(next)* | Archived foundation and component changes | NEW `generic-web-component-viewer` |
 
 ## Programme constraints
 
