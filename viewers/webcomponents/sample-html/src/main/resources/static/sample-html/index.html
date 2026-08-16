@@ -21,73 +21,659 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Causeway vanilla HTML web-component sample</title>
-  <style>
+  <meta name="description" content="Executable vanilla HTML reference showcase for Apache Causeway read-only web components.">
+  <title>Causeway read-only web-component showcase</title>
+  <style id="sample-theme">
     :root {
       color-scheme: light dark;
-      font-family: system-ui, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --sample-bg: #eef3f8;
+      --sample-bg-accent: #dcecff;
+      --sample-surface: #ffffff;
+      --sample-surface-muted: #f6f8fb;
+      --sample-text: #172033;
+      --sample-muted: #526178;
+      --sample-border: #c8d4e3;
+      --sample-accent: #145ea8;
+      --sample-on-accent: #ffffff;
+      --sample-accent-strong: #0b477f;
+      --sample-accent-soft: #e5f1ff;
+      --sample-success: #146c43;
+      --sample-success-soft: #e4f5eb;
+      --sample-warning: #81510b;
+      --sample-warning-soft: #fff2d6;
+      --sample-shadow: 0 1rem 2.5rem rgb(28 52 84 / 12%);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --sample-bg: #111827;
+        --sample-bg-accent: #162b46;
+        --sample-surface: #1c2637;
+        --sample-surface-muted: #222f43;
+        --sample-text: #f3f7fc;
+        --sample-muted: #bbc8d9;
+        --sample-border: #42536b;
+        --sample-accent: #7dc1ff;
+        --sample-on-accent: #102238;
+        --sample-accent-strong: #b7dcff;
+        --sample-accent-soft: #193a5d;
+        --sample-success: #7ad6a5;
+        --sample-success-soft: #173f31;
+        --sample-warning: #ffd28a;
+        --sample-warning-soft: #4b3617;
+        --sample-shadow: 0 1rem 2.5rem rgb(0 0 0 / 28%);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
-      margin: 2rem auto;
-      max-width: 60rem;
-      padding-inline: 1rem;
+      background:
+        radial-gradient(circle at 15% 0%, var(--sample-bg-accent), transparent 32rem),
+        var(--sample-bg);
+      color: var(--sample-text);
+      margin: 0;
+      min-block-size: 100vh;
+    }
+
+    button,
+    output {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    [role="link"]:focus-visible {
+      outline: 3px solid var(--sample-accent);
+      outline-offset: 3px;
+    }
+
+    .sample-shell {
+      margin-inline: auto;
+      max-inline-size: 76rem;
+      padding: clamp(1rem, 3vw, 2.5rem);
+    }
+
+    .sample-hero {
+      align-items: end;
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: minmax(0, 1fr) auto;
+      margin-block-end: 1.5rem;
+      padding: clamp(0.5rem, 2vw, 1.25rem) 0;
+    }
+
+    .sample-eyebrow,
+    .sample-section-kicker {
+      color: var(--sample-accent-strong);
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+      margin: 0 0 0.35rem;
+      text-transform: uppercase;
+    }
+
+    .sample-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.75rem);
+      letter-spacing: -0.045em;
+      line-height: 1;
+      margin: 0;
+      max-inline-size: 15ch;
+    }
+
+    .sample-hero-copy,
+    .sample-section-heading p {
+      color: var(--sample-muted);
+      line-height: 1.6;
+      margin: 0.75rem 0 0;
+      max-inline-size: 68ch;
+    }
+
+    .sample-readiness {
+      align-items: center;
+      background: var(--sample-success-soft);
+      border: 1px solid color-mix(in srgb, var(--sample-success) 45%, var(--sample-border));
+      border-radius: 999px;
+      color: var(--sample-success);
+      display: inline-flex;
+      font-weight: 700;
+      gap: 0.55rem;
+      padding: 0.55rem 0.85rem;
+      white-space: nowrap;
+    }
+
+    .sample-readiness::before {
+      background: currentColor;
+      border-radius: 50%;
+      content: "";
+      inline-size: 0.6rem;
+      block-size: 0.6rem;
+    }
+
+    [data-state="booting"] .sample-readiness,
+    [data-state="schema-loading"] .sample-readiness,
+    [data-state="object-loading"] .sample-readiness {
+      background: var(--sample-warning-soft);
+      color: var(--sample-warning);
+    }
+
+    .sample-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .sample-card {
+      background: var(--sample-surface);
+      border: 1px solid var(--sample-border);
+      border-radius: 1.15rem;
+      box-shadow: var(--sample-shadow);
+      grid-column: span 12;
+      overflow: hidden;
+      padding: clamp(1.1rem, 3vw, 1.75rem);
+    }
+
+    .sample-card-object,
+    .sample-card-actions {
+      grid-column: span 5;
+    }
+
+    .sample-card-coverage,
+    .sample-card-events {
+      grid-column: span 7;
+    }
+
+    .sample-section-heading {
+      border-block-end: 1px solid var(--sample-border);
+      margin-block-end: 1rem;
+      padding-block-end: 1rem;
+    }
+
+    .sample-section-heading h2 {
+      font-size: clamp(1.25rem, 3vw, 1.65rem);
+      margin: 0;
     }
 
     causeway-object-header,
-    causeway-property {
+    causeway-property,
+    causeway-action,
+    causeway-collection {
       display: block;
-      margin-block: 1rem;
+    }
+
+    causeway-object-header .causeway-object-header {
+      margin: 0;
+    }
+
+    causeway-object-header h1 {
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.025em;
+      margin-block: 0 0.5rem;
+    }
+
+    .causeway-object-identity {
+      color: var(--sample-muted);
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .sample-property-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sample-property-grid causeway-property {
+      background: var(--sample-surface-muted);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.8rem;
+      min-inline-size: 0;
+      padding: 0.9rem 1rem;
+    }
+
+    .sample-property-grid causeway-property[data-testid="property-summary"],
+    .sample-property-grid causeway-property[data-testid="property-related-object"] {
+      grid-column: span 2;
+    }
+
+    causeway-property .causeway-property {
+      margin: 0;
     }
 
     .causeway-property-label {
-      display: inline-block;
-      font-weight: 600;
-      min-width: 12rem;
+      color: var(--sample-muted);
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      margin-block-end: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .causeway-property-description {
+      color: var(--sample-muted);
+      display: block;
+      font-size: 0.86rem;
+      line-height: 1.45;
+      margin-block-end: 0.45rem;
+    }
+
+    .causeway-property-value {
+      color: var(--sample-text);
+      display: block;
+      font-size: 1rem;
+      font-weight: 650;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
 
     .causeway-property-disabled-reason,
-    [role="alert"] {
+    .causeway-action-disabled-reason {
+      background: var(--sample-warning-soft);
+      border-radius: 0.45rem;
+      color: var(--sample-warning);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin: 0.65rem 0 0;
+      padding: 0.45rem 0.55rem;
+    }
+
+    causeway-object-link button {
+      align-items: flex-start;
+      color: var(--sample-accent-strong);
+      flex-direction: column;
+      text-align: start;
+    }
+
+    .causeway-object-link-identity {
+      color: var(--sample-muted);
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    }
+
+    .sample-action-stack {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    causeway-action .causeway-action {
+      align-items: start;
+      display: grid;
+      gap: 0.25rem;
+      margin: 0;
+    }
+
+    causeway-action button,
+    [data-causeway-activate] {
+      background: var(--sample-accent);
+      border: 1px solid var(--sample-accent);
+      border-radius: 0.6rem;
+      color: var(--sample-on-accent);
+      cursor: pointer;
+      font-weight: 750;
+      min-block-size: 2.65rem;
+      padding: 0.6rem 0.95rem;
+    }
+
+    causeway-action button:disabled {
+      background: var(--sample-surface-muted);
+      border-color: var(--sample-border);
+      color: var(--sample-muted);
+      cursor: not-allowed;
+    }
+
+    .sample-coverage-list {
+      display: grid;
+      gap: 0.65rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sample-coverage-list li {
+      background: var(--sample-surface-muted);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.7rem;
+      color: var(--sample-muted);
+      line-height: 1.45;
+      padding: 0.75rem;
+    }
+
+    .sample-coverage-list strong {
+      color: var(--sample-text);
       display: block;
-      margin-block-start: 0.25rem;
+      margin-block-end: 0.2rem;
+    }
+
+    .sample-collection-stack {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr);
+    }
+
+    .sample-collection-panel {
+      background: var(--sample-surface-muted);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.85rem;
+      min-inline-size: 0;
+      padding: 1rem;
+    }
+
+    causeway-collection .causeway-collection {
+      margin: 0;
+    }
+
+    .causeway-collection-label {
+      font-size: 1.05rem;
+      margin-block: 0 0.35rem;
+    }
+
+    .causeway-collection-description {
+      color: var(--sample-muted);
+      font-size: 0.86rem;
+      line-height: 1.4;
+      margin-block: 0 0.8rem;
+    }
+
+    .causeway-collection-table {
+      background: var(--sample-surface);
+      border: 1px solid var(--sample-border);
+      border-radius: 0.6rem;
+      display: table;
+      overflow: hidden;
+    }
+
+    .causeway-collection-table th {
+      background: var(--sample-accent-soft);
+      color: var(--sample-accent-strong);
+      font-size: 0.74rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .causeway-collection-table th,
+    .causeway-collection-table td {
+      border-color: var(--sample-border);
+      padding: 0.7rem 0.8rem;
+    }
+
+    .causeway-collection-table tbody tr:nth-child(even) {
+      background: var(--sample-surface-muted);
+    }
+
+    .causeway-empty,
+    .causeway-value-null {
+      color: var(--sample-muted);
+    }
+
+    .sample-diagnostic-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: minmax(0, 2fr) minmax(10rem, 1fr);
+    }
+
+    .sample-diagnostic {
+      background: #101827;
+      border: 1px solid #324158;
+      border-radius: 0.8rem;
+      color: #edf6ff;
+      min-inline-size: 0;
+      padding: 1rem;
+    }
+
+    .sample-diagnostic-label {
+      color: #a8bdd6;
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+      margin-block-end: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .sample-diagnostic output {
+      color: #ffffff;
+      display: block;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .sample-footer {
+      color: var(--sample-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-block-start: 1.5rem;
+      text-align: center;
     }
 
     [role="alert"] {
       color: #b42318;
     }
+
+    @media (prefers-color-scheme: dark) {
+      [role="alert"] {
+        color: #ffaaa1;
+      }
+    }
+
+    @media (max-width: 52rem) {
+      .sample-hero {
+        align-items: start;
+        grid-template-columns: 1fr;
+      }
+
+      .sample-card-object,
+      .sample-card-actions,
+      .sample-card-coverage,
+      .sample-card-events {
+        grid-column: span 12;
+      }
+
+      .sample-collection-stack,
+      .sample-diagnostic-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 36rem) {
+      .sample-shell {
+        padding: 0.85rem;
+      }
+
+      .sample-card {
+        border-radius: 0.85rem;
+        padding: 1rem;
+      }
+
+      .sample-property-grid,
+      .sample-coverage-list {
+        grid-template-columns: 1fr;
+      }
+
+      .sample-property-grid causeway-property[data-testid="property-summary"],
+      .sample-property-grid causeway-property[data-testid="property-related-object"] {
+        grid-column: span 1;
+      }
+
+      .causeway-collection-table {
+        inline-size: 100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <main data-testid="sample-app" data-state="booting" aria-busy="true">
-    <h1>Causeway vanilla HTML web-component sample</h1>
-    <p>This page uses native custom elements and ECMAScript modules against the same-origin rich GraphQL endpoint.</p>
-    <output data-testid="sample-state" aria-live="polite">booting</output>
+  <main class="sample-shell" data-testid="sample-app" data-state="booting" aria-busy="true">
+    <header class="sample-hero">
+      <div>
+        <p class="sample-eyebrow">Apache Causeway · Vanilla HTML</p>
+        <h1>Read-only component showcase</h1>
+        <p class="sample-hero-copy">A deterministic domain page composed from native custom elements, packaged ECMAScript modules, and the same-origin rich GraphQL endpoint.</p>
+      </div>
+      <div class="sample-readiness" aria-label="Object context state">
+        <output data-testid="sample-state" aria-live="polite">booting</output>
+      </div>
+    </header>
 
     <causeway-graphql-client endpoint="/graphql" data-testid="graphql-client">
       <causeway-object-context
           logical-type="causeway.webcomponents.sample.SampleObject"
           object-id="s_sample-1"
           data-testid="sample-object">
-        <causeway-object-header data-testid="object-header"></causeway-object-header>
-        <causeway-property member="name" data-testid="property-name"></causeway-property>
-        <causeway-property member="code" data-testid="property-code"></causeway-property>
-        <causeway-property member="secret" data-testid="property-secret"></causeway-property>
+        <div class="sample-grid">
+          <section class="sample-card sample-card-object" data-testid="section-object-summary" aria-labelledby="sample-object-summary-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Object context</p>
+              <h2 id="sample-object-summary-heading">Semantic identity</h2>
+              <p>The header and bookmark metadata share the same coordinated object projection as every member below.</p>
+            </div>
+            <causeway-object-header data-testid="object-header"></causeway-object-header>
+          </section>
+
+          <aside class="sample-card sample-card-coverage" data-testid="sample-coverage" aria-labelledby="sample-coverage-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Coverage guide</p>
+              <h2 id="sample-coverage-heading">States represented here</h2>
+              <p>The explanatory copy describes the fixture; component-rendered state remains the source of truth.</p>
+            </div>
+            <ul class="sample-coverage-list">
+              <li><strong>Enabled values</strong>Text, number, boolean, enum, and null values are readable without implying an edit control.</li>
+              <li><strong>Disabled semantics</strong>Code, object reference, and archive retain explicit reasons supplied by Causeway.</li>
+              <li><strong>Semantic reference</strong>The related object publishes navigation intent without choosing a URL or router.</li>
+              <li><strong>Collections</strong>One secondary operation returns two selected rows while a sibling demonstrates the empty state.</li>
+              <li><strong>Intentionally hidden</strong>The secret property and hidden action produce no semantic content, and their hidden value is never repeated here.</li>
+              <li><strong>Framework neutral</strong>No HTMX, frontend framework, npm build, prompt, mutation, or action invocation is present.</li>
+            </ul>
+          </aside>
+
+          <section class="sample-card" data-testid="section-properties" aria-labelledby="sample-properties-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Value renderer registry</p>
+              <h2 id="sample-properties-heading">Representative properties</h2>
+              <p>Each member derives capability from targeted schema introspection and instance state from the nearest object context.</p>
+            </div>
+            <div class="sample-property-grid">
+              <causeway-property member="name" data-testid="property-name"></causeway-property>
+              <causeway-property member="code" data-testid="property-code"></causeway-property>
+              <causeway-property member="summary" data-testid="property-summary"></causeway-property>
+              <causeway-property member="capacity" data-testid="property-capacity"></causeway-property>
+              <causeway-property member="featured" data-testid="property-featured"></causeway-property>
+              <causeway-property member="status" data-testid="property-status"></causeway-property>
+              <causeway-property member="notes" data-testid="property-notes"></causeway-property>
+              <causeway-property member="relatedObject" data-testid="property-related-object"></causeway-property>
+              <causeway-property member="secret" data-testid="property-secret"></causeway-property>
+            </div>
+          </section>
+
+          <section class="sample-card sample-card-actions" data-testid="section-actions" aria-labelledby="sample-actions-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Read-only affordances</p>
+              <h2 id="sample-actions-heading">Semantic actions</h2>
+              <p>Enabled selection publishes an event; disabled and hidden states cannot request an action.</p>
+            </div>
+            <div class="sample-action-stack" aria-label="Read-only action affordances">
+              <causeway-action member="inspect" data-testid="action-inspect"></causeway-action>
+              <causeway-action member="archive" data-testid="action-archive"></causeway-action>
+              <causeway-action member="hiddenAction" data-testid="action-hidden"></causeway-action>
+            </div>
+          </section>
+
+          <section class="sample-card sample-card-events" data-testid="section-events" aria-labelledby="sample-events-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Plain JavaScript observer</p>
+              <h2 id="sample-events-heading">Live diagnostics</h2>
+              <p>Use the related-object link or enabled action to observe framework-neutral semantic payloads.</p>
+            </div>
+            <div class="sample-diagnostic-grid">
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Latest semantic request</span>
+                <output data-testid="sample-event" aria-live="polite">No semantic event</output>
+              </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Related collection</span>
+                <output data-testid="collection-related-count" aria-live="polite">Waiting for rows</output>
+              </div>
+            </div>
+          </section>
+
+          <section class="sample-card" data-testid="section-collections" aria-labelledby="sample-collections-heading">
+            <div class="sample-section-heading">
+              <p class="sample-section-kicker">Lazy secondary projections</p>
+              <h2 id="sample-collections-heading">Related objects</h2>
+              <p>Declared columns shape the collection operation, and returned rows hydrate nested object contexts.</p>
+            </div>
+            <div class="sample-collection-stack">
+              <div class="sample-collection-panel">
+                <causeway-collection member="relatedObjects" active data-testid="collection-related-objects">
+                  <causeway-collection-column member="name" label="Name" data-testid="column-related-name"></causeway-collection-column>
+                  <causeway-collection-column member="code" label="Code" data-testid="column-related-code"></causeway-collection-column>
+                </causeway-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <causeway-collection member="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></causeway-collection>
+              </div>
+            </div>
+          </section>
+        </div>
       </causeway-object-context>
     </causeway-graphql-client>
+
+    <footer class="sample-footer">Public semantic components · Same-origin GraphQL · No frontend build</footer>
   </main>
 
   <script type="module">
     const application = document.querySelector('[data-testid="sample-app"]');
     const stateOutput = document.querySelector('[data-testid="sample-state"]');
+    const eventOutput = document.querySelector('[data-testid="sample-event"]');
+    const collectionCountOutput = document.querySelector('[data-testid="collection-related-count"]');
+
+    const report = (output, value) => {
+      output.value = value;
+      output.textContent = value;
+    };
 
     application.addEventListener('causeway-object-context-state-change', event => {
       const state = event.detail.state.status;
       application.dataset.state = state;
       application.setAttribute('aria-busy', String(state === 'schema-loading' || state === 'object-loading'));
-      stateOutput.value = state;
+      report(stateOutput, state);
     });
 
-    await import('/causeway-webcomponents/index.mjs');
+    application.addEventListener('causeway-component-state-change', event => {
+      if (event.detail.element?.getAttribute('data-testid') === 'property-related-object' && event.detail.state.status === 'ready') {
+        event.detail.element.querySelector('causeway-object-link')?.setAttribute('data-testid', 'object-link-related-object');
+      }
+    });
+
+    application.addEventListener('causeway-collection-state-change', event => {
+      if (event.detail.member !== 'relatedObjects') {
+        return;
+      }
+      if (event.detail.state.status === 'loading') {
+        report(collectionCountOutput, 'Loading rows');
+        return;
+      }
+      const rows = event.detail.state.data?.get;
+      if (Array.isArray(rows)) {
+        report(collectionCountOutput, `${rows.length} ${rows.length === 1 ? 'row' : 'rows'} loaded`);
+      }
+    });
+
+    application.addEventListener('causeway-navigation-request', event => {
+      report(eventOutput, `navigate:${event.detail.target.logicalTypeName}:${event.detail.target.id}`);
+    });
+
+    application.addEventListener('causeway-action-request', event => {
+      report(eventOutput, `action:${event.detail.actionId}`);
+    });
+
+    const components = await import('/causeway-webcomponents/index.mjs');
+    components.installCausewayComponentStyles();
+    document.head.append(document.querySelector('#sample-theme'));
   </script>
 </body>
 </html>

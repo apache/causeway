@@ -21,6 +21,10 @@ export const GRAPHQL_CLIENT_REQUEST_EVENT = 'causeway-graphql-client-request';
 export const OBJECT_CONTEXT_REQUEST_EVENT = 'causeway-object-context-request';
 export const OBJECT_CONTEXT_STATE_EVENT = 'causeway-object-context-state-change';
 export const COMPONENT_STATE_EVENT = 'causeway-component-state-change';
+export const NAVIGATION_REQUEST_EVENT = 'causeway-navigation-request';
+export const ACTION_REQUEST_EVENT = 'causeway-action-request';
+export const COLLECTION_STATE_EVENT = 'causeway-collection-state-change';
+export const COLLECTION_CONFIGURATION_EVENT = 'causeway-collection-configuration-change';
 
 export function requestGraphQLClient(requester) {
   let client = null;

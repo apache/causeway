@@ -1,0 +1,179 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {installDomShim} from './dom-shim.mjs';
+
+const {document, customElements} = installDomShim();
+const {
+  ACTION_REQUEST_EVENT,
+  CausewayActionElement,
+  CausewayElementName,
+  CausewayObjectLinkElement,
+  CausewayPropertyElement,
+  CausewayValueElement,
+  NAVIGATION_REQUEST_EVENT,
+  defineCausewayWebComponents
+} = await import('../src/index.mjs');
+
+defineCausewayWebComponents();
+
+function readyState({descriptor, data}) {
+  return Object.freeze({
+    status: 'ready',
+    descriptor,
+    data,
+    errors: Object.freeze([]),
+    generation: 1
+  });
+}
+
+test('registers the complete public read-only custom-element vocabulary', () => {
+  for (const name of Object.values(CausewayElementName)) {
+    assert.equal(typeof customElements.get(name), 'function', name);
+  }
+});
+
+test('object links publish cancelable bubbling and composed semantic navigation', () => {
+  const link = new CausewayObjectLinkElement();
+  link.target = {logicalTypeName: 'university.staff.StaffMember', id: 'staff-1', title: 'Dr Ada'};
+  document.body.appendChild(link);
+  let received;
+  document.body.addEventListener(NAVIGATION_REQUEST_EVENT, event => {
+    received = event;
+  });
+  assert.match(link.innerHTML, /<button type="button"[^>]*role="link"/);
+  assert.equal(link.activate(), true);
+  assert.equal(received.bubbles, true);
+  assert.equal(received.composed, true);
+  assert.deepEqual(received.detail.target, {
+    logicalTypeName: 'university.staff.StaffMember',
+    id: 'staff-1',
+    title: 'Dr Ada'
+  });
+  link.disabled = true;
+  assert.equal(link.activate(), false);
+});
+
+test('actions render semantic states and publish requests only while enabled', () => {
+  let listener;
+  const context = {
+    identity: Object.freeze({logicalTypeName: 'university.dept.Department', id: '42'}),
+    registerRequirement(requirement, candidate) {
+      assert.deepEqual(requirement, {kind: 'action', member: 'changeName'});
+      listener = candidate;
+      return () => {};
+    }
+  };
+  const action = new CausewayActionElement();
+  action.member = 'changeName';
+  action.context = context;
+  document.body.appendChild(action);
+  let request;
+  action.addEventListener(ACTION_REQUEST_EVENT, event => {
+    request = event;
+  });
+  listener({
+    status: 'schema-loading',
+    descriptor: {id: 'changeName', description: 'Changes the department name.'},
+    data: null,
+    errors: [],
+    generation: 0
+  });
+  assert.match(action.innerHTML, /role="status"/);
+  listener({
+    status: 'terminal-error',
+    descriptor: {id: 'changeName', description: 'Changes the department name.'},
+    data: null,
+    errors: [{message: 'Action state failed'}],
+    generation: 0
+  });
+  assert.match(action.innerHTML, /role="alert"/);
+  assert.match(action.innerHTML, /Action state failed/);
+  listener(readyState({
+    descriptor: {id: 'changeName', description: 'Changes the department name.'},
+    data: {hidden: false, disabled: null}
+  }));
+  assert.match(action.innerHTML, /<button type="button"/);
+  assert.match(action.innerHTML, /causeway-action-description/);
+  assert.equal(action.activate(), true);
+  assert.equal(request.bubbles, true);
+  assert.equal(request.composed, true);
+  assert.equal(request.cancelable, true);
+  assert.equal(request.detail.actionId, 'changeName');
+  assert.deepEqual(request.detail.identity, context.identity);
+
+  listener(readyState({
+    descriptor: {id: 'changeName', description: 'Change name'},
+    data: {hidden: false, disabled: 'Approval required'}
+  }));
+  assert.match(action.innerHTML, /Approval required/);
+  assert.match(action.innerHTML, /aria-disabled="true"/);
+  assert.match(action.innerHTML, /aria-describedby=/);
+  assert.equal(action.activate(), false);
+
+  listener(readyState({
+    descriptor: {id: 'changeName', description: 'Change name'},
+    data: {hidden: true, disabled: null}
+  }));
+  assert.equal(action.hidden, true);
+  assert.equal(action.innerHTML, '');
+});
+
+test('properties delegate null, enum and object values to semantic renderers', () => {
+  const property = new CausewayPropertyElement();
+  property.member = 'chair';
+  property.renderComponentState(readyState({
+    descriptor: {
+      id: 'chair',
+      description: 'Department chair',
+      value: {typeRef: {kind: 'OBJECT', name: 'rich__university_staff_StaffMember', ofType: null}}
+    },
+    data: {
+      hidden: false,
+      disabled: null,
+      get: {_meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada'}}
+    }
+  }));
+  assert.equal(property.getAttribute('data-renderer'), 'object-reference');
+  assert.match(property.innerHTML, /causeway-object-link/);
+
+  property.renderComponentState(readyState({
+    descriptor: {
+      id: 'notes',
+      description: 'Notes',
+      value: {typeRef: {kind: 'SCALAR', name: 'String', ofType: null}}
+    },
+    data: {hidden: false, disabled: null, get: null}
+  }));
+  assert.equal(property.getAttribute('data-renderer'), 'null');
+  assert.match(property.innerHTML, /No value/);
+});
+
+test('the value element accepts structured state and reports its selected renderer', () => {
+  const value = new CausewayValueElement();
+  value.valueState = {
+    value: 'ACTIVE',
+    typeRef: {kind: 'ENUM', name: 'DepartmentStatus', ofType: null}
+  };
+  document.body.appendChild(value);
+  assert.equal(value.getAttribute('data-renderer'), 'enum');
+  assert.match(value.innerHTML, /ACTIVE/);
+});

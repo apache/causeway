@@ -189,7 +189,8 @@ export class CausewayGraphQLClient {
         kind: semanticKind,
         description: field.description ?? null,
         generatedTypeName: generatedMemberTypeName,
-        fields: fieldsByName(supportType)
+        fields: fieldsByName(supportType),
+        value: semanticValueDescription(semanticKind, supportType, describedTypes)
       });
       if (semanticKind === 'metadata') {
         metadata = member;
@@ -209,6 +210,42 @@ export class CausewayGraphQLClient {
       types: describedTypes
     });
   }
+}
+
+function semanticValueDescription(kind, supportType, describedTypes) {
+  if (kind !== 'property' && kind !== 'collection') {
+    return null;
+  }
+  const typeRef = supportType?.fields.find(field => field.name === 'get')?.type ?? null;
+  const elementTypeRef = kind === 'collection' ? listElementType(typeRef) : null;
+  const effectiveTypeRef = elementTypeRef ?? typeRef;
+  const namedTypeName = namedType(effectiveTypeRef);
+  return Object.freeze({
+    typeRef,
+    namedTypeName,
+    typeKind: innermostType(effectiveTypeRef)?.kind ?? null,
+    typeDescription: describedTypes.get(namedTypeName) ?? null,
+    elementTypeRef
+  });
+}
+
+function listElementType(typeRef) {
+  let current = typeRef;
+  while (current?.kind === 'NON_NULL') {
+    current = current.ofType;
+  }
+  if (current?.kind !== 'LIST') {
+    return null;
+  }
+  return current.ofType ?? null;
+}
+
+function innermostType(typeRef) {
+  let current = typeRef;
+  while (current?.ofType) {
+    current = current.ofType;
+  }
+  return current;
 }
 
 function directSupportTypeNames(objectType, generatedTypeName, schemaNames) {
