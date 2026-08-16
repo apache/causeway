@@ -43,7 +43,23 @@
 - [ ] 6.2 Add examples of application-provided editors, claimed action requests, custom prompt presentation, and host-controlled result navigation.
 - [ ] 6.3 Document semantic commands, interaction events, API-variant behavior, refresh guarantees, customization obligations, and unsupported interaction shapes.
 
-## 7. Verification
+## 7. Executable Interaction Sample
 
-- [ ] 7.1 Add end-to-end browser tests for property edits and representative safe and mutating actions against the rich GraphQL endpoint.
-- [ ] 7.2 Run browser tests, relevant GraphQL viewer and Maven tests, accessibility checks, formatting checks, and strict OpenSpec validation, and resolve all failures.
+- [ ] 7.1 Extend the deterministic `sample-html` domain with representative editable scalar and enum properties, validation, choices or autocomplete, safe and mutating actions, parameter semantics, and result shapes while preserving `s_sample-1` and the existing disabled and hidden members.
+- [ ] 7.2 Extend `/sample-html/index.html` with explicit property interaction enablement, the standard action interaction controller, accessible prompt and result presentation, semantic interaction diagnostics, and additive stable hooks while preserving all read-only selectors and readiness behavior.
+- [ ] 7.3 Extend random-port integration tests with targeted introspection and real GraphQL assertions for property validation and mutation, safe and mutating action operation placement, parameter negotiation, deterministic outcomes, and authoritative object refresh.
+- [ ] 7.4 Document the deterministic interaction data, stable selectors, expected editor and prompt states, semantic result events, Maven run profile, and troubleshooting probes for `/graphql` and terminal interaction errors.
+
+## 8. Automated Verification
+
+- [ ] 8.1 Add dependency-free DOM and fixture coverage for representative property edits, parameterless actions, parameterized prompts, safe and mutating invocation, semantic outcomes, focus restoration, cancellation, validation, and stale responses.
+- [ ] 8.2 Run the foundation Node suite, sample and GraphQL Maven tests, syntax, formatting, strict OpenSpec validation, and configured accessibility checks, and resolve all failures.
+
+## 9. Manual Browser Verification
+
+- [ ] 9.1 Launch the sample with `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html`, verify `/graphql` with a direct probe, open `/sample-html/index.html`, and confirm `sample-app[data-state="ready"]` before testing interactions.
+- [ ] 9.2 Verify with pointer input that a representative text or numeric property can enter edit mode, cancel without a command, reject an invalid pending value with an accessible reason, save a valid value, and render the authoritative refreshed value; also verify enum choices and advertised autocomplete behavior.
+- [ ] 9.3 Verify parameterless safe and parameterized mutating actions, prompt defaults and choices, invalid argument blocking, cancel behavior, successful invocation, disabled and hidden actions, semantic result diagnostics, and representative object, collection, scalar, and void outcomes without automatic navigation.
+- [ ] 9.4 Repeat property and action flows with keyboard-only input, including Tab order, Enter and Space activation, Escape cancellation, prompt focus containment, validation announcements, and focus restoration to the originating control.
+- [ ] 9.5 Repeat the interaction smoke test at narrow and wide viewports in light and dark color schemes, inspect GraphQL requests for correct query-versus-mutation placement and HTTP success, and confirm context refresh, stable read-only content, no console errors, and no configured Lighthouse accessibility failures.
+- [ ] 9.6 Record the manual results, then rerun final Maven, Node, formatting, and strict OpenSpec validation before marking the interaction change complete.
