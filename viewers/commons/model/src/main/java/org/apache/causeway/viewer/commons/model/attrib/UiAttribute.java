@@ -64,21 +64,21 @@ public interface UiAttribute extends UiModel, HasMetaModelContext {
     }
 
     default boolean isSingular() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
-                || getMetaModel().getFeatureType() == FeatureType.PROPERTY;
+        return getMetaModel().featureType() == FeatureType.ACTION_PARAMETER_SINGULAR
+                || getMetaModel().featureType() == FeatureType.PROPERTY;
     }
 
     default boolean isPlural() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL
-                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
+        return getMetaModel().featureType() == FeatureType.ACTION_PARAMETER_PLURAL
+                || getMetaModel().featureType() == FeatureType.COLLECTION;
     }
 
     default boolean isProperty() {
-        return getMetaModel().getFeatureType().isProperty();
+        return getMetaModel().featureType().isProperty();
     }
 
     default boolean isParameter() {
-        return getMetaModel().getFeatureType().isActionParameter();
+        return getMetaModel().featureType().isActionParameter();
     }
 
     default Optional<String> getDescribedAs() {
@@ -100,14 +100,14 @@ public interface UiAttribute extends UiModel, HasMetaModelContext {
     }
 
     default boolean isElementTypeAnyOf(final Can<Class<?>> requiredClasses) {
-        final String fullName = getElementType().getFullIdentifier();
+        final String fullName = getElementType().fullIdentifier();
         return requiredClasses.stream()
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
     default boolean isElementTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> elementType = getElementType().getCorrespondingClass();
+        final Class<?> elementType = getElementType().correspondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(elementType));
     }
@@ -133,13 +133,12 @@ public interface UiAttribute extends UiModel, HasMetaModelContext {
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
         public static ChoiceProviderSort valueOf(final UiAttribute uiAttribute) {
-            if (uiAttribute.hasChoices()) {
-                return ChoiceProviderSort.CHOICES;
-            } else if(uiAttribute.hasAutoComplete()) {
-                return ChoiceProviderSort.AUTO_COMPLETE;
-            } else if(uiAttribute.hasObjectAutoComplete()) {
-                return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
-            }
+            if (uiAttribute.hasChoices())
+				return ChoiceProviderSort.CHOICES;
+			else if(uiAttribute.hasAutoComplete())
+				return ChoiceProviderSort.AUTO_COMPLETE;
+			else if(uiAttribute.hasObjectAutoComplete())
+				return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             return NO_CHOICES;
         }
         public boolean isNoChoices() { return this == NO_CHOICES; }

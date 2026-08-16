@@ -391,7 +391,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var concreteColl = vmSpec.getCollectionElseFail("concreteColl");
         var concreteCollSpec = concreteColl.getElementType();
 
-        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.correspondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.beanSort());
         assertHasAction(concreteCollSpec, "abstractAction");
         assertHasAction(concreteCollSpec, "interfaceAction");
@@ -401,7 +401,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
         var interfaceCollSpec = interfaceColl.getElementType();
 
-        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.beanSort());
         assertHasAction(interfaceCollSpec, "interfaceAction");
         assertHasProperty(interfaceCollSpec, "interfaceProp");
@@ -409,7 +409,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var abstractColl = vmSpec.getCollectionElseFail("abstractColl");
         var abstractCollSpec = abstractColl.getElementType();
 
-        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.beanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
@@ -430,7 +430,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var interfaceSet = vmSpec.getCollectionElseFail("setOfInterfaceType");
         var interfaceSetSpec = interfaceSet.getElementType();
 
-        assertEquals(ElementTypeInterface.class, interfaceSetSpec.getCorrespondingClass());
+        assertEquals(ElementTypeInterface.class, interfaceSetSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceSetSpec.beanSort());
 
         //TODO scenario 2
@@ -444,7 +444,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var interfaceIter = vmSpec.getCollectionElseFail("immutableOfInterfaceType");
         var interfaceIterSpec = interfaceIter.getElementType();
 
-        assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
+        assertEquals(ElementTypeInterface.class, interfaceIterSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceIterSpec.beanSort());
 
     }
@@ -459,7 +459,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
         var concreteCollSpec = concreteColl.getElementType();
 
-        assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeConcrete.class, concreteCollSpec.correspondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.beanSort());
         assertHasAction(concreteCollSpec, "abstractAction");
         assertHasAction(concreteCollSpec, "interfaceAction");
@@ -469,7 +469,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
         var interfaceCollSpec = interfaceColl.getElementType();
 
-        assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeInterface.class, interfaceCollSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.beanSort());
         assertHasAction(interfaceCollSpec, "interfaceAction");
         assertHasProperty(interfaceCollSpec, "interfaceProp");
@@ -477,7 +477,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
         var abstractCollSpec = abstractColl.getElementType();
 
-        assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
+        assertEquals(ElementTypeAbstract.class, abstractCollSpec.correspondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.beanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
@@ -725,7 +725,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
         assertNotNull(introspectionPolicyFacet);
 
-        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
+        var introspectionPolicy = introspectionPolicyFacet.introspectionPolicy();
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());
@@ -775,7 +775,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var introspectionPolicyFacet = objectSpec.lookupFacet(IntrospectionPolicyFacet.class).orElse(null);
         assertNotNull(introspectionPolicyFacet);
 
-        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
+        var introspectionPolicy = introspectionPolicyFacet.introspectionPolicy();
         assertEquals(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());

@@ -82,7 +82,7 @@ record LayoutResourceLookup(
         var layoutResourceOpt = MetaModelContext.instance()
             .flatMap(mmc->mmc.specForType(layoutKey.domainClass()))
             .flatMap(spec->spec.streamTypeHierarchyAndInterfaces()
-                    .map(ObjectSpecification::getCorrespondingClass)
+                    .map(ObjectSpecification::correspondingClass)
                     .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
                     .findFirst());
 

@@ -35,7 +35,7 @@ public interface HasObjectSpecification {
     // -- SHORTCUTS
 
     default Class<?> getCorrespondingClass() {
-        return objSpec().getCorrespondingClass();
+        return objSpec().correspondingClass();
     }
 
     default LogicalType logicalType() {

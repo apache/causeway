@@ -79,7 +79,7 @@ public record JaxbServiceDefault(
                     .orElse(null);
                 var elementType = specLoaderProvider.get()
                     .specForType(elementCls)
-                    .map(ObjectSpecification::getCorrespondingClass)
+                    .map(ObjectSpecification::correspondingClass)
                     .orElse(null);
                 if (elementType!=null
                         && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {

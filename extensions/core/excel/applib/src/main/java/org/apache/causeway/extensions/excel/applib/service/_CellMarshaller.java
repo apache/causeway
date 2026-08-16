@@ -309,7 +309,7 @@ final class _CellMarshaller {
         }
 
         final ObjectSpecification propertySpec = otoa.getElementType();
-        Class<?> requiredType = propertySpec.getCorrespondingClass();
+        Class<?> requiredType = propertySpec.correspondingClass();
 
         // value types
         if(propertySpec.isValue()) {

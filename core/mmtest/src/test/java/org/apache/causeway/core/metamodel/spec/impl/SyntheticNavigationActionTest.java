@@ -292,7 +292,7 @@ class SyntheticNavigationActionTest {
         assertThat(action.getParameters().stream().allMatch(ObjectActionParameter::isOptional)).isTrue();
         assertThat(action.getParameters().stream()
                 .filter(parameter -> parameter.getId().equals("checkbox"))
-                .findFirst().orElseThrow().getElementType().getCorrespondingClass())
+                .findFirst().orElseThrow().getElementType().correspondingClass())
                 .isEqualTo(Boolean.class);
     }
 

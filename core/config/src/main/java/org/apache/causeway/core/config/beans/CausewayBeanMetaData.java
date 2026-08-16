@@ -20,12 +20,11 @@ package org.apache.causeway.core.config.beans;
 
 import java.io.Serializable;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.NonNull;
 
 public record CausewayBeanMetaData(
         @NonNull LogicalType logicalType,
@@ -79,11 +78,11 @@ implements Serializable {
         public boolean isUnspecified() { return this == UNSPECIFIED; }
     }
 
-    public Class<?> getCorrespondingClass() {
+    public Class<?> correspondingClass() {
         return logicalType.correspondingClass();
     }
 
-    public String getBeanName() {
+    public String beanName() {
         return logicalType.logicalName();
     }
 

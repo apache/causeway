@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
@@ -39,6 +36,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.schema.common.v2.ValueType;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Indicates that this class has value semantics.
@@ -86,7 +85,7 @@ extends
     default Optional<Parser<T>> selectParserForFeature(final @Nullable ObjectFeature feature) {
         return feature==null
             ? selectDefaultParser()
-            : switch(feature.getFeatureType()) {
+            : switch(feature.featureType()) {
                 case ACTION_PARAMETER_SINGULAR, PROPERTY->selectParserForAttribute(feature);
                 default->selectDefaultParser();
             };
@@ -110,7 +109,7 @@ extends
     default Optional<Renderer<T>> selectRendererForFeature(final @Nullable ObjectFeature feature) {
         return feature==null
             ? selectDefaultRenderer()
-            : switch(feature.getFeatureType()) {
+            : switch(feature.featureType()) {
                 case ACTION_PARAMETER_SINGULAR, PROPERTY, COLLECTION->
                     selectRendererForParamOrPropOrColl(feature);
                 default->selectDefaultRenderer();

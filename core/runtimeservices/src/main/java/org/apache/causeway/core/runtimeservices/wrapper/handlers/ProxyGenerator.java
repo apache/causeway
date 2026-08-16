@@ -98,7 +98,7 @@ public record ProxyGenerator(
     private Object instantiateProxy(final ObjectSpecification targetSpec, WrappingObject.Origin origin) {
         var proxyClass = proxyFactoryService
             .proxyClass(handler(targetSpec),
-                    targetSpec.getCorrespondingClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
+                    targetSpec.correspondingClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
         var proxy = proxyFactoryService
                 .factory(proxyClass)
                 .createInstance(false);

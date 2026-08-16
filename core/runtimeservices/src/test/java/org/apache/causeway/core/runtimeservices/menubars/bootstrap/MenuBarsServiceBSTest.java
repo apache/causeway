@@ -77,7 +77,7 @@ extends RuntimeServicesTestAbstract {
                 .anyMatch(bean->bean.beanClass().equals(Bar.class)));
 
         assertTrue(getMetaModelContext().streamServiceAdapters()
-                .anyMatch(domainObject->domainObject.objSpec().getCorrespondingClass().equals(Bar.class)));
+                .anyMatch(domainObject->domainObject.objSpec().correspondingClass().equals(Bar.class)));
     }
 
     @Test

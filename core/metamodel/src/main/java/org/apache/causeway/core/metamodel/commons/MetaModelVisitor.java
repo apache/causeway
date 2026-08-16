@@ -66,7 +66,7 @@ public interface MetaModelVisitor {
     /** types pass this filter, if member-annotation is not required */
     public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
             spec->!spec
-                    .getIntrospectionPolicy()
+                    .introspectionPolicy()
                     .getMemberAnnotationPolicy()
                     .isMemberAnnotationsRequired();
 }

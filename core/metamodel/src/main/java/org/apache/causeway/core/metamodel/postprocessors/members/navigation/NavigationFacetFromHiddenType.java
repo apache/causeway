@@ -79,7 +79,7 @@ implements
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("navigatedType", navigatedType.logicalTypeName());
-        visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
+        visitor.accept("navigatedTypeFqcn", navigatedType.correspondingClass().getName());
     }
 
 }

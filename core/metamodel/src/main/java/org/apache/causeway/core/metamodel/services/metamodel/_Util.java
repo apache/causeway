@@ -38,9 +38,8 @@ class _Util {
 
     void visitNonNullAttributes(final Facet facet, final BiConsumer<String, String> visitor) {
         facet.visitAttributes((key, attributeObj)->{
-            if(attributeObj == null) {
-                return;
-            }
+            if(attributeObj == null)
+				return;
             String str = asStr(attributeObj);
             visitor.accept(key, str);
         });
@@ -91,7 +90,7 @@ class _Util {
     }
 
     private String asStr(final ObjectSpecification attributeObj) {
-        return attributeObj.getFullIdentifier();
+        return attributeObj.fullIdentifier();
     }
 
     private String asStr(final MetaModelExportSupport attributeObj) {
@@ -127,9 +126,8 @@ class _Util {
     }
 
     private String asStr(final Object[] list) {
-        if(list.length == 0) {
-            return null; // skip
-        }
+        if(list.length == 0)
+			return null; // skip
         List<String> strings = _Lists.newArrayList();
         for (final Object o : list) {
             String s = asStr(o);
@@ -139,9 +137,8 @@ class _Util {
     }
 
     private String asStr(final List<?> list) {
-        if(list.isEmpty()) {
-            return null; // skip
-        }
+        if(list.isEmpty())
+			return null; // skip
         List<String> strings = _Lists.newArrayList();
         for (final Object o : list) {
             String s = asStr(o);

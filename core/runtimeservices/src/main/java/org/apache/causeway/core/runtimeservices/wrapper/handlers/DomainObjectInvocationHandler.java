@@ -90,9 +90,9 @@ implements WrapperInvocationHandler {
             final ProxyGenerator proxyGenerator,
             final CommandRecord.Factory commandRecordFactory) {
         this.targetSpec = targetSpec;
-        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
+        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.correspondingClass());
         this.proxyGenerator = proxyGenerator;
-        this.key = targetSpec.getCorrespondingClass().getName();
+        this.key = targetSpec.correspondingClass().getName();
         this.commandRecordFactory = commandRecordFactory;
     }
 
@@ -117,7 +117,7 @@ implements WrapperInvocationHandler {
             return handleTitleMethod(wrapperInvocation, targetAdapter);
         }
 
-        var resolvedMethod = _GenericResolver.resolveMethod(method, targetAdapter.objSpec().getCorrespondingClass())
+        var resolvedMethod = _GenericResolver.resolveMethod(method, targetAdapter.objSpec().correspondingClass())
                 .orElseThrow();
 
         if(!wrapperInvocation.origin().isFallback()) {

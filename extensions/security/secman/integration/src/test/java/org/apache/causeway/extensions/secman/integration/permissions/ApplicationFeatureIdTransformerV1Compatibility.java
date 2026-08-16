@@ -55,7 +55,7 @@ public class ApplicationFeatureIdTransformerV1Compatibility implements Applicati
             case MEMBER:
                 var logicalTypeNameBasedOnPhysicalName =
                         specificationLoader.specForLogicalTypeName(logicalTypeName)
-                        .map(ObjectSpecification::getCorrespondingClass)
+                        .map(ObjectSpecification::correspondingClass)
                         .map(Class::getName)
                         .orElse(logicalTypeName);
                 return applicationFeatureId.withLogicalTypeName(logicalTypeNameBasedOnPhysicalName);

@@ -58,7 +58,7 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     // makes sure PromptStyle is always INLINE_AS_IF_EDIT
     default CompositeValueUpdater overrideFacets() {
-        FacetUtil.computeIfAbsentExact(mixedInAction().getFacetHolder(),
+        FacetUtil.computeIfAbsentExact(mixedInAction().facetHolder(),
             PromptStyleFacet.class,
             PromptStyleFacet.class,
             Precedence.HIGH,

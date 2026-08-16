@@ -22,8 +22,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -37,6 +35,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Introduced to allow for proxies of {@link ObjectAction}.
@@ -103,12 +102,12 @@ public interface HasObjectAction extends ObjectAction {
     @Override default String asciiId() {
         return getObjectAction().asciiId();
     }
-    @Override default FeatureType getFeatureType() {
-        return getObjectAction().getFeatureType();
+    @Override default FeatureType featureType() {
+        return getObjectAction().featureType();
     }
     @Override
-    default FacetHolder getFacetHolder() {
-        return getObjectAction().getFacetHolder();
+    default FacetHolder facetHolder() {
+        return getObjectAction().facetHolder();
     }
     @Override default SemanticsOf getSemantics() {
         return getObjectAction().getSemantics();

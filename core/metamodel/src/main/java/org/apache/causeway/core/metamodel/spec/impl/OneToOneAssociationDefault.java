@@ -325,7 +325,7 @@ implements OneToOneAssociation, Serializable {
         str.append(super.toString());
         str.setAddComma();
         str.append("persisted", isIncludedWithSnapshots());
-        str.append("type", getElementType().getShortIdentifier());
+        str.append("type", getElementType().shortIdentifier());
         return str.toString();
     }
 

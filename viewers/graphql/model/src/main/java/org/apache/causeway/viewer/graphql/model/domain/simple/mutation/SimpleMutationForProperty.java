@@ -97,7 +97,7 @@ public class SimpleMutationForProperty extends Element {
             if (objectSpecArg != null) {
                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
-                Class<?> paramClass = objectSpec.getCorrespondingClass();
+                Class<?> paramClass = objectSpec.correspondingClass();
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
             }
             result = bookmarkIfAny

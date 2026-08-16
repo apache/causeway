@@ -20,15 +20,13 @@ package org.apache.causeway.core.mmtestsupport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.CanBeVoid;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
+import org.jspecify.annotations.Nullable;
 
 public record MethodRemover_forTesting(
     List<ResolvedMethod> removedMethodMethodCalls,
@@ -64,14 +62,13 @@ public record MethodRemover_forTesting(
     }
 
     @Override
-    public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
+    public void removeMethods(final Predicate<ResolvedMethod> filter) {
         removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
     }
 
     @Override
-    public Can<ResolvedMethod> snapshotMethodsRemaining() {
-        // creates a defensive copy, but as far as I know is not thread-safe
-        return Can.ofStream(removedMethodMethodCalls.stream());
+    public Stream<ResolvedMethod> streamRemaining() {
+        return removedMethodMethodCalls.stream();
     }
 
 }

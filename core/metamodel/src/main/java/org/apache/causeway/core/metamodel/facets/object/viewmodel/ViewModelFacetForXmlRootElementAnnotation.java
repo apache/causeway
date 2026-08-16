@@ -62,7 +62,7 @@ extends SecureViewModelFacet {
             final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
         var trustedXml = new String(trustedBookmarkIdAsBytes, StandardCharsets.UTF_8);
-        var viewmodelPojo = jaxbService.fromXml(viewmodelSpec.getCorrespondingClass(), trustedXml);
+        var viewmodelPojo = jaxbService.fromXml(viewmodelSpec.correspondingClass(), trustedXml);
         return viewmodelPojo;
     }
 

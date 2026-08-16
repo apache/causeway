@@ -43,7 +43,7 @@ record ScalarUnwrapper<T>(
         this.attributeModel = attributeModel;
         _Assert.assertTrue(attributeModel.getElementType().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
-                        attributeModel.getElementType().getCorrespondingClass(),
+                        attributeModel.getElementType().correspondingClass(),
                         type));
     }
 

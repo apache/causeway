@@ -39,7 +39,7 @@ implements MMNode, Serializable {
 		// for security mapping, abstract spec's may share their logical type name with sub-types
 		// however, for proper mementos, we should used fully qualified class names instead (when abstract)
 		this(objSpec.isAbstract()
-	    		? objSpec.getCorrespondingClass().getName()
+	    		? objSpec.correspondingClass().getName()
 	    		: objSpec.logicalTypeName(), isSubnode);
 	}
 
@@ -63,20 +63,20 @@ implements MMNode, Serializable {
         details.put("Bean Sort", spec.beanSort().name());
         details.put("Simple Name", spec.logicalType().logicalSimpleName());
         details.put("Namespace", spec.logicalType().namespace());
-        details.put("Corresponding Class", spec.getCorrespondingClass().getName());
-        Optional.ofNullable(spec.superclass())
+        details.put("Corresponding Class", spec.correspondingClass().getName());
+        spec.superSpec()
 	        .ifPresent(superType->{
-	        	details.put("Super Type", superType.getCorrespondingClass().getName());
+	        	details.put("Super Type", superType.correspondingClass().getName());
 	        });
-        spec.interfaces().stream()
+        spec.interfaceSpecs()
 	        .forEach(interfc->details.put(
 	        		"Interface",
-	        		interfc.getCorrespondingClass().getName()));
+	        		interfc.correspondingClass().getName()));
         switch (spec.beanSort()) {
             case ENTITY, ABSTRACT -> {
-                if(!spec.getCorrespondingClass().isInterface()) {
+                if(!spec.correspondingClass().isInterface()) {
                     var classCache = _ClassCache.getInstance();
-                    details.put("Byte Code Enhanced", ""+classCache.isByteCodeEnhanced(spec.getCorrespondingClass()));
+                    details.put("Byte Code Enhanced", ""+classCache.isByteCodeEnhanced(spec.correspondingClass()));
                 }
             }
             default -> {}
@@ -90,8 +90,8 @@ implements MMNode, Serializable {
 
         return _Streams.<MMNode>concat(
             Stream.of(
-            		MMNodeFactory.superType(spec.superclass(), this),
-            		MMNodeFactory.interfaceGroup(spec.interfaces(), this),
+            		MMNodeFactory.superType(spec.superSpec().orElse(null), this),
+            		MMNodeFactory.interfaceGroup(spec.interfaceSpecs(), this),
                     MMNodeFactory.facetGroup(spec.streamFacets(), this))
             	.filter(Objects::nonNull),
             spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED)

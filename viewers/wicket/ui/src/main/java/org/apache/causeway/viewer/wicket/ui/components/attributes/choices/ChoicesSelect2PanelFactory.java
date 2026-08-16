@@ -50,7 +50,7 @@ extends AttributeComponentFactory {
         var componentSort = ComponentSort.valueOf(attributeModel);
         switch(componentSort) {
         case TITLE_BADGE:
-            var valueType = attributeModel.getElementType().getCorrespondingClass();
+            var valueType = attributeModel.getElementType().correspondingClass();
             return new TitleBadgeAttributePanel<>(id, attributeModel, valueType);
         case VALUE_CHOICES:
             return new ValueChoicesAttributePanel(id, attributeModel);

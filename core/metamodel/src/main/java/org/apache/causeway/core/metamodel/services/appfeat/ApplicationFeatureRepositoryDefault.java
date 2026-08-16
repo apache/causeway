@@ -30,14 +30,6 @@ import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.id.LogicalType;
@@ -62,7 +54,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -203,7 +200,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     private static Class<?> correspondingClassFor(final ObjectSpecification objectSpec) {
-        return objectSpec != null ? objectSpec.getCorrespondingClass() : null;
+        return objectSpec != null ? objectSpec.correspondingClass() : null;
     }
 
     private static Integer valueOf(
@@ -339,7 +336,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
         if(excluded && log.isDebugEnabled()) {
             log.debug("{} excluded because: abstract:{} vetoed:{} unknown-sort:{} builtIn:{} hidden:{}",
-                    spec.getCorrespondingClass().getSimpleName(),
+                    spec.correspondingClass().getSimpleName(),
                     spec.isAbstract(),
                     spec.beanSort().isVetoed(),
                     spec.beanSort().isUnknown(),
@@ -356,7 +353,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
-        final String className = spec.getFullIdentifier();
+        final String className = spec.fullIdentifier();
         return className.startsWith("java");
     }
 

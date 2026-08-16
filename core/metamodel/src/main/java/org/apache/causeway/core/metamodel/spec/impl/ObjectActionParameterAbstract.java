@@ -52,13 +52,14 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 abstract class ObjectActionParameterAbstract
 implements
-    ObjectActionParameter,
-    HasSpecificationLoaderInternal {
+    ObjectActionParameter {
 
-    @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final FeatureType featureType;
     @Getter(onMethod_ = {@Override}) private final int parameterIndex;
     private final ObjectActionDefault parentAction;
     private final String javaSourceParamName;
@@ -161,7 +162,7 @@ implements
     // -- FacetHolder
 
     @Override
-    public FacetHolder getFacetHolder() {
+    public FacetHolder facetHolder() {
         // that is the faceted method parameter
         return parentAction.getFacetedMethod().parameter(parameterIndex);
     }
@@ -282,7 +283,7 @@ implements
             // check type, but wrap first
             // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
             final Class<?> choiceClass = choicePojo.getClass();
-            final Class<?> paramClass = paramSpec.getCorrespondingClass();
+            final Class<?> paramClass = paramSpec.correspondingClass();
 
             final Class<?> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
             final Class<?> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
@@ -297,7 +298,7 @@ implements
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec))
 				throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",
-                        paramSpec.getFullIdentifier(), choiceClass.getName()));
+                        paramSpec.fullIdentifier(), choiceClass.getName()));
         }
     }
 
@@ -388,6 +389,12 @@ implements
     @Override
     public String toString() {
         return String.format("ObjectActionParameter[id=%s]", getFeatureIdentifier());
+    }
+
+    // -- HELPER
+
+    SpecificationLoaderInternal specLoaderInternal() {
+    	return (SpecificationLoaderInternal) parentAction.getSpecificationLoader();
     }
 
 }

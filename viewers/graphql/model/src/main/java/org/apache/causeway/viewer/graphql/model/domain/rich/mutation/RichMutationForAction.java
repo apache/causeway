@@ -109,7 +109,7 @@ public class RichMutationForAction extends Element {
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, SCHEMA_TYPE);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
-                            objectSpecificationOfCollectionElement.getFullIdentifier(),
+                            objectSpecificationOfCollectionElement.fullIdentifier(),
                             objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
@@ -132,7 +132,7 @@ public class RichMutationForAction extends Element {
         var environment = new Environment.For(dataFetchingEnvironment);
         Object sourcePojo;
         if (isService) {
-            sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
+            sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.correspondingClass());
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
             Optional<Object> result;
@@ -144,7 +144,7 @@ public class RichMutationForAction extends Element {
                 if (objectSpecArg != null) {
                     bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
                 } else {
-                    Class<?> paramClass = objectSpec.getCorrespondingClass();
+                    Class<?> paramClass = objectSpec.correspondingClass();
                     bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
                 }
                 result = bookmarkIfAny

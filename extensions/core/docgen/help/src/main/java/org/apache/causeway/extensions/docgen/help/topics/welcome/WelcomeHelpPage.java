@@ -130,7 +130,7 @@ public class WelcomeHelpPage implements HelpPage {
                                             ObjectSpecification actionReturnType = menuAction.getReturnType();
                                             ObjectSpecification actionElementType = menuAction.getElementType();
 
-                                            if (actionElementType.getCorrespondingClass() == void.class) {
+                                            if (actionElementType.correspondingClass() == void.class) {
                                                 html.append("<i></i>"); //WARNING : NOTHING
                                             } else if (actionReturnType.isPlural()) {
                                                 domainObjects.put(actionElementType.logicalTypeName(), actionElementType);
@@ -170,7 +170,7 @@ public class WelcomeHelpPage implements HelpPage {
     private StringBuffer documentationForObjectType(final ObjectSpecification objectSpec) {
         StringBuffer html = new StringBuffer();
 
-        var grid = toGrid(objectSpec.getCorrespondingClass());
+        var grid = toGrid(objectSpec.correspondingClass());
         html.append("<ul>");
         {
             html.append("<ul>");

@@ -33,7 +33,7 @@ public interface ValueSchemaFactory {
     default Optional<Schema<?>> schemaForValue(
             final @Nullable ObjectSpecification objectSpecification) {
         return Optional.ofNullable(objectSpecification)
-                .map(ObjectSpecification::getCorrespondingClass)
+                .map(ObjectSpecification::correspondingClass)
                 .flatMap(this::schemaForValue);
     }
 

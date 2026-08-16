@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  */
 public interface IntrospectionPolicyFacet extends Facet {
 
-    Introspection getIntrospection();
-    IntrospectionPolicy getIntrospectionPolicy();
+    Introspection introspection();
+    IntrospectionPolicy introspectionPolicy();
 
 }

@@ -59,9 +59,10 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 abstract class ObjectMemberAbstract
 implements
@@ -71,8 +72,8 @@ implements
     Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final @NonNull FeatureType featureType;
     @Getter(onMethod_ = {@Override}) private final @NonNull Identifier featureIdentifier;
-    @Getter(onMethod_ = {@Override}) private final @NonNull FeatureType featureType;
     @Getter(onMethod_ = {@Override}) private final @NonNull FacetedMethod facetedMethod;
 
     // -- CONSTRUCTOR
@@ -84,9 +85,8 @@ implements
         this.featureIdentifier = featureIdentifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
-        if (getId() == null) {
-            throw new IllegalArgumentException("Id must always be set");
-        }
+        if (getId() == null)
+			throw new IllegalArgumentException("Id must always be set");
     }
 
     // -- IDENTIFIERS
@@ -113,13 +113,12 @@ implements
 
         var namedFacet = getFacet(MemberNamedFacet.class);
 
-        if(namedFacet==null) {
-            throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
-        }
+        if(namedFacet==null)
+			throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
 
         return namedFacet
             .getSpecialization()
-            .fold(  textFacet->textFacet.translated(),
+            .fold(  HasStaticText::translated,
                     textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target()));
     }
 
@@ -138,7 +137,7 @@ implements
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
-                .fold(textFacet->textFacet.translated(),
+                .fold(HasStaticText::translated,
                       textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target())));
     }
 
@@ -201,7 +200,7 @@ implements
 
     @Override
     public boolean isAlwaysHidden() {
-        return HiddenFacet.isAlwaysHidden(getFacetHolder());
+        return HiddenFacet.isAlwaysHidden(facetHolder());
     }
 
     /**
@@ -277,11 +276,10 @@ implements
             final @NonNull ManagedObject mixee) {
 
         // nullable for action parameter mixins
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
-            return ManagedObject.empty(mixinSpec);
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee))
+			return ManagedObject.empty(mixinSpec);
 
-        var mixinPojo = getFactoryService().mixin(mixinSpec.getCorrespondingClass(), mixee.getPojo());
+        var mixinPojo = getFactoryService().mixin(mixinSpec.correspondingClass(), mixee.getPojo());
         return ManagedObject.mixin(mixinSpec, mixinPojo);
     }
 

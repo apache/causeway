@@ -92,7 +92,7 @@ public class MarkupAttributePanelFactories {
             }
 
             return appliesIf(valueType.isAssignableFrom(
-                    objectAdapter.objSpec().getCorrespondingClass()) );
+                    objectAdapter.objSpec().correspondingClass()) );
         }
 
         @Override

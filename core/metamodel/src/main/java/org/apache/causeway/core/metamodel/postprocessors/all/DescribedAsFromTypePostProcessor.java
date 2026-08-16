@@ -84,7 +84,7 @@ extends MetaModelPostProcessorAbstract {
 	        .ifPresent(objectDescribedFacet->
 	            FacetUtil.addFacetIfPresent(
                     ParamDescribedFacetFromType
-	                    .create(objectDescribedFacet, parameter.getFacetHolder())));
+	                    .create(objectDescribedFacet, parameter.facetHolder())));
     }
 
 }

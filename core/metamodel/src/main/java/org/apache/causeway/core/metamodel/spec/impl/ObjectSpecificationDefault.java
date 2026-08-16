@@ -18,17 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -74,15 +69,13 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecificationRecord;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.jspecify.annotations.NonNull;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -92,23 +85,23 @@ import lombok.extern.slf4j.Slf4j;
 final class ObjectSpecificationDefault
 implements
 	ObjectSpecificationInternal,
-	HasIntrospectionStateHandler,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
 
     // -- CONSTRUCTION
 
-    private final FacetedMethodsFactory facetedMethodsFactory;
-    private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final FacetedMethodsFactory facetedMethodsFactory; //TODO in support of reloading, this factory should be recreated, as it holds a MethodRemover that is stateful
     private final _Lazy<Boolean> isInjectableLazy;
     private final _Lazy<Boolean> isDomainServiceLazy;
+    private final Can<EntityTitleSubscriber> titleSubscribers;
 
-    @Getter(onMethod_ = {@Override}) private final FacetHolder facetHolder;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final FacetHolder facetHolder;
 
     @Getter @Accessors(fluent = true)
 	private final IntrospectionStateHandler introspectionStateHandler;
 
-    @Getter(onMethod_={@Override})
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final IntrospectionPolicy introspectionPolicy;
 
     @Getter @Accessors(fluent = true)
@@ -120,24 +113,17 @@ implements
     private ActionContainer objectActionContainer = ActionContainer.EMPTY;
     @Getter @Accessors(fluent = true)
     private MemberCatalog memberCatalog = MemberCatalog.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private Hierarchical hierarchical = Hierarchical.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private final ConsistencyContext consistencyContext;
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
     		_Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
     				.map(TypeOfFacet::elementSpec));
 
+    private final SpecificationLoaderInternal specLoaderInternal;
     private final PostProcessor postProcessor;
-
-    /** not API, used for validation */
-    @Getter @Accessors(fluent = true)
-    private final Set<ResolvedMethod> potentialOrphans = new HashSet<>();
-
-    private final List<ObjectSpecification> interfaces = new ArrayList<>();
-
-    // defensive immutable lazy copy of interfaces
-    private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
-    		_Lazy.threadSafe(()->Can.ofCollection(interfaces));
-
-    private ObjectSpecification superclassSpec;
 
     private ValueFacet<?> valueFacet;
     private EntityFacet entityFacet;
@@ -149,107 +135,107 @@ implements
     private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
-    @Getter(lazy = true)
-    private final Can<EntityTitleSubscriber> titleSubscribers =
-    	getServiceRegistry().select(EntityTitleSubscriber.class);
-
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
             final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry,
+            final @NonNull Can<EntityTitleSubscriber> titleSubscribers,
             final @NonNull Supplier<MixinSpecStreamer> mixinSpecStreamerSupplier) {
 
         final MetaModelContext mmc = facetProcessor.getMetaModelContext();
+        this.specLoaderInternal = (SpecificationLoaderInternal) mmc.getSpecificationLoader();
 
     	this.typeMeta = typeMeta;
     	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(mmc.getServiceRegistry()));
     	this.isDomainServiceLazy = _Lazy.threadSafe(()->
-        	_ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
+        	_ClassCache.getInstance().head(correspondingClass()).hasAnnotation(DomainService.class));
+    	this.titleSubscribers = titleSubscribers;
+    	this.consistencyContext = new ConsistencyContext(typeMeta);
 
         this.facetHolder = FacetHolder.simple(
             mmc,
             Identifier.classIdentifier(logicalType()));
 
         this.postProcessor = postProcessor;
-        this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
-        facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
+        facetProcessor.processObjectType(typeMeta.correspondingClass(), this);
 
         // naturally supports attribute inheritance from the type's hierarchy
         this.introspectionPolicy = lookupFacet(IntrospectionPolicyFacet.class)
-                .map(IntrospectionPolicyFacet::getIntrospectionPolicy)
+                .map(IntrospectionPolicyFacet::introspectionPolicy)
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
         this.facetedMethodsFactory =
-                new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
+                new FacetedMethodsFactory(this, specLoaderInternal, facetProcessor, classSubstitutorRegistry);
+
+        final var hierarchicalFactory =
+        		new HierarchicalFactory(specLoaderInternal, classSubstitutorRegistry, facetHolder);
 
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
-        			introspectTypeHierarchy();
+        			introspectTypeHierarchy(hierarchicalFactory);
         	        invalidateCachedFacets();
         		},
         		()->{
         			introspectMembers(mixinSpecStreamerSupplier.get());
 //        	        // make sure we've loaded the facets from layout.xml also.
         	        Facets.gridPreload(this, null);
-        	        specLoaderInternal().validateLater(this);
+        	        specLoaderInternal.validateLater(this);
         		});
     }
 
     // --
 
-	@Override public FeatureType getFeatureType() { return FeatureType.OBJECT; }
+	@Override public FeatureType featureType() { return FeatureType.OBJECT; }
     @Override public BeanSort beanSort() { return typeMeta.beanSort(); }
-    @Override public Class<?> getCorrespondingClass() { return typeMeta.getCorrespondingClass(); }
+    @Override public Class<?> correspondingClass() { return typeMeta.correspondingClass(); }
 	@Override public LogicalType logicalType() { return typeMeta.logicalType(); }
-	@Override public String getFullIdentifier() { return getCorrespondingClass().getName(); }
-	@Override public String getShortIdentifier() { return logicalType().logicalSimpleName(); }
+	@Override public String fullIdentifier() { return correspondingClass().getName(); }
+	@Override public String shortIdentifier() { return logicalType().logicalSimpleName(); }
 //	@Override public Can<LogicalType> getAliases() { return aliases().get(); }
 	@Override public boolean isDomainService() { return isDomainServiceLazy.get(); }
 	@Override public boolean isInjectable() { return isInjectableLazy.get(); }
 	@Override public boolean isParented() { return containsFacet(ParentedCollectionFacet.class); }
 	@Override public boolean isImmutable() { return containsFacet(ImmutableFacet.class); }
 	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
+	@Override public Optional<ObjectSpecification> superSpec() { return hierarchical.superSpec(); }
+    @Override public Can<ObjectSpecification> interfaceSpecs() { return hierarchical.interfaceSpecs(); }
+    // state handling
+    @Override public boolean isFullyIntrospected() { return introspectionStateHandler.isFullyIntrospected(); }
 
     // -- CONTRACT
 
     @Override
     public int hashCode() {
-        return getCorrespondingClass().hashCode();
+        return correspondingClass().hashCode();
     }
     @Override
     public boolean equals(final Object o) {
         return (o instanceof ObjectSpecification other)
-            ? Objects.equals(this.getCorrespondingClass(), other.getCorrespondingClass())
+            ? Objects.equals(this.correspondingClass(), other.correspondingClass())
             : false;
     }
     @Override
     public String toString() {
         return "ObjSpec[class=%s, sort=%s, super=%s]"
-            .formatted(getFullIdentifier(), beanSort().name(), superclass() == null
+            .formatted(fullIdentifier(), beanSort().name(), superSpec().isEmpty()
                 ? "Object"
-                : superclass().getFullIdentifier());
+                : superSpec().get().fullIdentifier());
     }
 
-    private void introspectTypeHierarchy() {
-
+    private void introspectTypeHierarchy(final HierarchicalFactory hierarchicalFactory) {
         facetedMethodsFactory.introspectClass();
 
         // name
         addNamedFacetIfRequired();
 
         // go no further if a value
-        if(this.isValue()) {
-            if (log.isDebugEnabled()) {
-                log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
-            }
-            return;
-        }
+        if(this.isValue())
+			return;
 
-        loadSpecOfSuperclass(getCorrespondingClass().getSuperclass());
-        loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
+        this.hierarchical = hierarchicalFactory.createHierarchical(correspondingClass());
     }
 
     private void introspectMembers(final MixinSpecStreamer mixinSpecStreamer) {
@@ -259,22 +245,24 @@ implements
                 || this.beanSort().isVetoed()
                 || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for {} type {}", this.beanSort(), getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.beanSort(), fullIdentifier());
             }
             return;
         }
         Assert.isTrue(!isFullyIntrospected(), ()->"object spec for '%s' is in lockdown, because postprocessing already had run (cannot run twice)"
-        		.formatted(getFullIdentifier()));
+        		.formatted(fullIdentifier()));
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-    	streamTypeHierarchyAndInterfaces()
-    		.forEach(it->((IntrospectionStateHandler)it)
-    			.introspectFully());
+    	streamSuperTypeHierarchyAndInterfaces()
+    		.map(ObjectSpecificationDefault.class::cast)
+    		.forEach(spec->spec.introspectionStateHandler.introspectFully());
 
         // create associations and actions
 
-        var regularMemberFactory = new RegularMemberFactory(this, facetedMethodsFactory);
+    	var view = toView();
+
+        var regularMemberFactory = new RegularMemberFactory(mixinFacet(), facetedMethodsFactory);
         var regularAssociations = regularMemberFactory.createAssociations().toList();
         var regularActions = regularMemberFactory.createActions().toList();
 
@@ -289,18 +277,18 @@ implements
     		: List.<ObjectAction>of();
 
         this.objectAssociationContainer = new AssociationContainer(
-        		_MemberSortingUtils.associationsInOrder(this, regularAssociations, mixedInAssociations),
-        		superclass(),
-        		this);
+        		_MemberSortingUtils.associationsInOrder(typeMeta, regularAssociations, mixedInAssociations),
+        		superSpec().orElse(null),
+        		view);
         this.objectActionContainer = new ActionContainer(
-        		_MemberSortingUtils.actionsInOrder(this, regularActions, mixedInActions, syntheticActions),
+        		_MemberSortingUtils.actionsInOrder(typeMeta, regularActions, mixedInActions, syntheticActions),
         		ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment()),
-        		superclass());
+        		superSpec().orElse(null));
 
         //TODO? can we run mixin creation without triggering full introspection of other types ... if(!isMixin()) {
 		postProcessor.postProcess(this);
 		//}
-		this.memberCatalog = new MemberCatalog(this);
+		this.memberCatalog = new MemberCatalog(objectAssociationContainer, objectActionContainer);
 
         invalidateCachedFacets();
     }
@@ -310,14 +298,14 @@ implements
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
-                    _Strings.asNaturalName.apply(getShortIdentifier()),
+                    _Strings.asNaturalName.apply(shortIdentifier()),
                     this));
         }
     }
 
     @Override
-    public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
-    	introspectFully();
+    public Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
+    	introspectionStateHandler.introspectFully();
     	return memberCatalog.lookupMember(method);
     }
 
@@ -326,69 +314,6 @@ implements
     @Override
     public Optional<ObjectSpecification> explicitElementSpec() {
         return elementSpecification.get();
-    }
-
-    private void loadSpecOfSuperclass(final Class<?> superclass) {
-        if (superclass == null)
-			return;
-
-        this.superclassSpec = specLoaderInternal().loadSpecificationTypeOnly(superclass);
-        if (superclassSpec != null
-        		&& log.isDebugEnabled()) {
-            log.debug("  Superclass {}", superclass.getName());
-        }
-    }
-
-    private void loadSpecOfInterfaces(final Class<?>[] interfaces) {
-    	if(interfaces==null)
-			return;
-
-    	var classCache = _ClassCache.getInstance();
-
-        final List<ObjectSpecification> interfaceSpecList = Stream.of(interfaces)
-    		// pre-filter common interfaces (performance)
-        	.filter(interfaceType->!interfaceType.getName().startsWith("java."))
-        	//--
-        	.map(interfaceType->{
-        		var substitution = classSubstitutorRegistry.getSubstitution(interfaceType);
-                return substitution.isReplace()
-                		? substitution.replacement()
-        				: substitution.isNeverIntrospect()
-    	    				? null
-    	    				: interfaceType;
-        	})
-        	.filter(Objects::nonNull)
-        	.filter(interfaceType->classCache.head(interfaceType).hasAnnotation(DomainObject.class))
-        	.map(specLoaderInternal()::loadSpecificationTypeOnly)
-        	.filter(Objects::nonNull)
-        	.toList();
-
-        if(!interfaceSpecList.isEmpty()) {
-        	if(interfaceSpecList.size()>1) {
-              ValidationFailure.raiseFormatted(facetHolder,
-            		  "Cannot use @DomainObject on more than one interface, as inherited by: %s",
-            		  getCorrespondingClass().getName());
-        	}
-        	if (superclassSpec != null) {
-        		var superType = superclassSpec.getCorrespondingClass();
-        		if(classCache.head(superType).hasAnnotation(DomainObject.class)) {
-        			ValidationFailure.raiseFormatted(facetHolder,
-                  		  "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by: %s",
-                  		  getCorrespondingClass().getName());
-        		}
-        	}
-
-//debug
-//        	System.err.println("%s".formatted(getCorrespondingClass().getName()));
-//        	interfaceSpecList.forEach(i->{
-//        		System.err.println("- %s".formatted(i.getCorrespondingClass().getName()));
-//        	});
-        	synchronized(unmodifiableInterfaces) {
-                this.interfaces.clear();
-                this.interfaces.addAll(interfaceSpecList);
-                unmodifiableInterfaces.clear();
-            }
-        }
     }
 
     private void invalidateCachedFacets() {
@@ -494,26 +419,6 @@ implements
             .map(FaLayersProvider::getLayers);
     }
 
-    // -- HIERARCHICAL
-
-    @Override
-    public boolean isOfType(final ObjectSpecification other) {
-        var thisClass = this.getCorrespondingClass();
-        var otherClass = other.getCorrespondingClass();
-
-        return thisClass == otherClass
-                || otherClass.isAssignableFrom(thisClass);
-    }
-
-    @Override
-    public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
-        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
-        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
-
-        return thisClass == otherClass
-                || otherClass.isAssignableFrom(thisClass);
-    }
-
     // -- NAME, DESCRIPTION, PERSISTABILITY
 
     @Override
@@ -521,9 +426,8 @@ implements
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(ObjectNamedFacet::translated)
             // unexpected code reach, however keep for JUnit testing
-            .orElseGet(()->String.format(
-                    "(%s has neither title- nor object-named-facet)",
-                    getFullIdentifier()));
+            .orElseGet(()->"(%s has neither title- nor object-named-facet)"
+            	.formatted(fullIdentifier()));
     }
 
     /**
@@ -547,26 +451,14 @@ implements
 
     @Override
     public <Q extends Facet> Optional<Q> lookupFacet(final Class<Q> facetType) {
-        synchronized(unmodifiableInterfaces) {
-        	return Hierarchical.lookupFacet(facetType, facetHolder, this);
-        }
+        return Hierarchical.lookupFacet(facetType, facetHolder, this);
     }
 
     // -- INHERITED
 
     @Override
-    public ObjectSpecification superclass() {
-        return superclassSpec;
-    }
-
-    @Override
-    public Can<ObjectSpecification> interfaces() {
-        return unmodifiableInterfaces.get();
-    }
-
-    @Override
-    public Optional<? extends ObjectMember> getMember(final String memberId) {
-    	introspectFully();
+    public Optional<? extends ObjectMember> lookupMember(final String memberId) {
+    	introspectionStateHandler.introspectFully();
 
         if(_Strings.isEmpty(memberId))
 			return Optional.empty();
@@ -584,36 +476,23 @@ implements
 
     // -- SHALLOW IMMUTABLE / EXPERIMENTAL
 
-	public ObjectSpecificationRecord toUnmodifiable() {
-		//WIP
-		return new ObjectSpecificationRecord(
-				typeMeta,
-				getFeatureType(),
-				facetHolder,
-				this,//Hierarchical,
-				objectActionContainer,
-				objectAssociationContainer,
-				getServiceRegistry().select(EntityTitleSubscriber.class),
-				introspectionPolicy,
-				aliases(),
-				valueFacet(),
-		    	entityFacet(),
-		    	viewmodelFacet(),
-		    	mixinFacet(),
-		    	lookupFacet(ObjectNamedFacet.class),
-		    	lookupFacet(ObjectDescribedFacet.class),
-		    	lookupFacet(TypeOfFacet.class),
-		    	lookupNonFallbackFacet(TitleFacet.class),
-		    	lookupFacet(IconFacet.class),
-		    	lookupFacet(FaFacet.class),
-		        lookupFacet(NavigableParentFacet.class),
-		        lookupFacet(CssClassFacet.class),
-				isDomainService(),
-				isInjectable(),
-				isParented(),
-				isImmutable(),
-				isHidden(),
-				new MemberCatalog(this).membersByMethod());
+	private ObjectMetaDataView toView() {
+		return new ObjectMetaDataView() {
+			@Override public CausewayBeanMetaData typeMeta() {
+				return typeMeta;
+			}
+			@Override public <T extends Facet> Optional<T> lookupFacet(@NonNull final Class<T> facetType) {
+				return ObjectSpecificationDefault.this.lookupFacet(facetType);
+			}
+			@Override public Identifier featureIdentifier() {
+				return ObjectSpecificationDefault.this.getFeatureIdentifier();
+			}
+			@Override
+			public ObjectAssociationContainer associationContainer() {
+				return ObjectSpecificationDefault.this.objectAssociationContainer();
+			}
+		};
+
 	}
 
     // -- HELPER
@@ -626,7 +505,8 @@ implements
 
     	var managedObject = titleRenderRequest.object();
     	managedObject.getBookmark().ifPresent(bookmark -> {
-    		getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
+    		titleSubscribers.stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
     	});
     }
+
 }

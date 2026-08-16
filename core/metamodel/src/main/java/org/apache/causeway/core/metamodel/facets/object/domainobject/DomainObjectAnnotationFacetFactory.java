@@ -624,7 +624,7 @@ implements
                 }
 
                 private boolean isProxy(final @NonNull ObjectSpecification spec) {
-                    var cls = spec.getCorrespondingClass();
+                    var cls = spec.correspondingClass();
                     return !ClassUtils.getUserClass(cls).equals(cls);
                 }
 
@@ -646,7 +646,7 @@ implements
 
                 private String asCsv(final List<ObjectSpecification> specList) {
                     return stream(specList)
-                            .map(ObjectSpecification::getFullIdentifier)
+                            .map(ObjectSpecification::fullIdentifier)
                             .sorted()
                             .collect(Collectors.joining(", "));
                 }

@@ -51,7 +51,7 @@ record FilterUtils() {
 
         var mmc = elementType.getMetaModelContext();
         var collectionFilterServiceOpt = mmc.getServiceRegistry().select(CollectionFilterService.class).stream()
-                .filter(service->service.handles(elementType.getCorrespondingClass()))
+                .filter(service->service.handles(elementType.correspondingClass()))
                 .findFirst();
         if(!collectionFilterServiceOpt.isPresent()) {
             return Optional.empty();
@@ -59,21 +59,21 @@ record FilterUtils() {
         var collectionFilterService = collectionFilterServiceOpt.get();
 
         var tokenizer =
-                collectionFilterService.tokenizer(elementType.getCorrespondingClass());
+                collectionFilterService.tokenizer(elementType.correspondingClass());
         if(tokenizer==null) {
             return Optional.empty();
         }
 
-        var tokenFilter = collectionFilterService.tokenFilter(elementType.getCorrespondingClass());
+        var tokenFilter = collectionFilterService.tokenFilter(elementType.correspondingClass());
         if(tokenFilter==null) {
             return Optional.empty();
         }
 
         var translationService = mmc.lookupService(TranslationService.class)
                 .orElseGet(TranslationService::identity);
-        var translationContext = Optional.ofNullable(collectionFilterService.translationContext(elementType.getCorrespondingClass()))
+        var translationContext = Optional.ofNullable(collectionFilterService.translationContext(elementType.correspondingClass()))
                 .orElseGet(()->TranslationContext.named("Search"));
-        var translatableString = collectionFilterService.searchPromptPlaceholderText(elementType.getCorrespondingClass());
+        var translatableString = collectionFilterService.searchPromptPlaceholderText(elementType.correspondingClass());
 
         var searchPromptPlaceholderText = translatableString!=null
                 ? translatableString.translate(translationService, translationContext)

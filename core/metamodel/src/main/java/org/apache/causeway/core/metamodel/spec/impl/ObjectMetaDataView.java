@@ -18,12 +18,28 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import java.util.Optional;
 
-interface HasSpecificationLoaderInternal extends HasMetaModelContext {
-    
-    default SpecificationLoaderInternal specLoaderInternal() {
-        return (SpecificationLoaderInternal) getSpecificationLoader();
-    }
-    
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
+import org.jspecify.annotations.NonNull;
+
+interface ObjectMetaDataView {
+
+	CausewayBeanMetaData typeMeta();
+	Identifier featureIdentifier(); // TODO potentially always OBJECT
+	ObjectAssociationContainer associationContainer();
+	<T extends Facet> Optional<T> lookupFacet(@NonNull Class<T> facetType);
+
+	default BeanSort beanSort() {
+		return typeMeta().beanSort();
+	}
+
+	default Class<?> correspondingClass() {
+		return typeMeta().correspondingClass();
+	}
+
 }

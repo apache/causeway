@@ -57,7 +57,6 @@ public interface ServiceRegistry {
      * @return non-null
      */
     default <T> Can<T> select(final Class<T> type){
-
         return select(type, _Constants.emptyAnnotations);
     }
 
@@ -112,13 +111,10 @@ public interface ServiceRegistry {
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass, final Comparator<Object> comparator) {
         var bin = select(serviceClass);
-        if(bin.isEmpty()) {
-            return Optional.empty();
-        }
-        if(bin.isCardinalityOne()) {
-            return bin.getSingleton();
-        }
-        // dealing with ambiguity, get the one, with highest priority annotated
+        if(bin.isEmpty())
+			return Optional.empty();
+        if(bin.isCardinalityOne())
+		 return bin.getSingleton();
 
         var toComparatorReduction =
                 //TODO [2033] not tested yet, whether the 'direction' is correct < vs >
@@ -148,7 +144,7 @@ public interface ServiceRegistry {
 
     /**
      * Invalidates any cached service adapters that might hold a reference to
-     * the current {@link org.apache.causeway.core.metamodel.specloader.SpecificationLoader}. 
+     * the current {@link org.apache.causeway.core.metamodel.specloader.SpecificationLoader}.
      * Particularly useful when discarding
      * a meta-model instance, that is, purging the {@link org.apache.causeway.core.metamodel.spec.ObjectSpecification} cache.
      */

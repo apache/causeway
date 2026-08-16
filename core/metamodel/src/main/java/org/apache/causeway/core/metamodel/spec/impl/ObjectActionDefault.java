@@ -71,7 +71,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class ObjectActionDefault
 extends ObjectMemberAbstract
-implements ObjectAction, HasSpecificationLoaderInternal {
+implements ObjectAction {
     private static final long serialVersionUID = 1L;
 
     public static ActionScope getType(final String typeStr) {
@@ -547,18 +547,22 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters().getElseFail(i).getElementType().getShortIdentifier());
+            sb.append(getParameters().getElseFail(i).getElementType().shortIdentifier());
         }
         sb.append("}]");
         return sb.toString();
     }
 
     @Override
-    public FacetHolder getFacetHolder() {
+    public FacetHolder facetHolder() {
         return super.getFacetedMethod();
     }
 
     // -- HELPER
+
+    SpecificationLoaderInternal specLoaderInternal() {
+    	return (SpecificationLoaderInternal) facetHolder().getSpecificationLoader();
+    }
 
     protected String argsFor(final Can<ObjectActionParameter> parameters, final Can<ManagedObject> arguments) {
         if(parameters.size() != arguments.size())

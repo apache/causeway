@@ -99,7 +99,7 @@ class NavigableSubtreeFacetFactoryTest extends FacetFactoryTestAbstract {
         specs.forEach(postProcessor::postProcessObject);
         
         specs.forEach(spec->{
-            switch(spec.getCorrespondingClass().getSimpleName()) {
+            switch(spec.correspondingClass().getSimpleName()) {
                 case "A" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));
                 case "B" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));
                 case "C" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));

@@ -105,7 +105,7 @@ implements
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var resulType = getObjectSpecification().getCorrespondingClass();
+        var resulType = getObjectSpecification().correspondingClass();
         var query = Query.allInstances(resulType);
 
         var resultTypeSpec = specForType(resulType).orElse(null);

@@ -109,7 +109,7 @@ extends MetaModelValidatorAbstract {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
         for (var objSpec : specificationLoader.snapshotSpecifications()) {
-            var correspondingClass = objSpec.getCorrespondingClass();
+            var correspondingClass = objSpec.correspondingClass();
             if(correspondingClass.isEnum()) {
                 final Object[] enumConstants = correspondingClass.getEnumConstants();
                 for (Object enumConstant : enumConstants) {

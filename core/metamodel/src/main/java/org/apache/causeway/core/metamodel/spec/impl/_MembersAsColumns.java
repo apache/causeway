@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
@@ -72,7 +71,7 @@ record _MembersAsColumns(
      */
 	public Stream<ObjectAssociation> streamAssociationsForColumnRendering(
 			// the type that has the properties and collections that make up this table's columns
-			final ObjectSpecification elementType,
+			final ObjectMetaDataView elementType,
 			final ColumnQuery columnQuery) {
 
         var assocById = assembleAvailableColumns(elementType, columnQuery);
@@ -100,17 +99,17 @@ record _MembersAsColumns(
     // -- HELPER
 
 	private Map<String, ObjectAssociation> assembleAvailableColumns(
-			final ObjectSpecification elementType,
+			final ObjectMetaDataView elementType,
 			final ColumnQuery columnQuery) {
 
         final var assocById = new LinkedHashMap<String, ObjectAssociation>();
 
-		elementType.streamAssociations(MixedIn.INCLUDED)
+        elementType.associationContainer().streamAssociations(MixedIn.INCLUDED)
             .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(columnQuery.where()))
             .filter(columnQuery.isStandalone()
 				? _Predicates.alwaysTrue()
 				: ObjectAssociation.Predicates.referencesParent(columnQuery.parentObject().objSpec()).negate())
-            .filter(assoc->hideColumnUsingSpi(assoc, elementType.getCorrespondingClass()))
+            .filter(assoc->hideColumnUsingSpi(assoc, elementType.typeMeta().correspondingClass()))
             .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
 		return assocById;
@@ -126,12 +125,12 @@ record _MembersAsColumns(
 
     // comparator based on grid facet, that is by order of occurrence within associated layout
     private Optional<Comparator<String>> propertyIdComparator(
-            final @NonNull ObjectSpecification elementTypeSpec) {
+            final @NonNull ObjectMetaDataView elementType) {
 
         // same code also appears in DomainObjectPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via DomainObjectPage.
-        var elementTypeGridFacet = elementTypeSpec.lookupFacet(GridFacet.class).orElse(null);
+        var elementTypeGridFacet = elementType.lookupFacet(GridFacet.class).orElse(null);
 
         if(elementTypeGridFacet == null)
 			return Optional.empty();
@@ -168,13 +167,13 @@ record _MembersAsColumns(
     private boolean sortColumnsUsingPatch(
     		final ColumnQuery columnQuery,
             final List<String> assocIdsInOrder, //mutable
-            final ObjectSpecification elementType) {
+            final ObjectMetaDataView elementType) {
 
     	if(!isColumnOrderPatchingEnabled)
     		return false;
 
     	var identifier = columnQuery.isStandalone()
-    			? elementType.getFeatureIdentifier()
+    			? elementType.featureIdentifier()
     			: columnQuery.memberIdentifier();
     	Objects.requireNonNull(identifier, ()->"framework bug");
 
@@ -205,7 +204,7 @@ record _MembersAsColumns(
     private void sortColumnsUsingSpi(
             final ColumnQuery columnQuery,
             final List<String> assocIdsInOrder, //mutable
-            final ObjectSpecification elementType) {
+            final ObjectMetaDataView elementType) {
 
         if(tableColumnOrderServices.isEmpty())
 			return;
@@ -214,12 +213,12 @@ record _MembersAsColumns(
             .map(tableColumnOrderService->
                 columnQuery.isStandalone()
                 ? tableColumnOrderService.orderStandalone(
-                        elementType.getCorrespondingClass(),
+                        elementType.correspondingClass(),
                         assocIdsInOrder)
                 : tableColumnOrderService.orderParented(
                 		columnQuery.parentObject().getPojo(),
                         columnQuery.memberIdentifier().memberLogicalName(),
-                        elementType.getCorrespondingClass(),
+                        elementType.correspondingClass(),
                         assocIdsInOrder))
             .filter(Objects::nonNull)
             .findFirst()

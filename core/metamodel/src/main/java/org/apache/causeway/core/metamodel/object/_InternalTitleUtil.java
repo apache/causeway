@@ -24,8 +24,8 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
 import org.jspecify.annotations.NonNull;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -73,10 +73,10 @@ final class _InternalTitleUtil {
     private String formatAnyCardinalityAsTitle(final @NonNull ObjectSpecification objSpec, final @NonNull ManagedObject managedObject) {
         final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
         var elementSpec = objSpec.explicitElementSpec().orElse(null);
-        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
+        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.correspondingClass()), null);
 
         final String noun = (elementSpec == null
-                || elementSpec.getFullIdentifier().equals(Object.class.getName()))
+                || elementSpec.fullIdentifier().equals(Object.class.getName()))
                     ? "object"
                     : elementSpec.getSingularName();
         return MmTitleUtils.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());

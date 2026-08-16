@@ -106,7 +106,7 @@ record LogicalTypeResolver(
     private boolean hasTypeIdentity(final ObjectSpecification spec) {
         // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
         // don't have type identity; hence the guard.
-        return spec.getCorrespondingClass().getCanonicalName()!=null;
+        return spec.correspondingClass().getCanonicalName()!=null;
     }
 
     private void putWithWarnOnOverride(
@@ -124,7 +124,7 @@ record LogicalTypeResolver(
                     + "%s -> %s\n "
                     + "This will result in the meta-model validation to fail.",
                     logicalTypeName, previousMapping.correspondingClass(),
-                    logicalTypeName, spec.getCorrespondingClass());
+                    logicalTypeName, spec.correspondingClass());
             log.warn(msg);
         }
 

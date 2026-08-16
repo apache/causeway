@@ -97,8 +97,8 @@ implements GridFacet {
                     "getGrid(adapter) was called passing an adapter (type: %s), "
                     + "for which this GridFacet (type: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
-                    objectAdapter.objSpec().getCorrespondingClass().getName(),
-                    objSpec().getCorrespondingClass().getName());
+                    objectAdapter.objSpec().correspondingClass().getName(),
+                    objSpec().correspondingClass().getName());
     }
 
     private String layoutPrefixFor(final @Nullable ManagedObject objectAdapter) {
@@ -114,7 +114,7 @@ implements GridFacet {
     }
 
     private BSGrid load(final String layoutPrefix) {
-        var domainClass = objSpec().getCorrespondingClass();
+        var domainClass = objSpec().correspondingClass();
         var bsGrid = gridService.load(new LayoutKey(domainClass, layoutPrefix));
         return bsGrid;
     }

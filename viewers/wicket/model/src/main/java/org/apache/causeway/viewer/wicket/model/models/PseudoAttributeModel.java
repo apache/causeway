@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
@@ -41,6 +39,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Wraps a {@link ValueModel}. Used for rendering standalone values.
@@ -54,10 +53,10 @@ class PseudoAttributeModel extends UiAttributeWkt {
 	}
 
 	record PseudoFeature(ManagedObject valueMo) implements ObjectFeature {
-		@Override public FeatureType getFeatureType() {
+		@Override public FeatureType featureType() {
 			return FeatureType.OBJECT;
 		}
-		@Override public FacetHolder getFacetHolder() {
+		@Override public FacetHolder facetHolder() {
 			return valueMo.objSpec();
 		}
 		@Override public String getId() {

@@ -39,7 +39,7 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
         }
 
         return packageNamesToIgnore.stream()
-                .anyMatch(packageName ->  objectSpec.getCorrespondingClass().getName().startsWith(packageName));
+                .anyMatch(packageName ->  objectSpec.correspondingClass().getName().startsWith(packageName));
     }
 
     @Override

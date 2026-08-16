@@ -18,29 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 record RegularMemberFactory(
-		ObjectSpecificationInternal spec,
+		Optional<MixinFacet> mixinFacetOpt,
 		FacetedMethodsFactory factory) {
 
 	Stream<ObjectAssociation> createAssociations() {
         return factory.createAssociationFacetedMethods()
+    		.stream()
             .map(this::createAssociation)
-            .filter(_NullSafe::isPresent);
+            .filter(Objects::nonNull);
     }
 
     Stream<ObjectAction> createActions() {
     	return factory.createActionFacetedMethods()
+			.stream()
 			.map(this::createAction)
-			.filter(_NullSafe::isPresent);
+			.filter(Objects::nonNull);
     }
 
     // -- HELPER
@@ -59,12 +63,12 @@ record RegularMemberFactory(
             /* Assuming, that facetedMethod was already populated with ContributingFacet,
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */
-        	spec.mixinFacet()
+        	mixinFacetOpt
 	            .flatMap(mixinFacet->_Casts.castTo(MixinFacetImpl.class, mixinFacet))
 	            .ifPresent(mixinFacetAbstract->
 	                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
 
-            return spec.isMixin()
+            return mixinFacetOpt.isPresent()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
                     : ObjectActionDefault.forMethod(facetedMethod);
         } else

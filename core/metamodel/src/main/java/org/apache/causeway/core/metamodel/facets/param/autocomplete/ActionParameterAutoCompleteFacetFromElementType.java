@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-
 import org.jspecify.annotations.NonNull;
 
 public class ActionParameterAutoCompleteFacetFromElementType
@@ -40,7 +39,7 @@ extends ActionParameterAutoCompleteFacetAbstract {
         return param.getElementType()
                 .lookupNonFallbackFacet(AutoCompleteFacet.class)
                 .map(autoCompleteFacet->
-                    new ActionParameterAutoCompleteFacetFromElementType(autoCompleteFacet, param.getFacetHolder()));
+                    new ActionParameterAutoCompleteFacetFromElementType(autoCompleteFacet, param.facetHolder()));
     }
 
     private final AutoCompleteFacet autoCompleteFacet;

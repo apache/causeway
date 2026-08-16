@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.applib.domain.RefData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ public class CommandReplayReferenceDataServiceForRefData implements CommandRepla
         return specificationLoader != null
                 && bookmark != null
                 && specificationLoader.specForBookmark(bookmark)
-                .map(objectSpecification -> objectSpecification.getCorrespondingClass())
+                .map(ObjectSpecification::correspondingClass)
                 .map(RefData.class::isAssignableFrom)
                 .orElse(false);
     }

@@ -23,20 +23,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
@@ -48,6 +34,19 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 // keep public for JABX
 public class MetaModelServiceDefaultTest {
@@ -71,7 +70,7 @@ public class MetaModelServiceDefaultTest {
         Mockito.when(mockFacetedMethod.parameters()).thenReturn(Can.empty());
 
         mockSpec = Mockito.mock(ObjectSpecification.class);
-        Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");
+        Mockito.when(mockSpec.fullIdentifier()).thenReturn("mocked");
         Mockito.when(mockSpec.logicalTypeName()).thenReturn("logicalType");
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 

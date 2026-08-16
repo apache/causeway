@@ -69,7 +69,7 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.objSpec().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().correspondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 
@@ -101,7 +101,7 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.objSpec().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().correspondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 

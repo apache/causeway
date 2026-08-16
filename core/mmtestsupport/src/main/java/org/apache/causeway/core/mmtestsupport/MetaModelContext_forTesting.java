@@ -511,7 +511,7 @@ implements MetaModelContext {
         var spec = serviceInstance.specification();
         discoveredServices.add(SingletonBeanProvider.forTestingLazy(
                 spec.logicalTypeName(),
-                (Class)spec.getCorrespondingClass(),
+                (Class)spec.correspondingClass(),
                 serviceInstance::pojo));
     }
 

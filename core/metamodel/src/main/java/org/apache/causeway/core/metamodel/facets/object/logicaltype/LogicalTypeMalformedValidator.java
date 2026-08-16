@@ -60,7 +60,7 @@ extends MetaModelValidatorAbstract {
 
             ValidationFailure.raiseFormatted(spec,
                     validationResponse.builder()
-                        .addVariable("type", spec.getFullIdentifier())
+                        .addVariable("type", spec.fullIdentifier())
                         .addVariable("logicalTypeName", logicalTypeName)
                         .buildMessage());
         }

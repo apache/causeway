@@ -143,7 +143,7 @@ public record DomainEventHelper(
 
                     final List<Class<?>> parameterTypes = parameters.stream()
                             .map(ObjectActionParameter::getElementType)
-                            .map(ObjectSpecification::getCorrespondingClass)
+                            .map(ObjectSpecification::correspondingClass)
                             .collect(_Lists.toUnmodifiable());
 
                     if (event != null) {

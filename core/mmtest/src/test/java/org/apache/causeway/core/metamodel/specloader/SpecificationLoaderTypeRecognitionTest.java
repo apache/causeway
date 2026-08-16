@@ -71,7 +71,7 @@ implements HasMetaModelContext {
         var specification = getSpecificationLoader().loadSpecification(typeUnderTest);
         // then
         assertTrue(specification.isSingular());
-        assertEquals(typeUnderTest.getName(), specification.getFullIdentifier());
+        assertEquals(typeUnderTest.getName(), specification.fullIdentifier());
 
         final Facet collectionFacet = specification.getFacet(CollectionFacet.class);
         assertNull(collectionFacet);
@@ -106,7 +106,7 @@ implements HasMetaModelContext {
                 ? java.lang.reflect.Array.class
                 : typeUnderTest;
 
-        assertEquals(containerType.getName(), specification.getFullIdentifier());
+        assertEquals(containerType.getName(), specification.fullIdentifier());
 
         var collectionFacet = specification.getFacet(CollectionFacet.class);
         assertNotNull(collectionFacet);

@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public record BooleanAttributeModel(
     boolean isPrimitive,
@@ -29,7 +28,7 @@ public record BooleanAttributeModel(
 
     public BooleanAttributeModel(final UiAttributeWkt attributeModel) {
         this(
-            attributeModel.getElementType().getFullIdentifier().equals("boolean"),
+            attributeModel.getElementType().fullIdentifier().equals("boolean"),
             attributeModel);
     }
 

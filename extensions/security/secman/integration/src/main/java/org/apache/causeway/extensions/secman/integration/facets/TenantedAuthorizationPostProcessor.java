@@ -68,7 +68,7 @@ extends MetaModelPostProcessorAbstract {
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
-        FacetUtil.addFacetIfPresent(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
+        FacetUtil.addFacetIfPresent(createFacet(objectSpecification.correspondingClass(), objectSpecification));
     }
 
     @Override
@@ -89,7 +89,7 @@ extends MetaModelPostProcessorAbstract {
     // -- HELPER
 
     private void addFacetTo(final ObjectSpecification specification, final ObjectFeature objectFeature) {
-        FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
+        FacetUtil.addFacetIfPresent(createFacet(specification.correspondingClass(), objectFeature));
     }
 
     private Optional<TenantedAuthorizationFacetDefault> createFacet(

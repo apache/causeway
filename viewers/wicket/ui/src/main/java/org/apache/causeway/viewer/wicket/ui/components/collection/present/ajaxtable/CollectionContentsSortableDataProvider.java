@@ -23,13 +23,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.model.IModel;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
@@ -37,8 +30,12 @@ import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
-
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.model.IModel;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
@@ -55,7 +52,7 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public boolean isDecoratedWithDataTablesNet() {
-        return getDataTableModel().getMetaModel().getFacetHolder().lookupFacet(TableDecoratorFacet.class)
+        return getDataTableModel().getMetaModel().facetHolder().lookupFacet(TableDecoratorFacet.class)
         .map(TableDecoratorFacet::value)
         .map(TableDecorator.DatatablesNet.class::equals)
         .orElse(false);
@@ -111,9 +108,8 @@ extends SortableDataProvider<DataRow, String> {
         if(sortParam==null) return OptionalInt.empty();
         int columnIndex = 0;
         for(var column : dataTableInternal().dataColumnsObservable().getValue()) {
-            if(column.associationMetaModel().getId().equals(sortParam.getProperty())) {
-                return OptionalInt.of(columnIndex);
-            }
+            if(column.associationMetaModel().getId().equals(sortParam.getProperty()))
+				return OptionalInt.of(columnIndex);
             ++columnIndex;
         }
         return OptionalInt.empty();

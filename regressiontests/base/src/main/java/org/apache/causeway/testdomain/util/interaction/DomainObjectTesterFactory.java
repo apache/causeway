@@ -114,7 +114,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final @NonNull ActionInteraction actionInteraction) {
         var managedAction = actionInteraction.getManagedActionElseFail();
         assertEquals(domainObject.getClass(),
-                managedAction.getOwner().objSpec().getCorrespondingClass());
+                managedAction.getOwner().objSpec().correspondingClass());
         var actionTester = getServiceInjector().injectServicesInto(
                 new ActionTester<>(domainObject, actionInteraction, managedAction));
         actionTester.init();
@@ -1047,7 +1047,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 .orElseThrow(()->_Exceptions.noSuchElement(
                     String.format("'%s: %s' has no %s on its element type",
                             memberName,
-                            getObjectSpecification().getCorrespondingClass().getSimpleName(),
+                            getObjectSpecification().correspondingClass().getSimpleName(),
                             facetType.getSimpleName())
                     ));
         }

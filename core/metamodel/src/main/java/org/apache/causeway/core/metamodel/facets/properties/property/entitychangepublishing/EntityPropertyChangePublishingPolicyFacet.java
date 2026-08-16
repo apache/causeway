@@ -51,7 +51,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
         var policyFacetIfAny = property
                 .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class);
 
-        var typeOf = property.getElementType().getCorrespondingClass();
+        var typeOf = property.getElementType().correspondingClass();
         if(Blob.class.equals(typeOf)
                 || Clob.class.equals(typeOf)) {
 

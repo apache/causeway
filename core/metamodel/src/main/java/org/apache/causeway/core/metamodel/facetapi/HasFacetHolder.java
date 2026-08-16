@@ -28,48 +28,48 @@ public interface HasFacetHolder extends FacetHolder {
 
     // -- INTERFACE
 
-    FacetHolder getFacetHolder();
+    FacetHolder facetHolder();
 
     // -- SHORTCUTS
 
     @Override
     default Identifier getFeatureIdentifier() {
-        return getFacetHolder().getFeatureIdentifier();
+        return facetHolder().getFeatureIdentifier();
     }
 
     @Override
     default int getFacetCount() {
-        return getFacetHolder().getFacetCount();
+        return facetHolder().getFacetCount();
     }
 
     @Override
     default <T extends Facet> Optional<T> lookupFacet(final Class<T> cls) {
-        return getFacetHolder().lookupFacet(cls);
+        return facetHolder().lookupFacet(cls);
     }
 
     @Override
     default boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacetHolder().containsFacet(facetType);
+        return facetHolder().containsFacet(facetType);
     }
 
     @Override
     default Stream<Facet> streamFacets() {
-        return getFacetHolder().streamFacets();
+        return facetHolder().streamFacets();
     }
 
     @Override
     default void addFacet(final Facet facet) {
-        getFacetHolder().addFacet(facet);
+    	facetHolder().addFacet(facet);
     }
 
     @Override
     default Stream<FacetRanking> streamFacetRankings() {
-        return getFacetHolder().streamFacetRankings();
+        return facetHolder().streamFacetRankings();
     }
 
     @Override
     default Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        return getFacetHolder().getFacetRanking(facetType);
+        return facetHolder().getFacetRanking(facetType);
     }
 
 }

@@ -124,7 +124,7 @@ class MetaModelExporter {
             final String id = domainClassDto.getId();
             final ObjectSpecification existing = objectSpecificationByDomainClassId.get(id);
             if(existing != null) {
-                if(!existing.getCorrespondingClass().isEnum()) {
+                if(!existing.correspondingClass().isEnum()) {
                     buf.add(String.format("%s mapped to %s and %s", id, existing, objectSpecification));
                 }
             } else {
@@ -171,9 +171,9 @@ class MetaModelExporter {
     private boolean shouldIgnore(final Config config, final ObjectSpecification specification) {
         return notInNamespacePrefixes(specification, config)
                 || config.isIgnoreMixins() && specification.isMixin()
-                || config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()
+                || config.isIgnoreInterfaces() && specification.correspondingClass().isInterface()
                 || config.isIgnoreAbstractClasses()
-                    && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers())
+                    && Modifier.isAbstract(specification.correspondingClass().getModifiers())
                 || config.isIgnoreBuiltInValueTypes()
                     && isValueType(specification);
     }
@@ -209,7 +209,7 @@ class MetaModelExporter {
             final ObjectSpecification specification, final Config config) {
 
         final DomainClassDto domainClass = new DomainClassDto();
-        domainClass.setId(specification.getFullIdentifier());
+        domainClass.setId(specification.fullIdentifier());
         if(specification.isInjectable()) {
             domainClass.setService(true);
         }
@@ -243,7 +243,7 @@ class MetaModelExporter {
     }
 
     private boolean isEnum(final ObjectSpecification specification) {
-        return specification.getCorrespondingClass().isEnum();
+        return specification.correspondingClass().isEnum();
     }
 
     private void addProperties(

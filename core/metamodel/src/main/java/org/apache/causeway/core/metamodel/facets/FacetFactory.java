@@ -20,9 +20,7 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
@@ -38,6 +36,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
+import org.apache.causeway.core.metamodel.facetapi.MethodRemover.HasMethodRemover;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
@@ -85,21 +84,6 @@ public interface FacetFactory {
 	 * annotation if present.
 	 */
 	void processParams(ProcessParameterContext processParameterContext);
-
-	@FunctionalInterface
-	interface HasMethodRemover extends MethodRemover {
-        MethodRemover methodRemover();
-
-        @Override default void removeMethod(final ResolvedMethod method) {
-            methodRemover().removeMethod(method);
-        }
-        @Override default void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
-            methodRemover().removeMethods(filter, onRemoval);
-        }
-        @Override default Can<ResolvedMethod> snapshotMethodsRemaining() {
-            return methodRemover().snapshotMethodsRemaining();
-        }
-    }
 
     interface ProcessWithClsContext<T extends FacetHolder> {
     	T facetHolder();

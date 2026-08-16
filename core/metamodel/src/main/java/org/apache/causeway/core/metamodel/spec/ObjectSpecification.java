@@ -35,7 +35,6 @@ import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -45,6 +44,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -77,6 +77,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -107,14 +108,16 @@ extends
                     .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
-                Comparator.comparing(ObjectSpecification::getFullIdentifier);
+                Comparator.comparing(ObjectSpecification::fullIdentifier);
 
         public final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE =
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
-            s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+            s1.shortIdentifier().compareToIgnoreCase(s2.shortIdentifier());
     }
 
-    IntrospectionPolicy getIntrospectionPolicy();
+    @Override default FeatureType featureType() { return FeatureType.OBJECT; }
+
+    IntrospectionPolicy introspectionPolicy();
 
     /**
      * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
@@ -129,10 +132,10 @@ extends
      * @return optionally the ObjectMember associated with given {@code memberId},
      * based on whether given memberId exists
      */
-    Optional<? extends ObjectMember> getMember(String memberId);
+    Optional<? extends ObjectMember> lookupMember(String memberId);
 
     default ObjectMember getMemberElseFail(final String memberId) {
-        return getMember(memberId).orElseThrow(()->{
+        return lookupMember(memberId).orElseThrow(()->{
             var msg = "Member '" + memberId + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
@@ -144,10 +147,10 @@ extends
      * @return optionally the ObjectMember associated with given {@code method},
      * based on whether such an association exists
      */
-    Optional<? extends ObjectMember> getMember(ResolvedMethod method);
+    Optional<? extends ObjectMember> lookupMember(ResolvedMethod method);
 
     default ObjectMember getMemberElseFail(final @NonNull ResolvedMethod method) {
-        return getMember(method).orElseThrow(()->{
+        return lookupMember(method).orElseThrow(()->{
             var methodName = method.name();
             var msg = "Method '" + methodName + "' does not correspond "
                     + "to any of the object's fields or actions.";
@@ -182,7 +185,7 @@ extends
     /**
      * @return Java class this specification is associated with
      */
-    Class<?> getCorrespondingClass();
+    Class<?> correspondingClass();
 
     /**
      * Returns an (immutable) "full" identifier for this specification.
@@ -190,7 +193,7 @@ extends
      * This will be the fully qualified name of the Class object that this
      * object represents (i.e. it includes the package name).
      */
-    String getFullIdentifier();
+    String fullIdentifier();
 
     /**
      * Returns an (immutable) "short" identifier for this specification.
@@ -198,7 +201,7 @@ extends
      * This will be the class name without the package; any text up to and
      * including the last period is removed.
      */
-    String getShortIdentifier();
+    String shortIdentifier();
 
     /**
      * Immutable set of {@link LogicalType} aliases for corresponding
@@ -420,27 +423,27 @@ extends
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@link Void} or {@code void}.
+     * Whether {@link #correspondingClass()} is {@link Void} or {@code void}.
      */
     default boolean isVoid() {
-        return getCorrespondingClass()==void.class
-                || getCorrespondingClass()==Void.class;
+        return correspondingClass()==void.class
+                || correspondingClass()==Void.class;
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@code void} (but not {@link Void}).
+     * Whether {@link #correspondingClass()} is {@code void} (but not {@link Void}).
      */
     default boolean isVoidPrimitive() {
-        return getCorrespondingClass()==void.class;
+        return correspondingClass()==void.class;
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is a primitive type,
+     * Whether {@link #correspondingClass()} is a primitive type,
      * but not {@link Void} or {@code void}.
      */
     default boolean isPrimitive() {
         return !isVoid()
-                && getCorrespondingClass().isPrimitive();
+                && correspondingClass().isPrimitive();
     }
 
     default boolean isAbstract() {
@@ -448,11 +451,11 @@ extends
     }
 
     /**
-    * Whether {@link #getCorrespondingClass()} implements {@link Comparable}
+    * Whether {@link #correspondingClass()} implements {@link Comparable}
     * or has ordering (primitives, strings and enums).
     */
     default boolean isComparableOrOrdered() {
-        var cls = getCorrespondingClass();
+        var cls = correspondingClass();
         return Comparable.class.isAssignableFrom(cls)
                 || cls.isPrimitive()
                 || cls.equals(String.class)
@@ -519,7 +522,7 @@ extends
      * @since 2.0
      */
     default Object instantiatePojo() {
-        final Class<?> correspondingClass = getCorrespondingClass();
+        final Class<?> correspondingClass = correspondingClass();
         if (correspondingClass.isArray())
             return Array.newInstance(correspondingClass.getComponentType(), 0);
 
@@ -531,7 +534,7 @@ extends
         try {
             newInstance = cls.getDeclaredConstructor().newInstance();
         } catch (final Throwable e) {
-            throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
+            throw new UnrecoverableException("Failed to create instance of type " + fullIdentifier(), e);
         }
 
         return newInstance;
@@ -580,7 +583,7 @@ extends
         if(pojo==null) return;
 
         if(!isPojoCompatible(pojo)) {
-            var expectedType = getCorrespondingClass();
+            var expectedType = correspondingClass();
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
                     "objectSpec.correspondingClass = %s, " +
@@ -591,7 +594,7 @@ extends
     }
 
     default public boolean isAssignableFrom(final Class<?> actualType) {
-        var expectedType = getCorrespondingClass();
+        var expectedType = correspondingClass();
         if(expectedType.isAssignableFrom(actualType)
                 || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
             return true;
@@ -601,7 +604,7 @@ extends
     default public boolean isPojoCompatible(final Object pojo) {
         if(pojo==null)  return true;
 
-        var expectedType = getCorrespondingClass();
+        var expectedType = correspondingClass();
         var actualType = pojo.getClass();
 
         if(expectedType.isAssignableFrom(actualType)
@@ -623,11 +626,11 @@ extends
      * @since 2.0.0
      */
     default boolean isSerializable() {
-        return Serializable.class.isAssignableFrom(getCorrespondingClass());
+        return Serializable.class.isAssignableFrom(correspondingClass());
     }
 
     default String fqcn() {
-        return getCorrespondingClass().getName();
+        return correspondingClass().getName();
     }
 
     /**
@@ -635,9 +638,7 @@ extends
      * @since 2.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
-        return superclass()!=null
-                ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
-                : Stream.of(this);
+        return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchy());
     }
 
     /**
@@ -646,7 +647,35 @@ extends
      * @since 4.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
-        return Stream.concat(streamTypeHierarchy(), interfaces().stream());
+    	return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchyAndInterfaces());
+    }
+
+    /**
+     * Whether <code>this</code> specification represents the same specification,
+     * or a subclass of the specified <code>other</code> specification.
+     * <p>
+     * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
+     * {@link Class#isAssignableFrom(Class) Java's}
+     * <tt>superType.isAssignableFrom(subType)</tt>.
+     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
+     */
+    default boolean isOfType(final ObjectSpecification other) {
+    	var thisClass = this.correspondingClass();
+    	var otherClass = other.correspondingClass();
+
+    	return thisClass == otherClass
+    			|| otherClass.isAssignableFrom(thisClass);
+    }
+
+    /**
+     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
+     */
+    default boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
+        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.correspondingClass());
+        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.correspondingClass());
+
+        return thisClass == otherClass
+                || otherClass.isAssignableFrom(thisClass);
     }
 
     // -- COMMON SUPER TYPE FINDER
@@ -658,17 +687,17 @@ extends
             final @NonNull ObjectSpecification a,
             final @NonNull ObjectSpecification b) {
 
-        var cls_a = a.getCorrespondingClass();
-        var cls_b = b.getCorrespondingClass();
+        var cls_a = a.correspondingClass();
+        var cls_b = b.correspondingClass();
         if(cls_a.isAssignableFrom(cls_b))
             return a;
         if(cls_b.isAssignableFrom(cls_a))
             return b;
         // assuming the algorithm is correct: if non of the above is true,
         // we must be able to walk up the tree on both branches
-        _Assert.assertNotNull(a.superclass());
-        _Assert.assertNotNull(b.superclass());
-        return commonSuperType(a.superclass(), b.superclass());
+        var superA = a.superSpec().orElseThrow();
+        var superB = b.superSpec().orElseThrow();
+        return commonSuperType(superA, superB);
     }
 
     // -- VALUE SEMANTICS SUPPORT
