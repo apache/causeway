@@ -34,8 +34,8 @@ A successful run reports the Node test totals and completes both Maven modules:
 
 [source,text]
 ----
-tests 27
-pass 27
+tests 44
+pass 44
 fail 0
 BUILD SUCCESS
 ----
@@ -103,7 +103,15 @@ This avoids cross-origin and authentication-cookie differences that can obscure 
 
 The repository provides `viewers/webcomponents/sample-html` as the standard executable vanilla-HTML verification application.
 It supplies deterministic JPA/H2 data, the real rich GraphQL endpoint, packaged foundation modules, and stable hooks for future Playwright tests.
-See link:sample-html/README.adoc[`sample-html/README.adoc`] for its run commands and automation contract.
+Start it from the repository root with the reactor profile so that the foundation and GraphQL runtime are included:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-html
+----
+
+Then open `http://localhost:8080/sample-html/index.html` and wait for the application state to become `ready`.
+See link:sample-html/README.adoc[`sample-html/README.adoc`] for port overrides, the packaged-jar alternative, and the automation contract.
 
 === Install the local artifact
 

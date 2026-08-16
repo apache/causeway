@@ -22,13 +22,28 @@ import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from 
 import {ObjectContextStatus, RequirementStatus} from './types.mjs';
 
 export class ObjectContextController extends EventTarget {
-  constructor({client, logicalTypeName, objectId, schedule = callback => globalThis.queueMicrotask(callback)} = {}) {
+  constructor({
+    client,
+    logicalTypeName,
+    objectId,
+    hydration = null,
+    schedule = callback => globalThis.queueMicrotask(callback)
+  } = {}) {
     super();
     this.client = client ?? null;
     this.identity = Object.freeze({logicalTypeName: logicalTypeName ?? '', id: objectId ?? ''});
     this.schedule = callback => schedule(callback);
-    this.description = null;
-    this.snapshot = null;
+    this.description = hydration?.description ?? null;
+    this.snapshot = hydration?.data
+      ? deepFreeze({
+        data: hydration.data,
+        selection: hydration.selection ?? {},
+        errors: hydration.errors ?? [],
+        generation: hydration.generation ?? 0
+      })
+      : null;
+    this.secondaryCache = new Map();
+    this.secondaryAbortControllers = new Set();
     this.registrations = new Map();
     this.stateListeners = new Set();
     this.scheduled = false;
@@ -73,6 +88,73 @@ export class ObjectContextController extends EventTarget {
     };
   }
 
+  async loadCollection({member, columns = [], force = false, signal} = {}) {
+    if (this.closed) {
+      throw new Error('Cannot load a collection from a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    const descriptor = description.members.get(member);
+    if (!descriptor || descriptor.kind !== 'collection' || !descriptor.fields.has('get')) {
+      throw new Error(`Collection '${member}' is not readable on '${description.logicalTypeName}'.`);
+    }
+    const rowSelection = collectionRowSelection(columns);
+    const selection = {[member]: {get: rowSelection}};
+    const cacheKey = JSON.stringify({member, rowSelection});
+    if (!force && this.secondaryCache.has(cacheKey)) {
+      return this.secondaryCache.get(cacheKey);
+    }
+    const abortController = new AbortController();
+    this.secondaryAbortControllers.add(abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    const promise = this.client.readObject({
+      description,
+      identity: this.identity,
+      selection,
+      signal: abortController.signal
+    }).then(async result => {
+      const data = result.data?.[member] ?? null;
+      const firstObjectRow = data?.get?.find?.(row => row?._meta?.logicalTypeName);
+      let rowDescription = null;
+      let errors = result.errors;
+      if (firstObjectRow) {
+        try {
+          rowDescription = await this.client.describeObject(firstObjectRow._meta.logicalTypeName);
+        } catch (error) {
+          errors = Object.freeze([...errors, asGraphQLError(error)]);
+        }
+      }
+      return Object.freeze({
+        descriptor,
+        data,
+        errors,
+        rowDescription,
+        rowSelection,
+        selection
+      });
+    }).finally(() => {
+      signal?.removeEventListener?.('abort', abort);
+      this.secondaryAbortControllers.delete(abortController);
+    });
+    this.secondaryCache.set(cacheKey, promise);
+    promise.catch(() => this.secondaryCache.delete(cacheKey));
+    return promise;
+  }
+
+  createHydratedRowContext(row, rowSelection = {}) {
+    const metadata = row?._meta;
+    if (!metadata?.logicalTypeName || !metadata?.id) {
+      throw new Error('A hydrated row requires _meta.logicalTypeName and _meta.id.');
+    }
+    return new ObjectContextController({
+      client: this.client,
+      logicalTypeName: metadata.logicalTypeName,
+      objectId: metadata.id,
+      hydration: {data: row, selection: rowSelection}
+    });
+  }
+
   subscribe(listener) {
     this.stateListeners.add(listener);
     listener(this.state);
@@ -81,6 +163,10 @@ export class ObjectContextController extends EventTarget {
 
   refresh() {
     this.forceFull = true;
+    this.secondaryCache.clear();
+    for (const abortController of this.secondaryAbortControllers) {
+      abortController.abort();
+    }
     this.#scheduleFlush();
   }
 
@@ -91,6 +177,11 @@ export class ObjectContextController extends EventTarget {
   disconnect() {
     this.closed = true;
     this.abortController?.abort();
+    for (const abortController of this.secondaryAbortControllers) {
+      abortController.abort();
+    }
+    this.secondaryAbortControllers.clear();
+    this.secondaryCache.clear();
     this.registrations.clear();
     this.stateListeners.clear();
   }
@@ -159,6 +250,15 @@ export class ObjectContextController extends EventTarget {
       : differenceSelection(activeSelection, cachedSelection);
     if (isSelectionEmpty(requestedSelection)) {
       this.forceFull = false;
+      if (this.snapshot) {
+        this.#setState({
+          status: this.snapshot.errors.length > 0 ? ObjectContextStatus.PARTIAL_ERROR : ObjectContextStatus.READY,
+          generation: this.snapshot.generation,
+          snapshot: this.snapshot,
+          errors: this.snapshot.errors,
+          error: null
+        });
+      }
       this.#notifyAll();
       return;
     }
@@ -303,8 +403,10 @@ function normalizeRequirement(requirement) {
   if (requirement?.kind === 'header') {
     return Object.freeze({kind: 'header'});
   }
-  if (requirement?.kind === 'property' && typeof requirement.member === 'string' && requirement.member.length > 0) {
-    return Object.freeze({kind: 'property', member: requirement.member});
+  if (['property', 'action', 'collection'].includes(requirement?.kind)
+      && typeof requirement.member === 'string'
+      && requirement.member.length > 0) {
+    return Object.freeze({kind: requirement.kind, member: requirement.member});
   }
   throw new Error(`Unsupported semantic read requirement '${JSON.stringify(requirement)}'.`);
 }
@@ -326,17 +428,74 @@ function translateRequirement(requirement, description) {
     };
   }
   const member = description.members.get(requirement.member);
-  if (!member || member.kind !== 'property') {
-    throw new Error(`Property '${requirement.member}' is not present on '${description.logicalTypeName}'.`);
+  if (!member || member.kind !== requirement.kind) {
+    const label = requirement.kind[0].toUpperCase() + requirement.kind.slice(1);
+    throw new Error(`${label} '${requirement.member}' is not present on '${description.logicalTypeName}'.`);
   }
-  const supportedFields = ['hidden', 'disabled', 'get'].filter(field => member.fields.has(field));
-  if (!supportedFields.includes('get')) {
-    throw new Error(`Property '${requirement.member}' does not expose a readable value.`);
+  if (requirement.kind === 'property') {
+    if (!member.fields.has('get')) {
+      throw new Error(`Property '${requirement.member}' does not expose a readable value.`);
+    }
+    const memberSelection = Object.fromEntries(
+      ['hidden', 'disabled', 'datatype']
+        .filter(field => member.fields.has(field))
+        .map(field => [field, true])
+    );
+    memberSelection.get = propertyValueSelection(member);
+    return {descriptor: member, selection: {[member.id]: memberSelection}};
   }
+  if (requirement.kind === 'collection' && !member.fields.has('get')) {
+    throw new Error(`Collection '${requirement.member}' does not expose readable contents.`);
+  }
+  const supportedFields = ['hidden', 'disabled'].filter(field => member.fields.has(field));
   return {
     descriptor: member,
     selection: {[member.id]: Object.fromEntries(supportedFields.map(field => [field, true]))}
   };
+}
+
+function propertyValueSelection(member) {
+  const value = member.value;
+  if (!value || value.typeKind === 'SCALAR' || value.typeKind === 'ENUM') {
+    return true;
+  }
+  const typeFields = value.typeDescription?.fields ?? [];
+  const lobFields = typeFields
+    .filter(field => ['name', 'mimeType', 'bytes', 'chars'].includes(field.name))
+    .map(field => field.name);
+  if (lobFields.length > 0) {
+    return Object.fromEntries(lobFields.map(field => [field, true]));
+  }
+  const scalarFields = typeFields
+    .filter(field => ['SCALAR', 'ENUM'].includes(innermostType(field.type)?.kind))
+    .map(field => field.name);
+  if (scalarFields.length > 0) {
+    return Object.fromEntries(scalarFields.map(field => [field, true]));
+  }
+  if (value.typeDescription) {
+    return {__typename: true};
+  }
+  return {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+}
+
+function collectionRowSelection(columns) {
+  const selection = {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+  for (const column of columns) {
+    const member = typeof column === 'string' ? column : column?.member;
+    if (!member) {
+      continue;
+    }
+    selection[member] = {hidden: true, disabled: true, datatype: true, get: true};
+  }
+  return selection;
+}
+
+function innermostType(typeRef) {
+  let current = typeRef;
+  while (current?.ofType) {
+    current = current.ofType;
+  }
+  return current;
 }
 
 function mapRequirementStatus(objectStatus) {

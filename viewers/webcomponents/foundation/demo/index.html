@@ -21,27 +21,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Causeway web-component foundation</title>
-  <script type="module" src="../src/index.mjs"></script>
+  <title>Causeway read-only web components</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 60rem; }
-    causeway-object-header, causeway-property { display: block; margin-block: 1rem; }
-    .causeway-property-label { display: inline-block; font-weight: 600; min-width: 12rem; }
-    .causeway-error { color: #a00; }
+    :root {
+      --demo-accent: #145ea8;
+      --demo-border: #b7c5d5;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      margin: 2rem;
+      max-width: 60rem;
+    }
+
+    causeway-object-header,
+    causeway-property,
+    causeway-action,
+    causeway-collection {
+      display: block;
+    }
+
+    causeway-property .causeway-property-label,
+    causeway-collection .causeway-collection-label {
+      color: var(--demo-accent);
+    }
+
+    causeway-action button {
+      border: 1px solid var(--demo-border);
+      border-radius: 0.4rem;
+      padding: 0.4rem 0.75rem;
+    }
+
+    causeway-collection .causeway-collection-table {
+      border: 1px solid var(--demo-border);
+    }
   </style>
 </head>
 <body>
   <main>
     <h1>Causeway rich GraphQL web components</h1>
-    <p>This plain HTML page has no HTMX or frontend framework dependency.</p>
+    <p>This application-themed plain HTML page has no HTMX or frontend-framework dependency.</p>
+    <output id="semantic-event" aria-live="polite">No semantic event</output>
 
     <causeway-graphql-client endpoint="/graphql">
       <causeway-object-context logical-type="university.dept.Department" object-id="1">
         <causeway-object-header></causeway-object-header>
         <causeway-property member="name"></causeway-property>
-        <causeway-property member="code"></causeway-property>
+        <causeway-property member="status"></causeway-property>
+        <causeway-property member="chair"></causeway-property>
+        <causeway-action member="inspect"></causeway-action>
+        <causeway-collection member="staffMembers">
+          <causeway-collection-column member="name" label="Name"></causeway-collection-column>
+          <causeway-collection-column member="code" label="Code"></causeway-collection-column>
+        </causeway-collection>
       </causeway-object-context>
     </causeway-graphql-client>
   </main>
+
+  <script type="module">
+    const components = await import('../src/index.mjs');
+    components.installCausewayComponentStyles();
+
+    const eventOutput = document.querySelector('#semantic-event');
+    document.addEventListener('causeway-navigation-request', event => {
+      eventOutput.value = `navigate:${event.detail.target.logicalTypeName}:${event.detail.target.id}`;
+    });
+    document.addEventListener('causeway-action-request', event => {
+      eventOutput.value = `action:${event.detail.actionId}`;
+    });
+  </script>
 </body>
 </html>

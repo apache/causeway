@@ -36,6 +36,7 @@ export class CausewayObjectContextElement extends HTMLElementBase {
     super();
     this._client = null;
     this._injectedContext = null;
+    this._hydration = null;
     this._context = null;
     this._unsubscribe = null;
     this.addEventListener(OBJECT_CONTEXT_REQUEST_EVENT, event => {
@@ -84,6 +85,17 @@ export class CausewayObjectContextElement extends HTMLElementBase {
     }
   }
 
+  get hydration() {
+    return this._hydration;
+  }
+
+  set hydration(value) {
+    this._hydration = value;
+    if (this.isConnected && !this._injectedContext) {
+      this.#start();
+    }
+  }
+
   get state() {
     return this._context?.state ?? null;
   }
@@ -111,7 +123,8 @@ export class CausewayObjectContextElement extends HTMLElementBase {
       this._context = new ObjectContextController({
         client,
         logicalTypeName: this.logicalTypeName,
-        objectId: this.objectId
+        objectId: this.objectId,
+        hydration: this._hydration
       });
     }
     this._unsubscribe = this._context.subscribe?.(state => {

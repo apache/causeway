@@ -34,11 +34,20 @@ public class SampleDataConfiguration {
             final SampleObjectRepository repository) {
         return args -> transactionService.runTransactional(Propagation.REQUIRED, () -> {
             if (repository.findById(SampleObject.SAMPLE_ID) == null) {
-                repository.persist(new SampleObject(
+                final SampleObject sample = new SampleObject(
                         SampleObject.SAMPLE_ID,
                         SampleObject.SAMPLE_NAME,
                         SampleObject.SAMPLE_CODE,
-                        SampleObject.SAMPLE_SECRET));
+                        SampleObject.SAMPLE_SECRET);
+                sample.addRelatedObject(
+                        SampleRelatedObject.FIRST_ID,
+                        SampleRelatedObject.FIRST_NAME,
+                        SampleRelatedObject.FIRST_CODE);
+                sample.addRelatedObject(
+                        SampleRelatedObject.SECOND_ID,
+                        SampleRelatedObject.SECOND_NAME,
+                        SampleRelatedObject.SECOND_CODE);
+                repository.persist(sample);
             }
         });
     }

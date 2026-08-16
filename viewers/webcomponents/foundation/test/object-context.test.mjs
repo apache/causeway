@@ -48,6 +48,35 @@ test('coalesces header and property requirements into one initial object read', 
   assert.equal(codeStates.at(-1).data.get, 'CLA');
 });
 
+test('coordinates enum, object-reference, LOB and unsupported property projections', async () => {
+  const executor = createRichSchemaFixtureExecutor();
+  const context = createContext(executor);
+  let statusState;
+  let chairState;
+  let blobState;
+  let clobState;
+  let unsupportedState;
+  context.registerRequirement({kind: 'property', member: 'status'}, state => { statusState = state; });
+  context.registerRequirement({kind: 'property', member: 'chair'}, state => { chairState = state; });
+  context.registerRequirement({kind: 'property', member: 'prospectus'}, state => { blobState = state; });
+  context.registerRequirement({kind: 'property', member: 'history'}, state => { clobState = state; });
+  context.registerRequirement({kind: 'property', member: 'unsupportedValue'}, state => { unsupportedState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.equal(executor.readCalls.length, 1);
+  const document = executor.readCalls[0].document;
+  assert.match(document, /status\s*\{[^}]*get/s);
+  assert.match(document, /chair\s*\{[\s\S]*?_meta\s*\{/);
+  assert.match(document, /prospectus\s*\{[\s\S]*?bytes/);
+  assert.match(document, /history\s*\{[\s\S]*?chars/);
+  assert.match(document, /unsupportedValue\s*\{[\s\S]*?__typename/);
+  assert.equal(statusState.data.get, 'ACTIVE');
+  assert.equal(chairState.data.get._meta.id, 'staff-1');
+  assert.equal(blobState.data.get.name, 'prospectus.pdf');
+  assert.equal(clobState.data.get.chars, '/graphql/object/history/clobChars');
+  assert.deepEqual(unsupportedState.data.get, {nested: {value: 'unknown'}});
+});
+
 test('loads a later requirement as a delta and refreshes only active requirements', async () => {
   const executor = createRichSchemaFixtureExecutor({
     readResponses: [graphQLObjectResponse(), graphQLObjectResponse({version: '8'}), graphQLObjectResponse({version: '9'})]
