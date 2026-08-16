@@ -18,8 +18,10 @@
  */
 
 import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
+import {fieldsByName, namedType} from './introspection.mjs';
+import {commandSelection, resultSelectionForType} from './interaction-operations.mjs';
 import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
-import {ObjectContextStatus, RequirementStatus} from './types.mjs';
+import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
 export class ObjectContextController extends EventTarget {
   constructor({
@@ -44,6 +46,9 @@ export class ObjectContextController extends EventTarget {
       : null;
     this.secondaryCache = new Map();
     this.secondaryAbortControllers = new Set();
+    this.commandGenerations = new Map();
+    this.commandAbortControllers = new Map();
+    this.mutationTail = Promise.resolve();
     this.registrations = new Map();
     this.stateListeners = new Set();
     this.scheduled = false;
@@ -86,6 +91,343 @@ export class ObjectContextController extends EventTarget {
         this.#scheduleFlush();
       }
     };
+  }
+
+  async describePropertyInteraction(member) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+    const mutationType = await this.client.describeMutation();
+    const mutationFieldName = mutationFieldNameFor(description, member);
+    const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
+    const enumValues = descriptor.value?.typeDescription?.enumValues?.map(value => value.name) ?? [];
+    return Object.freeze({
+      descriptor,
+      editable: descriptor.fields.has('set') || Boolean(mutationField),
+      validate: descriptor.fields.has('validate'),
+      choices: descriptor.fields.has('choices'),
+      autoComplete: descriptor.fields.has('autoComplete'),
+      mutationFieldName: mutationField ? mutationFieldName : null,
+      inputType: propertyInputType(descriptor, mutationField, member),
+      enumValues: Object.freeze(enumValues)
+    });
+  }
+
+  async prepareProperty(member, {signal} = {}) {
+    const capabilities = await this.describePropertyInteraction(member);
+    if (!capabilities.editable) {
+      return interactionResult(InteractionStatus.UNSUPPORTED, {capabilities}, [commandError(`Property '${member}' does not expose an update capability.`)]);
+    }
+    let choices = capabilities.enumValues;
+    if (capabilities.choices) {
+      const result = await this.propertyChoices(member, {signal});
+      if (result.status === InteractionStatus.SUCCESS) {
+        choices = result.data ?? choices;
+      }
+    }
+    return interactionResult(InteractionStatus.SUCCESS, {
+      capabilities,
+      choices: Object.freeze([...(choices ?? [])])
+    });
+  }
+
+  async propertyChoices(member, {signal} = {}) {
+    return this.#runTransient(`property:${member}:choices`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('choices');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose choices.`)]);
+      }
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {choices: selection ?? true}},
+        operationName: 'CausewayPropertyChoices',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.choices ?? null);
+    });
+  }
+
+  async autoCompleteProperty(member, search, {signal} = {}) {
+    return this.#runTransient(`property:${member}:autocomplete`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('autoComplete');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose autocomplete.`)]);
+      }
+      const searchArgument = field.args.find(argument => argument.name === 'search')?.name ?? 'search';
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {autoComplete: commandSelection({[searchArgument]: search}, selection ?? true)}},
+        operationName: 'CausewayPropertyAutoComplete',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.autoComplete ?? null);
+    });
+  }
+
+  async validateProperty(member, value, {signal} = {}) {
+    return this.#runTransient(`property:${member}:validate`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const field = descriptor.fields.get('validate');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose validation.`)]);
+      }
+      const argumentName = field.args[0]?.name ?? member;
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {validate: commandSelection({[argumentName]: value})}},
+        operationName: 'CausewayValidateProperty',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.validate ?? null);
+    });
+  }
+
+  updateProperty(member, value, {signal} = {}) {
+    return this.#serializeMutation(async () => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+      const setField = descriptor.fields.get('set');
+      let result;
+      if (setField) {
+        const argumentName = setField.args[0]?.name ?? member;
+        const selection = resultSelectionForType(setField.type, description.types) ?? {__typename: true};
+        result = await this.client.executeObjectInteraction({
+          description,
+          identity: this.identity,
+          selection: {[member]: {set: commandSelection({[argumentName]: value}, selection)}},
+          operationName: 'CausewayUpdateProperty',
+          signal
+        });
+        result = {...result, data: result.data?.[member]?.set ?? null};
+      } else {
+        const mutationType = await this.client.describeMutation({signal});
+        const fieldName = mutationFieldNameFor(description, member);
+        const mutationField = mutationType ? fieldsByName(mutationType).get(fieldName) : null;
+        if (!mutationField) {
+          return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Property '${member}' does not expose an update mutation.`)]);
+        }
+        const targetArgument = targetArgumentName(mutationField, description.generatedInputTypeName);
+        const selection = resultSelectionForType(mutationField.type, description.types) ?? {__typename: true};
+        result = await this.client.executeMutationInteraction({
+          description,
+          mutationType,
+          fieldName,
+          args: {[targetArgument]: {id: this.identity.id}, [member]: value},
+          resultSelection: selection,
+          operationName: 'CausewayUpdateProperty',
+          signal
+        });
+      }
+      const response = commandResponse(result, result.data);
+      if (response.status === InteractionStatus.SUCCESS) {
+        this.refresh();
+      }
+      return response;
+    });
+  }
+
+  async describeActionInteraction(member) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'action');
+    const paramsField = descriptor.fields.get('params');
+    const paramsType = paramsField ? description.types.get(namedType(paramsField.type)) ?? null : null;
+    const validateField = descriptor.fields.get('validate');
+    const parameters = (paramsType?.fields ?? []).map(field => {
+      const wrapper = description.types.get(namedType(field.type)) ?? null;
+      const actionArgument = validateField?.args.find(argument => argument.name === field.name) ?? null;
+      const inputType = actionArgument?.type ?? parameterInputType(wrapper);
+      const enumType = inputType ? description.types.get(namedType(inputType)) ?? null : null;
+      return Object.freeze({
+        id: field.name,
+        description: field.description ?? null,
+        generatedTypeName: wrapper?.name ?? namedType(field.type),
+        fields: fieldsByName(wrapper),
+        inputType,
+        enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
+      });
+    });
+    const invocationField = actionInvocationField(descriptor);
+    const mutationType = invocationField ? null : await this.client.describeMutation();
+    const mutationFieldName = mutationFieldNameFor(description, member);
+    const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
+    return Object.freeze({
+      descriptor,
+      parameters: Object.freeze(parameters),
+      validate: Boolean(validateField),
+      invocationField: invocationField?.name ?? null,
+      mutationFieldName: mutationField ? mutationFieldName : null,
+      invokable: Boolean(invocationField || mutationField)
+    });
+  }
+
+  async prepareAction(member, values = {}, {signal} = {}) {
+    const capabilities = await this.describeActionInteraction(member);
+    if (!capabilities.invokable) {
+      return interactionResult(InteractionStatus.UNSUPPORTED, {capabilities}, [commandError(`Action '${member}' does not expose an invocation capability.`)]);
+    }
+    if (capabilities.parameters.length === 0) {
+      return interactionResult(InteractionStatus.SUCCESS, {capabilities, parameters: []});
+    }
+    return this.#runTransient(`action:${member}:prepare`, signal, async commandSignal => {
+      const {description} = await this.#memberDescriptor(member, 'action');
+      const parameterSelection = {};
+      for (const parameter of capabilities.parameters) {
+        const stateSelection = {};
+        for (const fieldName of ['hidden', 'disabled', 'default', 'choices', 'validity', 'datatype']) {
+          const field = parameter.fields.get(fieldName);
+          if (!field) {
+            continue;
+          }
+          const args = argumentsFromValues(field, values);
+          const resultSelection = resultSelectionForType(field.type, description.types);
+          stateSelection[fieldName] = Object.keys(args).length > 0
+            ? commandSelection(args, resultSelection ?? true)
+            : resultSelection ?? true;
+        }
+        parameterSelection[parameter.id] = stateSelection;
+      }
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {params: parameterSelection}},
+        operationName: 'CausewayPrepareAction',
+        signal: commandSignal
+      });
+      const parameterData = result.data?.[member]?.params ?? null;
+      if (!parameterData && result.errors?.length) {
+        return commandResponse(result, null);
+      }
+      return interactionResult(InteractionStatus.SUCCESS, {
+        capabilities,
+        parameters: Object.freeze(capabilities.parameters.map(parameter => {
+          const parameterError = result.errors?.find(error => error.path?.includes(parameter.id));
+          return Object.freeze({
+            ...parameter,
+            state: Object.freeze({
+              ...(parameterData?.[parameter.id] ?? {}),
+              ...(parameterError ? {error: parameterError.message} : {})
+            })
+          });
+        }))
+      }, result.errors, result.operation);
+    });
+  }
+
+  async autoCompleteActionParameter(member, parameterId, search, values = {}, {signal} = {}) {
+    return this.#runTransient(`action:${member}:${parameterId}:autocomplete`, signal, async commandSignal => {
+      const {description} = await this.#memberDescriptor(member, 'action');
+      const capabilities = await this.describeActionInteraction(member);
+      const parameter = capabilities.parameters.find(candidate => candidate.id === parameterId);
+      const field = parameter?.fields.get('autoComplete');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action parameter '${member}.${parameterId}' does not expose autocomplete.`)]);
+      }
+      const args = argumentsFromValues(field, values);
+      const searchArgument = field.args.find(argument => argument.name === 'search')?.name ?? field.args.at(-1)?.name;
+      if (searchArgument) {
+        args[searchArgument] = search;
+      }
+      await ensureResultTypes(this.client, description, field.type, commandSignal);
+      const selection = resultSelectionForType(field.type, description.types);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {
+          [member]: {
+            params: {
+              [parameterId]: {
+                autoComplete: commandSelection(args, selection ?? true)
+              }
+            }
+          }
+        },
+        operationName: 'CausewayActionParameterAutoComplete',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.params?.[parameterId]?.autoComplete ?? null);
+    });
+  }
+
+  async validateAction(member, values = {}, {signal} = {}) {
+    return this.#runTransient(`action:${member}:validate`, signal, async commandSignal => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'action');
+      const field = descriptor.fields.get('validate');
+      if (!field) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action '${member}' does not expose argument validation.`)]);
+      }
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {validate: commandSelection(argumentsFromValues(field, values))}},
+        operationName: 'CausewayValidateAction',
+        signal: commandSignal
+      });
+      return commandResponse(result, result.data?.[member]?.validate ?? null);
+    });
+  }
+
+  invokeAction(member, values = {}, {signal} = {}) {
+    return this.#serializeMutation(async () => {
+      const {description, descriptor} = await this.#memberDescriptor(member, 'action');
+      const invocationField = actionInvocationField(descriptor);
+      let result;
+      let resultType;
+      if (invocationField) {
+        const invokeType = description.types.get(namedType(invocationField.type));
+        const resultsField = invokeType ? fieldsByName(invokeType).get('results') : null;
+        if (resultsField) {
+          await ensureResultTypes(this.client, description, resultsField.type, signal);
+        }
+        const resultsSelection = resultsField ? resultSelectionForType(resultsField.type, description.types) : null;
+        result = await this.client.executeObjectInteraction({
+          description,
+          identity: this.identity,
+          selection: {
+            [member]: {
+              [invocationField.name]: commandSelection(
+                argumentsFromValues(invocationField, values),
+                resultsField ? {results: resultsSelection ?? true} : {target: true}
+              )
+            }
+          },
+          operationName: 'CausewayInvokeAction',
+          signal
+        });
+        resultType = resultsField?.type ?? null;
+        result = {...result, data: result.data?.[member]?.[invocationField.name]?.results ?? null};
+      } else {
+        const mutationType = await this.client.describeMutation({signal});
+        const fieldName = mutationFieldNameFor(description, member);
+        const mutationField = mutationType ? fieldsByName(mutationType).get(fieldName) : null;
+        if (!mutationField) {
+          return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action '${member}' does not expose an invocation mutation.`)]);
+        }
+        const targetArgument = targetArgumentName(mutationField, description.generatedInputTypeName);
+        const args = argumentsFromValues(mutationField, values);
+        args[targetArgument] = {id: this.identity.id};
+        resultType = mutationField.type;
+        await ensureResultTypes(this.client, description, resultType, signal);
+        result = await this.client.executeMutationInteraction({
+          description,
+          mutationType,
+          fieldName,
+          args,
+          resultSelection: resultSelectionForType(resultType, description.types),
+          operationName: 'CausewayInvokeAction',
+          signal
+        });
+      }
+      const response = commandResponse(result, normalizeActionResult(result.data, resultType));
+      if (response.status === InteractionStatus.SUCCESS) {
+        this.refresh();
+      }
+      return response;
+    });
   }
 
   async loadCollection({member, columns = [], force = false, signal} = {}) {
@@ -181,9 +523,60 @@ export class ObjectContextController extends EventTarget {
       abortController.abort();
     }
     this.secondaryAbortControllers.clear();
+    for (const abortController of this.commandAbortControllers.values()) {
+      abortController.abort();
+    }
+    this.commandAbortControllers.clear();
+    this.commandGenerations.clear();
     this.secondaryCache.clear();
     this.registrations.clear();
     this.stateListeners.clear();
+  }
+
+  async #memberDescriptor(member, kind) {
+    if (this.closed) {
+      throw new Error('Cannot execute a command on a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    const descriptor = description.members.get(member);
+    if (!descriptor || descriptor.kind !== kind) {
+      throw new Error(`${kind[0].toUpperCase() + kind.slice(1)} '${member}' is not present on '${description.logicalTypeName}'.`);
+    }
+    return {description, descriptor};
+  }
+
+  async #runTransient(key, signal, execute) {
+    const generation = (this.commandGenerations.get(key) ?? 0) + 1;
+    this.commandGenerations.set(key, generation);
+    this.commandAbortControllers.get(key)?.abort();
+    const abortController = new AbortController();
+    this.commandAbortControllers.set(key, abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    try {
+      const result = await execute(abortController.signal);
+      if (generation !== this.commandGenerations.get(key)) {
+        return interactionResult(InteractionStatus.OBSOLETE, null);
+      }
+      return result;
+    } catch (error) {
+      if (error?.name === 'AbortError' || generation !== this.commandGenerations.get(key)) {
+        return interactionResult(InteractionStatus.OBSOLETE, null);
+      }
+      return interactionResult(InteractionStatus.FAILED, null, [commandError(error)]);
+    } finally {
+      signal?.removeEventListener?.('abort', abort);
+      if (this.commandAbortControllers.get(key) === abortController) {
+        this.commandAbortControllers.delete(key);
+      }
+    }
+  }
+
+  #serializeMutation(execute) {
+    const run = this.mutationTail.then(execute, execute);
+    this.mutationTail = run.catch(() => {});
+    return run.catch(error => interactionResult(InteractionStatus.FAILED, null, [commandError(error)]));
   }
 
   #scheduleFlush() {
@@ -384,6 +777,126 @@ export class ObjectContextController extends EventTarget {
       generation: this.generation
     }));
   }
+}
+
+async function ensureResultTypes(client, description, typeRef, signal) {
+  const resultTypeName = namedType(typeRef);
+  const resultKind = innermostType(typeRef)?.kind;
+  if (!resultTypeName || resultKind !== 'OBJECT' || description.types.has(resultTypeName)) {
+    return;
+  }
+  const resultTypes = await client.describeTypes([resultTypeName], {signal});
+  const resultType = resultTypes.get(resultTypeName);
+  if (!resultType) {
+    return;
+  }
+  description.types.set(resultTypeName, resultType);
+  const metadataTypeName = namedType(fieldsByName(resultType).get('_meta')?.type);
+  if (metadataTypeName && !description.types.has(metadataTypeName)) {
+    const metadataTypes = await client.describeTypes([metadataTypeName], {signal});
+    const metadataType = metadataTypes.get(metadataTypeName);
+    if (metadataType) {
+      description.types.set(metadataTypeName, metadataType);
+    }
+  }
+}
+
+function mutationFieldNameFor(description, member) {
+  return `${description.generatedFieldName}__${member}`;
+}
+
+function targetArgumentName(field, generatedInputTypeName) {
+  return field.args.find(argument => namedType(argument.type) === generatedInputTypeName)?.name
+    ?? field.args.find(argument => argument.name === '_target')?.name
+    ?? '_target';
+}
+
+function propertyInputType(descriptor, mutationField, member) {
+  return descriptor.fields.get('set')?.args.find(argument => argument.name === member)?.type
+    ?? descriptor.fields.get('validate')?.args.find(argument => argument.name === member)?.type
+    ?? mutationField?.args.find(argument => argument.name === member)?.type
+    ?? descriptor.value?.typeRef
+    ?? null;
+}
+
+function parameterInputType(wrapper) {
+  if (!wrapper) {
+    return null;
+  }
+  for (const fieldName of ['validity', 'default', 'choices', 'autoComplete']) {
+    const field = fieldsByName(wrapper).get(fieldName);
+    const type = field?.args.at(-1)?.type;
+    if (type) {
+      return type;
+    }
+  }
+  return null;
+}
+
+function actionInvocationField(descriptor) {
+  return ['invoke', 'invokeIdempotent', 'invokeNonIdempotent']
+    .map(name => descriptor.fields.get(name))
+    .find(Boolean) ?? null;
+}
+
+function argumentsFromValues(field, values) {
+  const result = {};
+  for (const argument of field?.args ?? []) {
+    if (Object.prototype.hasOwnProperty.call(values, argument.name)) {
+      result[argument.name] = values[argument.name];
+    }
+  }
+  return result;
+}
+
+function commandResponse(result, data) {
+  if (result.errors?.length) {
+    return interactionResult(InteractionStatus.FAILED, data, result.errors, result.operation);
+  }
+  return interactionResult(InteractionStatus.SUCCESS, data, [], result.operation);
+}
+
+function interactionResult(status, data = null, errors = [], operation = null) {
+  return Object.freeze({
+    status,
+    data,
+    errors: Object.freeze([...(errors ?? [])]),
+    operation
+  });
+}
+
+function normalizeActionResult(value, typeRef) {
+  const inner = innermostType(typeRef);
+  const list = unwrapNonNull(typeRef)?.kind === 'LIST';
+  if (value == null) {
+    return Object.freeze({kind: InteractionResultKind.VOID, value: null});
+  }
+  if (list || Array.isArray(value)) {
+    return Object.freeze({kind: InteractionResultKind.COLLECTION, value});
+  }
+  if (inner?.kind === 'SCALAR' || inner?.kind === 'ENUM' || typeof value !== 'object') {
+    return Object.freeze({kind: InteractionResultKind.SCALAR, value});
+  }
+  return Object.freeze({kind: InteractionResultKind.OBJECT, value});
+}
+
+function unwrapNonNull(typeRef) {
+  let current = typeRef;
+  while (current?.kind === 'NON_NULL') {
+    current = current.ofType;
+  }
+  return current;
+}
+
+function commandError(error) {
+  if (typeof error === 'string') {
+    return Object.freeze({message: error, path: [], extensions: Object.freeze({})});
+  }
+  return Object.freeze({
+    message: error?.message ?? String(error),
+    path: Object.freeze([...(error?.path ?? [])]),
+    extensions: Object.freeze({...error?.extensions})
+  });
 }
 
 function validateIdentity(identity, client) {

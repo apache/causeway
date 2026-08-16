@@ -55,6 +55,17 @@ const TYPE_DESCRIPTION_SELECTION = `
       }
       type {${TYPE_REF_SELECTION}
       }
+    }
+    inputFields(includeDeprecated: true) {
+      name
+      description
+      defaultValue
+      type {${TYPE_REF_SELECTION}
+      }
+    }
+    enumValues(includeDeprecated: true) {
+      name
+      description
     }`;
 
 export function buildDescribeTypesOperation(typeNames) {
@@ -107,6 +118,16 @@ export function normalizeTypeDescription(type) {
         type: freezeTypeRef(argument.type)
       }))),
       type: freezeTypeRef(field.type)
+    }))),
+    inputFields: Object.freeze((type.inputFields ?? []).map(field => Object.freeze({
+      name: assertGraphQLName(field.name, 'introspected input field'),
+      description: field.description ?? null,
+      defaultValue: field.defaultValue ?? null,
+      type: freezeTypeRef(field.type)
+    }))),
+    enumValues: Object.freeze((type.enumValues ?? []).map(value => Object.freeze({
+      name: assertGraphQLName(value.name, 'introspected enum value'),
+      description: value.description ?? null
     })))
   });
 }

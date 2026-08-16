@@ -200,7 +200,12 @@ export function partialPropertyErrorResponse() {
   };
 }
 
-export function createRichSchemaFixtureExecutor({types = createRichSchemaTypes(), readResponses = [graphQLObjectResponse()]} = {}) {
+export function createRichSchemaFixtureExecutor({
+  types = createRichSchemaTypes(),
+  readResponses = [graphQLObjectResponse()],
+  operationRoots = {queryTypeName: 'SimpleAndRich', mutationTypeName: null},
+  interactionHandler = null
+} = {}) {
   const calls = [];
   const introspectionCalls = [];
   const readCalls = [];
@@ -219,11 +224,24 @@ export function createRichSchemaFixtureExecutor({types = createRichSchemaTypes()
       });
       return {data};
     }
+    if (request.operationName === 'CausewayDescribeOperationRoots') {
+      return {
+        data: {
+          __schema: {
+            queryType: operationRoots.queryTypeName ? {name: operationRoots.queryTypeName} : null,
+            mutationType: operationRoots.mutationTypeName ? {name: operationRoots.mutationTypeName} : null
+          }
+        }
+      };
+    }
     if (request.operationName === 'CausewayReadObject') {
       readCalls.push(request);
       const response = readResponses[Math.min(readIndex, readResponses.length - 1)];
       readIndex += 1;
       return typeof response === 'function' ? response(request) : response;
+    }
+    if (interactionHandler) {
+      return interactionHandler(request);
     }
     throw new Error(`Unexpected fixture operation '${request.operationName}'.`);
   };

@@ -21,7 +21,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Causeway read-only web components</title>
+  <title>Causeway interactive web components</title>
   <style>
     :root {
       --demo-accent: #145ea8;
@@ -66,10 +66,11 @@
     <causeway-graphql-client endpoint="/graphql">
       <causeway-object-context logical-type="university.dept.Department" object-id="1">
         <causeway-object-header></causeway-object-header>
-        <causeway-property member="name"></causeway-property>
-        <causeway-property member="status"></causeway-property>
+        <causeway-property member="name" editable></causeway-property>
+        <causeway-property member="status" editable></causeway-property>
         <causeway-property member="chair"></causeway-property>
         <causeway-action member="inspect"></causeway-action>
+        <causeway-interaction-controller></causeway-interaction-controller>
         <causeway-collection member="staffMembers">
           <causeway-collection-column member="name" label="Name"></causeway-collection-column>
           <causeway-collection-column member="code" label="Code"></causeway-collection-column>
@@ -88,6 +89,12 @@
     });
     document.addEventListener('causeway-action-request', event => {
       eventOutput.value = `action:${event.detail.actionId}`;
+    });
+    document.addEventListener('causeway-property-updated', event => {
+      eventOutput.value = `updated:${event.detail.member}`;
+    });
+    document.addEventListener('causeway-action-result', event => {
+      eventOutput.value = `result:${event.detail.actionId}:${event.detail.result.kind}`;
     });
   </script>
 </body>
