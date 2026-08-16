@@ -21,13 +21,29 @@ const OBJECT_TYPE = 'rich__university_dept_Department';
 const META_TYPE = `${OBJECT_TYPE}__gqlv_meta`;
 const NAME_TYPE = `${OBJECT_TYPE}__name__gqlv_property`;
 const CODE_TYPE = `${OBJECT_TYPE}__code__gqlv_property`;
+const STATUS_TYPE = `${OBJECT_TYPE}__status__gqlv_property`;
+const NOTES_TYPE = `${OBJECT_TYPE}__notes__gqlv_property`;
+const CHAIR_TYPE = `${OBJECT_TYPE}__chair__gqlv_property`;
+const BLOB_TYPE = `${OBJECT_TYPE}__prospectus__gqlv_property`;
+const BLOB_GET_TYPE = `${BLOB_TYPE}__gqlv_get`;
+const CLOB_TYPE = `${OBJECT_TYPE}__history__gqlv_property`;
+const CLOB_GET_TYPE = `${CLOB_TYPE}__gqlv_get`;
+const UNSUPPORTED_TYPE = `${OBJECT_TYPE}__unsupportedValue__gqlv_property`;
+const UNSUPPORTED_GET_TYPE = `${UNSUPPORTED_TYPE}__gqlv_get`;
 const COLLECTION_TYPE = `${OBJECT_TYPE}__staffMembers__gqlv_collection`;
+const EMPTY_COLLECTION_TYPE = `${OBJECT_TYPE}__formerStaff__gqlv_collection`;
 const ACTION_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action`;
 const ACTION_PARAMS_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action_params`;
 const ACTION_PARAM_TYPE = `${OBJECT_TYPE}__changeName__newName__gqlv_action_parameter`;
+const STAFF_OBJECT_TYPE = 'rich__university_staff_StaffMember';
+const STAFF_META_TYPE = `${STAFF_OBJECT_TYPE}__gqlv_meta`;
+const STAFF_NAME_TYPE = `${STAFF_OBJECT_TYPE}__name__gqlv_property`;
+const STAFF_CODE_TYPE = `${STAFF_OBJECT_TYPE}__code__gqlv_property`;
 
 export const DEPARTMENT_LOGICAL_TYPE = 'university.dept.Department';
 export const DEPARTMENT_OBJECT_FIELD = 'university_dept_Department';
+export const STAFF_LOGICAL_TYPE = 'university.staff.StaffMember';
+export const STAFF_OBJECT_FIELD = 'university_staff_StaffMember';
 
 export function createRichSchemaTypes() {
   return new Map([
@@ -35,7 +51,14 @@ export function createRichSchemaTypes() {
       field('_meta', 'Object metadata', named(META_TYPE)),
       field('name', 'Department name', named(NAME_TYPE)),
       field('code', 'Department code', named(CODE_TYPE)),
+      field('status', 'Department status', named(STATUS_TYPE)),
+      field('notes', 'Department notes', named(NOTES_TYPE)),
+      field('chair', 'Department chair', named(CHAIR_TYPE)),
+      field('prospectus', 'Department prospectus', named(BLOB_TYPE)),
+      field('history', 'Department history', named(CLOB_TYPE)),
+      field('unsupportedValue', 'Unsupported value', named(UNSUPPORTED_TYPE)),
       field('staffMembers', 'Staff members', named(COLLECTION_TYPE)),
+      field('formerStaff', 'Former staff', named(EMPTY_COLLECTION_TYPE)),
       field('changeName', 'Change the department name', named(ACTION_TYPE))
     ])],
     [META_TYPE, objectType(META_TYPE, 'Object metadata', [
@@ -46,10 +69,35 @@ export function createRichSchemaTypes() {
     ])],
     [NAME_TYPE, propertyType(NAME_TYPE)],
     [CODE_TYPE, propertyType(CODE_TYPE)],
+    [STATUS_TYPE, propertyType(STATUS_TYPE, enumeration('DepartmentStatus'))],
+    [NOTES_TYPE, propertyType(NOTES_TYPE)],
+    [CHAIR_TYPE, propertyType(CHAIR_TYPE, named('rich__university_staff_StaffMember'))],
+    [BLOB_TYPE, propertyType(BLOB_TYPE, named(BLOB_GET_TYPE))],
+    [BLOB_GET_TYPE, objectType(BLOB_GET_TYPE, null, [
+      field('name', null, scalar('String')),
+      field('mimeType', null, scalar('String')),
+      field('bytes', null, scalar('String'))
+    ])],
+    [CLOB_TYPE, propertyType(CLOB_TYPE, named(CLOB_GET_TYPE))],
+    [CLOB_GET_TYPE, objectType(CLOB_GET_TYPE, null, [
+      field('name', null, scalar('String')),
+      field('mimeType', null, scalar('String')),
+      field('chars', null, scalar('String'))
+    ])],
+    [UNSUPPORTED_TYPE, propertyType(UNSUPPORTED_TYPE, named(UNSUPPORTED_GET_TYPE))],
+    [UNSUPPORTED_GET_TYPE, objectType(UNSUPPORTED_GET_TYPE, null, [
+      field('nested', null, named('ArbitraryNestedValue'))
+    ])],
     [COLLECTION_TYPE, objectType(COLLECTION_TYPE, null, [
       field('hidden', null, scalar('Boolean')),
       field('disabled', null, scalar('String')),
-      field('get', null, list(named('rich__university_dept_StaffMember'))),
+      field('get', null, list(named(STAFF_OBJECT_TYPE))),
+      field('datatype', null, scalar('String'))
+    ])],
+    [EMPTY_COLLECTION_TYPE, objectType(EMPTY_COLLECTION_TYPE, null, [
+      field('hidden', null, scalar('Boolean')),
+      field('disabled', null, scalar('String')),
+      field('get', null, list(named(STAFF_OBJECT_TYPE))),
       field('datatype', null, scalar('String'))
     ])],
     [ACTION_TYPE, objectType(ACTION_TYPE, null, [
@@ -66,7 +114,20 @@ export function createRichSchemaTypes() {
       field('default', null, scalar('String')),
       field('validate', null, scalar('String'), [argument('newName', scalar('String'))]),
       field('datatype', null, scalar('String'))
-    ])]
+    ])],
+    [STAFF_OBJECT_TYPE, objectType(STAFF_OBJECT_TYPE, 'A staff member.', [
+      field('_meta', 'Object metadata', named(STAFF_META_TYPE)),
+      field('name', 'Staff name', named(STAFF_NAME_TYPE)),
+      field('code', 'Staff code', named(STAFF_CODE_TYPE))
+    ])],
+    [STAFF_META_TYPE, objectType(STAFF_META_TYPE, 'Object metadata', [
+      field('id', null, scalar('ID')),
+      field('logicalTypeName', null, scalar('String')),
+      field('version', null, scalar('String')),
+      field('title', null, scalar('String'))
+    ])],
+    [STAFF_NAME_TYPE, propertyType(STAFF_NAME_TYPE)],
+    [STAFF_CODE_TYPE, propertyType(STAFF_CODE_TYPE)]
   ]);
 }
 
@@ -84,8 +145,29 @@ export function departmentObjectData({
       version,
       title: 'Classics Department'
     },
-    name: {hidden: false, disabled: nameDisabled, get: name},
-    code: {hidden: codeHidden, disabled: null, get: code}
+    name: {hidden: false, disabled: nameDisabled, get: name, datatype: 'String'},
+    code: {hidden: codeHidden, disabled: null, get: code, datatype: 'String'},
+    status: {hidden: false, disabled: null, get: 'ACTIVE', datatype: 'DepartmentStatus'},
+    notes: {hidden: false, disabled: null, get: null, datatype: 'String'},
+    chair: {
+      hidden: false,
+      disabled: null,
+      get: {_meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', version: '3', title: 'Dr Ada'}}
+    },
+    prospectus: {
+      hidden: false,
+      disabled: null,
+      get: {name: 'prospectus.pdf', mimeType: 'application/pdf', bytes: '/graphql/object/prospectus/blobBytes'}
+    },
+    history: {
+      hidden: false,
+      disabled: null,
+      get: {name: 'history.txt', mimeType: 'text/plain', chars: '/graphql/object/history/clobChars'}
+    },
+    unsupportedValue: {hidden: false, disabled: null, get: {nested: {value: 'unknown'}}},
+    staffMembers: {hidden: false, disabled: null},
+    formerStaff: {hidden: false, disabled: null},
+    changeName: {hidden: false, disabled: null}
   };
 }
 
@@ -165,11 +247,11 @@ export function waitFor(predicate, {timeout = 2000, interval = 5} = {}) {
   });
 }
 
-function propertyType(name) {
+function propertyType(name, getType = scalar('String')) {
   return objectType(name, null, [
     field('hidden', null, scalar('Boolean')),
     field('disabled', null, scalar('String')),
-    field('get', null, scalar('String')),
+    field('get', null, getType),
     field('validate', null, scalar('String'), [argument('value', scalar('String'))]),
     field('datatype', null, scalar('String'))
   ]);
@@ -193,6 +275,10 @@ function scalar(name) {
 
 function named(name) {
   return {kind: 'OBJECT', name, ofType: null};
+}
+
+function enumeration(name) {
+  return {kind: 'ENUM', name, ofType: null};
 }
 
 function list(ofType) {

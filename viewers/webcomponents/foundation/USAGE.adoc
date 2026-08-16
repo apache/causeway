@@ -13,7 +13,7 @@
 
 The `causeway-viewer-webcomponents-foundation` Maven artifact packages standards-based ECMAScript modules below `META-INF/resources/causeway-webcomponents/`.
 The entry module is `index.mjs`.
-Importing that module registers the foundation custom elements when a browser custom-element registry is available.
+Importing that module registers the public custom elements when a browser custom-element registry is available.
 The modules can also be imported individually for explicit registration or non-DOM testing.
 
 The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-authoring framework.
@@ -22,22 +22,49 @@ The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-author
 
 [source,html]
 ----
-<script type="module" src="/causeway-webcomponents/index.mjs"></script>
-
 <causeway-graphql-client endpoint="/graphql">
   <causeway-object-context
       logical-type="university.dept.Department"
       object-id="42">
     <causeway-object-header></causeway-object-header>
     <causeway-property member="name"></causeway-property>
-    <causeway-property member="code"></causeway-property>
+    <causeway-property member="status"></causeway-property>
+    <causeway-property member="chair"></causeway-property>
+    <causeway-action member="inspect"></causeway-action>
+    <causeway-collection member="staffMembers">
+      <causeway-collection-column member="name" label="Name"></causeway-collection-column>
+      <causeway-collection-column member="code" label="Code"></causeway-collection-column>
+    </causeway-collection>
   </causeway-object-context>
 </causeway-graphql-client>
+
+<script type="module">
+  const components = await import('/causeway-webcomponents/index.mjs');
+  components.installCausewayComponentStyles();
+</script>
 ----
 
-The GraphQL client uses a combined rich schema under the `rich` query field by default.
-Set `rich-root-field=""` for a rich-only schema whose generated object lookup fields are at the query root.
-The `lookup-argument-name`, `object-field-prefix`, and `object-field-suffix` attributes correspond to the configurable GraphQL viewer lookup grammar.
+The page identifies Causeway types and members semantically and does not construct generated GraphQL names or documents.
+The collection remains inactive until its load button is selected or its `active` attribute or property is set.
+
+== Public component contract
+
+The public vocabulary consists of `causeway-graphql-client`, `causeway-object-context`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-collection`, and `causeway-collection-column`.
+`CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
+
+Member components use the `member` attribute and accept an optional `label` override.
+Object links use `logical-type`, `object-id`, `title`, and `disabled`.
+Collections use `active` and declarative collection-column children.
+
+The corresponding JavaScript properties support programmatic composition.
+A property or collection accepts a `rendererRegistry`.
+A collection accepts a structured `columns` array such as `[{member: 'name', label: 'Name'}]`.
+A value element accepts a structured `valueState` containing the value and its semantic descriptor or GraphQL type reference.
+A context consumer accepts an injected `context` for host-framework adapters and tests.
+
+The generated presentation is light DOM.
+No named Shadow DOM content slots are public in this read-only slice.
+Applications configure semantic content with attributes, structured properties, and declarative collection-column children, and customize presentation through the documented classes.
 
 == GraphQL execution
 
@@ -57,12 +84,18 @@ provider.executor = async ({document, variables, operationName, signal}) => {
 An executor can be either a function or an object exposing `execute(request)`.
 It returns the standard GraphQL response shape containing `data` and optional `errors`.
 
+The GraphQL client uses a combined rich schema under the `rich` query field by default.
+Set `rich-root-field=""` for a rich-only schema whose generated object lookup fields are at the query root.
+The `lookup-argument-name`, `object-field-prefix`, and `object-field-suffix` attributes correspond to the configurable GraphQL viewer lookup grammar.
+
 == Schema discovery
 
 The client derives generated rich-schema names from the Causeway logical type and performs targeted standard GraphQL introspection.
-It first describes the generated object type and then batches the reachable property, collection, action, parameter, and metadata wrapper types.
-It does not request an application-specific member-list field and does not access Causeway Java metamodel services.
+It describes the generated object type and then issues independent cached one-type introspection operations for reachable property, collection, action, parameter, metadata, and value wrapper types.
+This pattern is compatible with GraphQL Java's good-faith introspection limits because one operation does not repeat `__Type.fields` across many aliases.
+The client does not request an application-specific member-list field and does not access Causeway Java metamodel services.
 
+Descriptions include member kind, advertised wrapper fields, output type reference, named type, innermost type kind, collection element type, and reachable value-shape fields.
 Descriptions are cached by generated type name within one `<causeway-graphql-client>` instance.
 Several object contexts under the same provider therefore share schema descriptions while retaining independent object snapshots.
 The cache is memory-only and is not shared across browser sessions or users.
@@ -73,41 +106,122 @@ The cache is memory-only and is not shared across browser sessions or users.
 Descendant components synchronously request the nearest context using a bubbling and composed `causeway-object-context-request` event.
 A host adapter or test can instead inject a context through a component's `context` JavaScript property.
 
-Components register semantic requirements such as object header metadata or a named readable property.
+Components register semantic requirements such as object header metadata, a named property, action state, or collection state.
 Registrations made during one browser rendering turn are merged and deduplicated into one initial GraphQL object projection.
 A later component requests only selections absent from the current snapshot.
 Calling `refresh()` or `invalidate()` on the context controller executes the complete currently active projection.
 Disconnecting a component releases its requirement and shrinks future refreshes without causing a request by itself.
-
 Nested object contexts answer descendant requests at the nearest provider boundary.
 
-== Observable state and errors
+== Values and renderer extension
+
+The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
+Object references become semantic `<causeway-object-link>` elements.
+Null values use an explicit em-dash presentation labelled as no value.
+Unsupported output shapes produce a diagnostic containing the introspected type identifier.
+
+Applications can register a more specific renderer without taking ownership of GraphQL execution:
+
+[source,javascript]
+----
+import {defaultValueRendererRegistry} from '/causeway-webcomponents/index.mjs';
+
+const release = defaultValueRendererRegistry.register({
+  id: 'money',
+  priority: 200,
+  test: state => state.namedTypeName === 'Money',
+  render: state => ({
+    kind: 'money',
+    html: `<data class="app-money">${state.value}</data>`
+  })
+});
+
+// Call release() when the application override is no longer required.
+----
+
+Higher priorities win and the most recently registered renderer wins a priority tie.
+Application registrations default to priority `100`, while standard registrations use lower priorities.
+Renderer input is normalized semantic state containing `value`, `descriptor`, `typeRef`, `typeDescription`, `namedTypeName`, and `typeKind`.
+
+== Properties and object links
+
+`<causeway-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
+It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer, and an accessible disabled reason.
+A hidden property renders no label, value, or interactive content.
+Changing `member` releases the old requirement and registers the new one.
+
+`<causeway-object-link>` renders title and bookmark identity as a native button with link semantics.
+Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
+The event bubbles, crosses composed component boundaries, and is cancelable.
+The component does not invent a URL or select a router.
+
+== Read-only actions
+
+`<causeway-action>` renders rich action `hidden` and `disabled` state but does not query parameters or invoke the action.
+An enabled native button publishes cancelable `causeway-action-request` with `{actionId, identity, context}`.
+A disabled action exposes its reason through `aria-describedby` and cannot publish a request.
+A hidden action renders no actionable content.
+Native button behavior supplies equivalent pointer, Enter-key, and Space-key activation without a duplicate keyboard handler.
+
+== Lazy collections and row hydration
+
+A collection's primary object requirement contains only advertised `hidden` and `disabled` state.
+The `get` field is loaded through a context-owned secondary operation after activation.
+Secondary operations are cached by member and structural row selection, support forced refresh, and are canceled when their component or object context is disconnected.
+
+Without columns, object-valued rows request `_meta` identity, logical type, title, and version and render object links.
+Declared columns merge their property wrappers into the secondary operation and use the configured value renderer for returned values.
+Hidden cells emit no content, disabled cells expose their reasons, and row or member errors remain local while successful cells continue to render.
+An empty result renders the live `No items` status.
+
+Each object-valued result can create a hydrated `ObjectContextController` through `createHydratedRowContext(row, rowSelection)`.
+The hydrated context reuses the parent GraphQL client and serves selected metadata and properties without another object read.
+A later requirement outside the hydrated selection produces only a missing-field delta read.
+The collection's `rowContexts` property exposes the currently hydrated controllers to host adapters and is cleared on rerender or disconnect.
+
+The current rich GraphQL grammar returns complete collection lists.
+Paging, filtering, sorting, selection, bulk actions, and a large-result policy are intentionally deferred until the endpoint provides a concrete paging contract.
+
+== Observable state, accessibility, and styling
 
 Object contexts publish immutable states named `idle`, `schema-loading`, `object-loading`, `ready`, `partial-error`, and `terminal-error`.
 Request generations and abort signals prevent superseded responses from replacing newer state.
 GraphQL responses containing both data and errors preserve successful data and map member-relative error paths to the corresponding component.
 
 The object-context element emits `causeway-object-context-state-change` with the semantic state and context.
-Consumer components emit `causeway-component-state-change` after rendering a new requirement state.
-Both DOM events use standard `CustomEvent` payloads and are bubbling and composed where they cross component boundaries.
+Consumer components emit `causeway-component-state-change` after rendering a requirement state.
+Collections additionally emit `causeway-collection-state-change` for secondary loading and result state.
+These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
 
-== Foundation components
+Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
+Stable classes include `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
 
-`<causeway-object-header>` requests `id`, `logicalTypeName`, `title`, and entity `version` fields advertised by the metadata wrapper.
-It renders an accessible object heading and semantic identity.
+`installCausewayComponentStyles()` installs the optional minimal stylesheet once.
+Applications can replace or override those rules with ordinary design-system CSS:
 
-`<causeway-property member="…">` requests the advertised `hidden`, `disabled`, and `get` fields for one scalar property.
-It omits hidden property content, exposes a disabled reason, escapes displayed values, and renders member-scoped loading and error states.
-Changing the `member` attribute releases the old requirement and registers the new one.
+[source,css]
+----
+causeway-property .causeway-property-label {
+  color: var(--app-accent);
+}
+
+causeway-action button {
+  border-radius: 0.4rem;
+}
+
+causeway-collection .causeway-collection-table {
+  border: 1px solid var(--app-border);
+}
+----
 
 == Deliberate exclusions
 
-The foundation does not provide property editing, validation, choices, autocomplete, defaults, action invocation, collection rendering, generic page composition, HTMX navigation, Causeway grid interpretation, or persistent schema caching.
-Those concerns belong to the queued follow-on changes and must continue to consume the same semantic context contracts.
+This slice does not provide property editing, action prompts or invocation, collection paging, generic page generation, routing, grid interpretation, HTMX integration, or persistent schema caching.
+Those concerns belong to later changes and continue to consume the same semantic context and event contracts.
 
 == Demonstrator and tests
 
-`demo/index.html` is a plain HTML example that targets a same-origin rich GraphQL endpoint.
+`demo/index.html` is a plain HTML object summary, reference, action, and lazy collection example that targets a same-origin rich GraphQL endpoint.
 Serve the module directory through an HTTP server or application resource mapping so browser modules and `/graphql` share an appropriate origin and authentication policy.
 
 Run the dependency-free tests directly:
