@@ -4,6 +4,8 @@ The preceding changes provide shared GraphQL and object contexts plus a read-onl
 Existing action components publish semantic action requests, leaving the host free to provide interaction behavior.
 This change supplies the standard interaction implementation while preserving those host override points.
 The rich GraphQL grammar already exposes property validation, choices, autocomplete, setters, action parameter semantics, invocation, and top-level mutations according to the configured API variant.
+The completed `sample-html` application now provides a responsive, accessible read-only showcase with deterministic data, stable selectors, semantic event diagnostics, a real same-origin `/graphql` endpoint, and the `run-sample-html` Maven profile.
+This change will evolve that same page into the executable interaction fixture rather than introduce another sample or generic viewer.
 
 ## Goals / Non-Goals
 
@@ -15,6 +17,9 @@ The rich GraphQL grammar already exposes property validation, choices, autocompl
 - Handle dependent parameter semantics, cancellation, stale responses, validation, and partial errors.
 - Reconcile active object state after successful commands.
 - Publish framework-neutral semantic outcomes and allow application overrides.
+- Prove representative property and action interactions through the existing executable sample and real rich GraphQL endpoint.
+- Preserve the sample's established read-only states, selectors, route, bookmark, responsive presentation, and no-frontend-build architecture.
+- Provide repeatable manual verification for browser-only interaction, focus, layout, and network behavior.
 
 **Non-Goals:**
 
@@ -62,6 +67,20 @@ Applications may prevent the default handling and provide a custom prompt or wor
 
 This preserves the simple action component and keeps modal, sidebar, inline, or framework-specific prompt presentation replaceable.
 
+### Ship inline property editors and one accessible modal prompt
+
+Property editing will remain local to each property so the authoritative value, pending value, validation reason, save, and cancel controls stay visibly associated.
+The standard action interaction controller will provide one accessible modal prompt for parameterized actions, using native dialog semantics where available and a testable light-DOM form contract.
+The controller remains presentation-neutral at its semantic boundary, so applications may claim action requests and substitute a sidebar, inline form, or framework-specific prompt.
+A single default modal is preferred over multiple initial presentations because it gives custom pages a complete accessible behavior without multiplying focus and validation implementations.
+
+### Apply a deterministic validation policy
+
+Discrete choice changes will validate immediately when the schema advertises validation.
+Free-text and autocomplete changes will use cancellable debounced validation, while blur and every save or invocation attempt will force final validation of the current generation.
+Applications may override timing policy, but they may not bypass final server validation before a standard mutation or invocation.
+This balances responsive feedback with protection against one network request per keystroke.
+
 ### Derive parameter negotiation from GraphQL fields and arguments
 
 The prompt will build parameters in schema order from the introspected action parameter wrappers.
@@ -86,6 +105,13 @@ A different object, collection, scalar, or void result will be normalized as a s
 
 Broad active-projection refresh is preferred initially because Causeway supporting methods can make any visible member state depend on the changed object.
 
+### Publish results without automatic navigation
+
+Object, collection, scalar, and void results will always produce a typed bubbling and composed semantic result event.
+The standard controller may render a local result summary, but it will never navigate automatically, including for object results.
+Host routing remains responsible for deciding whether an object bookmark should replace the current page, open elsewhere, or remain only as a result.
+This preserves the framework-neutral navigation boundary established by read-only object links.
+
 ### Serialize mutations and sequence transient requests
 
 Mutating commands for one object context will execute serially to avoid ambiguous local reconciliation.
@@ -98,6 +124,16 @@ GraphQL errors will be associated using response paths and command identity.
 Property validation and mutation errors will remain with the property editor.
 Parameter errors will remain with the corresponding prompt input where possible, while invocation-level errors will appear at prompt level.
 Unrelated object-context data will remain available.
+
+### Extend the deterministic executable sample
+
+The existing root object `causeway.webcomponents.sample.SampleObject:s_sample-1` will remain the interaction target.
+Existing hidden and deliberately disabled members will retain their semantics, while already enabled scalar and enum properties will exercise standard editors, cancellation, validation, and server-authoritative save behavior.
+Additional deterministic action and supporting-method semantics will cover a safe parameterless scalar result, a parameterized mutating result, choices or autocomplete where exposed by the rich grammar, and representative object, collection, scalar, and void normalization in fixtures and integration coverage.
+The page will add an interaction controller, prompt and result outlet, semantic interaction diagnostics, and additive stable selectors without introducing HTMX, routing, or generic metadata-driven composition.
+
+Random-port integration tests will verify actual rich-schema capabilities and operations.
+Manual verification will launch the sample through `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html`, exercise pointer and keyboard flows, inspect query-versus-mutation network placement, repeat narrow and wide light and dark presentation checks, and require no GraphQL or console failures.
 
 ## Risks / Trade-offs
 
@@ -113,9 +149,9 @@ Unrelated object-context data will remain available.
 The interaction layer is additive.
 Existing read-only pages continue to render unchanged until edit affordances or a standard interaction controller are enabled.
 Existing semantic action-request events remain the extension point, and applications can opt out of standard handling per event or subtree.
+The sample enables the standard interaction layer explicitly and retains all read-only hooks so existing automation remains valid.
 
 ## Open Questions
 
-- Which prompt presentations should ship initially: modal only, inline only, or a presentation-neutral controller plus one default modal?
-- Should property validation run on every change, on blur, or through a configurable policy with a conservative default?
-- Which action result shapes should trigger navigation automatically versus only publishing a semantic result event?
+No planning-level questions remain for this slice.
+Implementation may still reveal a concrete rich-schema grammar gap; any server contract extension will be proposed separately rather than invented inside the component client.
