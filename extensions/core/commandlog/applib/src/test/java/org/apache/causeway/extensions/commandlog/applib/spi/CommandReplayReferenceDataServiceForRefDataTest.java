@@ -18,18 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.spi;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Import;
-
-import org.apache.causeway.applib.domain.RefData;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
@@ -37,6 +25,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.causeway.applib.domain.RefData;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Import;
 
 class CommandReplayReferenceDataServiceForRefDataTest {
 
@@ -73,14 +72,14 @@ class CommandReplayReferenceDataServiceForRefDataTest {
     void classificationUsesMetamodelTypeInformationOnly() {
         var specificationLoader = mock(SpecificationLoader.class);
         var objectSpecification = mock(ObjectSpecification.class);
-        doReturn(RefDataCategory.class).when(objectSpecification).getCorrespondingClass();
+        doReturn(RefDataCategory.class).when(objectSpecification).correspondingClass();
         when(specificationLoader.specForBookmark(CATEGORY)).thenReturn(Optional.of(objectSpecification));
         clearInvocations(specificationLoader, objectSpecification);
         var service = new CommandReplayReferenceDataServiceForRefData(specificationLoader);
 
         assertThat(service.isReferenceData(CATEGORY)).isTrue();
         verify(specificationLoader).specForBookmark(CATEGORY);
-        verify(objectSpecification).getCorrespondingClass();
+        verify(objectSpecification).correspondingClass();
         verifyNoMoreInteractions(specificationLoader, objectSpecification);
     }
 
@@ -97,7 +96,7 @@ class CommandReplayReferenceDataServiceForRefDataTest {
             final Class<?> correspondingClass) {
         var specificationLoader = mock(SpecificationLoader.class);
         var objectSpecification = mock(ObjectSpecification.class);
-        doReturn(correspondingClass).when(objectSpecification).getCorrespondingClass();
+        doReturn(correspondingClass).when(objectSpecification).correspondingClass();
         when(specificationLoader.specForBookmark(bookmark)).thenReturn(Optional.of(objectSpecification));
         return new CommandReplayReferenceDataServiceForRefData(specificationLoader);
     }

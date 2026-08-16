@@ -116,7 +116,7 @@ record SyntheticNavigationActionFactory(
             final Set<String> existingSyntheticActionIds) {
 
         if (!(ownerSpec.isEntity() || ownerSpec.isViewModel())
-                || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.getCorrespondingClass()))
+                || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.correspondingClass()))
 			return Stream.empty();
 
         var generatedIds = new HashSet<String>();
@@ -168,7 +168,7 @@ record SyntheticNavigationActionFactory(
         var filterProperties = filterPropertiesOf(ownerSpec, collection);
         var parameterTypes = filterProperties.stream()
                 .map(ObjectAssociation::getElementType)
-                .map(ObjectSpecification::getCorrespondingClass)
+                .map(ObjectSpecification::correspondingClass)
                 .map(ClassUtils::resolvePrimitiveIfNecessary)
                 .toArray(Class<?>[]::new);
         var parameterNames = filterProperties.stream()
@@ -176,9 +176,9 @@ record SyntheticNavigationActionFactory(
                 .toArray(String[]::new);
         var facetedMethod = FacetedMethod.createSyntheticAction(
         		ownerSpec.getMetaModelContext(),
-                ownerSpec.getCorrespondingClass(),
+                ownerSpec.correspondingClass(),
                 COLLECTION_ACTION_ID_PREFIX + collection.getId(),
-                collection.getElementType().getCorrespondingClass(),
+                collection.getElementType().correspondingClass(),
                 parameterTypes,
                 parameterNames);
 
@@ -203,9 +203,9 @@ record SyntheticNavigationActionFactory(
 
         var facetedMethod = FacetedMethod.createSyntheticAction(
         		ownerSpec.getMetaModelContext(),
-                ownerSpec.getCorrespondingClass(),
+                ownerSpec.correspondingClass(),
                 ACTION_ID_PREFIX + reference.getId(),
-                reference.getElementType().getCorrespondingClass(),
+                reference.getElementType().correspondingClass(),
                 new Class<?>[0],
                 new String[0]);
 
@@ -261,7 +261,7 @@ record SyntheticNavigationActionFactory(
 			return false;
         var elementType = property.getElementType();
         if (elementType.isValue()) {
-            var type = elementType.getCorrespondingClass();
+            var type = elementType.correspondingClass();
             return type != Blob.class && type != Clob.class;
         }
         return property.containsNonFallbackFacet(PropertyChoicesFacet.class)
