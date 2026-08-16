@@ -66,6 +66,9 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"property-notes\"")
                 .contains("data-testid=\"property-related-object\"")
                 .contains("data-testid=\"action-inspect\"")
+                .contains("data-testid=\"action-update-details\"")
+                .contains("data-testid=\"action-find-related\"")
+                .contains("data-testid=\"action-clear-notes\"")
                 .contains("data-testid=\"action-archive\"")
                 .contains("data-testid=\"action-hidden\"")
                 .contains("data-testid=\"collection-related-objects\"")
@@ -73,6 +76,8 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"column-related-name\"")
                 .contains("data-testid=\"column-related-code\"")
                 .contains("data-testid=\"sample-event\"")
+                .contains("data-testid=\"sample-interaction-event\"")
+                .contains("data-testid=\"action-interaction-controller\"")
                 .contains("data-testid=\"collection-related-count\"")
                 .contains("data-testid=\"section-object-summary\"")
                 .contains("data-testid=\"section-properties\"")
@@ -80,7 +85,7 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"section-collections\"")
                 .contains("data-testid=\"section-events\"")
                 .contains("data-testid=\"sample-coverage\"")
-                .contains("Read-only component showcase")
+                .contains("Component interaction showcase")
                 .contains("prefers-color-scheme: dark")
                 .contains("await import('/causeway-webcomponents/index.mjs')")
                 .doesNotContain(SampleObject.SAMPLE_SECRET);
@@ -92,6 +97,9 @@ class SampleHtmlApplication_IntegTest {
                 .contains("./register.mjs")
                 .contains("./action-element.mjs")
                 .contains("./collection-element.mjs")
+                .contains("./editor-registry.mjs")
+                .contains("./interaction-controller-element.mjs")
+                .contains("./interaction-operations.mjs")
                 .contains("./value-renderers.mjs");
     }
 
@@ -118,8 +126,8 @@ class SampleHtmlApplication_IntegTest {
         assertThat(introspection.at("/data/__type/fields").toString())
                 .contains(
                         "_meta", "name", "code", "secret", "summary", "capacity", "featured",
-                        "status", "notes", "relatedObject", "inspect", "archive", "hiddenAction",
-                        "relatedObjects", "emptyRelatedObjects");
+                        "status", "notes", "relatedObject", "inspect", "updateDetails", "findRelated",
+                        "clearNotes", "archive", "hiddenAction", "relatedObjects", "emptyRelatedObjects");
 
         final var statusIntrospection = graphQL("""
                 query CausewaySampleStatusDescribe {
@@ -265,6 +273,148 @@ class SampleHtmlApplication_IntegTest {
         assertThat(collectionRead.at(
                 "/data/rich/causeway_webcomponents_sample_SampleObject/emptyRelatedObjects/get").size())
                 .isZero();
+    }
+
+    @Test
+    void exposesDeterministicPropertyAndActionInteractions() throws Exception {
+        final var capacityInteraction = graphQL("""
+                query CausewaySampleCapacityInteraction {
+                  rich {
+                    causeway_webcomponents_sample_SampleObject(object: {id: "s_sample-1"}) {
+                      capacity {
+                        validateInvalid: validate(capacity: 0)
+                        validateValid: validate(capacity: 31)
+                      }
+                      status { choices }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(capacityInteraction);
+        assertThat(capacityInteraction.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/capacity/validateInvalid").asString())
+                .isEqualTo(SampleObject.CAPACITY_VALIDATION_REASON);
+        assertThat(capacityInteraction.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/capacity/validateValid").isNull())
+                .isTrue();
+        assertThat(capacityInteraction.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/status/choices").toString())
+                .contains("ACTIVE", "PAUSED");
+
+        final var capacityUpdate = graphQL("""
+                mutation CausewaySampleCapacityUpdate {
+                  causeway_webcomponents_sample_SampleObject__capacity(
+                    _target: {id: "s_sample-1"}, capacity: 31) {
+                    _meta { id version }
+                    capacity { get }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(capacityUpdate);
+        assertThat(capacityUpdate.at(
+                "/data/causeway_webcomponents_sample_SampleObject__capacity/capacity/get").asInt())
+                .isEqualTo(31);
+
+        final var capacityRestore = graphQL("""
+                mutation CausewaySampleCapacityRestore {
+                  causeway_webcomponents_sample_SampleObject__capacity(
+                    _target: {id: "s_sample-1"}, capacity: 24) {
+                    capacity { get }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(capacityRestore);
+        assertThat(capacityRestore.at(
+                "/data/causeway_webcomponents_sample_SampleObject__capacity/capacity/get").asInt())
+                .isEqualTo(SampleObject.SAMPLE_CAPACITY);
+
+        final var safeActions = graphQL("""
+                query CausewaySampleSafeActions {
+                  rich {
+                    causeway_webcomponents_sample_SampleObject(object: {id: "s_sample-1"}) {
+                      inspect { invoke { results } }
+                      findRelated {
+                        params { search { autoComplete(search: "Frame") } }
+                        invoke(search: "Framework") {
+                          results { _meta { id logicalTypeName title } }
+                        }
+                      }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(safeActions);
+        assertThat(safeActions.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/inspect/invoke/results").asString())
+                .isEqualTo(SampleObject.SAMPLE_NAME + " [" + SampleObject.SAMPLE_CODE + "]");
+        assertThat(safeActions.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/findRelated/params/search/autoComplete").toString())
+                .contains(SampleRelatedObject.SECOND_NAME);
+        assertThat(safeActions.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/findRelated/invoke/results").size())
+                .isEqualTo(1);
+
+        final var actionNegotiation = graphQL("""
+                query CausewaySampleUpdateDetailsNegotiation {
+                  rich {
+                    causeway_webcomponents_sample_SampleObject(object: {id: "s_sample-1"}) {
+                      updateDetails {
+                        params {
+                          summary { hidden disabled default validity datatype }
+                          status { hidden disabled default choices validity datatype }
+                        }
+                        invalid: validate(summary: "short", status: ACTIVE)
+                        valid: validate(summary: "A sufficiently detailed summary", status: PAUSED)
+                      }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(actionNegotiation);
+        final var updateDetails = actionNegotiation.at(
+                "/data/rich/causeway_webcomponents_sample_SampleObject/updateDetails");
+        assertThat(updateDetails.at("/params/summary/default").asString()).isEqualTo(SampleObject.SAMPLE_SUMMARY);
+        assertThat(updateDetails.at("/params/status/choices").toString()).contains("ACTIVE", "PAUSED");
+        assertThat(updateDetails.at("/invalid").asString()).isEqualTo(SampleObject.ACTION_VALIDATION_REASON);
+        assertThat(updateDetails.at("/valid").isNull()).isTrue();
+
+        final var updateDetailsMutation = graphQL("""
+                mutation CausewaySampleUpdateDetails {
+                  causeway_webcomponents_sample_SampleObject__updateDetails(
+                    _target: {id: "s_sample-1"},
+                    summary: "A deterministic interaction mutation result.",
+                    status: PAUSED) {
+                    _meta { id logicalTypeName version title }
+                    summary { get }
+                    status { get }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(updateDetailsMutation);
+        final var updated = updateDetailsMutation.at(
+                "/data/causeway_webcomponents_sample_SampleObject__updateDetails");
+        assertThat(updated.at("/_meta/id").asString()).isEqualTo(SampleObject.SAMPLE_BOOKMARK_ID);
+        assertThat(updated.at("/status/get").asString()).isEqualTo("PAUSED");
+
+        final var restore = graphQL("""
+                mutation CausewaySampleInteractionRestore {
+                  summary: causeway_webcomponents_sample_SampleObject__summary(
+                    _target: {id: "s_sample-1"},
+                    summary: "A deterministic reference page composed entirely from semantic Causeway web components.") {
+                    summary { get }
+                  }
+                  status: causeway_webcomponents_sample_SampleObject__status(
+                    _target: {id: "s_sample-1"}, status: ACTIVE) {
+                    status { get }
+                  }
+                  clearNotes: causeway_webcomponents_sample_SampleObject__clearNotes(
+                    _target: {id: "s_sample-1"})
+                }
+                """);
+        assertNoGraphQLErrors(restore);
+        assertThat(restore.at("/data/summary/summary/get").asString()).isEqualTo(SampleObject.SAMPLE_SUMMARY);
+        assertThat(restore.at("/data/status/status/get").asString()).isEqualTo(SampleObject.SAMPLE_STATUS.name());
+        assertThat(restore.at("/data/clearNotes").isNull()).isTrue();
     }
 
     private HttpResponse<String> get(final String path) throws Exception {

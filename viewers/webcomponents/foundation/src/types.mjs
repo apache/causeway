@@ -78,7 +78,23 @@
  * @property {string} name
  * @property {string|null} description
  * @property {GraphQLFieldDescription[]} fields
+ * @property {GraphQLInputFieldDescription[]} inputFields
+ * @property {GraphQLEnumValueDescription[]} enumValues
  * @property {string} kind
+ */
+
+/**
+ * @typedef {Object} GraphQLInputFieldDescription
+ * @property {string} name
+ * @property {string|null} description
+ * @property {GraphQLTypeRef} type
+ * @property {string|null} defaultValue
+ */
+
+/**
+ * @typedef {Object} GraphQLEnumValueDescription
+ * @property {string} name
+ * @property {string|null} description
  */
 
 /**
@@ -179,6 +195,27 @@ export const ObjectContextStatus = Object.freeze({
   READY: 'ready',
   PARTIAL_ERROR: 'partial-error',
   TERMINAL_ERROR: 'terminal-error'
+});
+
+export const InteractionStatus = Object.freeze({
+  IDLE: 'idle',
+  PREPARING: 'preparing',
+  EDITING: 'editing',
+  VALIDATING: 'validating',
+  SAVING: 'saving',
+  INVOKING: 'invoking',
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  CANCELLED: 'cancelled',
+  UNSUPPORTED: 'unsupported',
+  OBSOLETE: 'obsolete'
+});
+
+export const InteractionResultKind = Object.freeze({
+  OBJECT: 'object',
+  COLLECTION: 'collection',
+  SCALAR: 'scalar',
+  VOID: 'void'
 });
 
 export const RequirementStatus = Object.freeze({

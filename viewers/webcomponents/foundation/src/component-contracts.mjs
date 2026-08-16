@@ -28,6 +28,7 @@ export const CausewayElementName = Object.freeze({
   VALUE: 'causeway-value',
   OBJECT_LINK: 'causeway-object-link',
   ACTION: 'causeway-action',
+  INTERACTION_CONTROLLER: 'causeway-interaction-controller',
   COLLECTION: 'causeway-collection',
   COLLECTION_COLUMN: 'causeway-collection-column'
 });
@@ -41,6 +42,10 @@ export const CausewayHostClass = Object.freeze({
   VALUE: 'causeway-value',
   OBJECT_LINK: 'causeway-object-link',
   ACTION: 'causeway-action',
+  INTERACTION_CONTROLLER: 'causeway-interaction-controller',
+  ACTION_PROMPT: 'causeway-action-prompt',
+  ACTION_RESULT: 'causeway-action-result',
+  PROPERTY_EDITOR: 'causeway-property-editor',
   COLLECTION: 'causeway-collection',
   COLLECTION_COLUMN: 'causeway-collection-column',
   LOADING: 'causeway-loading',
@@ -60,7 +65,8 @@ export const CausewayAttribute = Object.freeze({
   LOGICAL_TYPE: 'logical-type',
   OBJECT_ID: 'object-id',
   TITLE: 'title',
-  DISABLED: 'disabled'
+  DISABLED: 'disabled',
+  EDITABLE: 'editable'
 });
 
 /**
@@ -72,6 +78,10 @@ export const CausewayAttribute = Object.freeze({
 export const CausewaySemanticEvent = Object.freeze({
   NAVIGATION_REQUEST: 'causeway-navigation-request',
   ACTION_REQUEST: 'causeway-action-request',
+  ACTION_PROMPT_STATE: 'causeway-action-prompt-state-change',
+  ACTION_RESULT: 'causeway-action-result',
+  PROPERTY_INTERACTION_STATE: 'causeway-property-interaction-state-change',
+  PROPERTY_UPDATED: 'causeway-property-updated',
   COLLECTION_STATE: 'causeway-collection-state-change',
   COLLECTION_CONFIGURATION: 'causeway-collection-configuration-change'
 });
