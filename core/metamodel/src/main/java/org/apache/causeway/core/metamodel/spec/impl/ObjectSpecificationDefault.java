@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.causeway.applib.Identifier;
@@ -86,7 +85,6 @@ import lombok.extern.slf4j.Slf4j;
 final class ObjectSpecificationDefault
 implements
 	ObjectSpecificationInternal,
-	HasIntrospectionStateHandler,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
 
@@ -117,11 +115,14 @@ implements
     private MemberCatalog memberCatalog = MemberCatalog.EMPTY;
     @Getter @Accessors(fluent = true)
     private Hierarchical hierarchical = Hierarchical.EMPTY;
+    @Getter @Accessors(fluent = true)
+    private final ConsistencyContext consistencyContext;
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
     		_Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
     				.map(TypeOfFacet::elementSpec));
 
+    private final SpecificationLoaderInternal specLoaderInternal;
     private final PostProcessor postProcessor;
 
     private ValueFacet<?> valueFacet;
@@ -143,12 +144,14 @@ implements
             final @NonNull Supplier<MixinSpecStreamer> mixinSpecStreamerSupplier) {
 
         final MetaModelContext mmc = facetProcessor.getMetaModelContext();
+        this.specLoaderInternal = (SpecificationLoaderInternal) mmc.getSpecificationLoader();
 
     	this.typeMeta = typeMeta;
     	this.isInjectableLazy = _Lazy.threadSafe(()->typeMeta.isInjectable(mmc.getServiceRegistry()));
     	this.isDomainServiceLazy = _Lazy.threadSafe(()->
         	_ClassCache.getInstance().head(correspondingClass()).hasAnnotation(DomainService.class));
     	this.titleSubscribers = titleSubscribers;
+    	this.consistencyContext = new ConsistencyContext(typeMeta);
 
         this.facetHolder = FacetHolder.simple(
             mmc,
@@ -165,10 +168,10 @@ implements
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
         this.facetedMethodsFactory =
-                new FacetedMethodsFactory(this, facetProcessor, classSubstitutorRegistry);
+                new FacetedMethodsFactory(this, specLoaderInternal, facetProcessor, classSubstitutorRegistry);
 
         final var hierarchicalFactory =
-        		new HierarchicalFactory(specLoaderInternal(), classSubstitutorRegistry, facetHolder);
+        		new HierarchicalFactory(specLoaderInternal, classSubstitutorRegistry, facetHolder);
 
         this.introspectionStateHandler = new IntrospectionStateHandlerThreadSafe(
         		()->{
@@ -179,7 +182,7 @@ implements
         			introspectMembers(mixinSpecStreamerSupplier.get());
 //        	        // make sure we've loaded the facets from layout.xml also.
         	        Facets.gridPreload(this, null);
-        	        specLoaderInternal().validateLater(this);
+        	        specLoaderInternal.validateLater(this);
         		});
     }
 
@@ -199,7 +202,8 @@ implements
 	@Override public boolean isHidden() { return containsFacet(HiddenFacet.class); }
 	@Override public Optional<ObjectSpecification> superSpec() { return hierarchical.superSpec(); }
     @Override public Can<ObjectSpecification> interfaceSpecs() { return hierarchical.interfaceSpecs(); }
-    @Override public Set<ResolvedMethod> potentialOrphans() { return facetedMethodsFactory.potentialOrphans(); }
+    // state handling
+    @Override public boolean isFullyIntrospected() { return introspectionStateHandler.isFullyIntrospected(); }
 
     // -- CONTRACT
 
@@ -251,8 +255,8 @@ implements
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
     	streamSuperTypeHierarchyAndInterfaces()
-    		.forEach(it->((IntrospectionStateHandler)it)
-    			.introspectFully());
+    		.map(ObjectSpecificationDefault.class::cast)
+    		.forEach(spec->spec.introspectionStateHandler.introspectFully());
 
         // create associations and actions
 
@@ -299,7 +303,7 @@ implements
 
     @Override
     public Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
-    	introspectFully();
+    	introspectionStateHandler.introspectFully();
     	return memberCatalog.lookupMember(method);
     }
 
@@ -452,7 +456,7 @@ implements
 
     @Override
     public Optional<? extends ObjectMember> lookupMember(final String memberId) {
-    	introspectFully();
+    	introspectionStateHandler.introspectFully();
 
         if(_Strings.isEmpty(memberId))
 			return Optional.empty();
@@ -514,4 +518,5 @@ implements
     		titleSubscribers.stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
     	});
     }
+
 }

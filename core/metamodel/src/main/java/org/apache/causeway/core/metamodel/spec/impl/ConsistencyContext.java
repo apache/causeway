@@ -18,19 +18,22 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-@FunctionalInterface
-interface HasIntrospectionStateHandler extends IntrospectionStateHandler {
+import java.util.HashSet;
+import java.util.Set;
 
-	IntrospectionStateHandler introspectionStateHandler();
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 
-	@Override
-	default void introspectUpTo(final IntrospectionState upTo) {
-		introspectionStateHandler().introspectUpTo(upTo);
-	}
+/**
+ * Holder of meta model inconsistencies if any.
+ */
+record ConsistencyContext(
+		CausewayBeanMetaData typeMeta,
+		Set<ResolvedMethod> potentialOrphans) {
 
-	@Override
-	default IntrospectionState introspectionState() {
-		return introspectionStateHandler().introspectionState();
+	ConsistencyContext(
+			final CausewayBeanMetaData typeMeta) {
+		this(typeMeta, new HashSet<>());
 	}
 
 }

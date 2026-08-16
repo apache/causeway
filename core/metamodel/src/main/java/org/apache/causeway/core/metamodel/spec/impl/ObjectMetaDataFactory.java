@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -29,17 +29,30 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationFacade.ObjectMetaData;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationFacade.ObjectMetaDataFull;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationFacade.ObjectMetaDataInitial;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationFacade.ObjectMetaDataTypeOnly;
 
 /**
  * WIP
  */
-record ObjectMetaDataFactory(FacetProcessor facetProcessor) {
+record ObjectMetaDataFactory(
+		SpecificationLoaderInternal specLoaderInternal,
+		FacetProcessor facetProcessor) {
 
-	ObjectMetaData register(final CausewayBeanMetaData typeMeta) {
+	ObjectMetaData transition(final ObjectMetaData objectMetaData, final IntrospectionRequest request) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	ObjectMetaDataInitial register(final CausewayBeanMetaData typeMeta) {
 		var facetHolder = FacetHolder.simple(mmc(),
                 Identifier.classIdentifier(typeMeta.logicalType()));
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
@@ -48,18 +61,14 @@ record ObjectMetaDataFactory(FacetProcessor facetProcessor) {
                 .map(IntrospectionPolicyFacet::introspectionPolicy)
                 .orElseGet(()->mmc().getConfiguration().core().metaModel().introspector().policy());
 
-    	return new ObjectMetaData(
+    	return new ObjectMetaDataInitial(
 				typeMeta,
 				introspectionPolicy,
-				facetHolder,
-				Hierarchical.EMPTY,
-				ActionContainer.EMPTY,
-		        AssociationContainer.EMPTY,
-				Map.of());
+				facetHolder);
 	}
 
-	ObjectMetaData typeOnly(
-			final ObjectMetaData registered,
+	ObjectMetaDataTypeOnly typeOnly(
+			final ObjectMetaDataInitial registered,
 			final FacetedMethodsFactory facetedMethodsFactory,
 			final HierarchicalFactory hierarchicalFactory) {
 
@@ -78,17 +87,17 @@ record ObjectMetaDataFactory(FacetProcessor facetProcessor) {
         		? Hierarchical.EMPTY
         		: hierarchicalFactory.createHierarchical(typeMeta.correspondingClass());
 
-        return new ObjectMetaData(
+        return new ObjectMetaDataTypeOnly(
 				typeMeta,
 				registered.introspectionPolicy(),
 				facetHolder,
-				hierarchical,
-				ActionContainer.EMPTY,
-		        AssociationContainer.EMPTY,
-				Map.of());
+				facetHolder.lookupFacet(AliasedFacet.class)
+					.map(AliasedFacet::getAliases)
+					.orElseGet(Can::empty),
+				hierarchical);
 	}
 
-	ObjectMetaData full(final ObjectMetaData typeOnly,
+	ObjectMetaDataFull full(final ObjectMetaDataTypeOnly typeOnly,
 			final FacetedMethodsFactory facetedMethodsFactory,
 			final MixinSpecStreamer mixinSpecStreamer,
 			final PostProcessor postProcessor) {
@@ -101,13 +110,13 @@ record ObjectMetaDataFactory(FacetProcessor facetProcessor) {
         if(beanSort.isCollection()
                 || beanSort.isVetoed()
                 || beanSort.isValue())
-		 return typeOnly;
+		 return null; //FIXME
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
         typeOnly.hierarchical().streamSuperTypeHierarchyAndInterfaces()
-    		.forEach(it->((IntrospectionStateHandler)it) //TODO incompatible
-    			.introspectFully());
+    		.map(ObjectSpecification::correspondingClass)
+    		.forEach(cls->specLoaderInternal.loadSpecification(cls, IntrospectionRequest.FULL));
 
         // create associations and actions
 
@@ -140,7 +149,7 @@ record ObjectMetaDataFactory(FacetProcessor facetProcessor) {
 		//}
 		var memberCatalog = new MemberCatalog(spec);
 
-		return new ObjectMetaData(
+		return new ObjectMetaDataFull(
 				typeMeta,
 				typeOnly.introspectionPolicy(),
 				facetHolder,

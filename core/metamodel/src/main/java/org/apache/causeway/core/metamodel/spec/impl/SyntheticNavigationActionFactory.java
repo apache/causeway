@@ -63,6 +63,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.ColumnQuery;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.impl.IntrospectionStateHandler.IntrospectionRequest;
 import org.springframework.util.ClassUtils;
 
 record SyntheticNavigationActionFactory(
@@ -243,7 +244,9 @@ record SyntheticNavigationActionFactory(
                 AssociationsLookup.AVAILABLE);
         var elementType = (ObjectSpecificationInternal)collection.getElementType();
         if(!elementType.isFullyIntrospected()) {
-			elementType.introspectFully();
+        	var mmc = ownerSpec.getMetaModelContext();
+        	var specLoaderInternal = (SpecificationLoaderInternal) mmc.getSpecificationLoader();
+        	specLoaderInternal.loadSpecification(elementType.correspondingClass(), IntrospectionRequest.FULL);
 		}
         return collection.getElementType()
                 .streamAssociationsForColumnRendering(columnQuery)
@@ -278,4 +281,5 @@ record SyntheticNavigationActionFactory(
             FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));
         }
     }
+
 }

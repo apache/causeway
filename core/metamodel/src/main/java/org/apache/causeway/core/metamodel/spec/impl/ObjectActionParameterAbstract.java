@@ -56,8 +56,7 @@ import lombok.experimental.Accessors;
 
 abstract class ObjectActionParameterAbstract
 implements
-    ObjectActionParameter,
-    HasSpecificationLoaderInternal {
+    ObjectActionParameter {
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final FeatureType featureType;
@@ -390,6 +389,12 @@ implements
     @Override
     public String toString() {
         return String.format("ObjectActionParameter[id=%s]", getFeatureIdentifier());
+    }
+
+    // -- HELPER
+
+    SpecificationLoaderInternal specLoaderInternal() {
+    	return (SpecificationLoaderInternal) parentAction.getSpecificationLoader();
     }
 
 }

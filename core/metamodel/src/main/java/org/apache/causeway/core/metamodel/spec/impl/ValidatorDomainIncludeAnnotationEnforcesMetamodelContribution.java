@@ -143,7 +143,7 @@ extends MetaModelValidatorAbstract {
             });
 
         validateOrphanedSupportingMethod(
-        		internalSpec, supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp, internalSpec.potentialOrphans());
+        		internalSpec, supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp, internalSpec.consistencyContext().potentialOrphans());
     }
 
     // -- HELPER - VALIDATION LOGIC
@@ -220,10 +220,12 @@ extends MetaModelValidatorAbstract {
 
     private static boolean matchesSupportMethodNamingConvention(final String methodName) {
         for(var objectSupportMethod : ObjectSupportMethod.values()) {
-            if(objectSupportMethod.getMethodNames().anyMatch(name->name.equals(methodName))) return true;
+            if(objectSupportMethod.getMethodNames().anyMatch(name->name.equals(methodName)))
+            	return true;
         }
         for(var memberSupportPrefix : MemberSupportPrefix.values()) {
-            if(memberSupportPrefix.getMethodNamePrefixes().anyMatch(prefix->methodName.startsWith(prefix))) return true;
+            if(memberSupportPrefix.getMethodNamePrefixes().anyMatch(methodName::startsWith))
+            	return true;
         }
         return false;
     }

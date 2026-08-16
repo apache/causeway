@@ -646,14 +646,13 @@ implements
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
 
-        if(phase == Phase.INTROSPECTING_MIXINS
+        var effectiveRequest = (phase == Phase.INTROSPECTING_MIXINS
         		&& request==IntrospectionRequest.FULL
-        		&& !spec.isMixin()) {
-        	// don't allow the side-effect of fully introspecting other types during mixin introspection
-        	spec.introspect(IntrospectionRequest.TYPE_ONLY);
-        } else {
-        	spec.introspect(request);
-        }
+        		&& !spec.isMixin())
+    		? IntrospectionRequest.TYPE_ONLY
+			: request;
+
+        introspect(spec, effectiveRequest);
 
         if(spec.aliases().isNotEmpty()
             // this bool. expr. is an optimization, not strictly required ... a bit of hack though
@@ -674,7 +673,7 @@ implements
         return spec;
     }
 
-    /**
+	/**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
     private ObjectSpecificationInternal createSpecification(
@@ -700,7 +699,7 @@ implements
             final Can<ObjectSpecificationInternal> specs,
             final IntrospectionRequest request) {
         for (var spec : specs) {
-            spec.introspect(request);
+            introspect(spec, request);
         }
     }
 
@@ -710,7 +709,7 @@ implements
         specs.parallelStream()
         .forEach(spec -> {
             try {
-                spec.introspect(request);
+                introspect(spec, request);
             } catch (Throwable ex) {
                 log.error("failure", ex);
                 throw ex;
@@ -762,5 +761,22 @@ implements
         serviceRegistry.lookupService(GridService.class)
             .ifPresent(GridService::clearCache);
     }
+
+    private void introspect(final ObjectSpecificationInternal internalSpec, final IntrospectionRequest request) {
+    	if(internalSpec instanceof ObjectSpecificationDefault legacy) {
+    		legacy.introspectionStateHandler().introspect(request);
+    		return;
+    	}
+    	if(internalSpec instanceof ObjectSpecificationFacade facade) {
+    		var metaDataFactory = new ObjectMetaDataFactory(this, facetProcessor); //TODO use shared instance
+    		var objectMetaData = facade.objectMetaData();
+    		var newObjectMetaData = metaDataFactory.transition(objectMetaData, request);
+    		if(newObjectMetaData!=objectMetaData) {
+    			facade.objectMetaDataRef().set(newObjectMetaData);
+    		}
+    		return;
+    	}
+		throw new IllegalArgumentException("Unexpected value: " + internalSpec);
+	}
 
 }

@@ -62,18 +62,18 @@ record FacetedMethodsFactory(
 	    Function<Class<?>, ObjectSpecification> loadSpecificationTypeOnlyFunction,
 	    Set<ResolvedMethod> potentialOrphans)
 implements
-    HasSpecificationLoaderInternal,
     HasMetaModelContext {
 
     FacetedMethodsFactory(
             final ObjectSpecificationInternal internalSpec,
+            final SpecificationLoaderInternal specLoaderInternal,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
     	this(internalSpec,
     			facetProcessor,
     			classSubstitutorRegistry,
     			MethodRemover.createMethodRemover(internalSpec.correspondingClass(), internalSpec.introspectionPolicy()),
-    			internalSpec.specLoaderInternal()::loadSpecificationTypeOnly,
+    			specLoaderInternal::loadSpecificationTypeOnly,
     			new HashSet<>());
     }
 
@@ -339,6 +339,10 @@ implements
 
     private IntrospectionPolicy introspectionPolicy() {
         return internalSpec.introspectionPolicy();
+    }
+
+    SpecificationLoaderInternal specLoaderInternal() {
+    	return (SpecificationLoaderInternal) internalSpec().getSpecificationLoader();
     }
 
 }

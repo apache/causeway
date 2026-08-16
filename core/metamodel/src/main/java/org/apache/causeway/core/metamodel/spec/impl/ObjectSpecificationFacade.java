@@ -78,11 +78,175 @@ record ObjectSpecificationFacade(
         /** mutable meta data */
         AtomicReference<ObjectMetaData> objectMetaDataRef)
 implements
-	ObjectSpecification,
+	ObjectSpecificationInternal,
 	HasObjectActionContainer,
 	HasObjectAssociationContainer {
 
-	record ObjectMetaData(
+	sealed interface ObjectMetaData
+	permits ObjectMetaDataInitial, ObjectMetaDataTypeOnly, ObjectMetaDataFull {
+		CausewayBeanMetaData typeMeta();
+		IntrospectionPolicy introspectionPolicy();
+		FacetHolder facetHolder();
+		Can<LogicalType> aliases();
+		Hierarchical hierarchical();
+		ObjectActionContainer actionContainer();
+        ObjectAssociationContainer associationContainer();
+    	Optional<ValueFacet<?>> valueFacet();
+    	Optional<EntityFacet> entityFacet();
+    	Optional<ViewModelFacet> viewmodelFacet();
+    	Optional<MixinFacet> mixinFacet();
+    	Optional<ObjectNamedFacet> objectNamedFacet();
+    	Optional<ObjectDescribedFacet> objectDescribedFacet();
+    	Optional<TypeOfFacet> typeOfFacet(); // explicit element type
+    	Optional<TitleFacet> titleFacet();
+    	Optional<IconFacet> iconFacet();
+    	Optional<FaFacet> faFacet();
+    	Optional<NavigableParentFacet> navigableParentFacet();
+    	Optional<CssClassFacet> cssClassFacet();
+    	boolean isParented();
+		boolean isImmutable();
+		boolean isHidden();
+    	Map<ResolvedMethod, ObjectMember> membersByMethod();
+	}
+
+	/**
+	 * TODO WIP
+	 */
+	record ObjectMetaDataInitial(
+			CausewayBeanMetaData typeMeta,
+			IntrospectionPolicy introspectionPolicy,
+			FacetHolder facetHolder)
+	implements ObjectMetaData {
+		@Override public Can<LogicalType> aliases() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Hierarchical hierarchical() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public ObjectActionContainer actionContainer() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public ObjectAssociationContainer associationContainer() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ValueFacet<?>> valueFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<EntityFacet> entityFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ViewModelFacet> viewmodelFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<MixinFacet> mixinFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ObjectNamedFacet> objectNamedFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ObjectDescribedFacet> objectDescribedFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<TypeOfFacet> typeOfFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<TitleFacet> titleFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<IconFacet> iconFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<FaFacet> faFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<NavigableParentFacet> navigableParentFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<CssClassFacet> cssClassFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isParented() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isImmutable() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isHidden() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Map<ResolvedMethod, ObjectMember> membersByMethod() {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
+	/**
+	 * TODO WIP
+	 */
+	record ObjectMetaDataTypeOnly(
+			CausewayBeanMetaData typeMeta,
+			IntrospectionPolicy introspectionPolicy,
+			FacetHolder facetHolder,
+			Can<LogicalType> aliases, //TODO too early?
+			Hierarchical hierarchical)
+	implements ObjectMetaData {
+		@Override public ObjectActionContainer actionContainer() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public ObjectAssociationContainer associationContainer() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ValueFacet<?>> valueFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<EntityFacet> entityFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ViewModelFacet> viewmodelFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<MixinFacet> mixinFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ObjectNamedFacet> objectNamedFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<ObjectDescribedFacet> objectDescribedFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<TypeOfFacet> typeOfFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<TitleFacet> titleFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<IconFacet> iconFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<FaFacet> faFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<NavigableParentFacet> navigableParentFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Optional<CssClassFacet> cssClassFacet() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isParented() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isImmutable() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public boolean isHidden() {
+			throw new UnsupportedOperationException();
+		}
+		@Override public Map<ResolvedMethod, ObjectMember> membersByMethod() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	record ObjectMetaDataFull(
 			CausewayBeanMetaData typeMeta,
 			IntrospectionPolicy introspectionPolicy,
 			FacetHolder facetHolder,
@@ -105,9 +269,9 @@ implements
 	    	boolean isParented,
 			boolean isImmutable,
 			boolean isHidden,
-	    	Map<ResolvedMethod, ObjectMember> membersByMethod) {
+	    	Map<ResolvedMethod, ObjectMember> membersByMethod) implements ObjectMetaData {
 
-		ObjectMetaData(
+		ObjectMetaDataFull(
 				final CausewayBeanMetaData typeMeta,
 				final IntrospectionPolicy introspectionPolicy,
 				final FacetHolder facetHolder,
@@ -137,7 +301,6 @@ implements
 					facetHolder.containsFacet(HiddenFacet.class),
 					membersByMethod);
 		}
-
 	}
 
 	ObjectSpecificationFacade(
@@ -149,6 +312,8 @@ implements
 		this(typeMeta, isDomainService, isInjectable,
 				titleSubscribers, new AtomicReference<>(objectMetaData));
 	}
+
+	ObjectMetaData objectMetaData() { return objectMetaDataRef.get(); }
 
     // -- SPECIFICATION
 
@@ -185,6 +350,13 @@ implements
 	@Override public boolean isParented() { return objectMetaData().isParented(); }
 	@Override public boolean isImmutable() { return objectMetaData().isImmutable(); }
 	@Override public boolean isHidden() { return objectMetaData().isHidden(); }
+	@Override public boolean isFullyIntrospected() { return objectMetaData() instanceof ObjectMetaDataFull; }
+
+	@Override
+	public ConsistencyContext consistencyContext() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 
 	// -- MEMBER LOOKUP
 
@@ -206,14 +378,14 @@ implements
 
 	@Override
 	public Optional<? extends ObjectMember> lookupMember(final ResolvedMethod method) {
-		return Optional.ofNullable(objectMetaData().membersByMethod.get(method));
+		return Optional.ofNullable(objectMetaData().membersByMethod().get(method));
 	}
 
 	// -- INFERRED FROM FACETS
 
 	@Override
 	public String getSingularName() {
-		return objectMetaData().objectNamedFacet
+		return objectMetaData().objectNamedFacet()
             .flatMap(ObjectNamedFacet::translated)
             // unexpected code reach, however keep for JUnit testing
             .orElseGet(()->"(%s has neither title- nor object-named-facet)"
@@ -221,14 +393,14 @@ implements
 	}
 	@Override
 	public String getDescription() {
-		return objectMetaData().objectDescribedFacet
+		return objectMetaData().objectDescribedFacet()
             .map(ObjectDescribedFacet::translated)
             .orElse("");
 	}
 	@Override
 	public String getTitle(final TitleRenderRequest titleRenderRequest) {
-        if (objectMetaData().titleFacet.isPresent()) {
-            var titleString = objectMetaData().titleFacet.get().title(titleRenderRequest);
+        if (objectMetaData().titleFacet().isPresent()) {
+            var titleString = objectMetaData().titleFacet().get().title(titleRenderRequest);
             if(StringUtils.hasLength(titleString)) {
 	            notifyTitleSubscribers(titleRenderRequest, titleString);
 	            return titleString;
@@ -245,26 +417,26 @@ implements
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
-        return objectMetaData().iconFacet
+        return objectMetaData().iconFacet()
             .flatMap(facet->facet.icon(domainObject, iconSize))
             .or(()->faLayers(domainObject)
                 .map(ObjectSupport.FontAwesomeIconResource::new));
 	}
 	@Override
 	public Object getNavigableParent(final Object object) {
-		return objectMetaData().navigableParentFacet
+		return objectMetaData().navigableParentFacet()
 				.map(facet->facet.navigableParent(object))
 				.orElse(null);
 	}
 	@Override
 	public String getCssClass(final ManagedObject domainObject) {
-		return objectMetaData().cssClassFacet
+		return objectMetaData().cssClassFacet()
 			.map(facet->facet.cssClass(domainObject))
 			.orElse(null);
 	}
 	@Override
 	public Optional<ObjectSpecification> explicitElementSpec() {
-		return objectMetaData().typeOfFacet
+		return objectMetaData().typeOfFacet()
             .map(TypeOfFacet::elementSpec);
 	}
 	@Override
@@ -302,11 +474,10 @@ implements
 
     // -- HELPER
 
-    private ObjectMetaData objectMetaData() { return objectMetaDataRef.get(); }
     private Hierarchical hierarchical() { return objectMetaData().hierarchical(); }
 
 	private Optional<FontAwesomeLayers> faLayers(final ManagedObject domainObject){
-        return objectMetaData().faFacet
+        return objectMetaData().faFacet()
             .map(FaFacet::getSpecialization)
             .map(either->either.fold(
                 faStaticFacet->(FaLayersProvider)faStaticFacet,

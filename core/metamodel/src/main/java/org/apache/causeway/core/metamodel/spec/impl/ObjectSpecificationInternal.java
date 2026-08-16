@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.Set;
-
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
@@ -31,14 +28,17 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
  *
  * <p> How far we are in the initializing phases can be queried via {@link #introspectionState()}
  */
-interface ObjectSpecificationInternal
+sealed interface ObjectSpecificationInternal
 extends
-	HasSpecificationLoaderInternal,
 	ObjectActionContainer,
 	ObjectAssociationContainer,
-	IntrospectionStateHandler,
-	ObjectSpecification {
+	ObjectSpecification
+permits
+	ObjectSpecificationFacade,
+	ObjectSpecificationDefault {
 
-    Set<ResolvedMethod> potentialOrphans();
+	ConsistencyContext consistencyContext();
+
+	boolean isFullyIntrospected();
 
 }
