@@ -30,6 +30,7 @@ import graphql.schema.GraphQLInputObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static graphql.schema.GraphQLTypeReference.typeRef;
 
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -148,7 +149,7 @@ public class CommonDomainObject
 
         return newFieldDefinition()
                 .name(fieldName)
-                .type(this.context.typeMapper.outputTypeFor(objectSpec, getSchemaType()))
+                .type(typeRef(TypeNames.objectTypeNameFor(objectSpec, getSchemaType())))
                 .argument(GraphQLArgument.newArgument()
                         .name(graphqlConfiguration.lookup().argName())   // eg "object"
                         .type(gqlInputObjectType)

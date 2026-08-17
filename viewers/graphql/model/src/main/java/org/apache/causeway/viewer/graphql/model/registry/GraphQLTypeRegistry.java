@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -28,18 +25,25 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
-import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
-import org.springframework.stereotype.Component;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
+import graphql.schema.GraphQLUnionType;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
+import org.springframework.stereotype.Component;
+
+import org.apache.causeway.viewer.graphql.model.context.Context;
+import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
+import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,11 +79,11 @@ public class GraphQLTypeRegistry {
         var typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
         var enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
 
-        if (enumTypeIfAny.isPresent())
-			return enumTypeIfAny.get();
+        if (enumTypeIfAny.isPresent()) {
+            return enumTypeIfAny.get();
+        }
 
-        @SuppressWarnings("unchecked")
-		var enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
+        var enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
         var enumType = newEnum()
                 .name(typeName)
                 .values(Stream.of(enumTypeToAdd.getEnumConstants())
@@ -110,11 +114,15 @@ public class GraphQLTypeRegistry {
             return;
         }
 
+        if (typeToAdd instanceof GraphQLUnionType) {
+            addUnionTypeIfNotAlreadyPresent((GraphQLUnionType) typeToAdd);
+            return;
+        }
+
         // TODO: none of these types yet handled
         // GraphQLTypeReference
         // GraphQLScalarType
         // GraphQLCompositeType
-        // GraphQLUnionType
         // GraphQLEnumType
         // GraphQLInterfaceType
         // GraphQLList
@@ -149,11 +157,21 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
+    public GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
+        var existing = lookup(typeToAdd.getName(), GraphQLUnionType.class);
+        if (existing.isPresent()) {
+            log.debug("GraphQLUnionType for {} already present", typeToAdd.getName());
+            return existing.get();
+        }
+        add(typeToAdd);
+        return typeToAdd;
+    }
+
     private boolean isPresent(
             final GraphQLNamedType typeToAdd,
             final Class<? extends GraphQLNamedType> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
     }
@@ -162,7 +180,7 @@ public class GraphQLTypeRegistry {
             final String typeName,
             final Class<T> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .filter(ot -> ot.getName().equals(typeName))
                 .findFirst();

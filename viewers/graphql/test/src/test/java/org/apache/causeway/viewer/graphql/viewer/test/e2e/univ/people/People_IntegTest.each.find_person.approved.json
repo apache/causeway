@@ -11,6 +11,7 @@
                   "name" : "Dr. Helen Johansen"
                 },
                 "results" : {
+                  "__typename" : "rich__university_dept_DeptHead",
                   "name" : {
                     "get" : "Dr. Helen Johansen"
                   },

@@ -1,0 +1,129 @@
+= Rich Object Interaction Correctness
+
+The rich GraphQL schema supports public object identity, polymorphic output, declared-type action arguments, and authoritative property mutation results.
+These contracts use generated rich-schema names and standard targeted GraphQL introspection.
+
+== Public object identity
+
+Every existing public entity or view-model logical-type enum value remains available.
+When an abstract and concrete implementation share one public logical type, the generated input vocabulary uses the concrete bookmarkable specification for that name.
+
+An input declared against an abstract domain type requires `logicalTypeName` when `id` is used.
+The logical type must be assignable to the declared parameter type.
+A `ref` saved in the current GraphQL execution context is also checked for assignability.
+
+[source,graphql]
+----
+query ReadPerson($person: rich__university_dept_Person__gqlv_input!) {
+  rich {
+    university_dept_People {
+      nameOf {
+        invoke(person: $person) {
+          results
+        }
+      }
+    }
+  }
+}
+----
+
+[source,json]
+----
+{
+  "person": {
+    "id": "123",
+    "logicalTypeName": "university_dept_StaffMember"
+  }
+}
+----
+
+The enum token is generated from the public logical type.
+Java implementation class names are not part of the input contract.
+Invalid, stale, unavailable, or incompatible input returns a bounded GraphQL error naming only the required public logical type.
+
+== Polymorphic rich output
+
+An output declared using an abstract domain-object type uses a generated rich union when assignable concrete public types are available.
+The union name ends in `__gqlv_union`.
+Clients select `__typename` and standard GraphQL fragments for concrete fields.
+
+[source,graphql]
+----
+{
+  rich {
+    university_dept_People {
+      findNamed {
+        invoke(name: "Dr. Helen Johansen") {
+          results {
+            __typename
+            ... on rich__university_dept_DeptHead {
+              _meta { id logicalTypeName title }
+              name { get }
+            }
+            ... on rich__university_dept_StaffMember {
+              _meta { id logicalTypeName title }
+              name { get }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+The same shape is used for abstract-element collection rows and collection-valued action results.
+A direct top-level lookup for an abstract declared type retains its established object shape for compatibility.
+The simple schema retains its established non-union output behavior.
+
+== Declared-type action arguments
+
+Rich action defaults, choices, autocomplete, parameter visibility, parameter usability, per-parameter validity, all-arguments validity, query invocation, and mutation invocation use one recursive argument conversion path.
+
+The converter handles:
+
+* scalar and registered value inputs;
+* singular object inputs;
+* collection-valued scalar inputs;
+* collection-valued object inputs;
+* omitted arguments;
+* explicit null;
+* execution-context references;
+* abstract inputs with concrete public logical type.
+
+Collection-valued object inputs are converted from GraphQL input maps to domain objects before Causeway negotiation or validation runs.
+Raw GraphQL maps are never adapted as scalar domain values.
+Malformed list or object shapes return bounded data-fetching errors rather than assertion failures or HTTP 500 processing failures.
+
+Choices, defaults, visibility, and autocomplete receive the converted preceding argument prefix.
+Per-parameter validity additionally receives the current proposed parameter.
+Arguments after the current negotiation point remain omitted managed values.
+
+== Authoritative property mutation
+
+A rich property mutation returns the mutated domain pojo rather than an internal `ManagedObject` wrapper.
+The returned member wrappers therefore observe authoritative post-mutation state.
+
+For a memento view model, `_meta.id` is regenerated from that updated state.
+The new identifier or a `saveAs` reference created from the mutation result reloads the changed view model.
+Persistent entity mutations retain their established persistent bookmark identity.
+
+Visibility, usability, declared-type conversion, and server-side property validation run before mutation.
+An invalid mutation does not return changed state.
+
+== Compatibility and schema impact
+
+Concrete object type names, direct concrete lookups, scalar action documents, persistent entity bookmarks, and legacy top-level abstract lookups remain valid.
+Existing public logical-type enum values are retained, while previously omitted concrete shared logical types are added.
+
+Polymorphic unions are generated only for rich abstract output types that have reachable concrete public types.
+The generated schema snapshot and integration tests record union count and type growth so future changes remain reviewable.
+
+== Reference fixture measurements
+
+The deterministic GraphQL integration fixture generated zero union types before this capability and five rich union types after it.
+The fixture's logical-type enum grew from 19 to 20 values because the new tests add one concrete view-model logical type shared by an abstract declaration and concrete implementation.
+The complete fixture schema grew from 222,145 to 233,398 bytes, while the additional object types belong primarily to that reduced view-model fixture rather than union machinery and the input-type count remained unchanged.
+
+A warm local `PrintSchemaIntegTest` reactor run using JDK 17 measured 13.15 seconds at the baseline commit and 13.26 seconds with the implementation.
+These single-machine values are regression evidence rather than a performance guarantee, and the 0.11-second difference does not indicate a meaningful startup regression at fixture scale.

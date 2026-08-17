@@ -18,40 +18,35 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.mutation;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
+
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import java.util.Map;
-import java.util.Optional;
-
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
+import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
-import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
 
 //@Slf4j
 public class RichMutationForProperty extends Element {
 
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
-    private final String argumentName;
+    private String argumentName;
 
     public RichMutationForProperty(
             final ObjectSpecification objectSpec,
@@ -84,58 +79,37 @@ public class RichMutationForProperty extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        Object target = dataFetchingEnvironment.getArgument(argumentName);
-        Optional<Object> result;
-        final Environment environment = new Environment.For(dataFetchingEnvironment);
-        @SuppressWarnings("unchecked")
-		var argumentValue1 = (Map<String, ?>) target;
-        var idValue = (String)argumentValue1.get("id");
-        if (idValue != null) {
-            var objectSpecArg = (ObjectSpecification) argumentValue1.get("logicalTypeName");
-            Optional<Bookmark> bookmarkIfAny;
-            if (objectSpecArg != null) {
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
-            } else {
-                Class<?> paramClass = objectSpec.correspondingClass();
-                bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
-            }
-            result = bookmarkIfAny
-                    .map(context.bookmarkService::lookup)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get);
-        } else {
-            var refValue = (String)argumentValue1.get("ref");
-            if (refValue != null) {
-                var key = ObjectFeatureUtils.keyFor(refValue);
-                BookmarkedPojo value = environment.getGraphQlContext().get(key);
-                result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-            } else
-				throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-        }
-        Object sourcePojo = result
-                    .orElseThrow(); // TODO: better error handling if no such object found.
-
+        var environment = new Environment.For(dataFetchingEnvironment);
+        var target = dataFetchingEnvironment.getArgument(argumentName);
+        var sourcePojo = ObjectFeatureUtils.requirePojo(objectSpec, target, environment, context);
         var managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
-        ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
+        var argumentValue = dataFetchingEnvironment.getArgument(oneToOneAssociation.asciiId());
+        var argumentPojo = ObjectFeatureUtils.unmarshalValue(
+                oneToOneAssociation.getElementType(),
+                argumentValue,
+                environment,
+                context);
+        var argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
 
         var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed())
-			throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
+        if (visibleConsent.isVetoed()) {
+            throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
+        }
 
         var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed())
-			throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
+        if (usableConsent.isVetoed()) {
+            throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
+        }
 
         var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed())
-			throw new InvalidException(validityConsent);
+        if (validityConsent.isVetoed()) {
+            throw new InvalidException(validityConsent);
+        }
 
         oneToOneAssociation.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
 
-        return managedObject; // return the original object because setters return void
+        return managedObject.getPojo(); // setters return void, so return authoritative post-mutation state
     }
 
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
