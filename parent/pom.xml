@@ -388,7 +388,6 @@
                         <excludes>
                             <exclude>${testsToExclude}</exclude>
                         </excludes>
-                        <printSummary>false</printSummary>
                         <argLine>${surefire-plugin.argLine}</argLine>
                         <forkCount>1C</forkCount>
                         <reuseForks>true</reuseForks>
@@ -402,6 +401,10 @@
 							<!-- reduce test logging verbosity -->
                             <logging.level.root>WARN</logging.level.root>
                         </systemPropertyVariables>
+						<!-- CI friendly test logging: -->
+                        <useFile>false</useFile><!-- don't buffer test output to filesystem -->
+                        <reportFormat>plain</reportFormat><!-- don't use XML -->
+                        <printSummary>true</printSummary><!-- print a summary of failures to console -->
                     </configuration>
                 </plugin>
                 <plugin>
