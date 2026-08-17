@@ -18,26 +18,9 @@
  */
 package org.apache.causeway.testdomain.rest.jpa;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.JAXBException;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.web.client.RestClient;
 
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
@@ -47,6 +30,21 @@ import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.web.client.RestClient;
+
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBException;
 
 @SpringBootTest(
         classes = {
@@ -64,7 +62,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RestServiceTest extends RegressionTestWithJpaFixtures {
 
-    private static final boolean USE_REQUEST_DEBUG_LOGGING = true;
+    private static final boolean USE_REQUEST_DEBUG_LOGGING = false;
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject JpaRestEndpointService restService;

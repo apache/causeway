@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.testdomain.fixtures;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
@@ -26,16 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.springframework.beans.factory.DisposableBean;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -54,12 +48,13 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.DisposableBean;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public abstract class EntityTestFixtures
 implements
     MetamodelListener,
@@ -190,7 +185,8 @@ implements
     @RequiredArgsConstructor
     public static class Lock {
         private final _Oneshot release = new _Oneshot();
-        private final String dsUrl;
+        @SuppressWarnings("unused")
+		private final String dsUrl;
         private final EntityTestFixtures entityTestFixtures;
         public void install() {
             entityTestFixtures.install(this);
@@ -204,10 +200,8 @@ implements
     public final synchronized Lock aquireLock() {
         var dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().jdbcUrl();
         this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
-        log.info("waiting for lock {}", dsUrl);
         Lock lock;
         lockQueue.put(lock = new Lock(dsUrl, this)); // put next lock on the queue; blocks until space available
-        log.info("lock aquired for {}", dsUrl);
         initSchema();
         kvStoreForTesting.clearValues();
         return lock;
@@ -226,12 +220,10 @@ implements
 
     @SneakyThrows
     private void release(final Lock lock) {
-        log.info("about to release lock {}", lock.dsUrl);
         try {
             clearRepositoryInTransaction();
         } finally {
             lockQueue.take(); // remove lock from queue
-            log.info("lock released {}", lock.dsUrl);
         }
     }
 

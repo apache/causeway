@@ -18,23 +18,16 @@
  */
 package org.apache.causeway.testdomain.publishing;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-import java.util.function.BiConsumer;
-
-import org.jspecify.annotations.NonNull;
-import org.junit.jupiter.api.DynamicTest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.support.TransactionSynchronization;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactn.Interaction;
@@ -45,11 +38,15 @@ import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
+import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.DynamicTest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -95,7 +92,7 @@ public abstract class PublishingTestFactoryAbstract {
 
         public static class TraceLog {
             private final StringBuilder buffer = new StringBuilder();
-            @Getter private boolean debug = true;
+            @Getter private final boolean debug = true;
 
             public TraceLog log(final String format, final Object...args) {
                 var msg = String.format(format, args);
@@ -175,7 +172,6 @@ public abstract class PublishingTestFactoryAbstract {
 
         @Override
         public void beforeCompletion() {
-            _Probe.errOut("=== TRANSACTION before completion");
             if(testContext!=null) {
                 testContext.traceLog().log("3.1 pre-commit event is occurring");
                 testContext.runVerify(VerificationStage.PRE_COMMIT);
@@ -188,9 +184,7 @@ public abstract class PublishingTestFactoryAbstract {
 
         @Override
         public void afterCompletion(final int status) {
-
             TransactionCompletionStatus transactionCompletionStatus = TransactionCompletionStatus.forStatus(status);
-            _Probe.errOut("=== TRANSACTION after completion");
             if(testContext!=null) {
                 try {
                     if(transactionCompletionStatus.isCommitted()) {
