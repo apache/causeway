@@ -23,13 +23,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.exceptions.TranslatableException;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -111,14 +109,12 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
             if(logRecognizedExceptions) {
                 log.info("Recognized exception, stacktrace : ", throwable);
             }
-            if(ex instanceof TranslatableException) {
-                var translatableException = (TranslatableException) ex;
+            if(ex instanceof TranslatableException translatableException) {
                 var translatableMessage = translatableException.getTranslatableMessage();
                 var translationContext = translatableException.getTranslationContext();
                 if(translatableMessage != null
-                        && translationContext != null) {
-                    return translatableMessage.translate(translationService, translationContext);
-                }
+                        && translationContext != null)
+					return translatableMessage.translate(translationService, translationContext);
             }
             final String formattedMessage = _Exceptions.getRootCause(throwable)
                 .map(rootCauseMessageFormatter::apply)
@@ -131,9 +127,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
     @Override
     public Optional<Recognition> recognize(final Throwable ex) {
-        if(disabled) {
-            return Optional.empty();
-        }
+        if(disabled)
+			return Optional.empty();
         return Recognition.of(category, recognizeRootCause(ex).orElse(null));
     }
 

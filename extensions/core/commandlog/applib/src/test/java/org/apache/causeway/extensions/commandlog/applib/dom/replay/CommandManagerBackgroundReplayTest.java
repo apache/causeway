@@ -18,6 +18,15 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom.replay;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -27,9 +36,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.transaction.TransactionDefinition;
 
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
@@ -48,16 +54,8 @@ import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.TransactionDefinition;
 
 class CommandManagerBackgroundReplayTest {
 
@@ -227,9 +225,8 @@ class CommandManagerBackgroundReplayTest {
         when(executor.executeCommand(eq(InteractionContextPolicy.SWITCH_USER_AND_TIME), any(CommandDto.class)))
                 .thenAnswer(invocation -> {
                     executions.incrementAndGet();
-                    if (failNextExecution.getAndSet(false)) {
-                        return Try.failure(new IllegalStateException("replay failed"));
-                    }
+                    if (failNextExecution.getAndSet(false))
+						return Try.failure(new IllegalStateException("replay failed"));
                     var command = invocation.<CommandDto>getArgument(1);
                     entries.stream()
                             .filter(entry -> entry.entry().getInteractionId().toString()

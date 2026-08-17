@@ -456,7 +456,7 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
+        var actionInvocationFacet = lookupFacet(ActionInvocationFacet.class).orElseThrow();
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }
@@ -485,7 +485,7 @@ implements ObjectAction {
         for (int i = 0; i < parameterCount; i++) {
             var param = parameters.getElseFail(i);
             var paramSpec = param.getElementType();
-            var paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
+            var paramFacet = param.lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
 
             if (paramFacet != null && !paramFacet.precedence().isFallback()) {
 

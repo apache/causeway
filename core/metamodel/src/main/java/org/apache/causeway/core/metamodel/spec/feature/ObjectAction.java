@@ -16,6 +16,8 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.spec.feature;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,8 +25,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
@@ -34,7 +34,6 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -54,8 +53,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+import org.jspecify.annotations.NonNull;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -271,10 +269,9 @@ public interface ObjectAction extends ObjectMember {
                 // whereas for INLINE it would render a form with no fields
                 || getParameterCount() == 0) {
             if (promptStyle.isPresent()) {
-                if (promptStyle.get().isDialogAny()) {
-                    // preserve dialog specialization
+                if (promptStyle.get().isDialogAny())
+					// preserve dialog specialization
                     return promptStyle.get();
-                }
             }
             // fallback to generic dialog
             return PromptStyle.DIALOG;
@@ -285,13 +282,11 @@ public interface ObjectAction extends ObjectMember {
 
         if(needsFallback) {
             // modal vs side-bar
-            switch (getWicketViewerSettings().dialogMode()) {
-            case SIDEBAR:
-                return PromptStyle.DIALOG_SIDEBAR;
-            case MODAL:
-            default:
-                return PromptStyle.DIALOG_MODAL;
-            }
+			return switch (getWicketViewerSettings().dialogMode()) {
+			case SIDEBAR -> PromptStyle.DIALOG_SIDEBAR;
+			case MODAL -> PromptStyle.DIALOG_MODAL;
+			default -> PromptStyle.DIALOG_MODAL;
+			};
         }
         return promptStyle.get();
     }
@@ -309,9 +304,8 @@ public interface ObjectAction extends ObjectMember {
             if (returnType != null) {
                 Class<?> cls = returnType.correspondingClass();
                 if (Blob.class.isAssignableFrom(cls)
-                        || Clob.class.isAssignableFrom(cls)) {
-                    return true;
-                }
+                        || Clob.class.isAssignableFrom(cls))
+					return true;
             }
             return false;
         }
@@ -320,18 +314,15 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAction action) {
 
             var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
-            if (layoutGroupFacet == null) {
-                return false;
-            }
+            if (layoutGroupFacet == null)
+				return false;
             var layoutGroupId = layoutGroupFacet.getGroupId();
-            if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                return false;
-            }
+            if (_Strings.isNullOrEmpty(layoutGroupId))
+				return false;
             var prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
                     .orElse(null);
-            if (prop == null) {
-                return false;
-            }
+            if (prop == null)
+				return false;
             return true;
         }
 
@@ -388,15 +379,13 @@ public interface ObjectAction extends ObjectMember {
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
             PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
-            if(facet == null) {
-                // don't think this can occur, see PromptStyleFallback
+            if(facet == null)
+				// don't think this can occur, see PromptStyleFallback
                 return PromptStyle.INLINE;
-            }
             final PromptStyle promptStyle = facet.value();
-            if(promptStyle == PromptStyle.AS_CONFIGURED) {
-                // don't think this can occur, see PromptStyleConfiguration
+            if(promptStyle == PromptStyle.AS_CONFIGURED)
+				// don't think this can occur, see PromptStyleConfiguration
                 return PromptStyle.INLINE;
-            }
             return promptStyle;
         }
 
@@ -436,13 +425,11 @@ public interface ObjectAction extends ObjectMember {
             return (final ObjectAction objectAction) -> {
 
                 var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
+                if (layoutGroupFacet == null)
+					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return layoutGroupId.equals(memberId);
             };
         }
@@ -457,13 +444,11 @@ public interface ObjectAction extends ObjectMember {
             return (final ObjectAction objectAction) -> {
 
                 var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
+                if (layoutGroupFacet == null)
+					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return associationIds.contains(layoutGroupId);
             };
         }
@@ -512,13 +497,11 @@ public interface ObjectAction extends ObjectMember {
             @Override
             public boolean test(final ObjectAction objectAction) {
                 var choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
-                if(choicesFromFacet == null) {
-                    return false;
-                }
+                if(choicesFromFacet == null)
+					return false;
                 var choicesFromMemberName = choicesFromFacet.value();
-                if (choicesFromMemberName == null) {
-                    return false;
-                }
+                if (choicesFromMemberName == null)
+					return false;
                 var memberNameLowerCase = choicesFromMemberName.toLowerCase();
                 return Objects.equals(memberId, memberNameLowerCase);
             }

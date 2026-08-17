@@ -132,7 +132,8 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     /**
      * Output: all the objects created by this fixture.
      */
-    @Getter
+    @SuppressWarnings("rawtypes")
+	@Getter
     private final List objects = new ArrayList();
 
     /**

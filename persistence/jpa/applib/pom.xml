@@ -59,7 +59,6 @@
             <!-- provides EntityScan annotation-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-persistence</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
 
         <dependency>
@@ -94,7 +93,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.6.1</version>
                         <executions>
                             <execution>
                                 <id>add-source</id>

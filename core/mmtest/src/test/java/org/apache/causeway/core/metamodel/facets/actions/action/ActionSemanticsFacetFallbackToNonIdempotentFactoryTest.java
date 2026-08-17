@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -30,6 +26,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
 extends FacetFactoryTestAbstract {
@@ -62,7 +61,7 @@ extends FacetFactoryTestAbstract {
             //when
             processSemantics(facetFactory, processMethodContext);
             //then
-            var facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            var facet = facetedMethod.lookupFacet(ActionSemanticsFacet.class).orElse(null);
             assertNotNull(facet);
             assertEquals(SemanticsOf.NON_IDEMPOTENT, facet.value());
 

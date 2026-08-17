@@ -27,11 +27,6 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.context.annotation.Import;
-
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -54,14 +49,16 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.springframework.context.annotation.Import;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 
 /**
@@ -341,9 +338,8 @@ public class FixtureScripts {
     }
     @MemberSupport public String default0RunFixtureScript() {
         var defaultFixtureScript = defaultFromFixtureScriptsSpecification();
-        if(defaultFixtureScript != null) {
-            return defaultFixtureScript;
-        }
+        if(defaultFixtureScript != null)
+			return defaultFixtureScript;
         var choices = choices0RunFixtureScript();
         return choices.size() == 1
                 ? choices.iterator().next()
@@ -388,13 +384,11 @@ public class FixtureScripts {
     public Object recreateObjectsAndReturnFirst() {
         var recreateScriptClass =  getSpecification().getRecreateScriptClass();
         var recreateScript = findFixtureScriptNameFor(recreateScriptClass);
-        if(recreateScript == null) {
-            return null;
-        }
+        if(recreateScript == null)
+			return null;
         final List<FixtureResult> results = runScript(recreateScript, null);
-        if(results.isEmpty()) {
-            return null;
-        }
+        if(results.isEmpty())
+			return null;
         return results.get(0).getObject();
     }
     @MemberSupport public boolean hideRecreateObjectsAndReturnFirst() {
@@ -579,9 +573,8 @@ public class FixtureScripts {
     protected String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
         var fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
         for (final Map.Entry<String,FixtureScript> fs : fixtureScripts) {
-            if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass())) {
-                return fs.getKey();
-            }
+            if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass()))
+				return fs.getKey();
         }
         return null;
     }
@@ -606,23 +599,20 @@ public class FixtureScripts {
 
     @Programmatic
     FixtureResult newFixtureResult(final FixtureScript script, final String subkey, final Object object, final boolean firstTime) {
-        if(object == null) {
-            return null;
-        }
+        if(object == null)
+			return null;
 
         if (object instanceof ViewModel
                 || repositoryService.getEntityState(object).isAttachedOrRemoved()) {
             // continue
         } else {
-            switch(getNonPersistedObjectsStrategy()) {
-            case PERSIST:
-                transactionService.flushTransaction();
-                break;
-            case IGNORE:
-                return null;
-            default:
-                throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
-            }
+            switch (getNonPersistedObjectsStrategy()) {
+			case PERSIST -> transactionService.flushTransaction();
+			case IGNORE -> {
+				return null;
+			}
+			default -> throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
+			}
         }
         final FixtureResult fixtureResult = serviceInjector.injectServicesInto(
                                                                 new FixtureResult());
@@ -643,9 +633,8 @@ public class FixtureScripts {
 
     private static FixtureScript toSingleScript(final FixtureScript[] fixtureScriptList) {
 
-        if (fixtureScriptList.length == 1) {
-            return fixtureScriptList[0];
-        }
+        if (fixtureScriptList.length == 1)
+			return fixtureScriptList[0];
 
         return new FixtureScript() {
             @Override

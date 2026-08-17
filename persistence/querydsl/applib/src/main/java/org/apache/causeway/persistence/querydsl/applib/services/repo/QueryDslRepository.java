@@ -29,7 +29,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
+import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
+import org.jspecify.annotations.Nullable;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.NonUniqueResultException;
@@ -40,13 +44,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.EntityPathBase;
 
-import org.jspecify.annotations.Nullable;
-
-import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
-import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
-
+import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -63,6 +61,7 @@ import lombok.experimental.SuperBuilder;
  * @param <T> is the entity type
  * @param <Q> is the Q type of the entity
  */
+@SuppressWarnings("rawtypes")
 @SuperBuilder
 @NoArgsConstructor
 public abstract class QueryDslRepository<T extends Comparable, Q extends EntityPathBase<T>> {
@@ -111,11 +110,13 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @see #findAnyUsingDefaultOrder(Function...)
      * @see #findFieldsDistinctUsingDefaultOrder(Function, Function...)
      */
-    protected Function<Q, List<OrderSpecifier<? extends Comparable>>> getDefaultOrders() {
+    @SuppressWarnings("unchecked")
+	protected Function<Q, List<OrderSpecifier<? extends Comparable>>> getDefaultOrders() {
         return entity -> newList(ID_ORDER_SPECIFIER);
     }
 
-    private Function<Q, OrderSpecifier<?>>[] getDefaultOrdersAsArray() {
+    @SuppressWarnings("unchecked")
+	private Function<Q, OrderSpecifier<?>>[] getDefaultOrdersAsArray() {
         return getDefaultOrders().apply(getEntityPath())
                 .stream()
                 .map(orderSpecifier -> (Function<Q, OrderSpecifier<?>>) q -> orderSpecifier)
@@ -123,7 +124,8 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
                 .toArray(new Function[]{});
     }
 
-    private OrderSpecifier<? extends Comparable>[] getDefaultOrdersUnwrapped() {
+    @SuppressWarnings("unchecked")
+	private OrderSpecifier<? extends Comparable>[] getDefaultOrdersUnwrapped() {
         try {
             var defaultOrdersFunc = getDefaultOrders();
             var defaultOrders = defaultOrdersFunc.apply(entity());
@@ -192,9 +194,8 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
 
     private Q getEntityPathInstance() {
         Class<Q> qClass = getTypeParameter(getClass(), 1);
-        if (qClass == null) {
-            throw new RecoverableException("Could not find Q type for this entity");
-        }
+        if (qClass == null)
+			throw new RecoverableException("Could not find Q type for this entity");
         try {
             String alias = "e";
             if (getEntityClass() != null) {
@@ -216,7 +217,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      *
      * @see #findAllUsingDefaultOrder()
      */
-    public List<T> findAll(final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+    public List<T> findAll(@SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return queryDslSupport
                 .selectFrom(getEntityPath())
                 .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
@@ -249,7 +250,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @throws NonUniqueResultException if there is more than one matching result
      */
     public Optional<T> findUnique(
-            final Function<Q, Predicate>... predicates
+            @SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates
     ) throws NonUniqueResultException {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
@@ -268,7 +269,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      */
     public Optional<T> findAny(
             final @Nullable Function<Q, Predicate>[] predicates,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
@@ -289,7 +290,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      */
     public Optional<T> findAny(
             final Function<Q, Predicate> predicate,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return findAny(asArray(predicate), orderSpecifiers);
     }
@@ -310,7 +311,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @see #findAny(Function, Function[])
      * @see #getDefaultOrdersUnwrapped()
      */
-    public Optional<T> findAnyUsingDefaultOrder(final Function<Q, Predicate>... predicates) {
+    public Optional<T> findAnyUsingDefaultOrder(@SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates) {
         return findAny(predicates, getDefaultOrdersAsArray());
     }
 
@@ -328,7 +329,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      */
     public Optional<T> findFirst(
             final @Nullable Function<Q, Predicate>[] predicates,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
@@ -351,7 +352,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      */
     public Optional<T> findFirst(
             final Function<Q, Predicate> predicate,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return findFirst(asArray(predicate), orderSpecifiers);
     }
 
@@ -367,7 +368,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #findFirst(Function, Function[])
      */
     public Optional<T> findFirstUsingDefaultOrder(
-            final Function<Q, Predicate>... predicates) {
+            @SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates) {
         return findFirst(predicates, getDefaultOrdersAsArray());
     }
 
@@ -392,7 +393,7 @@ s     * @see #findFirst(Function[], Function[])
     public <F> List<F> findFieldsDistinct(
             final Function<Q, Expression<F>> projection,
             final @Nullable Function<Q, Predicate>[] predicates,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return queryDslSupport
                 .select(projection.apply(getEntityPath()))
                 .distinct()
@@ -423,7 +424,7 @@ s     * @see #findFirst(Function[], Function[])
     public <F> List<F> findFieldsDistinct(
             final Function<Q, Expression<F>> projection,
             final @Nullable Function<Q, Predicate> predicate,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return findFieldsDistinct(projection, asArray(predicate), orderSpecifiers);
     }
 
@@ -450,7 +451,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> List<F> findFieldsDistinctUsingDefaultOrder(
             final Function<Q, Expression<F>> projection,
-            final @Nullable Function<Q, Predicate>... predicates
+            @SuppressWarnings("unchecked") final @Nullable Function<Q, Predicate>... predicates
     ) {
         return queryDslSupport
                 .select(projection.apply(getEntityPath()))
@@ -480,7 +481,7 @@ s     * @see #findFirst(Function[], Function[])
     public <F> Optional<F> findFirstFields(
             final Function<Q, Expression<F>> projection,
             final @Nullable Function<Q, Predicate>[] predicates,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
                 .select(projection.apply(getEntityPath()))
@@ -510,7 +511,7 @@ s     * @see #findFirst(Function[], Function[])
     public <F> Optional<F> findFirstFields(
             final Function<Q, Expression<F>> projection,
             final @Nullable Function<Q, Predicate> predicate,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return findFirstFields(projection, asArray(predicate), orderSpecifiers);
     }
@@ -537,7 +538,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> Optional<F> findFirstFieldsUsingDefaultOrder(
             final Function<Q, Expression<F>> projection,
-            final @Nullable Function<Q, Predicate>... predicates
+            @SuppressWarnings("unchecked") final @Nullable Function<Q, Predicate>... predicates
     ) {
         return findFirstFields(projection, predicates, getDefaultOrdersAsArray());
     }
@@ -552,7 +553,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> Optional<F> findUniqueFields(
             final Function<Q, Expression<F>> projection,
-            final Function<Q, Predicate>... predicates
+            @SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates
     ) throws NonUniqueResultException {
         return Optional.ofNullable(queryDslSupport
                 .select(projection.apply(getEntityPath()))
@@ -574,7 +575,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public List<T> find(
             final @Nullable Function<Q, Predicate>[] predicates,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return queryDslSupport
                 .selectFrom(getEntityPath())
@@ -596,7 +597,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public List<T> find(
             final @Nullable Function<Q, Predicate> predicate,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+            @SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return find(asArray(predicate), orderSpecifiers);
     }
@@ -616,7 +617,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #find(Function[], Function[])
      * @see #find(Function, Function[])
      */
-    public List<T> findUsingDefaultOrder(final Function<Q, Predicate>... predicates) {
+    public List<T> findUsingDefaultOrder(@SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates) {
         return find(predicates, getDefaultOrdersAsArray());
     }
 
@@ -633,7 +634,8 @@ s     * @see #findFirst(Function[], Function[])
      *
      * @see #findAsBean(Function, Function, Class, Function[])
      */
-    public <B> List<B> findAsBean(
+    @SuppressWarnings("unchecked")
+	public <B> List<B> findAsBean(
             final Function<Q, Expression<?>>[] projections,
             final Class<? extends B> bean,
             final @Nullable Function<Q, Predicate>[] predicates,
@@ -658,11 +660,12 @@ s     * @see #findFirst(Function[], Function[])
      * @param <B>               the bean type
      * @return the information defined by the projections as ordered beans
      */
-    public <B> List<B> findAsBean(
+    @SuppressWarnings("unchecked")
+	public <B> List<B> findAsBean(
             final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>> orderSpecifier,
             final Class<? extends B> bean,
-            final Function<Q, Expression<?>>... projections) {
+            @SuppressWarnings("unchecked") final Function<Q, Expression<?>>... projections) {
         return (List<B>) queryDslSupport
                 .from(getEntityPath())
                 .projection(Projections.bean(bean, unwrapProjections(projections)))
@@ -679,37 +682,35 @@ s     * @see #findFirst(Function[], Function[])
 //                .toArray(new Expression[0]));
 //    }
 
-    private Expression<?>[] unwrapProjections(final Function<Q, Expression<?>>... projections) {
+    private Expression<?>[] unwrapProjections(@SuppressWarnings("unchecked") final Function<Q, Expression<?>>... projections) {
         return Arrays.stream(projections)
                 .map(x -> x.apply(getEntityPath()))
                 .collect(Collectors.toUnmodifiableList())
                 .toArray(new Expression[0]);
     }
 
-    private Predicate[] unwrapPredicates(final Function<Q, Predicate>... predicates) {
-        if(predicates == null) {
-            return new Predicate[]{new BooleanBuilder()};
-        }
-        if(predicates.length == 0) {
-            return new Predicate[]{new BooleanBuilder()};
-        }
-        if(predicates.length == 1 && predicates[0] == null) {
-            return new Predicate[]{new BooleanBuilder()};
-        }
+    private Predicate[] unwrapPredicates(@SuppressWarnings("unchecked") final Function<Q, Predicate>... predicates) {
+        if(predicates == null)
+			return new Predicate[]{new BooleanBuilder()};
+        if(predicates.length == 0)
+			return new Predicate[]{new BooleanBuilder()};
+        if(predicates.length == 1 && predicates[0] == null)
+			return new Predicate[]{new BooleanBuilder()};
         return Arrays.stream(predicates)
                 .map(x -> x.apply(getEntityPath()))
                 .collect(Collectors.toUnmodifiableList())
                 .toArray(new Predicate[0]);
     }
 
-    private OrderSpecifier<?>[] unwrapOrderSpecifiers(final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+    private OrderSpecifier<?>[] unwrapOrderSpecifiers(@SuppressWarnings("unchecked") final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return Arrays.stream(orderSpecifiers)
                 .map(x -> x.apply(getEntityPath()))
                 .collect(Collectors.toUnmodifiableList())
                 .toArray(new OrderSpecifier[0]);
     }
 
-    private static <T> Class<T> getTypeParameter(final Class<?> parameterizedType, final int index){
+    @SuppressWarnings("unchecked")
+	private static <T> Class<T> getTypeParameter(final Class<?> parameterizedType, final int index){
         if(parameterizedType==null) return null;
 
         ParameterizedType pType= (ParameterizedType) parameterizedType.getGenericSuperclass();
@@ -721,17 +722,18 @@ s     * @see #findFirst(Function[], Function[])
         return (Class<T>) types[index];
     }
 
-    private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(final Function<Q, Predicate> predicate) {
+    @SuppressWarnings("unchecked")
+	private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(final Function<Q, Predicate> predicate) {
         return predicate != null
                 ? (Function<Q, Predicate>[]) new Function[] {predicate}
                 : new Function[0];
     }
 
-    static <T> List<T> newList(final T... objs) {
+    static <T> List<T> newList(@SuppressWarnings("unchecked") final T... objs) {
         return newArrayList(objs);
     }
 
-    static <T> ArrayList<T> newArrayList(final T... objs) {
+    static <T> ArrayList<T> newArrayList(@SuppressWarnings("unchecked") final T... objs) {
         ArrayList<T> result = new ArrayList<>();
         Collections.addAll(result, objs);
         return result;

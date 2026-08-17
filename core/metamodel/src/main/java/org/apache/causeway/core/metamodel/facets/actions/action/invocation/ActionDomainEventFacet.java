@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
 import org.jspecify.annotations.NonNull;
 
 public class ActionDomainEventFacet
@@ -81,7 +80,8 @@ implements
                 .orElseGet(()->{
 
                     var typeFromDomainObject = typeSpec
-                            .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                            .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+                            .orElse(null);
 
                     return typeFromDomainObject != null
                             ? new ActionDomainEventFacet(
@@ -168,9 +168,8 @@ implements
                         Can.empty(),
                         // result pojo n/a
                         null);
-        if (event != null && event.isHidden()) {
-            return "Hidden by subscriber";
-        }
+        if (event != null && event.isHidden())
+			return "Hidden by subscriber";
         return null;
     }
 
@@ -182,7 +181,7 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
-                        actionFrom(ic), 
+                        actionFrom(ic),
                         facetHolder(),
                         ic.head(),
                         // corresponds to programming model 'disablePlaceOrder()',
@@ -213,15 +212,14 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
-                        actionFrom(ic), 
+                        actionFrom(ic),
                         facetHolder(),
                         ic.head(), aic.args(),
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
+            if(reasonTranslatable != null)
+				return reasonTranslatable.translate(translationService, translationContext);
             return event.getInvalidityReason();
         }
 
@@ -231,10 +229,9 @@ implements
     // -- HELPER
 
     private static ObjectAction actionFrom(final InteractionContext ic) {
-        if(!(ic instanceof ActionInteractionContext)) {
-            throw new IllegalStateException(
+        if(!(ic instanceof ActionInteractionContext))
+			throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
-        }
         return ((ActionInteractionContext) ic).objectAction();
     }
 

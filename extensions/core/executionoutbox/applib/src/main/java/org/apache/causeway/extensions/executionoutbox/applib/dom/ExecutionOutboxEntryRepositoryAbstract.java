@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.query.Query;
@@ -40,6 +37,8 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import lombok.Getter;
 
 /**
@@ -87,7 +86,8 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         this.factoryService = factoryService;
     }
 
-    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public E createEntryAndPersist(final Execution execution) {
         E e = factoryService.detachedEntity(executionOutboxEntryClass);
         e.init(execution);
@@ -172,9 +172,8 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         if(outboxEventIfAny.isPresent()) {
             repositoryService().removeAndFlush(outboxEventIfAny.get());
             return true;
-        } else {
-            return false;
-        }
+        } else
+			return false;
     }
 
     private void persist(final E commandLogEntry) {
@@ -190,9 +189,8 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
      */
     @Override
     public List<ExecutionOutboxEntry> findAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot removeAll in production systems");
         return _Casts.uncheckedCast(repositoryService().allInstances(executionOutboxEntryClass));
     }
 
@@ -201,9 +199,8 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot removeAll in production systems");
         repositoryService().removeAll(executionOutboxEntryClass);
     }
 

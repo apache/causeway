@@ -19,26 +19,21 @@
  */
 package org.apache.causeway.persistence.querydsl.integration.services;
 
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
 import org.apache.causeway.persistence.querydsl.applib.services.auto.AutoCompleteGeneratedQueryService;
-
 import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteUsingQueryDslFacet;
-
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
+
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
 @Service
 @NoArgsConstructor
@@ -52,13 +47,13 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param searchPhrase wildcard will ALWAYS be added when absent
      * @param <T>
      */
-    public <T> List<T> autoComplete(Class<T> cls, String searchPhrase){
+    @Override
+	public <T> List<T> autoComplete(final Class<T> cls, final String searchPhrase){
         // Call generated autoComplete
         AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
-        if(facet!=null){
-            return facet.autoComplete(searchPhrase);
-        }
-        return newList();
+        if(facet!=null)
+			return facet.autoComplete(searchPhrase);
+        return new ArrayList<>();
     }
 
     /**
@@ -68,13 +63,13 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param additionalExpression
      * @param <T>
      */
-    public <T> List<T> autoComplete(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){
+    @Override
+	public <T> List<T> autoComplete(final Class<T> cls, final String searchPhrase, final Function<PathBuilder<T>, Predicate> additionalExpression){
         // Call generated autoComplete
         AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
-        if(facet!=null){
-            return facet.autoComplete(searchPhrase, additionalExpression);
-        }
-        return newList();
+        if(facet!=null)
+			return facet.autoComplete(searchPhrase, additionalExpression);
+        return new ArrayList<>();
     }
 
     /**
@@ -83,13 +78,13 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param searchPhrase wildcard will NEVER be added when absent
      * @param <T>
      */
-    public <T> List<T> executeQuery(Class<T> cls, String searchPhrase){
+    @Override
+	public <T> List<T> executeQuery(final Class<T> cls, final String searchPhrase){
         // Call generated autoComplete
         AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
-        if(facet!=null){
-            return facet.executeQuery(searchPhrase);
-        }
-        return newList();
+        if(facet!=null)
+			return facet.executeQuery(searchPhrase);
+        return new ArrayList<>();
     }
 
     /**
@@ -99,32 +94,20 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param additionalExpression
      * @param <T>
      */
-    public <T> List<T> executeQuery(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){
+    @Override
+	public <T> List<T> executeQuery(final Class<T> cls, final String searchPhrase, final Function<PathBuilder<T>, Predicate> additionalExpression){
         // Call generated autoComplete
         AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
-        if(facet!=null){
-            return facet.executeQuery(searchPhrase, additionalExpression);
-        }
-        return newList();
+        if(facet!=null)
+			return facet.executeQuery(searchPhrase, additionalExpression);
+        return new ArrayList<>();
     }
 
-    private <T> AutoCompleteUsingQueryDslFacet getFacet(Class<T> cls) {
-        AutoCompleteFacet facet = specificationLoader.loadSpecification(cls)
-                .getFacet(AutoCompleteFacet.class);
-        if(facet instanceof AutoCompleteUsingQueryDslFacet){
-            return (AutoCompleteUsingQueryDslFacet)facet;
-        }
+    private <T> AutoCompleteUsingQueryDslFacet getFacet(final Class<T> cls) {
+        AutoCompleteFacet facet = specificationLoader.loadSpecification(cls).lookupFacet(AutoCompleteFacet.class).orElse(null);
+        if(facet instanceof AutoCompleteUsingQueryDslFacet)
+			return (AutoCompleteUsingQueryDslFacet)facet;
         return null;
-    }
-
-    private static <T> List<T> newList(T... objs) {
-        return newArrayList(objs);
-    }
-
-    static <T> ArrayList<T> newArrayList(T... objs) {
-        ArrayList<T> result = new ArrayList();
-        Collections.addAll(result, objs);
-        return result;
     }
 
 }

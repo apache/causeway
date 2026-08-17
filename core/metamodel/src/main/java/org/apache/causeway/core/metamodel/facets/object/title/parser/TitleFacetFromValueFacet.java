@@ -46,6 +46,7 @@ implements TitleFacet {
         this.valueFacet = valueFacet;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public String title(final TitleRenderRequest renderRequest) {
         if (renderRequest == null) return null;
@@ -71,7 +72,7 @@ implements TitleFacet {
             case COLLECTION:
             case ACTION_PARAMETER_SINGULAR:
             case ACTION_PARAMETER_PLURAL: {
-                final Renderer renderer = valueFacet
+				final Renderer renderer = valueFacet
                         .selectRendererForParamOrPropOrCollOrElseFallback(feature);
                 return renderer
                         .titlePresentation(valueFacet

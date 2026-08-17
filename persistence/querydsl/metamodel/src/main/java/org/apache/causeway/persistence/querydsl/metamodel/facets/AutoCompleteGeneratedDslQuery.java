@@ -22,15 +22,9 @@ package org.apache.causeway.persistence.querydsl.metamodel.facets;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.PathBuilder;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
@@ -40,11 +34,17 @@ import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDsl
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;
 import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
 import org.apache.causeway.persistence.querydsl.applib.util.Wildcards;
+import org.jspecify.annotations.NonNull;
+import org.springframework.util.StringUtils;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 /**
  * Dynamically generate an auto complete query on runtime using Query DSL.
@@ -128,24 +128,23 @@ public class AutoCompleteGeneratedDslQuery {
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
         var dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
-        return dslQueryIfAny.map(query -> query.fetch()).orElse(newList());
+        return dslQueryIfAny.map(DslQuery::fetch).orElseGet(ArrayList::new);
     }
 
     public <T> Optional<DslQuery> generateQuery(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
 
-        if (searchableProperties.isEmpty()) {
-            // not expected
+        if (searchableProperties.isEmpty())
+			// not expected
             throw new RecoverableException("At least one searchable property should be specified");
-        }
 
-        if (isNotEmpty(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
+        if (StringUtils.hasLength(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
 
             // define entity
             PathBuilder<T> entityPath = new PathBuilder(entity, "e");
             BooleanBuilder where = new BooleanBuilder();
-            List<OrderSpecifier<String>> orderSpecifiers = newList();
+            List<OrderSpecifier<String>> orderSpecifiers = new ArrayList<>();
 
             // Build where and order clause
             searchableProperties.forEach(se -> {
@@ -176,24 +175,6 @@ public class AutoCompleteGeneratedDslQuery {
             return Optional.of(dslQuery);
         }
         return Optional.empty();
-    }
-
-    static <T> List<T> newList(final T... objs) {
-        return newArrayList(objs);
-    }
-
-    static <T> ArrayList<T> newArrayList(final T... objs) {
-        ArrayList<T> result = new ArrayList();
-        Collections.addAll(result, objs);
-        return result;
-    }
-
-    static boolean isNotEmpty(final CharSequence cs) {
-        return !isEmpty(cs);
-    }
-
-    static boolean isEmpty(final CharSequence cs) {
-        return cs == null || cs.length() == 0;
     }
 
 }

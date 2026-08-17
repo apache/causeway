@@ -104,7 +104,7 @@ extends MetaModelPostProcessorAbstract {
     private void installMixeeSpecificActionInvocationFacet(
             final ObjectAction objectAction,
             final ActionDomainEventFacet mixeeSpecificActionDomainEventFacet) {
-        var actionInvocationFacet = objectAction.getFacet(ActionInvocationFacet.class);
+        var actionInvocationFacet = objectAction.lookupFacet(ActionInvocationFacet.class).orElse(null);
         if (!(actionInvocationFacet instanceof ActionInvocationFacetForAction actionInvocationFacetForAction))
 			return;
         objectAction.addFacet(ActionInvocationFacetForAction.createObjectTypeSpecific(

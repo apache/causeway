@@ -178,7 +178,7 @@ public class DomainMemberDefault implements DomainMember {
             var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
-                final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
+                final ActionParameterChoicesFacet facet = param.lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
             return interpretations.isEmpty()
@@ -197,7 +197,7 @@ public class DomainMemberDefault implements DomainMember {
             var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
-                final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
+                final ActionParameterAutoCompleteFacet facet = param.lookupFacet(ActionParameterAutoCompleteFacet.class).orElse(null);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
             return interpretations.stream().collect(Collectors.joining(";"));
@@ -214,7 +214,7 @@ public class DomainMemberDefault implements DomainMember {
             var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
-                final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
+                final ActionParameterDefaultsFacet facet = param.lookupFacet(ActionParameterDefaultsFacet.class).orElse(null);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
             return !interpretations.isEmpty()
@@ -243,7 +243,7 @@ public class DomainMemberDefault implements DomainMember {
     // -- HELPER
 
     private String interpretRowAndFacet(final Class<? extends Facet> facetClass) {
-        final Facet facet = member.getFacet(facetClass);
+        final Facet facet = member.lookupFacet(facetClass).orElse(null);
         return interpretFacet(facet);
     }
 
@@ -254,7 +254,7 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     private String interpret(final Class<? extends Facet> cls) {
-        return interpretFacet(member.getFacet(cls));
+        return interpretFacet(member.lookupFacet(cls).orElse(null));
     }
 
     private static String interpretFacet(final Facet facet) {

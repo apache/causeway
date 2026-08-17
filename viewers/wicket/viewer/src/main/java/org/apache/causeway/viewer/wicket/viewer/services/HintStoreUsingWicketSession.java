@@ -22,24 +22,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.inject.Named;
-
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
-
 import org.apache.wicket.Session;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.hint.HintStore;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
-
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 /**

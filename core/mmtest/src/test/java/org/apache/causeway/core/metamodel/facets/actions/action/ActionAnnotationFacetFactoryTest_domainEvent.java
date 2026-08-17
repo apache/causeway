@@ -18,8 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import org.junit.jupiter.api.Test;
-
+import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,8 +38,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
-
-import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
+import org.junit.jupiter.api.Test;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,12 +56,12 @@ extends ActionAnnotationFacetFactoryTest {
             final EventTypeOrigin eventTypeOrigin,
             final Class<? extends ActionDomainEvent<?>> eventType) {
 
-        var domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+        var domainEventFacet = facetedMethod.lookupFacet(ActionDomainEventFacet.class).orElse(null);
         assertNotNull(domainEventFacet);
         assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
         assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
 
-        var invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+        var invocationFacet = facetedMethod.lookupFacet(ActionInvocationFacet.class).orElse(null);
         assertNotNull(invocationFacet);
         assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
         var invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
@@ -80,12 +78,12 @@ extends ActionAnnotationFacetFactoryTest {
             final EventTypeOrigin eventTypeOrigin,
             final Class<? extends ActionDomainEvent<?>> eventType) {
 
-        var domainEventFacet = mixedInAct.getFacet(ActionDomainEventFacet.class);
+        var domainEventFacet = mixedInAct.lookupFacet(ActionDomainEventFacet.class).orElse(null);
         assertNotNull(domainEventFacet);
         assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
         assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
 
-        var invocationFacet = mixedInAct.getFacet(ActionInvocationFacet.class);
+        var invocationFacet = mixedInAct.lookupFacet(ActionInvocationFacet.class).orElse(null);
         assertNotNull(invocationFacet);
         assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
         var invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;

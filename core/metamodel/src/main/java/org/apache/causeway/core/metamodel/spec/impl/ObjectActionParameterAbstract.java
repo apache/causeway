@@ -178,8 +178,7 @@ implements
 
     @Override
     public boolean hasAutoComplete() {
-        var actionParameterAutoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
-        return actionParameterAutoCompleteFacet != null;
+        return containsFacet(ActionParameterAutoCompleteFacet.class);
     }
 
     @Override
@@ -188,7 +187,7 @@ implements
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
+        var autoCompleteFacet = lookupFacet(ActionParameterAutoCompleteFacet.class).orElse(null);
         if (autoCompleteFacet == null)
 			return Can.empty();
 
@@ -207,7 +206,7 @@ implements
 
     @Override
     public int getAutoCompleteMinLength() {
-        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+        final ActionParameterAutoCompleteFacet facet = lookupFacet(ActionParameterAutoCompleteFacet.class).orElse(null);
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
@@ -215,8 +214,7 @@ implements
 
     @Override
     public boolean hasChoices() {
-        var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-        return choicesFacet != null;
+        return containsFacet(ActionParameterChoicesFacet.class);
     }
 
     @Override
@@ -225,7 +223,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var paramSpec = getElementType();
-        var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        var choicesFacet = lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
         if (choicesFacet == null)
 			return Can.empty();
 

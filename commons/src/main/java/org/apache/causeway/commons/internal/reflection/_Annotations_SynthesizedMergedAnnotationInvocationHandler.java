@@ -28,20 +28,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+//import org.springframework.core.annotation.SynthesizedAnnotation;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.annotation.AnnotationConfigurationException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
-//import org.springframework.core.annotation.SynthesizedAnnotation;
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * {@link InvocationHandler} for an {@link Annotation} that Spring has
@@ -87,21 +84,16 @@ implements InvocationHandler {
 
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) {
-        if (ReflectionUtils.isEqualsMethod(method)) {
-            return annotationEquals(args[0]);
-        }
-        if (ReflectionUtils.isHashCodeMethod(method)) {
-            return annotationHashCode();
-        }
-        if (ReflectionUtils.isToStringMethod(method)) {
-            return this.mergedAnnotations.toString();
-        }
-        if (isAnnotationTypeMethod(method)) {
-            return this.type;
-        }
-        if (this.attributes.indexOf(method.getName()) != -1) {
-            return getAttributeValue(method);
-        }
+        if (ReflectionUtils.isEqualsMethod(method))
+			return annotationEquals(args[0]);
+        if (ReflectionUtils.isHashCodeMethod(method))
+			return annotationHashCode();
+        if (ReflectionUtils.isToStringMethod(method))
+			return this.mergedAnnotations.toString();
+        if (isAnnotationTypeMethod(method))
+			return this.type;
+        if (this.attributes.indexOf(method.getName()) != -1)
+			return getAttributeValue(method);
         throw new AnnotationConfigurationException(String.format(
                 "Method [%s] is unsupported for synthesized annotation type [%s]", method, this.type));
     }
@@ -115,19 +107,16 @@ implements InvocationHandler {
      * @param other the other object to compare against
      */
     private boolean annotationEquals(final Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!this.type.isInstance(other)) {
-            return false;
-        }
+        if (this == other)
+			return true;
+        if (!this.type.isInstance(other))
+			return false;
         for (int i = 0; i < this.attributes.size(); i++) {
             Method attribute = this.attributes.get(i);
             Object thisValue = getAttributeValue(attribute);
             Object otherValue = ReflectionUtils.invokeMethod(attribute, other);
-            if (!ObjectUtils.nullSafeEquals(thisValue, otherValue)) {
-                return false;
-            }
+            if (!ObjectUtils.nullSafeEquals(thisValue, otherValue))
+				return false;
         }
         return true;
     }
@@ -155,38 +144,28 @@ implements InvocationHandler {
     }
 
     private int getValueHashCode(final @Nullable Object value) {
-        if(value==null) {
-            return 0;
-        }
+        if(value==null)
+			return 0;
         // Use Arrays.hashCode since ObjectUtils doesn't comply to to
         // Annotation#hashCode()
-        if (value instanceof boolean[]) {
-            return Arrays.hashCode((boolean[]) value);
-        }
-        if (value instanceof byte[]) {
-            return Arrays.hashCode((byte[]) value);
-        }
-        if (value instanceof char[]) {
-            return Arrays.hashCode((char[]) value);
-        }
-        if (value instanceof double[]) {
-            return Arrays.hashCode((double[]) value);
-        }
-        if (value instanceof float[]) {
-            return Arrays.hashCode((float[]) value);
-        }
-        if (value instanceof int[]) {
-            return Arrays.hashCode((int[]) value);
-        }
-        if (value instanceof long[]) {
-            return Arrays.hashCode((long[]) value);
-        }
-        if (value instanceof short[]) {
-            return Arrays.hashCode((short[]) value);
-        }
-        if (value instanceof Object[]) {
-            return Arrays.hashCode((Object[]) value);
-        }
+        if (value instanceof boolean[])
+			return Arrays.hashCode((boolean[]) value);
+        if (value instanceof byte[])
+			return Arrays.hashCode((byte[]) value);
+        if (value instanceof char[])
+			return Arrays.hashCode((char[]) value);
+        if (value instanceof double[])
+			return Arrays.hashCode((double[]) value);
+        if (value instanceof float[])
+			return Arrays.hashCode((float[]) value);
+        if (value instanceof int[])
+			return Arrays.hashCode((int[]) value);
+        if (value instanceof long[])
+			return Arrays.hashCode((long[]) value);
+        if (value instanceof short[])
+			return Arrays.hashCode((short[]) value);
+        if (value instanceof Object[])
+			return Arrays.hashCode((Object[]) value);
         return value.hashCode();
     }
 
@@ -221,10 +200,9 @@ implements InvocationHandler {
                 .orElse(false);
 
         if(!hasCollected
-                && !hasAdditional) {
-            // annotation is neither present on getter nor field
+                && !hasAdditional)
+			// annotation is neither present on getter nor field
             return Optional.empty();
-        }
 
         var invocationHandler = hasCollected
                 ? new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(

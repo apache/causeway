@@ -160,7 +160,7 @@ public class LayoutFacetUtil {
         final HasBookmarking hasBookmarking,
         final FacetHolder facetHolder) {
 
-        var bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+        var bookmarkPolicyFacet = facetHolder.lookupFacet(BookmarkPolicyFacet.class).orElse(null);
         if(isNonFallback(bookmarkPolicyFacet)) {
             final BookmarkPolicy bookmarking = bookmarkPolicyFacet.value();
             if(bookmarking != null) {
@@ -173,7 +173,7 @@ public class LayoutFacetUtil {
         final HasCssClass hasCssClass,
         final FacetHolder facetHolder) {
 
-        var cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+        var cssClassFacet = facetHolder.lookupFacet(CssClassFacet.class).orElse(null);
         if(isNonFallback(cssClassFacet)) {
             try {
                 // try...finally because CSS class may vary by object, and we pass in only null
@@ -209,7 +209,7 @@ public class LayoutFacetUtil {
         final CollectionLayoutData collectionLayoutData,
         final FacetHolder facetHolder) {
 
-        var defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
+        var defaultViewFacet = facetHolder.lookupFacet(DefaultViewFacet.class).orElse(null);
         if(isNonFallback(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
             if(_Strings.isNotEmpty(defaultView)) {
@@ -299,7 +299,7 @@ public class LayoutFacetUtil {
         final HasHidden hasHidden,
         final FacetHolder facetHolder) {
 
-        var hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
+        var hiddenFacet = facetHolder.lookupFacet(HiddenFacet.class).orElse(null);
         if (isNonFallback(hiddenFacet)) {
             final Where where = hiddenFacet.where();
             if(where != null) {
@@ -312,7 +312,7 @@ public class LayoutFacetUtil {
         final PropertyLayoutData propertyLayoutData,
         final FacetHolder facetHolder) {
 
-        var labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
+        var labelAtFacet = facetHolder.lookupFacet(LabelAtFacet.class).orElse(null);
         if(isNonFallback(labelAtFacet)) {
             final LabelPosition labelPosition = labelAtFacet.label();
             if(labelPosition != null) {
@@ -325,7 +325,7 @@ public class LayoutFacetUtil {
         final PropertyLayoutData propertyLayoutData,
         final FacetHolder facetHolder) {
 
-        var multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
+        var multiLineFacet = facetHolder.lookupFacet(MultiLineFacet.class).orElse(null);
         if(isNonFallback(multiLineFacet)) {
             final int numberOfLines = multiLineFacet.numberOfLines();
             if(numberOfLines > 0) {
@@ -364,7 +364,7 @@ public class LayoutFacetUtil {
         final ActionLayoutData actionLayoutData,
         final FacetHolder facetHolder) {
 
-        var actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = facetHolder.lookupFacet(ActionPositionFacet.class).orElse(null);
         if(isNonFallback(actionPositionFacet)) {
             final ActionLayout.Position position = actionPositionFacet.position();
             if(position != null) {
@@ -386,7 +386,7 @@ public class LayoutFacetUtil {
         final CollectionLayoutData collectionLayoutData,
         final FacetHolder facetHolder) {
 
-        var sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
+        var sortedByFacet = facetHolder.lookupFacet(SortedByFacet.class).orElse(null);
         if(isNonFallback(sortedByFacet)) {
             final Class<? extends Comparator<?>> cls = sortedByFacet.value();
             if(cls != null
@@ -400,7 +400,7 @@ public class LayoutFacetUtil {
         final PropertyLayoutData propertyLayoutData,
         final FacetHolder facetHolder) {
 
-        var typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
+        var typicalLengthFacet = facetHolder.lookupFacet(TypicalLengthFacet.class).orElse(null);
         if(isNonFallback(typicalLengthFacet)) {
             final int typicalLength = typicalLengthFacet.value();
             if(typicalLength > 0) {

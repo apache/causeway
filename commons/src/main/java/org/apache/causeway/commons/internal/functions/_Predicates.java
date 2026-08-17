@@ -21,8 +21,6 @@ package org.apache.causeway.commons.internal.functions;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -41,7 +39,7 @@ public final class _Predicates {
      * @param operand
      * @return a Predicate that tests its argument against equality to the given {@code operand}
      */
-    public static <T> Predicate<T> equalTo(T operand) {
+    public static <T> Predicate<T> equalTo(final T operand) {
         return arg->Objects.equals(arg, operand);
     }
 
@@ -49,7 +47,7 @@ public final class _Predicates {
      * @param operand
      * @return a Predicate that tests its argument whether it is the same instance as the given {@code operand}
      */
-    public static <T> Predicate<T> sameAs(T operand) {
+    public static <T> Predicate<T> sameAs(final T operand) {
         return arg-> arg == operand;
     }
 
@@ -80,7 +78,7 @@ public final class _Predicates {
      * Negates the specified {@code predicate}. (Obsolete with Java-11)
      * @param predicate
      */
-    public static <T> Predicate<T> not(Predicate<T> predicate) {
+    public static <T> Predicate<T> not(final Predicate<T> predicate) {
         return predicate.negate();
     }
 
@@ -89,7 +87,7 @@ public final class _Predicates {
      * @return a Predicate that tests for the operand to be an instance of {@code cls}
      * @implNote equivalent to {@code Class::isInstance}
      */
-    public static Predicate<Object> instanceOf(Class<?> cls) {
+    public static Predicate<Object> instanceOf(final Class<?> cls) {
         return cls::isInstance;
     }
 

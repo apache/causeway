@@ -23,11 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
@@ -35,7 +30,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,6 +45,10 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedO
 import org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.wicket.Component;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -151,7 +149,7 @@ implements
     private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod = @__(@Override))
-    private RenderingHint renderingHint;
+    private final RenderingHint renderingHint;
 
     @Override
     public String getHint(final Component component, final String keyName) {

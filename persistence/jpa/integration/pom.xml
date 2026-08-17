@@ -63,7 +63,6 @@
             <!-- provides EntityScan annotation-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-persistence</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
 
         <dependency>

@@ -67,7 +67,7 @@ implements MetaModelRefiner {
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(isBookmarkable())
             .forEach(objectAction->{
-                var actionSemanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
+                var actionSemanticsFacet = objectAction.lookupFacet(ActionSemanticsFacet.class).orElse(null);
                 if(actionSemanticsFacet == null
                         || actionSemanticsFacet.precedence().isFallback()
                         || !actionSemanticsFacet.value().isSafeInNature()) {
@@ -87,7 +87,7 @@ implements MetaModelRefiner {
 
     private static Predicate<ObjectAction> isBookmarkable() {
         return objectAction->{
-            var bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
+            var bookmarkPolicyFacet = objectAction.lookupFacet(BookmarkPolicyFacet.class).orElse(null);
             if(bookmarkPolicyFacet == null
                     || bookmarkPolicyFacet.precedence().isFallback()
                     || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER)

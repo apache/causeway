@@ -16,9 +16,6 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.actions.layout;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -37,6 +34,8 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ActionLayoutAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -59,7 +58,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ActionPositionFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
             var actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
@@ -78,7 +77,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HiddenFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForActionLayoutAnnotation);
             var actionLayoutFacetAnnotation = (HiddenFacetForActionLayoutAnnotation) facet;
@@ -98,7 +97,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foo", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ActionPositionFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionPositionFacetFallback);
         });
@@ -115,7 +114,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            Facet facet = facetedMethod.getFacet(FaFacet.class);
+            Facet facet = facetedMethod.lookupFacet(FaFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             var classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
@@ -136,7 +135,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            Facet facet = facetedMethod.getFacet(FaFacet.class);
+            Facet facet = facetedMethod.lookupFacet(FaFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             var classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;

@@ -32,7 +32,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.RequiredArgsConstructor;
 
@@ -107,9 +106,8 @@ public class CommandManager_exportSequence {
     private static String timestampSuffix(
             final List<ReplayableCommand> exportable,
             final boolean enabled) {
-        if (!enabled || exportable.isEmpty()) {
-            return "";
-        }
+        if (!enabled || exportable.isEmpty())
+			return "";
         return exportable.get(0).getTimestampIfAny()
                 .map(timestamp -> Instant.from(timestamp).toString())
                 .map(value -> "." + value.replaceAll("[^A-Za-z0-9._-]", "_"))

@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -43,6 +41,7 @@ import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionP
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.junit.jupiter.api.Test;
 
 class ActionMethodsFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -64,7 +63,7 @@ extends FacetFactoryTestAbstract {
             facetFactory.process(processMethodContext);
 
             //then
-            final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ActionValidationFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionValidationFacetViaMethod);
             var actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
@@ -91,7 +90,7 @@ extends FacetFactoryTestAbstract {
             facetFactory.process(processMethodContext);
 
             //then
-            final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ActionValidationFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionValidationFacetViaMethod);
             var actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
@@ -118,14 +117,14 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet0 = facetedMethod.parameter(0).getFacet(ActionParameterDefaultsFacet.class);
+            final Facet facet0 = facetedMethod.parameter(0).lookupFacet(ActionParameterDefaultsFacet.class).orElse(null);
             assertNotNull(facet0);
             assertTrue(facet0 instanceof ActionParameterDefaultsFacetViaMethod);
             final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
             assertMethodEqualsFirstIn(default0Method, actionDefaultFacetViaMethod0);
             assertMethodWasRemoved(default0Method);
 
-            final Facet facet1 = facetedMethod.parameter(1).getFacet(ActionParameterDefaultsFacet.class);
+            final Facet facet1 = facetedMethod.parameter(1).lookupFacet(ActionParameterDefaultsFacet.class).orElse(null);
             assertNotNull(facet1);
             assertTrue(facet1 instanceof ActionParameterDefaultsFacetViaMethod);
             final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
@@ -154,21 +153,21 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet0 = facetedMethod.parameter(0).getFacet(ActionParameterChoicesFacet.class);
+            final Facet facet0 = facetedMethod.parameter(0).lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
             assertNotNull(facet0);
             assertTrue(facet0 instanceof ActionParameterChoicesFacetViaMethod);
             var actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
             assertMethodEqualsFirstIn(choices0Method, actionChoicesFacetViaMethod0);
             assertMethodWasRemoved(choices0Method);
 
-            final Facet facet1 = facetedMethod.parameter(1).getFacet(ActionParameterChoicesFacet.class);
+            final Facet facet1 = facetedMethod.parameter(1).lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
             assertNotNull(facet1);
             assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
             var actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
             assertMethodEqualsFirstIn(choices1Method, actionChoicesFacetViaMethod1);
             assertMethodWasRemoved(choices1Method);
 
-            final Facet facet2 = facetedMethod.parameter(2).getFacet(ActionParameterChoicesFacet.class);
+            final Facet facet2 = facetedMethod.parameter(2).lookupFacet(ActionParameterChoicesFacet.class).orElse(null);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
             var actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
@@ -193,7 +192,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet0 = facetedMethod.parameter(0).getFacet(ActionParameterAutoCompleteFacet.class);
+            final Facet facet0 = facetedMethod.parameter(0).lookupFacet(ActionParameterAutoCompleteFacet.class).orElse(null);
             assertNotNull(facet0);
             assertTrue(facet0 instanceof ActionParameterAutoCompleteFacetViaMethod);
             final ActionParameterAutoCompleteFacetViaMethod actionAutoCompleteFacetViaMethod0 = (ActionParameterAutoCompleteFacetViaMethod) facet0;

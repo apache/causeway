@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,6 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.junit.jupiter.api.Test;
 
 class ActionAnnotationFacetFactoryTest_Semantics
 extends ActionAnnotationFacetFactoryTest {
@@ -51,7 +50,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processSemantics(facetFactory, processMethodContext);
             // then
-            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            final ActionSemanticsFacet facet = facetedMethod.lookupFacet(ActionSemanticsFacet.class).orElse(null);
             assertNotNull(facet);
             assertThat(facet.value(), is(SemanticsOf.SAFE));
         });
@@ -70,7 +69,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processSemantics(facetFactory, processMethodContext);
             // then
-            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            final ActionSemanticsFacet facet = facetedMethod.lookupFacet(ActionSemanticsFacet.class).orElse(null);
             assertNotNull(facet);
             assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         });
@@ -89,7 +88,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processSemantics(facetFactory, processMethodContext);
             // then
-            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            final ActionSemanticsFacet facet = facetedMethod.lookupFacet(ActionSemanticsFacet.class).orElse(null);
             assertNotNull(facet);
             assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
         });

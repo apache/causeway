@@ -193,8 +193,8 @@ implements MixedInAction {
      * domain-event type is posted.
      */
     private boolean hasLocalActionInvocationFacet() {
-        return this.getFacet(ActionInvocationFacet.class)
-                != mixinAction.getFacet(ActionInvocationFacet.class);
+        return this.lookupFacet(ActionInvocationFacet.class).orElse(null)
+                != mixinAction.lookupFacet(ActionInvocationFacet.class).orElse(null);
     }
 
     @Override
