@@ -18,18 +18,12 @@
  */
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -46,7 +40,6 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -66,7 +59,12 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -225,7 +223,7 @@ implements MenuBarsService {
         if (menuBars == null)
             return null;
 
-        var menusWithUnreferencedActionsFlagSet = _Lists.<BSMenu>newArrayList();
+        var menusWithUnreferencedActionsFlagSet = new ArrayList<BSMenu>();
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
             if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
                 menusWithUnreferencedActionsFlagSet.add(menu);
@@ -281,7 +279,7 @@ implements MenuBarsService {
             final BSMenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
-        var serviceActions = _Lists.<ServiceAndAction>newArrayList();
+        var serviceActions = new ArrayList<ServiceAndAction>();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
         serviceAdapters.stream()
@@ -307,7 +305,7 @@ implements MenuBarsService {
             final Set<String> serviceNamesInOrder,
             final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
-        final List<BSMenu> menus = _Lists.newArrayList();
+        final List<BSMenu> menus = new ArrayList<>();
         for (String serviceName : serviceNamesInOrder) {
 
             BSMenu menu = new BSMenu(serviceName);
@@ -393,7 +391,7 @@ implements MenuBarsService {
             var serviceAdapter = serviceAction.getServiceAdapter();
 
             if(serviceActionsForName == null) {
-                serviceActionsForName = _Lists.newArrayList();
+                serviceActionsForName = new ArrayList<>();
                 serviceActionsByName.put(serviceAction.getServiceName(), serviceActionsForName);
             } else {
                 // capture whether this action is from a different service; if so, add a separator before it

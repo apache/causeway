@@ -31,11 +31,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -56,30 +55,26 @@ public final class _Lists {
     // -- LIST ACCESS
 
     public <T> T firstElementIfAny(final @Nullable List<T> list) {
-        if(_NullSafe.isEmpty(list)) {
-            return null;
-        }
+        if(_NullSafe.isEmpty(list))
+			return null;
         return list.get(0);
     }
 
     public <T> Optional<T> firstElement(final @Nullable List<T> list) {
-        if(_NullSafe.isEmpty(list)) {
-            return Optional.empty();
-        }
+        if(_NullSafe.isEmpty(list))
+			return Optional.empty();
         return Optional.ofNullable(list.get(0));
     }
 
     public <T> T lastElementIfAny(final @Nullable List<T> list) {
-        if(_NullSafe.isEmpty(list)) {
-            return null;
-        }
+        if(_NullSafe.isEmpty(list))
+			return null;
         return list.get(list.size()-1);
     }
 
     public <T> Optional<T> lastElement(final @Nullable List<T> list) {
-        if(_NullSafe.isEmpty(list)) {
-            return Optional.empty();
-        }
+        if(_NullSafe.isEmpty(list))
+			return Optional.empty();
         return Optional.ofNullable(list.get(list.size()-1));
     }
 
@@ -90,9 +85,8 @@ public final class _Lists {
      * and the specified element.
      */
     public <T> List<T> append(final @Nullable List<T> list, final @Nullable T element) {
-        if(_NullSafe.isEmpty(list)) {
-            return Collections.singletonList(element);
-        }
+        if(_NullSafe.isEmpty(list))
+			return Collections.singletonList(element);
         var resultList = new ArrayList<T>(list.size() + 1);
         resultList.addAll(list);
         resultList.add(element);
@@ -107,16 +101,14 @@ public final class _Lists {
         var isEmpty1 = _NullSafe.isEmpty(list1);
         var isEmpty2 = _NullSafe.isEmpty(list2);
 
-        if(isEmpty1) {
-            return isEmpty2
+        if(isEmpty1)
+			return isEmpty2
                     ? Collections.emptyList()
                     : Collections.unmodifiableList(new ArrayList<T>(list2));
-        }
 
-        if(isEmpty2) {
-            // at this point list1 is not empty
+        if(isEmpty2)
+			// at this point list1 is not empty
             return Collections.unmodifiableList(new ArrayList<T>(list1));
-        }
 
         var resultList = new ArrayList<T>(list1.size() + list2.size());
         resultList.addAll(list1);
@@ -230,9 +222,8 @@ public final class _Lists {
      */
     public <T> List<T> ofArray(final @Nullable T[] elements) {
         if(elements==null
-                || elements.length==0) {
-            return Collections.emptyList();
-        }
+                || elements.length==0)
+			return Collections.emptyList();
         return Collections.unmodifiableList(_NullSafe.stream(elements)
                 .collect(Collectors.toList()));
     }
@@ -243,9 +234,8 @@ public final class _Lists {
      * @return non null
      */
     public <T> List<T> unmodifiable(final @Nullable Iterable<T> iterable) {
-        if(iterable==null) {
-            return Collections.emptyList();
-        }
+        if(iterable==null)
+			return Collections.emptyList();
         return Collections.unmodifiableList(
                 _NullSafe.stream(iterable)
                 .collect(Collectors.toList()));
@@ -253,18 +243,13 @@ public final class _Lists {
 
     // -- ARRAY LIST
 
-    public <T> ArrayList<T> newArrayList() {
-        return new ArrayList<T>();
-    }
-
     public <T> ArrayList<T> newArrayList(final int initialSize) {
         return new ArrayList<T>(initialSize);
     }
 
     public <T> ArrayList<T> newArrayList(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newArrayList();
-        }
+        if(collection==null)
+			return new ArrayList<>();
         return new ArrayList<T>(collection);
     }
 
@@ -280,9 +265,8 @@ public final class _Lists {
     }
 
     public <T> LinkedList<T> newLinkedList(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newLinkedList();
-        }
+        if(collection==null)
+			return newLinkedList();
         return new LinkedList<T>(collection);
     }
 
@@ -298,9 +282,8 @@ public final class _Lists {
     }
 
     public <T> CopyOnWriteArrayList<T> newConcurrentList(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newConcurrentList();
-        }
+        if(collection==null)
+			return newConcurrentList();
         return new CopyOnWriteArrayList<T>(collection);
     }
 

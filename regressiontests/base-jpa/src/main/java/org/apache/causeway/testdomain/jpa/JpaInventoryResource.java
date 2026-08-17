@@ -18,15 +18,9 @@
  */
 package org.apache.causeway.testdomain.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.xml.bind.JAXBException;
-
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -35,12 +29,16 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
 
 @Named("testdomain.jpa.InventoryResource")
@@ -97,9 +95,8 @@ public class JpaInventoryResource {
         var servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         var httpSession = servletRequestAttributes.getRequest().getSession(false);
-        if(httpSession==null) {
-            return "no http-session";
-        }
+        if(httpSession==null)
+			return "no http-session";
         var sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
         .collect(Collectors.joining(","));
 
@@ -118,7 +115,7 @@ public class JpaInventoryResource {
             @ParameterLayout(named = "") final
             int nrOfBooks) {
 
-        var books = _Lists.<BookDto>newArrayList();
+        var books = new ArrayList<BookDto>();
 
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {

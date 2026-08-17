@@ -40,14 +40,11 @@ import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Objects;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 record Can_Singleton<T>(T element) implements Can<T> {
 
@@ -146,9 +143,8 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
-        if(predicate==null) {
-            return this; // identity
-        }
+        if(predicate==null)
+			return this; // identity
         return predicate.test(element)
                 ? this // identity
                 : Can.empty();
@@ -185,12 +181,10 @@ record Can_Singleton<T>(T element) implements Can<T> {
     @Override
     public Can<T> addAll(final @Nullable Can<T> other) {
         if(other==null
-                || other.isEmpty()) {
-            return this;
-        }
-        if(other.isCardinalityOne()) {
-            return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
-        }
+                || other.isEmpty())
+			return this;
+        if(other.isCardinalityOne())
+			return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
         var newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);
         other.forEach(newElements::add);
@@ -199,25 +193,21 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<T> add(final int index, final @Nullable T element) {
-        if(element==null) {
-            return this; // no-op
-        }
-        if(index==0) {
-            return Can.ofStream(Stream.of(element, this.element)); // insert before
-        }
-        if(index==1) {
-            return Can.ofStream(Stream.of(this.element, element)); // append
-        }
+        if(element==null)
+			return this; // no-op
+        if(index==0)
+			return Can.ofStream(Stream.of(element, this.element)); // insert before
+        if(index==1)
+			return Can.ofStream(Stream.of(this.element, element)); // append
         throw new IndexOutOfBoundsException(
                 "cannot add to singleton with index other than 0 or 1; got " + index);
     }
 
     @Override
     public Can<T> replace(final int index, final @Nullable T element) {
-        if(index!=0) {
-            throw new IndexOutOfBoundsException(
+        if(index!=0)
+			throw new IndexOutOfBoundsException(
                 "cannot replace on singleton with index other than 0; got " + index);
-        }
         return element!=null
                 ? Can.ofSingleton(element)
                 : Can.empty();
@@ -225,39 +215,34 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<T> remove(final int index) {
-        if(index==0) {
-            return Can.empty();
-        }
+        if(index==0)
+			return Can.empty();
         throw new IndexOutOfBoundsException(
                 "cannot remove from singleton with index other than 0; got " + index);
     }
 
     @Override
     public Can<T> remove(final @Nullable T element) {
-        if(this.element.equals(element)) {
-            return Can.empty();
-        }
+        if(this.element.equals(element))
+			return Can.empty();
         return this;
     }
 
     @Override
     public Can<T> pickByIndex(final @Nullable int... indices) {
         if(indices==null
-                ||indices.length==0) {
-            return Can.empty();
-        }
+                ||indices.length==0)
+			return Can.empty();
         int pickCount = 0; // actual size of the returned Can<T>
         for(int index:indices) {
             if(index==0) {
                 ++pickCount;
             }
         }
-        if(pickCount==0) {
-            return Can.empty();
-        }
-        if(pickCount==1) {
-            return this;
-        }
+        if(pickCount==0)
+			return Can.empty();
+        if(pickCount==1)
+			return this;
         var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
@@ -267,19 +252,15 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<T> pickByIndex(final @Nullable IntStream intStream) {
-        if(intStream==null) {
-            return Can.empty();
-        }
+        if(intStream==null)
+			return Can.empty();
         final long pickCountL = intStream.filter(index->index==0).count();
-        if(pickCountL==0L) {
-            return Can.empty();
-        }
-        if(pickCountL==1L) {
-            return this;
-        }
-        if(pickCountL>Integer.MAX_VALUE) {
-            throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
-        }
+        if(pickCountL==0L)
+			return Can.empty();
+        if(pickCountL==1L)
+			return this;
+        if(pickCountL>Integer.MAX_VALUE)
+			throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
         final int pickCount = (int) pickCountL;
         var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
@@ -297,9 +278,8 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<T> subCan(final int startInclusive, final int endExclusive) {
-        if (startInclusive >= endExclusive) {
-            return Can.empty();
-        }
+        if (startInclusive >= endExclusive)
+			return Can.empty();
         return (startInclusive<=0
                     && endExclusive>0)
                 ? this
@@ -308,18 +288,16 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
-        if(maxInnerSize<1) {
-            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
-        }
+        if(maxInnerSize<1)
+			throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
         // a singular always fits into a single slot
         return Can.of(this);
     }
 
     @Override
     public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
-        if(outerSizeYield<1) {
-            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
-        }
+        if(outerSizeYield<1)
+			throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
         // a singular always fits into a single slot
         return Can.of(this);
     }
@@ -345,9 +323,8 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public boolean equals(final Object obj) {
-        if(obj instanceof Can) {
-            return ((Can<?>) obj).isEqualTo(this);
-        }
+        if(obj instanceof Can)
+			return ((Can<?>) obj).isEqualTo(this);
         return false;
     }
 
@@ -362,16 +339,14 @@ record Can_Singleton<T>(T element) implements Can<T> {
         // -1 ... this (singleton) is before other
         // +1 ... this (singleton) is after other
         if(other==null
-                || other.isEmpty()) {
-            return 1; // all empty Cans are same and come first
-        }
+                || other.isEmpty())
+			return 1; // all empty Cans are same and come first
         final int firstElementComparison = _Objects.compareNonNull(
                 this.element,
                 other.getFirstElseFail());
         if(firstElementComparison!=0
-                || other.isCardinalityOne()) {
-            return firstElementComparison; // when both Cans are singletons, just compare by their contained values
-        }
+                || other.isCardinalityOne())
+			return firstElementComparison; // when both Cans are singletons, just compare by their contained values
         // at this point firstElementComparison is 0 and other is of cardinality MULTIPLE
         return -1; // singletons come before multi-cans
     }
@@ -383,7 +358,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public List<T> toArrayList() {
-        var list = _Lists.<T>newArrayList();
+        var list = new ArrayList<T>();
         list.add(element);
         return list;
     }

@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 
 public final class ValidationFailures implements Iterable<ValidationFailure> {
@@ -68,7 +67,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
      * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
      */
     public ArrayList<String> getMessages(final String messageFormat) { // <-- ensure serializable result
-        var messages = _Lists.<String>newArrayList();
+        var messages = new ArrayList<String>();
         failures.stream() // already sorted
         .map(ValidationFailure::message)
         .map(msg->String.format(messageFormat, messages.size()+1, msg))
@@ -90,9 +89,8 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     }
 
     public Optional<String> getAsLineNumberedString() {
-        if (!hasFailures()) {
-            return Optional.empty();
-        }
+        if (!hasFailures())
+			return Optional.empty();
         return Optional.of(toLineNumberedString(getMessages()));
     }
 

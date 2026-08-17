@@ -19,10 +19,9 @@
 package org.apache.causeway.applib.services.iactn;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
@@ -32,13 +31,13 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.util.schema.MemberExecutionDtoUtils;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.schema.common.v2.DifferenceDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 
@@ -109,7 +108,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
 
     // -- parent, children
 
-    private final List<Execution<?, ?>> children = _Lists.newArrayList();
+    private final List<Execution<?, ?>> children = new ArrayList<>();
 
     /**
      * The action/property that invoked this action/property edit (if any).

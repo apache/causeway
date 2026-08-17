@@ -18,16 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -38,6 +33,10 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @since 1.x {@index}
@@ -107,18 +106,16 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     protected void ensureJaxbAnnotated(final Class<?> domainType) {
-        if(!_ClassCache.getInstance().head(domainType).hasJaxbRootElementSemantics()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
-        }
+        if(!_ClassCache.getInstance().head(domainType).hasJaxbRootElementSemantics())
+			throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
     }
 
     protected void ensureDomainObjectAssignable(final String xRoDomainType, final Class<?> domainType, final Object domainObject) {
-        if(!domainType.isAssignableFrom(domainObject.getClass())) {
-            throw RestfulObjectsApplicationException.createWithMessage(
+        if(!domainType.isAssignableFrom(domainObject.getClass()))
+			throw RestfulObjectsApplicationException.createWithMessage(
                 HttpStatus.NOT_ACCEPTABLE,
                     "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')"
                 .formatted(xRoDomainType, domainObject.getClass().getName()));
-        }
     }
 
     protected boolean mediaTypeParameterMatches(
@@ -126,9 +123,8 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
             final String parameter, final String parameterValue) {
         for (MediaType mediaType : acceptableMediaTypes) {
             final String paramValue = sanitize(mediaType.getParameters().get(parameter));
-            if (Objects.equals(paramValue, parameterValue)) {
-                return true;
-            }
+            if (Objects.equals(paramValue, parameterValue))
+				return true;
         }
         return false;
     }
@@ -136,7 +132,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     protected List<String> mediaTypeParameterList(
             final List<MediaType> acceptableMediaTypes,
             final String parameter) {
-        final List<String> paramList = _Lists.newArrayList();
+        final List<String> paramList = new ArrayList<>();
         for (MediaType mediaType : acceptableMediaTypes) {
             final String paramValue = sanitize(mediaType.getParameters().get(parameter));
             _Strings.splitThenStream(paramValue, ",")

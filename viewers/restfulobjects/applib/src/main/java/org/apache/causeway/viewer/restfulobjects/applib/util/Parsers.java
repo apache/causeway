@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.applib.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -28,14 +29,12 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.springframework.http.CacheControl;
-import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
-
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -136,7 +135,7 @@ class Parsers {
     }
 
     record CacheControlParser() implements Parser<CacheControl> {
-        @Override public CacheControl valueOf(String str) {
+        @Override public CacheControl valueOf(final String str) {
             //Cache-Control: no-cache, no-store, max-age=3600
             var directives = _Strings.splitThenStream(str.toLowerCase(Locale.US), ",")
                 .map(String::trim)
@@ -162,19 +161,21 @@ class Parsers {
                     builder = builder.staleWhileRevalidate(Integer.parseInt(directive.substring("stale-while-revalidate=".length())), TimeUnit.SECONDS);
                 } else if(directive.startsWith("stale-if-error=")) {
                     builder = builder.staleIfError(Integer.parseInt(directive.substring("stale-if-error=".length())), TimeUnit.SECONDS);
-                } else switch (directive) {
-                    case "must-revalidate" -> builder = builder.mustRevalidate();
-                    case "no-transform" -> builder = builder.noTransform();
-                    case "public" -> builder = builder.cachePublic();
-                    case "private" -> builder = builder.cachePrivate();
-                    case "proxy-revalidate" -> builder = builder.proxyRevalidate();
-                    case "immutable" -> builder = builder.immutable();
-                    default -> {}
-                }
+                } else {
+					switch (directive) {
+					    case "must-revalidate" -> builder = builder.mustRevalidate();
+					    case "no-transform" -> builder = builder.noTransform();
+					    case "public" -> builder = builder.cachePublic();
+					    case "private" -> builder = builder.cachePrivate();
+					    case "proxy-revalidate" -> builder = builder.proxyRevalidate();
+					    case "immutable" -> builder = builder.immutable();
+					    default -> {}
+					}
+				}
             }
             return builder;
         }
-        @Override public String asString(CacheControl t) {
+        @Override public String asString(final CacheControl t) {
             return t.getHeaderValue();
         }
     }
@@ -191,24 +192,21 @@ class Parsers {
     record ListOfStringsParser() implements Parser<List<String>> {
         @Override public List<String> valueOf(final List<String> strings) {
             if (strings == null) return Collections.emptyList();
-            if (strings.size() == 1) {
-                // special case processing to handle comma-separated values
+            if (strings.size() == 1)
+				// special case processing to handle comma-separated values
                 return valueOf(strings.get(0));
-            }
             return strings;
         }
         @Override public List<String> valueOf(final String[] strings) {
             if (strings == null) return Collections.emptyList();
-            if (strings.length == 1) {
-                // special case processing to handle comma-separated values
+            if (strings.length == 1)
+				// special case processing to handle comma-separated values
                 return valueOf(strings[0]);
-            }
             return Arrays.asList(strings);
         }
         @Override public List<String> valueOf(final String str) {
-            if (str == null) {
-                return Collections.emptyList();
-            }
+            if (str == null)
+				return Collections.emptyList();
             return _Strings.splitThenStream(str, ",")
                     .collect(Collectors.toList());
         }
@@ -221,7 +219,7 @@ class Parsers {
     record ListOfListOfStringsParser() implements Parser<List<List<String>>> {
         @Override public List<List<String>> valueOf(final List<String> str) {
             if (str == null || str.size() == 0) return null;
-            final List<List<String>> listOfLists = _Lists.newArrayList();
+            final List<List<String>> listOfLists = new ArrayList<>();
             for (final String s : str) {
                 listOfLists.add(PathNode.split(s));
             }
@@ -247,18 +245,16 @@ class Parsers {
     record ArrayOfStringsParser() implements Parser<String[]> {
         @Override public String[] valueOf(final List<String> strings) {
             if (strings == null) return _Constants.emptyStringArray;
-            if (strings.size() == 1) {
-                // special case processing to handle comma-separated values
+            if (strings.size() == 1)
+				// special case processing to handle comma-separated values
                 return valueOf(strings.get(0));
-            }
             return strings.toArray(new String[] {});
         }
         @Override public String[] valueOf(final String[] strings) {
             if (strings == null) return _Constants.emptyStringArray;
-            if (strings.length == 1) {
-                // special case processing to handle comma-separated values
+            if (strings.length == 1)
+				// special case processing to handle comma-separated values
                 return valueOf(strings[0]);
-            }
             return strings;
         }
         @Override public String[] valueOf(final String str) {
@@ -289,13 +285,13 @@ class Parsers {
 
     record WarningParser() implements Parser<String> {
         private static final String PREFIX = "199 RestfulObjects ";
-        @Override public String valueOf(String str) {
+        @Override public String valueOf(final String str) {
             return stripPrefix(str, PREFIX);
         }
-        @Override public String asString(String str) {
+        @Override public String asString(final String str) {
             return PREFIX + str;
         }
-        private String stripPrefix(String str, String prefix) {
+        private String stripPrefix(final String str, final String prefix) {
             return str.startsWith(prefix) ? str.substring(prefix.length()) : str;
         }
     }

@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import tools.jackson.databind.node.NullNode;
-
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -37,6 +35,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
+
+import tools.jackson.databind.node.NullNode;
 
 public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
@@ -145,9 +145,8 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     @Override
     protected void addMutatorLinksIfEnabled() {
-        if (usability().isVetoed()) {
-            return;
-        }
+        if (usability().isVetoed())
+			return;
         objectMemberType.getMutators()
             .values()
             .forEach(this::addLinkFor);
@@ -167,10 +166,9 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         var choiceAdapters = objectMember
                 .getChoices(objectAdapter, getInteractionInitiatedBy());
 
-        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
-            return null;
-        }
-        final List<Object> list = _Lists.newArrayList();
+        if (choiceAdapters == null || choiceAdapters.isEmpty())
+			return null;
+        final List<Object> list = new ArrayList<>();
         for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
@@ -185,9 +183,8 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().suppressDescribedByLinks()) {
-            return;
-        }
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
         final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }

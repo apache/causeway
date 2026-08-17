@@ -29,7 +29,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -163,7 +162,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     // --
 
-    private final List<Object> elements = _Lists.newArrayList();
+    private final List<Object> elements = new ArrayList<>();
     private final String groupFullName;
     private final String groupName;
     private final String groupPath;
@@ -235,11 +234,10 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
             groupNameComponents[i] = tokens.nextToken();
         }
         final String groupSimpleName = groupNameComponents.length > 0 ? groupNameComponents[groupNameComponents.length - 1] : "";
-        if (groupSimpleName.length() > 1) {
-            return groupSimpleName.substring(0, 1).toUpperCase() + groupSimpleName.substring(1);
-        } else {
-            return groupSimpleName.toUpperCase();
-        }
+        if (groupSimpleName.length() > 1)
+			return groupSimpleName.substring(0, 1).toUpperCase() + groupSimpleName.substring(1);
+		else
+			return groupSimpleName.toUpperCase();
 
     }
 
@@ -248,9 +246,8 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      */
     private static String deriveGroupPath(final String groupFullName) {
         final int lastComma = groupFullName.lastIndexOf(",");
-        if (lastComma == -1) {
-            return "";
-        }
+        if (lastComma == -1)
+			return "";
         return groupFullName.substring(0, lastComma);
     }
 
@@ -314,8 +311,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // remove all OrderSets from elements
         // though remembering the order they were encountered
         for (Object child : elementList()) {
-            if(child instanceof DeweyOrderSet) {
-                final DeweyOrderSet orderSet = (DeweyOrderSet) child;
+            if(child instanceof final DeweyOrderSet orderSet) {
                 elements.remove(orderSet);
                 orderSets.put(orderSet.getGroupName(), orderSet);
             }
@@ -347,31 +343,25 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      */
     @Override
     public int compareTo(final DeweyOrderSet o) {
-        if (this.equals(o)) {
-            return 0;
-        }
+        if (this.equals(o))
+			return 0;
         return groupFullName.compareTo(o.groupFullName);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+        if (this == obj)
+			return true;
+        if (obj == null)
+			return false;
+        if (getClass() != obj.getClass())
+			return false;
         final DeweyOrderSet other = (DeweyOrderSet) obj;
         if (groupFullName == null) {
-            if (other.groupFullName != null) {
-                return false;
-            }
-        } else if (!groupFullName.equals(other.groupFullName)) {
-            return false;
-        }
+            if (other.groupFullName != null)
+				return false;
+        } else if (!groupFullName.equals(other.groupFullName))
+			return false;
         return true;
     }
 

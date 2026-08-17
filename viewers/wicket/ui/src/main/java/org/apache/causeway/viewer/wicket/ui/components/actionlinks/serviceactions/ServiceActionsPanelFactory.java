@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
+import java.util.ArrayList;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for a {@link ServiceActionsPanel} to represent the
@@ -43,9 +43,8 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
      */
     @Override
     protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        if(!(model instanceof ServiceActionsModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
+        if(!(model instanceof ServiceActionsModel))
+			return ApplicationAdvice.DOES_NOT_APPLY;
         var menuUiModel = ((ServiceActionsModel) model).getObject();
         var menuBarSelect = menuUiModel.menuBarSelect();
         return appliesIf(
@@ -57,7 +56,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         var navBarSection = ((ServiceActionsModel) model).getObject();
 
-        var menuItems = _Lists.<CssMenuItem>newArrayList();
+        var menuItems = new ArrayList<CssMenuItem>();
         ServiceActionUtil.buildMenu(navBarSection, menuItems::add);
 
         return new ServiceActionsPanel(id, menuItems);

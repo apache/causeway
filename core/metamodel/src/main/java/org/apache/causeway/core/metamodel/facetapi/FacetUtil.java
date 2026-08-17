@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.DisablingOrEnabling;
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
@@ -145,7 +145,7 @@ public final class FacetUtil {
     }
 
     public static Stream<_Strings.KeyValuePair> streamAttributes(final Facet facet) {
-        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
+        final var keyValuePairs = new ArrayList<_Strings.KeyValuePair>();
         facet.visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
         return keyValuePairs.stream();
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.services.i18n;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.causeway.applib.annotation.Domain;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * @since 1.x {@index}
@@ -147,7 +147,7 @@ public record TranslatableString(
 
     private static String format(final String format, final Map<String, Object> values) {
         StringBuilder formatter = new StringBuilder(format);
-        List<Object> valueList = _Lists.newArrayList();
+        List<Object> valueList = new ArrayList<>();
         Matcher matcher = PATTERN.matcher(format);
 
         while (matcher.find()) {
@@ -176,9 +176,8 @@ public record TranslatableString(
             if (param) {
                 if (paramArg instanceof String) {
                     paramStr = (String) paramArg;
-                } else {
-                    throw new IllegalArgumentException("Parameter must be a string");
-                }
+                } else
+					throw new IllegalArgumentException("Parameter must be a string");
             } else {
                 final Object arg = paramArg;
                 map.put(paramStr, arg);
@@ -186,9 +185,8 @@ public record TranslatableString(
             }
             param = !param;
         }
-        if (paramStr != null) {
-            throw new IllegalArgumentException("Must have equal number of parameters and arguments");
-        }
+        if (paramStr != null)
+			throw new IllegalArgumentException("Must have equal number of parameters and arguments");
         return map;
     }
 

@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,6 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
@@ -649,7 +649,7 @@ public abstract class FixtureScript {
          * but used only by {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} to determine whether
          * should execute or not.
          */
-        private final List<FixtureScript> previouslyExecuted = _Lists.newArrayList();
+        private final List<FixtureScript> previouslyExecuted = new ArrayList<>();
 
         /**
          * Returns a list of the {@link FixtureScript} instances that have already been executed.

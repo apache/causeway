@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -75,7 +75,7 @@ final class _JsonValueConverters {
 
     private List<JsonValueConverter> asList() {
 
-        var converters = _Lists.<JsonValueConverter>newArrayList();
+        var converters = new ArrayList<JsonValueConverter>();
 
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.STRING){
             @Override

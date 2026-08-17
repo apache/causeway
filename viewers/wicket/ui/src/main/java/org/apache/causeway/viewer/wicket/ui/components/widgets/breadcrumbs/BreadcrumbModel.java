@@ -19,18 +19,17 @@
 package org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class BreadcrumbModel implements HasMetaModelContext, Serializable {
 
@@ -40,10 +39,10 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
 
     private final Map<String, Bookmark> bookmarkByOidStr = _Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
-    private final List<Bookmark> list = _Lists.newArrayList();
+    private final List<Bookmark> list = new ArrayList<>();
 
     public List<UiObjectWkt> getList() {
-        List<UiObjectWkt> entityModels = _Lists.newArrayList();
+        List<UiObjectWkt> entityModels = new ArrayList<>();
         for (Bookmark bookmark : list) {
             UiObjectWkt objectModel = toEntityModel(bookmark);
             entityModels.add(objectModel);
@@ -88,9 +87,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
 
     private String oidStrFrom(final PageParameters pageParameters) {
         String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        if(oidStr == null) {
-            return null;
-        }
+        if(oidStr == null)
+			return null;
         try {
             return Bookmark.parse(oidStr)
             .map(Bookmark::stringify)
@@ -108,9 +106,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
     }
 
     private void trimTo(final int size) {
-        if(list.size() <= size) {
-            return;
-        }
+        if(list.size() <= size)
+			return;
         final List<Bookmark> bookmarksToRemove = list.subList(size, list.size());
         for (final Bookmark bookmark : bookmarksToRemove) {
             final String oidStr = oidStrByBookmark.get(bookmark);
@@ -119,13 +116,11 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
     }
 
     public UiObjectWkt lookup(final String oidStr) {
-        if(oidStr == null) {
-            return null;
-        }
+        if(oidStr == null)
+			return null;
         final Bookmark bookmark = bookmarkByOidStr.get(oidStr);
-        if(bookmark == null) {
-            return null;
-        }
+        if(bookmark == null)
+			return null;
         return toEntityModel(bookmark);
     }
 

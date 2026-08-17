@@ -18,15 +18,14 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.builder.include;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
-
 import org.jspecify.annotations.NonNull;
 
 public final class IncludeStatements {
@@ -36,7 +35,7 @@ public final class IncludeStatements {
     public static Can<IncludeStatement> find(
             final @NonNull Iterable<String> lines) {
 
-        var matches = _Lists.<IncludeStatement>newArrayList();
+        var matches = new ArrayList<IncludeStatement>();
         visit(lines, (line, incl)->incl.ifPresent(matches::add));
         return Can.ofCollection(matches);
     }
@@ -51,7 +50,7 @@ public final class IncludeStatements {
             final @NonNull Iterable<String> lines,
             final @NonNull UnaryOperator<IncludeStatement> rewriter) {
 
-        var processedLines = _Lists.<String>newArrayList();
+        var processedLines = new ArrayList<String>();
         visit(lines, (originalLine, inclOptional)->{
 
             var incl = inclOptional.map(rewriter::apply).orElse(null);

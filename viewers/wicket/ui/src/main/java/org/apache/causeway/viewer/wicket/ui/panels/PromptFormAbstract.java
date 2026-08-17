@@ -18,19 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.model.IModel;
-
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -49,6 +41,13 @@ import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.IModel;
 
 public abstract class PromptFormAbstract<T extends
     FormExecutorContext
@@ -58,7 +57,7 @@ implements AttributeModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
-    protected final List<AttributePanel> paramPanels = _Lists.newArrayList();
+    protected final List<AttributePanel> paramPanels = new ArrayList<>();
 
     private final Component parentPanel;
 
@@ -184,9 +183,8 @@ implements AttributeModelChangeListener {
         } catch(org.apache.wicket.WicketRuntimeException ex) {
             return null;
         }
-        if (page instanceof DomainObjectPage domainObjectPage) {
-            return domainObjectPage.getUiHintContainerIfAny();
-        }
+        if (page instanceof DomainObjectPage domainObjectPage)
+			return domainObjectPage.getUiHintContainerIfAny();
         return null;
     }
 

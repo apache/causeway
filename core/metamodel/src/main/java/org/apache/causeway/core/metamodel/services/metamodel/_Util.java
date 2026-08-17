@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.metamodel;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
@@ -26,7 +27,6 @@ import java.util.regex.Pattern;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -128,7 +128,7 @@ class _Util {
     private String asStr(final Object[] list) {
         if(list.length == 0)
 			return null; // skip
-        List<String> strings = _Lists.newArrayList();
+        List<String> strings = new ArrayList<>();
         for (final Object o : list) {
             String s = asStr(o);
             strings.add(s);
@@ -139,7 +139,7 @@ class _Util {
     private String asStr(final List<?> list) {
         if(list.isEmpty())
 			return null; // skip
-        List<String> strings = _Lists.newArrayList();
+        List<String> strings = new ArrayList<>();
         for (final Object o : list) {
             String s = asStr(o);
             strings.add(s);

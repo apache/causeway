@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.extensions.secman.applib.permission.dom;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
@@ -39,14 +37,15 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-
 import org.jspecify.annotations.NonNull;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 /**
  *
@@ -64,7 +63,7 @@ implements ApplicationPermissionRepository {
 
     private final Class<P> applicationPermissionClass;
 
-    protected ApplicationPermissionRepositoryAbstract(Class<P> applicationPermissionClass) {
+    protected ApplicationPermissionRepositoryAbstract(final Class<P> applicationPermissionClass) {
         this.applicationPermissionClass = applicationPermissionClass;
     }
 
@@ -79,7 +78,8 @@ implements ApplicationPermissionRepository {
                 ApplicationPermissionRepositoryAbstract.class, "findByRoleCached", role);
     }
 
-    public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
+    @Override
+	public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                 Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE)
@@ -93,18 +93,21 @@ implements ApplicationPermissionRepository {
                 ApplicationPermissionRepositoryAbstract.class, "findByUserCached", user);
     }
 
-    public List<ApplicationPermission> findByUser(final @NonNull ApplicationUser user) {
+    @Override
+	public List<ApplicationPermission> findByUser(final @NonNull ApplicationUser user) {
         return findByUser(user.getUsername());
     }
 
-    public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
+    @Override
+	public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
         var roleNames = userMemento.roles().stream()
                 .map(RoleMemento::name)
                 .collect(Collectors.toList());
         return findByRoleNames(roleNames);
     }
 
-    public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
+    @Override
+	public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                         Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE_NAMES)
@@ -166,16 +169,16 @@ implements ApplicationPermissionRepository {
     // -- findByRoleAndRuleAndFeatureType (programmatic)
     @Override
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
-            org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
-            ApplicationPermissionRule rule,
-            ApplicationFeatureSort type) {
+            final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
+            final ApplicationPermissionRule rule,
+            final ApplicationFeatureSort type) {
         return queryResultsCacheProvider.get().execute(this::findByRoleAndRuleAndFeatureType,
                 ApplicationPermissionRepositoryAbstract.class, "findByRoleAndRuleAndFeatureTypeCached",
                 role, rule, type);
     }
 
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(
-            org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
+            final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
             final ApplicationPermissionRule rule,
             final ApplicationFeatureSort featureSort) {
         return repository.allMatches(Query.named(
@@ -267,9 +270,8 @@ implements ApplicationPermissionRepository {
 
         ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureSort, featureFqn)
                 .orElse(null);
-        if (permission != null) {
-            return permission;
-        }
+        if (permission != null)
+			return permission;
         permission = newApplicationPermission();
         permission.setRole(role);
         permission.setRule(rule);
@@ -337,7 +339,7 @@ implements ApplicationPermissionRepository {
         var featureNamesKnownToTheMetamodel =
                 featureRepository.getFeatureIdentifiersByName().keySet();
 
-        var orphaned = _Lists.<ApplicationPermission>newArrayList();
+        var orphaned = new ArrayList<ApplicationPermission>();
 
         for (var permission : allPermissions()) {
 

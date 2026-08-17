@@ -38,15 +38,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -135,7 +134,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        var zipEntryDataSources = new ArrayList<ZipEntryDataSource>();
 
         zippedSource.consumeAsFile(zipFile->{
             try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath())) {
@@ -164,7 +163,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        var zipEntryDataSources = _Lists.<ZipEntryDataSource>new ArrayList<XXX>();
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
@@ -211,7 +210,9 @@ public class ZipUtils {
 
                 ZipEntry zipEntry;
                 while((zipEntry = in.getNextEntry())!=null) {
-                    if(zipEntry.isDirectory()) continue;
+                    if(zipEntry.isDirectory()) {
+						continue;
+					}
                     if(zipOptions.zipEntryFilter().test(zipEntry)) {
                         zipEntryDataSources.add(
                                 new ZipEntryDataSource(zipEntry, _Bytes.ofKeepOpen(in)));

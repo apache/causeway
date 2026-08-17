@@ -20,14 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.components.collection.present.summa
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.list.AbstractItem;
-import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -43,6 +39,10 @@ import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.AbstractItem;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -120,10 +120,10 @@ implements CollectionCountProvider {
         private BigDecimal sum = BigDecimal.ZERO;
         private BigDecimal min = null;
         private BigDecimal max = null;
-        private final List<String> titles = _Lists.newArrayList();
-        private final List<BigDecimal> values = _Lists.newArrayList();
-        private BigDecimal average;
-        private String propertyName;
+        private final List<String> titles = new ArrayList<>();
+        private final List<BigDecimal> values = new ArrayList<>();
+        private final BigDecimal average;
+        private final String propertyName;
 
         public Summary(final List<ManagedObject> adapters, final ObjectAssociation numberAssociation) {
             this(null, adapters, numberAssociation);

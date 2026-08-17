@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.applib.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 
@@ -102,7 +101,7 @@ public class ReasonBuffer2 {
     private final Mode mode;
     private final String prefix;
 
-    private final List<LazyReason> lazyReasons = _Lists.newArrayList();
+    private final List<LazyReason> lazyReasons = new ArrayList<>();
 
     private ReasonBuffer2(final Mode mode, final String prefix) {
         this.prefix = prefix;
@@ -151,9 +150,8 @@ public class ReasonBuffer2 {
     public String getReason() {
 
         final Optional<LazyReason> anyReasons = this.lazyReasons.stream().filter(Objects::nonNull).findAny();
-        if (!anyReasons.isPresent()) {
-            return null;
-        }
+        if (!anyReasons.isPresent())
+			return null;
 
         final StringBuilder buf = new StringBuilder();
 

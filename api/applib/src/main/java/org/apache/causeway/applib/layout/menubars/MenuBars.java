@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.applib.layout.menubars;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * @since 1.x {@index}
@@ -42,7 +42,7 @@ public interface MenuBars {
     Map<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
 
     default Stream<ServiceActionLayoutData> stream() {
-        var entries = _Lists.<ServiceActionLayoutData>newArrayList();
+        var entries = new ArrayList<ServiceActionLayoutData>();
         visit(entries::add);
         return entries.stream();
     }

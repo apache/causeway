@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 /**
@@ -51,7 +51,7 @@ public class FixtureResultList {
 
     // -- list of FixtureResults
 
-    private final List<FixtureResult> list = _Lists.newArrayList();
+    private final List<FixtureResult> list = new ArrayList<>();
 
     /**
      * Irrespective of the setting for {@link FixtureScripts#getMultipleExecutionStrategy()}, this list ensures
@@ -70,7 +70,7 @@ public class FixtureResultList {
      * </p>
      * {@link FixtureScript}s used to generate this result list.
      */
-    private final List<FixtureScript> fixtureScriptList = _Lists.newArrayList();
+    private final List<FixtureScript> fixtureScriptList = new ArrayList<>();
 
     private final Map<String, FixtureResult> fixtureResultByKey = _Maps.newHashMap();
 
@@ -119,18 +119,15 @@ public class FixtureResultList {
 
     // -- lookup
 
-    <T> T lookup(final String key, Class<T> cls) {
+    <T> T lookup(final String key, final Class<T> cls) {
         final FixtureResult fixtureResult = fixtureResultByKey.get(key);
-        if(fixtureResult == null) {
-            return null;
-        }
+        if(fixtureResult == null)
+			return null;
         final Object object = fixtureResult.getObject();
-        if(object == null) {
-            throw new IllegalStateException("Fixture result exists but has NULL object");
-        }
-        if (!cls.isAssignableFrom(object.getClass())) {
-            throw new IllegalStateException(String.format("Fixture result exists and contains object but is of type %s, not %s", object.getClass().getName(), cls.getName()));
-        }
+        if(object == null)
+			throw new IllegalStateException("Fixture result exists but has NULL object");
+        if (!cls.isAssignableFrom(object.getClass()))
+			throw new IllegalStateException(String.format("Fixture result exists and contains object but is of type %s, not %s", object.getClass().getName(), cls.getName()));
         return _Casts.uncheckedCast(object);
     }
 

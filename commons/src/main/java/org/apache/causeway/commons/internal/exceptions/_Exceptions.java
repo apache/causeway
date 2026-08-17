@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.internal.exceptions;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -306,7 +307,7 @@ public final class _Exceptions {
     public static List<Throwable> getCausalChain(final @Nullable Throwable ex) {
         if(ex==null)
 			return Collections.emptyList();
-        final List<Throwable> chain = _Lists.newArrayList();
+        final List<Throwable> chain = new ArrayList<>();
         Throwable t = ex;
         while(t!=null) {
             chain.add(t);

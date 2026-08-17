@@ -27,11 +27,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -178,7 +178,7 @@ implements MetaModelRefiner {
 
     private List<TypeValidator> getTypeValidators(final CausewayConfiguration configuration) {
 
-        final List<TypeValidator> typeValidators = _Lists.newArrayList();
+        final List<TypeValidator> typeValidators = new ArrayList<>();
         if(configuration.core().metaModel().validator().jaxbViewModel().notAbstract()) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
         }
@@ -192,7 +192,7 @@ implements MetaModelRefiner {
     }
 
     private List<AssociationValidator> getAssociationValidators(final CausewayConfiguration configuration) {
-        final List<AssociationValidator> associationValidators = _Lists.newArrayList();
+        final List<AssociationValidator> associationValidators = new ArrayList<>();
         if(configuration.core().metaModel().validator().jaxbViewModel().referenceTypeAdapter()) {
             associationValidators.add(new PropertyValidatorForReferenceTypes());
         }

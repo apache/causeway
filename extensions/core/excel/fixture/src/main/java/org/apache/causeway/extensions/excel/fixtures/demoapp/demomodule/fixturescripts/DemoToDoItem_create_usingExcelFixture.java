@@ -19,19 +19,18 @@
 package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.causeway.extensions.excel.testing.ExcelFixture;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 
 public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
@@ -47,7 +46,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
     }
 
     @Getter
-    private List<ExcelDemoToDoItem> todoItems = _Lists.newArrayList();
+    private final List<ExcelDemoToDoItem> todoItems = new ArrayList<>();
 
     @Override
     public void execute(final ExecutionContext executionContext) {

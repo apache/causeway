@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.commons;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 public final class ListExtensions {
     private static final String DEFAULT_DELIMITER = ",";
@@ -35,7 +35,7 @@ public final class ListExtensions {
     }
 
     public static <T> List<T> combineWith(final List<T> extendee, final List<T> list2) {
-        final List<T> combinedList = _Lists.newArrayList();
+        final List<T> combinedList = new ArrayList<>();
         combinedList.addAll(extendee);
         combinedList.addAll(list2);
         return combinedList;
@@ -61,9 +61,8 @@ public final class ListExtensions {
     }
 
     public static List<String> appendDelimitedStringToList(final String delimited, final String delimiter, final List<String> list) {
-        if (delimited == null) {
-            return list;
-        }
+        if (delimited == null)
+			return list;
         final String[] optionValues = delimited.split(delimiter);
         list.addAll(Arrays.asList(optionValues));
         return list;
@@ -76,7 +75,7 @@ public final class ListExtensions {
                 .collect(Collectors.toList());
     }
 
-    public static <T> List<T> mutableCopy(T[] arr) {
+    public static <T> List<T> mutableCopy(final T[] arr) {
         return stream(arr)
                 .collect(Collectors.toList());
     }

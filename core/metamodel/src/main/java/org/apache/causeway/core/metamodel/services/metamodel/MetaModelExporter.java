@@ -104,7 +104,7 @@ class MetaModelExporter {
         // correspond to each object members types.
         //
         // we do this in phases, just in case we discover new types along the way as we introspect the members.
-        final List<ObjectSpecification> processed = _Lists.newArrayList();
+        final List<ObjectSpecification> processed = new ArrayList<>();
         List<ObjectSpecification> toProcess =
                 remaining(domainClassByObjectSpec.keySet(), processed);
         while(!toProcess.isEmpty()) {
@@ -117,7 +117,7 @@ class MetaModelExporter {
 
         // phase 2.5: check no duplicates
         final Map<String, ObjectSpecification> objectSpecificationByDomainClassId = _Maps.newHashMap();
-        final List<String> buf = _Lists.newArrayList();
+        final List<String> buf = new ArrayList<>();
         for (final Map.Entry<ObjectSpecification, DomainClassDto> entry : domainClassByObjectSpec.entrySet()) {
             final ObjectSpecification objectSpecification = entry.getKey();
             final DomainClassDto domainClassDto = entry.getValue();

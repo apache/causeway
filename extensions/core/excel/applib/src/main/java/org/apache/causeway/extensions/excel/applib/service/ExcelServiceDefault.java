@@ -21,28 +21,26 @@ package org.apache.causeway.extensions.excel.applib.service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
 import org.apache.causeway.extensions.excel.applib.ExcelService;
 import org.apache.causeway.extensions.excel.applib.Mode;
 import org.apache.causeway.extensions.excel.applib.WorksheetContent;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Implementation of {@link ExcelService}.
@@ -193,7 +191,7 @@ public class ExcelServiceDefault implements ExcelService {
             final WorksheetSpec.Matcher matcher,
             final WorksheetSpec.Sequencer sequencer) throws ExcelServiceDefault.Exception {
 
-        List<WorksheetSpec> worksheetSpecs = _Lists.newArrayList();
+        List<WorksheetSpec> worksheetSpecs = new ArrayList<>();
         try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.bytes())) {
             try (final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais)) {
                 final int numberOfSheets = wb.getNumberOfSheets();

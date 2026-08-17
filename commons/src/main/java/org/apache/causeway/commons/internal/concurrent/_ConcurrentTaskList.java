@@ -32,7 +32,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.causeway.commons.concurrent.AwaitableLatch;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ public class _ConcurrentTaskList {
 
     @Getter private final String name;
 
-    private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
+    private final List<_ConcurrentTask<?>> tasks = new ArrayList<>();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
     private final CountDownLatch allFinishedLatch = new CountDownLatch(1);
     private final AwaitableLatch awaitableLatch = new AwaitableLatch(allFinishedLatch);

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -55,9 +55,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     @Override
     public JsonRepresentation render() {
 
-        if(representation == null) {
-            return null;
-        }
+        if(representation == null)
+			return null;
 
         renderMemberContent();
 
@@ -88,9 +87,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     private void addValue(final LinkFollowSpecs linkFollower) {
         var valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
-        if (valueAdapter == null) {
-            return;
-        }
+        if (valueAdapter == null)
+			return;
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         final boolean eagerlyRender = !followHref.isTerminated()
@@ -98,7 +96,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
                         && Facets.defaultViewIsTable(objectMember)
                         && resourceContext.canEagerlyRender(valueAdapter));
 
-        final List<JsonRepresentation> list = _Lists.newArrayList();
+        final List<JsonRepresentation> list = new ArrayList<>();
 
         CollectionFacet.streamAdapters(valueAdapter)
         .forEach(elementAdapter->{
@@ -146,9 +144,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().suppressDescribedByLinks()) {
-            return;
-        }
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
         final JsonRepresentation link =
                 CollectionDescriptionReprRenderer
                 .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();

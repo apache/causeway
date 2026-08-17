@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.progmodel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -153,10 +153,12 @@ implements
     private List<FacetFactory> snapshotFactories(
             final ProgrammingModelInitFilter filter) {
 
-        var factories = _Lists.<FacetFactory>newArrayList();
+        var factories = new ArrayList<FacetFactory>();
         for(var order : FacetProcessingOrder.values()) {
             var factoryEntrySet = factoryEntriesByOrder.get(order);
-            if(factoryEntrySet==null)  continue;
+            if(factoryEntrySet==null) {
+				continue;
+			}
             for(var factoryEntry : factoryEntrySet) {
                 if(filter.acceptFactoryType(factoryEntry.instance().getClass(), factoryEntry.markers())) {
                     factories.add(factoryEntry.instance());
@@ -172,10 +174,12 @@ implements
     private List<MetaModelValidator> snapshotValidators(
             final ProgrammingModelInitFilter filter) {
 
-        var validators = _Lists.<MetaModelValidator>newArrayList();
+        var validators = new ArrayList<MetaModelValidator>();
         for(var order : ValidationOrder.values()) {
             var validatorEntrySet = validatorEntriesByOrder.get(order);
-            if(validatorEntrySet==null) continue;
+            if(validatorEntrySet==null) {
+				continue;
+			}
 
             for(var validatorEntry : validatorEntrySet) {
                 if(filter.acceptValidator(validatorEntry.instance().getClass(), validatorEntry.markers())) {
@@ -192,10 +196,12 @@ implements
     private List<MetaModelPostProcessor> snapshotPostProcessors(
             final ProgrammingModelInitFilter filter) {
 
-        var postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
+        var postProcessors = new ArrayList<MetaModelPostProcessor>();
         for(var order : PostProcessingOrder.values()) {
             var postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
-            if(postProcessorEntrySet==null) continue;
+            if(postProcessorEntrySet==null) {
+				continue;
+			}
 
             for(var postProcessorEntry : postProcessorEntrySet) {
                 if(filter.acceptPostProcessor(
@@ -215,17 +221,15 @@ implements
     }
 
     protected void assertNotInitialized() {
-        if(isInitialized()) {
-            throw _Exceptions.unrecoverable(
+        if(isInitialized())
+			throw _Exceptions.unrecoverable(
                     "The programming-model was already initialized, it cannot be altered.");
-        }
     }
 
     private void assertInitialized() {
-        if(!isInitialized()) {
-            throw _Exceptions.unrecoverable(
+        if(!isInitialized())
+			throw _Exceptions.unrecoverable(
                     "The programming-model was not initialized yet.");
-        }
     }
 
 }

@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.collections;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -38,13 +39,10 @@ import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 record Can_Empty<T>() implements Can<T> {
 
@@ -180,10 +178,9 @@ record Can_Empty<T>() implements Can<T> {
 
     @Override
     public Can<T> add(final int index, final @Nullable T element) {
-        if(index!=0) {
-            throw new IndexOutOfBoundsException(
+        if(index!=0)
+			throw new IndexOutOfBoundsException(
                     "cannot add to empty can with index other than 0; got " + index);
-        }
         return add(element);
     }
 
@@ -253,9 +250,8 @@ record Can_Empty<T>() implements Can<T> {
 
     @Override
     public boolean equals(final @Nullable Object obj) {
-        if(INSTANCE == obj) {
-            return true; // optimization not strictly necessary
-        }
+        if(INSTANCE == obj)
+			return true; // optimization not strictly necessary
         return (obj instanceof Can)
                 ? ((Can<?>)obj).isEmpty()
                 : false;
@@ -268,9 +264,8 @@ record Can_Empty<T>() implements Can<T> {
 
     @Override
     public int compareTo(final @Nullable Can<T> other) {
-        if(other==null) {
-            return 0;
-        }
+        if(other==null)
+			return 0;
         // when returning
         // -1 ... this is before other
         // +1 ... this is after other
@@ -284,7 +279,7 @@ record Can_Empty<T>() implements Can<T> {
 
     @Override
     public List<T> toArrayList() {
-        return _Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override

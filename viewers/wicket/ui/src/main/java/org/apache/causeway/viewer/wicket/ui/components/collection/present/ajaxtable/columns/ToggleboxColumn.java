@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
@@ -30,14 +28,15 @@ import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesA
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.selop.SelectOperationChooser;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.wicket.Component;
 
 public final class ToggleboxColumn
 extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
-    private DataTableWithPagesAndFilter<?, ?> table;
+    private final List<ContainedToggleboxPanel> rowToggles = new ArrayList<>();
+    private final DataTableWithPagesAndFilter<?, ?> table;
 
     public ToggleboxColumn(
             final ObjectSpecification elementType,

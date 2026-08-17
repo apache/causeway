@@ -38,8 +38,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -50,8 +48,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -157,9 +156,8 @@ public interface CollectionFacet extends Facet {
             }
 
             // Can
-            if (Can.class.equals(requiredType)) {
-                return rawStream.collect(Can.toCan());
-            }
+            if (Can.class.equals(requiredType))
+				return rawStream.collect(Can.toCan());
 
             // not recognized
             return null;
@@ -173,8 +171,8 @@ public interface CollectionFacet extends Facet {
                     // specific list implementations
                 Map.entry(CopyOnWriteArrayList.class, _Lists::newConcurrentList),
                 Map.entry(LinkedList.class, _Lists::newLinkedList),
-                Map.entry(ArrayList.class, _Lists::newArrayList),
-                Map.entry(AbstractList.class, _Lists::newArrayList),
+                Map.entry(ArrayList.class, ArrayList::new),
+                Map.entry(AbstractList.class, ArrayList::new),
 
                     // specific set implementations
                 Map.entry(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet),
@@ -184,10 +182,10 @@ public interface CollectionFacet extends Facet {
                 Map.entry(AbstractSet.class, _Sets::newLinkedHashSet),
 
                     // interfaces
-                Map.entry(List.class, _Lists::newArrayList),
+                Map.entry(List.class, ArrayList::new),
                 Map.entry(SortedSet.class, _Sets::newTreeSet),
                 Map.entry(Set.class, _Sets::newLinkedHashSet),
-                Map.entry(Collection.class, _Lists::newArrayList)
+                Map.entry(Collection.class, ArrayList::new)
                 );
 
     }

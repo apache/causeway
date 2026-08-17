@@ -16,17 +16,11 @@
  * under the License. */
 package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.model.Model;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
@@ -34,6 +28,11 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.Action
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.model.Model;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -85,7 +84,7 @@ implements Menuable {
         this.actionLink = actionLink;
     }
 
-    private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
+    private final List<CssMenuItem> subMenuItems = new ArrayList<>();
     protected final void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
@@ -143,9 +142,8 @@ implements Menuable {
     }
 
     private void addCssClassAttributesIfRequired(final Component linkComponent) {
-        if (!hasSubMenuItems()) {
-            return;
-        }
+        if (!hasSubMenuItems())
+			return;
         Wkt.cssAppend(linkComponent, this.hasParent() ? "parent" : "top-parent");
     }
 

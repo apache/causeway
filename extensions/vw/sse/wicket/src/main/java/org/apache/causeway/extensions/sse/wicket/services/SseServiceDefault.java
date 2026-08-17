@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.sse.wicket.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,13 +32,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -46,7 +40,12 @@ import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -218,7 +217,7 @@ public class SseServiceDefault implements SseService {
                 log.debug("about to fire events to {} listeners", defensiveCopyOfListeners.size());
             }
 
-            final List<Predicate<SseSource>> markedForRemoval = _Lists.newArrayList();
+            final List<Predicate<SseSource>> markedForRemoval = new ArrayList<>();
 
             defensiveCopyOfListeners.forEach(listener->{
                 var retain = listener.test(source);

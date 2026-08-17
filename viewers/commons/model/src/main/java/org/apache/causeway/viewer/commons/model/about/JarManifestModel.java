@@ -33,11 +33,10 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Provider;
-
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
+
+import jakarta.inject.Provider;
 
 public record JarManifestModel(List<JarManifestAttributes> manifests) implements Serializable {
 
@@ -62,7 +61,7 @@ public record JarManifestModel(List<JarManifestAttributes> manifests) implements
         } catch (IOException e) {
             return new JarManifestModel(manifests);
         }
-        final List<JarManifest> jarManifests = _Lists.newArrayList();
+        final List<JarManifest> jarManifests = new ArrayList<>();
         while (resEnum.hasMoreElements()) {
             URL url = (URL)resEnum.nextElement();
             JarManifest jarManifest = new JarManifest(url);
@@ -87,11 +86,11 @@ public record JarManifestModel(List<JarManifestAttributes> manifests) implements
     }
 
     private static class JarManifest implements Comparable<JarManifest> {
-        private final List<JarManifestAttributes> attributes = _Lists.newArrayList();
+        private final List<JarManifestAttributes> attributes = new ArrayList<>();
 
         private final URL url;
 
-        private JarName jarName;
+        private final JarName jarName;
 
         public JarManifest(final URL url) {
             this.url = url;
@@ -148,16 +147,14 @@ public record JarManifestModel(List<JarManifestAttributes> manifests) implements
 
         // searching from the end, return the jar name if possible
         for (String part : parts) {
-            if(part.endsWith(".jar")) {
-                return new JarName(JarName.Type.JAR, part);
-            }
+            if(part.endsWith(".jar"))
+				return new JarName(JarName.Type.JAR, part);
         }
 
         // see if running in an IDE, under target*/classes; return the part prior to that.
         if(parts.size()>=3) {
-            if(parts.get(0).equals("classes") && parts.get(1).startsWith("target")) {
-                return new JarName(JarName.Type.CLASSES, parts.get(2));
-            }
+            if(parts.get(0).equals("classes") && parts.get(1).startsWith("target"))
+				return new JarName(JarName.Type.CLASSES, parts.get(2));
         }
 
         // otherwise, return the stripped path

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -255,7 +256,7 @@ record ObjectMemberResolverForGrid(
         var actionDisjunction = gridModel.actionDisjunction(objectActionById.keySet());
         var possiblyMissingActionIds = actionDisjunction.right();
 
-        final List<String> associatedActionIds = _Lists.newArrayList();
+        final List<String> associatedActionIds = new ArrayList<>();
 
         final List<ObjectAction> sortedPossiblyMissingActions =
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);

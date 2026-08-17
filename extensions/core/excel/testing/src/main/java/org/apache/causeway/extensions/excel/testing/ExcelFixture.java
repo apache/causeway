@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.excel.testing;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +35,6 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -133,7 +133,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
      * Output: all the objects created by this fixture.
      */
     @Getter
-    private final List objects = _Lists.newArrayList();
+    private final List objects = new ArrayList();
 
     /**
      * Output: the objects created by this fixture, for a specific persistable/row handler class.
@@ -179,7 +179,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     private void addToMap(final Class<?> cls, final List<Object> createdObjects) {
         List<Object> objectList = objectsByClass.get(cls);
         if (objectList == null) {
-            objectList = _Lists.newArrayList();
+            objectList = new ArrayList<>();
             this.objectsByClass.put(cls, objectList);
         }
         objectList.addAll(createdObjects);

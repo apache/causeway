@@ -18,18 +18,17 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _CsvExport {
 
-    StringBuilder toCsv(DomainModel domainModel) {
+    StringBuilder toCsv(final DomainModel domainModel) {
         return asBuf(asList(domainModel));
     }
 
@@ -44,7 +43,7 @@ class _CsvExport {
     }
 
     private List<String> asList(final DomainModel model) {
-        final List<String> list = _Lists.newArrayList();
+        final List<String> list = new ArrayList<>();
         list.add(header());
         for (final DomainMember row : model.getDomainMembers()) {
             list.add(asTextCsv(row));

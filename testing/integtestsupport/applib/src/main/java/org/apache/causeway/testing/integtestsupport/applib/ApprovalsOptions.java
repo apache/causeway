@@ -18,21 +18,19 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import tools.jackson.databind.ObjectMapper;
-
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.io.TextUtils;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
 import org.approvaltests.reporters.linux.ReportWithMeldMergeLinux;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.io.TextUtils;
-
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import tools.jackson.databind.ObjectMapper;
 
 @UtilityClass
 public class ApprovalsOptions {
@@ -45,7 +43,7 @@ public class ApprovalsOptions {
 			? opts.withReporter(ReportWithMeldMergeLinux.INSTANCE)
 			: opts;
 	}
-	
+
     public static Options xmlOptions() {
         return defaultOptions()
             .withScrubber(ApprovalsOptions::scrub)
@@ -75,13 +73,12 @@ public class ApprovalsOptions {
         var magicPrefix = "<mml:param ";
         var magicSuffix = ">";
         int p = line.indexOf(magicPrefix);
-        if(p<0) {
-            return line;
-        }
+        if(p<0)
+			return line;
         p += magicPrefix.length(); // pointer at end of "...<mml:param "
         int q = line.lastIndexOf(magicSuffix); // pointer at start of "... >"
 
-        var chunks = _Lists.<String>newArrayList();
+        var chunks = new ArrayList<String>();
         chunks.add(line.substring(0, p-1)); // first chunk "...<mml:param"
 
         // ordered attributes
@@ -108,7 +105,7 @@ public class ApprovalsOptions {
     public Options gqlOptions() {
         return defaultOptions()
     		.withScrubber(new Scrubber() {
-    			private ObjectMapper objectMapper = new ObjectMapper();
+    			private final ObjectMapper objectMapper = new ObjectMapper();
 			    @SneakyThrows @Override public String scrub(final String s) {
 			        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
 			    }

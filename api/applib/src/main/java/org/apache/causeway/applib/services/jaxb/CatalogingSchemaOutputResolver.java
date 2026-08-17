@@ -21,6 +21,7 @@ package org.apache.causeway.applib.services.jaxb;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import jakarta.xml.bind.SchemaOutputResolver;
-
+import org.apache.causeway.commons.internal.codec._DocumentFactories;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,9 +41,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
+import jakarta.xml.bind.SchemaOutputResolver;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has
@@ -55,7 +54,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     private static final String SCHEMA_LOCATION_CORRECT = "https://causeway.apache.org/schema/common/common.xsd";
 
     private final CausewaySchemas causewaySchemas;
-    private final List<String> namespaceUris = _Lists.newArrayList();
+    private final List<String> namespaceUris = new ArrayList<>();
 
     public CatalogingSchemaOutputResolver(final CausewaySchemas causewaySchemas) {
         this.causewaySchemas = causewaySchemas;
@@ -65,13 +64,12 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         return namespaceUris;
     }
 
-    private Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = _Maps.newLinkedHashMap();
+    private final Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = _Maps.newLinkedHashMap();
 
     public String getSchemaTextFor(final String namespaceUri) {
         final StreamResultWithWriter streamResult = schemaResultByNamespaceUri.get(namespaceUri);
-        if (streamResult == null) {
-            return null;
-        }
+        if (streamResult == null)
+			return null;
         String xsd = streamResult.asString();
 
         try {
@@ -97,9 +95,8 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     // replace <xs:import namespace="..." schemaLocation="https://causeway.apache.org/schema/common"/>
     // with    <xs:import namespace="..." schemaLocation="https://causeway.apache.org/schema/common/common.xsd"/>
     private static void replaceCommonSchemaLocationIfAny(final Node node) {
-        if(schemaLocationReplacedIn(node)) {
-            return;
-        }
+        if(schemaLocationReplacedIn(node))
+			return;
         final NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node currentNode = nodeList.item(i);
@@ -110,8 +107,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     }
 
     private static boolean schemaLocationReplacedIn(final Node node) {
-        if(node instanceof Element) {
-            final Element importEl = (Element) node;
+        if(node instanceof final Element importEl) {
             final Attr schemaLocationAttr = importEl.getAttributeNode("schemaLocation");
             if(schemaLocationAttr != null) {
                 final String value = schemaLocationAttr.getValue();

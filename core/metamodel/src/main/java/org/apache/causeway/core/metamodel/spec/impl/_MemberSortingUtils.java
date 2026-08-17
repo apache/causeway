@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
@@ -97,7 +96,7 @@ final class _MemberSortingUtils {
                 actionsToAppendTo.add(objectAction);
             }
             else if (element instanceof DeweyOrderSet deweyOrderSet) {
-                var actions = _Lists.<ObjectAction>newArrayList();
+                var actions = new ArrayList<ObjectAction>();
                 sortActions(deweyOrderSet, actions);
                 actionsToAppendTo.addAll(actions);
             } else

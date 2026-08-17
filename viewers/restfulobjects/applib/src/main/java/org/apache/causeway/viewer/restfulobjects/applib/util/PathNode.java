@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -45,8 +45,8 @@ public record PathNode(
 
     public static final PathNode NULL = new PathNode("", Collections.emptyMap());
 
-    public static List<String> split(String path) {
-        List<String> parts = _Lists.newArrayList();
+    public static List<String> split(final String path) {
+        List<String> parts = new ArrayList<>();
         String curr = null;
 
         final List<String> chunks = _Strings.splitThenStream(path, ".")
@@ -78,13 +78,11 @@ public record PathNode(
 
     public static PathNode parse(final String path) {
         final Matcher nodeMatcher = NODE.matcher(path);
-        if (!nodeMatcher.matches()) {
-            return null;
-        }
+        if (!nodeMatcher.matches())
+			return null;
         final int groupCount = nodeMatcher.groupCount();
-        if (groupCount < 1) {
-            return null;
-        }
+        if (groupCount < 1)
+			return null;
         final String key = nodeMatcher.group(1);
         final Map<String, String> criteria = _Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
@@ -116,17 +114,15 @@ public record PathNode(
     }
 
     public boolean matches(final JsonRepresentation repr) {
-        if (!repr.isMap()) {
-            return false;
-        }
+        if (!repr.isMap())
+			return false;
         for (final Map.Entry<String, String> criterium : criteria.entrySet()) {
             String requiredValue = criterium.getValue();
             if(requiredValue != null) {
                 // list syntax
                 String actualValue = repr.getString(criterium.getKey());
-                if(actualValue == null) {
-                    return false;
-                }
+                if(actualValue == null)
+					return false;
 
                 // determine if fuzzy match (ie without additional parameters)
                 // eg [rel=urn:org.restfulobjects:rel/details;action="list"] matches [rel=urn:org.restfulobjects:rel/details]
@@ -138,13 +134,11 @@ public record PathNode(
                 if(actualValueSemiIndex == -1 && requiredValueSemiIndex != -1) {
                     requiredValue = requiredValue.substring(0, requiredValueSemiIndex);
                 }
-                if (!Objects.equals(requiredValue, actualValue)) {
-                    return false;
-                }
-            } else {
-                // map syntax
+                if (!Objects.equals(requiredValue, actualValue))
+					return false;
+            } else
+				// map syntax
                 return repr.getRepresentation(criterium.getKey()) != null;
-            }
         }
         return true;
     }
@@ -158,7 +152,7 @@ public record PathNode(
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;

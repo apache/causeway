@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.MediaType;
-
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -35,6 +33,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
+import org.springframework.http.MediaType;
 
 import lombok.Getter;
 
@@ -83,9 +82,8 @@ implements ReprRenderer<T> {
     }
 
     private LinkFollowSpecs asProvidedElseCreate(final LinkFollowSpecs linkFollower) {
-        if (linkFollower != null) {
-            return linkFollower;
-        }
+        if (linkFollower != null)
+			return linkFollower;
         return LinkFollowSpecs.create(resourceContext.followLinks());
     }
 
@@ -112,9 +110,8 @@ implements ReprRenderer<T> {
 
     public <R extends ReprRendererAbstract<T>> R withLink(final Rel rel, final JsonRepresentation link) {
         final String relStr = link.getString("rel");
-        if (relStr == null || !relStr.equals(rel.getName())) {
-            throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
-        }
+        if (relStr == null || !relStr.equals(rel.getName()))
+			throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
         if (link != null) {
             getLinks().arrayAdd(link);
         }
@@ -134,9 +131,8 @@ implements ReprRenderer<T> {
     }
 
     protected void addLink(final Rel rel, final ObjectSpecification objectSpec) {
-        if (objectSpec == null) {
-            return;
-        }
+        if (objectSpec == null)
+			return;
         final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
         JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
@@ -163,9 +159,8 @@ implements ReprRenderer<T> {
     }
 
     public ReprRendererAbstract<T> withExtensions(final JsonRepresentation extensions) {
-        if (!extensions.isMap()) {
-            throw new IllegalArgumentException("extensions must be a map");
-        }
+        if (!extensions.isMap())
+			throw new IllegalArgumentException("extensions must be a map");
         representation.mapPutJsonRepresentation("extensions", extensions);
         return this;
     }
@@ -181,17 +176,16 @@ implements ReprRenderer<T> {
 
         // TODO: have removed UpdateNotifier, plan is to re-introduce using the CausewayTransaction
         // enlisted objects (which would also allow newly-created objects to be shown)
-        final List<ManagedObject> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
-        final List<ManagedObject> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();
+        final List<ManagedObject> changedObjects = new ArrayList<>(); // updateNotifier.getChangedObjects();
+        final List<ManagedObject> disposedObjects = new ArrayList<>(); // updateNotifier.getDisposedObjects();
 
         addToExtensions("changed", changedObjects);
         addToExtensions("disposed", disposedObjects);
     }
 
     private void addToExtensions(final String key, final List<ManagedObject> adapters) {
-        if(adapters == null || adapters.isEmpty()) {
-            return;
-        }
+        if(adapters == null || adapters.isEmpty())
+			return;
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPutJsonRepresentation(key, adapterList);
         for (var adapter : adapters) {

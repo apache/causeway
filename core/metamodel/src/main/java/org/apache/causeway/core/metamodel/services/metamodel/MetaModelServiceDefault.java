@@ -43,7 +43,6 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -246,7 +245,7 @@ public record MetaModelServiceDefault(
         /*TODO[CAUSEWAY-3206] refactor: ideally config would provide the list, but unfortunately
          * MetaModelAnnotator type is not know to Config, which lives in applib.
          */
-        var metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();
+        var metaModelAnnotators = new ArrayList<MetaModelAnnotator>();
         if(config.isIncludeTitleAnnotations()) {
             metaModelAnnotators.add(new TitleAnnotator(new ExporterConfig(){}));
         }

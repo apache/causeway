@@ -18,27 +18,26 @@
  */
 package org.apache.causeway.core.runtimeservices.i18n.po;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.i18n.LanguageProvider;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationsResolver;
+import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.apache.causeway.applib.services.i18n.LanguageProvider;
-import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.i18n.TranslationsResolver;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 @ExtendWith(MockitoExtension.class)
 class PoReaderTest {
@@ -78,7 +77,7 @@ class PoReaderTest {
         poReader = new PoReader(mockTranslationServicePo) {
             @Override
             protected List<String> readPo(final Locale locale) {
-                final List<String> lines = _Lists.newArrayList();
+                final List<String> lines = new ArrayList<>();
                 lines.add(String.format("#: %s", context.getName()));
                 lines.add(String.format("msgid \"%s\"", msgId));
                 lines.add(String.format("msgstr \"%s\"", msgStr));
@@ -107,7 +106,7 @@ class PoReaderTest {
         poReader = new PoReader(mockTranslationServicePo) {
             @Override
             protected List<String> readPo(final Locale locale) {
-                final List<String> lines = _Lists.newArrayList();
+                final List<String> lines = new ArrayList<>();
                 lines.add(String.format("#: %s", context1.getName()));
                 lines.add(String.format("#: %s", context2.getName()));
                 lines.add(String.format("msgid \"%s\"", msgId));
@@ -145,7 +144,7 @@ class PoReaderTest {
         poReader = new PoReader(mockTranslationServicePo) {
             @Override
             protected List<String> readPo(final Locale locale) {
-                final List<String> lines = _Lists.newArrayList();
+                final List<String> lines = new ArrayList<>();
                 lines.add(String.format("#: %s", context1.getName()));
                 lines.add(String.format("msgid \"%s\"", msgid1));
                 lines.add(String.format("msgstr \"%s\"", msgstr1));
@@ -189,7 +188,7 @@ class PoReaderTest {
         poReader = new PoReader(mockTranslationServicePo) {
             @Override
             protected List<String> readPo(final Locale locale) {
-                final List<String> lines = _Lists.newArrayList();
+                final List<String> lines = new ArrayList<>();
                 lines.add(String.format("#: %s", context.getName()));
                 lines.add(String.format("msgid \"%s\"", msgid));
                 lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
@@ -220,7 +219,7 @@ class PoReaderTest {
         poReader = new PoReader(mockTranslationServicePo) {
             @Override
             protected List<String> readPo(final Locale locale) {
-                return _Lists.newArrayList();
+                return new ArrayList<>();
             }
         };
 

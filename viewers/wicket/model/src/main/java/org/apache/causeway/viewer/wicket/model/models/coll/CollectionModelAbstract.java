@@ -18,22 +18,21 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.coll;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection (a member) of a domain object.
@@ -134,7 +133,7 @@ permits CollectionModelParented, CollectionModelStandalone {
     /**
      * Additional links to render (if any)
      */
-    private List<ActionModel> actionModels = _Lists.newArrayList();
+    private final List<ActionModel> actionModels = new ArrayList<>();
 
     public final void setLinkAndLabels(final @NonNull Iterable<ActionModel> actionModels) {
         this.actionModels.clear();

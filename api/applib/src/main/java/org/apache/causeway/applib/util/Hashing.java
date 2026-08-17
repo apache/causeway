@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.applib.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-
-import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * Fluent Object Hash Code Composition.
@@ -32,26 +31,25 @@ import org.apache.causeway.commons.internal.collections._Lists;
  */
 public class Hashing<T> {
 
-    public static <T> Hashing<T> hashing(Function<? super T, ?> getter){
+    public static <T> Hashing<T> hashing(final Function<? super T, ?> getter){
         return new Hashing<>(getter);
     }
 
-    private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
+    private final List<Function<? super T, ?>> getters = new ArrayList<>();
 
-    private Hashing(Function<? super T, ?> getter) {
+    private Hashing(final Function<? super T, ?> getter) {
         getters.add(getter);
     }
 
-    public Hashing<T> thenHashing(Function<? super T, ?> getter){
+    public Hashing<T> thenHashing(final Function<? super T, ?> getter){
         Objects.requireNonNull(getter);
         getters.add(getter);
         return this;
     }
 
-    public int hashCode(T object){
-        if(object==null) {
-            return 0;
-        }
+    public int hashCode(final T object){
+        if(object==null)
+			return 0;
         int result = 1;
         for(Function<? super T, ?> getter : getters) {
             final Object element = getter.apply(object);

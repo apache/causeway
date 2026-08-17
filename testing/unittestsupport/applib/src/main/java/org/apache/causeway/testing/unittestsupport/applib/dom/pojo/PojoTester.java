@@ -46,11 +46,9 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import org.opentest4j.AssertionFailedError;
-
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.opentest4j.AssertionFailedError;
 
 import lombok.Getter;
 
@@ -384,12 +382,10 @@ public class PojoTester {
 	 * </p>
 	 */
 	public <T> PojoTester usingData(final Class<T> c, final T... data) {
-		if (Enum.class.isAssignableFrom(c)) {
+		if (Enum.class.isAssignableFrom(c))
 			throw new IllegalArgumentException("No need to provide test data for enums");
-		}
-		if (data == null || data.length < 2) {
+		if (data == null || data.length < 2)
 			throw new IllegalArgumentException("Test data is mandatory, at least two data items are required");
-		}
 		return usingData(new DatumFactoryImpl<>(c, data));
 	}
 	public <T> PojoTester usingData(final Class<T> c, final List<T> data) {
@@ -518,11 +514,10 @@ public class PojoTester {
 					}
 				};
 				dataByType.put(parameterType, factory);
-			} else {
+			} else
 				throw new TestException(String.format(
 						"No test data is available for %s( %s ).",
 						setterName, parameterType.getName()));
-			}
 		}
 
 		checkMethodVisibility(property, setterName, setterMethod);
@@ -539,12 +534,11 @@ public class PojoTester {
 
 		try {
 			final var getterMethod = bean.getClass().getMethod(getterName);
-			if (getterMethod.getReturnType().equals(void.class)) {
+			if (getterMethod.getReturnType().equals(void.class))
 				throw new TestException(String.format("%s(...) is void return.", getterName));
-			}
 			checkMethodVisibility(property, getterName, getterMethod);
 
-			List<Object> earlierGetterOriginalValues = _Lists.newArrayList();
+			List<Object> earlierGetterOriginalValues = new ArrayList<>();
 	        for (var earlierGetter : earlierGetters) {
                 final var earlierValue = earlierGetter.invoke(bean);
                 earlierGetterOriginalValues.add(earlierValue);
@@ -561,11 +555,10 @@ public class PojoTester {
 	            for (var earlierGetter : earlierGetters) {
 	                final var earlierGetterCurrentValue = earlierGetter.invoke(bean);
 	                final var earlierGetterOriginalValue = earlierGetterOriginalValues.get(j++);
-                    if(!Objects.equals(earlierGetterOriginalValue, earlierGetterCurrentValue)) {
-	                    throw new TestException(String.format(
+                    if(!Objects.equals(earlierGetterOriginalValue, earlierGetterCurrentValue))
+						throw new TestException(String.format(
 	                    		"%s interferes with %s",
 								setterName, earlierGetter.getName()));
-	                }
 	            }
 			}
 
@@ -582,16 +575,14 @@ public class PojoTester {
 	private static void checkMethodVisibility(final String property,
 			final String accessorName, final Method method)
 			throws AssertionFailedError, TestException {
-		if (!Modifier.isPublic(method.getModifiers())) {
+		if (!Modifier.isPublic(method.getModifiers()))
 			throw new TestException(String.format(
 					"Test failed for %s because %s is not publicly visible.",
 					property, accessorName));
-		}
-		if (!Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
+		if (!Modifier.isPublic(method.getDeclaringClass().getModifiers()))
 			throw new TestException(String.format(
 					"Test failed for %s because %s is declared in a class that is not publicly visible.",
 					property, accessorName));
-		}
 	}
 
 	private static void invokeSetterAndGetter(final Object bean,
@@ -601,14 +592,12 @@ public class PojoTester {
 
 		setterMethod.invoke(bean, t);
 		final var r = getterMethod.invoke(bean);
-		if (!t.getClass().equals(r.getClass())) {
+		if (!t.getClass().equals(r.getClass()))
 			throw new TestException("Test failed for " + property
 					+ " because types do not match.");
-		}
 
-		if (!t.equals(r)) {
+		if (!t.equals(r))
 			throw new TestException(String.format("Test failed for %s using %s", property, t));
-		}
 
 		if (t instanceof Iterable<?>) {
 			final var it = ((Iterable<?>) t).iterator();
@@ -616,23 +605,20 @@ public class PojoTester {
 			while (it.hasNext() && ir.hasNext()) {
 				final var ti = it.next();
 				final var ri = ir.next();
-				if (!ti.equals(ri)) {
+				if (!ti.equals(ri))
 					throw new TestException(String.format(
 							"Test failed for %s with iterator item %s",
 							property, ti));
-				}
 			}
-			if (it.hasNext() || ir.hasNext()) {
+			if (it.hasNext() || ir.hasNext())
 				throw new TestException(String.format(
 						"Test failed for %s because iteration lengths differ.", property));
-			}
 		}
 	}
 
 	private String getAccessor(final String prefix, final String property) {
-		if (property.length() == 1) {
+		if (property.length() == 1)
 			return prefix + Character.toUpperCase(property.charAt(0));
-		}
 		return prefix + Character.toUpperCase(property.charAt(0))
 				+ property.substring(1);
 	}
@@ -660,11 +646,10 @@ public class PojoTester {
 		}
 
 		private boolean shouldInclude(final String x) {
-			if (include) {
+			if (include)
 				return isEmpty() || contains(x);
-			} else {
+			else
 				return !contains(x);
-			}
 		}
 
 		public static FilterSet includingOnly(final String... property) {

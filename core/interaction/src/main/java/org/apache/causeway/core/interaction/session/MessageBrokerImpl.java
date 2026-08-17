@@ -19,11 +19,11 @@
 package org.apache.causeway.core.interaction.session;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 
 import lombok.NoArgsConstructor;
@@ -43,8 +43,8 @@ public class MessageBrokerImpl implements Serializable, MessageBroker {
     // serializable lock
     private final Object $lock = new Object[0];
 
-    private final List<String> messages = _Lists.newArrayList();
-    private final List<String> warnings = _Lists.newArrayList();
+    private final List<String> messages = new ArrayList<>();
+    private final List<String> warnings = new ArrayList<>();
     private String applicationError;
 
     // -- RESET
@@ -82,10 +82,9 @@ public class MessageBrokerImpl implements Serializable, MessageBroker {
 
     private void addIfNotAlreadyPresent(final List<String> strings, final String string) {
         synchronized ($lock) {
-            if (strings.contains(string)) {
-                // just ignore it...
+            if (strings.contains(string))
+				// just ignore it...
                 return;
-            }
             strings.add(string);
         }
     }

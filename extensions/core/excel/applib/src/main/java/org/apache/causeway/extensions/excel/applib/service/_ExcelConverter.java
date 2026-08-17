@@ -33,26 +33,12 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -76,6 +62,17 @@ import org.apache.causeway.extensions.excel.applib.annotation.PivotRow;
 import org.apache.causeway.extensions.excel.applib.annotation.PivotValue;
 import org.apache.causeway.extensions.excel.applib.util.PivotUtils;
 import org.apache.causeway.extensions.excel.applib.util.SheetPivoter;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jspecify.annotations.Nullable;
 
 import lombok.ToString;
 
@@ -124,15 +121,13 @@ class _ExcelConverter {
         final Set<String> worksheetNames = worksheetContents.stream()
                 .map(x -> x.getSpec().getSheetName())
                 .collect(Collectors.toSet());
-        if(worksheetNames.size() < worksheetContents.size()) {
-            throw new IllegalArgumentException("Sheet names must have distinct names");
-        }
+        if(worksheetNames.size() < worksheetContents.size())
+			throw new IllegalArgumentException("Sheet names must have distinct names");
         for (final String worksheetName : worksheetNames) {
-            if(worksheetName.length() > 30) {
-                throw new IllegalArgumentException(
+            if(worksheetName.length() > 30)
+				throw new IllegalArgumentException(
                         String.format("Sheet name cannot exceed 30 characters (invalid name: '%s')",
                                 worksheetName));
-            }
         }
 
         final File tempFile =
@@ -158,7 +153,7 @@ class _ExcelConverter {
                 .map(objectManager::adapt)
                 .collect(Collectors.toList());
 
-        final List<OneToOneAssociation> propertyList = _Lists.newArrayList();
+        final List<OneToOneAssociation> propertyList = new ArrayList<>();
 
         specificationLoader.specForType(factory.getCls())
         .ifPresent(spec->spec.streamProperties(MixedIn.INCLUDED)
@@ -172,7 +167,7 @@ class _ExcelConverter {
                     .forEach(annotatedAsHyperlink::add);
         }
 
-        final Sheet sheet = ((Workbook) workbook).createSheet(sheetName);
+        final Sheet sheet = workbook.createSheet(sheetName);
 
         final RowFactory rowFactory = new RowFactory(sheet);
         final Row headerRow = rowFactory.newRow();
@@ -215,16 +210,14 @@ class _ExcelConverter {
         .filter(_Strings::isNotEmpty)
         .collect(_Sets.toUnmodifiableSorted());
 
-        if(worksheetNames.size() < worksheetContents.size()) {
-            throw new IllegalArgumentException("Sheet names must have distinct names and cannot be empty");
-        }
+        if(worksheetNames.size() < worksheetContents.size())
+			throw new IllegalArgumentException("Sheet names must have distinct names and cannot be empty");
 
         for (var worksheetName : worksheetNames) {
-            if(worksheetName.length() > 30) {
-                throw new IllegalArgumentException(
+            if(worksheetName.length() > 30)
+				throw new IllegalArgumentException(
                         String.format("Sheet name cannot exceed 30 characters (invalid name: '%s')",
                                 worksheetName));
-            }
         }
 
         try(final XSSFWorkbook workbook = new XSSFWorkbook()) {
@@ -248,7 +241,7 @@ class _ExcelConverter {
             final WorksheetSpec.RowFactory<?> factory,
             final String sheetName) throws IOException {
 
-        final List<ObjectAssociation> propertyList = _Lists.newArrayList();
+        final List<ObjectAssociation> propertyList = new ArrayList<>();
 
         specificationLoader.specForType(factory.getCls())
         .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
@@ -269,7 +262,7 @@ class _ExcelConverter {
         }
 
         // create pivot sheet
-        final Sheet pivotSheet = ((Workbook) workbook).createSheet(sheetName);
+        final Sheet pivotSheet = workbook.createSheet(sheetName);
 
         // Create source sheet for pivot
         String pivotSourceSheetName = ("source for ".concat(sheetName));
@@ -296,18 +289,14 @@ class _ExcelConverter {
 
     private void validateAnnotations(final List<? extends ObjectAssociation> list, final Class<?> cls) throws IllegalArgumentException{
 
-        if (fieldsAnnotatedWith(cls, PivotRow.class).size()==0){
-            throw new IllegalArgumentException("No annotation for row found");
-        }
-        if (fieldsAnnotatedWith(cls, PivotRow.class).size()>1){
-            throw new IllegalArgumentException("Only one annotation for row allowed");
-        }
-        if (fieldsAnnotatedWith(cls, PivotColumn.class).size()==0){
-            throw new IllegalArgumentException("No annotation for column found");
-        }
-        if (fieldsAnnotatedWith(cls, PivotValue.class).size()==0){
-            throw new IllegalArgumentException("No annotation for value found");
-        }
+        if (fieldsAnnotatedWith(cls, PivotRow.class).size()==0)
+			throw new IllegalArgumentException("No annotation for row found");
+        if (fieldsAnnotatedWith(cls, PivotRow.class).size()>1)
+			throw new IllegalArgumentException("Only one annotation for row allowed");
+        if (fieldsAnnotatedWith(cls, PivotColumn.class).size()==0)
+			throw new IllegalArgumentException("No annotation for column found");
+        if (fieldsAnnotatedWith(cls, PivotValue.class).size()==0)
+			throw new IllegalArgumentException("No annotation for value found");
 
     }
 
@@ -370,7 +359,7 @@ class _ExcelConverter {
             final List<WorksheetSpec> worksheetSpecs,
             final byte[] bs) throws IOException, InvalidFormatException {
 
-        final List<List<?>> listOfLists = _Lists.newArrayList();
+        final List<List<?>> listOfLists = new ArrayList<>();
         for (WorksheetSpec worksheetSpec : worksheetSpecs) {
             listOfLists.add(fromBytes(bs, worksheetSpec));
         }
@@ -398,7 +387,7 @@ class _ExcelConverter {
         final String sheetName = worksheetSpec.getSheetName();
         final Mode mode = worksheetSpec.getMode();
 
-        final List<T> importedItems = _Lists.newArrayList();
+        final List<T> importedItems = new ArrayList<>();
 
         final _CellMarshaller cellMarshaller = this.newCellMarshaller(workbook);
 
@@ -427,11 +416,9 @@ class _ExcelConverter {
 
                     } catch (final Exception e) {
                         switch (mode) {
-                        case RELAXED:
-                            // ignore
-                        default:
-                            throw new ExcelServiceDefault.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
-                        }
+							case RELAXED -> throw new ExcelServiceDefault.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
+							default -> throw new ExcelServiceDefault.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
+						}
                     }
 
                 }
@@ -521,7 +508,7 @@ class _ExcelConverter {
     }
 
     private static <T> List<String> determineCandidateSheetNames(final String sheetName, final Class<T> cls) {
-        final List<String> names = _Lists.newArrayList();
+        final List<String> names = new ArrayList<>();
         if(sheetName != null) {
             names.add(sheetName);
         }
@@ -537,9 +524,8 @@ class _ExcelConverter {
             final List<String> sheetNames) {
         for (String sheetName : sheetNames) {
             final Sheet sheet = wb.getSheet(sheetName);
-            if(sheet != null) {
-                return sheet;
-            }
+            if(sheet != null)
+				return sheet;
         }
         throw new IllegalArgumentException(String.format("Could not locate sheet named any of: '%s'", sheetNames));
     }
@@ -548,9 +534,8 @@ class _ExcelConverter {
             final @Nullable ObjectSpecification objectSpec,
             final String propertyNameOrId) {
 
-        if(objectSpec==null) {
-            return null;
-        }
+        if(objectSpec==null)
+			return null;
 
         return objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getCanonicalFriendlyName())

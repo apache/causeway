@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import org.springframework.http.HttpStatus;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -35,6 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.springframework.http.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -100,7 +99,7 @@ public class ObjectActionArgHelper {
 
         // ensure that an argument value has been provided for all non-optional
         // parameters
-        var argList = _Lists.<JsonRepresentation>newArrayList();
+        var argList = new ArrayList<JsonRepresentation>();
         var parameters = action.getParameters();
         for (final ObjectActionParameter param : parameters) {
             final String paramId = param.getId();
