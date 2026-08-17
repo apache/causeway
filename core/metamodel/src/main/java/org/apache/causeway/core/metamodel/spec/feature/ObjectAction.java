@@ -358,7 +358,7 @@ public interface ObjectAction extends ObjectMember {
                                     ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
                                         ? null
                                         : hasImperativeFaIcon.getFaLayersProvider(domainObject)))
-                .filter(_NullSafe::isPresent);
+                .filter(Objects::nonNull);
         }
 
         /**

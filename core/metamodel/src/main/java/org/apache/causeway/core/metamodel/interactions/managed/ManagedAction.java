@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
+import java.util.Objects;
 import java.util.Optional;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -31,7 +29,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -39,6 +36,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -171,9 +170,9 @@ public final class ManagedAction extends ManagedMember {
         var resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .map(objManager::adapt)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(actionResult);
 

@@ -73,7 +73,7 @@ public final class _Predicates {
      * @return a Predicate that tests for the operand to be not null
      */
     public static <T> Predicate<T> isPresent() {
-        return _NullSafe::isPresent;
+        return Objects::nonNull;
     }
 
     /**

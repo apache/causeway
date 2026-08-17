@@ -33,11 +33,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -115,12 +114,10 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Iterable<T> iterable){
-        if(iterable instanceof Collection) {
-            return ((Collection<T>) iterable).stream();
-        }
-        if(iterable instanceof Can) {
-            return ((Can<T>) iterable).stream();
-        }
+        if(iterable instanceof Collection)
+			return ((Collection<T>) iterable).stream();
+        if(iterable instanceof Can)
+			return ((Can<T>) iterable).stream();
         return iterable!=null
                 ? stream(iterable.iterator())
                 : Stream.empty();
@@ -191,15 +188,12 @@ public final class _NullSafe {
      * In case of a {@link Map} traverses the map's values.
      */
     public static Stream<?> streamAutodetect(final @Nullable Object pojo) {
-        if(pojo==null) {
-            return Stream.empty();
-        }
-        if(pojo instanceof Collection) {
-            return ((Collection<?>)pojo).stream();
-        }
-        if(pojo instanceof ImmutableCollection) {
-            return ((ImmutableCollection<?>)pojo).stream();
-        }
+        if(pojo==null)
+			return Stream.empty();
+        if(pojo instanceof Collection)
+			return ((Collection<?>)pojo).stream();
+        if(pojo instanceof ImmutableCollection)
+			return ((ImmutableCollection<?>)pojo).stream();
         if(pojo.getClass().isArray()) {
             if(Array.getLength(pojo)==0) return Stream.empty();
             if(pojo instanceof Object[]) return Stream.of((Object[]) pojo);
@@ -212,15 +206,12 @@ public final class _NullSafe {
             if(pojo instanceof long[]) return primitiveStream((long[]) pojo);
             if(pojo instanceof short[]) return primitiveStream((short[]) pojo);
         }
-        if(pojo instanceof Map) {
-            return ((Map<?, ?>)pojo).values().stream();
-        }
-        if(pojo instanceof Iterable) {
-            return stream((Iterable<?>)pojo);
-        }
-        if(pojo instanceof Enumeration) {
-            return stream((Enumeration<?>)pojo);
-        }
+        if(pojo instanceof Map)
+			return ((Map<?, ?>)pojo).values().stream();
+        if(pojo instanceof Iterable)
+			return stream((Iterable<?>)pojo);
+        if(pojo instanceof Enumeration)
+			return stream((Enumeration<?>)pojo);
         return Stream.of(pojo);
     }
 
@@ -258,30 +249,6 @@ public final class _NullSafe {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    // -- ABSENCE/PRESENCE PREDICATES
-
-    /**
-     * Equivalent to {@link java.util.Objects#nonNull(Object)}.
-     * @param x
-     * @return whether {@code x} is not null (present).
-     *
-     * @apiNote we keep this, arguably provides better code readability than {@code Objects#nonNull}
-     */
-    public static boolean isPresent(final @Nullable Object x) {
-        return x!=null;
-    }
-
-    /**
-     * Equivalent to {@link java.util.Objects#isNull(Object)}.
-     * @param x
-     * @return whether {@code x} is null (absent).
-     *
-     * @apiNote we keep this, arguably provides better code readability than {@code Objects#isNull}
-     */
-    public static boolean isAbsent(final @Nullable Object x) {
-        return x==null;
-    }
-
     // -- EMTPY CHECKS
 
     public static boolean isEmpty(final @Nullable String x) { return x==null || x.length() == 0; }
@@ -317,21 +284,16 @@ public final class _NullSafe {
     public static int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
     public static int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
     public static int sizeAutodetect(final @Nullable Object pojo) {
-        if(pojo==null) {
-            return 0;
-        }
-        if(pojo instanceof Collection) {
-            return ((Collection<?>)pojo).size();
-        }
-        if(pojo instanceof ImmutableCollection) {
-            return ((ImmutableCollection<?>)pojo).size();
-        }
-        if(pojo.getClass().isArray()) {
-            return Array.getLength(pojo);
-        }
-        if(pojo instanceof Map) {
-            return ((Map<?, ?>)pojo).size();
-        }
+        if(pojo==null)
+			return 0;
+        if(pojo instanceof Collection)
+			return ((Collection<?>)pojo).size();
+        if(pojo instanceof ImmutableCollection)
+			return ((ImmutableCollection<?>)pojo).size();
+        if(pojo.getClass().isArray())
+			return Array.getLength(pojo);
+        if(pojo instanceof Map)
+			return ((Map<?, ?>)pojo).size();
         return Math.toIntExact(streamAutodetect(pojo).count());
     }
 
@@ -371,9 +333,8 @@ public final class _NullSafe {
             final @Nullable K key,
             final @Nullable V defaultValue) {
 
-        if(map==null || key==null) {
-            return defaultValue;
-        }
+        if(map==null || key==null)
+			return defaultValue;
         return map.getOrDefault(key, defaultValue);
     }
 

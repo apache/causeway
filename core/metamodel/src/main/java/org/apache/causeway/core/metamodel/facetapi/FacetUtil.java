@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -25,12 +26,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.util.ClassUtils;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
@@ -38,6 +33,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Disabling
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Validating;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -170,9 +168,9 @@ public final class FacetUtil {
         if(facetHolders==null)
             return Optional.empty();
         return Stream.of(facetHolders)
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .map(facetHolder->facetHolder.getFacet(facetType))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b
                 : a);
@@ -187,10 +185,10 @@ public final class FacetUtil {
         if(facetHolders==null)
             return Optional.empty();
         return Stream.of(facetHolders)
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .filter(x -> !excluded.test(x))
         .map(facetHolder->facetHolder.getFacet(facetType))
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b
                 : a);

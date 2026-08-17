@@ -20,11 +20,11 @@ package org.apache.causeway.applib.services.conmap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.http.MediaType;
-
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.springframework.http.MediaType;
 
 /**
  *
@@ -53,14 +53,13 @@ public interface ContentMappingService {
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             final Map<String, String> parameters = acceptableMediaType.getParameters();
             final String domainType = parameters.get("x-ro-domain-type");
-            if(domainType != null) {
-                return domainType;
-            }
+            if(domainType != null)
+				return domainType;
         }
         throw new IllegalArgumentException(
                 "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
                         _NullSafe.stream(acceptableMediaTypes)
-                                .filter(_NullSafe::isPresent)
+                                .filter(Objects::nonNull)
                                 .map(Object::toString)
                                 .collect(Collectors.joining(", ")) );
     }

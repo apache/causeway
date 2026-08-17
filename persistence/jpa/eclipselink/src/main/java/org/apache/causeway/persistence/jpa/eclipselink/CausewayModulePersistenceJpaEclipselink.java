@@ -20,15 +20,19 @@ package org.apache.causeway.persistence.jpa.eclipselink;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.sql.DataSource;
 
-import jakarta.inject.Inject;
-
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
+import org.apache.causeway.persistence.jpa.eclipselink.metamodel.EclipseLinkMetadataService;
+import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jpa.autoconfigure.JpaBaseConfiguration;
 import org.springframework.boot.jpa.autoconfigure.JpaProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -41,13 +45,7 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
-import org.apache.causeway.persistence.jpa.eclipselink.metamodel.EclipseLinkMetadataService;
-import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
-
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -203,7 +201,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                                         "JPA operation: " + nextEx.getMessage(),
                                         extractSqlStringFromException(nextEx),
                                         nextEx))
-                        .filter(_NullSafe::isPresent) //CAUSEWAY-3282
+                        .filter(Objects::nonNull) //CAUSEWAY-3282
                         .findFirst()
                         .orElse(null);
 

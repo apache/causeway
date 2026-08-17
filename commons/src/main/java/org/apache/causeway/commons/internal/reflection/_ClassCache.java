@@ -26,25 +26,12 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.MergedAnnotations;
-import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -60,7 +47,18 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.MergedAnnotations;
+import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -229,7 +227,7 @@ public final class _ClassCache implements AutoCloseable {
         return Stream.of("get", "is")
             .map(prefix->prefix + capitalizedFieldName)
             .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .filter(AccessorSemantics::isGetter)
             .findFirst();
     }
@@ -403,7 +401,7 @@ public final class _ClassCache implements AutoCloseable {
             _Reflect.streamAllMethods(type, true)
                 .filter(_ClassCache::methodIncludeFilter)
                 .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .forEach(resolved->{
                     var key = new MethodKey(type, resolved.method());
                     var methodToKeep =
@@ -418,7 +416,7 @@ public final class _ClassCache implements AutoCloseable {
             _NullSafe.stream(type.getMethods())
                 .filter(_ClassCache::methodIncludeFilter)
                 .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .forEach(resolved->{
                     var key = new MethodKey(type, resolved.method());
                     putIntoMapHonoringOverridingRelation(body.publicMethodsByKey, key, resolved);

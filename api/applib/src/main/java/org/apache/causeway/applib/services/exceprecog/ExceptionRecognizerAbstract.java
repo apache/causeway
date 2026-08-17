@@ -125,7 +125,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 .orElse("");
             return formattedMessage;
         })
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .findFirst();
     }
 

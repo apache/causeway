@@ -18,20 +18,17 @@
  */
 package org.apache.causeway.core.mmtestsupport;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
-
-import org.jspecify.annotations.NonNull;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -59,7 +56,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
@@ -108,6 +104,9 @@ import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.util.ClassUtils;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -151,16 +150,16 @@ implements MetaModelContext {
     });
 
     @Builder.Default
-    private MetamodelEventService metamodelEventService =
+    private final MetamodelEventService metamodelEventService =
         new MetamodelEventService(event->{
             System.out.printf("MetaModelContext_forTesting (logs event to console): %s%n", event);
         });
 
     @Builder.Default @Getter
-    private CausewaySystemEnvironment systemEnvironment = new CausewaySystemEnvironment();
+    private final CausewaySystemEnvironment systemEnvironment = new CausewaySystemEnvironment();
 
     @Builder.Default @Getter
-    private ClassSubstitutorRegistry classSubstitutorRegistry =
+    private final ClassSubstitutorRegistry classSubstitutorRegistry =
         new ClassSubstitutorRegistry(List.of(
                 //new ClassSubstitutorForDomainObjects(),
                 new ClassSubstitutorForCollections(),
@@ -173,7 +172,7 @@ implements MetaModelContext {
      * default: false
      */
     @Builder.Default
-    private boolean enablePostprocessors = false;
+    private final boolean enablePostprocessors = false;
 
     private ObjectManager objectManager;
 
@@ -185,60 +184,60 @@ implements MetaModelContext {
     Can<Function<MetaModelContext, MetaModelRefiner>> refiners = Can.empty();
 
     @Builder.Default
-    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory =
+    private final BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory =
         (mmc, refiners)->new CausewayModuleCoreMetamodelConfigurationDefault()
             .programmingModel(mmc, refiners.toList(), ProgrammingModelInitFilter.noop());
 
     @Getter
-    private InteractionService interactionService;
+    private final InteractionService interactionService;
 
     private TranslationService translationService;
 
-    private InteractionContext authentication;
+    private final InteractionContext authentication;
 
     @Getter
-    private AuthorizationManager authorizationManager;
+    private final AuthorizationManager authorizationManager;
 
     @Getter
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Builder.Default @Getter
-    private TitleService titleService = new TitleServiceForTesting();
+    private final TitleService titleService = new TitleServiceForTesting();
 
     @Getter
-    private ObjectIconService objectIconService;
+    private final ObjectIconService objectIconService;
 
     @Getter
-    private RepositoryService repositoryService;
+    private final RepositoryService repositoryService;
 
     private FactoryService factoryService;
 
     @Getter
-    private MemberExecutorService memberExecutor;
+    private final MemberExecutorService memberExecutor;
 
     @Getter
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
-    private TransactionState transactionState;
+    private final TransactionState transactionState;
 
     private CausewayBeanTypeClassifier causewayBeanTypeClassifier;
 
     private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @Builder.Default @Getter
-    private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
+    private final PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
 
     @Builder.Default @Getter
-    private ObjectRenderService objectRenderService = ObjectRenderService.fallback();
+    private final ObjectRenderService objectRenderService = ObjectRenderService.fallback();
 
     @Singular @Getter
-    private List<Object> singletons;
+    private final List<Object> singletons;
 
     @Singular
-    private List<ValueSemanticsProvider<?>> valueSemantics;
+    private final List<ValueSemanticsProvider<?>> valueSemantics;
 
     @Singular @Getter
-    private List<SingletonBeanProvider> singletonProviders;
+    private final List<SingletonBeanProvider> singletonProviders;
 
     // -- SERVICE SUPPORT
 
@@ -289,7 +288,7 @@ implements MetaModelContext {
         return Stream.concat(
                 fields,
                 getSingletons().stream())
-                .filter(_NullSafe::isPresent);
+                .filter(Objects::nonNull);
     }
 
     Stream<SingletonBeanProvider> streamBeanAdapters() {
@@ -306,7 +305,7 @@ implements MetaModelContext {
                     SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
                     SingletonBeanProvider.forTestingLazy(HmacAuthority.class, HmacAuthority::forTesting),
                     SingletonBeanProvider.forTestingLazy(UrlEncodingService.class, UrlEncodingService::forTestingNoCompression),
-                    SingletonBeanProvider.forTestingLazy(ValueCodec.class, ()->ValueCodec.forTesting())
+                    SingletonBeanProvider.forTestingLazy(ValueCodec.class, ValueCodec::forTesting)
                     )
                 );
     }
@@ -370,7 +369,7 @@ implements MetaModelContext {
     }
 
     private final _Lazy<ProgrammingModel> programmingModelRef =
-            _Lazy.threadSafe(()->initProgrammingModel());
+            _Lazy.threadSafe(this::initProgrammingModel);
     @Override
     public ProgrammingModel getProgrammingModel() {
         return programmingModelRef.get();
@@ -463,7 +462,7 @@ implements MetaModelContext {
             getSystemEnvironment(),
             getConfiguration(),
             getMessageService(),
-            ()->getSpecificationLoader(),
+            this::getSpecificationLoader,
             List.of(getGridMarshaller()),
             List.of(new LayoutResourceLoaderDefault()));
     }
@@ -523,7 +522,7 @@ implements MetaModelContext {
             .streamRegisteredBeans()
             .map(this::toServiceInstance)
             .map(op->op.orElse(null))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .peek(this::registerAsService)
             .collect(Can.<ServiceInstance>toCan());
 
@@ -541,9 +540,8 @@ implements MetaModelContext {
     private Optional<ServiceInstance> toServiceInstance(final SingletonBeanProvider managedBeanAdapter) {
         var servicePojo = managedBeanAdapter.getInstanceElseFail();
 
-        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.beanClass())) {
-            return Optional.empty();
-        }
+        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.beanClass()))
+			return Optional.empty();
         return getSpecificationLoader()
             .specForType(servicePojo.getClass())
             .map(serviceSpec->new ServiceInstance(serviceSpec, servicePojo));
@@ -586,6 +584,6 @@ implements MetaModelContext {
     }
 
     @Getter
-    private CommandDtoFactory commandDtoFactory;
+    private final CommandDtoFactory commandDtoFactory;
 
 }

@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -33,7 +34,6 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -89,7 +89,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
 
             var beanSort = Optional.ofNullable(specLoader)
             .flatMap(sl->sl.specForType(cls))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .map(ObjectSpecification::beanSort)
             .orElse(BeanSort.UNKNOWN);
 
@@ -167,9 +167,9 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
             final Object rowObj,
             final ExecutionContext ec,
             final Object previousRow) {
-        if (rowObj instanceof final ExcelFixtureRowHandler rowHandler) {
-            return rowHandler.handleRow(ec, this, previousRow);
-        } else {
+        if (rowObj instanceof final ExcelFixtureRowHandler rowHandler)
+			return rowHandler.handleRow(ec, this, previousRow);
+		else {
             repositoryService.persist(rowObj);
             ec.addResult(this, rowObj);
             return Collections.singletonList(rowObj);

@@ -20,11 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.layout.bs.col;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -53,6 +50,9 @@ import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 public class Col
 extends PanelAbstract<ManagedObject, UiObjectWkt>
@@ -131,11 +131,11 @@ implements HasDynamicallyVisibleContent {
 
         var visibleActions = _NullSafe.stream(actionLayoutDataList)
         .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .map(actionLayoutData ->
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .map(act->ActionModel.forEntity(act, getModel()))
         .collect(Can.toCan());
 
@@ -162,7 +162,7 @@ implements HasDynamicallyVisibleContent {
         // tab groups
         final List<BSTabGroup> tabGroupsWithNonEmptyTabs =
                 _NullSafe.stream(bsCol.getTabGroups())
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .filter(bsTabGroup ->
                         _NullSafe.stream(bsTabGroup.getTabs())
                                 .anyMatch(BSUtil::hasContent)
@@ -211,7 +211,7 @@ implements HasDynamicallyVisibleContent {
         // fieldsets
         final List<FieldSet> fieldSetsWithProperties =
                 _NullSafe.stream(bsCol.getFieldSets())
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .filter(fieldSet -> ! _NullSafe.isEmpty(fieldSet.getProperties()))
                 .collect(Collectors.toList());
 

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.introspection;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacetAbstract;
@@ -41,8 +41,8 @@ extends IntrospectionPolicyFacetAbstract {
             final FacetHolder holder) {
 
         return domainObjectIfAny
-                .map(annot->annot.introspection())
-                .filter(_NullSafe::isPresent)
+                .map(DomainObject::introspection)
+                .filter(Objects::nonNull)
                 .filter(encapsulation->!encapsulation.isNotSpecified())
                 .map(encapsulation -> new IntrospectionPolicyFacetForDomainObjectAnnotation(
                         encapsulation,

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.spec.feature;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -28,7 +29,6 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -271,14 +271,13 @@ public interface ObjectMember extends ObjectFeature {
 
         var sortedBy = Stream.of(this, getElementType())
             .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
-            .filter(_NullSafe::isPresent)
+            .filter(Objects::nonNull)
             .findFirst()
             .map(SortedByFacet::value)
             .orElse(null);
 
-        if(sortedBy == null) {
-            return Optional.empty();
-        }
+        if(sortedBy == null)
+			return Optional.empty();
 
         var pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
                 _InstanceUtil.createInstance(sortedBy));

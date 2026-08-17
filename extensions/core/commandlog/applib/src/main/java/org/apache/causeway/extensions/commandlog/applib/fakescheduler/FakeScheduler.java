@@ -19,21 +19,14 @@
 package org.apache.causeway.extensions.commandlog.applib.fakescheduler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
@@ -41,7 +34,11 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import jakarta.inject.Inject;
 import lombok.Builder;
 
 /**
@@ -100,16 +97,14 @@ public class FakeScheduler {
         List<CommandDto> commandDtos = pendingCommandDtos();
 
         if(commandDtos.isEmpty()) {
-            switch (noCommandsPolicy) {
-                case STRICT:
-                    return CommandBulkExecutionResult.builder()
-                            .failure(new IllegalStateException(
-                                    "There are no background commands to be started"))
-                            .build();
-                case RELAXED:
-                default:
-                    return CommandBulkExecutionResult.happyCase();
-            }
+            return switch (noCommandsPolicy) {
+			case STRICT -> CommandBulkExecutionResult.builder()
+			                            .failure(new IllegalStateException(
+			                                    "There are no background commands to be started"))
+			                            .build();
+			case RELAXED -> CommandBulkExecutionResult.happyCase();
+			default -> CommandBulkExecutionResult.happyCase();
+			};
         }
 
         transactionService.flushTransaction();
@@ -135,7 +130,7 @@ public class FakeScheduler {
 
                 .failure(tasks.getTasks().stream()
                         .map(_ConcurrentTask::getFailedWith)
-                        .filter(_NullSafe::isPresent)
+                        .filter(Objects::nonNull)
                         .findAny()
                         .orElse(null))
                 .remainingCommandsToProcessCount(

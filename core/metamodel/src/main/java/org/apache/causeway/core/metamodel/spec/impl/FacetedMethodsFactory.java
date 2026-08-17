@@ -221,7 +221,7 @@ implements
         // build action
         return Optional.of(actionMethod)
             .map(this::createActionFacetedMethod)
-            .filter(_NullSafe::isPresent);
+            .filter(Objects::nonNull);
     }
 
     @Nullable

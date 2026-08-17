@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -42,12 +43,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  *
@@ -165,9 +164,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofNullable(final @Nullable T element) {
-        if(element==null) {
-            return empty();
-        }
+        if(element==null)
+			return empty();
         return new Can_Singleton<>(element);
     }
 
@@ -212,12 +210,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofArray(final @Nullable T[] array) {
-        if(_NullSafe.size(array)==0) {
-            return empty();
-        }
+        if(_NullSafe.size(array)==0)
+			return empty();
 
         var nonNullElements = Stream.of(array)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
@@ -238,12 +235,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
         var inputSize = _NullSafe.size(collection);
 
-        if(inputSize==0) {
-            return empty();
-        }
+        if(inputSize==0)
+			return empty();
 
         var nonNullElements = collection.stream()
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(inputSize));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
@@ -262,13 +258,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofIterable(final @Nullable Iterable<T> iterable) {
 
-        if(iterable==null) {
-            return empty();
-        }
+        if(iterable==null)
+			return empty();
         // Can implements Iterable, hence there is a potential shortcut, assuming un-modifaiablitity.
-        if(iterable instanceof Can) {
-            return (Can<T>)iterable;
-        }
+        if(iterable instanceof Can)
+			return (Can<T>)iterable;
 
         var nonNullElements = new ArrayList<T>();
         iterable.forEach(element->{
@@ -296,9 +290,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofEnumeration(final @Nullable Enumeration<T> enumeration) {
 
-        if(enumeration==null) {
-            return empty();
-        }
+        if(enumeration==null)
+			return empty();
 
         var nonNullElements = new ArrayList<T>();
         while(enumeration.hasMoreElements()) {
@@ -326,13 +319,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofStream(final @Nullable Stream<T> stream) {
 
-        if(stream==null) {
-            return empty();
-        }
+        if(stream==null)
+			return empty();
 
         var nonNullElements = stream
-                .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(()->new ArrayList<>()));
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
@@ -413,14 +405,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default <R> Can<R> map(final @NonNull Function<? super T, R> mapper) {
 
-        if(isEmpty()) {
-            return empty();
-        }
+        if(isEmpty())
+			return empty();
 
         var nonNullMappedElements =
                 stream()
                 .map(mapper)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .collect(_CanFactory.toListWithSizeUpperBound(size()));
 
         return _CanFactory.ofNonNullElements(nonNullMappedElements);
@@ -428,14 +419,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     default <R> Can<R> flatMap(final @NonNull Function<? super T, ? extends Can<? extends R>> mapper) {
 
-        if(isEmpty()) {
-            return empty();
-        }
+        if(isEmpty())
+			return empty();
 
         return
                 stream()
                 .map(mapper)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .flatMap(Can::stream)
                 .collect(Can.toCan());
     }
@@ -463,12 +453,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> concat(final @Nullable Can<T> can, final @Nullable T element) {
-        if(can==null || can.isEmpty()) {
-            return ofNullable(element);
-        }
-        if(element==null) {
-            return can;
-        }
+        if(can==null || can.isEmpty())
+			return ofNullable(element);
+        if(element==null)
+			return can;
         // at this point: can is not empty and variant is not null
         var newSize = can.size() + 1;
         var union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
@@ -536,9 +524,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return same or new instance
      */
     default Can<T> addUnique(final @Nullable T element) {
-        if(contains(element)) {
-            return this;
-        }
+        if(contains(element))
+			return this;
         return add(element);
     }
 
@@ -698,20 +685,17 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return whether this is element-wise equal to {@code other}
      */
     default boolean isEqualTo(final @Nullable Can<?> other) {
-        if(other==null) {
-            return false;
-        }
-        if(this.size()!=other.size()) {
-            return false;
-        }
+        if(other==null)
+			return false;
+        if(this.size()!=other.size())
+			return false;
 
         var otherIterator = other.iterator();
 
         for(T element: this) {
             var otherElement = otherIterator.next();
-            if(!element.equals(otherElement)) {
-                return false;
-            }
+            if(!element.equals(otherElement))
+				return false;
         }
 
         return true;
@@ -727,12 +711,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default boolean startsWith(final @Nullable Can<?> other) {
         if(other==null
-                || other.isEmpty()) {
-            return true;
-        }
-        if(this.size()<other.size()) {
-            return false;
-        }
+                || other.isEmpty())
+			return true;
+        if(this.size()<other.size())
+			return false;
 
         var thisIterator = this.iterator();
         var otherIterator = other.iterator();
@@ -741,9 +723,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             var otherElement = otherIterator.next();
             var thisElement  = thisIterator.next();
 
-            if(!thisElement.equals(otherElement)) {
-                return false;
-            }
+            if(!thisElement.equals(otherElement))
+				return false;
         }
         return true;
     }
@@ -756,12 +737,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     default boolean endsWith(final @Nullable Can<?> other) {
         if(other==null
-                || other.isEmpty()) {
-            return true;
-        }
-        if(this.size()<other.size()) {
-            return false;
-        }
+                || other.isEmpty())
+			return true;
+        if(this.size()<other.size())
+			return false;
 
         var thisIterator = this.reverseIterator();
         var otherIterator = other.reverseIterator();
@@ -770,9 +749,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             var otherElement = otherIterator.next();
             var thisElement  = thisIterator.next();
 
-            if(!thisElement.equals(otherElement)) {
-                return false;
-            }
+            if(!thisElement.equals(otherElement))
+				return false;
         }
         return true;
     }

@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -43,16 +44,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
@@ -98,9 +96,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public boolean contains(final @Nullable T element) {
-        if(element==null) {
-            return false; // Can's dont't contain null
-        }
+        if(element==null)
+			return false; // Can's dont't contain null
         return elements.contains(element);
     }
 
@@ -109,14 +106,12 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         // we do an index out of bounds check ourselves, in order to prevent any stack-traces,
         // that pollute the heap
         var size = size();
-        if(size==0) {
-            return Optional.empty();
-        }
+        if(size==0)
+			return Optional.empty();
         var minIndex = 0;
         var maxIndex = size - 1;
-        if(elementIndex < minIndex ||  elementIndex > maxIndex) {
-            return Optional.empty();
-        }
+        if(elementIndex < minIndex ||  elementIndex > maxIndex)
+			return Optional.empty();
         return Optional.of(elements.get(elementIndex));
     }
 
@@ -166,7 +161,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
             private int remainingCount = size();
             @Override public boolean hasNext() { return remainingCount>0; }
             @Override public T next() {
-                if(!hasNext()) { throw _Exceptions.noSuchElement(); }
+                if(!hasNext())
+					throw _Exceptions.noSuchElement();
                 return elements.get(--remainingCount);
             }
         };
@@ -195,18 +191,16 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
-        if(predicate==null) {
-            return this; // identity
-        }
+        if(predicate==null)
+			return this; // identity
         var filteredElements =
                 stream()
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         // optimization for the case when the filter accepted all
-        if(filteredElements.size()==size()) {
-            return this; // identity
-        }
+        if(filteredElements.size()==size())
+			return this; // identity
         return Can.ofCollection(filteredElements);
     }
 
@@ -229,7 +223,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         var zippedInIterator = zippedIn.iterator();
         return stream()
                 .map(t->mapper.apply(t, zippedInIterator.next()))
-                .filter(_NullSafe::isPresent);
+                .filter(Objects::nonNull);
     }
 
     @Override
@@ -242,9 +236,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     @Override
     public Can<T> addAll(final @Nullable Can<T> other) {
         if(other==null
-                || other.isEmpty()) {
-            return this;
-        }
+                || other.isEmpty())
+			return this;
         var newElements = new ArrayList<T>(this.size() + other.size());
         newElements.addAll(elements);
         other.forEach(newElements::add);
@@ -253,9 +246,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> add(final int index, final @Nullable T element) {
-        if(element==null) {
-            return this; // identity
-        }
+        if(element==null)
+			return this; // identity
         var newElements = new ArrayList<T>(elements);
         newElements.add(index, element);
         return Can.ofCollection(newElements);
@@ -263,9 +255,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> replace(final int index, final @Nullable T element) {
-        if(element==null) {
-            return remove(index);
-        }
+        if(element==null)
+			return remove(index);
         var newElements = new ArrayList<T>(elements);
         newElements.set(index, element);
         return Can.ofCollection(newElements);
@@ -280,9 +271,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> remove(final @Nullable T element) {
-        if(element==null) {
-            return this; // identity
-        }
+        if(element==null)
+			return this; // identity
         var newElements = new ArrayList<T>(elements);
         newElements.remove(element);
         return Can.ofCollection(newElements);
@@ -291,9 +281,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     @Override
     public Can<T> pickByIndex(final @Nullable int... indices) {
         if(indices==null
-                ||indices.length==0) {
-            return Can.empty();
-        }
+                ||indices.length==0)
+			return Can.empty();
         var newElements = new ArrayList<T>(indices.length);
         final int maxIndex = size()-1;
         for(int index:indices) {
@@ -307,9 +296,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> pickByIndex(final @Nullable IntStream intStream) {
-        if(intStream==null) {
-            return Can.empty();
-        }
+        if(intStream==null)
+			return Can.empty();
         var newElements = new ArrayList<T>();
         final int maxIndex = size()-1;
         intStream
@@ -330,17 +318,15 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         final int upperBoundExclusive = endExclusive < 0
                 ? size() + endExclusive
                 : endExclusive;
-        if (startInclusive >= upperBoundExclusive) {
-            return Can.empty();
-        }
+        if (startInclusive >= upperBoundExclusive)
+			return Can.empty();
         return pickByIndex(IntStream.range(startInclusive, upperBoundExclusive));
     }
 
     @Override
     public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
-        if(maxInnerSize<1) {
-            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
-        }
+        if(maxInnerSize<1)
+			throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
         final int n = size();
         final int subCanCount = (n - 1)/maxInnerSize + 1;
         var newElements = new ArrayList<Can<T>>(subCanCount);
@@ -352,9 +338,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
-        if(outerSizeYield<1) {
-            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
-        }
+        if(outerSizeYield<1)
+			throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
         final int n = size();
         final int maxInnerSize = (n - 1)/outerSizeYield + 1;
         return partitionInnerBound(maxInnerSize);
@@ -388,9 +373,8 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public boolean equals(final Object obj) {
-        if(obj instanceof Can) {
-            return ((Can<?>) obj).isEqualTo(this);
-        }
+        if(obj instanceof Can)
+			return ((Can<?>) obj).isEqualTo(this);
         return false;
     }
 
@@ -405,42 +389,36 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         // -1 ... this (multi-can) is before other
         // +1 ... this (multi-can) is after other
         if(other==null
-                || other.isEmpty()) {
-            return 1; // all empty Cans are same and come first
-        }
+                || other.isEmpty())
+			return 1; // all empty Cans are same and come first
         if(other.isCardinalityOne()) {
             final int firstElementComparison = _Objects.compareNonNull(
                     this.elements.get(0),
                     other.getSingletonOrFail());
-            if(firstElementComparison!=0) {
-                return firstElementComparison;
-            }
+            if(firstElementComparison!=0)
+				return firstElementComparison;
         }
         // at this point firstElementComparison is 0 and other is a multi-can
         // XXX we already compared the first elements, could skip ahead for performance reasons
         if(this.size()>=other.size()) {
             var otherIterator = other.iterator();
             for(T left: this) {
-                if(!otherIterator.hasNext()) {
-                    return 1; // the other has fewer elements hence comes first
-                }
+                if(!otherIterator.hasNext())
+					return 1; // the other has fewer elements hence comes first
                 var right = otherIterator.next();
                 int c = _Objects.compareNonNull(left, right);
-                if(c!=0) {
-                    return c;
-                }
+                if(c!=0)
+					return c;
             }
         } else {
             var thisIterator = this.iterator();
             for(T right: other) {
-                if(!thisIterator.hasNext()) {
-                    return -1; // this has fewer elements hence comes first
-                }
+                if(!thisIterator.hasNext())
+					return -1; // this has fewer elements hence comes first
                 var left = thisIterator.next();
                 int c = _Objects.compareNonNull(left, right);
-                if(c!=0) {
-                    return c;
-                }
+                if(c!=0)
+					return c;
             }
         }
         return 0; // we compared all elements and found no difference
@@ -525,7 +503,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
         return stream()
                 .map(toStringFunction)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .collect(Collectors.joining(delimiter));
     }
 

@@ -254,7 +254,7 @@ implements
             ManagedObjects.bookmark(prop.get(candidateAdapter, InteractionInitiatedBy.PASS_THROUGH))
             .orElse(null)
         )
-        .filter(_NullSafe::isPresent);
+        .filter(Objects::nonNull);
     }
 
     // -- VIEW OR EDIT

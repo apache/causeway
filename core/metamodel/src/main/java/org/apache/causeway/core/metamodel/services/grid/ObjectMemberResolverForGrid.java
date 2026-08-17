@@ -18,10 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -58,8 +61,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -187,7 +188,7 @@ record ObjectMemberResolverForGrid(
                 var associations1To1Ids =
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
-                        .filter(_NullSafe::isPresent)
+                        .filter(Objects::nonNull)
                         .sorted(ObjectMember.byMemberOrderSequence(false))
                         .map(ObjectAssociation::getId)
                         .collect(Collectors.toList());
@@ -207,7 +208,7 @@ record ObjectMemberResolverForGrid(
                 var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
                     .sortProperties(context.causewayConfiguration(), unboundPropertyIds.stream()
                             .map(oneToOneAssociationById::get)
-                            .filter(_NullSafe::isPresent));
+                            .filter(Objects::nonNull));
 
                 addPropertiesTo(
                         fieldSet,
@@ -230,7 +231,7 @@ record ObjectMemberResolverForGrid(
             var sortedMissingCollectionIds = _UnreferencedSequenceUtil
                     .sortCollections(context.causewayConfiguration(), collectionDisjunction.right().stream()
                             .map(oneToManyAssociationById::get)
-                            .filter(_NullSafe::isPresent));
+                            .filter(Objects::nonNull));
 
             gridModel.nodeForUnreferencedCollections()
             .accept(

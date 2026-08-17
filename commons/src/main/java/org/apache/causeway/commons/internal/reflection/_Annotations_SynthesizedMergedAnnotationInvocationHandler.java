@@ -200,7 +200,7 @@ implements InvocationHandler {
         // for all discovered annotations of this.type determine the effective (attribute) value
         var attributeValue = streamAnnotations()
         .map(mergedAnnotation->(Object)mergedAnnotation.getValue(name, type).orElse(null))
-        .filter(_NullSafe::isPresent)
+        .filter(Objects::nonNull)
         .filter(value->!value.equals(defaultValue))
         .findFirst()
         .orElse(defaultValue);

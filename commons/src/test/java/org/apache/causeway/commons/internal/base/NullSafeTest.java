@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,53 +32,39 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class NullSafeTest {
 
     @Test
     void streamAutodetect() throws Exception {
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new boolean[] {true, false})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new byte[] {1, 2})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new char[] {'1', '2'})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new short[] {1, 2})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new float[] {1.f, 2.f})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new double[] {1., 2.})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new int[] {1, 2})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new long[] {1L, 2L})
                 .count());
-        
-        assertEquals(2, 
+        assertEquals(2,
                 _NullSafe.streamAutodetect(new String[] {"hi", "there"})
                 .count());
     }
-    
+
     @Test
     void isEmptyString() throws Exception {
         assertThat(_NullSafe.isEmpty((String)null), is(true));
@@ -89,22 +80,8 @@ class NullSafeTest {
     }
 
     @Test
-    void absence() throws Exception {
-        assertThat(_NullSafe.isAbsent(null), is(true));
-        assertThat(_NullSafe.isAbsent(""), is(false));
-    }
-
-    @Test
-    void presence() throws Exception {
-        assertThat(_NullSafe.isPresent(null), is(false));
-        assertThat(_NullSafe.isPresent(""), is(true));
-    }
-
-    @Test
     void emptyStreamWithArray() throws Exception {
-
         assertNotNull(_NullSafe.stream((String[])null));
-
         assertNotNull(_NullSafe.stream(_Strings.emptyArray));
         assertEquals(0L, _NullSafe.stream(_Strings.emptyArray).count());
     }
@@ -119,9 +96,7 @@ class NullSafeTest {
 
     @Test
     void emptyStreamWithCollection() throws Exception {
-
         assertNotNull(_NullSafe.stream((List<?>)null));
-
         assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)));
         assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray)).count());
     }
@@ -136,9 +111,7 @@ class NullSafeTest {
 
     @Test
     void emptyStreamWithIterator() throws Exception {
-
         assertNotNull(_NullSafe.stream((Iterator<?>)null));
-
         assertNotNull(_NullSafe.stream(Arrays.asList(_Strings.emptyArray)).iterator());
         assertEquals(0L, _NullSafe.stream(Arrays.asList(_Strings.emptyArray).iterator()).count());
     }

@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -89,7 +89,7 @@ public interface Hierarchical {
 
         // lookup all interfaces
 		Stream<T> facets2 = hierarchical.interfaceSpecs().stream()
-                .filter(_NullSafe::isPresent) // just in case
+                .filter(Objects::nonNull) // just in case
                 .flatMap(interfaceSpec->interfaceSpec.lookupFacet(facetType).stream());
 
         // search up the inheritance hierarchy

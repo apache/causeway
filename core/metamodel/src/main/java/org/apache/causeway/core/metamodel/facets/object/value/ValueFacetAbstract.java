@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -36,7 +34,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -50,6 +47,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -146,7 +145,7 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getOrderRelation)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .map(rel->(OrderRelation<T, ?>)rel);
     }
@@ -158,7 +157,7 @@ implements ValueFacet<T> {
         return getAllValueSemantics()
                 .stream()
                 .filter(isMatching(Optional.empty()))
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -170,7 +169,7 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getDefaultsProvider)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -178,7 +177,7 @@ implements ValueFacet<T> {
     public Optional<DefaultsProvider<T>> selectDefaultsProviderForAttribute(@Nullable final ObjectFeature feature) {
         return streamValueSemanticsHonoringQualifiers(feature)
                 .map(ValueSemanticsProvider::getDefaultsProvider)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -190,7 +189,7 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getParser)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -198,7 +197,7 @@ implements ValueFacet<T> {
     public Optional<Parser<T>> selectParserForAttribute(@NonNull final ObjectFeature feature) {
         return streamValueSemanticsHonoringQualifiers(feature)
                 .map(ValueSemanticsProvider::getParser)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -215,7 +214,7 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatching(Optional.empty()))
                 .map(ValueSemanticsProvider::getRenderer)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -223,7 +222,7 @@ implements ValueFacet<T> {
     public Optional<Renderer<T>> selectRendererForParamOrPropOrColl(final @NonNull ObjectFeature param) {
         return streamValueSemanticsHonoringQualifiers(param)
                 .map(ValueSemanticsProvider::getRenderer)
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 

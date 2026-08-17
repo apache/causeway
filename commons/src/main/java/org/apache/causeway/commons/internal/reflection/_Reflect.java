@@ -448,7 +448,7 @@ public final class _Reflect {
 //        return methods
 //                .filter(m->same(method, m))
 //                .map(m->m.getAnnotation(annotationCls))
-//                .filter(_NullSafe::isPresent)
+//                .filter(Objects::nonNull)
 //                .findFirst()
 //                .orElse(null);
 

@@ -22,22 +22,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import jakarta.inject.Inject;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.jspecify.annotations.Nullable;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -50,16 +44,19 @@ import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
-
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import jakarta.inject.Inject;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -474,7 +471,9 @@ public abstract class FixtureScript {
                 final @Nullable PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
             if(personaWithBuilderScripts==null) return; // no-op
             for (PersonaWithBuilderScript<?,?> builder : personaWithBuilderScripts) {
-                if(builder==null) continue; // ignore
+                if(builder==null) {
+					continue; // ignore
+				}
                 BuilderScriptAbstract<?> childFixtureScript = builder.builder();
                 executeChild(callingFixtureScript, childFixtureScript);
             }
@@ -508,7 +507,9 @@ public abstract class FixtureScript {
                 final @Nullable Iterable<FixtureScript> fixtureScripts) {
             if(fixtureScripts==null) return; // no-op
             for (FixtureScript fixtureScript : fixtureScripts) {
-                if(fixtureScript==null) continue; // ignore
+                if(fixtureScript==null) {
+					continue; // ignore
+				}
                 executeChild(callingFixtureScript, fixtureScript);
             }
         }
@@ -522,7 +523,7 @@ public abstract class FixtureScript {
                 final @Nullable Stream<FixtureScript> fixtureScripts) {
             if(fixtureScripts==null) return; // no-op
             fixtureScripts
-                .filter(_NullSafe::isPresent)
+                .filter(Objects::nonNull)
                 .forEach(fixtureScript -> executeChild(callingFixtureScript, fixtureScript));
         }
 
@@ -549,9 +550,8 @@ public abstract class FixtureScript {
                 final String localNameOverride,
                 final FixtureScript childFixtureScript) {
 
-            if(childFixtureScript == null) {
-                return;
-            }
+            if(childFixtureScript == null)
+				return;
             executeChildT(callingFixtureScript, localNameOverride, childFixtureScript);
         }
 
@@ -602,9 +602,8 @@ public abstract class FixtureScript {
                     this.previouslyExecuted.add(childFixtureScript);
                     fixtureScriptByClass.put(childFixtureScript.getClass(), childFixtureScript);
                     return childFixtureScript;
-                } else {
-                    return _Casts.uncheckedCast(previouslyExecutedScript);
-                }
+                } else
+					return _Casts.uncheckedCast(previouslyExecutedScript);
 
             case EXECUTE_ONCE_BY_VALUE:
                 return executeChildIfNotAlreadyWithValueSemantics(childFixtureScript);
@@ -622,9 +621,7 @@ public abstract class FixtureScript {
         private <T extends FixtureScript> FixtureScripts.MultipleExecutionStrategy determineExecutionStrategy(final T childFixtureScript) {
             final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
-            if(childFixtureScript instanceof FixtureScriptWithExecutionStrategy) {
-                final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy =
-                        (FixtureScriptWithExecutionStrategy) childFixtureScript;
+            if(childFixtureScript instanceof final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy) {
                 executionStrategy = Optional.ofNullable(
                         fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy())
                         .orElseGet(fixtureScripts::getMultipleExecutionStrategy);
@@ -641,9 +638,8 @@ public abstract class FixtureScript {
                 this.previouslyExecuted.add(childFixtureScript);
                 fixtureScriptByValue.put(childFixtureScript, childFixtureScript);
                 return childFixtureScript;
-            } else {
-                return _Casts.uncheckedCast(previouslyExecutedScript);
-            }
+            } else
+				return _Casts.uncheckedCast(previouslyExecutedScript);
         }
 
         // -- previouslyExecuted
@@ -705,7 +701,8 @@ public abstract class FixtureScript {
         final Class<T> cls = _Casts.uncheckedCast(defaultValue.getClass());
 
         final T value = readParam(parameterName, ec, cls);
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         // else default value
         return defaultValue;
@@ -725,7 +722,8 @@ public abstract class FixtureScript {
 
         // read from ExecutionContext
         T value = ec.getParameterAsT(parameterName, cls);
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         // else from fixture script
         Method method;
@@ -735,7 +733,8 @@ public abstract class FixtureScript {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
-        if(value != null) { return value; }
+        if(value != null)
+			return value;
 
         if (cls == Boolean.class || cls == boolean.class) {
             try {
@@ -744,7 +743,8 @@ public abstract class FixtureScript {
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
             }
-            if(value != null) { return value; }
+            if(value != null)
+				return value;
         }
 
         return null;
