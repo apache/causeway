@@ -149,7 +149,7 @@ record SyntheticNavigationActionFactory(
     private static boolean eligible(
             final Class<?> ownerType,
             final OneToManyAssociation collection) {
-        return ownerType.equals(collection.getDeclaringType().getClass())
+        return ownerType.equals(collection.getDeclaringType().correspondingClass())
                 && collection.getElementType() != null
                 && collection.getElementType().isEntityOrViewModelOrAbstract();
     }

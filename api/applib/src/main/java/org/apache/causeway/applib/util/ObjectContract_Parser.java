@@ -28,11 +28,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.util.ObjectContracts.ObjectContract;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Package private parser for ObjectContract.<br/><br/>
@@ -50,7 +49,7 @@ class ObjectContract_Parser<T> {
      * @param propertyNames
      */
     @SuppressWarnings("unchecked")
-    public static <T> ObjectContract<T> parse(Class<T> cls, final @Nullable String propertyNames) {
+    public static <T> ObjectContract<T> parse(final Class<T> cls, final @Nullable String propertyNames) {
 
         Objects.requireNonNull(cls);
 
@@ -62,9 +61,8 @@ class ObjectContract_Parser<T> {
 
         ObjectContract<T> contract = ObjectContract.empty(cls);
 
-        if(clauses.isEmpty()) {
-            return contract;
-        }
+        if(clauses.isEmpty())
+			return contract;
 
         for(Clause<T> clause : clauses) {
             @SuppressWarnings("rawtypes")
@@ -89,14 +87,14 @@ class ObjectContract_Parser<T> {
                 @Override @SuppressWarnings({ "unchecked", "rawtypes" })
                 public Comparator<Comparable<?>> getOrdering() {
                     // legacy of Ordering.natural().nullsFirst();
-                    return Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
+                    return Comparator.nullsFirst((Comparator)Comparator.naturalOrder());
                 }
             },
             ASC_NULLS_LAST {
                 @Override @SuppressWarnings({ "unchecked", "rawtypes" })
                 public Comparator<Comparable<?>> getOrdering() {
                     // legacy of Ordering.natural().nullsLast();
-                    return Comparator.nullsLast(Comparator.<Comparable>naturalOrder());
+                    return Comparator.nullsLast((Comparator)Comparator.naturalOrder());
                 }
             },
             DESC {
@@ -116,7 +114,7 @@ class ObjectContract_Parser<T> {
 
             public abstract Comparator<Comparable<?>> getOrdering();
 
-            public static Direction valueOfElseAsc(String str) {
+            public static Direction valueOfElseAsc(final String str) {
                 if("asc".equals(str)) return ASC;
                 if("asc nullsFirst".equals(str)) return ASC;
                 if("asc nullsLast".equals(str)) return ASC_NULLS_LAST;
@@ -132,15 +130,14 @@ class ObjectContract_Parser<T> {
         private final Direction direction;
         private final Method getterMethod;
 
-        private static <X> Clause<X> parse(Class<X> cls, String input) {
+        private static <X> Clause<X> parse(final Class<X> cls, final String input) {
             final Matcher matcher = pattern.matcher(input);
-            if(!matcher.matches()) {
-                return null;
-            }
+            if(!matcher.matches())
+				return null;
             return new Clause<>(cls, matcher.group(1), Direction.valueOfElseAsc(matcher.group(2)));
         }
 
-        private Clause(Class<T> cls, String propertyName, Direction direction) {
+        private Clause(final Class<T> cls, final String propertyName, final Direction direction) {
             this.objectClass = cls;
             this.propertyName = propertyName;
             this.direction = direction;
@@ -163,7 +160,7 @@ class ObjectContract_Parser<T> {
             }
         }
 
-        public Object extractValue(T obj) {
+        public Object extractValue(final T obj) {
             try {
                 return getterMethod.invoke(obj, _Constants.emptyObjects);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
