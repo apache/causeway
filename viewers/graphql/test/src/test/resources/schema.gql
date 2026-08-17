@@ -41,6 +41,21 @@ directive @specifiedBy(
     url: String!
   ) on SCALAR
 
+"Concrete rich object types assignable to causeway.feat.ApplicationFeatureViewModel"
+union rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union = rich__causeway_feat_ApplicationNamespace | rich__causeway_feat_ApplicationType | rich__causeway_feat_ApplicationTypeAction | rich__causeway_feat_ApplicationTypeCollection | rich__causeway_feat_ApplicationTypeProperty
+
+"Concrete rich object types assignable to causeway.feat.ApplicationTypeMember"
+union rich__causeway_feat_ApplicationTypeMember__gqlv_union = rich__causeway_feat_ApplicationTypeAction | rich__causeway_feat_ApplicationTypeCollection | rich__causeway_feat_ApplicationTypeProperty
+
+"Concrete rich object types assignable to org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
+union rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union = rich__causeway_metamodel_MetamodelInspectView
+
+"Concrete rich object types assignable to university.calc.EditableMementoViewModel"
+union rich__university_calc_EditableMementoViewModel__gqlv_union = rich__university_calc_EditableMementoViewModel
+
+"Concrete rich object types assignable to university.dept.Person"
+union rich__university_dept_Person__gqlv_union = rich__university_dept_DeptHead | rich__university_dept_StaffMember
+
 type Mutation {
   causeway_conf_ConfigurationProperty__key(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, key: String!): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationProperty__value(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, value: String!): rich__causeway_conf_ConfigurationProperty
@@ -53,6 +68,9 @@ type Mutation {
   university_admin_AdminMenu__actionWithHiddenParam(firstParam: String!, secondParam: String!): String
   university_admin_AdminMenu__adminAction: String
   university_admin_AdminMenu__otherAdminAction: String
+  university_calc_Calculator__createEditableMementoViewModel: rich__university_calc_EditableMementoViewModel
+  university_calc_Calculator__createSharedViewModel: rich__university_calc_EditableMementoViewModel__gqlv_union
+  university_calc_EditableMementoViewModel__age(_target: rich__university_calc_EditableMementoViewModel__gqlv_input, age: Int!): rich__university_calc_EditableMementoViewModel
   university_dept_Department__addStaffMember(_target: rich__university_dept_Department__gqlv_input, staffMember: rich__university_dept_StaffMember__gqlv_input!): rich__university_dept_Department
   university_dept_Department__addStaffMembers(_target: rich__university_dept_Department__gqlv_input, staffMembers: [rich__university_dept_StaffMember__gqlv_input]): rich__university_dept_Department
   university_dept_Department__changeDeptHead(_target: rich__university_dept_Department__gqlv_input, newDeptHead: rich__university_dept_DeptHead__gqlv_input!): rich__university_dept_Department
@@ -93,7 +111,6 @@ type RICHSchema {
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
-  java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
@@ -102,6 +119,7 @@ type RICHSchema {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
+  university_calc_EditableMementoViewModel(object: rich__university_calc_EditableMementoViewModel__gqlv_input): rich__university_calc_EditableMementoViewModel
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
   university_calc_calculatorHyphenated: rich__university_calc_calculatorHyphenated
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
@@ -134,7 +152,6 @@ type SIMPLESchema {
   causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: simple__java_lang_Record__gqlv_input): simple__java_lang_Record
-  java_lang_Runnable(object: simple__java_lang_Runnable__gqlv_input): simple__java_lang_Runnable
   java_util_concurrent_Callable(object: simple__java_util_concurrent_Callable__gqlv_input): simple__java_util_concurrent_Callable
   java_util_function_Consumer(object: simple__java_util_function_Consumer__gqlv_input): simple__java_util_function_Consumer
   java_util_function_Function(object: simple__java_util_function_Function__gqlv_input): simple__java_util_function_Function
@@ -143,6 +160,7 @@ type SIMPLESchema {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
+  university_calc_EditableMementoViewModel(object: simple__university_calc_EditableMementoViewModel__gqlv_input): simple__university_calc_EditableMementoViewModel
   university_calc_I18nCalculator: simple__university_calc_I18nCalculator
   university_calc_calculatorHyphenated: simple__university_calc_calculatorHyphenated
   university_dept_Department(object: simple__university_dept_Department__gqlv_input): simple__university_dept_Department
@@ -185,7 +203,6 @@ type ScenarioStep {
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
-  java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
@@ -194,6 +211,7 @@ type ScenarioStep {
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
+  university_calc_EditableMementoViewModel(object: rich__university_calc_EditableMementoViewModel__gqlv_input): rich__university_calc_EditableMementoViewModel
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
   university_calc_calculatorHyphenated: rich__university_calc_calculatorHyphenated
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
@@ -601,7 +619,7 @@ type rich__causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property 
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  set(memberName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(memberName: String): String
 }
 
@@ -610,15 +628,16 @@ type rich__causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_proper
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  set(namespaceName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(namespaceName: String): String
 }
 
 type rich__causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationFeatureViewModel
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -627,7 +646,7 @@ type rich__causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_prope
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationFeatureViewModel
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(typeSimpleName: String): String
 }
 
@@ -649,6 +668,7 @@ type rich__causeway_feat_ApplicationNamespace {
 type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection {
   datatype: String
   disabled: String
+  get: [rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union]
   hidden: Boolean
 }
 
@@ -684,6 +704,7 @@ type rich__causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
 type rich__causeway_feat_ApplicationNamespace__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationNamespace
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
@@ -776,6 +797,7 @@ type rich__causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
 type rich__causeway_feat_ApplicationTypeAction__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeAction
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
@@ -866,6 +888,7 @@ type rich__causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
 type rich__causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeCollection
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
@@ -909,7 +932,7 @@ type rich__causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(memberName: String!): rich__causeway_feat_ApplicationTypeMember
+  set(memberName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(memberName: String): String
 }
 
@@ -918,15 +941,16 @@ type rich__causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeMember
+  set(namespaceName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(namespaceName: String): String
 }
 
 type rich__causeway_feat_ApplicationTypeMember__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
-  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeMember
+  set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
 
@@ -935,7 +959,7 @@ type rich__causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeMember
+  set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(typeSimpleName: String): String
 }
 
@@ -1010,6 +1034,7 @@ type rich__causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
 type rich__causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeProperty
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
@@ -1088,6 +1113,7 @@ type rich__causeway_feat_ApplicationType__namespaceName__gqlv_property {
 type rich__causeway_feat_ApplicationType__parent__gqlv_property {
   datatype: String
   disabled: String
+  get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationType
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
@@ -1144,7 +1170,7 @@ type rich__causeway_metamodel_MetamodelInspectView__inspect__fullyQualifiedClass
   datatype: String
   disabled(fullyQualifiedClassName: String): String
   hidden: Boolean
-  validity: String
+  validity(fullyQualifiedClassName: String): String
 }
 
 "Opens a meta-model inspection view for given fully qualified domain class"
@@ -1290,22 +1316,6 @@ type rich__java_lang_Record__gqlv_meta {
   title: String!
 }
 
-type rich__java_lang_Runnable {
-  "Object metadata"
-  _meta: rich__java_lang_Runnable__gqlv_meta
-}
-
-type rich__java_lang_Runnable__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type rich__java_util_concurrent_Callable {
   "Object metadata"
   _meta: rich__java_util_concurrent_Callable__gqlv_meta
@@ -1393,7 +1403,7 @@ type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__tree__gql
   disabled: String
   get: String!
   hidden: Boolean
-  set(tree: String!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
+  set(tree: String!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union
   validate(tree: String): String
 }
 
@@ -1450,7 +1460,7 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv
   datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
-  validity: String
+  validity(firstParam: String): String
 }
 
 type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
@@ -1488,21 +1498,21 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__secondParam__gql
   datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
-  validity: String
+  validity(firstParam: String, secondParam: String): String
 }
 
 type rich__university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__gqlv_action_parameter {
   datatype: String
   disabled(firstParam: String, secondParam: String, thirdParameter: String): String
   hidden(firstParam: String, secondParam: String): Boolean
-  validity: String
+  validity(firstParam: String, secondParam: String, thirdParameter: String): String
 }
 
 type rich__university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_action_parameter {
   datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
-  validity: String
+  validity(firstParam: String): String
 }
 
 type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
@@ -1537,7 +1547,7 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_
   datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
-  validity: String
+  validity(firstParam: String, secondParam: String): String
 }
 
 type rich__university_admin_AdminMenu__adminAction__gqlv_action {
@@ -1593,6 +1603,10 @@ type rich__university_calc_Calculator {
   and: rich__university_calc_Calculator__and__gqlv_action
   "Concat"
   concat: rich__university_calc_Calculator__concat__gqlv_action
+  "Create Editable Memento View Model"
+  createEditableMementoViewModel: rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action
+  "Create Shared View Model"
+  createSharedViewModel: rich__university_calc_Calculator__createSharedViewModel__gqlv_action
   "Jdk 8 Local Plus Days"
   jdk8LocalPlusDays: rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action
   "Jdk 8 Local Plus Hours And Minutes"
@@ -1609,6 +1623,8 @@ type rich__university_calc_Calculator {
   not: rich__university_calc_Calculator__not__gqlv_action
   "Or"
   or: rich__university_calc_Calculator__or__gqlv_action
+  "Read Shared View Model"
+  readSharedViewModel: rich__university_calc_Calculator__readSharedViewModel__gqlv_action
   "Some Locale"
   someLocale: rich__university_calc_Calculator__someLocale__gqlv_action
   "Some Url"
@@ -1649,14 +1665,14 @@ type rich__university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter 
   datatype: String
   disabled(x: String): String
   hidden: Boolean
-  validity: String
+  validity(x: String): String
 }
 
 type rich__university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter {
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
-  validity: String
+  validity(x: String, y: String): String
 }
 
 type rich__university_calc_Calculator__addBigIntegers__gqlv_action {
@@ -1691,14 +1707,14 @@ type rich__university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter 
   datatype: String
   disabled(x: String): String
   hidden: Boolean
-  validity: String
+  validity(x: String): String
 }
 
 type rich__university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
-  validity: String
+  validity(x: String, y: String): String
 }
 
 type rich__university_calc_Calculator__addByteWrappers__gqlv_action {
@@ -1733,14 +1749,14 @@ type rich__university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
-  validity: String
+  validity(x: Byte): String
 }
 
 type rich__university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
-  validity: String
+  validity(x: Byte, y: Byte): String
 }
 
 type rich__university_calc_Calculator__addBytes__gqlv_action {
@@ -1775,14 +1791,14 @@ type rich__university_calc_Calculator__addBytes__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
-  validity: String
+  validity(x: Byte): String
 }
 
 type rich__university_calc_Calculator__addBytes__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
-  validity: String
+  validity(x: Byte, y: Byte): String
 }
 
 type rich__university_calc_Calculator__addDoubleWrappers__gqlv_action {
@@ -1817,14 +1833,14 @@ type rich__university_calc_Calculator__addDoubleWrappers__x__gqlv_action_paramet
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_Calculator__addDoubleWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_Calculator__addDoubles__gqlv_action {
@@ -1859,14 +1875,14 @@ type rich__university_calc_Calculator__addDoubles__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_Calculator__addFloatWrappers__gqlv_action {
@@ -1901,14 +1917,14 @@ type rich__university_calc_Calculator__addFloatWrappers__x__gqlv_action_paramete
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_Calculator__addFloatWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_Calculator__addFloats__gqlv_action {
@@ -1943,14 +1959,14 @@ type rich__university_calc_Calculator__addFloats__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_Calculator__addFloats__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_Calculator__addIntegerWrappers__gqlv_action {
@@ -1985,14 +2001,14 @@ type rich__university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parame
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
-  validity: String
+  validity(x: Int): String
 }
 
 type rich__university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
-  validity: String
+  validity(x: Int, y: Int): String
 }
 
 type rich__university_calc_Calculator__addIntegers__gqlv_action {
@@ -2027,14 +2043,14 @@ type rich__university_calc_Calculator__addIntegers__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
-  validity: String
+  validity(x: Int): String
 }
 
 type rich__university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
-  validity: String
+  validity(x: Int, y: Int): String
 }
 
 type rich__university_calc_Calculator__addShortWrappers__gqlv_action {
@@ -2069,14 +2085,14 @@ type rich__university_calc_Calculator__addShortWrappers__x__gqlv_action_paramete
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
-  validity: String
+  validity(x: Short): String
 }
 
 type rich__university_calc_Calculator__addShortWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
-  validity: String
+  validity(x: Short, y: Short): String
 }
 
 type rich__university_calc_Calculator__addShorts__gqlv_action {
@@ -2111,14 +2127,14 @@ type rich__university_calc_Calculator__addShorts__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
-  validity: String
+  validity(x: Short): String
 }
 
 type rich__university_calc_Calculator__addShorts__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
-  validity: String
+  validity(x: Short, y: Short): String
 }
 
 type rich__university_calc_Calculator__and__gqlv_action {
@@ -2153,14 +2169,14 @@ type rich__university_calc_Calculator__and__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_Calculator__and__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
-  validity: String
+  validity(x: Boolean, y: Boolean): String
 }
 
 type rich__university_calc_Calculator__concat__gqlv_action {
@@ -2195,21 +2211,45 @@ type rich__university_calc_Calculator__concat__prefix__gqlv_action_parameter {
   datatype: String
   disabled(prefix: String): String
   hidden: Boolean
-  validity: String
+  validity(prefix: String): String
 }
 
 type rich__university_calc_Calculator__concat__suffix__gqlv_action_parameter {
   datatype: String
   disabled(prefix: String, suffix: String): String
   hidden(prefix: String): Boolean
-  validity: String
+  validity(prefix: String, suffix: String): String
+}
+
+type rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent: rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action_invoke {
+  results: rich__university_calc_EditableMementoViewModel
+  target: String
+}
+
+type rich__university_calc_Calculator__createSharedViewModel__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent: rich__university_calc_Calculator__createSharedViewModel__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__createSharedViewModel__gqlv_action_invoke {
+  results: rich__university_calc_EditableMementoViewModel__gqlv_union
+  target: String
 }
 
 type rich__university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter {
   datatype: String
   disabled(date: String): String
   hidden: Boolean
-  validity: String
+  validity(date: String): String
 }
 
 type rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
@@ -2244,7 +2284,7 @@ type rich__university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_p
   datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
-  validity: String
+  validity(date: String, numDays: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action {
@@ -2282,28 +2322,28 @@ type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__g
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
-  validity: String
+  validity(numHours: Int, time: String): String
 }
 
 type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
-  validity: String
+  validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
 type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: String): String
   hidden: Boolean
-  validity: String
+  validity(time: String): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime): String
   hidden: Boolean
-  validity: String
+  validity(dateTime: DateTime): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
@@ -2344,21 +2384,21 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__num
   datatype: String
   disabled(dateTime: DateTime, numDays: Int): String
   hidden(dateTime: DateTime): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
   hidden(dateTime: DateTime, numDays: Int): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int, numHours: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
@@ -2396,28 +2436,28 @@ type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__
   datatype: String
   disabled(numHours: Int, time: Time): String
   hidden(time: Time): Boolean
-  validity: String
+  validity(numHours: Int, time: Time): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: Time): String
   hidden(numHours: Int, time: Time): Boolean
-  validity: String
+  validity(numHours: Int, numMinutes: Int, time: Time): String
 }
 
 type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: Time): String
   hidden: Boolean
-  validity: String
+  validity(time: Time): String
 }
 
 type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String): String
   hidden: Boolean
-  validity: String
+  validity(dateTime: String): String
 }
 
 type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
@@ -2458,21 +2498,21 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numD
   datatype: String
   disabled(dateTime: String, numDays: Int): String
   hidden(dateTime: String): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int): String
   hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int, numHours: Int): String
 }
 
 type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
 type rich__university_calc_Calculator__nextMonth__gqlv_action {
@@ -2505,7 +2545,7 @@ type rich__university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
   datatype: String
   disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
-  validity: String
+  validity(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
 type rich__university_calc_Calculator__not__gqlv_action {
@@ -2537,7 +2577,7 @@ type rich__university_calc_Calculator__not__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_Calculator__or__gqlv_action {
@@ -2572,14 +2612,47 @@ type rich__university_calc_Calculator__or__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_Calculator__or__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
-  validity: String
+  validity(x: Boolean, y: Boolean): String
+}
+
+type rich__university_calc_Calculator__readSharedViewModel__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input!): rich__university_calc_Calculator__readSharedViewModel__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__readSharedViewModel__gqlv_action_params
+  validate(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
+}
+
+type rich__university_calc_Calculator__readSharedViewModel__gqlv_action_args {
+  viewModel: rich__university_calc_EditableMementoViewModel__gqlv_union
+}
+
+type rich__university_calc_Calculator__readSharedViewModel__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__readSharedViewModel__gqlv_action_args
+  results: Int
+  target: String
+}
+
+type rich__university_calc_Calculator__readSharedViewModel__gqlv_action_params {
+  "View Model"
+  viewModel: rich__university_calc_Calculator__readSharedViewModel__viewModel__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__readSharedViewModel__viewModel__gqlv_action_parameter {
+  choices: [rich__university_calc_EditableMementoViewModel__gqlv_union]
+  datatype: String
+  disabled(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
+  hidden: Boolean
+  validity(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
 }
 
 type rich__university_calc_Calculator__someLocale__gqlv_action {
@@ -2618,6 +2691,33 @@ type rich__university_calc_Calculator__someUuid__gqlv_action_invoke {
   target: String
 }
 
+type rich__university_calc_EditableMementoViewModel {
+  "Object metadata"
+  _meta: rich__university_calc_EditableMementoViewModel__gqlv_meta
+  "Age"
+  age: rich__university_calc_EditableMementoViewModel__age__gqlv_property
+}
+
+type rich__university_calc_EditableMementoViewModel__age__gqlv_property {
+  datatype: String
+  disabled: String
+  get: Int!
+  hidden: Boolean
+  set(age: Int!): rich__university_calc_EditableMementoViewModel
+  validate(age: Int): String
+}
+
+type rich__university_calc_EditableMementoViewModel__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
 type rich__university_calc_I18nCalculator {
   "Concät"
   concat: rich__university_calc_I18nCalculator__concat__gqlv_action
@@ -2627,14 +2727,14 @@ type rich__university_calc_I18nCalculator__concat__a1__gqlv_action_parameter {
   datatype: String
   disabled(a1: String): String
   hidden: Boolean
-  validity: String
+  validity(a1: String): String
 }
 
 type rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter {
   datatype: String
   disabled(a1: String, a2: String): String
   hidden(a1: String): Boolean
-  validity: String
+  validity(a1: String, a2: String): String
 }
 
 type rich__university_calc_I18nCalculator__concat__gqlv_action {
@@ -2752,14 +2852,14 @@ type rich__university_calc_calculatorHyphenated__addBigDecimals__x__gqlv_action_
   datatype: String
   disabled(x: String): String
   hidden: Boolean
-  validity: String
+  validity(x: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__addBigDecimals__y__gqlv_action_parameter {
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
-  validity: String
+  validity(x: String, y: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action {
@@ -2794,14 +2894,14 @@ type rich__university_calc_calculatorHyphenated__addBigIntegers__x__gqlv_action_
   datatype: String
   disabled(x: String): String
   hidden: Boolean
-  validity: String
+  validity(x: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__addBigIntegers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
-  validity: String
+  validity(x: String, y: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action {
@@ -2836,14 +2936,14 @@ type rich__university_calc_calculatorHyphenated__addByteWrappers__x__gqlv_action
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
-  validity: String
+  validity(x: Byte): String
 }
 
 type rich__university_calc_calculatorHyphenated__addByteWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
-  validity: String
+  validity(x: Byte, y: Byte): String
 }
 
 type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action {
@@ -2878,14 +2978,14 @@ type rich__university_calc_calculatorHyphenated__addBytes__x__gqlv_action_parame
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
-  validity: String
+  validity(x: Byte): String
 }
 
 type rich__university_calc_calculatorHyphenated__addBytes__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
-  validity: String
+  validity(x: Byte, y: Byte): String
 }
 
 type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action {
@@ -2920,14 +3020,14 @@ type rich__university_calc_calculatorHyphenated__addDoubleWrappers__x__gqlv_acti
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addDoubleWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action {
@@ -2962,14 +3062,14 @@ type rich__university_calc_calculatorHyphenated__addDoubles__x__gqlv_action_para
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addDoubles__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action {
@@ -3004,14 +3104,14 @@ type rich__university_calc_calculatorHyphenated__addFloatWrappers__x__gqlv_actio
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addFloatWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action {
@@ -3046,14 +3146,14 @@ type rich__university_calc_calculatorHyphenated__addFloats__x__gqlv_action_param
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
-  validity: String
+  validity(x: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addFloats__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
-  validity: String
+  validity(x: Float, y: Float): String
 }
 
 type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action {
@@ -3088,14 +3188,14 @@ type rich__university_calc_calculatorHyphenated__addIntegerWrappers__x__gqlv_act
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
-  validity: String
+  validity(x: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__addIntegerWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
-  validity: String
+  validity(x: Int, y: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action {
@@ -3130,14 +3230,14 @@ type rich__university_calc_calculatorHyphenated__addIntegers__x__gqlv_action_par
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
-  validity: String
+  validity(x: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__addIntegers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
-  validity: String
+  validity(x: Int, y: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action {
@@ -3172,14 +3272,14 @@ type rich__university_calc_calculatorHyphenated__addShortWrappers__x__gqlv_actio
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
-  validity: String
+  validity(x: Short): String
 }
 
 type rich__university_calc_calculatorHyphenated__addShortWrappers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
-  validity: String
+  validity(x: Short, y: Short): String
 }
 
 type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action {
@@ -3214,14 +3314,14 @@ type rich__university_calc_calculatorHyphenated__addShorts__x__gqlv_action_param
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
-  validity: String
+  validity(x: Short): String
 }
 
 type rich__university_calc_calculatorHyphenated__addShorts__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
-  validity: String
+  validity(x: Short, y: Short): String
 }
 
 type rich__university_calc_calculatorHyphenated__and__gqlv_action {
@@ -3256,14 +3356,14 @@ type rich__university_calc_calculatorHyphenated__and__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_calculatorHyphenated__and__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
-  validity: String
+  validity(x: Boolean, y: Boolean): String
 }
 
 type rich__university_calc_calculatorHyphenated__concat__gqlv_action {
@@ -3298,21 +3398,21 @@ type rich__university_calc_calculatorHyphenated__concat__prefix__gqlv_action_par
   datatype: String
   disabled(prefix: String): String
   hidden: Boolean
-  validity: String
+  validity(prefix: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__concat__suffix__gqlv_action_parameter {
   datatype: String
   disabled(prefix: String, suffix: String): String
   hidden(prefix: String): Boolean
-  validity: String
+  validity(prefix: String, suffix: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_action_parameter {
   datatype: String
   disabled(date: String): String
   hidden: Boolean
-  validity: String
+  validity(date: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action {
@@ -3347,7 +3447,7 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gql
   datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
-  validity: String
+  validity(date: String, numDays: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action {
@@ -3385,28 +3485,28 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
-  validity: String
+  validity(numHours: Int, time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
-  validity: String
+  validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: String): String
   hidden: Boolean
-  validity: String
+  validity(time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime): String
   hidden: Boolean
-  validity: String
+  validity(dateTime: DateTime): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
@@ -3447,21 +3547,21 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   datatype: String
   disabled(dateTime: DateTime, numDays: Int): String
   hidden(dateTime: DateTime): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
   hidden(dateTime: DateTime, numDays: Int): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int, numHours: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
-  validity: String
+  validity(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
@@ -3499,28 +3599,28 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__
   datatype: String
   disabled(numHours: Int, time: Time): String
   hidden(time: Time): Boolean
-  validity: String
+  validity(numHours: Int, time: Time): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: Time): String
   hidden(numHours: Int, time: Time): Boolean
-  validity: String
+  validity(numHours: Int, numMinutes: Int, time: Time): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: Time): String
   hidden: Boolean
-  validity: String
+  validity(time: Time): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String): String
   hidden: Boolean
-  validity: String
+  validity(dateTime: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
@@ -3561,21 +3661,21 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   datatype: String
   disabled(dateTime: String, numDays: Int): String
   hidden(dateTime: String): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int): String
   hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int, numHours: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
-  validity: String
+  validity(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
 type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action {
@@ -3613,21 +3713,21 @@ type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
-  validity: String
+  validity(numHours: Int, time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
-  validity: String
+  validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: String): String
   hidden: Boolean
-  validity: String
+  validity(time: String): String
 }
 
 type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action {
@@ -3660,7 +3760,7 @@ type rich__university_calc_calculatorHyphenated__nextMonth__month__gqlv_action_p
   datatype: String
   disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
-  validity: String
+  validity(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
 type rich__university_calc_calculatorHyphenated__not__gqlv_action {
@@ -3692,7 +3792,7 @@ type rich__university_calc_calculatorHyphenated__not__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_calculatorHyphenated__or__gqlv_action {
@@ -3727,14 +3827,14 @@ type rich__university_calc_calculatorHyphenated__or__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
-  validity: String
+  validity(x: Boolean): String
 }
 
 type rich__university_calc_calculatorHyphenated__or__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
-  validity: String
+  validity(x: Boolean, y: Boolean): String
 }
 
 type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action {
@@ -3787,8 +3887,12 @@ type rich__university_dept_Department {
   changeName: rich__university_dept_Department__changeName__gqlv_action
   "Departmental head, responsible for curriculum, research, funding and staff"
   deptHead: rich__university_dept_Department__deptHead__gqlv_property
+  "Inspect People"
+  inspectPeople: rich__university_dept_Department__inspectPeople__gqlv_action
   "Name"
   name: rich__university_dept_Department__name__gqlv_property
+  "People"
+  people: rich__university_dept_Department__people__gqlv_collection
   "University department specializing in a field of study"
   removeStaffMember: rich__university_dept_Department__removeStaffMember__gqlv_action
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -3826,7 +3930,7 @@ type rich__university_dept_Department__addStaffMember__staffMember__gqlv_action_
   datatype: String
   disabled(staffMember: rich__university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
-  validity: String
+  validity(staffMember: rich__university_dept_StaffMember__gqlv_input): String
 }
 
 "University department specializing in a field of study"
@@ -3860,7 +3964,7 @@ type rich__university_dept_Department__addStaffMembers__staffMembers__gqlv_actio
   datatype: String
   disabled(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
   hidden: Boolean
-  validity: String
+  validity(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
 }
 
 "University department specializing in a field of study"
@@ -3895,7 +3999,7 @@ type rich__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_
   default: rich__university_dept_DeptHead
   disabled(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
   hidden: Boolean
-  validity: String
+  validity(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
 }
 
 "University department specializing in a field of study"
@@ -3929,7 +4033,7 @@ type rich__university_dept_Department__changeName__newName__gqlv_action_paramete
   default: String
   disabled(newName: String): String
   hidden: Boolean
-  validity: String
+  validity(newName: String): String
 }
 
 "Departmental head, responsible for curriculum, research, funding and staff"
@@ -3955,6 +4059,39 @@ type rich__university_dept_Department__gqlv_meta {
   version: String
 }
 
+type rich__university_dept_Department__inspectPeople__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(people: [rich__university_dept_Person__gqlv_input]): rich__university_dept_Department__inspectPeople__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_dept_Department__inspectPeople__gqlv_action_params
+  validate(people: [rich__university_dept_Person__gqlv_input]): String
+}
+
+type rich__university_dept_Department__inspectPeople__gqlv_action_args {
+  people: [rich__university_dept_Person__gqlv_union]
+}
+
+type rich__university_dept_Department__inspectPeople__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_dept_Department__inspectPeople__gqlv_action_args
+  results: String
+  target: rich__university_dept_Department
+}
+
+type rich__university_dept_Department__inspectPeople__gqlv_action_params {
+  "People"
+  people: rich__university_dept_Department__inspectPeople__people__gqlv_action_parameter
+}
+
+type rich__university_dept_Department__inspectPeople__people__gqlv_action_parameter {
+  choices: [rich__university_dept_Person__gqlv_union]
+  datatype: String
+  disabled(people: [rich__university_dept_Person__gqlv_input]): String
+  hidden: Boolean
+  validity(people: [rich__university_dept_Person__gqlv_input]): String
+}
+
 type rich__university_dept_Department__name__gqlv_property {
   datatype: String
   disabled: String
@@ -3962,6 +4099,13 @@ type rich__university_dept_Department__name__gqlv_property {
   hidden: Boolean
   set(name: String!): rich__university_dept_Department
   validate(name: String): String
+}
+
+type rich__university_dept_Department__people__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [rich__university_dept_Person__gqlv_union]
+  hidden: Boolean
 }
 
 "University department specializing in a field of study"
@@ -3995,7 +4139,7 @@ type rich__university_dept_Department__removeStaffMember__staffMember__gqlv_acti
   datatype: String
   disabled(staffMember: rich__university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
-  validity: String
+  validity(staffMember: rich__university_dept_StaffMember__gqlv_input): String
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -4020,7 +4164,7 @@ type rich__university_dept_Departments__createDepartment__deptHead__gqlv_action_
   datatype: String
   disabled(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
   hidden(name: String): Boolean
-  validity: String
+  validity(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
 }
 
 "University department specializing in a field of study"
@@ -4056,7 +4200,7 @@ type rich__university_dept_Departments__createDepartment__name__gqlv_action_para
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 "University department specializing in a field of study"
@@ -4102,7 +4246,7 @@ type rich__university_dept_Departments__findDepartmentByName__name__gqlv_action_
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 "Departmental head, responsible for curriculum, research, funding and staff"
@@ -4124,7 +4268,7 @@ type rich__university_dept_DeptHead__changeDepartment__department__gqlv_action_p
   datatype: String
   disabled(department: rich__university_dept_Department__gqlv_input): String
   hidden: Boolean
-  validity: String
+  validity(department: rich__university_dept_Department__gqlv_input): String
 }
 
 "Departmental head, responsible for curriculum, research, funding and staff"
@@ -4184,7 +4328,7 @@ type rich__university_dept_DeptHead__changeName__newName__gqlv_action_parameter 
   default: String
   disabled(newName: String): String
   hidden: Boolean
-  validity: String
+  validity(newName: String): String
 }
 
 "University department specializing in a field of study"
@@ -4269,7 +4413,7 @@ type rich__university_dept_DeptHeads__findHeadByName__name__gqlv_action_paramete
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 type rich__university_dept_People {
@@ -4295,7 +4439,7 @@ type rich__university_dept_People__findNamed__gqlv_action_args {
 type rich__university_dept_People__findNamed__gqlv_action_invoke {
   "Arguments used to invoke this action"
   args: rich__university_dept_People__findNamed__gqlv_action_args
-  results: rich__university_dept_Person
+  results: rich__university_dept_Person__gqlv_union
   target: String
 }
 
@@ -4308,7 +4452,7 @@ type rich__university_dept_People__findNamed__name__gqlv_action_parameter {
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 type rich__university_dept_People__nameOf__gqlv_action {
@@ -4321,7 +4465,7 @@ type rich__university_dept_People__nameOf__gqlv_action {
 }
 
 type rich__university_dept_People__nameOf__gqlv_action_args {
-  person: rich__university_dept_Person
+  person: rich__university_dept_Person__gqlv_union
 }
 
 type rich__university_dept_People__nameOf__gqlv_action_invoke {
@@ -4340,7 +4484,7 @@ type rich__university_dept_People__nameOf__person__gqlv_action_parameter {
   datatype: String
   disabled(person: rich__university_dept_Person__gqlv_input): String
   hidden: Boolean
-  validity: String
+  validity(person: rich__university_dept_Person__gqlv_input): String
 }
 
 type rich__university_dept_Person {
@@ -4366,7 +4510,7 @@ type rich__university_dept_Person__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
-  set(name: String!): rich__university_dept_Person
+  set(name: String!): rich__university_dept_Person__gqlv_union
   validate(name: String): String
 }
 
@@ -4455,7 +4599,7 @@ type rich__university_dept_Staff__createStaffMember__department__gqlv_action_par
   datatype: String
   disabled(department: rich__university_dept_Department__gqlv_input, name: String): String
   hidden(name: String): Boolean
-  validity: String
+  validity(department: rich__university_dept_Department__gqlv_input, name: String): String
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -4491,7 +4635,7 @@ type rich__university_dept_Staff__createStaffMember__name__gqlv_action_parameter
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -4537,7 +4681,7 @@ type rich__university_dept_Staff__findStaffMemberByName__name__gqlv_action_param
   datatype: String
   disabled(name: String): String
   hidden: Boolean
-  validity: String
+  validity(name: String): String
 }
 
 type simple__causeway_applib_DomainObjectList {
@@ -4661,6 +4805,7 @@ type simple__causeway_feat_ApplicationFeatureViewModel {
   _meta: simple__causeway_feat_ApplicationFeatureViewModel__gqlv_meta
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   typeSimpleName: String!
 }
 
@@ -4678,8 +4823,11 @@ type simple__causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
 type simple__causeway_feat_ApplicationNamespace {
   "Object metadata"
   _meta: simple__causeway_feat_ApplicationNamespace__gqlv_meta
+  "Contents"
+  contents: [simple__causeway_feat_ApplicationFeatureViewModel]
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   typeSimpleName: String!
 }
 
@@ -4703,6 +4851,7 @@ type simple__causeway_feat_ApplicationType {
   collections: [simple__causeway_feat_ApplicationTypeCollection]
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   "Properties"
   properties: [simple__causeway_feat_ApplicationTypeProperty]
   typeSimpleName: String!
@@ -4714,6 +4863,7 @@ type simple__causeway_feat_ApplicationTypeAction {
   actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   returnType: String!
   typeSimpleName: String!
 }
@@ -4736,6 +4886,7 @@ type simple__causeway_feat_ApplicationTypeCollection {
   elementType: String!
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   typeSimpleName: String!
 }
 
@@ -4755,6 +4906,7 @@ type simple__causeway_feat_ApplicationTypeMember {
   _meta: simple__causeway_feat_ApplicationTypeMember__gqlv_meta
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   typeSimpleName: String!
 }
 
@@ -4776,6 +4928,7 @@ type simple__causeway_feat_ApplicationTypeProperty {
   maxLength: Int
   memberName: String!
   namespaceName: String!
+  parent: simple__causeway_feat_ApplicationFeatureViewModel!
   returnType: String!
   typeSimpleName: String!
   typicalLength: Int
@@ -4869,22 +5022,6 @@ type simple__java_lang_Record {
 }
 
 type simple__java_lang_Record__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__java_lang_Runnable {
-  "Object metadata"
-  _meta: simple__java_lang_Runnable__gqlv_meta
-}
-
-type simple__java_lang_Runnable__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -5034,6 +5171,10 @@ type simple__university_calc_Calculator {
   and(x: Boolean!, y: Boolean!): Boolean
   "Concat"
   concat(prefix: String!, suffix: String): String
+  "Create Editable Memento View Model"
+  createEditableMementoViewModel: simple__university_calc_EditableMementoViewModel
+  "Create Shared View Model"
+  createSharedViewModel: simple__university_calc_EditableMementoViewModel
   "Jdk 8 Local Plus Days"
   jdk8LocalPlusDays(date: String!, numDays: Int!): String
   "Jdk 8 Local Plus Hours And Minutes"
@@ -5050,12 +5191,31 @@ type simple__university_calc_Calculator {
   not(x: Boolean!): Boolean
   "Or"
   or(x: Boolean!, y: Boolean!): Boolean
+  "Read Shared View Model"
+  readSharedViewModel(viewModel: simple__university_calc_EditableMementoViewModel__gqlv_input!): Int
   "Some Locale"
   someLocale: String
   "Some Url"
   someUrl: String
   "Some Uuid"
   someUuid: UUID
+}
+
+type simple__university_calc_EditableMementoViewModel {
+  "Object metadata"
+  _meta: simple__university_calc_EditableMementoViewModel__gqlv_meta
+  age: Int!
+}
+
+type simple__university_calc_EditableMementoViewModel__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
 }
 
 type simple__university_calc_I18nCalculator {
@@ -5131,7 +5291,11 @@ type simple__university_dept_Department {
   "University department specializing in a field of study"
   changeName(newName: String!): simple__university_dept_Department
   deptHead: simple__university_dept_DeptHead
+  "Inspect People"
+  inspectPeople(people: [simple__university_dept_Person__gqlv_input]): String
   name: String!
+  "People"
+  people: [simple__university_dept_Person]
   "University department specializing in a field of study"
   removeStaffMember(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -5285,6 +5449,8 @@ enum logicalTypeNames__gqlv_enum {
   causeway_testing_fixtures_FixtureResult
   "org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView
+  "university.calc.EditableMementoViewModel"
+  university_calc_EditableMementoViewModel
   "university.dept.Department"
   university_dept_Department
   "university.dept.DeptHead"
@@ -5490,15 +5656,6 @@ input rich__java_lang_Record__gqlv_input {
   ref: String
 }
 
-input rich__java_lang_Runnable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__java_util_concurrent_Callable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -5545,6 +5702,15 @@ input rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_inp
 }
 
 input rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input rich__university_calc_EditableMementoViewModel__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -5733,15 +5899,6 @@ input simple__java_lang_Record__gqlv_input {
   ref: String
 }
 
-input simple__java_lang_Runnable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input simple__java_util_concurrent_Callable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -5788,6 +5945,15 @@ input simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_i
 }
 
 input simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__university_calc_EditableMementoViewModel__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.graphql.model.context;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
+import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -88,18 +89,53 @@ public class Context {
 
     public List<? extends ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
         var includeEntities = causewayConfiguration.viewer().graphql().apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
-        return specificationLoader.snapshotSpecifications()
+        var specificationsByLogicalType = new LinkedHashMap<String, ObjectSpecification>();
+        specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
-                .distinct((a, b) -> a.logicalTypeName().equals(b.logicalTypeName()))
                 .filter(x ->
                            x.isViewModel()
                         || (includeEntities && x.isEntity())
-                        || (includeEntities && x.isAbstract()) // this is a little bit inaccurate; Person.class was not being picked up, not sure that MappedSuperclass is enough to install the EntityFacet though.
+                        || (includeEntities && x.isAbstract()) // include abstract declared member and action types
                         || x.beanSort().isManagedBeanContributing()
                 )
+                .forEach(x -> specificationsByLogicalType.merge(
+                        x.logicalTypeName(),
+                        x,
+                        Context::preferConcreteSpecification));
+        return specificationsByLogicalType.values().stream()
                 .filter(predicate)
                 .sorted(Comparator.comparing(HasLogicalType::logicalTypeName))
                 .toList();
+    }
+
+    public List<? extends ObjectSpecification> concreteSpecificationsAssignableTo(
+            final ObjectSpecification declaredType) {
+        return objectSpecifications(specification ->
+                isConcreteDomainObject(specification)
+                && declaredType.isAssignableFrom(specification.getCorrespondingClass()));
+    }
+
+    private static ObjectSpecification preferConcreteSpecification(
+            final ObjectSpecification first,
+            final ObjectSpecification second) {
+        return specificationRank(second) > specificationRank(first)
+                ? second
+                : first;
+    }
+
+    private static int specificationRank(final ObjectSpecification specification) {
+        if (isConcreteDomainObject(specification)) {
+            return 3;
+        }
+        if (specification.isEntityOrViewModel()) {
+            return 2;
+        }
+        return specification.isAbstract() ? 1 : 0;
+    }
+
+    private static boolean isConcreteDomainObject(final ObjectSpecification specification) {
+        return specification.isEntityOrViewModel()
+                && !Modifier.isAbstract(specification.getCorrespondingClass().getModifiers());
     }
 
     private void computeLogicalTypeNames() {

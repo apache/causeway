@@ -33,6 +33,7 @@ import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLUnionType;
 
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
@@ -113,11 +114,15 @@ public class GraphQLTypeRegistry {
             return;
         }
 
+        if (typeToAdd instanceof GraphQLUnionType) {
+            addUnionTypeIfNotAlreadyPresent((GraphQLUnionType) typeToAdd);
+            return;
+        }
+
         // TODO: none of these types yet handled
         // GraphQLTypeReference
         // GraphQLScalarType
         // GraphQLCompositeType
-        // GraphQLUnionType
         // GraphQLEnumType
         // GraphQLInterfaceType
         // GraphQLList
@@ -152,11 +157,21 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
+    public GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
+        var existing = lookup(typeToAdd.getName(), GraphQLUnionType.class);
+        if (existing.isPresent()) {
+            log.debug("GraphQLUnionType for {} already present", typeToAdd.getName());
+            return existing.get();
+        }
+        add(typeToAdd);
+        return typeToAdd;
+    }
+
     private boolean isPresent(
             final GraphQLNamedType typeToAdd,
             final Class<? extends GraphQLNamedType> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
     }
@@ -165,7 +180,7 @@ public class GraphQLTypeRegistry {
             final String typeName,
             final Class<T> cls) {
         return graphQLTypes.stream()
-                .filter(o -> o.getClass().isAssignableFrom(cls))
+                .filter(cls::isInstance)
                 .map(cls::cast)
                 .filter(ot -> ot.getName().equals(typeName))
                 .findFirst();

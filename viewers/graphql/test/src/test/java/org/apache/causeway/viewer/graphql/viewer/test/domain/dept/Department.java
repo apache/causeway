@@ -36,6 +36,8 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -166,6 +168,45 @@ public class Department implements Comparable<Department> {
         }
 
         @Inject StaffMemberRepository staffMemberRepository;
+    }
+
+    @Collection
+    public List<Person> getPeople() {
+        var people = new ArrayList<Person>();
+        if (deptHead != null) {
+            people.add(deptHead);
+        }
+        people.addAll(staffMembers);
+        people.sort(Comparator.comparing(Person::getName));
+        return people;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(associateWith = "people")
+    public class inspectPeople {
+
+        public String act(
+                @Parameter(optionality = Optionality.OPTIONAL)
+                final List<Person> people) {
+            return people.stream()
+                    .map(Person::getName)
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+        }
+
+        public List<Person> choices0Act() {
+            return getPeople();
+        }
+
+        public String validate0Act(final List<Person> people) {
+            return people == null || people.isEmpty()
+                    ? "Select at least one person"
+                    : null;
+        }
+
+        public String validateAct(final List<Person> people) {
+            return validate0Act(people);
+        }
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

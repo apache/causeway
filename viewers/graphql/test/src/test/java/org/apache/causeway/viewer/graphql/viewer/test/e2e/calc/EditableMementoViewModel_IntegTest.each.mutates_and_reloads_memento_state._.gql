@@ -1,0 +1,29 @@
+mutation {
+  create: university_calc_Calculator__createEditableMementoViewModel {
+    age {
+      get
+    }
+    _meta {
+      saveAs(ref: "mutable")
+    }
+  }
+  update: university_calc_EditableMementoViewModel__age(
+    _target: {ref: "mutable"}
+    age: 30
+  ) {
+    age {
+      get
+    }
+    _meta {
+      saveAs(ref: "updated")
+    }
+  }
+  updateAgain: university_calc_EditableMementoViewModel__age(
+    _target: {ref: "updated"}
+    age: 31
+  ) {
+    age {
+      get
+    }
+  }
+}

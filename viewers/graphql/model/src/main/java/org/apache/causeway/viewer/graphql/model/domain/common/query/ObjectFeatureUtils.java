@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain.common.query;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
@@ -38,130 +37,146 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ObjectFeatureUtils {
 
-    static Optional<Object> asPojo(
-            final ObjectSpecification elementType,
-            final Object argumentValueObj,
+    public static Optional<Object> asPojo(
+            final ObjectSpecification declaredType,
+            final Object argumentValue,
             final Environment environment,
-            final Context context
-    ) {
-        var argumentValue = (Map<String, ?>) argumentValueObj;
+            final Context context) {
+        if (argumentValue == null) {
+            return Optional.empty();
+        }
+        if (!(argumentValue instanceof Map<?, ?> input)) {
+            throw invalidObjectInput(declaredType);
+        }
 
-        var refValue = (String)argumentValue.get("ref");
+        var refValue = input.get("ref");
         if (refValue != null) {
-            String key = keyFor(refValue);
-            BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
-            if (bookmarkedPojo == null) {
-                throw new IllegalArgumentException(String.format(
-                    "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
+            if (!(refValue instanceof String ref)) {
+                throw invalidObjectInput(declaredType);
             }
-            var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
-            var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
-            if (targetPojoSpec == null) {
-                throw new IllegalArgumentException(String.format(
-                    "The object referenced '%s' is not part of the metamodel (has class '%s')",
-                    refValue, targetPojoClass.getCanonicalName()));
-            }
-            if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
-                throw new IllegalArgumentException(String.format(
-                    "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
-                    refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
-            }
-            return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
+            var bookmarkedPojo = environment.getGraphQlContext().<BookmarkedPojo>get(keyFor(ref));
+            return compatiblePojo(declaredType, bookmarkedPojo != null
+                    ? bookmarkedPojo.getTargetPojo()
+                    : null);
         }
 
-        var idValue = (String)argumentValue.get("id");
+        var idValue = input.get("id");
         if (idValue != null) {
-            Class<?> paramClass = elementType.getCorrespondingClass();
-            Optional<Bookmark> bookmarkIfAny;
-            if(elementType.isAbstract()) {
-                var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
-                if (objectSpecArg == null) {
-                    throw new IllegalArgumentException(String.format(
-                            "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
-                            elementType.logicalTypeName()));
-                }
-                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
-            } else {
-                bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
+            if (!(idValue instanceof String id)) {
+                throw invalidObjectInput(declaredType);
             }
-            return bookmarkIfAny
-                    .map(context.bookmarkService::lookup)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get);
+            var selectedType = input.get("logicalTypeName");
+            if (selectedType != null && !(selectedType instanceof ObjectSpecification)) {
+                throw invalidObjectInput(declaredType);
+            }
+            var selectedSpecification = (ObjectSpecification) selectedType;
+            if (selectedSpecification != null
+                    && !declaredType.isAssignableFrom(selectedSpecification.getCorrespondingClass())) {
+                throw new IllegalArgumentException(String.format(
+                        "The selected logical type is not assignable to required type '%s'",
+                        declaredType.logicalTypeName()));
+            }
+            if (declaredType.isAbstract() && selectedSpecification == null) {
+                throw new IllegalArgumentException(String.format(
+                        "The 'logicalTypeName' is required with 'id' for abstract input type '%s'",
+                        declaredType.logicalTypeName()));
+            }
+
+            Optional<Bookmark> bookmark = selectedSpecification != null
+                    ? Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
+                            selectedSpecification.logicalTypeName(), id))
+                    : context.bookmarkService.bookmarkFor(declaredType.getCorrespondingClass(), id);
+            return bookmark
+                    .flatMap(context.bookmarkService::lookup)
+                    .flatMap(pojo -> compatiblePojo(declaredType, pojo));
         }
-        throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
+
+        throw new IllegalArgumentException(
+                "Either 'id' or 'ref' must be specified for a domain object input");
     }
 
-    /**
-     * @param environment
-     * @param objectAction
-     * @param context
-     * @return
-     */
+    public static Object requirePojo(
+            final ObjectSpecification declaredType,
+            final Object argumentValue,
+            final Environment environment,
+            final Context context) {
+        return asPojo(declaredType, argumentValue, environment, context)
+                .orElseThrow(() -> new IllegalArgumentException(String.format(
+                        "Domain object input is unavailable or incompatible with required type '%s'",
+                        declaredType.logicalTypeName())));
+    }
+
+    public static Object unmarshalValue(
+            final ObjectSpecification declaredType,
+            final Object argumentValue,
+            final Environment environment,
+            final Context context) {
+        if (argumentValue == null) {
+            return null;
+        }
+        return switch (declaredType.beanSort()) {
+            case ABSTRACT, ENTITY, VIEW_MODEL ->
+                requirePojo(declaredType, argumentValue, environment, context);
+            case VALUE -> context.typeMapper.unmarshal(argumentValue, declaredType);
+            default -> throw new IllegalArgumentException(String.format(
+                    "Unsupported GraphQL input for declared type '%s'",
+                    declaredType.logicalTypeName()));
+        };
+    }
+
     public static Can<ManagedObject> argumentManagedObjectsFor(
             final Environment environment,
             final ObjectAction objectAction,
             final Context context) {
-        Map<String, Object> argumentPojos = environment.getArguments();
-        Can<ObjectActionParameter> parameters = objectAction.getParameters();
-        return parameters
-                .map(oap -> {
-                    final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(oap.asciiId());
-                    Object pojoOrPojoList;
-
-                    switch (elementType.beanSort()) {
-
-                        case VALUE:
-                            return adaptValue(oap, argumentValue, context);
-
-                        case ENTITY:
-                        case VIEW_MODEL:
-                            if (argumentValue == null) {
-                                return ManagedObject.empty(elementType);
-                            }
-                            // fall through
-
-                        case ABSTRACT:
-                            // if the parameter is abstract, we still attempt to figure out the arguments.
-                            // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
-                            if (argumentValue instanceof List) {
-                                var argumentValueList = (List<Object>) argumentValue;
-                                pojoOrPojoList = argumentValueList.stream()
-                                        .map(value -> asPojo(oap.getElementType(), value, environment, context))
-                                        .filter(Optional::isPresent)
-                                        .map(Optional::get)
-                                        .collect(Collectors.toList());
-                            } else {
-                                pojoOrPojoList = asPojo(oap.getElementType(), argumentValue, environment, context).orElse(null);
-                            }
-                            return ManagedObject.adaptParameter(oap, pojoOrPojoList);
-
-                        case COLLECTION:
-                        case MANAGED_BEAN_CONTRIBUTING:
-                        case VETOED:
-                        case MANAGED_BEAN_NOT_CONTRIBUTING:
-                        case MIXIN:
-                        case UNKNOWN:
-                        default:
-                            throw new IllegalArgumentException(String.format(
-                                    "Cannot handle an input type for %s; beanSort is %s", elementType.getFullIdentifier(), elementType.beanSort()));
-                    }
-                });
+        var argumentValues = Optional.ofNullable(environment.getArguments()).orElseGet(Map::of);
+        return objectAction.getParameters()
+                .map(parameter -> adaptArgument(
+                        parameter,
+                        argumentValues.containsKey(parameter.asciiId()),
+                        argumentValues.get(parameter.asciiId()),
+                        environment,
+                        context));
     }
 
-    private static ManagedObject adaptValue(
-            final ObjectActionParameter oap,
+    private static ManagedObject adaptArgument(
+            final ObjectActionParameter parameter,
+            final boolean present,
             final Object argumentValue,
+            final Environment environment,
             final Context context) {
-
-        var elementType = oap.getElementType();
-        if (argumentValue == null) {
+        var elementType = parameter.getElementType();
+        if (!present || argumentValue == null) {
             return ManagedObject.empty(elementType);
         }
 
-        var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
-        return ManagedObject.adaptParameter(oap, argPojo);
+        if (parameter.isPlural()) {
+            if (!(argumentValue instanceof List<?> values)) {
+                throw new IllegalArgumentException(String.format(
+                        "Expected a list input for parameter '%s'",
+                        parameter.asciiId()));
+            }
+            var convertedValues = values.stream()
+                    .map(value -> unmarshalValue(elementType, value, environment, context))
+                    .toList();
+            return ManagedObject.adaptParameter(parameter, convertedValues);
+        }
+
+        var convertedValue = unmarshalValue(elementType, argumentValue, environment, context);
+        return ManagedObject.adaptParameter(parameter, convertedValue);
+    }
+
+    private static Optional<Object> compatiblePojo(
+            final ObjectSpecification declaredType,
+            final Object pojo) {
+        return Optional.ofNullable(pojo)
+                .filter(declaredType::isPojoCompatible);
+    }
+
+    private static IllegalArgumentException invalidObjectInput(
+            final ObjectSpecification declaredType) {
+        return new IllegalArgumentException(String.format(
+                "Expected a domain object input for required type '%s'",
+                declaredType.logicalTypeName()));
     }
 
     public static String keyFor(final String ref) {
