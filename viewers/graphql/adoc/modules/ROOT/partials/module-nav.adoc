@@ -1,6 +1,7 @@
 
 * xref:gqlv:ROOT:setup-and-configuration.adoc[]
 * xref:gqlv:ROOT:reference-application-coverage.adoc[]
+* xref:gqlv:ROOT:rich-object-interactions.adoc[]
 * xref:gqlv:ROOT:testsupport.adoc[]
 * xref:gqlv:ROOT:spi-services.adoc[]
 * xref:gqlv:ROOT:i18n.adoc[]

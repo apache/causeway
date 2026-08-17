@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -174,6 +175,25 @@ public class Calculator {
     @Action(semantics = SemanticsOf.SAFE)
     public Locale someLocale() {
         return Locale.UK;
+    }
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public EditableMementoViewModel createEditableMementoViewModel() {
+        return new EditableMementoViewModel(18);
+    }
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public EditableMementoViewModelContract createSharedViewModel() {
+        return new EditableMementoViewModel(42);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public int readSharedViewModel(final EditableMementoViewModelContract viewModel) {
+        return viewModel.getAge();
+    }
+
+    public List<EditableMementoViewModelContract> choices0ReadSharedViewModel() {
+        return List.of();
     }
 
 }

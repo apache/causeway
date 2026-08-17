@@ -57,6 +57,12 @@ public final class TypeNames {
         return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_input";
     }
 
+    public String polymorphicTypeNameFor(
+            final ObjectSpecification objectSpecification,
+            final SchemaType schemaType) {
+        return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_union";
+    }
+
     public String enumTypeNameFor(
             final ObjectSpecification objectSpec,
             final SchemaType schemaType) {

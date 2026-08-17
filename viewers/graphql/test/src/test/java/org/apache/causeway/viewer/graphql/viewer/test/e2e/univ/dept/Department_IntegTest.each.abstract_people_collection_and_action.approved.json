@@ -1,0 +1,87 @@
+{
+  "data" : {
+    "rich" : {
+      "Scenario" : {
+        "Given" : {
+          "university_dept_Departments" : {
+            "findDepartmentByName" : {
+              "invoke" : {
+                "results" : {
+                  "people" : {
+                    "get" : [ {
+                      "__typename" : "rich__university_dept_DeptHead",
+                      "_meta" : {
+                        "saveAs" : "person"
+                      },
+                      "deptHeadName" : {
+                        "get" : "Dr. Barney Jones"
+                      }
+                    }, {
+                      "__typename" : "rich__university_dept_StaffMember",
+                      "_meta" : {
+                        "saveAs" : "person"
+                      },
+                      "staffMemberName" : {
+                        "get" : "Gerry Jones"
+                      }
+                    }, {
+                      "__typename" : "rich__university_dept_StaffMember",
+                      "_meta" : {
+                        "saveAs" : "person"
+                      },
+                      "staffMemberName" : {
+                        "get" : "Letitia Leadbetter"
+                      }
+                    } ]
+                  },
+                  "inspectPeople" : {
+                    "params" : {
+                      "people" : {
+                        "choices" : [ {
+                          "__typename" : "rich__university_dept_DeptHead",
+                          "deptHeadName" : {
+                            "get" : "Dr. Barney Jones"
+                          }
+                        }, {
+                          "__typename" : "rich__university_dept_StaffMember",
+                          "staffMemberName" : {
+                            "get" : "Gerry Jones"
+                          }
+                        }, {
+                          "__typename" : "rich__university_dept_StaffMember",
+                          "staffMemberName" : {
+                            "get" : "Letitia Leadbetter"
+                          }
+                        } ],
+                        "validity" : "Select at least one person"
+                      }
+                    },
+                    "validateOmitted" : "Select at least one person",
+                    "validateNull" : "Select at least one person",
+                    "validateSelected" : null,
+                    "invoke" : {
+                      "args" : {
+                        "people" : [ {
+                          "__typename" : "rich__university_dept_DeptHead",
+                          "deptHeadName" : {
+                            "get" : "Dr. Barney Jones"
+                          }
+                        }, {
+                          "__typename" : "rich__university_dept_StaffMember",
+                          "staffMemberName" : {
+                            "get" : "Gerry Jones"
+                          }
+                        } ]
+                      },
+                      "results" : "Dr. Barney Jones, Gerry Jones"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
