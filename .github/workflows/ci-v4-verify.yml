@@ -96,7 +96,11 @@ jobs:
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
-        ls /home/runner/.m2/repository/org/mockito/mockito-core/
+        ls -al ~/.m2/repository
+        ls -al /home/runner/.m2/repository
+        ls -al /home/runner/.m2/repository/org
+        ls -al /home/runner/.m2/repository/org/mockito
+        ls -al /home/runner/.m2/repository/org/mockito/mockito-core/
 
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
