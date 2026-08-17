@@ -162,8 +162,12 @@ public class RichActionParamsParam
     }
 
     @Override
-    public void addGqlArgument(final ObjectAction objectAction, final GraphQLFieldDefinition.Builder fieldBuilder, final TypeMapper.InputContext inputContext, final int paramNum) {
-        // TODO: what lives here?
+    public void addGqlArgument(
+            final ObjectAction objectAction,
+            final GraphQLFieldDefinition.Builder fieldBuilder,
+            final TypeMapper.InputContext inputContext,
+            final int paramNum) {
+        actionInteractor.addGqlArguments(objectAction, fieldBuilder, inputContext, paramNum + 1);
     }
 
     @Override
