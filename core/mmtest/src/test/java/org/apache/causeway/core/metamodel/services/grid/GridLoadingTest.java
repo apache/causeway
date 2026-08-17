@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -28,24 +26,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
+import org.junit.jupiter.api.Test;
 
-class GridLoadingTest
+final class GridLoadingTest
 extends MetaModelTestAbstract {
 
     private GridServiceDefault gridService;
 
     @Override
     protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
-        CausewaySystemEnvironment.setPrototyping(true);
-        var env = new CausewaySystemEnvironment();
-        CausewaySystemEnvironment.setPrototyping(false);
-        assertTrue(env.isPrototyping());
+        var env = new CausewaySystemEnvironment(DeploymentType.PROTOTYPING);
         mmcBuilder.systemEnvironment(env);
         super.onSetUp(mmcBuilder);
     }
@@ -55,6 +52,7 @@ extends MetaModelTestAbstract {
         this.gridService = ((GridServiceDefault) getServiceRegistry()
                 .lookupServiceElseFail(GridService.class));
         assertTrue(gridService.supportsReloading());
+        assertTrue(getMetaModelContext().getSystemEnvironment().deploymentType().isPrototyping());
     }
 
     @Test

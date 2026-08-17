@@ -18,22 +18,12 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-
-import jakarta.inject.Inject;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.quartz.JobExecutionContext;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -52,7 +42,13 @@ import org.apache.causeway.extensions.commandlog.applib.integtest.model.CounterR
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_bumpUsingMixin;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.quartz.JobExecutionContext;
+import org.springframework.transaction.annotation.Propagation;
 
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 
 public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegrationTestAbstract {
@@ -65,6 +61,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
     @Inject BookmarkService bookmarkService;
     @Inject CounterRepository<? extends Counter> counterRepository;
+    @Inject CausewaySystemEnvironment env;
 
     JobExecutionContext mockQuartzJobExecutionContext = Mockito.mock(JobExecutionContext.class);
 
@@ -72,21 +69,9 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     protected abstract <T extends Counter> T newCounter(String name);
 
-    private static boolean prototypingOrig;
-
-    @BeforeAll
-    static void setup_environment() {
-        prototypingOrig = CausewaySystemEnvironment.deploymentTypeFromEnvironment().isPrototyping();
-        CausewaySystemEnvironment.setPrototyping(true);
-    }
-
-    @AfterAll
-    static void reset_environment() {
-        CausewaySystemEnvironment.setPrototyping(prototypingOrig);
-    }
-
     @BeforeEach
     void setup_counter() {
+    	assertTrue(env.deploymentType().isPrototyping()); // pre requisite check
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             counterRepository.removeAll();
 

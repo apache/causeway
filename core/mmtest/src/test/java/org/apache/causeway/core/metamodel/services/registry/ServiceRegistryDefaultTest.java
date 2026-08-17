@@ -18,25 +18,25 @@
  */
 package org.apache.causeway.core.metamodel.services.registry;
 
-import java.lang.annotation.Annotation;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.annotation.Annotation;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class ServiceRegistryDefaultTest {
 
     @Test
     void selectReturnsEmptyWhenSpringContextHolderIsUnavailable() {
         var serviceRegistry = new ServiceRegistryDefault(
-                new CausewaySystemEnvironment(),
+                new CausewaySystemEnvironment(DeploymentType.PRODUCTION),
                 Mockito.mock(CausewayBeanTypeRegistry.class));
 
         assertTrue(serviceRegistry.select(String.class, new Annotation[0]).isEmpty());

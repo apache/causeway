@@ -65,6 +65,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -156,7 +157,7 @@ implements MetaModelContext {
         });
 
     @Builder.Default @Getter
-    private final CausewaySystemEnvironment systemEnvironment = new CausewaySystemEnvironment();
+    private final CausewaySystemEnvironment systemEnvironment = new CausewaySystemEnvironment(DeploymentType.PRODUCTION);
 
     @Builder.Default @Getter
     private final ClassSubstitutorRegistry classSubstitutorRegistry =

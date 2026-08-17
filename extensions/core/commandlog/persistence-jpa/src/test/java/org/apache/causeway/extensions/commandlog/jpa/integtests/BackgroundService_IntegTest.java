@@ -24,7 +24,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(
-        classes = AppManifest.class
+        classes = AppManifest.class,
+		properties = {
+                "causeway.deploymentType=PROTOTYPING"
+        }
 )
 @ActiveProfiles("test")
 public class BackgroundService_IntegTest extends BackgroundService_IntegTestAbstract {
