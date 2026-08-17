@@ -80,6 +80,7 @@ jobs:
         cache-name: shared
       with:
         path: ~/.m2/repository
+        save-always: true
         key: ${{ runner.os }}-maven-${{ env.cache-name }}
         restore-keys: |
           ${{ runner.os }}-maven-
@@ -95,7 +96,7 @@ jobs:
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
-        ls -al ~
+        ls -al ~/.m2/
 
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
