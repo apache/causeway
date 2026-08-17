@@ -136,13 +136,9 @@ public final class _Sets {
 
     // -- HASH SET
 
-    public static <T> HashSet<T> newHashSet() {
-        return new HashSet<T>();
-    }
-
     public static <T> HashSet<T> newHashSet(final @Nullable Collection<T> collection) {
         if(collection==null)
-			return newHashSet();
+			return new HashSet<>();
         return new HashSet<T>(collection);
     }
 

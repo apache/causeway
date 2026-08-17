@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -173,7 +174,7 @@ class CanTest {
     @Test
     void multiCan_toSet_should_find_duplicates() {
         var expectedSet = _Sets.of("a", "b", "c");
-        var duplicates = _Sets.<String>newHashSet();
+        var duplicates = new HashSet<String>();
 
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet());
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet(duplicates::add));

@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import jakarta.inject.Inject;
+import java.util.HashSet;
 
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Blackhole;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -30,8 +29,9 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-
 import org.jspecify.annotations.NonNull;
+
+import jakarta.inject.Inject;
 
 /**
  * Rationale:
@@ -53,7 +53,7 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
 
-        var overloadedNames = _Sets.<String>newHashSet();
+        var overloadedNames = new HashSet<String>();
 
         _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
                 spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{

@@ -19,6 +19,7 @@
 package org.apache.causeway.core.mmtestsupport;
 
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,7 +34,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
@@ -51,7 +51,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     @NonNull private final MetaModelContext metaModelContext;
 
     @Getter @Setter private SpringContextHolder iocContainer;
-    private final Set<SingletonBeanProvider> registeredBeans = _Sets.newHashSet();
+    private final Set<SingletonBeanProvider> registeredBeans = new HashSet<>();
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
@@ -135,9 +135,8 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     private Stream<SingletonBeanProvider> streamBeans() {
         // lookup the MetaModelContextBean's list of singletons
         var mmc = metaModelContext;
-        if(mmc instanceof MetaModelContext_forTesting mmcb) {
-            return mmcb.streamBeanAdapters();
-        }
+        if(mmc instanceof MetaModelContext_forTesting mmcb)
+			return mmcb.streamBeanAdapters();
         return Stream.empty();
     }
 

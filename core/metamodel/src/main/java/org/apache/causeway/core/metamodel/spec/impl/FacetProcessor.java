@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +34,6 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -351,7 +351,7 @@ implements HasMetaModelContext {
     }
 
     private static Set<String> methodPrefixes(final Iterable<FacetFactory> factories) {
-        var cachedMethodPrefixes = _Sets.<String>newHashSet();
+        var cachedMethodPrefixes = new HashSet<String>();
         for (var facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory) {
                 methodPrefixBasedFacetFactory.getPrefixes().forEach(cachedMethodPrefixes::add);

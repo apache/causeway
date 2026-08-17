@@ -177,7 +177,7 @@ public interface CollectionFacet extends Facet {
                 // specific set implementations
                 Map.entry(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet),
                 Map.entry(LinkedHashSet.class, _Sets::newLinkedHashSet),
-                Map.entry(HashSet.class, _Sets::newHashSet),
+                Map.entry(HashSet.class, HashSet::new),
                 Map.entry(TreeSet.class, TreeSet::new),
                 Map.entry(AbstractSet.class, _Sets::newLinkedHashSet),
 

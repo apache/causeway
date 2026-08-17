@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -43,7 +44,7 @@ public class Config {
     private final boolean includeTitleAnnotations;
 
     @Builder.Default
-    private final Set<String> namespacePrefixes = _Sets.newHashSet();
+    private final Set<String> namespacePrefixes = new HashSet<>();
 
     public boolean isNamespacePrefixAny() {
         return namespacePrefixes.isEmpty()

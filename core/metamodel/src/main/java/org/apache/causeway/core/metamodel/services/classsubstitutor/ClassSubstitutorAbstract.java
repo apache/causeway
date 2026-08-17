@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -89,9 +90,9 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     // -- HELPERS
 
     private final Set<Class<?>> classesToIgnore = _Sets.newConcurrentHashSet();
-    private final Set<String> classNamesToIgnore = _Sets.newHashSet();
-    private final Set<String> packageNamesToIgnore = _Sets.newHashSet();
-    private final Set<String> proxyPackageNamesToSkip = _Sets.newHashSet();
+    private final Set<String> classNamesToIgnore = new HashSet<>();
+    private final Set<String> packageNamesToIgnore = new HashSet<>();
+    private final Set<String> proxyPackageNamesToSkip = new HashSet<>();
 
     /**
      * For any classes registered as ignored, {@link #getReplacement(Class)} will

@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public abstract class ClassExcluderAbstract implements ClassExcluder {
 
-    private final Set<String> packageNamesToIgnore = _Sets.newHashSet();
+    private final Set<String> packageNamesToIgnore = new HashSet<>();
 
     protected void ignorePackage(final String packageName) {
         packageNamesToIgnore.add(packageName);
@@ -34,9 +34,8 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
 
     @Override
     public boolean exclude(final ObjectSpecification objectSpec) {
-        if(objectSpec == null) {
-            return false;
-        }
+        if(objectSpec == null)
+			return false;
 
         return packageNamesToIgnore.stream()
                 .anyMatch(packageName ->  objectSpec.correspondingClass().getName().startsWith(packageName));
@@ -45,15 +44,13 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
     @Override
     public boolean exclude(final ObjectAction objectAction) {
         final ObjectSpecification returnType = objectAction.getReturnType();
-        if(exclude(returnType)) {
-            return true;
-        }
+        if(exclude(returnType))
+			return true;
 
         var parameterTypes = objectAction.getParameterTypes();
         for (ObjectSpecification parameterType : parameterTypes) {
-            if(exclude(parameterType)) {
-                return true;
-            }
+            if(exclude(parameterType))
+				return true;
         }
         return false;
     }

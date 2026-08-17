@@ -140,15 +140,6 @@ class _SetsTest {
     }
 
     /**
-     * Test method for {@link org.apache.causeway.commons.internal.collections._Sets#newHashSet()}.
-     */
-    @Test
-    void testNewHashSet() {
-        var set = _Sets.newHashSet();
-        assertEquals(HashSet.class, set.getClass());
-    }
-
-    /**
      * Test method for {@link org.apache.causeway.commons.internal.collections._Sets#newHashSet(java.util.Collection)}.
      */
     @Test

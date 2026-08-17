@@ -19,10 +19,10 @@
 package org.apache.causeway.core.metamodel.specloader.typeextract;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Generics;
 
@@ -53,7 +53,7 @@ public class TypeExtractor {
      */
     public static Stream<Class<?>> streamMethodParameters(final Method ...methods) {
 
-        var set = _Sets.<Class<?>>newHashSet();
+        var set = new HashSet<Class<?>>();
 
         for(var method : methods) {
             if(method==null) {
@@ -83,8 +83,7 @@ public class TypeExtractor {
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
     public static Stream<Class<?>> streamMethodReturn(final ResolvedMethod ...methods) {
-
-        var set = _Sets.<Class<?>>newHashSet();
+        var set = new HashSet<Class<?>>();
 
         for(var method : methods) {
             if(method==null) {
@@ -101,7 +100,7 @@ public class TypeExtractor {
     // -- VARIANTS
 
     public static Stream<Class<?>> streamMethodReturn(final Iterable<ResolvedMethod> methods) {
-        var set = _Sets.<Class<?>>newHashSet();
+    	var set = new HashSet<Class<?>>();
 
         for(var method : methods) {
             if(method==null) {

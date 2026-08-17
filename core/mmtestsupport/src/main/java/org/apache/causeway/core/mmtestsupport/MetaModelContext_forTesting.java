@@ -21,6 +21,7 @@ package org.apache.causeway.core.mmtestsupport;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +58,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -503,7 +503,7 @@ implements MetaModelContext {
     }
 
     @Builder.Default
-    private final Set<SingletonBeanProvider> discoveredServices = _Sets.newHashSet();
+    private final Set<SingletonBeanProvider> discoveredServices = new HashSet<>();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void registerAsService(final ServiceInstance serviceInstance) {

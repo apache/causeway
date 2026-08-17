@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -47,7 +48,6 @@ import java.util.stream.Stream;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -436,14 +436,14 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Set<T> toSet() {
-        var set = _Sets.<T>newHashSet(); // serializable
+        var set = new HashSet<T>(); // serializable
         set.addAll(elements);
         return Collections.unmodifiableSet(set); // serializable and immutable
     }
 
     @Override
     public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
-        var set = _Sets.<T>newHashSet(); // serializable
+        var set = new HashSet<T>(); // serializable
         elements
         .forEach(s->{
             if(!set.add(s)) {

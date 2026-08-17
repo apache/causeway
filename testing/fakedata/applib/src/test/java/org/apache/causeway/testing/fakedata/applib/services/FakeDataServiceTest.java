@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -28,15 +30,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -45,7 +42,9 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class FakeDataServiceTest {
 
@@ -251,7 +250,7 @@ class FakeDataServiceTest {
         @Test
         public void anyOfObject() throws Exception {
 
-           final Set<Object> seen = _Sets.newHashSet();
+           final Set<Object> seen = new HashSet<>();
            final ArrayList<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), new Object(), new Object()));
 
            for (int i = 0; i < 1000; i++) {
@@ -268,7 +267,7 @@ class FakeDataServiceTest {
         public void anyOfObjectExcept() throws Exception {
 
             final Object thisOne = new Object();
-            final Set<Object> seen = _Sets.newHashSet();
+            final Set<Object> seen = new HashSet<>();
             final Collection<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), thisOne, new Object()));
 
             for (int i = 0; i < 1000; i++) {
@@ -285,7 +284,7 @@ class FakeDataServiceTest {
         @Test
         public void anyInt() throws Exception {
 
-           final Set<Integer> seen = _Sets.newHashSet();
+           final Set<Integer> seen = new HashSet<>();
            final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
@@ -301,7 +300,7 @@ class FakeDataServiceTest {
         @Test
         public void anyIntExcept() throws Exception {
 
-           final Set<Integer> seen = _Sets.newHashSet();
+           final Set<Integer> seen = new HashSet<>();
            final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {

@@ -18,22 +18,21 @@
  */
 package org.apache.causeway.core.security.authentication;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AuthenticationRequestAbstract
 implements AuthenticationRequest {
 
     private final String name;
-    private final Set<String> roles = _Sets.newHashSet();
+    private final Set<String> roles = new HashSet<>();
 
     public AuthenticationRequestAbstract(final String name) {
         this.name = name;
@@ -62,9 +61,8 @@ implements AuthenticationRequest {
      * @since 2.0
      */
     public void addRole(final String role) {
-        if(_Strings.isNullOrEmpty(role)) {
-            return; // ignore
-        }
+        if(_Strings.isNullOrEmpty(role))
+			return; // ignore
         this.roles.add(role);
     }
 
