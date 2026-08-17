@@ -77,13 +77,12 @@ jobs:
       env:
         # change the cache-name if we want to rebuild the cache
         # can be reset via github action page
-        cache-name: maven-shared
+        cache-name: shared
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-${{ env.cache-name }}
+        key: ${{ runner.os }}-maven-${{ env.cache-name }}
         restore-keys: |
-          ${{ runner.os }}-${{ env.cache-name }}
-          ${{ runner.os }}-
+          ${{ runner.os }}-maven-
 
     - name: Setup Script Environment
       if: matrix.language == 'java'
@@ -96,11 +95,7 @@ jobs:
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
-        ls -al ~/.m2/repository
-        ls -al /home/runner/.m2/repository
-        ls -al /home/runner/.m2/repository/org
-        ls -al /home/runner/.m2/repository/org/mockito
-        ls -al /home/runner/.m2/repository/org/mockito/mockito-core/
+        ls -al ~
 
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
