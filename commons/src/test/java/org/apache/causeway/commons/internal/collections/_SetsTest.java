@@ -165,7 +165,7 @@ class _SetsTest {
      */
     @Test
     void testNewLinkedHashSet() {
-        var set = _Sets.newLinkedHashSet();
+        var set = new LinkedHashSet<>();
         assertEquals(LinkedHashSet.class, set.getClass());
     }
 

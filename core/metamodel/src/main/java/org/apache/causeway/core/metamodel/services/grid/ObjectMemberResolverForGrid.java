@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -149,7 +150,7 @@ record ObjectMemberResolverForGrid(
             if(boundAssociationIds == null) {
                 boundAssociationIds = stream(fieldSet.getProperties())
                         .map(PropertyLayoutData::getId)
-                        .collect(Collectors.toCollection(_Sets::newLinkedHashSet));
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
                 boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
             }
         }
@@ -167,7 +168,7 @@ record ObjectMemberResolverForGrid(
             var id = layoutGroupFacet.getGroupId();
             if(gridModel.containsFieldSetId(id)) {
                 Set<String> boundAssociationIds =
-                        boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
+                        boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> new LinkedHashSet<>());
                 boundAssociationIds.add(oneToOneAssociation.getId());
             } else if(id.equals(LayoutConstants.FieldSetId.METADATA)) {
                 unboundMetadataContributingIds.add(oneToOneAssociation.getId());

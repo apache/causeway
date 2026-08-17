@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +42,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -354,7 +354,7 @@ implements MenuBarsService {
     private static Set<String> serviceNamesInOrder(
             final Can<ManagedObject> serviceAdapters,
             final List<ServiceAndAction> serviceActions) {
-        final Set<String> serviceNameOrder = _Sets.newLinkedHashSet();
+        final Set<String> serviceNameOrder = new LinkedHashSet<>();
 
         // first, order as defined in causeway.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {

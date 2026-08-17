@@ -149,13 +149,10 @@ public final class _Sets {
 
     // -- LINKED HASH SET
 
-    public static <T> LinkedHashSet<T> newLinkedHashSet() {
-        return new LinkedHashSet<T>();
-    }
 
     public static <T> LinkedHashSet<T> newLinkedHashSet(final @Nullable Collection<T> collection) {
         if(collection==null)
-			return newLinkedHashSet();
+			return new LinkedHashSet<>();
         return new LinkedHashSet<T>(collection);
     }
 
