@@ -100,7 +100,7 @@ jobs:
       if: matrix.language == 'java'
       shell: bash
       run: |
-        MOCKITO_VERSION=$(mvn -f $PROJECT_ROOT_PATH/core/internaltestsupport/pom.xml help:evaluate -Dexpression=mockito.version -q -DforceStdout)
+        MOCKITO_VERSION=$(mvn -f $PROJECT_ROOT_PATH/core/internaltestsupport/pom.xml help:evaluate -Dexpression=mockito.version -q -DforceStdout | awk '{print $NF}')
         echo "MOCKITO_VERSION = $MOCKITO_VERSION"
         mvn dependency:get -Dartifact=org.mockito:mockito-core:$MOCKITO_VERSION
 
