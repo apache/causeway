@@ -67,8 +67,8 @@
         <ethlo-eclipselink-maven-plugin.version>4.0.2</ethlo-eclipselink-maven-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
-        <maven-surefire-report-plugin.version>3.5.6</maven-surefire-report-plugin.version>
+        <maven-surefire-plugin.version>3.6.0-M1</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.6.0-M1</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.15.2</maven.plugin.tools.version>
 
@@ -401,10 +401,6 @@
 							<!-- reduce test logging verbosity -->
                             <logging.level.root>WARN</logging.level.root>
                         </systemPropertyVariables>
-						<!-- CI friendly test logging: -->
-                        <useFile>false</useFile><!-- don't buffer test output to filesystem -->
-                        <reportFormat>plain</reportFormat><!-- don't use XML -->
-                        <printSummary>true</printSummary><!-- print a summary of failures to console -->
                     </configuration>
                 </plugin>
                 <plugin>
