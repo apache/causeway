@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.commons.internal.collections;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,10 +34,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @since Feb 23, 2020
@@ -108,15 +108,6 @@ class _SetsTest {
         var set = _Sets.unmodifiable(Samples.iterable(3, 1, 2));
         assertUnmodifiable(set);
         Samples.assertListEquals(List.of(3, 1, 2), set);
-    }
-
-    /**
-     * Test method for {@link org.apache.causeway.commons.internal.collections._Sets#newTreeSet()}.
-     */
-    @Test
-    void testNewTreeSet() {
-        var set = _Sets.newTreeSet();
-        assertEquals(TreeSet.class, set.getClass());
     }
 
     /**
@@ -287,8 +278,8 @@ class _SetsTest {
     void testIntersectSorted() {
         Samples.assertListEquals(List.of(), _Sets.intersectSorted(null, null));
         Samples.assertListEquals(List.of(), _Sets.intersectSorted(null, _Sets.newTreeSet(_Sets.of())));
-        Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(), null));
-        Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(new TreeSet<>(), null));
+        Samples.assertListEquals(List.of(), _Sets.intersectSorted(new TreeSet<>(), new TreeSet<>()));
         Samples.assertListEquals(List.of(), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
         Samples.assertListEquals(List.of(1, 2), _Sets.intersectSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
     }
@@ -314,8 +305,8 @@ class _SetsTest {
     void testMinusSortedSortedSetOfTSortedSetOfT() {
         Samples.assertListEquals(List.of(), _Sets.minusSorted(null, null));
         Samples.assertListEquals(List.of(), _Sets.minusSorted(null, _Sets.newTreeSet(_Sets.of())));
-        Samples.assertListEquals(List.of(), _Sets.minusSorted(_Sets.newTreeSet(), null));
-        Samples.assertListEquals(List.of(), _Sets.minusSorted(_Sets.newTreeSet(), _Sets.newTreeSet()));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(new TreeSet<>(), null));
+        Samples.assertListEquals(List.of(), _Sets.minusSorted(new TreeSet<>(), new TreeSet<>()));
         Samples.assertListEquals(List.of(0, 1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1, 0)), _Sets.newTreeSet(_Sets.of(3, 2))));
         Samples.assertListEquals(List.of(0), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(2, 0, 1)), _Sets.newTreeSet((_Sets.of(3, 1, 2)))));
     }

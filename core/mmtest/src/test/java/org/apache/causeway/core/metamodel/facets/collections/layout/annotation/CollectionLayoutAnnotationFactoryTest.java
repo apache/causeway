@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout.annotation;
 
-import java.util.SortedSet;
-
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -31,9 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -42,6 +40,7 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutAnnotation;
+import org.junit.jupiter.api.Test;
 
 class CollectionLayoutAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
@@ -51,7 +50,7 @@ extends FacetFactoryTestAbstract {
         var facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @CollectionLayout(named = "1st names")
-            public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
+            public SortedSet<String> getFirstNames() { return new TreeSet<>(); }
         }
         collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -69,7 +68,7 @@ extends FacetFactoryTestAbstract {
         var facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @CollectionLayout(hidden = Where.OBJECT_FORMS)
-            public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
+            public SortedSet<String> getFirstNames() { return new TreeSet<>(); }
         }
         collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod)->{
             // when

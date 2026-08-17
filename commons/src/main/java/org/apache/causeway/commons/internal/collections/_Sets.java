@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.internal.collections;
 
+import static org.apache.causeway.commons.internal.functions._Predicates.not;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,13 +37,10 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
-import static org.apache.causeway.commons.internal.functions._Predicates.not;
-
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -87,9 +86,8 @@ public final class _Sets {
      */
     @SafeVarargs
     public static <T> Set<T> of(final @NonNull T ... elements) {
-        if(elements.length==0) {
-            return Collections.emptySet();
-        }
+        if(elements.length==0)
+			return Collections.emptySet();
         return Stream.of(elements)
                 .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
@@ -101,9 +99,8 @@ public final class _Sets {
      */
     @SafeVarargs
     public static <T> SortedSet<T> ofSorted(final @NonNull T ... elements) {
-        if(elements.length==0) {
-            return Collections.emptySortedSet();
-        }
+        if(elements.length==0)
+			return Collections.emptySortedSet();
         return Collections.unmodifiableSortedSet(
                 Stream.of(elements)
                 .collect(Collectors.toCollection(TreeSet::new))); // natural order
@@ -115,18 +112,13 @@ public final class _Sets {
      * @return non null
      */
     public static <T> Set<T> unmodifiable(final @Nullable Iterable<T> iterable) {
-        if(iterable==null) {
-            return Collections.emptySet();
-        }
+        if(iterable==null)
+			return Collections.emptySet();
         return _NullSafe.stream(iterable)
                 .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
 
     // -- TREE SET
-
-    public static <T> TreeSet<T> newTreeSet() {
-        return new TreeSet<T>();
-    }
 
     public static <T> TreeSet<T> newTreeSet(final @Nullable Comparator<T> comparator) {
         return comparator!=null ? new TreeSet<T>(comparator) : new TreeSet<T>();
@@ -149,9 +141,8 @@ public final class _Sets {
     }
 
     public static <T> HashSet<T> newHashSet(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newHashSet();
-        }
+        if(collection==null)
+			return newHashSet();
         return new HashSet<T>(collection);
     }
 
@@ -167,9 +158,8 @@ public final class _Sets {
     }
 
     public static <T> LinkedHashSet<T> newLinkedHashSet(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newLinkedHashSet();
-        }
+        if(collection==null)
+			return newLinkedHashSet();
         return new LinkedHashSet<T>(collection);
     }
 
@@ -204,9 +194,8 @@ public final class _Sets {
     }
 
     public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(final @Nullable Collection<T> collection) {
-        if(collection==null) {
-            return newCopyOnWriteArraySet();
-        }
+        if(collection==null)
+			return newCopyOnWriteArraySet();
         return new CopyOnWriteArraySet<T>(collection);
     }
 
@@ -225,12 +214,10 @@ public final class _Sets {
      * @return non null, unmodifiable
      */
     public static <T> Set<T> intersect(final @Nullable Set<T> a, final @Nullable Set<T> b) {
-        if(a==null && b==null) {
-            return Collections.emptySet();
-        }
-        if(a==null || b==null) {
-            return Collections.emptySet();
-        }
+        if(a==null && b==null)
+			return Collections.emptySet();
+        if(a==null || b==null)
+			return Collections.emptySet();
         return a.stream()
                 .filter(Objects::nonNull)
                 .filter(b::contains)
@@ -246,12 +233,10 @@ public final class _Sets {
      * @return non null, unmodifiable
      */
     public static <T> SortedSet<T> intersectSorted(final @Nullable SortedSet<T> a, final @Nullable SortedSet<T> b) {
-        if(a==null && b==null) {
-            return Collections.emptySortedSet();
-        }
-        if(a==null || b==null) {
-            return Collections.emptySortedSet();
-        }
+        if(a==null && b==null)
+			return Collections.emptySortedSet();
+        if(a==null || b==null)
+			return Collections.emptySortedSet();
         return a.stream()
                 .filter(Objects::nonNull)
                 .filter(b::contains)
@@ -299,9 +284,8 @@ public final class _Sets {
             final @Nullable Set<T> b,
             final @NonNull Supplier<Set<T>> collectionFactory) {
 
-        if(a==null || a.isEmpty()) {
-            return Collections.emptySet();
-        }
+        if(a==null || a.isEmpty())
+			return Collections.emptySet();
         if(b==null || b.isEmpty()) {
             var copy = collectionFactory.get();
             copy.addAll(a);
@@ -328,9 +312,8 @@ public final class _Sets {
             final @Nullable SortedSet<T> b,
             final @NonNull Supplier<SortedSet<T>> collectionFactory) {
 
-        if(a==null || a.isEmpty()) {
-            return Collections.emptySortedSet();
-        }
+        if(a==null || a.isEmpty())
+			return Collections.emptySortedSet();
         if(b==null || b.isEmpty()) {
             var copy = collectionFactory.get();
             copy.addAll(a);

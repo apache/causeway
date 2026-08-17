@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -46,9 +44,11 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -168,9 +168,8 @@ public class MetaModelServiceMenu {
         @MemberSupport public String validateAct(
                 final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces,
                 final ExportFormat exportFormat, final boolean zip) {
-            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
-                return "At least one package must be selected";
-            }
+            if(namespacePrefixes == null || namespacePrefixes.isEmpty())
+				return "At least one package must be selected";
             return null;
         }
 
@@ -243,9 +242,8 @@ public class MetaModelServiceMenu {
                 final List<String> namespacePrefixes,
                 final boolean includeInterfaces,
                 final Blob rightMetamodelBlob) {
-            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
-                return "At least one package must be selected";
-            }
+            if(namespacePrefixes == null || namespacePrefixes.isEmpty())
+				return "At least one package must be selected";
             return null;
         }
 
@@ -280,7 +278,7 @@ public class MetaModelServiceMenu {
     private List<String> namespaceChoices() {
         var domainModel = metaModelService.getDomainModel();
         var domainMembers = domainModel.getDomainMembers();
-        var namespaces = _Sets.<String>newTreeSet();
+        var namespaces = new TreeSet<String>();
         for (var domainMember : domainMembers) {
             var namespace = domainMember.getNamespace();
             var namespaceParts = namespace.split("[.]");

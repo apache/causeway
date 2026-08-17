@@ -201,7 +201,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList(1);
+        var zipEntryDataSources = new ArrayList<ZipEntryDataSource>(1);
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(

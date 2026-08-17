@@ -21,12 +21,12 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -176,7 +176,7 @@ public class DomainMemberDefault implements DomainMember {
         case ACTION:
         default:
             var parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = _Sets.newTreeSet();
+            final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -195,7 +195,7 @@ public class DomainMemberDefault implements DomainMember {
 			return "";
 		else {
             var parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = _Sets.newTreeSet();
+            final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -212,7 +212,7 @@ public class DomainMemberDefault implements DomainMember {
 			return "";
 		else {
             var parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = _Sets.newTreeSet();
+            final SortedSet<String> interpretations = new TreeSet<>();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -228,7 +228,7 @@ public class DomainMemberDefault implements DomainMember {
         if(memberType == MemberType.PROPERTY)
 			return interpretRowAndFacet(PropertyValidateFacet.class);
 		else if(memberType == MemberType.COLLECTION)
-			return String.join(";", _Sets.newTreeSet());
+			return String.join(";", new TreeSet<>());
 		else
 			return interpretRowAndFacet(ActionValidationFacet.class);
     }
@@ -261,9 +261,8 @@ public class DomainMemberDefault implements DomainMember {
         if (facet == null
                 || facet.precedence().isFallback())
 			return "";
-        if (facet instanceof ImperativeFacet imperativeFacet) {
-            return imperativeFacet.getMethods().getFirstElseFail().getName();
-        }
+        if (facet instanceof ImperativeFacet imperativeFacet)
+			return imperativeFacet.getMethods().getFirstElseFail().getName();
         final String name = facet.getClass().getSimpleName();
         if (ignore(name))
 		 return "";

@@ -117,7 +117,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> sorted(final @NonNull Comparator<? super T> c) {
-        var newElements = _Lists.<T>newArrayList(elements);
+        var newElements = new ArrayList<T>(elements);
         newElements.sort(c);
         return new Can_Multiple<>(newElements);
     }
@@ -132,7 +132,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     @Override
     public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         final int initialSize = Math.min(1024, elements.size());
-        var uniqueElements = _Lists.<T>newArrayList(initialSize);
+        var uniqueElements = new ArrayList<T>(initialSize);
         elements
         .forEach(element->{
             if(!uniqueElements.stream().anyMatch(x->equality.test(x, element))) {

@@ -23,11 +23,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 class PoWriter extends PoAbstract {
 
     private static class Block {
-        private final SortedSet<String> contexts = _Sets.newTreeSet();
+        private final SortedSet<String> contexts = new TreeSet<>();
         private String msgIdPlural;
 
         private Block() { }
@@ -106,9 +106,8 @@ class PoWriter extends PoAbstract {
     @Override
     public String translate(final TranslationContext context, final String msgId) {
 
-        if(msgId == null) {
-            return null;
-        }
+        if(msgId == null)
+			return null;
         final Block block = blockFor(msgId);
         synchronized(block) {
             block.contexts.add(context.getName());
@@ -120,9 +119,8 @@ class PoWriter extends PoAbstract {
     @Override
     String translate(final TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
 
-        if(msgId == null) {
-            return null;
-        }
+        if(msgId == null)
+			return null;
         final Block block = blockFor(msgId);
         synchronized(block) {
             block.contexts.add(context.getName());

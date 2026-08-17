@@ -243,10 +243,6 @@ public final class _Lists {
 
     // -- ARRAY LIST
 
-    public <T> ArrayList<T> newArrayList(final int initialSize) {
-        return new ArrayList<T>(initialSize);
-    }
-
     public <T> ArrayList<T> newArrayList(final @Nullable Collection<T> collection) {
         if(collection==null)
 			return new ArrayList<>();
@@ -260,13 +256,9 @@ public final class _Lists {
 
     // -- LINKED LIST
 
-    public <T> LinkedList<T> newLinkedList() {
-        return new LinkedList<T>();
-    }
-
     public <T> LinkedList<T> newLinkedList(final @Nullable Collection<T> collection) {
         if(collection==null)
-			return newLinkedList();
+			return new LinkedList<>();
         return new LinkedList<T>(collection);
     }
 

@@ -22,8 +22,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
-
-import org.jspecify.annotations.NonNull;
+import java.util.TreeSet;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
@@ -34,7 +33,7 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.commons.internal.collections._Sets;
+import org.jspecify.annotations.NonNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -91,16 +90,16 @@ Comparable<ApplicationFeature> {
     private @NonNull OptionalInt propertyTypicalLength = OptionalInt.empty();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> contents = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> properties = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> collections = new TreeSet<>();
 
     @Getter(onMethod_ = {@Override})
-    private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> actions = new TreeSet<>();
 
     // -- PACKAGE PRIVATE ACCESS
 

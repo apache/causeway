@@ -168,25 +168,25 @@ public interface CollectionFacet extends Facet {
 
         private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = Map.ofEntries(
 
-                    // specific list implementations
+                // specific list implementations
                 Map.entry(CopyOnWriteArrayList.class, _Lists::newConcurrentList),
-                Map.entry(LinkedList.class, _Lists::newLinkedList),
+                Map.entry(LinkedList.class, LinkedList::new),
                 Map.entry(ArrayList.class, ArrayList::new),
                 Map.entry(AbstractList.class, ArrayList::new),
 
-                    // specific set implementations
+                // specific set implementations
                 Map.entry(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet),
                 Map.entry(LinkedHashSet.class, _Sets::newLinkedHashSet),
                 Map.entry(HashSet.class, _Sets::newHashSet),
-                Map.entry(TreeSet.class, _Sets::newTreeSet),
+                Map.entry(TreeSet.class, TreeSet::new),
                 Map.entry(AbstractSet.class, _Sets::newLinkedHashSet),
 
-                    // interfaces
+                // interfaces
                 Map.entry(List.class, ArrayList::new),
-                Map.entry(SortedSet.class, _Sets::newTreeSet),
+                Map.entry(SortedSet.class, TreeSet::new),
                 Map.entry(Set.class, _Sets::newLinkedHashSet),
                 Map.entry(Collection.class, ArrayList::new)
-                );
+            );
 
     }
 

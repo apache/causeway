@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.Identifier;
@@ -25,7 +26,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -120,7 +120,7 @@ public record FacetedMethod(
             final MethodFacade actionMethod) {
 
         final List<FacetedMethodParameter> actionParams =
-                _Lists.newArrayList(actionMethod.getParameterCount());
+                new ArrayList<>(actionMethod.getParameterCount());
 
         int paramIndex = -1;
 
