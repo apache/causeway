@@ -65,7 +65,7 @@ public class CausewaySystemEnvironment {
     @Autowired
     public CausewaySystemEnvironment(final ApplicationContext springContext) {
         this.springContextHolder = new SpringContextHolder(springContext);
-        this.deploymentType = deploymentTypeFromStringContextOrSystemEnvironment(springContext.getEnvironment());
+        this.deploymentType = deploymentTypeFromSpringContextOrSystemEnvironment(springContext.getEnvironment());
         log.info("init for {} (hashCode = {})", deploymentType, this.hashCode());
     }
 
@@ -123,7 +123,7 @@ public class CausewaySystemEnvironment {
 
     // -- UTIL
 
-    public static DeploymentType deploymentTypeFromStringContextOrSystemEnvironment(final Environment environment) {
+    public static DeploymentType deploymentTypeFromSpringContextOrSystemEnvironment(final Environment environment) {
 
     	// preferred for integration tests @SpringBootTest(properties = {"causeway.deploymentType=PROTOTYPING"})
     	final @Nullable String deploymentTypeFromSpring = environment.getProperty("causeway.deploymentType");
