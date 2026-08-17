@@ -197,7 +197,8 @@ permits Either.Left, Either.Right {
     		final @Nullable Stream<Either<L, R>> inputStream,
     		final @Nullable Function<L, T> leftMapper,
             final @Nullable Function<R, T> rightMapper) {
-    	if(inputStream==null)
+    	if(inputStream==null
+    			|| (leftMapper==null && rightMapper==null))
     		return Stream.empty();
     	final Function<L, T> leftMapperNonNull = leftMapper!=null
 			? leftMapper
