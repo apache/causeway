@@ -18,18 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
+import java.util.LinkedHashMap;
 import java.util.Optional;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.Model;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
@@ -42,6 +35,11 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGro
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.Model;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AttributePanelWithFormField<T>
 extends AttributePanelWithInlinePrompt {
@@ -71,29 +69,14 @@ extends AttributePanelWithInlinePrompt {
      */
     protected MarkupContainer createFieldFrame() {
         var renderScenario = getRenderScenario();
-        final FieldFragment fieldFragment;
-        switch (renderScenario) {
-        case READONLY:
-            // setup as output-format (no links)
-            fieldFragment = FieldFragment.NO_LINK_VIEWING;
-            break;
-        case CAN_EDIT:
-        case CAN_EDIT_INLINE:
-        case CAN_EDIT_INLINE_VIA_ACTION:
-        case EDITING_WITH_LINK_TO_NESTED:
-            // setup as output-format (with links to edit)
-            fieldFragment = FieldFragment.LINK_TO_PROMT;
-            break;
-        case EDITING:
-            // setup as input-format
-            fieldFragment = attributeModel().isEditingMode()
-                ? FieldFragment.NO_LINK_EDITING // supports additional buttons (clear, ...)
-                : FieldFragment.NO_LINK_VIEWING;
-            break;
-
-        default:
-            throw _Exceptions.unmatchedCase(renderScenario);
-        }
+        final FieldFragment fieldFragment = switch (renderScenario) {
+		case READONLY -> /* setup as output-format (no links) */ FieldFragment.NO_LINK_VIEWING;
+		case CAN_EDIT, CAN_EDIT_INLINE, CAN_EDIT_INLINE_VIA_ACTION, EDITING_WITH_LINK_TO_NESTED -> /* setup as output-format (with links to edit) */ FieldFragment.LINK_TO_PROMT;
+		case EDITING -> /* setup as input-format */ attributeModel().isEditingMode()
+		                ? FieldFragment.NO_LINK_EDITING // supports additional buttons (clear, ...)
+		                : FieldFragment.NO_LINK_VIEWING; // supports additional buttons (clear, ...)
+		default -> throw _Exceptions.unmatchedCase(renderScenario);
+		};
         return Wkt.fragment(fieldFragment.getContainerId(),
                 fieldFragment.getFragmentId(),
                 this);
@@ -141,10 +124,10 @@ extends AttributePanelWithInlinePrompt {
 
         XrayWkt.ifEnabledDo(()->{
             // debug (wicket viewer x-ray)
-            var xrayDetails = _Maps.<String, String>newLinkedHashMap();
+            var xrayDetails = new LinkedHashMap<String, String>();
             xrayDetails.put("panel", this.getClass().getSimpleName());
             xrayDetails.put("renderScenario", renderScenario.name());
-            xrayDetails.put("inputFragmentType", getInputFragmentType().map(x->x.name()).orElse("(none)"));
+            xrayDetails.put("inputFragmentType", getInputFragmentType().map(InputFragment::name).orElse("(none)"));
             xrayDetails.put("formComponent", _Strings.nonEmpty(formComponent.getClass().getSimpleName())
                     .orElseGet(()->formComponent.getClass().getName()));
             xrayDetails.put("formComponent.id", formComponent.getId());

@@ -31,6 +31,7 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -58,7 +59,6 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 
@@ -96,9 +96,8 @@ public class XrayUi extends JFrame {
 
     public static void waitForShutdown() {
         if(latch==null
-                || INSTANCE == null) {
-            return;
-        }
+                || INSTANCE == null)
+			return;
         System.err.println("Waiting for XrayUi to shut down...");
         try {
             latch.await();
@@ -130,9 +129,8 @@ public class XrayUi extends JFrame {
         tree.getSelectionModel().addTreeSelectionListener((final TreeSelectionEvent e) -> {
 
             var selPath = e.getNewLeadSelectionPath();
-            if(selPath==null) {
-                return; // ignore event
-            }
+            if(selPath==null)
+				return; // ignore event
             var selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
             var userObject = selectedNode.getUserObject();
 
@@ -245,12 +243,11 @@ public class XrayUi extends JFrame {
     }
 
     private boolean canRemoveNode(final DefaultMutableTreeNode node) {
-        if(node.getParent()==null) {
-            return false; // don't remove root
-        }
+        if(node.getParent()==null)
+			return false; // don't remove root
         return extractUserObject(node)
         .map(HasIdAndLabel::getStickiness)
-        .map(stickiness->stickiness.isCanDeleteNode())
+        .map(Stickiness::isCanDeleteNode)
         .orElse(true); // default: allow removal
     }
 
@@ -351,7 +348,7 @@ public class XrayUi extends JFrame {
 
     // -- CUSTOM TREE NODE ICONS
 
-    private final Map<String, Optional<ImageIcon>> iconCache = _Maps.newConcurrentHashMap();
+    private final Map<String, Optional<ImageIcon>> iconCache = new ConcurrentHashMap<>();
 
     @RequiredArgsConstructor
     class XrayTreeCellRenderer implements TreeCellRenderer {
@@ -373,8 +370,7 @@ public class XrayUi extends JFrame {
                     delegate.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
             Object o = ((DefaultMutableTreeNode) value).getUserObject();
-            if (o instanceof XrayDataModel) {
-                XrayDataModel dataModel = (XrayDataModel) o;
+            if (o instanceof XrayDataModel dataModel) {
                 var imageIcon = iconCache.computeIfAbsent(dataModel.getIconResource(), iconResource->{
                     URL imageUrl = getClass().getResource(dataModel.getIconResource());
                     return Optional.ofNullable(imageUrl)

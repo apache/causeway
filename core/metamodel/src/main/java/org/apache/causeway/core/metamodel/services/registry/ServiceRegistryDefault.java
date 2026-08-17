@@ -19,28 +19,27 @@
 package org.apache.causeway.core.metamodel.services.registry;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Default implementation of {@link ServiceRegistry}.
@@ -99,7 +98,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
             _Lazy.threadSafe(this::enumerateContributingDomainServices);
 
     private Map<String, SingletonBeanProvider> enumerateContributingDomainServices() {
-        var managedBeanAdapterByName = _Maps.<String, SingletonBeanProvider>newHashMap();
+        var managedBeanAdapterByName = new HashMap<String, SingletonBeanProvider>();
 
         causewaySystemEnvironment.springContextHolder()
             .streamAllBeans()

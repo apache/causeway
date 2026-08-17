@@ -21,15 +21,7 @@ package org.apache.causeway.core.security.authentication.manager;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
@@ -40,15 +32,21 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.security.authentication.standard.Registrar;
-
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.Getter;
 
 @Service
 @Named(AuthenticationManager.LOGICAL_TYPE_NAME)
@@ -60,7 +58,7 @@ public class AuthenticationManager {
 
     @Getter private final @NonNull Can<Authenticator> authenticators;
 
-    private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
+    private final Map<String, String> userByValidationCode = new ConcurrentHashMap<>();
     private final @NonNull InteractionService interactionService;
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
@@ -79,9 +77,8 @@ public class AuthenticationManager {
         this.authenticators = Can.ofCollection(authenticators);
         this.userCurrentSessionTimeZoneHolder = userCurrentSessionTimeZoneHolder;
         this.userMementoRefiners = userMementoRefiners;
-        if (this.authenticators.isEmpty()) {
-            throw new NoAuthenticatorException("No authenticators specified");
-        }
+        if (this.authenticators.isEmpty())
+			throw new NoAuthenticatorException("No authenticators specified");
         this.registrars = this.authenticators
                 .filter(Registrar.class::isInstance)
                 .map(Registrar.class::cast);
@@ -93,17 +90,15 @@ public class AuthenticationManager {
     // cannot use final here, as Spring provides a transaction aware proxy for this type
     public /*final*/ InteractionContext authenticate(final AuthenticationRequest request) {
 
-        if (request == null) {
-            return null;
-        }
+        if (request == null)
+			return null;
 
         var compatibleAuthenticators = authenticators
                 .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
 
-        if (compatibleAuthenticators.isEmpty()) {
-            throw new NoAuthenticatorException(
+        if (compatibleAuthenticators.isEmpty())
+			throw new NoAuthenticatorException(
                     "No authenticator available for processing " + request.getClass().getName());
-        }
 
         // open a new anonymous interaction for this loop to run in
         // we simply participate with the current transaction
@@ -143,10 +138,9 @@ public class AuthenticationManager {
         do {
 
             // guard against infinite loop when unique code generation for some reason fails
-            if(stopWatch.getMillis()>3000L) {
-                throw new NoAuthenticatorException(
+            if(stopWatch.getMillis()>3000L)
+				throw new NoAuthenticatorException(
                         "RandomCodeGenerator failed to produce a unique code within 3s.");
-            }
 
             code = randomCodeGenerator.generateRandomCode();
         } while (userByValidationCode.containsKey(code));
@@ -156,16 +150,13 @@ public class AuthenticationManager {
 
     // cannot use final here, as Spring provides a transaction aware proxy for this type
     public /*final*/ boolean isSessionValid(final @Nullable InteractionContext interactionContext) {
-        if(interactionContext==null) {
-            return false;
-        }
+        if(interactionContext==null)
+			return false;
         var userMemento = interactionContext.getUser();
-        if(userMemento.authenticationSource().isExternal()) {
-            return true;
-        }
-        if(userMemento.isImpersonating()) {
-            return true;
-        }
+        if(userMemento.authenticationSource().isExternal())
+			return true;
+        if(userMemento.isImpersonating())
+			return true;
         final String userName = userByValidationCode.get(userMemento.authenticationCode());
         return interactionContext.getUser().isCurrentUser(userName);
     }
@@ -182,18 +173,16 @@ public class AuthenticationManager {
 
     public boolean register(final RegistrationDetails registrationDetails) {
         for (var registrar : this.registrars) {
-            if (registrar.canRegister(registrationDetails.getClass())) {
-                return registrar.register(registrationDetails);
-            }
+            if (registrar.canRegister(registrationDetails.getClass()))
+				return registrar.register(registrationDetails);
         }
         return false;
     }
 
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (var registrar : this.registrars) {
-            if (registrar.canRegister(registrationDetailsClass)) {
-                return true;
-            }
+            if (registrar.canRegister(registrationDetailsClass))
+				return true;
         }
         return false;
     }

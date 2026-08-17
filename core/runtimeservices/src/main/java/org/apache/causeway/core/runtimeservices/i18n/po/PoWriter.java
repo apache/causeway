@@ -23,11 +23,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +41,7 @@ class PoWriter extends PoAbstract {
         private Block() { }
     }
 
-    private final SortedMap<String, Block> blocksByMsgId = _Maps.newTreeMap();
+    private final SortedMap<String, Block> blocksByMsgId = new TreeMap<>();
 
     public PoWriter(final TranslationServicePo translationServicePo) {
         super(translationServicePo, Mode.WRITE);

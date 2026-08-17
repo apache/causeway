@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.debug.xray;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +31,6 @@ import javax.swing.JTextArea;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel.LogEntry;
 import org.apache.causeway.commons.internal.debug.xray.graphics.CallStackDiagram;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -118,7 +118,7 @@ final class _CallStackMerger {
     private void initialize() {
 
         var executionNodeSet = new HashSet<String>(); // temporary helper
-        var executionNodeMap = _Maps.<Integer, String>newHashMap(); // StackStraceElement by unique id
+        var executionNodeMap = new HashMap<Integer, String>(); // StackStraceElement by unique id
 
         var executionLanes = new ArrayList<int[]>();
 

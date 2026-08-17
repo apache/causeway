@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
 import org.jspecify.annotations.NonNull;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,7 +41,7 @@ record LogicalTypeResolver(
         Map<String, LogicalType> logicalTypeByName) {
 
     LogicalTypeResolver() {
-        this(_Maps.newConcurrentHashMap());
+        this(new ConcurrentHashMap<>());
     }
 
     /**
@@ -71,9 +71,8 @@ record LogicalTypeResolver(
 
         var logicalTypeName = spec.logicalTypeName();
 
-        if(logicalTypeByName.containsKey(logicalTypeName)) {
-            return spec;
-        }
+        if(logicalTypeByName.containsKey(logicalTypeName))
+			return spec;
 
         // collect concrete classes (do not collect abstract or anonymous types or interfaces)
         if(!spec.isAbstract()

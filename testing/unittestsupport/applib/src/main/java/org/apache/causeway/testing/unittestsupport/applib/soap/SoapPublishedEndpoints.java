@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.soap;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 /**
  * Collection of SOAP endpoints that have been published; will automatically assign a unique address to any
@@ -48,9 +48,8 @@ public class SoapPublishedEndpoints {
      * Lazily instantiates the singleton, using the {@link #INITIAL_PORT_DEFAULT default initial port}.
      */
     public static SoapPublishedEndpoints instance() {
-        if(instance == null) {
-            return new SoapPublishedEndpoints();
-        }
+        if(instance == null)
+			return new SoapPublishedEndpoints();
         return instance;
     }
 
@@ -85,19 +84,19 @@ public class SoapPublishedEndpoints {
     SoapPublishedEndpoints(){
         this(INITIAL_PORT_DEFAULT);
     }
-    SoapPublishedEndpoints(int initialPort){
+    SoapPublishedEndpoints(final int initialPort){
         this.initialPort = initialPort;
         this.port = this.initialPort;
     }
     private final int initialPort;
     private int port;
-    private final Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
+    private final Map<Class<?>, SoapEndpoint> soapEndpointByType = new LinkedHashMap<>();
 
     public SoapPublishedEndpoints publishIfRequired(final Class<?> endpointClass, final String endpointAddress) {
         return publishIfRequired(new SoapEndpointSpec(endpointClass, endpointAddress));
     }
 
-    public SoapPublishedEndpoints publishIfRequired(Class<?>... endpointClasses) {
+    public SoapPublishedEndpoints publishIfRequired(final Class<?>... endpointClasses) {
         var soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -111,7 +110,7 @@ public class SoapPublishedEndpoints {
         return publishIfRequired(soapEndpointSpecs);
     }
 
-    public SoapPublishedEndpoints publishIfRequired(SoapEndpointSpec... soapEndpointSpecs) {
+    public SoapPublishedEndpoints publishIfRequired(final SoapEndpointSpec... soapEndpointSpecs) {
         var soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
         return instance.publishIfRequired(soapEndpointSpecs2);
@@ -138,11 +137,11 @@ public class SoapPublishedEndpoints {
         return this;
     }
 
-    public String getEndpointAddress(Class<?> endpointClass) {
+    public String getEndpointAddress(final Class<?> endpointClass) {
         return soapEndpointByType.get(endpointClass).getSpec().getEndpointAddress();
     }
 
-    public <T> T getEndpointImplementor(Class<T> endpointClass) {
+    public <T> T getEndpointImplementor(final Class<T> endpointClass) {
         return _Casts.uncheckedCast( soapEndpointByType.get(endpointClass).getImplementor() );
     }
 }

@@ -24,18 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.confview.ConfigurationProperty;
@@ -45,15 +37,21 @@ import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.apache.causeway.core.webapp.modules.WebModule;
-
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,7 +122,7 @@ implements
 
     // -- HELPER
 
-    private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(()->loadConfiguration());
+    private final _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(this::loadConfiguration);
 
     private List<Map<String, ConfigurationProperty>> loadConfiguration() {
         var configCategories =
@@ -154,7 +152,7 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
         add("Causeway Version", configuration.viewer().common().application().version(), map);
         add("Deployment Type", systemEnvironment.deploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
@@ -185,7 +183,7 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadPrimary(final List<String> primaryPrefixes) {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
         if(isShowConfigurationProperties()) {
             configuration.streamConfigurationPropertyNames()
             .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
@@ -213,7 +211,7 @@ implements
     }
 
     private Map<String, ConfigurationProperty> loadSecondary(final Set<String> toBeExcluded) {
-        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        final Map<String, ConfigurationProperty> map = new TreeMap<>();
         if(isShowConfigurationProperties()) {
             configuration.streamConfigurationPropertyNames()
             .filter(propName->!toBeExcluded.contains(propName))
@@ -232,7 +230,7 @@ implements
         return map;
     }
 
-    private static void logRetrievalFailure(final String propName, Throwable error) {
+    private static void logRetrievalFailure(final String propName, final Throwable error) {
         log.warn("failed to load configuration property '{}'", propName, error);
     }
 
@@ -246,16 +244,12 @@ implements
     }
 
     private boolean isShowConfigurationProperties() {
-        switch (getConfigurationPropertyVisibilityPolicy()) {
-        case NEVER_SHOW:
-            return false;
-        case SHOW_ONLY_IN_PROTOTYPE:
-            return systemEnvironment.deploymentType().isPrototyping();
-        case ALWAYS_SHOW:
-            return true;
-        default:
-            return false;
-        }
+        return switch (getConfigurationPropertyVisibilityPolicy()) {
+		case NEVER_SHOW -> false;
+		case SHOW_ONLY_IN_PROTOTYPE -> systemEnvironment.deploymentType().isPrototyping();
+		case ALWAYS_SHOW -> true;
+		default -> false;
+		};
     }
 
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {

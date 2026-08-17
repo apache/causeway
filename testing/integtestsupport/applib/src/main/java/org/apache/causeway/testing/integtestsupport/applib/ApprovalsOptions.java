@@ -19,10 +19,10 @@
 package org.apache.causeway.testing.integtestsupport.applib;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.io.TextUtils;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
@@ -82,7 +82,7 @@ public class ApprovalsOptions {
         chunks.add(line.substring(0, p-1)); // first chunk "...<mml:param"
 
         // ordered attributes
-        var attrs = _Maps.<String, _Strings.KeyValuePair>newTreeMap();
+        var attrs = new TreeMap<String, _Strings.KeyValuePair>();
         _Strings.splitThenStream(line.substring(p, q), " ")
                 .map(attrLiteral->
                         _Strings.parseKeyValuePair(attrLiteral, '=')

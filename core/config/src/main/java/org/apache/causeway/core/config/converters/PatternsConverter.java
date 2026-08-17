@@ -18,20 +18,19 @@
  */
 package org.apache.causeway.core.config.converters;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.inject.Named;
-
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleCoreConfig.NAMESPACE + "..PatternsConverter")
@@ -39,7 +38,7 @@ import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 public class PatternsConverter implements Converter<String, Map<Pattern, String>> {
 
     @Override
-    public Map<Pattern, String> convert(String source) {
+    public Map<Pattern, String> convert(final String source) {
         return toPatternMap(source);
     }
 
@@ -55,11 +54,11 @@ public class PatternsConverter implements Converter<String, Map<Pattern, String>
      */
     private static final Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
 
-    private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
-        final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();
+    private static Map<Pattern, String> toPatternMap(final String cssClassPatterns) {
+        final Map<Pattern,String> valueByPattern = new LinkedHashMap<>();
         if(cssClassPatterns != null) {
             final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ",");
-            final Map<String,String> valueByRegex = _Maps.newLinkedHashMap();
+            final Map<String,String> valueByRegex = new LinkedHashMap<>();
             while (regexToCssClasses.hasMoreTokens()) {
                 String regexToCssClass = regexToCssClasses.nextToken().trim();
                 if (_Strings.isNullOrEmpty(regexToCssClass)) {

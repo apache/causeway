@@ -21,7 +21,6 @@ package org.apache.causeway.commons.internal.collections;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +29,6 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,13 +37,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -94,20 +91,20 @@ public final class _Maps {
     // -- UNMODIFIABLE MAP
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         mapPreservingOrder.put(k3, v3);
@@ -115,7 +112,7 @@ public final class _Maps {
     }
 
     public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3, final K k4, final V v4) {
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         mapPreservingOrder.put(k3, v3);
@@ -128,7 +125,7 @@ public final class _Maps {
         if(entries.length==0)
             return Collections.emptyMap();
 
-        final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
+        final LinkedHashMap<K, V> mapPreservingOrder = new LinkedHashMap<>();
 
         Stream.of(entries)
         .forEach(entry->mapPreservingOrder.put(entry.getKey(), entry.getValue()));
@@ -220,36 +217,6 @@ public final class _Maps {
         return result;
     }
 
-    // -- FACTORIES ...
-
-    // -- HASH MAP
-
-    public static <K, V> HashMap<K, V> newHashMap() {
-        return new HashMap<>();
-    }
-
-    // -- LINKED HASH MAP
-
-    public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
-        return new LinkedHashMap<>();
-    }
-
-    // -- CONCURRENT HASH MAP
-
-    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-        return new ConcurrentHashMap<>();
-    }
-
-    // -- TREE MAP
-
-    public static <K, V> TreeMap<K, V> newTreeMap() {
-        return new TreeMap<>();
-    }
-
-    public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<? super K> comparator) {
-        return new TreeMap<>(comparator);
-    }
-
     // -- ALIAS MAP
 
     private record KeyPair<K>(
@@ -323,7 +290,7 @@ public final class _Maps {
 
             // -- HELPER
 
-            private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
+            private final Map<K, KeyPair<K>> pairByAliasKey = new HashMap<>();
 
             private void putAliasKeys(final K key, final Can<K> aliasKeys, final boolean remap) {
                 if(aliasKeys.isNotEmpty()) {

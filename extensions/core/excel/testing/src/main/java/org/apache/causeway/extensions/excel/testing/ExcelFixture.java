@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,7 +36,6 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
@@ -139,7 +139,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
      * Output: the objects created by this fixture, for a specific persistable/row handler class.
      */
     @Getter
-    private final Map<Class<?>, List<Object>> objectsByClass = _Maps.newHashMap();
+    private final Map<Class<?>, List<Object>> objectsByClass = new HashMap<>();
 
     @Override
     protected void execute(final ExecutionContext ec) {

@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -28,7 +29,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.iactn.InteractionContext;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -42,7 +42,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<String, Event> eventById = _Maps.newLinkedHashMap();
+    private final Map<String, Event> eventById = new LinkedHashMap<>();
 
     // //////////////////////////////////////
 
@@ -83,9 +83,8 @@ public abstract class EventProviderAbstract implements EventProvider {
         for (final CalendarableDereferencingService dereferencingService : services) {
             final Object dereferencedObject = dereferencingService.dereference(domainObject);
             if (dereferencedObject != null
-                    && dereferencedObject != domainObject) {
-                return dereferencedObject;
-            }
+                    && dereferencedObject != domainObject)
+				return dereferencedObject;
         }
         return domainObject;
     }
@@ -98,9 +97,8 @@ public abstract class EventProviderAbstract implements EventProvider {
 
             final Object domainObjectPojo = domainObject.getPojo();
             final CalendarEvent calendarEvent = calendarEventFor(domainObjectPojo, calendarName);
-            if(calendarEvent == null) {
-                return null;
-            }
+            if(calendarEvent == null)
+				return null;
 
             var timeZone = commonContext.getInteractionService()
                     .currentInteractionContext()
@@ -139,9 +137,8 @@ public abstract class EventProviderAbstract implements EventProvider {
 
                 return event;
 
-            } else {
-                return null;
-            }
+            } else
+				return null;
 
         };
     }

@@ -18,19 +18,18 @@
  */
 package org.apache.causeway.core.runtimeservices.scratchpad;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 /**
  * Default implementation of {@link Scratchpad}, which simply stores data in-memory.
@@ -53,13 +52,13 @@ public class ScratchpadDefault implements Scratchpad {
      * Provides a mechanism for each object being acted upon to pass
      * data to the next object.
      */
-    private final Map<Object, Object> userData = _Maps.newHashMap();
+    private final Map<Object, Object> userData = new HashMap<>();
 
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
     @Override
-    public Object get(Object key) {
+    public Object get(final Object key) {
         return userData.get(key);
     }
 
@@ -67,7 +66,7 @@ public class ScratchpadDefault implements Scratchpad {
      * Set user-data, for the use of a subsequent object being acted upon.
      */
     @Override
-    public void put(Object key, Object value) {
+    public void put(final Object key, final Object value) {
         userData.put(key, value);
     }
 

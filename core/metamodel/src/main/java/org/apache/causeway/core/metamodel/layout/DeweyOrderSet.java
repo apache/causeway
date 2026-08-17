@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
@@ -73,7 +74,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     public static DeweyOrderSet createOrderSet(final Stream<? extends FacetHolder> identifiedHolders) {
 
-        final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup = _Maps.newTreeMap();
+        final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup = new TreeMap<>();
         final SortedSet<FacetHolder> nonAnnotatedGroup = _Sets.newTreeSet(MmSortUtils::memberIdentifierCompare);
 
         // spin over all the members and put them into a Map of SortedSets
@@ -100,7 +101,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // iteration will be in alphabetical order (ie parent groups before
         // their children).
         final Set<String> groupNames = sortedMembersByGroup.keySet();
-        final SortedMap<String, DeweyOrderSet> orderSetsByGroup = _Maps.newTreeMap();
+        final SortedMap<String, DeweyOrderSet> orderSetsByGroup = new TreeMap<>();
 
         for (final String string : groupNames) {
             final String groupName = string;
@@ -306,7 +307,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     // ///////////////////////// reorderChildren //////////////////////
 
     public void reorderChildren(final List<String> requiredOrder) {
-        final LinkedHashMap<String,DeweyOrderSet> orderSets = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String,DeweyOrderSet> orderSets = new LinkedHashMap<>();
 
         // remove all OrderSets from elements
         // though remembering the order they were encountered

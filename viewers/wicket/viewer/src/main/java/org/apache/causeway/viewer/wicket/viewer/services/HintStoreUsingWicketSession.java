@@ -115,7 +115,7 @@ public class HintStoreUsingWicketSession implements HintStore {
         LinkedHashMap<String, String> hints =
                 _Casts.uncheckedCast(Session.get().getAttribute(sessionAttribute));
         if(hints == null) {
-            hints = _Maps.newLinkedHashMap();
+            hints = new LinkedHashMap<>();
             Session.get().setAttribute(sessionAttribute, hints);
         }
         return hints;

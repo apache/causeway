@@ -18,9 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -33,17 +43,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.hint.HintStore;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +72,7 @@ class UiObjectWkt_hintsTest {
     }
 
     static class HintStore_forTesting implements HintStore {
-        private final Map<String, String> map = _Maps.newHashMap();
+        private final Map<String, String> map = new HashMap<>();
         @Override public String get(final Bookmark bookmark, final String hintKey) {
             return map.get(hintKey);}
         @Override public void set(final Bookmark bookmark, final String hintKey, final String value) {

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.actions.homepage.annotation;
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.HomePage;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -73,7 +73,7 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_MANAGED_BEANS) {
 
-            private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
+            private final Map<String, ObjectAction> actionsHavingHomePageFacet = new HashMap<>();
 
             @Override
             public void validateObjectEnter(final @NonNull ObjectSpecification spec) {

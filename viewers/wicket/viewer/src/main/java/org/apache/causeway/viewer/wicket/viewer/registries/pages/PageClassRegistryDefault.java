@@ -18,28 +18,26 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.apache.wicket.Page;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+import org.apache.wicket.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
@@ -64,8 +62,8 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
     }
 
     private final PageClassList pageClassList; // serializable
-    private final Map<PageType, Class<? extends Page>> pageClassByType = _Maps.newHashMap();
-    private final Map<Class<? extends Page>, PageType> typeByPageClass = _Maps.newHashMap();
+    private final Map<PageType, Class<? extends Page>> pageClassByType = new HashMap<>();
+    private final Map<Class<? extends Page>, PageType> typeByPageClass = new HashMap<>();
 
     @Inject
     public PageClassRegistryDefault(final PageClassList pageClassList) {
@@ -80,9 +78,8 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
 
     private void ensureAllPageTypesRegistered() {
         for (final PageType pageType : PageType.values()) {
-            if (getPageClass(pageType) == null) {
-                throw new IllegalStateException("No page registered for " + pageType);
-            }
+            if (getPageClass(pageType) == null)
+				throw new IllegalStateException("No page registered for " + pageType);
         }
     }
 

@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.applib.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
@@ -84,7 +84,7 @@ public record PathNode(
         if (groupCount < 1)
 			return null;
         final String key = nodeMatcher.group(1);
-        final Map<String, String> criteria = _Maps.newHashMap();
+        final Map<String, String> criteria = new HashMap<>();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
 

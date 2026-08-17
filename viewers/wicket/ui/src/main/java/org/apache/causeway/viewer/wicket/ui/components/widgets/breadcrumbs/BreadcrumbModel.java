@@ -21,11 +21,11 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -37,8 +37,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
 
     private static final int MAX_SIZE = 5;
 
-    private final Map<String, Bookmark> bookmarkByOidStr = _Maps.newHashMap();
-    private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
+    private final Map<String, Bookmark> bookmarkByOidStr = new HashMap<>();
+    private final Map<Bookmark, String> oidStrByBookmark = new HashMap<>();
     private final List<Bookmark> list = new ArrayList<>();
 
     public List<UiObjectWkt> getList() {

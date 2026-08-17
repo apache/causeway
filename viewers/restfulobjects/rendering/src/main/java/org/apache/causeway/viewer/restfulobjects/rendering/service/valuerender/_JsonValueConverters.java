@@ -21,10 +21,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -67,7 +67,7 @@ final class _JsonValueConverters {
     }
 
     public static Map<Class<?>, JsonValueConverter> byClass() {
-        var converterByClass = _Maps.<Class<?>, JsonValueConverter>newLinkedHashMap();
+        var converterByClass = new LinkedHashMap<Class<?>, JsonValueConverter>();
         new _JsonValueConverters().asList()
                 .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
         return converterByClass;

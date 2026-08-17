@@ -214,9 +214,9 @@ final class GridInitializationModel {
     // --
 
     private final LinkedHashSet<String> allIds = new LinkedHashSet<>();
-    private final LinkedHashMap<String, BSRow> rows = _Maps.newLinkedHashMap();
-    private final LinkedHashMap<String, BSCol> cols = _Maps.newLinkedHashMap();
-    private final LinkedHashMap<String, FieldSet> fieldSets = _Maps.newLinkedHashMap();
+    private final LinkedHashMap<String, BSRow> rows = new LinkedHashMap<>();
+    private final LinkedHashMap<String, BSCol> cols = new LinkedHashMap<>();
+    private final LinkedHashMap<String, FieldSet> fieldSets = new LinkedHashMap<>();
 
     private BSCol colForUnreferencedActionsRef;
     private FieldSet fieldSetForUnreferencedActionsRef;

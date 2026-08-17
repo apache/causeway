@@ -271,7 +271,7 @@ public class FixtureScripts {
                                     throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));
                                 },
                                 TreeMap::new))
-                    : _Maps.newTreeMap();
+                    : new TreeMap<>();
     }
 
     // -- runFixtureScript (using choices as the drop-down policy)

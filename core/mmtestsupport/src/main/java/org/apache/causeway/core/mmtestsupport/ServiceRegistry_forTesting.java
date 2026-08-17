@@ -19,6 +19,7 @@
 package org.apache.causeway.core.mmtestsupport;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -33,7 +34,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
@@ -82,7 +82,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return Can.empty();
     }
 
-    private final Map<String, SingletonBeanProvider> registeredBeanById = _Maps.newHashMap();
+    private final Map<String, SingletonBeanProvider> registeredBeanById = new HashMap<>();
 
     @Override
     public Stream<SingletonBeanProvider> streamRegisteredBeans() {

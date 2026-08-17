@@ -20,20 +20,19 @@ package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.io.TextUtils;
 
 /**
@@ -59,7 +58,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
     }
 
     static Map<String, String> asKeyValueMap(final String parameters) {
-        final Map<String, String> keyValues = _Maps.newLinkedHashMap();
+        final Map<String, String> keyValues = new LinkedHashMap<>();
         if (parameters != null) {
             try {
                 TextUtils.streamLines(parameters)
@@ -131,108 +130,96 @@ public class ExecutionParametersDefault implements ExecutionParameters {
     @Override
     public Boolean getParameterAsBoolean(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Boolean.valueOf(value);
     }
 
     @Override
     public Byte getParameterAsByte(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Byte.valueOf(value);
     }
 
     @Override
     public Short getParameterAsShort(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Short.valueOf(value);
     }
 
     @Override
     public Integer getParameterAsInteger(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Integer.valueOf(value);
     }
 
     @Override
     public Long getParameterAsLong(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Long.valueOf(value);
     }
 
     @Override
     public Float getParameterAsFloat(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Float.valueOf(value);
     }
 
     @Override
     public Double getParameterAsDouble(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Double.valueOf(value);
     }
 
     @Override
     public Character getParameterAsCharacter(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return Character.valueOf(value.charAt(0));
     }
 
     @Override
     public BigInteger getParameterAsBigInteger(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return new BigInteger(value);
     }
 
     @Override
     public BigDecimal getParameterAsBigDecimal(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
+        if (_Strings.isNullOrEmpty(value))
+			return null;
         return new BigDecimal(value);
     }
 
     @Override
     public LocalDate getParameterAsLocalDate(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (value == null) {
-            return null;
-        }
+        if (value == null)
+			return null;
         return LocalDate.parse(value);
     }
 
     @Override
     public LocalDateTime getParameterAsLocalDateTime(final String parameterName) {
         final String value = getParameter(parameterName);
-        if (value == null) {
-            return null;
-        }
+        if (value == null)
+			return null;
         return LocalDateTime.parse(value);
     }
 
@@ -243,14 +230,12 @@ public class ExecutionParametersDefault implements ExecutionParameters {
     }
 
     private static <T extends Enum<T>> T valueOfElseNull(final Class<T> enumClass, final String value) {
-        if (value == null) {
-            return null;
-        }
+        if (value == null)
+			return null;
         final T[] enumConstants = enumClass.getEnumConstants();
         for (T enumConstant : enumConstants) {
-            if (enumConstant.name().equals(value)) {
-                return enumConstant;
-            }
+            if (enumConstant.name().equals(value))
+				return enumConstant;
         }
         return null;
     }
@@ -262,17 +247,14 @@ public class ExecutionParametersDefault implements ExecutionParameters {
 
     @Override
     public void setParameterIfNotPresent(final String parameterName, final String parameterValue) {
-        if (parameterName == null) {
-            throw new IllegalArgumentException("parameterName required");
-        }
-        if (parameterValue == null) {
-            // ignore
+        if (parameterName == null)
+			throw new IllegalArgumentException("parameterName required");
+        if (parameterValue == null)
+			// ignore
             return;
-        }
-        if (parameterMap.containsKey(parameterName)) {
-            // ignore; the existing parameter take precedence
+        if (parameterMap.containsKey(parameterName))
+			// ignore; the existing parameter take precedence
             return;
-        }
         parameterMap.put(parameterName, parameterValue);
     }
 
@@ -363,13 +345,11 @@ public class ExecutionParametersDefault implements ExecutionParameters {
 
     @Override
     public void setParameter(final String parameterName, final String parameterValue) {
-        if (parameterName == null) {
-            throw new IllegalArgumentException("parameterName required");
-        }
-        if (parameterValue == null) {
-            // ignore
+        if (parameterName == null)
+			throw new IllegalArgumentException("parameterName required");
+        if (parameterValue == null)
+			// ignore
             return;
-        }
         parameterMap.put(parameterName, parameterValue);
     }
 

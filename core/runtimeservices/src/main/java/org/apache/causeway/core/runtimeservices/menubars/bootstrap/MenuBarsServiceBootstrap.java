@@ -19,10 +19,12 @@
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -41,7 +43,6 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -162,7 +163,7 @@ implements MenuBarsService {
     }
 
     private BSMenuBars updateFacetsFromActionLayoutXml(final BSMenuBars menuBarsFromXml) {
-        final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = _Maps.newHashMap();
+        final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = new HashMap<>();
         menuBarsFromXml.visit(serviceActionLayoutData->
             serviceActionLayoutDataByActionId.put(
                     serviceActionLayoutData.getLogicalTypeNameAndId(),
@@ -379,7 +380,7 @@ implements MenuBarsService {
      */
     private static Map<String, List<ServiceAndAction>> groupByServiceName(
             final List<ServiceAndAction> serviceActions) {
-        var serviceActionsByName = _Maps.<String, List<ServiceAndAction>>newTreeMap();
+        var serviceActionsByName = new TreeMap<String, List<ServiceAndAction>>();
 
         // map available services
         ManagedObject lastServiceAdapter = null;

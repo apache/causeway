@@ -19,18 +19,16 @@
 package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.http.MediaType;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.MediaType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -70,7 +68,7 @@ public enum RestfulClientMediaType {
             final String urn,
             final Class<?> dtoClass,
             final EnumSet<SuppressionType> suppressionTypes) {
-        var headerMap = _Maps.<String, String>newHashMap();
+        var headerMap = new HashMap<String, String>();
 
         headerMap.put("profile", "\"urn:" + urn + "\"");
 

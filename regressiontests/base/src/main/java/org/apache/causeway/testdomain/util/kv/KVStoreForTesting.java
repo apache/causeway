@@ -20,18 +20,15 @@ package org.apache.causeway.testdomain.util.kv;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+
+import org.apache.causeway.commons.collections.Can;
+import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,8 +42,8 @@ public class KVStoreForTesting {
     @PostConstruct
     public void init() {
         log.info("about to initialize");
-        keyValueMap = _Maps.newConcurrentHashMap();
-        latchMap = _Maps.newConcurrentHashMap();
+        keyValueMap = new ConcurrentHashMap<>();
+        latchMap = new ConcurrentHashMap<>();
     }
 
     @PreDestroy

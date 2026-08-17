@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.util.snapshot;
 
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +40,6 @@ import org.apache.causeway.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -801,7 +801,7 @@ public class XmlSnapshot implements Snapshot {
         return place;
     }
 
-    private final Map<ManagedObject, String> viewModelFakeOids = _Maps.newHashMap();
+    private final Map<ManagedObject, String> viewModelFakeOids = new HashMap<>();
 
     private String oidAsString(final ManagedObject adapter) {
         if (adapter.getPojo() instanceof ViewModel) {

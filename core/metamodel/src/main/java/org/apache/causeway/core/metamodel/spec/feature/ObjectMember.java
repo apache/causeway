@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.feature;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,7 +30,6 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -227,7 +227,7 @@ public interface ObjectMember extends ObjectFeature {
 
     public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
-        var memberById = _Maps.<String, T>newLinkedHashMap();
+        var memberById = new LinkedHashMap<String, T>();
         members.forEach(member->{
             // if there are multiple members with same id, just disregard
             memberById.put(member.getId(), member);

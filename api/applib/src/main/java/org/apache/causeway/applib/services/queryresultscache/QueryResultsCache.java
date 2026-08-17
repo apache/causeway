@@ -19,25 +19,23 @@
 package org.apache.causeway.applib.services.queryresultscache;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Named;
-
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -72,7 +70,7 @@ public class QueryResultsCache implements DisposableBean {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".QueryResultsCache";
 
-    private final Map<Key, Value<?>> cache = _Maps.newHashMap();
+    private final Map<Key, Value<?>> cache = new HashMap<>();
 
     /**
      * Executes the callable if not already cached for the supplied calling
@@ -101,53 +99,47 @@ public class QueryResultsCache implements DisposableBean {
     }
 
     public <R> R execute(final MethodReferences.Call0<? extends R> action, final Class<?> callingClass, final String methodName) {
-        if(isIgnoreCache()) {
-            return action.call();
-        }
+        if(isIgnoreCache())
+			return action.call();
         final Key cacheKey = new Key(callingClass, methodName);
         return executeWithCaching(action::call, cacheKey);
     }
 
     public <R, A0> R execute(final MethodReferences.Call1<? extends R, A0> action, final Class<?> callingClass, final String methodName, final A0 arg0) {
-        if(isIgnoreCache()) {
-            return action.call(arg0);
-        }
+        if(isIgnoreCache())
+			return action.call(arg0);
         final Key cacheKey = new Key(callingClass, methodName, arg0);
         return executeWithCaching(()->action.call(arg0), cacheKey);
     }
 
     public <R, A0, A1> R execute(final MethodReferences.Call2<? extends R, A0, A1> action, final Class<?> callingClass, final String methodName, final A0 arg0,
                                  final A1 arg1) {
-        if(isIgnoreCache()) {
-            return action.call(arg0, arg1);
-        }
+        if(isIgnoreCache())
+			return action.call(arg0, arg1);
         final Key cacheKey = new Key(callingClass, methodName, arg0, arg1);
         return executeWithCaching(()->action.call(arg0, arg1), cacheKey);
     }
 
     public <R, A0, A1, A2> R execute(final MethodReferences.Call3<? extends R, A0, A1, A2> action, final Class<?> callingClass, final String methodName,
                                      final A0 arg0, final A1 arg1, final A2 arg2) {
-        if(isIgnoreCache()) {
-            return action.call(arg0, arg1, arg2);
-        }
+        if(isIgnoreCache())
+			return action.call(arg0, arg1, arg2);
         final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2);
         return executeWithCaching(()->action.call(arg0, arg1, arg2), cacheKey);
     }
 
     public <R, A0, A1, A2, A3> R execute(final MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, final Class<?> callingClass,
                                          final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3) {
-        if(isIgnoreCache()) {
-            return action.call(arg0, arg1, arg2, arg3);
-        }
+        if(isIgnoreCache())
+			return action.call(arg0, arg1, arg2, arg3);
         final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2, arg3);
         return executeWithCaching(()->action.call(arg0, arg1, arg2, arg3), cacheKey);
     }
 
     public <R, A0, A1, A2, A3, A4> R execute(final MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, final Class<?> callingClass,
                                              final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3, final A4 arg4) {
-        if(isIgnoreCache()) {
-            return action.call(arg0, arg1, arg2, arg3, arg4);
-        }
+        if(isIgnoreCache())
+			return action.call(arg0, arg1, arg2, arg3, arg4);
         final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2, arg3, arg4);
         return executeWithCaching(()->action.call(arg0, arg1, arg2, arg3, arg4), cacheKey);
     }
@@ -181,9 +173,8 @@ public class QueryResultsCache implements DisposableBean {
         try {
             final Value<?> cacheValue = cache.get(cacheKey);
             logHitOrMiss(cacheKey, cacheValue);
-            if(cacheValue != null) {
-                return _Casts.uncheckedCast(cacheValue.getResult());
-            }
+            if(cacheValue != null)
+				return _Casts.uncheckedCast(cacheValue.getResult());
 
             // cache miss, so get the result...
             T result = callable.call();
@@ -208,9 +199,8 @@ public class QueryResultsCache implements DisposableBean {
     }
 
     private static void logHitOrMiss(final Key cacheKey, final Value<?> cacheValue) {
-        if(!log.isDebugEnabled()) {
-            return;
-        }
+        if(!log.isDebugEnabled())
+			return;
         log.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 
@@ -238,7 +228,7 @@ public class QueryResultsCache implements DisposableBean {
 
     private boolean isIgnoreCache() {
         return _NullSafe.stream(cacheControl)
-                .anyMatch(c->c.isIgnoreCache());
+                .anyMatch(QueryResultsCacheControl::isIgnoreCache);
     }
 
 }

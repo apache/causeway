@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -38,6 +39,19 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.codec._DocumentFactories;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.glassfish.jaxb.core.v2.runtime.IllegalAnnotationException;
+import org.glassfish.jaxb.runtime.v2.runtime.IllegalAnnotationsException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBContextFactory;
 import jakarta.xml.bind.JAXBElement;
@@ -45,22 +59,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.SchemaOutputResolver;
 import jakarta.xml.bind.Unmarshaller;
-
-import org.glassfish.jaxb.core.v2.runtime.IllegalAnnotationException;
-import org.glassfish.jaxb.runtime.v2.runtime.IllegalAnnotationsException;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
@@ -362,7 +360,7 @@ public class JaxbUtils {
         return contextOf(_Arrays.combine(primaryClass, additionalClassesToBeBound));
     }
 
-    private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
+    private static Map<Class<?>, JAXBContext> jaxbContextByClass = new ConcurrentHashMap<>();
 
     public static JAXBContext jaxbContextFor(final Class<?> dtoClass, final boolean useCache)  {
         return useCache

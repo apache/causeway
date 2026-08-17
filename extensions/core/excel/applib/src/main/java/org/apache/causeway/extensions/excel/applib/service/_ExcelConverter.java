@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +40,6 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -394,7 +394,7 @@ class _ExcelConverter {
         final Sheet sheet = lookupSheet(cls, sheetName, workbook);
 
         boolean header = true;
-        final Map<Integer, Property> propertyByColumn = _Maps.newHashMap();
+        final Map<Integer, Property> propertyByColumn = new HashMap<>();
 
         final ObjectSpecification objectSpec = specificationLoader.specForType(cls).orElse(null);
 

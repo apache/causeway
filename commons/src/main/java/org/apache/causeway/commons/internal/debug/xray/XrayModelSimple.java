@@ -21,13 +21,12 @@ package org.apache.causeway.commons.internal.debug.xray;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
 import org.jspecify.annotations.NonNull;
-
-import org.apache.causeway.commons.internal.collections._Maps;
 
 record XrayModelSimple(
         MutableTreeNode rootNode,
@@ -36,7 +35,7 @@ record XrayModelSimple(
 
     XrayModelSimple(
             final MutableTreeNode rootNode){
-        this(rootNode, _Maps.newConcurrentHashMap(), _Maps.newConcurrentHashMap());
+        this(rootNode, new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
     }
 
     @Override

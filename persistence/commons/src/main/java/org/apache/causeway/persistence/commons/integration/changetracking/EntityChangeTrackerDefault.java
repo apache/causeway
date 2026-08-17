@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -33,22 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.EntityChangeKind;
@@ -88,7 +73,20 @@ import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 import org.apache.causeway.schema.chg.v2.ObjectsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,7 +155,7 @@ implements
      *           cannot use <code>newConcurrentHashMap</code> as this doesn't preserve insertion order; instead we
      *           make sure that it is only ever accessed within a <code>synchronized</code> block.
      */
-    private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
+    private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = new LinkedHashMap<>();
 
     /**
      * As used when {@link #enlistCreated(ManagedObject)} or {@link #enlistUpdating(ManagedObject, Function)}
@@ -253,7 +251,7 @@ implements
     /**
      * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
      */
-    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newHashMap();
+    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = new HashMap<>();
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
@@ -304,23 +302,19 @@ implements
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
-        if (!configuration.isEnabled()) {
+        if (!configuration.isEnabled())
 			return true;
-		}
 
-        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec())) {
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec()))
 			return true; // ignore entities that are not enabled for entity change publishing
-		}
 
         // guard against transient
-        if(ManagedObjects.bookmark(entity).isEmpty()) {
+        if(ManagedObjects.bookmark(entity).isEmpty())
 			return true;
-		}
 
-        if(changes.isMemoized()) {
+        if(changes.isMemoized())
 			throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
-		}
 
         return false;
     }
@@ -353,15 +347,12 @@ implements
     }
 
     private static String decodeStatus(final int status) {
-        if (status == STATUS_COMMITTED) {
+        if (status == STATUS_COMMITTED)
 			return "STATUS_COMMITTED";
-		}
-        if (status == STATUS_ROLLED_BACK) {
+        if (status == STATUS_ROLLED_BACK)
 			return "STATUS_ROLLED_BACK";
-		}
-        if (status == STATUS_UNKNOWN) {
+        if (status == STATUS_UNKNOWN)
 			return "STATUS_UNKNOWN";
-		}
         return status + " [not recognised]";
     }
 
@@ -376,9 +367,8 @@ implements
 
         // a defensive copy of
         var changeKindByEnlistedAdapter = new HashMap<>(this.changeKindByEnlistedAdapter);
-        if(changeKindByEnlistedAdapter.isEmpty()) {
+        if(changeKindByEnlistedAdapter.isEmpty())
 			return Optional.empty();
-		}
 
         final var interactionCarrier = interactionCarrier();
         final int numberEntitiesLoaded1 = numberEntitiesLoaded();
@@ -421,9 +411,8 @@ implements
 
         changeKindByEnlistedEntity.forEach((bookmark, kind)->{
             var oidDto = bookmark.toOidDto();
-            if(oidDto==null) {
+            if(oidDto==null)
 				return;
-			}
             switch(kind) {
                 case CREATE:
                     objectsDto.getCreated().getOid().add(oidDto);
@@ -480,7 +469,8 @@ implements
     // -- HELPER
 
     /**
-     * @return <code>true</code> if successfully enlisted, <code>false</code> if not (no longer) enlisted ... eg delete of an entity that was created earlier in the transaction
+     * @return <code>true</code> if successfully enlisted, <code>false</code> if not (no longer) enlisted
+     * ... eg delete of an entity that was created earlier in the transaction
      */
     private boolean enlistForChangeKindPublishing(
             final @NonNull ManagedObject entity,
@@ -496,30 +486,24 @@ implements
             changeKindByEnlistedAdapter.put(bookmark, changeKind);
             return true;
         }
-        switch (previousChangeKind) {
-        case CREATE:
-            switch (changeKind) {
-            case DELETE:
-                changeKindByEnlistedAdapter.remove(bookmark);
-            case CREATE:
-            case UPDATE:
-                return false;
-            }
-            break;
-        case UPDATE:
-            switch (changeKind) {
-            case DELETE:
-                changeKindByEnlistedAdapter.put(bookmark, changeKind);
-                return true;
-            case CREATE:
-            case UPDATE:
-                return false;
-            }
-            break;
-        case DELETE:
-            return false;
-        }
-        return false;
+        return switch (previousChangeKind) {
+	        case CREATE ->
+	            switch (changeKind) {
+		            case DELETE -> {
+		            	changeKindByEnlistedAdapter.remove(bookmark);
+		                yield false;
+		            }
+		            case CREATE, UPDATE -> false;
+	            };
+	        case UPDATE -> switch (changeKind) {
+		            case DELETE -> {
+		                changeKindByEnlistedAdapter.put(bookmark, changeKind);
+		                yield true;
+		            }
+		            case CREATE, UPDATE -> false;
+	            };
+	        case DELETE -> false;
+        };
     }
 
     // side-effect free, used by XRay
@@ -535,9 +519,8 @@ implements
         _Xray.enlistCreated(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec())) {
+                || !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec()))
 			return;
-		}
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
@@ -557,9 +540,8 @@ implements
         _Xray.enlistUpdating(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec())) {
+                || !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec()))
 			return;
-		}
 
         if(log.isDebugEnabled()) {
             log.debug("enlist entity's property changes for publishing {}", entity);
@@ -595,9 +577,8 @@ implements
         _Xray.enlistDeleting(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec())) {
+                || !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec()))
 			return;
-		}
 
         suppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);

@@ -26,16 +26,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.beans.factory.InjectionPoint;
-import org.springframework.core.MethodParameter;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -44,12 +37,16 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Collections;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Generics;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.core.MethodParameter;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -60,8 +57,8 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private _InjectorMethodEvaluator injectorMethodEvaluator;
 
-    private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newConcurrentHashMap();
-    private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newConcurrentHashMap();
+    private final Map<Class<?>, Method[]> methodsByClassCache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Field[]> fieldsByClassCache = new ConcurrentHashMap<>();
 
     @Override
     public <T> T injectServicesInto(final T domainObject) {
@@ -130,9 +127,8 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         final Class<?> typeToBeInjected = field.getType();
         // don't think that type can ever be null,
         // but Javadoc for java.lang.reflect.Field doesn't say
-        if(typeToBeInjected == null) {
-            return;
-        }
+        if(typeToBeInjected == null)
+			return;
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
         final Class<?> elementType = inferElementType(field)
@@ -226,9 +222,8 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = injectorMethodEvaluator.getTypeToBeInjected(setter);
-        if(typeToBeInjected == null) {
-            return;
-        }
+        if(typeToBeInjected == null)
+			return;
 
         var instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
         if(instance.isCardinalityOne()) {
@@ -249,11 +244,10 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             throw new MetaModelException(e1);
         } catch (final InvocationTargetException e) {
             final Throwable targetException = e.getTargetException();
-            if (targetException instanceof RuntimeException) {
-                throw (RuntimeException) targetException;
-            } else {
-                throw new MetaModelException(targetException);
-            }
+            if (targetException instanceof RuntimeException)
+				throw (RuntimeException) targetException;
+			else
+				throw new MetaModelException(targetException);
         }
     }
 

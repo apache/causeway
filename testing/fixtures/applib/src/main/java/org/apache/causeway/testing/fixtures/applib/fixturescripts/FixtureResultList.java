@@ -20,12 +20,12 @@ package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 
 /**
  * Collecting parameter.
@@ -72,7 +72,7 @@ public class FixtureResultList {
      */
     private final List<FixtureScript> fixtureScriptList = new ArrayList<>();
 
-    private final Map<String, FixtureResult> fixtureResultByKey = _Maps.newHashMap();
+    private final Map<String, FixtureResult> fixtureResultByKey = new HashMap<>();
 
     public <T> T add(final FixtureScript script, final T object) {
         return add(script, nextItemFor(script), object);
@@ -106,7 +106,7 @@ public class FixtureResultList {
 
     // -- nextItemFor
 
-    private final Map<FixtureScript, AtomicInteger> itemNumberByScript = _Maps.newHashMap();
+    private final Map<FixtureScript, AtomicInteger> itemNumberByScript = new HashMap<>();
 
     String nextItemFor(final FixtureScript script) {
         AtomicInteger atomicInteger = itemNumberByScript.get(script);

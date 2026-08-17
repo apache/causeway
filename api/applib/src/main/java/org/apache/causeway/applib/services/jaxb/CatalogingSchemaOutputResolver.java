@@ -23,6 +23,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,7 +64,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         return namespaceUris;
     }
 
-    private final Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = _Maps.newLinkedHashMap();
+    private final Map<String, StreamResultWithWriter> schemaResultByNamespaceUri = new LinkedHashMap<>();
 
     public String getSchemaTextFor(final String namespaceUri) {
         final StreamResultWithWriter streamResult = schemaResultByNamespaceUri.get(namespaceUri);
@@ -140,7 +140,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     }
 
     public Map<String, String> asMap() {
-        final Map<String,String> map = _Maps.newLinkedHashMap();
+        final Map<String,String> map = new LinkedHashMap<>();
         final List<String> namespaceUris = getNamespaceUris();
 
         for (String namespaceUri : namespaceUris) {

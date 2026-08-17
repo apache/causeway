@@ -19,15 +19,14 @@
 package org.apache.causeway.testing.specsupport.applib.integration;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.commons.internal.collections._Maps;
-
-import lombok.RequiredArgsConstructor;
 
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
@@ -36,7 +35,7 @@ import io.cucumber.core.exception.CucumberException;
 public class ObjectFactoryForIntegration implements ObjectFactory {
 
     private final ServiceInjector serviceInjector;
-    private final Map<Class<?>, Object> instances = _Maps.newHashMap();
+    private final Map<Class<?>, Object> instances = new HashMap<>();
 
     @Override
     public void start() { }

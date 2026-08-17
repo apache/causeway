@@ -20,6 +20,7 @@ package org.apache.causeway.core.runtimeservices.i18n.po;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +33,6 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +43,8 @@ class PoReader extends PoAbstract {
     public static final String DASH = "-";
     public static final String UNDERSCORE = "_";
 
-    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = _Maps.newHashMap();
-    private final Map<Locale, Boolean> usesFallbackByLocale = _Maps.newHashMap();
+    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = new HashMap<>();
+    private final Map<Locale, Boolean> usesFallbackByLocale = new HashMap<>();
 
     /**
      * The basename of the translations file, hard-coded to <tt>translations</tt>.
@@ -170,7 +170,7 @@ class PoReader extends PoAbstract {
         if(translationsByKey != null)
 			return translationsByKey;
 
-        translationsByKey = _Maps.newHashMap();
+        translationsByKey = new HashMap<>();
         read(locale, translationsByKey);
         translationByKeyByLocale.put(locale, translationsByKey);
 

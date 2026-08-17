@@ -28,6 +28,8 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,7 +48,6 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
@@ -669,20 +670,20 @@ public abstract class FixtureScript {
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
          * strategy is in use.
          */
-        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = _Maps.newLinkedHashMap();
+        private final Map<Class<? extends FixtureScript>, FixtureScript> fixtureScriptByClass = new LinkedHashMap<>();
 
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
          * strategy is in use.
          */
-        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
+        private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = new LinkedHashMap<>();
 
         static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
 
         @Getter @Setter
-        private Map<Class<?>, Object> userData = _Maps.newHashMap();
+        private Map<Class<?>, Object> userData = new HashMap<>();
         @Programmatic
         public <T> T clearUserData(final Class<T> cls) {
             return _Casts.uncheckedCast(userData.remove(cls));

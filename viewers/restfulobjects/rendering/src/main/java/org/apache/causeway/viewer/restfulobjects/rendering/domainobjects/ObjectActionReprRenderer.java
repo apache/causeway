@@ -19,12 +19,12 @@
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -119,7 +119,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     // PARAMETER DETAILS
 
     private ObjectActionReprRenderer addParameterDetails() {
-        final Map<String,Object> parameters = _Maps.newLinkedHashMap();
+        final Map<String,Object> parameters = new LinkedHashMap<>();
         if(objectMember.getParameterCount()>0) {
             var act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
             var paramNeg = act.startParameterNegotiation();

@@ -20,15 +20,8 @@ package org.apache.causeway.core.metamodel.valuetypes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -37,11 +30,15 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemantics;
+import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -111,7 +108,7 @@ implements ValueSemanticsResolver {
 
     // managed by Causeway
     @SuppressWarnings("rawtypes")
-    private Map<Class<?>, ValueSemanticsProvider> enumSemantics = _Maps.newConcurrentHashMap();
+    private final Map<Class<?>, ValueSemanticsProvider> enumSemantics = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> ValueSemanticsProvider<T> defaultEnumSemantics(final Class<T> enumType) {

@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,6 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -80,13 +80,13 @@ implements ApplicationFeatureRepository, MetamodelListener {
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
 
-    final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = _Maps.newTreeMap();
-    private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
+    final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = new TreeMap<>();
+    private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = new TreeMap<>();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = new TreeMap<>();
 
     @Inject
     public ApplicationFeatureRepositoryDefault(

@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +30,6 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -89,7 +89,7 @@ class MetaModelExporter {
 
         // phase 1: create a domainClassType for each ObjectSpecification
         // these are added into a map for lookups in phase 2
-        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
+        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = new HashMap<>();
         for (final ObjectSpecification specification : specificationLookup.snapshotSpecifications()) {
             DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
@@ -116,7 +116,7 @@ class MetaModelExporter {
         }
 
         // phase 2.5: check no duplicates
-        final Map<String, ObjectSpecification> objectSpecificationByDomainClassId = _Maps.newHashMap();
+        final Map<String, ObjectSpecification> objectSpecificationByDomainClassId = new HashMap<>();
         final List<String> buf = new ArrayList<>();
         for (final Map.Entry<ObjectSpecification, DomainClassDto> entry : domainClassByObjectSpec.entrySet()) {
             final ObjectSpecification objectSpecification = entry.getKey();
@@ -150,7 +150,7 @@ class MetaModelExporter {
     private MetamodelDto exportTinyDomain(final List<ObjectSpecification> tinyDomain, final Config config) {
         MetamodelDto metamodelDto = new MetamodelDto();
 
-        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
+        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = new HashMap<>();
         for (final ObjectSpecification specification : tinyDomain) {
             DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);

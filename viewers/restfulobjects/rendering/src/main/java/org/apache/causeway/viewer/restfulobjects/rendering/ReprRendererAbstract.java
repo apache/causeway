@@ -19,11 +19,11 @@
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -46,7 +46,7 @@ implements ReprRenderer<T> {
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
-    private final Map<String,String> mediaTypeParams = _Maps.newLinkedHashMap();
+    private final Map<String,String> mediaTypeParams = new LinkedHashMap<>();
 
     private final InteractionInitiatedBy interactionInitiatedBy;
 
