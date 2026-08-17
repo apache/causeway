@@ -2,9 +2,9 @@
 
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, and interaction change `add-domain-web-component-interactions` are archived.
-The analysis-only `analyze-rich-graphql-referenceapp-coverage` change is complete but remains the sole active change until archived.
-No implementation draft may be promoted until that analysis is synced and archived.
+The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, and analysis change `analyze-rich-graphql-referenceapp-coverage` are archived.
+The first P0 change, `fix-rich-graphql-object-interaction-correctness`, is now active.
+The remaining drafts stay queued until that change is implemented and archived.
 
 Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
 After the active change is archived, promote the next draft verbatim:
@@ -24,8 +24,8 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 |---:|---|---|---|---|
 | 1 | `add-read-only-domain-web-components` *(archived)* | Complete | Archived foundation | NEW `domain-web-components` |
 | 2 | `add-domain-web-component-interactions` *(archived)* | Complete | Archived read-only components | MODIFIED `domain-web-components` |
-| 3 | `analyze-rich-graphql-referenceapp-coverage` *(active and complete; analysis only)* | Gate | Archived foundation and components; pinned reference application | NEW `rich-graphql-referenceapp-analysis` |
-| 4 | `fix-rich-graphql-object-interaction-correctness` | P0 | Completed analysis | NEW `rich-graphql-object-interaction-correctness` |
+| 3 | `analyze-rich-graphql-referenceapp-coverage` *(archived; analysis only)* | Complete | Archived foundation and components; pinned reference application | NEW `rich-graphql-referenceapp-analysis` |
+| 4 | `fix-rich-graphql-object-interaction-correctness` *(active)* | P0 | Completed analysis | NEW `rich-graphql-object-interaction-correctness` |
 | 5 | `fix-rich-graphql-resource-link-safety` | P0 | Completed analysis | NEW `rich-graphql-resource-link-safety` |
 | 6 | `add-rich-graphql-value-and-resource-semantics` | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-value-semantics` |
 | 7 | `add-rich-graphql-collection-windowing` | P1 | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
