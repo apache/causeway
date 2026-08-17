@@ -151,6 +151,7 @@ identified
         <surefire-plugin.argLine>
             -Xmx384m
             -XX:+EnableDynamicAgentLoading
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
         </surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
