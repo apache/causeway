@@ -100,8 +100,10 @@ jobs:
       if: matrix.language == 'java'
       shell: bash
       run: |
+        mvn -f $PROJECT_ROOT_PATH/core/internaltestsupport/pom.xml help:evaluate -Dexpression=mockito.version -q -DforceStdout
+        MOCKITO_VERSION=$(mvn -f $PROJECT_ROOT_PATH/core/internaltestsupport/pom.xml help:evaluate -Dexpression=mockito.version -q -DforceStdout)
+        echo $MOCKITO_VERSION
         mvn dependency:get -Dartifact=org.mockito:mockito-core:5.23.0
-        ls -al ~/.m2/
 
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
