@@ -31,6 +31,7 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService.Associatio
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -88,62 +89,53 @@ record SyntheticNavigationActionFactory(
             "logicalTypeName",
             "id",
             "version",
-            "objectIdentifier",
-            "datanucleusVersionLong",
-            "datanucleusVersionTimestamp");
+            "objectIdentifier");
 
 	List<ObjectAction> synthesizeNavigationActions() {
         var existingActionIds = Stream.concat(regularActions.stream(), mixedInActions.stream())
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet());
         var existingSyntheticActionIds = Stream.concat(regularActions.stream(), mixedInActions.stream())
-                .filter(action -> action.lookupFacet(ParentedCollectionNavigationFacet.class).isPresent()
-                        || action.lookupFacet(ScalarReferenceNavigationFacet.class).isPresent())
+                .filter(action -> action.containsFacet(ParentedCollectionNavigationFacet.class)
+                        || action.containsFacet(ScalarReferenceNavigationFacet.class))
                 .map(ObjectAction::getId)
                 .collect(Collectors.toSet());
         var syntheticActions = createFor(
-        				Stream.concat(regularAssociations.stream(), mixedInAssociations.stream()).toList(),
-                        existingActionIds,
-                        existingSyntheticActionIds)
-                .toList();
+				Stream.concat(regularAssociations.stream(), mixedInAssociations.stream()),
+                existingActionIds,
+                existingSyntheticActionIds);
         return syntheticActions;
     }
 
-    private Stream<ObjectAction> createFor(
-            final List<ObjectAssociation> candidates,
+    private List<ObjectAction> createFor(
+            final Stream<ObjectAssociation> candidates,
             final Set<String> existingActionIds,
             final Set<String> existingSyntheticActionIds) {
 
-    	final Class<?> ownerType = ownerSpec.correspondingClass();
-
         if (!(ownerSpec.isEntity() || ownerSpec.isViewModel())
                 || CommandRecordingSuppressed.class.isAssignableFrom(ownerSpec.correspondingClass()))
-			return Stream.empty();
+			return List.of();
 
         var generatedIds = new HashSet<String>();
 
-        return Stream.concat(
-                        candidates.stream()
-                                .filter(ObjectAssociation::isOneToManyAssociation)
-                                .map(ObjectAssociation::getSpecialization)
-                                .flatMap(specialization -> specialization.right().stream())
-                                .filter(collection -> eligible(ownerType, collection))
-                                .filter(collection -> !existingSyntheticActionIds.contains(
-                                        COLLECTION_ACTION_ID_PREFIX + collection.getId()))
-                                .map(collection -> createCollectionAction(ownerSpec, collection)),
-                        candidates.stream()
-                                .filter(ObjectAssociation::isOneToOneAssociation)
-                                .map(ObjectAssociation::getSpecialization)
-                                .flatMap(specialization -> specialization.left().stream())
-                                .filter(reference -> eligible(ownerType, reference))
-                                .filter(reference -> !existingSyntheticActionIds.contains(
-                                        ACTION_ID_PREFIX + reference.getId()))
-                                .map(reference -> createReferenceAction(ownerSpec, reference)))
-                .peek(action -> {
-                    if (existingActionIds.contains(action.getId()) || !generatedIds.add(action.getId()))
-						throw new IllegalStateException("Action id '%s' is reserved for synthetic navigation"
-                                .formatted(action.getId()));
-                });
+        return Either.foldStream(
+	    		candidates
+	        		.map(ObjectAssociation::getSpecialization),
+	    		prop -> eligible(ownerSpec.correspondingClass(), prop)
+	    				&& !existingSyntheticActionIds.contains(ACTION_ID_PREFIX + prop.getId())
+	    			? createReferenceAction(ownerSpec, prop)
+					: null,
+	    		coll -> eligible(ownerSpec.correspondingClass(), coll)
+	    				&& !existingSyntheticActionIds.contains(COLLECTION_ACTION_ID_PREFIX + coll.getId())
+    				? createCollectionAction(ownerSpec, coll)
+					: null)
+    		.peek(synthAction -> {
+    			if (existingActionIds.contains(synthAction.getId())
+    					|| !generatedIds.add(synthAction.getId()))
+    				throw new IllegalStateException("Action id '%s' is reserved for synthetic navigation"
+    						.formatted(synthAction.getId()));
+    		})
+        	.toList(); // consume the stream in order for peek to be called
     }
 
     private static boolean eligible(

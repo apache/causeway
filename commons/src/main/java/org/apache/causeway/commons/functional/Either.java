@@ -19,10 +19,12 @@
 package org.apache.causeway.commons.functional;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 
@@ -174,6 +176,25 @@ permits Either.Left, Either.Right {
             rightConsumer.accept(_right);
         }
 
+    }
+
+    // -- STREAM UTIL
+
+    /**
+     * Folds elements of a {@link Stream} of {@link Either} resulting in a new {@link Stream} of type T.
+     * The resulting stream is guaranteed to not contain <code>null</code> elements,
+     * that is, if any of the mappers maps to null, the element is ignored.
+     * @param <L> Left Type
+     * @param <R> Right Type
+     * @param <T> Result Type
+     */
+    public static <L, R, T> Stream<T> foldStream(
+    		final @NonNull Stream<Either<L, R>> inputStream,
+    		final @NonNull Function<L, T> leftMapper,
+            final @NonNull Function<R, T> rightMapper) {
+        return inputStream
+    		.map(either->either.fold(leftMapper, rightMapper))
+    		.filter(Objects::nonNull);
     }
 
 //    // -- TYPE COMPOSITION
