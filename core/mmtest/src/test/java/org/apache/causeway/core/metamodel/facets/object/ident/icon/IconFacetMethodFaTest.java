@@ -69,7 +69,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            var iconFacet = facetHolder.getFacet(IconFacet.class);
+            var iconFacet = facetHolder.lookupFacet(IconFacet.class).orElse(null);
             assertNotNull(iconFacet, ()->"IconFacet required");
             assertTrue(iconFacet instanceof IconFacetViaIconMethod);
             var imperativeFacet = (IconFacetViaIconMethod)iconFacet;

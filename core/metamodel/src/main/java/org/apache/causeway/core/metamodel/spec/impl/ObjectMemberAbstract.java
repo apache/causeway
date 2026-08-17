@@ -111,7 +111,7 @@ implements
     @Override
     public final String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
 
-        var namedFacet = getFacet(MemberNamedFacet.class);
+        var namedFacet = lookupFacet(MemberNamedFacet.class).orElse(null);
 
         if(namedFacet==null)
 			throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
@@ -153,8 +153,10 @@ implements
 
     @Override
     public final String getHelp() {
-        final HelpFacet facet = getFacet(HelpFacet.class);
-        return facet.value();
+        final HelpFacet facet = lookupFacet(HelpFacet.class).orElse(null);
+        return facet!=null
+        		? facet.value()
+				: "";
     }
 
     // -- CANONICAL NAMING

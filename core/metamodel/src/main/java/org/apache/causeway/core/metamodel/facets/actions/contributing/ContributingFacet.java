@@ -45,7 +45,7 @@ public interface ContributingFacet extends Facet {
     // -- UTILITIES
 
     static boolean isActionContributionVetoed(final ObjectAction action) {
-        var facet = action.getFacet(ContributingFacet.class);
+        var facet = action.lookupFacet(ContributingFacet.class).orElse(null);
         if(facet != null) {
             return facet.isActionContributionVetoed();
         }
@@ -53,7 +53,7 @@ public interface ContributingFacet extends Facet {
     }
 
     static boolean isAssociationContributionVetoed(final ObjectAction action) {
-        var facet = action.getFacet(ContributingFacet.class);
+        var facet = action.lookupFacet(ContributingFacet.class).orElse(null);
         if(facet != null) {
             return facet.isAssociationContributionVetoed();
         }

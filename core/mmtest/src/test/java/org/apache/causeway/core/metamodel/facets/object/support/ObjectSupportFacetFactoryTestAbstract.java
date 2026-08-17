@@ -70,7 +70,7 @@ extends FacetFactoryTestAbstract {
 
             assertEquals(expectedSupportMethodCount, supportMethods.size());
 
-            var facet = facetHolder.getFacet(facetType);
+            var facet = facetHolder.lookupFacet(facetType).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ImperativeFacet);
             var imperativeFacet = (ImperativeFacet)facet;

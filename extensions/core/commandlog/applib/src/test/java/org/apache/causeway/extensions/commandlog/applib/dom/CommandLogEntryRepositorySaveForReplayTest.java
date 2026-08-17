@@ -18,23 +18,22 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.apache.causeway.applib.query.Query;
-import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.causeway.applib.query.Query;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class CommandLogEntryRepositorySaveForReplayTest {
 
@@ -48,7 +47,8 @@ class CommandLogEntryRepositorySaveForReplayTest {
         repository.factoryService = factoryService;
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void reImportOfExistingInteractionIdReturnsExistingEntryWithoutCreatingDuplicate() {
         var interactionId = UUID.randomUUID();
         var existing = mock(CommandLogEntry.class);
@@ -61,7 +61,8 @@ class CommandLogEntryRepositorySaveForReplayTest {
         verify(repositoryService, never()).persistAndFlush(any());
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void firstImportCreatesAndPersistsNewEntry() {
         var created = mock(CommandLogEntry.class);
         when(repositoryService.uniqueMatch(any(Query.class))).thenReturn(Optional.empty());
@@ -73,7 +74,8 @@ class CommandLogEntryRepositorySaveForReplayTest {
         verify(repositoryService).persistAndFlush(created);
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void malformedInteractionIdSkipsTheLookupAndCreatesNewEntry() {
         var created = mock(CommandLogEntry.class);
         when(factoryService.detachedEntity(CommandLogEntry.class)).thenReturn(created);

@@ -28,17 +28,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -56,7 +45,16 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.applib.value.Blob;
+import org.jspecify.annotations.Nullable;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -165,8 +163,10 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private SortedSet<ExcelDemoToDoItem> dependencies = new TreeSet<>();
 
     // no getter/setter (therefore persisted but not part of Causeway' metamodel)
-    private Double locationLatitude;
-    private Double locationLongitude;
+    @SuppressWarnings("unused")
+	private Double locationLatitude;
+    @SuppressWarnings("unused")
+	private Double locationLongitude;
 
     public String validateDueBy(final LocalDate dueBy) {
         if (dueBy == null)

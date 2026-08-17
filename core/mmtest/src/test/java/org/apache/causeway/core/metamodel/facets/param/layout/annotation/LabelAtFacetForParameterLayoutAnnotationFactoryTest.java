@@ -49,7 +49,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParams(processParameterContext);
             //then
-            final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
+            final Facet facet = facetedMethodParameter.lookupFacet(LabelAtFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(LabelAtFacetForParameterLayoutAnnotation.class)));
             final LabelAtFacetForParameterLayoutAnnotation layoutAnnotation = (LabelAtFacetForParameterLayoutAnnotation) facet;

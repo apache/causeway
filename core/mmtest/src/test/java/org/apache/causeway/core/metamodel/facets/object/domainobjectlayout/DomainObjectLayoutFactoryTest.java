@@ -84,7 +84,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                final Facet facet = facetHolder.lookupFacet(BookmarkPolicyFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
 
@@ -103,7 +103,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                final BookmarkPolicyFacet facet = facetHolder.lookupFacet(BookmarkPolicyFacet.class).orElse(null);
                 assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
 
                 assertNoMethodsRemoved();
@@ -120,7 +120,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
+                final Facet facet = facetHolder.lookupFacet(CssClassFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
 
@@ -139,7 +139,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
+                final Facet facet = facetHolder.lookupFacet(CssClassFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -154,7 +154,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(FaFacet.class);
+                final Facet facet = facetHolder.lookupFacet(FaFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof FaFacetForDomainObjectLayoutAnnotation);
 
@@ -171,7 +171,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(FaFacet.class);
+                final Facet facet = facetHolder.lookupFacet(FaFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -186,7 +186,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ObjectDescribedFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof ObjectDescribedFacetForDomainObjectLayoutAnnotation);
 
@@ -203,7 +203,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ObjectDescribedFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -218,7 +218,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                var namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
+                var namedFacet = facetHolder.lookupFacet(ObjectNamedFacet.class).orElse(null);
                 assertNotNull(namedFacet);
                 assertTrue(namedFacet instanceof ObjectNamedFacetForDomainObjectLayoutAnnotation);
 
@@ -233,7 +233,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                var facet = facetHolder.getFacet(ObjectNamedFacet.class);
+                var facet = facetHolder.lookupFacet(ObjectNamedFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -248,7 +248,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(PagedFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof PagedFacetForDomainObjectLayoutAnnotation);
 
@@ -265,7 +265,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(PagedFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();

@@ -22,13 +22,15 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
 
 public class InvalidException extends InteractionException {
-    public InvalidException(Consent consent) {
+	private static final long serialVersionUID = 1L;
+
+    public InvalidException(final Consent consent) {
         super(consent.getReasonAsString().orElse("Invalid"));
     }
-    public InvalidException(Identifier identifier) {
+    public InvalidException(final Identifier identifier) {
         super(identifier);
     }
-    public InvalidException(Identifier identifier, Throwable cause) {
+    public InvalidException(final Identifier identifier, final Throwable cause) {
         super(identifier, cause);
     }
 }

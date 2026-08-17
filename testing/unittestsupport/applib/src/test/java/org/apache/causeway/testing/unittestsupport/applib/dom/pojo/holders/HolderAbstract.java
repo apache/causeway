@@ -30,7 +30,8 @@ public class HolderAbstract<H> {
 
     boolean broken = false;
 
-    public H butBroken() {
+    @SuppressWarnings("unchecked")
+	public H butBroken() {
         broken = true;
         return (H) this;
     }

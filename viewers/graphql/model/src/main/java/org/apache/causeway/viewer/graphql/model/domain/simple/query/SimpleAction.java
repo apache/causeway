@@ -94,7 +94,7 @@ public class SimpleAction
 
             case COLLECTION:
 
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                TypeOfFacet facet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
                 if (facet == null) {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
@@ -158,7 +158,8 @@ public class SimpleAction
                             // if the parameter is abstract, we still attempt to figure out the arguments.
                             // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
                             if (argumentValue instanceof List) {
-                                var argumentValueList = (List<Object>) argumentValue;
+                                @SuppressWarnings("unchecked")
+								var argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
                                         .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
@@ -201,7 +202,8 @@ public class SimpleAction
             final Environment environment,
             final Context context
     ) {
-        var argumentValue = (Map<String, ?>) argumentValueObj;
+        @SuppressWarnings("unchecked")
+		var argumentValue = (Map<String, ?>) argumentValueObj;
 
         var refValue = (String)argumentValue.get("ref");
         if (refValue != null) {

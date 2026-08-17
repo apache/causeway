@@ -140,7 +140,7 @@ extends FacetFactoryTestAbstract {
                     facetFactory.processEntityChangePublishing(
                             processClassContext.synthesizeOnType(DomainObject.class), processClassContext);
 
-                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final EntityChangePublishingFacet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertThat(facet, is(notNullValue()));
                     assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
                     assertThat(facet.isEnabled(), is(true));
@@ -155,7 +155,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final EntityChangePublishingFacet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertThat(facet.isEnabled(), is(false));
 
@@ -174,7 +174,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final EntityChangePublishingFacet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
                     assertThat(facet.isEnabled(), is(true));
@@ -189,7 +189,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final EntityChangePublishingFacet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertThat(facet.isEnabled(), is(false));
 
@@ -208,7 +208,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndAuditingSetToEnabled.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
 
@@ -227,7 +227,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEntityChangePublishingSetToEnabledForUpdatesOnly.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
 
@@ -293,7 +293,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AutoCompleteFacet.class).orElse(null);
                 assertNotNull(facet);
 
                 assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
@@ -314,7 +314,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndAutoCompleteRepository.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AutoCompleteFacet.class).orElse(null);
                 assertNotNull(facet);
 
                 assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
@@ -334,7 +334,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectButNoAutoCompleteRepository.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AutoCompleteFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -347,7 +347,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AutoCompleteFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -382,7 +382,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndBoundedSetToTrue.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ChoicesFacet.class).orElse(null);
                 assertNotNull(facet);
 
                 assertTrue(facet instanceof ChoicesFacetForDomainObjectAnnotation);
@@ -398,7 +398,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndBoundedSetToFalse.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ChoicesFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -411,7 +411,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ChoicesFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -445,7 +445,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNull(facet);
 
                     assertNoMethodsRemoved();
@@ -460,7 +460,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
@@ -474,7 +474,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNotNull(facet); // default is now non-editable
                     assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
@@ -492,7 +492,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNull(facet);
 
                     assertNoMethodsRemoved();
@@ -505,7 +505,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
@@ -519,7 +519,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNotNull(facet); // default is now non-editable
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotationAsConfigured);
 
@@ -537,7 +537,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEditingSetToEnabled.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final ImmutableFacet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNull(facet);
 
                     assertNoMethodsRemoved();
@@ -554,7 +554,7 @@ extends FacetFactoryTestAbstract {
                 objectScenario(CustomerWithDomainObjectAndEditingSetToDisabled.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
-                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    final Facet facet = facetHolder.lookupFacet(ImmutableFacet.class).orElse(null);
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
@@ -594,7 +594,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(LogicalTypeNameCustomerWithDomainObjectButNoObjectType.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AliasedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AliasedFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -607,7 +607,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(AliasedFacet.class);
+                final Facet facet = facetHolder.lookupFacet(AliasedFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -646,7 +646,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndNatureSetToJdoEntity.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ViewModelFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -659,7 +659,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndNatureSetToNotSpecified.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ViewModelFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();
@@ -672,7 +672,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDomainObjectAndNatureSetToViewModel.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ViewModelFacet.class).orElse(null);
                 assertNotNull(facet);
 
                 assertTrue(facet instanceof ViewModelFacetForDomainObjectAnnotation);
@@ -688,7 +688,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                final Facet facet = facetHolder.lookupFacet(ViewModelFacet.class).orElse(null);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();

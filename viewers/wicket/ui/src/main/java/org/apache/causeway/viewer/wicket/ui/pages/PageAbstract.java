@@ -22,36 +22,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
-import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
@@ -78,10 +54,29 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssR
 import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicketViewerJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
-
-import lombok.extern.slf4j.Slf4j;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
+import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link UiComponentType}s.
@@ -412,13 +407,11 @@ implements ActionPromptProvider {
                 sort.policy().isInjectable()
                         ? getWicketViewerSettings().dialogModeForMenu()
                         : getWicketViewerSettings().dialogMode();
-        switch (dialogMode) {
-        case SIDEBAR:
-            return actionPromptSidebar;
-        case MODAL:
-        default:
-            return actionPromptModalWindow;
-        }
+        return switch (dialogMode) {
+		case SIDEBAR -> actionPromptSidebar;
+		case MODAL -> actionPromptModalWindow;
+		default -> actionPromptModalWindow;
+		};
     }
 
     @Override
@@ -459,7 +452,6 @@ implements ActionPromptProvider {
 
     @Override
     public void renderPage() {
-
         var pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
                 .map(PageType::asApplibPageType)
                 .orElse(PageRenderSubscriber.PageType.OTHER);
@@ -469,19 +461,9 @@ implements ActionPromptProvider {
         enabledPageRenderSubscribers
                 .forEach(subscriber -> subscriber.onRendering(pageType));
 
-        if(XrayUi.isXrayEnabled()){
-            _Debug.log("about to render %s ..", this.getClass().getSimpleName());
-            var stopWatch = _Timing.now();
-            onRendering(enabledPageRenderSubscribers);
-            onNewRequestCycle();
-            super.renderPage();
-            stopWatch.stop();
-            _Debug.log(".. rendering took %s", stopWatch.toString());
-        } else {
-            onRendering(enabledPageRenderSubscribers);
-            onNewRequestCycle();
-            super.renderPage();
-        }
+        onRendering(enabledPageRenderSubscribers);
+        onNewRequestCycle();
+        super.renderPage();
 
         onRendered(enabledPageRenderSubscribers);
     }

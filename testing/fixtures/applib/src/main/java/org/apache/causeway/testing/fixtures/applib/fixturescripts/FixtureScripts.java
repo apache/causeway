@@ -43,7 +43,6 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
@@ -83,7 +82,6 @@ public class FixtureScripts {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     @Inject private TitleService titleService;
-    @Inject private JaxbService jaxbService;
     @Inject private ServiceInjector serviceInjector;
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;

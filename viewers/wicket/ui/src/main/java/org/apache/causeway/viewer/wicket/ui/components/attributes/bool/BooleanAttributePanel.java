@@ -121,7 +121,7 @@ extends AttributePanelWithFormField<Boolean> {
 
     @Override
     public String getVariation() {
-//        var labelAtFacet = getModel().getFacet(LabelAtFace~t.class);
+//        var labelAtFacet = getModel().lookupFacet(LabelAtFace~t.class).orElse(null);
 //        return labelAtFacet != null
 //                && labelAtFacet.label() == LabelPosition.RIGHT
 //            ? "labelRightPosition"

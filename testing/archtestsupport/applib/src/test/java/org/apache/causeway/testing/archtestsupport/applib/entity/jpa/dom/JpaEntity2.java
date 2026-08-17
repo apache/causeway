@@ -20,6 +20,11 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jpa.dom;
 
 import java.util.Comparator;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -28,11 +33,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 @Entity
 @Table(
@@ -50,7 +50,8 @@ public abstract class JpaEntity2 implements Comparable<JpaEntity2> {
     @Version
     private Long version;
 
-    private final String name;
+    @SuppressWarnings("unused")
+	private final String name;
 
     // abstract classes do not need to have no-arg constructor
     public JpaEntity2(final String name) {

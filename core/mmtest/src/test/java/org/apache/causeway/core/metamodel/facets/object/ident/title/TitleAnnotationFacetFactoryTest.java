@@ -79,7 +79,7 @@ extends FacetFactoryTestAbstract {
         objectScenario(Customer1.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            final Facet facet = facetHolder.lookupFacet(TitleFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
             final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
@@ -131,7 +131,7 @@ extends FacetFactoryTestAbstract {
         objectScenario(Customer2.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            final Facet facet = facetHolder.lookupFacet(TitleFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
             final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
@@ -167,7 +167,7 @@ extends FacetFactoryTestAbstract {
 
         objectScenario(Customer3.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
-            assertNull(facetHolder.getFacet(TitleFacet.class));
+            assertNull(facetHolder.lookupFacet(TitleFacet.class).orElse(null));
         });
     }
 

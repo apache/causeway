@@ -64,7 +64,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetFromFeature);
             final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
@@ -84,7 +84,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetFromFeature);
             final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
@@ -104,7 +104,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertEquals(Order.class, facet.value().elementType());
             assertThat(facet.value().collectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));

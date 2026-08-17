@@ -270,7 +270,7 @@ public interface ObjectMember extends ObjectFeature {
     default Optional<Comparator<ManagedObject>> getElementComparator(){
 
         var sortedBy = Stream.of(this, getElementType())
-            .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
+            .map(facetHolder->facetHolder.lookupFacet(SortedByFacet.class).orElse(null))
             .filter(Objects::nonNull)
             .findFirst()
             .map(SortedByFacet::value)

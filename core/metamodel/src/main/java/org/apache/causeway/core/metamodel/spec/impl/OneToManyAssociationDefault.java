@@ -103,9 +103,10 @@ implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
+        var accessor = lookupFacet(PropertyOrCollectionAccessorFacet.class).orElseThrow();
         var collection = accessor.getAssociationValueAsPojo(ownerAdapter, interactionInitiatedBy);
-        if (collection == null) return null;
+        if (collection == null)
+        	return null;
 
         return getObjectManager().adapt(collection, this::getElementType);
     }

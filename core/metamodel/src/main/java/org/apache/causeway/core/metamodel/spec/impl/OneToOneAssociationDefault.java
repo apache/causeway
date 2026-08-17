@@ -139,7 +139,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject ownerAdapter,
             final ManagedObject referencedAdapter) {
 
-        final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
+        final PropertyInitializationFacet initializerFacet = lookupFacet(PropertyInitializationFacet.class).orElse(null);
         if (initializerFacet != null) {
             initializerFacet.initProperty(ownerAdapter, referencedAdapter);
         }
@@ -152,7 +152,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var propertyOrCollectionAccessorFacet = getFacet(PropertyOrCollectionAccessorFacet.class);
+        var propertyOrCollectionAccessorFacet = lookupFacet(PropertyOrCollectionAccessorFacet.class).orElseThrow();
         var referencedPojo =
                 propertyOrCollectionAccessorFacet.getAssociationValueAsPojo(ownerAdapter, interactionInitiatedBy);
 
@@ -203,7 +203,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var propertySetterFacet = getFacet(PropertySetterFacet.class);
+        var propertySetterFacet = lookupFacet(PropertySetterFacet.class).orElse(null);
         if (propertySetterFacet == null)
 			throw _Exceptions.unexpectedCodeReach();
 
@@ -216,7 +216,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var propertyClearFacet = getFacet(PropertySetterFacet.class);
+        var propertyClearFacet = lookupFacet(PropertySetterFacet.class).orElse(null);
 
         if (propertyClearFacet == null)
 			throw _Exceptions.unexpectedCodeReach();
@@ -234,7 +234,7 @@ implements OneToOneAssociation, Serializable {
         // specification (eg an int should
         // default to 0).
         if (propertyDefaultFacet == null) {
-            propertyDefaultFacet = this.getElementType().getFacet(PropertyDefaultFacet.class);
+            propertyDefaultFacet = this.getElementType().lookupFacet(PropertyDefaultFacet.class).orElse(null);
         }
         if (propertyDefaultFacet == null)
 			return null;
@@ -257,7 +257,7 @@ implements OneToOneAssociation, Serializable {
 
     @Override
     public boolean hasChoices() {
-        return getFacet(PropertyChoicesFacet.class) != null;
+        return containsFacet(PropertyChoicesFacet.class);
     }
 
     @Override
@@ -265,7 +265,7 @@ implements OneToOneAssociation, Serializable {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
+        var propertyChoicesFacet = lookupFacet(PropertyChoicesFacet.class).orElse(null);
         if (propertyChoicesFacet == null)
 			return Can.empty();
 
@@ -276,7 +276,7 @@ implements OneToOneAssociation, Serializable {
 
     @Override
     public boolean hasAutoComplete() {
-        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = lookupFacet(PropertyAutoCompleteFacet.class).orElse(null);
         return propertyAutoCompleteFacet != null;
     }
 
@@ -286,7 +286,7 @@ implements OneToOneAssociation, Serializable {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = lookupFacet(PropertyAutoCompleteFacet.class).orElse(null);
         final Object[] pojoOptions = propertyAutoCompleteFacet
                 .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
 
@@ -298,8 +298,10 @@ implements OneToOneAssociation, Serializable {
 
     @Override
     public int getAutoCompleteMinLength() {
-        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
-        return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
+        final PropertyAutoCompleteFacet propertyAutoCompleteFacet = lookupFacet(PropertyAutoCompleteFacet.class).orElse(null);
+        return propertyAutoCompleteFacet != null
+        		? propertyAutoCompleteFacet.getMinLength()
+				: MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
     /**

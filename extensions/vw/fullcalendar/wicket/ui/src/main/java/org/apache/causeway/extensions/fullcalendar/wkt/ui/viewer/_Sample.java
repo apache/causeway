@@ -20,9 +20,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarConfig;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarResponse;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
@@ -36,6 +33,8 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.S
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.View;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.selector.EventSourceSelector;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
@@ -119,7 +118,7 @@ class _Sample {
 		};
 		calendar.setMarkupId("calendar");
 		container.addOrReplace(calendar);
-		container.addOrReplace(new EventSourceSelector("selector", calendar));
+		container.addOrReplace(new EventSourceSelector("selector"));
 	}
 
     protected void info2(final String message) {
@@ -189,9 +188,8 @@ class _Sample {
         @Override
         public Event getEventForId(final String id) throws NoSuchElementException {
             var event = eventsById.get(id);
-            if (event != null) {
-                return event;
-            }
+            if (event != null)
+				return event;
             throw new NoSuchElementException("Event with id: " + id
                     + " not found");
         }

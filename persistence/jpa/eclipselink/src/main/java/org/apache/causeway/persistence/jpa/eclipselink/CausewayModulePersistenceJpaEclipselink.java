@@ -151,7 +151,6 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
     // --
 
-    @SuppressWarnings("serial")
     private EclipseLinkJpaDialect eclipselinkJpaDialect() {
 
         var jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());

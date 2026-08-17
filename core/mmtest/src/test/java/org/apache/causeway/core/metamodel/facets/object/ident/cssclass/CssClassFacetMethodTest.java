@@ -68,7 +68,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            var cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+            var cssClassFacet = facetHolder.lookupFacet(CssClassFacet.class).orElse(null);
             assertNotNull(cssClassFacet, ()->"CssClassFacet required");
             assertTrue(cssClassFacet instanceof CssClassFacetViaCssClassMethod);
             var imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;

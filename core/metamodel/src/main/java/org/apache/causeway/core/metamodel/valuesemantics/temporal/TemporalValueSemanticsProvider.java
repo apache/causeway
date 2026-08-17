@@ -33,11 +33,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.annotation.TimeZoneTranslation;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -54,7 +49,10 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Date
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -182,13 +180,13 @@ implements TemporalValueSemantics<T> {
         if(temporalString==null)
             return null;
 
-        T contextTemporal = null; //FIXME[CAUSEWAY-2882] not implemented yet
-        if(contextTemporal != null) {
-            var adjusted = TemporalAdjust
-                    .parseAdjustment(adjuster, contextTemporal, temporalString);
-            if(adjusted!=null)
-                return adjusted;
-        }
+//        T contextTemporal = null; //FIXME[CAUSEWAY-2882] not implemented yet
+//        if(contextTemporal != null) {
+//            var adjusted = TemporalAdjust
+//                    .parseAdjustment(adjuster, contextTemporal, temporalString);
+//            if(adjusted!=null)
+//                return adjusted;
+//        }
 
         var format = getEditingInputFormat(context);
 

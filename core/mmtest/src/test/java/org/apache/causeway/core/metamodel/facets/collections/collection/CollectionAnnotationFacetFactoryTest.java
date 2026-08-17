@@ -399,7 +399,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 processTypeOf(facetFactory, processMethodContext);
                 // then
-                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
                 assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));
@@ -423,7 +423,7 @@ extends FacetFactoryTestAbstract {
                 processTypeOf(facetFactory, processMethodContext);
 
                 // then
-                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacet);
                 assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));
@@ -448,7 +448,7 @@ extends FacetFactoryTestAbstract {
                 processTypeOf(facetFactory, processMethodContext);
 
                 // then
-                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacetFromFeature);
                 assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));

@@ -70,12 +70,12 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final MaxLengthFacet maxLengthFacet = facetedMethodParameter.getFacet(MaxLengthFacet.class);
+                final MaxLengthFacet maxLengthFacet = facetedMethodParameter.lookupFacet(MaxLengthFacet.class).orElse(null);
                 assertNotNull(maxLengthFacet);
                 assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
                 assertThat(maxLengthFacet.value(), is(30));
                 // and then
-                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNotNull(mandatoryFacet);
                 assertThat(mandatoryFacet.getSemantics(), is(Semantics.OPTIONAL));
             });
@@ -211,7 +211,7 @@ extends FacetFactoryTestAbstract {
                 facetFactory.processParams(processParameterContext);
 
                 // then
-                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethodParameter.getFacet(MustSatisfySpecificationFacet.class);
+                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethodParameter.lookupFacet(MustSatisfySpecificationFacet.class).orElse(null);
                 assertNotNull(mustSatisfySpecificationFacet);
                 assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
                 MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
@@ -240,7 +240,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNotNull(mandatoryFacet);
                 assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Optional);
             });
@@ -260,7 +260,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNotNull(mandatoryFacet);
                 assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Required);
             });
@@ -280,7 +280,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNull(mandatoryFacet);
             });
         }
@@ -298,7 +298,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNull(mandatoryFacet);
             });
         }
@@ -323,7 +323,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethodParameter.lookupFacet(RegExFacet.class).orElse(null);
                 assertNotNull(regExFacet);
                 assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
                 assertThat(regExFacet.patternFlags(), is(10));
@@ -346,7 +346,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethodParameter.lookupFacet(RegExFacet.class).orElse(null);
                 assertNull(regExFacet);
 
             });
@@ -366,7 +366,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethodParameter.lookupFacet(RegExFacet.class).orElse(null);
                 assertNull(regExFacet);
             });
         }
@@ -385,7 +385,7 @@ extends FacetFactoryTestAbstract {
                 // when
                 facetFactory.processParams(processParameterContext);
                 // then
-                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethodParameter.lookupFacet(RegExFacet.class).orElse(null);
                 assertNotNull(regExFacet);
 
             });

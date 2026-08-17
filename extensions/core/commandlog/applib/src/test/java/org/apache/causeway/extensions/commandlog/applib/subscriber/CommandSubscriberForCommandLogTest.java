@@ -18,19 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.subscriber;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-
-import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -38,6 +25,18 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RecordingSupport;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
+import org.junit.jupiter.api.Test;
 
 class CommandSubscriberForCommandLogTest {
 
@@ -128,7 +127,8 @@ class CommandSubscriberForCommandLogTest {
                 org.mockito.ArgumentMatchers.any());
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void recordingContinuesAfterBackgroundWorkCompletes() {
         var blocked = new Command(UUID.randomUUID());
         var accepted = new Command(UUID.randomUUID());

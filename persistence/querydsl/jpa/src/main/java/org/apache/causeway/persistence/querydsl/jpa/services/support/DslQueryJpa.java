@@ -22,6 +22,8 @@ package org.apache.causeway.persistence.querydsl.jpa.services.support;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
+
 import com.mysema.commons.lang.CloseableIterator;
 import com.querydsl.core.FetchableQuery;
 import com.querydsl.core.NonUniqueResultException;
@@ -42,42 +44,41 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.BooleanOperation;
 import com.querydsl.jpa.impl.JPAQuery;
 
-import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")
 public class DslQueryJpa<T> implements DslQuery<T> {
+	private static final long serialVersionUID = 1L;
 
     final JPAQuery<T> jpaQuery;
 
     @Override
-    public <U> DslQuery<U> projection(Expression<U> expr) {
+    public <U> DslQuery<U> projection(final Expression<U> expr) {
         return DslQueryJpa.of(jpaQuery.select(expr));
     }
 
     @Override
-    public DslQuery<T> from(EntityPath<?>... sources) {
+    public DslQuery<T> from(final EntityPath<?>... sources) {
         return DslQueryJpa.of(jpaQuery.from(sources));
     }
 
     @Override
-    public <U> DslQuery<T> from(CollectionExpression<?, U> path, Path<U> alias) {
+    public <U> DslQuery<T> from(final CollectionExpression<?, U> path, final Path<U> alias) {
         return DslQueryJpa.of(jpaQuery.from(path,alias));
     }
 
     @Override
-    public <U> FetchableQuery<U, ?> select(Expression<U> expression) {
+    public <U> FetchableQuery<U, ?> select(final Expression<U> expression) {
         return jpaQuery.select(expression);
     }
 
     @Override
-    public FetchableQuery<Tuple, ?> select(Expression<?>... expressions) {
+    public FetchableQuery<Tuple, ?> select(final Expression<?>... expressions) {
         return jpaQuery.select(expressions);
     }
 
     @Override
-    public <S> S transform(ResultTransformer<S> resultTransformer) {
+    public <S> S transform(final ResultTransformer<S> resultTransformer) {
         return jpaQuery.transform(resultTransformer);
     }
 
@@ -112,37 +113,37 @@ public class DslQueryJpa<T> implements DslQuery<T> {
     }
 
     @Override
-    public DslQuery<T> groupBy(Expression<?>... expressions) {
+    public DslQuery<T> groupBy(final Expression<?>... expressions) {
         return DslQueryJpa.of(jpaQuery.groupBy(expressions));
     }
 
     @Override
-    public DslQuery<T> having(Predicate... predicates) {
+    public DslQuery<T> having(final Predicate... predicates) {
         return DslQueryJpa.of(jpaQuery.having(predicates));
     }
 
     @Override
-    public DslQuery<T> limit(long limit) {
+    public DslQuery<T> limit(final long limit) {
         return DslQueryJpa.of(jpaQuery.limit(limit));
     }
 
     @Override
-    public DslQuery<T> offset(long offset) {
+    public DslQuery<T> offset(final long offset) {
         return DslQueryJpa.of(jpaQuery.offset(offset));
     }
 
     @Override
-    public DslQuery<T> restrict(QueryModifiers queryModifiers) {
+    public DslQuery<T> restrict(final QueryModifiers queryModifiers) {
         return DslQueryJpa.of(jpaQuery.restrict(queryModifiers));
     }
 
     @Override
-    public DslQuery<T> orderBy(OrderSpecifier<?>... orderSpecifiers) {
+    public DslQuery<T> orderBy(final OrderSpecifier<?>... orderSpecifiers) {
         return DslQueryJpa.of(jpaQuery.orderBy(orderSpecifiers));
     }
 
     @Override
-    public <P> DslQuery<T> set(ParamExpression<P> paramExpression, P t) {
+    public <P> DslQuery<T> set(final ParamExpression<P> paramExpression, final P t) {
         return DslQueryJpa.of(jpaQuery.set(paramExpression,t));
     }
 
@@ -152,37 +153,37 @@ public class DslQueryJpa<T> implements DslQuery<T> {
     }
 
     @Override
-    public DslQuery<T> where(Predicate... predicates) {
+    public DslQuery<T> where(final Predicate... predicates) {
         return DslQueryJpa.of(jpaQuery.where(predicates));
     }
 
     @Override
-    public BooleanExpression eq(Expression<? extends T> expression) {
+    public BooleanExpression eq(final Expression<? extends T> expression) {
         return jpaQuery.eq(expression);
     }
 
     @Override
-    public BooleanExpression eq(T t) {
+    public BooleanExpression eq(final T t) {
         return jpaQuery.eq(t);
     }
 
     @Override
-    public BooleanExpression ne(Expression<? extends T> expression) {
+    public BooleanExpression ne(final Expression<? extends T> expression) {
         return jpaQuery.ne(expression);
     }
 
     @Override
-    public BooleanExpression ne(T t) {
+    public BooleanExpression ne(final T t) {
         return jpaQuery.ne(t);
     }
 
     @Override
-    public BooleanExpression contains(Expression<? extends T> expression) {
+    public BooleanExpression contains(final Expression<? extends T> expression) {
         return jpaQuery.contains(expression);
     }
 
     @Override
-    public BooleanExpression contains(T t) {
+    public BooleanExpression contains(final T t) {
         return jpaQuery.contains(t);
     }
 
@@ -197,42 +198,42 @@ public class DslQueryJpa<T> implements DslQuery<T> {
     }
 
     @Override
-    public BooleanExpression lt(Expression<? extends T> expression) {
+    public BooleanExpression lt(final Expression<? extends T> expression) {
         return jpaQuery.lt(expression);
     }
 
     @Override
-    public BooleanExpression lt(T t) {
+    public BooleanExpression lt(final T t) {
         return jpaQuery.lt(t);
     }
 
     @Override
-    public BooleanExpression gt(Expression<? extends T> expression) {
+    public BooleanExpression gt(final Expression<? extends T> expression) {
         return jpaQuery.gt(expression);
     }
 
     @Override
-    public BooleanExpression gt(T t) {
+    public BooleanExpression gt(final T t) {
         return jpaQuery.gt(t);
     }
 
     @Override
-    public BooleanExpression loe(Expression<? extends T> expression) {
+    public BooleanExpression loe(final Expression<? extends T> expression) {
         return jpaQuery.loe(expression);
     }
 
     @Override
-    public BooleanExpression loe(T t) {
+    public BooleanExpression loe(final T t) {
         return jpaQuery.loe(t);
     }
 
     @Override
-    public BooleanExpression goe(Expression<? extends T> expression) {
+    public BooleanExpression goe(final Expression<? extends T> expression) {
         return jpaQuery.goe(expression);
     }
 
     @Override
-    public BooleanExpression goe(T t) {
+    public BooleanExpression goe(final T t) {
         return jpaQuery.goe(t);
     }
 
@@ -247,12 +248,12 @@ public class DslQueryJpa<T> implements DslQuery<T> {
     }
 
     @Override
-    public BooleanExpression in(Collection<? extends T> collection) {
+    public BooleanExpression in(final Collection<? extends T> collection) {
         return jpaQuery.in(collection);
     }
 
     @Override
-    public BooleanExpression in(T... ts) {
+    public BooleanExpression in(@SuppressWarnings("unchecked") final T... ts) {
         return jpaQuery.in(ts);
     }
 
@@ -262,7 +263,7 @@ public class DslQueryJpa<T> implements DslQuery<T> {
     }
 
     @Override
-    public <R, C> R accept(Visitor<R, C> visitor, C c) {
+    public <R, C> R accept(final Visitor<R, C> visitor, final C c) {
         return jpaQuery.accept(visitor,c);
     }
 

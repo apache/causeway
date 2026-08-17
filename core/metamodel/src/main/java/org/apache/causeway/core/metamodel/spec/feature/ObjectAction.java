@@ -313,7 +313,7 @@ public interface ObjectAction extends ObjectMember {
         public static boolean isDirectlyAssociatedWithAnyProperty(
                 final ObjectAction action) {
 
-            var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
             if (layoutGroupFacet == null)
 				return false;
             var layoutGroupId = layoutGroupFacet.getGroupId();
@@ -340,7 +340,7 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAction action,
                 final ManagedObject domainObject) {
 
-            return Optional.ofNullable(action.getFacet(FaFacet.class))
+            return Optional.ofNullable(action.lookupFacet(FaFacet.class).orElse(null))
                 .map(FaFacet::getSpecialization)
                 .map(specialization->specialization
                         .fold(
@@ -378,7 +378,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
-            PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
+            PromptStyleFacet facet = objectAction.lookupFacet(PromptStyleFacet.class).orElse(null);
             if(facet == null)
 				// don't think this can occur, see PromptStyleFallback
                 return PromptStyle.INLINE;
@@ -424,7 +424,7 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
                 if (layoutGroupFacet == null)
 					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
@@ -443,7 +443,7 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
                 if (layoutGroupFacet == null)
 					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
@@ -496,7 +496,7 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                var choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
+                var choicesFromFacet = objectAction.lookupFacet(ChoicesFromFacet.class).orElse(null);
                 if(choicesFromFacet == null)
 					return false;
                 var choicesFromMemberName = choicesFromFacet.value();

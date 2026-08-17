@@ -18,24 +18,17 @@
  */
 package org.apache.causeway.testdomain.value;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-import org.junit.jupiter.api.Assertions;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.Where;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -44,16 +37,15 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
+import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.Assertions;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -64,9 +56,9 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
 
-    @Inject private SpecificationLoader specLoader;
+    //@Inject private SpecificationLoader specLoader;
     @Inject private SchemaValueMarshaller valueMarshaller;
-    @Inject private WrapperFactory wrapperFactory;
+    //@Inject private WrapperFactory wrapperFactory;
 
     @Override
     public void testComposer(
@@ -98,30 +90,30 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
             System.err.printf("WARN: ValueSemanticsTest for COMPOSITE %s not implemented.%n",
                     semantics);
 
-            var valueMixin = (Object)null;
-            if(valueMixin!=null) {
-
-                var spec = specLoader.specForTypeElseFail(valueMixin.getClass());
-                var interaction = ActionInteraction
-                        .start(ManagedObject.mixin(spec,  valueMixin), "act", Where.ANYWHERE);
-
-                var pendingParams = interaction
-                        .startParameterNegotiation()
-                        .get();
-
-                var managedAction = interaction.getManagedActionElseFail();
-                var typedTuple = pendingParams.getParamValues();
-
-                var recoveredValue = managedAction
-                        .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
-                        .getSuccessElseFail()
-                        .getPojo();
-
-                tester.assertValueEquals(
-                        example.getValue(),
-                        recoveredValue,
-                        "serialization roundtrip failed");
-            }
+//            var valueMixin = (Object)null;
+//            if(valueMixin!=null) {
+//
+//                var spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+//                var interaction = ActionInteraction
+//                        .start(ManagedObject.mixin(spec,  valueMixin), "act", Where.ANYWHERE);
+//
+//                var pendingParams = interaction
+//                        .startParameterNegotiation()
+//                        .get();
+//
+//                var managedAction = interaction.getManagedActionElseFail();
+//                var typedTuple = pendingParams.getParamValues();
+//
+//                var recoveredValue = managedAction
+//                        .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+//                        .getSuccessElseFail()
+//                        .getPojo();
+//
+//                tester.assertValueEquals(
+//                        example.getValue(),
+//                        recoveredValue,
+//                        "serialization roundtrip failed");
+//            }
         }
 
     }
@@ -169,9 +161,8 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         });
 
-        if(example.getParseExpectations().isNotEmpty()) {
-            return; // skip round-trip test
-        }
+        if(example.getParseExpectations().isNotEmpty())
+			return; // skip round-trip test
 
         //TODO eventually all examples should have their ParseExpectations, so we can remove
         // Parser round-trip test
@@ -192,11 +183,10 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                         //|| valueType.equals(ZonedDateTime.class)
                         ) {
 
-                    if(stringified.endsWith("Z")) {
-                        // skip format variations on UTC time-zone
+                    if(stringified.endsWith("Z"))
+						// skip format variations on UTC time-zone
                         //System.err.printf("DEBUG: skipping stringified: %s%n", stringified);
                         return;
-                    }
 
                     var with4digitZone = _Strings.substring(stringified, 0, -3) + "00";
                     var with2digitZone = _Strings.substring(stringified, 0, -3);

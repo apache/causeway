@@ -33,7 +33,7 @@ public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract 
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
-        var tableDecoratorFacet = holder.getFacet(TableDecoratorFacet.class);
+        var tableDecoratorFacet = holder.lookupFacet(TableDecoratorFacet.class).orElse(null);
         if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
         }

@@ -100,7 +100,7 @@ public class RichMutationForAction extends Element {
 
             case COLLECTION:
 
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                TypeOfFacet facet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
                 if (facet == null) {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
@@ -136,7 +136,8 @@ public class RichMutationForAction extends Element {
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
             Optional<Object> result;
-            var argumentValue = (Map<String, ?>) target;
+            @SuppressWarnings("unchecked")
+			var argumentValue = (Map<String, ?>) target;
             String idValue = (String)argumentValue.get("id");
             if (idValue != null) {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");

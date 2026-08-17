@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.testdomain.publishing.jpa;
 
-import jakarta.inject.Inject;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.apache.causeway.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.publishing.PublishingTestFactoryJpa;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.causeway.testdomain.publishing.stubs.EntityPublishingTestAbstract;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+
+import jakarta.inject.Inject;
 
 @SpringBootTest(
         classes = {
@@ -46,7 +46,8 @@ class JpaEntityPublishingTest
 extends EntityPublishingTestAbstract
 implements HasPersistenceStandardJpa {
 
-    @Inject private PublishingTestFactoryJpa testFactory;
+    @SuppressWarnings("unused")
+	@Inject private PublishingTestFactoryJpa testFactory;
 
     @Override
     protected PublishingTestFactoryAbstract getTestFactory() {

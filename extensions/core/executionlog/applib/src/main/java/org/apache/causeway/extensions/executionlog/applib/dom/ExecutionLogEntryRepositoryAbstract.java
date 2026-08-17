@@ -26,11 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -38,6 +33,10 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.jspecify.annotations.Nullable;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -70,7 +69,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         this.factoryService = factoryService;
     }
 
-    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public E createEntryAndPersist(final Execution execution) {
         E e = factoryService.detachedEntity(executionLogEntryClass);
         e.init(execution);
@@ -248,9 +248,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
      */
     @Override
     public List<ExecutionLogEntry> findAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'findAll' in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot call 'findAll' in production systems");
         return _Casts.uncheckedCast(repositoryService().allInstances(executionLogEntryClass));
     }
 
@@ -259,9 +258,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.deploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
-        }
+        if (causewaySystemEnvironment.deploymentType().isProduction())
+			throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         repositoryService().removeAll(executionLogEntryClass);
     }
 

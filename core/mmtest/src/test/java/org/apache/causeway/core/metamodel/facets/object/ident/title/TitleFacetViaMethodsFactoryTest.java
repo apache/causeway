@@ -58,7 +58,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            final Facet facet = facetHolder.lookupFacet(TitleFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TitleFacetFromToStringMethod);
             var titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
@@ -86,7 +86,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            assertNull(facetHolder.getFacet(TitleFacet.class));
+            assertNull(facetHolder.lookupFacet(TitleFacet.class).orElse(null));
         });
 
     }

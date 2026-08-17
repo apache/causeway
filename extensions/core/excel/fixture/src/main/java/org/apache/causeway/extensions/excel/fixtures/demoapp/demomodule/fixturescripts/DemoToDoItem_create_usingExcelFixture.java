@@ -68,7 +68,8 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
         transactionService.flushTransaction();
     }
 
-    private List<ExcelDemoToDoItem> load(
+    @SuppressWarnings("unchecked")
+	private List<ExcelDemoToDoItem> load(
             final ExecutionContext executionContext,
             final String resourceName) {
 

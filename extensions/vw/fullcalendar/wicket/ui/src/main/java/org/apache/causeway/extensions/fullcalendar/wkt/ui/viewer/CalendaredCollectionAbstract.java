@@ -20,9 +20,6 @@ package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 
 import java.util.Set;
 
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.markup.head.IHeaderResponse;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
@@ -35,6 +32,8 @@ import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.markup.head.IHeaderResponse;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -98,7 +97,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
         final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedbackPanel);
         addOrReplace(calendar);
-        addOrReplace(new EventSourceSelector(ID_SELECTOR, calendar));
+        addOrReplace(new EventSourceSelector(ID_SELECTOR));
     }
 
     protected abstract EventProvider newEventProvider(

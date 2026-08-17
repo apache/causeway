@@ -18,29 +18,27 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import jakarta.inject.Provider;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import jakarta.inject.Provider;
 
 class CommandReplayResultMappingRepositoryAbstractTest {
 
@@ -54,7 +52,8 @@ class CommandReplayResultMappingRepositoryAbstractTest {
         repository.factoryService = factoryService;
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     void selectsNamedQueriesAndParameters() {
         when(repositoryService.firstMatch(any(Query.class))).thenReturn(Optional.empty());
         when(repositoryService.allMatches(any(Query.class))).thenReturn(List.of());
@@ -104,14 +103,14 @@ class CommandReplayResultMappingRepositoryAbstractTest {
         verify(repositoryService).removeAll(Mapping.class);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     private NamedQuery<Mapping> captureFirstMatchQuery() {
         var captor = ArgumentCaptor.forClass(Query.class);
         verify(repositoryService).firstMatch(captor.capture());
         return (NamedQuery<Mapping>) captor.getValue();
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     private NamedQuery<Mapping> captureLastAllMatchesQuery() {
         var captor = ArgumentCaptor.forClass(Query.class);
         verify(repositoryService, org.mockito.Mockito.atLeastOnce()).allMatches(captor.capture());

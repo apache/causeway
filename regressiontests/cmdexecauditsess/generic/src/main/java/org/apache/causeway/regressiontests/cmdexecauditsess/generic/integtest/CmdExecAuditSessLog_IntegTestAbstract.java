@@ -93,7 +93,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
     protected void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
         var objectSpecification = specificationLoader.loadSpecification(entityClass);
-        EntityChangePublishingFacet facet = objectSpecification.getFacet(EntityChangePublishingFacet.class);
+        EntityChangePublishingFacet facet = objectSpecification.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
         Assertions.assertThat(facet)
                         .satisfies(f -> assertThat(f).isNotNull())
                         .satisfies(f -> assertThat(f.isEnabled()).isFalse())

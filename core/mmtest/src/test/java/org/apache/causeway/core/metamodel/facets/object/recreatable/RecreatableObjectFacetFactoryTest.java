@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final ViewModelFacet viewModelFacet = facetHolder.getFacet(ViewModelFacet.class);
+            final ViewModelFacet viewModelFacet = facetHolder.lookupFacet(ViewModelFacet.class).orElse(null);
             assertNotNull(viewModelFacet);
             assertTrue(viewModelFacet instanceof ViewModelFacetForViewModelInterface);
 

@@ -100,7 +100,7 @@ class DomainObjectResourceTest {
 
         val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
 
-        val grid = (BSGrid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
+        val grid = (BSGrid) spec.lookupFacet(GridFacet.class).orElse(null).getGrid(objectAdapter);
 
         DomainObjectResourceServerside.addLinks(resourceContext, domainType, instanceId, grid);
 
@@ -136,7 +136,7 @@ class DomainObjectResourceTest {
 
         val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
 
-        val grid = (BSGrid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
+        val grid = (BSGrid) spec.lookupFacet(GridFacet.class).orElse(null).getGrid(objectAdapter);
 
         DomainObjectResourceServerside.addLinks(resourceContext, domainType, instanceId, grid);
 

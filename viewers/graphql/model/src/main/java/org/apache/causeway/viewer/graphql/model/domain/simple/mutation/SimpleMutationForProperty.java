@@ -18,15 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.mutation;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import java.util.Map;
 import java.util.Optional;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLOutputType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -35,8 +30,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
@@ -46,14 +41,17 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLOutputType;
+
 //@Slf4j
 public class SimpleMutationForProperty extends Element {
 
-    private static final SchemaType SCHEMA_TYPE = SchemaType.SIMPLE;
-
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
-    private String argumentName;
+    private final String argumentName;
 
     public SimpleMutationForProperty(
             final ObjectSpecification objectSpec,
@@ -89,7 +87,8 @@ public class SimpleMutationForProperty extends Element {
         Object target = dataFetchingEnvironment.getArgument(argumentName);
         Optional<Object> result;
         final Environment environment = new Environment.For(dataFetchingEnvironment);
-        var argumentValue1 = (Map<String, ?>) target;
+        @SuppressWarnings("unchecked")
+		var argumentValue1 = (Map<String, ?>) target;
         var idValue = (String)argumentValue1.get("id");
         if (idValue != null) {
             var objectSpecArg = (ObjectSpecification)argumentValue1.get("logicalTypeName");
@@ -110,9 +109,8 @@ public class SimpleMutationForProperty extends Element {
                 String key = ObjectFeatureUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
                 result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-            } else {
-                throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-            }
+            } else
+				throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
         }
         Object sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
@@ -124,19 +122,16 @@ public class SimpleMutationForProperty extends Element {
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 
         var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
-        }
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
 
         var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
-        }
+        if (usableConsent.isVetoed())
+			throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
 
         var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new InvalidException(validityConsent);
-        }
+        if (validityConsent.isVetoed())
+			throw new InvalidException(validityConsent);
 
         oneToOneAssociation.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
 

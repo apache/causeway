@@ -52,7 +52,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParams(processParameterContext);
             //then
-            var facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var facet = facetedMethodParameter.lookupFacet(ParamNamedFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
             assertEquals(NAME, facet.text());

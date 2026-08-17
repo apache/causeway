@@ -381,7 +381,7 @@ public class PojoTester {
 	 *     There should be at least two and ideally three different data instances.
 	 * </p>
 	 */
-	public <T> PojoTester usingData(final Class<T> c, final T... data) {
+	public <T> PojoTester usingData(final Class<T> c, @SuppressWarnings("unchecked") final T... data) {
 		if (Enum.class.isAssignableFrom(c))
 			throw new IllegalArgumentException("No need to provide test data for enums");
 		if (data == null || data.length < 2)
@@ -397,6 +397,7 @@ public class PojoTester {
 	 * compile time type, with the runtime type providing a no-arg constructor so that instances can be
 	 * generated as required.
 	 */
+	@SuppressWarnings("unchecked")
 	@lombok.SneakyThrows
 	public <T> PojoTester usingData(final Class<T> compileTimeType, final Class<? extends T> runtimeType) {
 		final var declaredConstructor = runtimeType.getDeclaredConstructor();

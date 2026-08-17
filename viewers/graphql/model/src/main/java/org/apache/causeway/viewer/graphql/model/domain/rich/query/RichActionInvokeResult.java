@@ -72,7 +72,7 @@ public class RichActionInvokeResult extends Element {
 
             case COLLECTION:
 
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                TypeOfFacet facet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
                 if (facet == null) {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;

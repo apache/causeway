@@ -22,14 +22,15 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
 
 public class DisabledException extends InteractionException {
+    private static final long serialVersionUID = 1L;
 
-    public DisabledException(Consent consent) {
+	public DisabledException(final Consent consent) {
         super(consent.getReasonAsString().orElse("Disabled"));
     }
-    public DisabledException(Identifier identifier) {
+    public DisabledException(final Identifier identifier) {
         super(identifier);
     }
-    public DisabledException(Identifier identifier, Throwable cause) {
+    public DisabledException(final Identifier identifier, final Throwable cause) {
         super(identifier, cause);
     }
 }

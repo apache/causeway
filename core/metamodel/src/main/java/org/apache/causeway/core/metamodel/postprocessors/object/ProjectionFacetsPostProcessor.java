@@ -50,15 +50,15 @@ extends MetaModelPostProcessorAbstract {
                 ProjectionFacetFromProjectingProperty.create(objectSpecification))
         .ifPresent(projectionFacet->{
 
-            var titleFacet = objectSpecification.getFacet(TitleFacet.class);
+            var titleFacet = objectSpecification.lookupFacet(TitleFacet.class).orElse(null);
             if(canOverwrite(titleFacet)) {
                 FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }
-            var iconFacet = objectSpecification.getFacet(IconFacet.class);
+            var iconFacet = objectSpecification.lookupFacet(IconFacet.class).orElse(null);
             if(canOverwrite(iconFacet)) {
                 FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }
-            var cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+            var cssClassFacet = objectSpecification.lookupFacet(CssClassFacet.class).orElse(null);
             if(canOverwrite(cssClassFacet)) {
                 FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }

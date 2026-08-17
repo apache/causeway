@@ -59,7 +59,7 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
-        var facet = navigatedType.getFacet(HiddenTypeFacet.class);
+        var facet = navigatedType.lookupFacet(HiddenTypeFacet.class).orElse(null);
         if(facet == null) {
             // not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet

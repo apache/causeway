@@ -95,7 +95,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
             assertNull(facet);
         });
@@ -110,7 +110,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             // we rely upon CommandAnnotationFacetFactory to add the facet only if there is no @Property specified also
             assertNull(facet);
         });
@@ -139,7 +139,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNull(facet);
         });
     }
@@ -178,7 +178,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             final ExecutionPublishingFacetForActionAnnotation facetImpl = (ExecutionPublishingFacetForActionAnnotation) facet;
             _Blackhole.consume(facetImpl);
@@ -200,7 +200,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
 
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
             assertNoMethodsRemoved();
@@ -225,7 +225,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
 
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
             assertNoMethodsRemoved();
@@ -250,7 +250,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
 
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
             assertNoMethodsRemoved();
@@ -275,7 +275,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
 
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
             assertNoMethodsRemoved();
@@ -313,7 +313,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
             assertNoMethodsRemoved();
@@ -334,7 +334,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ExecutionPublishingFacetForActionAnnotation);
         });

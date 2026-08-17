@@ -20,16 +20,15 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
+import org.springframework.stereotype.Service;
+
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
 import graphql.execution.FieldValueInfo;
-
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.services.iactn.InteractionContext;
-import org.apache.causeway.applib.services.iactn.InteractionService;
-import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
 @Service
 public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
@@ -53,16 +52,15 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
 
         var userMemento = userMementoProvider.userMemento(executionContext, parameters);
 
-        if (userMemento != null) {
-            return interactionService.call(
+        if (userMemento != null)
+			return interactionService.call(
                     InteractionContext.builder().user(userMemento).build(),
                     () -> resolveFieldWithInfo2(executionContext, parameters)
             );
-        } else {
-            return interactionService.callAnonymous(
+		else
+			return interactionService.callAnonymous(
                     () -> resolveFieldWithInfo2(executionContext, parameters)
             );
-        }
     }
 
     /**
@@ -70,12 +68,13 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
      * <p>
      * super.resolveFieldWithInfo(..) return type changed to {@link Object} with graphql-java 22.0
      */
-    protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo2(
+    @SuppressWarnings("unchecked")
+	protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo2(
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
         var obj = super.resolveFieldWithInfo(executionContext, parameters);
-        return obj instanceof FieldValueInfo
-                ? CompletableFuture.completedFuture((FieldValueInfo)obj)
+        return obj instanceof FieldValueInfo f
+                ? CompletableFuture.completedFuture(f)
                 : (CompletableFuture<FieldValueInfo>)obj;
     }
 

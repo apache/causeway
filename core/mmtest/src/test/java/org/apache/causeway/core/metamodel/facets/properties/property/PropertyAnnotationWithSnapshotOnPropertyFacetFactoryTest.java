@@ -59,7 +59,7 @@ extends FacetFactoryTestAbstract {
             // when
             processNotPersisted(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(SnapshotExcludeFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof SnapshotExcludeFacetForPropertyAnnotation);
 

@@ -23,24 +23,25 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 
 public abstract class InteractionException extends RecoverableException {
+	private static final long serialVersionUID = 1L;
 
-    public InteractionException(String msg) {
+    public InteractionException(final String msg) {
         super(msg);
     }
 
-    public InteractionException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod) {
+    public InteractionException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod) {
         super(translatableMessage, translationContextClass, translationContextMethod);
     }
 
-    public InteractionException(Throwable cause) {
+    public InteractionException(final Throwable cause) {
         super(cause);
     }
 
-    public InteractionException(String msg, Throwable cause) {
+    public InteractionException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 
-    public InteractionException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod, Throwable cause) {
+    public InteractionException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause) {
         super(translatableMessage, translationContextClass, translationContextMethod, cause);
     }
 
@@ -48,7 +49,7 @@ public abstract class InteractionException extends RecoverableException {
         this(identifier.toString());
     }
 
-    public InteractionException(Identifier identifier, Throwable cause) {
+    public InteractionException(final Identifier identifier, final Throwable cause) {
         this(identifier.toString(), cause);
     }
 }

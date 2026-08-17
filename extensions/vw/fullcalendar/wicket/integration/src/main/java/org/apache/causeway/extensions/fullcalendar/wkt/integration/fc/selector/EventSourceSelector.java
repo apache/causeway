@@ -18,21 +18,16 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.selector;
 
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebComponent;
-
-import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class EventSourceSelector extends WebComponent implements IHeaderContributor {
 
     private static final long serialVersionUID = 1L;
 
-    private FullCalendar calendar;
-
-	public EventSourceSelector(final String id, final FullCalendar calendar) {
+	public EventSourceSelector(final String id) {
 		super(id);
-		this.calendar = calendar;
 		Wkt.ajaxEnable(this);
 	}
 

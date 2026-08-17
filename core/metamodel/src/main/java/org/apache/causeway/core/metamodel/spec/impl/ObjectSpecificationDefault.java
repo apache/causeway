@@ -317,12 +317,12 @@ implements
     }
 
     private void invalidateCachedFacets() {
-        this.valueFacet = getFacet(ValueFacet.class);
+        this.valueFacet = lookupFacet(ValueFacet.class).orElse(null);
         this.titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
-        this.iconFacet = getFacet(IconFacet.class);
-        this.navigableParentFacet = getFacet(NavigableParentFacet.class);
-        this.cssClassFacet = getFacet(CssClassFacet.class);
-        this.aliasedFacet = getFacet(AliasedFacet.class);
+        this.iconFacet = lookupFacet(IconFacet.class).orElse(null);
+        this.navigableParentFacet = lookupFacet(NavigableParentFacet.class).orElse(null);
+        this.cssClassFacet = lookupFacet(CssClassFacet.class).orElse(null);
+        this.aliasedFacet = lookupFacet(AliasedFacet.class).orElse(null);
     }
 
     @Override
@@ -338,7 +338,7 @@ implements
     public final Optional<MixinFacet> mixinFacet() {
         // deliberately don't memoize lookup misses, because could be too early
         if(mixinFacet==null) {
-            mixinFacet = getFacet(MixinFacet.class);
+            mixinFacet = lookupFacet(MixinFacet.class).orElse(null);
         }
         return Optional.ofNullable(mixinFacet);
     }
@@ -347,7 +347,7 @@ implements
     public final Optional<EntityFacet> entityFacet() {
         // deliberately don't memoize lookup misses, because could be too early
         if(entityFacet==null) {
-            entityFacet = getFacet(EntityFacet.class);
+            entityFacet = lookupFacet(EntityFacet.class).orElse(null);
         }
         return Optional.ofNullable(entityFacet);
     }
@@ -356,7 +356,7 @@ implements
     public final Optional<ViewModelFacet> viewmodelFacet() {
         // deliberately don't memoize lookup misses, because could be too early
         if(viewmodelFacet==null) {
-            viewmodelFacet = getFacet(ViewModelFacet.class);
+            viewmodelFacet = lookupFacet(ViewModelFacet.class).orElse(null);
         }
         return Optional.ofNullable(viewmodelFacet);
     }

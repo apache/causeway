@@ -61,7 +61,7 @@ extends FacetFactoryTestAbstract {
             // when
             processRegEx(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(RegExFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(RegExFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof RegExFacetForPatternAnnotationOnProperty);
             final RegExFacetForPatternAnnotationOnProperty regExFacet = (RegExFacetForPatternAnnotationOnProperty) facet;
@@ -80,7 +80,7 @@ extends FacetFactoryTestAbstract {
             // when
             processRegEx(facetFactory, processMethodContext);
             // then
-            assertNull(facetedMethod.getFacet(RegExFacet.class));
+            assertNull(facetedMethod.lookupFacet(RegExFacet.class).orElse(null));
         });
     }
 

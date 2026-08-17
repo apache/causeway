@@ -665,7 +665,7 @@ s     * @see #findFirst(Function[], Function[])
             final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>> orderSpecifier,
             final Class<? extends B> bean,
-            @SuppressWarnings("unchecked") final Function<Q, Expression<?>>... projections) {
+            final Function<Q, Expression<?>>... projections) {
         return (List<B>) queryDslSupport
                 .from(getEntityPath())
                 .projection(Projections.bean(bean, unwrapProjections(projections)))

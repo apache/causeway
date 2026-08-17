@@ -26,17 +26,15 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.util.StringUtils;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.io.TextUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.StringUtils;
 
 /**
  * Represents a list of lines (of text),
@@ -224,10 +222,12 @@ public record Listing<T>(
 
     // -- STREAMS
 
-    public Stream<LineEnabled<T>> streamEnabledLines() {
+    @SuppressWarnings("unchecked")
+	public Stream<LineEnabled<T>> streamEnabledLines() {
         return lines().stream().filter(LineEnabled.class::isInstance).map(LineEnabled.class::cast);
     }
-    public Stream<LineDisabled<T>> streamDisabledLines() {
+    @SuppressWarnings("unchecked")
+	public Stream<LineDisabled<T>> streamDisabledLines() {
         return lines().stream().filter(LineDisabled.class::isInstance).map(LineDisabled.class::cast);
     }
     public Stream<T> streamEnabled() {

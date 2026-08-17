@@ -300,7 +300,7 @@ extends ReprRendererAbstract<ManagedMember> {
      * Convenience method.
      */
     protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {
-        return objectMember.getElementType().getFacet(facetType);
+        return objectMember.getElementType().lookupFacet(facetType).orElse(null);
     }
 
     protected Consent usability() {

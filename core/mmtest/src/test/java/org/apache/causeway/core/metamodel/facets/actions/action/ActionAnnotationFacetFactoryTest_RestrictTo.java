@@ -49,7 +49,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final PrototypeFacet facet = facetedMethod.lookupFacet(PrototypeFacet.class).orElse(null);
             assertNotNull(facet);
         });
     }
@@ -67,7 +67,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final PrototypeFacet facet = facetedMethod.lookupFacet(PrototypeFacet.class).orElse(null);
             assertNull(facet);
         });
     }
@@ -85,7 +85,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final PrototypeFacet facet = facetedMethod.lookupFacet(PrototypeFacet.class).orElse(null);
             assertNull(facet);
         });
     }

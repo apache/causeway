@@ -66,7 +66,7 @@ public class CommonMetaFetcher {
         return managedObject()
                 .map(managedObject -> {
                     var domainPojo = managedObject.getPojo();
-                    var entityFacet = managedObject.objSpec().getFacet(EntityFacet.class);
+                    var entityFacet = managedObject.objSpec().lookupFacet(EntityFacet.class).orElse(null);
                     if (entityFacet != null) {
                         var object = entityFacet.versionOf(domainPojo);
                         return object != null ? object.toString() : null;
@@ -89,7 +89,7 @@ public class CommonMetaFetcher {
     public String cssClass() {
         return managedObject()
                 .map(managedObject -> {
-                    var facet = managedObject.objSpec().getFacet(CssClassFacet.class);
+                    var facet = managedObject.objSpec().lookupFacet(CssClassFacet.class).orElse(null);
                     return facet != null ? facet.cssClass(managedObject) : null;
                 })
                 .orElse(null);
@@ -98,7 +98,7 @@ public class CommonMetaFetcher {
     public String layout() {
         return managedObject()
                 .map(managedObject -> {
-                    var facet = managedObject.objSpec().getFacet(LayoutPrefixFacet.class);
+                    var facet = managedObject.objSpec().lookupFacet(LayoutPrefixFacet.class).orElse(null);
                     return facet != null ? facet.layoutPrefix(managedObject) : null;
                 })
                 .orElse(null);

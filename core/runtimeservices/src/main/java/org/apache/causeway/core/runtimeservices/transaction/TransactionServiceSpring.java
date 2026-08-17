@@ -322,7 +322,8 @@ implements
             var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
             txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-            var obs = onCloseHandle.observationClosure().startAndOpenScope(observationProvider.get("Transaction"))
+            @SuppressWarnings("unused")
+			var obs = onCloseHandle.observationClosure().startAndOpenScope(observationProvider.get("Transaction"))
                 .observation()
                 .highCardinalityKeyValue("txManager", txManager.getClass().getName());
 

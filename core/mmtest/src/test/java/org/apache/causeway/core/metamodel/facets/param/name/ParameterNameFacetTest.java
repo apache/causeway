@@ -85,7 +85,7 @@ extends FacetFactoryTestAbstract {
             programmingModel.streamFactories()
             .forEach(facetFactory->facetFactory.processParams(processParameterContext));
             // then
-            var namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var namedFacet = facetedMethodParameter.lookupFacet(ParamNamedFacet.class).orElse(null);
             assertEquals("An Awesome Name", namedFacet.text());
         });
     }
@@ -105,7 +105,7 @@ extends FacetFactoryTestAbstract {
             // when
             programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
             // then
-            var namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var namedFacet = facetedMethodParameter.lookupFacet(ParamNamedFacet.class).orElse(null);
             assertNotNull(namedFacet);
             assertEquals("Even Better Name", namedFacet.text());
         });

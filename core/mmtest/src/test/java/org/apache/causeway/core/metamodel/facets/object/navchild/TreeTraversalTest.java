@@ -92,7 +92,7 @@ extends FacetFactoryTestAbstract {
         assertFalse(tree.isLeaf());
 
         // node a is expected to have 4 children
-        var navigableSubtreeFacet = specA.getFacet(NavigableSubtreeFacet.class);
+        var navigableSubtreeFacet = specA.lookupFacet(NavigableSubtreeFacet.class).orElse(null);
         assertEquals(4, navigableSubtreeFacet.childCountOf(a));
         assertEquals(4, navigableSubtreeFacet.childrenOf(a).toList().size());
         assertEquals(4, treeAdapter.childCountOf(a));

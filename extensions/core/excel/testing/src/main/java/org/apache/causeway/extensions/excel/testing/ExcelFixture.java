@@ -186,7 +186,8 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
         objectList.addAll(createdObjects);
     }
 
-    private void addToCombined(final List<Object> createdObjects) {
+    @SuppressWarnings("unchecked")
+	private void addToCombined(final List<Object> createdObjects) {
         this.objects.addAll(createdObjects);
     }
 

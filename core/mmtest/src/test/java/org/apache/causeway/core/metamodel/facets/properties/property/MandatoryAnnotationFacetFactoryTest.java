@@ -59,7 +59,7 @@ extends FacetFactoryTestAbstract {
             // when
             processOptional(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation);
         });

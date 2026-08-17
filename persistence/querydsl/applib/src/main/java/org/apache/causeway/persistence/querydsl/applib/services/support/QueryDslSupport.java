@@ -98,6 +98,6 @@ public interface QueryDslSupport extends QueryFactory<DslQuery<?>> {
     <T> DslQuery<T> selectFrom(EntityPath<T> expr);
 
     <T> DslQuery<T> from(EntityPath<T> from);
-    <T> DslQuery<T> from(EntityPath<T>... from);
+    <T> DslQuery<T> from(@SuppressWarnings("unchecked") EntityPath<T>... from);
 
 }

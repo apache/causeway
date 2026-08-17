@@ -66,7 +66,7 @@ permits ManagedMember, ManagedParameter {
      */
     default <T extends Facet> Optional<T> getFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? Optional.ofNullable(getMetaModel().getFacet(facetType))
+                ? Optional.ofNullable(getMetaModel().lookupFacet(facetType).orElse(null))
                 : Optional.empty();
     }
 
@@ -77,7 +77,7 @@ permits ManagedMember, ManagedParameter {
      */
     default <T extends Facet> boolean hasFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? getMetaModel().getFacet(facetType)!=null
+                ? getMetaModel().lookupFacet(facetType).orElse(null)!=null
                 : false;
     }
 

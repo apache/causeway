@@ -56,7 +56,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            var facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            var facet = facetedMethod.lookupFacet(MemberNamedFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
             assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HiddenFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForCollectionLayoutAnnotation);
             final HiddenFacetForCollectionLayoutAnnotation collLayoutFacetAnnotation = (HiddenFacetForCollectionLayoutAnnotation) facet;

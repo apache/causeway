@@ -60,11 +60,6 @@ public enum EntityState {
      */
     DETACHED(true),
     /**
-     * @deprecated - This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
-     */
-    @Deprecated // JDO specific
-    HOLLOW(true),
-    /**
      * Object with this state is an entity that is transient
      * or has been removed from the database.
      * Objects in this state may no longer be interacted with.
@@ -91,11 +86,6 @@ public enum EntityState {
     public boolean isAttachedNoOid() { return this == ATTACHED_NO_OID; }
     /** @see #DETACHED */
     public boolean isDetached() { return this == DETACHED; }
-    /** @see #HOLLOW */
-    @Deprecated // JDO specific
-    public boolean isHollow() { return this == HOLLOW; }
-    /** @see #TRANSIENT_OR_REMOVED
-     *  @see #REMOVED */
     public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED
             || this == REMOVED; }
     /** @see #REMOVED */

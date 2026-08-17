@@ -112,7 +112,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
         // TODO: this ought to take into account if the field is persistable
 
         // we update the existing facet
-        var autoCompleteUsingQueryDslFacet = Optional.ofNullable(declaringSpec.getFacet(AutoCompleteFacet.class))
+        var autoCompleteUsingQueryDslFacet = Optional.ofNullable(declaringSpec.lookupFacet(AutoCompleteFacet.class).orElse(null))
                 .filter(AutoCompleteUsingQueryDslFacet.class::isInstance)
                 .map(AutoCompleteUsingQueryDslFacet.class::cast)
                 .orElseGet(() -> {

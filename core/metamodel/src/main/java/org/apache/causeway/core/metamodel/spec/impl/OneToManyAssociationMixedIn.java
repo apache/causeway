@@ -77,7 +77,7 @@ implements MixedInMember {
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction) {
 
-        var actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        var actionTypeOfFacet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault,
         // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
@@ -130,7 +130,7 @@ implements MixedInMember {
     }
 
     private DisabledFacet disabledFacet() {
-        final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
+        final DisabledFacet originalFacet = facetHolder.lookupFacet(DisabledFacet.class).orElse(null);
         if( originalFacet != null &&
                 originalFacet.where().isAlways())
 			return originalFacet;

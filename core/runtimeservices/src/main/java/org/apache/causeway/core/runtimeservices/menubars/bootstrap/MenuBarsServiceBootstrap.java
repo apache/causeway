@@ -414,7 +414,7 @@ implements MenuBarsService {
 
         return objectActions
                 .map(objectAction->{
-                    var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                    var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
                     String serviceName = layoutGroupFacet != null
                             ? layoutGroupFacet.getGroupId()
                             : null;
@@ -429,7 +429,7 @@ implements MenuBarsService {
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
         return (final ManagedObject input) -> {
             final DomainServiceLayoutFacet facet =
-                    input.objSpec().getFacet(DomainServiceLayoutFacet.class);
+                    input.objSpec().lookupFacet(DomainServiceLayoutFacet.class).orElse(null);
             return facet != null && facet.getMenuBar() == menuBar;
         };
     }

@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.e2e.special;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import tools.jackson.databind.ObjectMapper;
-
+import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -33,9 +34,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
+import tools.jackson.databind.ObjectMapper;
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
@@ -54,7 +53,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
 
         var gridUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/grid")
-                .asText();
+                .asString();
 
         assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
         var gridHttpResponse = submitReturningString(gridUrl);
@@ -65,7 +64,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
 
         var photoBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
-                .asText();
+                .asString();
 
         assertThat(photoBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
         var photoBytesResponse = submitReturningBytes(photoBytesUrl);
@@ -75,7 +74,7 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
 
         var iconBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")
-                .asText();
+                .asString();
 
         assertThat(iconBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");
         var iconBytesResponse = submitReturningBytes(iconBytesUrl);
@@ -84,15 +83,15 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
         assertThat(iconBytes).isNotEmpty();
     }
 
-    private HttpResponse<byte[]> submitReturningBytes(String url) throws IOException, InterruptedException {
+    private HttpResponse<byte[]> submitReturningBytes(final String url) throws IOException, InterruptedException {
         return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofByteArray());
     }
 
-    private HttpResponse<String> submitReturningString(String url) throws IOException, InterruptedException {
+    private HttpResponse<String> submitReturningString(final String url) throws IOException, InterruptedException {
         return submitReturningResponseHandledBy(url, HttpResponse.BodyHandlers.ofString());
     }
 
-    private <T> HttpResponse<T> submitReturningResponseHandledBy(String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
+    private <T> HttpResponse<T> submitReturningResponseHandledBy(final String url, final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
         var urlSuffix = url.substring(3); // strip off the '///' prefix
         var uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
 

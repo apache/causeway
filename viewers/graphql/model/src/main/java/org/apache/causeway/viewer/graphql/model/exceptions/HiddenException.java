@@ -22,16 +22,17 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
 
 public class HiddenException extends InteractionException {
+	private static final long serialVersionUID = 1L;
 
-    public HiddenException(Consent consent) {
+    public HiddenException(final Consent consent) {
         super(consent.getReasonAsString().orElse("Hidden"));
     }
 
-    public HiddenException(Identifier identifier) {
+    public HiddenException(final Identifier identifier) {
         super(identifier);
     }
 
-    public HiddenException(Identifier identifier, Throwable cause) {
+    public HiddenException(final Identifier identifier, final Throwable cause) {
         super(identifier, cause);
     }
 }

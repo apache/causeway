@@ -144,7 +144,8 @@ public class RichAction
                             // if the parameter is abstract, we still attempt to figure out the arguments.
                             // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
                             if (argumentValue instanceof List) {
-                                var argumentValueList = (List<Object>) argumentValue;
+                                @SuppressWarnings("unchecked")
+								var argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
                                         .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
@@ -187,7 +188,8 @@ public class RichAction
             final Environment environment,
             final Context context
     ) {
-        var argumentValue = (Map<String, ?>) argumentValueObj;
+        @SuppressWarnings("unchecked")
+		var argumentValue = (Map<String, ?>) argumentValueObj;
 
         var refValue = (String)argumentValue.get("ref");
         if (refValue != null) {

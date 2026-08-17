@@ -83,7 +83,7 @@ public class AutoCompleteUsingQueryDslFacet extends FacetAbstract implements Aut
         this.queryDslSupport = queryDslSupport;
 
         // in case no searchable properties are provided, we keep track of any previous implementation, to delegate to if required
-        this.previousAutoCompleteFacetIfAny = Optional.ofNullable(facetHolder.getFacet(AutoCompleteFacet.class));
+        this.previousAutoCompleteFacetIfAny = Optional.ofNullable(facetHolder.lookupFacet(AutoCompleteFacet.class).orElse(null));
 
         // this remains empty until at least one searchableProperty is added.
         autoCompleteGeneratedDslQueryIfAny = Optional.empty();

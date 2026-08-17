@@ -52,7 +52,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.lookupFacet(LayoutOrderFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromPropertyLayoutAnnotation);
             assertEquals("1", facet.getSequence());
@@ -76,7 +76,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.lookupFacet(LayoutOrderFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromCollectionLayoutAnnotation);
             assertEquals("2", facet.getSequence());
@@ -96,7 +96,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.lookupFacet(LayoutOrderFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromActionLayoutAnnotation);
             assertEquals("3", facet.getSequence());

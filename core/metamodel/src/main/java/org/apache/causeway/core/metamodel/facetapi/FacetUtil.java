@@ -169,7 +169,7 @@ public final class FacetUtil {
             return Optional.empty();
         return Stream.of(facetHolders)
             .filter(Objects::nonNull)
-            .map(facetHolder->facetHolder.getFacet(facetType))
+            .map(facetHolder->facetHolder.lookupFacet(facetType).orElse(null))
             .filter(Objects::nonNull)
             .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b
@@ -187,7 +187,7 @@ public final class FacetUtil {
         return Stream.of(facetHolders)
         .filter(Objects::nonNull)
         .filter(x -> !excluded.test(x))
-        .map(facetHolder->facetHolder.getFacet(facetType))
+        .map(facetHolder->facetHolder.lookupFacet(facetType).orElse(null))
         .filter(Objects::nonNull)
         .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b

@@ -43,7 +43,7 @@ public interface CommandPublishingFacet extends Facet {
     CommandDtoProcessor getProcessor();
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        var facet = facetHolder.getFacet(CommandPublishingFacet.class);
+        var facet = facetHolder.lookupFacet(CommandPublishingFacet.class).orElse(null);
         return facet != null && facet.isEnabled();
     }
 

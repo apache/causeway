@@ -56,7 +56,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(BookmarkPolicyFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof BookmarkPolicyFacetAbstract);
 

@@ -63,7 +63,8 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     Counter counter1;
     Counter counter2;
 
-    @BeforeEach
+    @SuppressWarnings("unchecked")
+	@BeforeEach
     void beforeEach() {
 
         counterRepository.removeAll();
@@ -321,10 +322,12 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         counter1 = counterRepository.findByName("counter-1");
         executionTarget1User1 = executionTarget1User1ById.get();
         executionTarget1User2 = executionTarget1User2ById.get();
-        var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
+        @SuppressWarnings("unused")
+		var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
         executionTarget2User1 = executionTarget2User1ById.get();
 
-        var target1 = executionTarget1User1.getTarget();
+        @SuppressWarnings("unused")
+		var target1 = executionTarget1User1.getTarget();
         var username1 = executionTarget1User1.getUsername();
         Timestamp from1 = executionTarget1User1.getStartedAt();
         Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));

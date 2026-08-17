@@ -114,7 +114,7 @@ extends InteractionTestAbstract {
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
                     //System.out.println("act: " + act);
-                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.lookupFacet(MemberNamedFacet.class).orElse(null);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })

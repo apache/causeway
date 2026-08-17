@@ -184,7 +184,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 			}
 
             // then
-            var setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+            var setterFacet = facetedMethod.lookupFacet(PropertySetterFacet.class).orElse(null);
             assertNotNull(setterFacet);
             assertTrue(setterFacet instanceof PropertyModifyFacet, "unexpected facet: " + setterFacet);
             final PropertyModifyFacet setterFacetImpl = (PropertyModifyFacet) setterFacet;
@@ -549,7 +549,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEditing(facetFactory, processMethodContext);
                 // then
-                var disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
+                var disabledFacet = facetedMethod.lookupFacet(DisabledFacet.class).orElse(null);
                 assertNotNull(disabledFacet);
                 assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
                 var disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
@@ -577,7 +577,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 processMaxLength(facetFactory, processMethodContext);
 
                 // then
-                final MaxLengthFacet maxLengthFacet = facetedMethod.getFacet(MaxLengthFacet.class);
+                final MaxLengthFacet maxLengthFacet = facetedMethod.lookupFacet(MaxLengthFacet.class).orElse(null);
                 assertNotNull(maxLengthFacet);
                 assertTrue(maxLengthFacet instanceof MaxLengthFacetForPropertyAnnotation);
                 assertThat(maxLengthFacet.value(), is(30));
@@ -618,7 +618,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 processMustSatisfy(facetFactory, processMethodContext);
 
                 // then
-                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethod.getFacet(MustSatisfySpecificationFacet.class);
+                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethod.lookupFacet(MustSatisfySpecificationFacet.class).orElse(null);
                 assertNotNull(mustSatisfySpecificationFacet);
                 assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
                 final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
@@ -668,7 +668,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
-                var changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                var changePolicyFacet = facetedMethod.lookupFacet(EntityPropertyChangePublishingPolicyFacet.class).orElse(null);
                 assertNull(changePolicyFacet);
             });
         }
@@ -691,7 +691,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processSnapshot(facetFactory, processMethodContext);
                 // then
-                final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
+                final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.lookupFacet(SnapshotExcludeFacet.class).orElse(null);
                 assertNotNull(snapshotExcludeFacet);
                 assertTrue(snapshotExcludeFacet instanceof SnapshotExcludeFacetForPropertyAnnotation);
             });
@@ -714,7 +714,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNotNull(mandatoryFacet);
                 assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Optional);
             });
@@ -733,7 +733,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNotNull(mandatoryFacet);
                 assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Required);
             });
@@ -752,7 +752,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNull(mandatoryFacet);
             });
         }
@@ -770,7 +770,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processOptional(facetFactory, processMethodContext);
                 // then
-                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                final MandatoryFacet mandatoryFacet = facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null);
                 assertNull(mandatoryFacet);
             });
         }
@@ -795,7 +795,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processRegEx(facetFactory, processMethodContext);
                 // then
-                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethod.lookupFacet(RegExFacet.class).orElse(null);
                 assertNotNull(regExFacet);
                 assertTrue(regExFacet instanceof RegExFacetForPropertyAnnotation);
                 assertThat(regExFacet.patternFlags(), is(10));
@@ -816,7 +816,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processRegEx(facetFactory, processMethodContext);
                 // then
-                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethod.lookupFacet(RegExFacet.class).orElse(null);
                 assertNull(regExFacet);
             });
         }
@@ -835,7 +835,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 processRegEx(facetFactory, processMethodContext);
 
                 // then
-                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethod.lookupFacet(RegExFacet.class).orElse(null);
                 assertNull(regExFacet);
             });
         }
@@ -855,7 +855,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 processRegEx(facetFactory, processMethodContext);
 
                 // then
-                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                final RegExFacet regExFacet = facetedMethod.lookupFacet(RegExFacet.class).orElse(null);
                 assertNull(regExFacet);
             });
         }

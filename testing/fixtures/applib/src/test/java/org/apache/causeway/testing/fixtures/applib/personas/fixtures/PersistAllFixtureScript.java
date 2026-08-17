@@ -22,18 +22,18 @@ package org.apache.causeway.testing.fixtures.applib.personas.fixtures;
 
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.personas.dom.Person;
-import org.apache.causeway.testing.fixtures.applib.setup.PersonaEnumPersistAll;
 
 public class PersistAllFixtureScript extends FixtureScript {
 
-    @Override
+	@Override
     protected void execute(final ExecutionContext executionContext) {
 
         // create them all.
-        final PersonaEnumPersistAll<Person, Person_persona, PersonBuilderScript> persistAll = new PersonaEnumPersistAll<>(Person_persona.class);
+		//final PersonaEnumPersistAll<Person, Person_persona, PersonBuilderScript> persistAll = new PersonaEnumPersistAll<>(Person_persona.class);
 
         executionContext.executeChildren(this, Person_persona.SteveSingle, Person_persona.MeghanMarriedMum);
 
+        @SuppressWarnings("unused")
         Person person = executionContext.executeChildT(this, Person_persona.SteveSingle.builder()).getObject();
     }
 }

@@ -75,7 +75,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     void classicMixin_shouldHaveProperFacet() {
 
         var mixinFacet = super.runTypeContextOn(Customer_mixin.class)
-                .getFacet(MixinFacet.class);
+                .lookupFacet(MixinFacet.class).orElse(null);
 
         // proper predicates
         assertNotNull(mixinFacet);
@@ -106,7 +106,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     void actionMixin_shouldHaveProperFacet() {
 
         var mixinFacet = super.runTypeContextOn(Customer_action.class)
-                .getFacet(MixinFacet.class);
+                .lookupFacet(MixinFacet.class).orElse(null);
 
         // proper predicates
         assertNotNull(mixinFacet);
@@ -136,7 +136,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     void propertyMixin_shouldHaveProperFacet() {
 
         var mixinFacet = super.runTypeContextOn(Customer_property.class)
-                .getFacet(MixinFacet.class);
+                .lookupFacet(MixinFacet.class).orElse(null);
 
         // proper predicates
         assertNotNull(mixinFacet);
@@ -161,7 +161,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     void collectionMixin_shouldHaveProperFacet() {
 
         var mixinFacet = super.runTypeContextOn(Customer_collection.class)
-                .getFacet(MixinFacet.class);
+                .lookupFacet(MixinFacet.class).orElse(null);
 
         // proper predicates
         assertNotNull(mixinFacet);

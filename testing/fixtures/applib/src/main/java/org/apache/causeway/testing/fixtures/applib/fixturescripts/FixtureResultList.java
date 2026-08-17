@@ -38,15 +38,12 @@ import org.apache.causeway.commons.internal.base._Casts;
 public class FixtureResultList {
 
     private final FixtureScripts fixtureScripts;
-    private final FixtureScript.ExecutionContext executionContext;
 
     // -- constructor
 
     FixtureResultList(
-            final FixtureScripts fixtureScripts,
-            final FixtureScript.ExecutionContext executionContext) {
+            final FixtureScripts fixtureScripts) {
         this.fixtureScripts = fixtureScripts;
-        this.executionContext = executionContext;
     }
 
     // -- list of FixtureResults

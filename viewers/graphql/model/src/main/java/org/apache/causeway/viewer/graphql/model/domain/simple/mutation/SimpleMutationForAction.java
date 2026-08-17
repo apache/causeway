@@ -58,8 +58,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SimpleMutationForAction extends Element {
 
-    private static final SchemaType SCHEMA_TYPE = SchemaType.SIMPLE;
-
     private final ObjectSpecification objectSpec;
     private final ObjectAction objectAction;
     private final String argumentName;
@@ -99,7 +97,7 @@ public class SimpleMutationForAction extends Element {
 
             case COLLECTION:
 
-                TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
+                TypeOfFacet facet = objectAction.lookupFacet(TypeOfFacet.class).orElse(null);
                 if (facet == null) {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
@@ -135,7 +133,8 @@ public class SimpleMutationForAction extends Element {
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
             Optional<Object> result;
-            var argumentValue = (Map<String, ?>) target;
+            @SuppressWarnings("unchecked")
+			var argumentValue = (Map<String, ?>) target;
             var idValue = (String)argumentValue.get("id");
             if (idValue != null) {
                 var objectSpecArg = (ObjectSpecification) argumentValue.get("logicalTypeName");

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -66,7 +67,7 @@ public class MetaModelServiceDefaultTest {
         Mockito.when(mockFacetedMethod.getMetaModelContext()).thenReturn(MetaModelContext_forTesting.buildDefault());
         Mockito.when(mockFacetedMethod.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
               TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));
-        Mockito.when(mockFacetedMethod.getFacet(Mockito.any(Class.class))).thenReturn(null);
+        Mockito.when(mockFacetedMethod.lookupFacet(Mockito.any(Class.class))).thenReturn(Optional.empty());
         Mockito.when(mockFacetedMethod.parameters()).thenReturn(Can.empty());
 
         mockSpec = Mockito.mock(ObjectSpecification.class);

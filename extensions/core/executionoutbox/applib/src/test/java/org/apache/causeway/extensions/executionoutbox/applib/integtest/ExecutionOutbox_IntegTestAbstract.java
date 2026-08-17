@@ -60,7 +60,8 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     Counter counter1;
     Counter counter2;
 
-    @BeforeEach
+    @SuppressWarnings("unchecked")
+	@BeforeEach
     void beforeEach() {
         counterRepository.removeAll();
         executionOutboxEntryRepository.removeAll();

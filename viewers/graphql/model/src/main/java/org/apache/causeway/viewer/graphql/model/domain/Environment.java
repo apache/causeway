@@ -28,7 +28,8 @@ public interface Environment {
 
     Map<String, Object> getArguments();
 
-    default <T> T getArgument(String name) {
+    @SuppressWarnings("unchecked")
+	default <T> T getArgument(final String name) {
         return (T)getArguments().get(name);
     }
 

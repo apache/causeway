@@ -41,7 +41,7 @@ extends CssClassFacetAbstract {
     @Override
     public String cssClass(final ManagedObject targetAdapter) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
-        var cssClassFacet = projectedAdapter.objSpec().getFacet(CssClassFacet.class);
+        var cssClassFacet = projectedAdapter.objSpec().lookupFacet(CssClassFacet.class).orElse(null);
         return cssClassFacet != null
                 ? cssClassFacet.cssClass(projectedAdapter)
                 : null;

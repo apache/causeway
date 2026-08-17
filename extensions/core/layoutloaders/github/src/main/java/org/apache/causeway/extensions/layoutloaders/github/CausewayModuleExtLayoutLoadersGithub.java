@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.extensions.layoutloaders.github;
 
+import org.apache.causeway.applib.layout.menubars.Menu;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
+import org.apache.causeway.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
-
-import org.apache.causeway.applib.layout.menubars.Menu;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
-import org.apache.causeway.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub;
 
 /**
  * Adds the {@link Menu} with its auto-configured menu entries.
@@ -82,7 +81,7 @@ public class CausewayModuleExtLayoutLoadersGithub {
         var apiKey = causewayConfiguration.extensions().layoutLoaders().github().apiKey();
 
         return new RestTemplateBuilder()
-                .rootUri("https://api.github.com")
+                .baseUri("https://api.github.com")
                 .additionalInterceptors((request, body, execution) -> {
                     request.getHeaders().add("Authorization", "Bearer " + apiKey);
                     request.getHeaders().remove("Accept");
@@ -110,7 +109,7 @@ public class CausewayModuleExtLayoutLoadersGithub {
         var repo = causewayConfiguration.extensions().layoutLoaders().github().repository();
 
         return new RestTemplateBuilder()
-                .rootUri(String.format("https://api.github.com/repos/%s", repo))
+                .baseUri(String.format("https://api.github.com/repos/%s", repo))
                 .additionalInterceptors((request, body, execution) -> {
                     request.getHeaders().add("Authorization", "Bearer " + apiKey);
                     request.getHeaders().remove("Accept");

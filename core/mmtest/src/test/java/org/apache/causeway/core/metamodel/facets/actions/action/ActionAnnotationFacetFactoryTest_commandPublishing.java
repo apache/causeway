@@ -81,7 +81,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processCommandPublishing(facetFactory, processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(CommandPublishingFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(CommandPublishingFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CommandPublishingFacetForActionAnnotation);
         });

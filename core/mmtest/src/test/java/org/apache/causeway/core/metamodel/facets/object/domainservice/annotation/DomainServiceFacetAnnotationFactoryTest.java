@@ -55,7 +55,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            var facet = facetHolder.getFacet(AliasedFacet.class);
+            var facet = facetHolder.lookupFacet(AliasedFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof AliasedFacetForDomainServiceAnnotation);
 

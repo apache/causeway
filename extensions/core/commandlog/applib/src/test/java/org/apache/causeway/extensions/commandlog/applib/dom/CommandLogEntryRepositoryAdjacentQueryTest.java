@@ -18,31 +18,31 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-import jakarta.inject.Provider;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import org.apache.causeway.applib.query.NamedQuery;
-import org.apache.causeway.applib.query.Query;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.apache.causeway.applib.query.NamedQuery;
+import org.apache.causeway.applib.query.Query;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
+import jakarta.inject.Provider;
+
 class CommandLogEntryRepositoryAdjacentQueryTest {
 
     private final RepositoryService repositoryService = mock(RepositoryService.class);
     private final Repository repository = new Repository();
 
-    @BeforeEach
+    @SuppressWarnings("unchecked")
+	@BeforeEach
     void setUp() {
         repository.repositoryServiceProvider = providerOf(repositoryService);
         when(repositoryService.allMatches(any(Query.class))).thenReturn(List.of());
@@ -88,7 +88,7 @@ class CommandLogEntryRepositoryAdjacentQueryTest {
                 .containsEntry("replayState3", ReplayState.OK);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     private NamedQuery<CommandLogEntry> captureLastQuery() {
         var captor = ArgumentCaptor.forClass(Query.class);
         verify(repositoryService, org.mockito.Mockito.atLeastOnce()).allMatches(captor.capture());

@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract {
 
             assertEquals(expectedCallbackCount, callbackMethods.size());
 
-            var facet = facetHolder.getFacet(facetType);
+            var facet = facetHolder.lookupFacet(facetType).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ImperativeFacet);
             var imperativeFacet = facet;

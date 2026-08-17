@@ -20,16 +20,14 @@ package org.apache.causeway.extensions.titlecache.caffeine;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.causeway.extensions.titlecache.applib.CausewayModuleExtTitlecacheApplib;
 import org.apache.causeway.extensions.titlecache.caffeine.dom.TitleCacheSubscriber;
-
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.causeway.extensions.titlecache.applib.CausewayModuleExtTitlecacheApplib;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
@@ -42,20 +40,25 @@ import com.github.benmanes.caffeine.cache.Caffeine;
         TitleCacheSubscriber.class
 })
 @EnableCaching
-public class CausewayModuleExtTitlecacheCaffeine extends CachingConfigurerSupport {
+public class CausewayModuleExtTitlecacheCaffeine {
 
     public static final String NAMESPACE = "causeway.ext.titlecache.jcache";
     static final String CACHE_NAME_PREFIX = NAMESPACE + ".";
 
     @Bean
-    @Override
-    public CaffeineCacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
-        cacheManager.setCaffeine(
-                Caffeine.newBuilder()
-                        .expireAfterWrite(10, TimeUnit.MINUTES)
-                        .maximumSize(100)
-        );
-        return cacheManager;
+    CachingConfigurer cachingConfigurer() {
+    	return new CachingConfigurer() {
+    		@Override
+    	    public CaffeineCacheManager cacheManager() {
+    	        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+    	        cacheManager.setCaffeine(
+    	                Caffeine.newBuilder()
+    	                        .expireAfterWrite(10, TimeUnit.MINUTES)
+    	                        .maximumSize(100)
+    	        );
+    	        return cacheManager;
+    	    }
+		};
     }
+
 }

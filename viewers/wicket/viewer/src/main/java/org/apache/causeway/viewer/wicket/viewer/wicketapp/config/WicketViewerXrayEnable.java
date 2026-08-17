@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.wicket.protocol.http.WebApplication;
-
-import org.springframework.context.annotation.Configuration;
-
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.settings.DebugSettings.ClassOutputStrategy;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Activates visual debugging mode for the Wicket Viewer.
@@ -40,7 +39,7 @@ implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
         XrayWkt.setEnabled(true);
         webApplication.getDebugSettings()
-            .setOutputMarkupContainerClassName(true);
+        	.setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
 
         //debug
         //replace the resource locator

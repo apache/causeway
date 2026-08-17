@@ -64,7 +64,7 @@ extends FacetFactoryTestAbstract {
             facetFactory.process(processClassContext);
             //then
             if(expectedValidationMessage==null) {
-                var navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
+                var navigableParentFacet = facetHolder.lookupFacet(NavigableParentFacet.class).orElse(null);
                 assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
                 assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
                 assertEquals(
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
                         Try.call(()->parentMethod.method().invoke(domainObject, _Constants.emptyObjects))
                             .valueAsNullableElseFail());
             } else {
-                assertNull(facetHolder.getFacet(NavigableParentFacet.class));
+                assertNull(facetHolder.lookupFacet(NavigableParentFacet.class).orElse(null));
 
                 var validation = getSpecificationLoader().getOrAssessValidationResult();
                 assertTrue(validation.getMessages().stream()

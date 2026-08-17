@@ -61,7 +61,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            var facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            var facet = facetedMethod.lookupFacet(MemberNamedFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
             assertThat(((HasStaticText)facet).text(), is(equalTo("1st name")));
@@ -79,7 +79,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HiddenFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForPropertyLayoutAnnotation);
             var propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
@@ -98,7 +98,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(LabelAtFacet.class).orElse(null);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
             var layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;

@@ -26,4 +26,5 @@ module org.apache.causeway.incubator.viewer.graphql.applib {
     requires com.graphqljava;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
+	requires org.jspecify;
 }

@@ -41,7 +41,7 @@ import org.jspecify.annotations.NonNull;
 public interface ExecutionPublishingFacet extends Facet {
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        var facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        var facet = facetHolder.lookupFacet(ExecutionPublishingFacet.class).orElse(null);
         return facet != null && facet.isEnabled();
     }
 

@@ -57,7 +57,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParamsOptional(processParameterContext);
             //then
-            final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+            final Facet facet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof MandatoryFacetForParameterAnnotation.Optional);
         });
@@ -75,7 +75,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParamsOptional(processParameterContext);
             //then
-            assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+            assertNull(facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null));
         });
     }
 
@@ -90,7 +90,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParamsOptional(processParameterContext);
             //then
-            final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+            final Facet facet = facetedMethodParameter.lookupFacet(MandatoryFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnParameter);
         });
@@ -107,7 +107,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParamsOptional(processParameterContext);
             //then
-            assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+            assertNull(facetedMethod.lookupFacet(MandatoryFacet.class).orElse(null));
         });
     }
 

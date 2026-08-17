@@ -18,27 +18,23 @@
  */
 package org.apache.causeway.viewer.graphql.applib.marshallers;
 
+import org.jspecify.annotations.NonNull;
+
 import graphql.schema.GraphQLScalarType;
 
-import org.springframework.lang.NonNull;
-
 /**
- * Provides an SPI to allow different scalar datatypes to be marshalled to and from GraphQL scalar types.
+ * Provides an SPI to allow different scalar data types to be marshalled to and from GraphQL scalar types.
  *
- * <p>
- *     The implementations are called following a chain-of-responsibility pattern, first one matching is used.
- *     Use {@link jakarta.annotation.Priority} (with {@link org.apache.causeway.applib.annotation.PriorityPrecedence} values)
- *     to override the framework-provided defaults, earliest wins.
- * </p>
- *
- * @param <K>
+ * <p>The implementations are called following a chain-of-responsibility pattern, first one matching is used.
+ * Use {@link jakarta.annotation.Priority} (with {@link org.apache.causeway.applib.annotation.PriorityPrecedence} values)
+ * to override the framework-provided defaults, earliest wins.
  *
  * @since 2.0 {@index}
  */
 public interface ScalarMarshaller<K> {
 
     /**
-     * Whether this marshaller is able to marshall/unmarshall the provided Java class.
+     * Whether this marshaller is able to marshall/un-marshall the provided Java class.
      *
      * @param javaClass
      * @return
@@ -54,11 +50,11 @@ public interface ScalarMarshaller<K> {
     /**
      * Unmarshal the provided graphQL value into its Java equivalent.
      *
-     * @param graphValue - to be unmarshalled.  This will never be null.
+     * @param graphValue - to be un-marshalled.  This will never be null.
      * @param targetType - the required type.  Usually isn't required, though the fallback Object marshaller uses it to correctly marshal enums.
      * @return
      */
     K unmarshal(
-            final Object graphValue,
-            final @NonNull Class<?> targetType);
+            Object graphValue,
+            @NonNull Class<?> targetType);
 }

@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.integtests;
 
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
 import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
 import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(
         classes = AppManifest.class
@@ -30,7 +29,9 @@ import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 @ActiveProfiles("test")
 public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
 
-    protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
+    @Override
+	@SuppressWarnings("unchecked")
+	protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

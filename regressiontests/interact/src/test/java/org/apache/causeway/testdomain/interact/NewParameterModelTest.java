@@ -78,10 +78,10 @@ class NewParameterModelTest extends InteractionTestAbstract {
                 .objectAction().get().getParameterByIndex(0);
 
         // as with first param's @Parameter(maxLength = 2)
-        var maxLengthFacet = param0Metamodel.getFacet(MaxLengthFacet.class);
+        var maxLengthFacet = param0Metamodel.lookupFacet(MaxLengthFacet.class).orElse(null);
 
         // as with first param's @ParameterLayout(describedAs = "first")
-        var describedAsFacet = param0Metamodel.getFacet(ParamDescribedFacet.class);
+        var describedAsFacet = param0Metamodel.lookupFacet(ParamDescribedFacet.class).orElse(null);
 
         assertNotNull(maxLengthFacet);
         assertNotNull(describedAsFacet);

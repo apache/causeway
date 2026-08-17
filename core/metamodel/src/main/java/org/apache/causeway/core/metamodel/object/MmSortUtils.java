@@ -137,16 +137,16 @@ public class MmSortUtils {
     }
 
     public int compareMemberOrderSequence(final boolean assertInSameGroup, final FacetHolder m1, final FacetHolder m2) {
-        var orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
-        var orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
+        var orderFacet1 = m1==null ? null : m1.lookupFacet(LayoutOrderFacet.class).orElse(null);
+        var orderFacet2 = m2==null ? null : m2.lookupFacet(LayoutOrderFacet.class).orElse(null);
 
         if (orderFacet1 == null && orderFacet2 == null) return 0;
         if (orderFacet1 == null && orderFacet2 != null) return +1; // annotated before non-annotated
         if (orderFacet1 != null && orderFacet2 == null) return -1; // annotated before non-annotated
 
         if(assertInSameGroup) {
-            var groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
-            var groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
+            var groupFacet1 = m1.lookupFacet(LayoutGroupFacet.class).orElse(null);
+            var groupFacet2 = m2.lookupFacet(LayoutGroupFacet.class).orElse(null);
             var groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
             var groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
 

@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            final Facet facet = facetHolder.lookupFacet(DomainServiceLayoutFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
             DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
@@ -81,7 +81,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            final Facet facet = facetHolder.lookupFacet(DomainServiceLayoutFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
             DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
@@ -102,7 +102,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            final Facet facet = facetHolder.lookupFacet(DomainServiceLayoutFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
             DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
@@ -124,7 +124,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            final Facet facet = facetHolder.lookupFacet(DomainServiceLayoutFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
             DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;

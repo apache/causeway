@@ -19,8 +19,10 @@
  */
 package org.apache.causeway.persistence.querydsl.jpa.services.support;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.stereotype.Component;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.dml.DeleteClause;
@@ -28,11 +30,8 @@ import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
-import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Component
 @ConditionalOnMissingBean(QueryDslSupport.class)
@@ -89,12 +88,14 @@ public class QueryDslSupportJpa implements QueryDslSupport {
         return DslQueryJpa.of(getQueryFactory().selectFrom(expr));
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> DslQuery<T> from(final EntityPath<T> from) {
         return (DslQuery<T>) DslQueryJpa.of(getQueryFactory().from(from));
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> DslQuery<T> from(final EntityPath<T>... from) {
         return (DslQuery<T>) DslQueryJpa.of(getQueryFactory().from(from));
     }

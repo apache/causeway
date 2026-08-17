@@ -29,10 +29,12 @@ public class ScenarioFixtureScript extends FixtureScript {
     protected void execute(final ExecutionContext executionContext) {
 
         // build it ..
-        Person steve = Person_persona.SteveSingle.build(this, executionContext);
+        @SuppressWarnings("unused")
+		Person steve = Person_persona.SteveSingle.build(this, executionContext);
 
         // ... look it up
-        Person steve2 = Person_persona.SteveSingle.findUsing(serviceRegistry);
+        @SuppressWarnings("unused")
+		Person steve2 = Person_persona.SteveSingle.findUsing(serviceRegistry);
 
     }
 }

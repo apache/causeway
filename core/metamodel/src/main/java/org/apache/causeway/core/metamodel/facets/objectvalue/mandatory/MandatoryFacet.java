@@ -81,7 +81,7 @@ extends Facet, ValidatingInteractionAdvisor {
     // -- UTILITY
 
     static boolean isMandatory(final @NonNull FacetHolder facetHolder) {
-        var mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
+        var mandatoryFacet = facetHolder.lookupFacet(MandatoryFacet.class).orElse(null);
         if(mandatoryFacet == null) {
             // absence of the mandatory facet indicates OPTIONAL
             return false;

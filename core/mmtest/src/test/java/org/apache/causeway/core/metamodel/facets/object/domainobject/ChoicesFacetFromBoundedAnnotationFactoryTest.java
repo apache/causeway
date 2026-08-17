@@ -56,7 +56,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processBounded(processClassContext.synthesizeOnType(DomainObject.class), processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+            final Facet facet = facetHolder.lookupFacet(ChoicesFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ChoicesFacetFromBoundedAbstract);
 

@@ -95,18 +95,18 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.lookupFacet(LayoutOrderFacet.class).orElse(null);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("750.1"))
         ;
 
-        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;
@@ -124,18 +124,18 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
         */
 
-        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.lookupFacet(LayoutOrderFacet.class).orElse(null);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("400.1"))
         ;
 
-        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.lookupFacet(LayoutGroupFacet.class).orElse(null);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;

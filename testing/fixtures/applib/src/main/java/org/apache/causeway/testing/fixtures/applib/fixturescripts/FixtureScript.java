@@ -195,7 +195,7 @@ public abstract class FixtureScript {
                 final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
             this.executionParameters = executionParameters;
-            this.fixtureResultList = new FixtureResultList(fixtureScripts, this);
+            this.fixtureResultList = new FixtureResultList(fixtureScripts);
         }
 
         @Override

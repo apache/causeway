@@ -51,7 +51,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
@@ -97,7 +97,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
@@ -120,7 +120,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
@@ -145,7 +145,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
@@ -170,7 +170,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             var collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;

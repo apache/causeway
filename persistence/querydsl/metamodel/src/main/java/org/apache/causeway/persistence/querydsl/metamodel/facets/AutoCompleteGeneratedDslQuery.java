@@ -101,7 +101,8 @@ public class AutoCompleteGeneratedDslQuery {
      * Auto complete operates on fields of String type ONLY.
      * The autoComplete method ALWAYS applies wildcards when NONE are specified in de given search string.
      */
-    public <T> List<T> autoComplete(
+    @SuppressWarnings({ "unchecked", "exports" })
+	public <T> List<T> autoComplete(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
 
@@ -124,14 +125,16 @@ public class AutoCompleteGeneratedDslQuery {
      * Auto complete operates on fields of String type ONLY.
      * The executeQuery method NEVER applies wildcards when NONE are specified in de given search string.
      */
-    public <T> List<T> executeQuery(
+    @SuppressWarnings({ "exports", "unchecked" })
+	public <T> List<T> executeQuery(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
         var dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
         return dslQueryIfAny.map(DslQuery::fetch).orElseGet(ArrayList::new);
     }
 
-    public <T> Optional<DslQuery> generateQuery(
+    @SuppressWarnings({ "exports", "rawtypes" })
+	public <T> Optional<DslQuery> generateQuery(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
 
@@ -142,7 +145,8 @@ public class AutoCompleteGeneratedDslQuery {
         if (StringUtils.hasLength(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
 
             // define entity
-            PathBuilder<T> entityPath = new PathBuilder(entity, "e");
+            @SuppressWarnings("unchecked")
+			PathBuilder<T> entityPath = new PathBuilder(entity, "e");
             BooleanBuilder where = new BooleanBuilder();
             List<OrderSpecifier<String>> orderSpecifiers = new ArrayList<>();
 

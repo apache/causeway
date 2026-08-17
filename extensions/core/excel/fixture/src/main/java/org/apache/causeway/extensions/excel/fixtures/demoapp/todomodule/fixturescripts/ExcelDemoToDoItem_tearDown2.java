@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.extensions.excel.testing.ExcelFixture;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+
+import jakarta.inject.Inject;
 
 public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
@@ -41,9 +41,11 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
     @Override
     public void execute(final ExecutionContext executionContext) {
 
-        final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
+        @SuppressWarnings("unused")
+		final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
-        var em = jpaSupport.getEntityManagerElseFail(ExcelFixture.class);
+        @SuppressWarnings("unused")
+		var em = jpaSupport.getEntityManagerElseFail(ExcelFixture.class);
 
 //FIXME
 //        jdoSupport.executeUpdate(String.format(

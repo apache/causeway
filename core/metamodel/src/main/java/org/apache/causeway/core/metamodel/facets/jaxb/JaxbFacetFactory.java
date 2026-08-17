@@ -104,7 +104,7 @@ implements MetaModelRefiner {
 
         //[ahuber] accessType not yet used, but could be in future extensions
         final Optional<XmlAccessorTypeFacet> accessorTypeFacet =
-                Optional.ofNullable(processMethodContext.facetHolder().getFacet(XmlAccessorTypeFacet.class));
+                Optional.ofNullable(processMethodContext.facetHolder().lookupFacet(XmlAccessorTypeFacet.class).orElse(null));
         final XmlAccessType accessType = accessorTypeFacet
                 .map(XmlAccessorTypeFacet::value)
                 .orElse(XmlAccessType.PUBLIC_MEMBER); // the annotation's default value
@@ -152,7 +152,7 @@ implements MetaModelRefiner {
             if(!viewModel)
 				return;
 
-            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+            final ViewModelFacet facet = objectSpec.lookupFacet(ViewModelFacet.class).orElse(null);
             if (!(facet instanceof ViewModelFacetForXmlRootElementAnnotation))
 				return;
 

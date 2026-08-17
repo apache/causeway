@@ -61,7 +61,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNull(facet);
         });
     }
@@ -82,7 +82,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
             assertThat(facet.value().elementType(), classEqualTo(Order.class));
@@ -104,7 +104,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNull(facet);
         });
     }
@@ -124,7 +124,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacet);
             assertThat(facet.value().elementType(), classEqualTo(Order.class));
@@ -147,7 +147,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            final TypeOfFacet facet = facetedMethod.lookupFacet(TypeOfFacet.class).orElse(null);
             assertNotNull(facet);
             assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
             assertThat(facet.value().elementType(), classEqualTo(Order.class));

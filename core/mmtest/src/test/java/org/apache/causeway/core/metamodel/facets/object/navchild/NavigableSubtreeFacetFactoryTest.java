@@ -58,38 +58,38 @@ class NavigableSubtreeFacetFactoryTest extends FacetFactoryTestAbstract {
         
         collectionScenario(_TreeSample.A.class, "childrenB", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
             // copy over facets to spec for testing later
             var spec = specLoader.specForType(_TreeSample.A.class).orElseThrow();
             spec.getAssociationElseFail("childrenB")
-                .addFacet(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
         });
         
         collectionScenario(_TreeSample.A.class, "childrenC", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
             // copy over facets to spec for testing later
             var spec = specLoader.specForType(_TreeSample.A.class).orElseThrow();
             spec.getAssociationElseFail("childrenC")
-                .addFacet(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
         });
         
         collectionScenario(_TreeSample.B.class, "childrenD", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
             // copy over facets to spec for testing later
             var spec = specLoader.specForType(_TreeSample.B.class).orElseThrow();
             spec.getAssociationElseFail("childrenD")
-                .addFacet(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
         });
         
         collectionScenario(_TreeSample.C.class, "childrenD", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
             // copy over facets to spec for testing later
             var spec = specLoader.specForType(_TreeSample.C.class).orElseThrow();
             spec.getAssociationElseFail("childrenD")
-                .addFacet(facetedMethod.getFacet(NavigableSubtreeSequenceFacet.class));
+                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
         });
         
         var specs = Can.of(_TreeSample.A.class, _TreeSample.B.class, _TreeSample.C.class, _TreeSample.D.class)
@@ -100,10 +100,10 @@ class NavigableSubtreeFacetFactoryTest extends FacetFactoryTestAbstract {
         
         specs.forEach(spec->{
             switch(spec.correspondingClass().getSimpleName()) {
-                case "A" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));
-                case "B" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));
-                case "C" -> assertNotNull(spec.getFacet(NavigableSubtreeFacet.class));
-                case "D" -> assertNull(spec.getFacet(NavigableSubtreeFacet.class));
+                case "A" -> assertNotNull(spec.lookupFacet(NavigableSubtreeFacet.class).orElse(null));
+                case "B" -> assertNotNull(spec.lookupFacet(NavigableSubtreeFacet.class).orElse(null));
+                case "C" -> assertNotNull(spec.lookupFacet(NavigableSubtreeFacet.class).orElse(null));
+                case "D" -> assertNull(spec.lookupFacet(NavigableSubtreeFacet.class).orElse(null));
                 default -> fail("unexpected case");
             }
         });

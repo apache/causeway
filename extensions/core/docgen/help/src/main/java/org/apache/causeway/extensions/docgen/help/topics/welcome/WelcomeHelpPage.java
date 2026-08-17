@@ -199,7 +199,7 @@ public class WelcomeHelpPage implements HelpPage {
                             if (!member.isAlwaysHidden()) {
                                 String description = null;
                                 if (member.containsFacet(MemberDescribedFacet.class)) {
-                                    description = member.getFacet(MemberDescribedFacet.class).getSpecialization()
+                                    description = member.lookupFacet(MemberDescribedFacet.class).orElse(null).getSpecialization()
                                             .left().map(HasStaticText::text).orElse(null);
                                 }
                                 if (_Strings.isNotEmpty(description)) {

@@ -111,7 +111,7 @@ implements MixedInMember {
     }
 
     private DisabledFacet disabledFacet() {
-        final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
+        final DisabledFacet originalFacet = facetHolder.lookupFacet(DisabledFacet.class).orElse(null);
         if( originalFacet != null &&
                 originalFacet.where().isAlways())
 			return originalFacet;

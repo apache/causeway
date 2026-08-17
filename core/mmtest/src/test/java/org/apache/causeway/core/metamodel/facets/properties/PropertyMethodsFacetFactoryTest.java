@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
             var propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
@@ -95,7 +95,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertySetterFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
             var propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
@@ -118,7 +118,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyInitializationFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyInitializationFacet);
             var propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
@@ -139,7 +139,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
+            assertNull(facetedMethod.lookupFacet(SnapshotExcludeFacet.class).orElse(null));
         });
     }
 
@@ -157,7 +157,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertySetterFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof ImperativeFacet);
             var propertyModifyFacet = (ImperativeFacet) facet;
@@ -180,7 +180,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyChoicesFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
             var propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
@@ -204,7 +204,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyAutoCompleteFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
             var propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
@@ -228,7 +228,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyDefaultFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
             var propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
@@ -252,7 +252,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyValidateFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyValidateFacetViaMethod);
             var propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
@@ -276,7 +276,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(DisableForContextFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
             var disableForContextFacet = (DisableForContextFacetViaMethod) facet;
@@ -300,7 +300,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(DisableForContextFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
             var disableForContextFacet = (DisableForContextFacetViaMethod) facet;
@@ -324,7 +324,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HideForContextFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
             var hideForContextFacet = (HideForContextFacetViaMethod) facet;
@@ -348,7 +348,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HideForContextFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
             var hideForContextFacet = (HideForContextFacetViaMethod) facet;
@@ -373,7 +373,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PropertyOrCollectionAccessorFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
             var accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
@@ -408,13 +408,13 @@ extends FacetFactoryTestAbstract {
             facetFactoryForHide.process(processMethodContext);
             facetFactoryForDisable.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(HideForContextFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
             var hideForContextFacet = (HideForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
 
-            final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
+            final Facet facet2 = facetedMethod.lookupFacet(DisableForContextFacet.class).orElse(null);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
             var disableForContextFacet = (DisableForContextFacetViaMethod) facet2;

@@ -80,7 +80,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // any non-annotated members go into additional nonAnnotatedGroup set.
 
         identifiedHolders.forEach(facetHolder->{
-            var layoutGroupFacet = facetHolder.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = facetHolder.lookupFacet(LayoutGroupFacet.class).orElse(null);
             if (layoutGroupFacet == null) {
                 nonAnnotatedGroup.add(facetHolder);
                 return;

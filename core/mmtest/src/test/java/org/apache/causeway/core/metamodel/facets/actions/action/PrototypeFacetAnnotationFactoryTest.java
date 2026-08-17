@@ -64,7 +64,7 @@ extends FacetFactoryTestAbstract {
             //when
             processRestrictTo(facetFactory, processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final Facet facet = facetedMethod.lookupFacet(PrototypeFacet.class).orElse(null);
             assertNotNull(facet);
             assertTrue(facet instanceof PrototypeFacetAbstract);
             assertNoMethodsRemoved();

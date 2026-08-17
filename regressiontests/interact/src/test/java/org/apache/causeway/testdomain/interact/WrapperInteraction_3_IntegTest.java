@@ -135,7 +135,7 @@ extends InteractionTestAbstract {
                 objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
-                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.lookupFacet(MemberNamedFacet.class).orElse(null);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })
