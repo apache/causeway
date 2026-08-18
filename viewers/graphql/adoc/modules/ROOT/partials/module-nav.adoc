@@ -4,6 +4,7 @@
 * xref:gqlv:ROOT:rich-object-interactions.adoc[]
 * xref:gqlv:ROOT:rich-value-semantics.adoc[]
 * xref:gqlv:ROOT:rich-collection-windowing.adoc[]
+* xref:gqlv:ROOT:rich-application-entry-points.adoc[]
 * xref:gqlv:ROOT:testsupport.adoc[]
 * xref:gqlv:ROOT:spi-services.adoc[]
 * xref:gqlv:ROOT:i18n.adoc[]

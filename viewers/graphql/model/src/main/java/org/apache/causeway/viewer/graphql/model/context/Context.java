@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.graphql.model.application.ApplicationEntryService;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
@@ -64,6 +65,7 @@ public class Context {
     public final CausewaySystemEnvironment causewaySystemEnvironment;
     public final ObjectManager objectManager;
     public final GraphQLTypeRegistry graphQLTypeRegistry;
+    public final ApplicationEntryService applicationEntryService;
 
     public final Map<String, CommonDomainService> domainServiceByTypeName = new LinkedHashMap<>();
     public final Map<String, CommonDomainObject> domainObjectByTypeName = new LinkedHashMap<>();

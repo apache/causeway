@@ -27,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -37,6 +38,7 @@ import lombok.Setter;
 
 @Named("university.calc.EditableMementoViewModel")
 @DomainObject(nature = Nature.VIEW_MODEL, editing = Editing.ENABLED)
+@HomePage
 @XmlRootElement(name = "editableMementoViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
