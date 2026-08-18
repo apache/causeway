@@ -6,12 +6,21 @@ The rich GraphQL schema SHALL provide a discoverable collection `window` operati
 #### Scenario: Client requests a valid window
 - **WHEN** a client requests a valid zero-based offset and positive size within the configured maximum
 - **THEN** the response contains no more than the requested rows
-- **AND** identifies requested offset, returned count, previous availability, and next availability
+- **AND** identifies requested offset and size, configured maximum, returned count, ordering mode, previous availability, and next availability
+
+#### Scenario: Client uses configured defaults
+- **WHEN** a client omits offset or size
+- **THEN** offset defaults to zero and size defaults to the configured default of 20
+- **AND** the configured default cannot exceed the configured maximum of 100 unless either value is overridden consistently
 
 #### Scenario: Requested size exceeds the maximum
 - **WHEN** the requested size exceeds the configured hard maximum
 - **THEN** GraphQL returns a bounded validation error
-- **AND** does not materialize or serialize the requested oversized response
+- **AND** does not read, materialize, or serialize the requested oversized response
+
+#### Scenario: Requested range is otherwise invalid
+- **WHEN** the requested offset is negative or size is not positive
+- **THEN** GraphQL returns a bounded validation error before reading the collection
 
 #### Scenario: Requested offset is out of range
 - **WHEN** the requested offset is beyond the current authorized collection
@@ -39,8 +48,8 @@ Supported Causeway collection ordering SHALL be applied before offset selection.
 
 #### Scenario: Stable ordering is unavailable
 - **WHEN** the collection cannot provide deterministic cross-request ordering
-- **THEN** the contract identifies per-request consistency limitations
-- **AND** does not claim stable cursor continuation
+- **THEN** the response identifies encounter ordering
+- **AND** the contract identifies per-request consistency limitations and does not claim stable cursor continuation
 
 ### Requirement: Per-request consistency
 Window responses SHALL represent one execution-time view and SHALL document behavior when collections change between requests.
@@ -54,6 +63,24 @@ Window responses SHALL represent one execution-time view and SHALL document beha
 - **THEN** the new response reflects current state
 - **AND** the contract does not promise that prior offsets retain the same members
 
+### Requirement: Authorized and partially successful windows
+Collection reads SHALL preserve member visibility and GraphQL partial-data semantics without treating disabled presentation as a read veto.
+
+#### Scenario: Collection is hidden
+- **WHEN** a client requests `get` or `window` for a hidden collection
+- **THEN** no collection rows are returned
+- **AND** GraphQL reports the existing bounded hidden-member error
+
+#### Scenario: Collection is disabled but visible
+- **WHEN** a client requests a visible collection whose disabled reason is non-null
+- **THEN** collection rows remain readable because the operation does not modify domain state
+- **AND** the existing disabled field continues to report the reason
+
+#### Scenario: Nested row field fails
+- **WHEN** GraphQL can represent a failed nested row field as nullable
+- **THEN** safe rows and window metadata remain available according to GraphQL partial-data rules
+- **AND** the response reports the nested error without enlarging the requested window
+
 ### Requirement: Backward-compatible collection migration
 The bounded capability SHALL preserve established unargumented collection documents for the documented compatibility period.
 
@@ -62,6 +89,24 @@ The bounded capability SHALL preserve established unargumented collection docume
 - **THEN** its document remains schema-valid
 - **AND** its established list response shape remains available during migration
 
+### Requirement: Secondary collection-operation contract
+The object context SHALL prefer discovered window capability and expose semantic range metadata without defining paging presentation.
+
+#### Scenario: Window capability is discovered
+- **WHEN** targeted introspection finds a collection `window` field
+- **THEN** the collection descriptor records its result shape and argument defaults
+- **AND** secondary collection reads request bounded rows with the caller's offset and size
+
+#### Scenario: Window request is superseded
+- **WHEN** a later window request for the same component supersedes an earlier request
+- **THEN** the earlier request is aborted where possible and its response is discarded
+- **AND** only the latest result may update component collection state
+
+#### Scenario: Server lacks window capability
+- **WHEN** targeted introspection finds only the established `get` field
+- **THEN** the context retains the compatibility read path
+- **AND** does not invent unavailable range metadata
+
 ### Requirement: Explicit materialization behavior
 Documentation and diagnostics SHALL distinguish bounded GraphQL response rows from persistence-level bounded retrieval.
 
@@ -69,3 +114,4 @@ Documentation and diagnostics SHALL distinguish bounded GraphQL response rows fr
 - **WHEN** the server materializes the complete domain collection before selecting the response window
 - **THEN** the serialized response remains bounded
 - **AND** documentation does not claim database-level paging efficiency
+- **AND** materialization remains an implementation diagnostic rather than a semantic window field
