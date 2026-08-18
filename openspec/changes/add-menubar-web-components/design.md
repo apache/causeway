@@ -44,6 +44,8 @@ The controller uses targeted introspection to discover the configured rich root,
 It reads application-entry metadata once per generation, validates the opaque origin-relative resource descriptor, fetches it with same-origin credentials and no-store semantics, and provides one immutable menu plan to child bars.
 An explicit `refresh()` starts a new generation, aborts superseded metadata, resource, and service-state requests, and re-evaluates authorization-sensitive and locale-sensitive content.
 The controller does not retain menu documents or action state across users, GraphQL-client instances, page loads, or explicit generations.
+One GraphQL client serializes its initial targeted schema-discovery operations, and the GraphQL viewer initializes its lazy execution delegate and `GraphQL` source exactly once under concurrent first requests.
+This cold-start correctness guard does not parallelize data fetchers or alter serial top-level mutation semantics.
 
 No public application-context element is introduced in this slice.
 A bar beneath `<causeway-menubars>` consumes the composite's internal context, while a standalone bar requests the nearest GraphQL client and owns an equivalent private controller.
@@ -118,6 +120,7 @@ The components never resolve or invoke a home page, select routes, mutate browse
 ## Risks / Trade-offs
 
 - [Application-entry resources vary by user and locale] → Scope state to one GraphQL client and explicit generation, use no-store requests, and expose `refresh()`.
+- [Object and menu contexts can race lazy schema startup] → Serialize one client's schema discovery and make viewer execution-source initialization thread safe without introducing fetcher parallelism.
 - [Many menu actions can cause excessive network work] → Batch current state by logical service type and reuse targeted schema descriptions.
 - [Menus can become keyboard traps] → Use native controls and navigation landmarks rather than ARIA application-menu mode, and verify focus restoration and Escape behavior.
 - [Service actions lack object identity] → Publish an explicit service interaction target instead of manufacturing a bookmark.

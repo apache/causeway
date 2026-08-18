@@ -122,7 +122,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.render();
       return false;
     }
-    const parameters = prepared.data.parameters ?? [];
+    let parameters = prepared.data.parameters ?? [];
     if (parameters.length === 0) {
       return this.#invoke(actionId, context, {}, source, generation);
     }
@@ -130,6 +130,15 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     for (const parameter of parameters) {
       if (parameter.state?.default !== undefined && parameter.state.default !== null) {
         values[parameter.id] = parameter.state.default;
+      }
+    }
+    if (Object.keys(values).length > 0) {
+      const preparedWithDefaults = await context.prepareAction(actionId, values);
+      if (generation !== this.generation) {
+        return false;
+      }
+      if (preparedWithDefaults.status === InteractionStatus.SUCCESS) {
+        parameters = preparedWithDefaults.data.parameters ?? parameters;
       }
     }
     this.promptState = Object.freeze({
@@ -235,11 +244,13 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     clearTimeout(this.parameterTimer);
     const source = this.promptState.source;
     const actionId = this.promptState.actionId;
+    const interactionContext = this.promptState.context;
     this.generation += 1;
     this.promptState = null;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_PROMPT_STATE, Object.freeze({
       actionId,
-      status: InteractionStatus.CANCELLED
+      status: InteractionStatus.CANCELLED,
+      ...interactionTargetDetail(interactionContext)
     })));
     this.render();
     this.#restoreFocus(source);
@@ -261,7 +272,21 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     });
     this.#publishPromptState();
     this.render();
-    const result = await context.invokeAction(actionId, values);
+    let result;
+    try {
+      result = await context.invokeAction(actionId, values);
+    } catch {
+      if (generation === this.generation) {
+        this.promptState = Object.freeze({
+          ...this.promptState,
+          status: InteractionStatus.FAILED,
+          error: 'Action invocation failed.'
+        });
+        this.#publishPromptState();
+        this.render();
+      }
+      return false;
+    }
     if (generation !== this.generation) {
       return false;
     }
@@ -276,10 +301,10 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return false;
     }
     this.promptState = null;
-    this.resultState = Object.freeze({actionId, result: result.data});
+    this.resultState = Object.freeze({actionId, result: result.data, ...interactionTargetDetail(context)});
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_RESULT, Object.freeze({
       actionId,
-      identity: context.identity,
+      ...interactionTargetDetail(context),
       result: result.data,
       context
     })));
@@ -410,7 +435,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       actionId: this.promptState.actionId,
       status: this.promptState.status,
       values: this.promptState.values,
-      error: this.promptState.error
+      error: this.promptState.error,
+      ...interactionTargetDetail(this.promptState.context)
     })));
   }
 
@@ -436,8 +462,28 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   #restoreFocus(source) {
-    queueMicrotask(() => source?.querySelector?.('button')?.focus?.());
+    queueMicrotask(() => {
+      const focusTarget = source?.matches?.('button, [href], input, select, textarea, [tabindex]')
+        ? source
+        : source?.querySelector?.('button, [href], input, select, textarea, [tabindex]');
+      focusTarget?.focus?.();
+    });
   }
+}
+
+function interactionTargetDetail(context) {
+  if (context?.interactionTarget?.kind === 'service') {
+    return Object.freeze({
+      identity: null,
+      target: context.interactionTarget,
+      serviceLogicalTypeName: context.interactionTarget.logicalTypeName
+    });
+  }
+  return Object.freeze({
+    identity: context?.identity ?? null,
+    target: context?.identity ? Object.freeze({kind: 'object', ...context.identity}) : null,
+    serviceLogicalTypeName: null
+  });
 }
 
 function promptStatusLabel(status) {

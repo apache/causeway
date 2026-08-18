@@ -11,6 +11,7 @@ The reference evidence is recorded in `coverage-matrix.yaml` entries `REF-MENU-0
 - Add public `<causeway-menubar-primary>`, `<causeway-menubar-secondary>`, and `<causeway-menubar-tertiary>` components that can be coordinated by the composite or used independently.
 - Discover the rich GraphQL application capability through targeted introspection, read its menu resource descriptor, and securely fetch and parse the authorized effective Causeway menu-bars XML.
 - Share one bounded application-menu generation across composite child bars while allowing standalone bars to own an equivalent private generation and explicit refresh lifecycle.
+- Serialize initial targeted discovery within one browser client and make the GraphQL viewer's lazy execution-source initialization safe for concurrent cold-start requests without enabling fetcher parallelism.
 - Render ordered menus, sections, text-safe presentation hints, and visible service actions while coordinating current hidden and disabled action state by logical service type.
 - Adapt the existing editor, prompt, validation, invocation, cancellation, stale-response, and semantic-result primitives to service actions without requiring an object bookmark or adding another invocation grammar.
 - Provide accessible wide and narrow disclosure behavior, keyboard operation, focus restoration, landmarks, empty-state handling, light-DOM styling hooks, and bounded redacted diagnostics.
@@ -29,7 +30,7 @@ None.
 
 ## Impact
 
-- Affects the web-component foundation module, GraphQL client operations, shared structural-resource safety primitives, application-menu coordination, service-action interaction adaptation, styling, tests, sample HTML, and documentation.
+- Affects the web-component foundation module, GraphQL client operations, GraphQL viewer cold-start initialization, shared structural-resource safety primitives, application-menu coordination, service-action interaction adaptation, styling, tests, sample HTML, and documentation.
 - Depends on archived object-interaction correctness, resource-link safety, value semantics, application entry points, and component interaction work.
 - Uses the consistent public spelling `causeway-menubar-*`; no `causeway-menu-bar-*` aliases are introduced.
 - Adds no public framework-neutral application-context element because coordination remains internal to the composite or standalone bar.

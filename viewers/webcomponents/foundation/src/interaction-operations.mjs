@@ -62,6 +62,39 @@ export function buildObjectInteractionOperation({
   });
 }
 
+export function buildServiceInteractionOperation({
+  description,
+  selection,
+  schemaNames,
+  operationName = 'CausewayServiceInteraction'
+}) {
+  const variables = {};
+  const declarations = [];
+  const serviceType = description.types.get(description.generatedTypeName);
+  const renderedSelection = renderExecutableSelection({
+    selection,
+    typeDescription: serviceType,
+    types: description.types,
+    variables,
+    declarations,
+    variablePrefix: 'input',
+    indentation: schemaNames.richRootField ? '      ' : '    '
+  });
+  const serviceField = assertGraphQLName(description.generatedFieldName, 'service field');
+  const serviceRead = schemaNames.richRootField
+    ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${serviceField} {\n${renderedSelection}\n    }\n  }`
+    : `  ${serviceField} {\n${renderedSelection}\n  }`;
+  const declarationsText = declarations.length > 0 ? `(${declarations.join(', ')})` : '';
+  return Object.freeze({
+    document: `query ${assertGraphQLName(operationName, 'operation name')}${declarationsText} {\n${serviceRead}\n}`,
+    variables,
+    operationName,
+    servicePath: schemaNames.richRootField
+      ? [schemaNames.richRootField, serviceField]
+      : [serviceField]
+  });
+}
+
 export function buildMutationInteractionOperation({
   mutationType,
   fieldName,
@@ -95,8 +128,9 @@ export function buildMutationInteractionOperation({
         indentation: '    '
       })}\n  }`
     : '';
+  const declarationsText = declarations.length > 0 ? `(${declarations.join(', ')})` : '';
   return Object.freeze({
-    document: `mutation ${assertGraphQLName(operationName, 'operation name')}(${declarations.join(', ')}) {\n  ${assertGraphQLName(fieldName, 'mutation field')}${renderedArgs}${renderedResult}\n}`,
+    document: `mutation ${assertGraphQLName(operationName, 'operation name')}${declarationsText} {\n  ${assertGraphQLName(fieldName, 'mutation field')}${renderedArgs}${renderedResult}\n}`,
     variables,
     operationName,
     resultPath: [fieldName],
