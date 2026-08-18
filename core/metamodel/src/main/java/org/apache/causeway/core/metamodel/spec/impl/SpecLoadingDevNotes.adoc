@@ -113,15 +113,34 @@ package "Bootstrap & Lifecycle Orchestrator" {
   [FacetProcessingPipeline] as Pipeline
 }
 
-package "Specification Implementation" {
-  [ObjectSpecificationFacade] as Facade
-  [ObjectMetaData\n<<Sealed Interface>>] as Delegate
+package "Facet Creation" {
+  [Partial Introspection] as Partial
   [Ordered Facet Factories] as Factories
   [PostProcessors] as PostProcs
+  [ObjectMetaDataHandle] as Handle
+  
+  note left of Handle
+    Callers only ever have access to a Handle, 
+    because, it is given to them via a 
+    context, that is associated 
+    with the class that is under introspection. 
+    Creating an introspection context is the 
+    responsibility of the Spec Loader, 
+    which must not be exposed as API. 
+  end note
+}
+
+package "Specification Implementation" {
+  [ObjectSpecification\nInterface] as Spec
+  [ObjectSpecificationFacade] as Facade
+  [ObjectMetaData\nSealed Interface] as Delegate
   [ObjectMetaDataInitial] as Initial
   [ObjectMetaDataTypeOnly] as TypeOnly
   [ObjectMetaDataFull] as Full
-  [ObjectMetaDataHandle] as Handle
+  
+  note bottom of Spec
+    exposes only read access to Facets
+  end note
   
   note right of Delegate
     Introspection state is reflected
@@ -132,15 +151,19 @@ package "Specification Implementation" {
 Loader --> Cache : manages\n & populates
 Loader --> Tracker : drives\n transitions
 Loader --> Pipeline : triggers\n on FULL phase
-Pipeline --> Factories : executes by\n FacetProcessingOrder
-Pipeline --> PostProcs : runs after\n factories
+Pipeline --> Partial : runs on\nTYPE_ONLY
+Pipeline --> Factories : runs on\nFULL
+Pipeline --> PostProcs : runs after\n Facet factories
 Facade --> Delegate : delegates\n (swappable on reload)
 Loader --> Facade : creates & caches
 
-Factories --> Handle: modifies Facets via
-PostProcs --> Handle: modifies Facets via
+Partial --> Handle: modifies\nFacets via
+Factories --> Handle: modifies\nFacets via
+PostProcs --> Handle: modifies\nFacets via
 
-Handle --> Delegate: allows Facet modification
+Handle --> Delegate: has\nwrite access\nto Facets
+
+Facade -|> Spec 
 
 Delegate <|--- Initial 
 Delegate <|--- TypeOnly
