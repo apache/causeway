@@ -45,20 +45,21 @@ Menu discovery SHALL honor current visibility without disclosing hidden values o
 
 #### Scenario: Visibility context changes
 - **WHEN** user, role, locale, layout generation, or another menu-affecting context changes
-- **THEN** cached menu data is not reused outside its valid scope
+- **THEN** effective menu data is generated within the current interaction
+- **AND** the resource uses `private, no-store` so it is not reused outside that context
 
 ### Requirement: Configured home-page discovery and resolution
-The application-entry contract SHALL identify and resolve the configured home-page semantic kind without requiring clients to invent an object identifier.
+The application-entry contract SHALL identify and resolve the domain object returned by `HomePageResolverService` without requiring clients to invent an object identifier.
 
 #### Scenario: Home page is a domain object
 - **WHEN** the application configures a valid visible `@HomePage` domain-object type
 - **THEN** GraphQL identifies its public logical type
 - **AND** resolves the current concrete rich object through the framework home-page behavior
 
-#### Scenario: Home page is a supported service action
-- **WHEN** the application configures a valid visible home service action
-- **THEN** GraphQL returns its public service logical type and semantic action ID
-- **AND** invocation reuses the established service-action contract
+#### Scenario: Resolver does not return a supported domain object
+- **WHEN** the configured resolver returns a non-domain, hidden, invalid, or unresolvable value
+- **THEN** GraphQL does not advertise an unsupported home kind
+- **AND** returns documented absence or a bounded non-disclosing diagnostic
 
 #### Scenario: Home page is absent or unavailable
 - **WHEN** no usable home entry exists for the current context
