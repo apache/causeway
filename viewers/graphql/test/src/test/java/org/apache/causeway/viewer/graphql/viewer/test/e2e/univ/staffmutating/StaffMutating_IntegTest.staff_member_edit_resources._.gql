@@ -1,0 +1,35 @@
+mutation {
+  photo: university_dept_StaffMember__photo(
+      _target: {id: "$staffMemberId"},
+      photo: {name: "updated.pdf", mimeType: "application/pdf", base64: "JVBERi0xLjQ="}
+  ) {
+    photo {
+      get {
+        name
+        mimeType
+        byteLength
+        fileAccept
+        inlineInputMaxBytes
+        transferMode
+        bytes
+      }
+    }
+  }
+  profile: university_dept_StaffMember__profile(
+      _target: {id: "$staffMemberId"},
+      profile: {name: "updated.txt", mimeType: "text/plain", chars: "Updated profile"}
+  ) {
+    profile {
+      get {
+        name
+        mimeType
+        byteLength
+        characterLength
+        fileAccept
+        inlineInputMaxBytes
+        transferMode
+        chars
+      }
+    }
+  }
+}

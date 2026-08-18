@@ -39,6 +39,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 //@Slf4j
@@ -84,14 +85,6 @@ public class RichMutationForProperty extends Element {
         var sourcePojo = ObjectFeatureUtils.requirePojo(objectSpec, target, environment, context);
         var managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        var argumentValue = dataFetchingEnvironment.getArgument(oneToOneAssociation.asciiId());
-        var argumentPojo = ObjectFeatureUtils.unmarshalValue(
-                oneToOneAssociation.getElementType(),
-                argumentValue,
-                environment,
-                context);
-        var argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
-
         var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
@@ -101,6 +94,15 @@ public class RichMutationForProperty extends Element {
         if (usableConsent.isVetoed()) {
             throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
         }
+
+        var argumentValue = dataFetchingEnvironment.getArgument(oneToOneAssociation.asciiId());
+        var argumentPojo = ObjectFeatureUtils.unmarshalValue(
+                oneToOneAssociation.getElementType(),
+                argumentValue,
+                environment,
+                context);
+        ResourceValueTypes.validateFileAccept(oneToOneAssociation, argumentPojo);
+        var argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
 
         var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {

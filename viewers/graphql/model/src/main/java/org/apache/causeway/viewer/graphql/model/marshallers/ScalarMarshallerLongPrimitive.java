@@ -38,7 +38,7 @@ public class ScalarMarshallerLongPrimitive extends ScalarMarshallerAbstract<Long
 
     @Inject
     public ScalarMarshallerLongPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(long.class, ExtendedScalars.GraphQLLong, causewayConfiguration);
+        super(long.class, ExtendedScalars.GraphQLLong, causewayConfiguration, true);
     }
 
     @Override

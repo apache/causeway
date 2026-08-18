@@ -23,12 +23,18 @@ import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.PropertyInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
+import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 public class RichPropertyValidate extends Element {
@@ -62,8 +68,22 @@ public class RichPropertyValidate extends Element {
         var otoa = holder.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
+        var visibleConsent = otoa.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed()) {
+            throw new HiddenException(otoa.getFeatureIdentifier());
+        }
+        var usableConsent = otoa.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (usableConsent.isVetoed()) {
+            throw new DisabledException(otoa.getFeatureIdentifier());
+        }
+
         var arguments = dataFetchingEnvironment.getArguments();
-        var argumentValue = arguments.get(otoa.asciiId());
+        var argumentValue = ObjectFeatureUtils.unmarshalValue(
+                otoa.getElementType(),
+                arguments.get(otoa.asciiId()),
+                new Environment.For(dataFetchingEnvironment),
+                context);
+        ResourceValueTypes.validateFileAccept(otoa, argumentValue);
         var argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
         var valid = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);

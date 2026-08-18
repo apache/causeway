@@ -56,13 +56,42 @@ union rich__university_calc_EditableMementoViewModel__gqlv_union = rich__univers
 "Concrete rich object types assignable to university.dept.Person"
 union rich__university_dept_Person__gqlv_union = rich__university_dept_DeptHead | rich__university_dept_StaffMember
 
+"Metadata-first bounded Causeway Blob output."
+type BlobValue {
+  "RFC 4648 base64 content; null when the configured inline-output limit is exceeded."
+  base64: String
+  byteLength: Int!
+  inlineOutputMaxBytes: Int!
+  mimeType: String!
+  name: String!
+  transferMode: String!
+}
+
+"Metadata-first bounded Causeway Clob output."
+type ClobValue {
+  byteLength: Int!
+  characterLength: Int!
+  "Character content; null when the configured UTF-8 inline-output limit is exceeded."
+  chars: String
+  inlineOutputMaxBytes: Int!
+  mimeType: String!
+  name: String!
+  transferMode: String!
+}
+
+"A Causeway local resource path and browser opening strategy."
+type LocalResourcePathValue {
+  openUrlStrategy: OpenUrlStrategy!
+  path: String!
+}
+
 type Mutation {
   causeway_conf_ConfigurationProperty__key(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, key: String!): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationProperty__value(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, value: String!): rich__causeway_conf_ConfigurationProperty
   causeway_metamodel_MetamodelInspectView__inspect(_target: rich__causeway_metamodel_MetamodelInspectView__gqlv_input, fullyQualifiedClassName: String!): rich__causeway_metamodel_MetamodelInspectView
   causeway_testing_fixtures_FixtureResult__fixtureScriptClassName(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__key(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): rich__causeway_testing_fixtures_FixtureResult
-  causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): rich__causeway_testing_fixtures_FixtureResult
+  causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: UnsupportedValue!): rich__causeway_testing_fixtures_FixtureResult
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_target: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
   university_admin_AdminMenu__actionWithHiddenParam(firstParam: String!, secondParam: String!): String
@@ -86,7 +115,8 @@ type Mutation {
   university_dept_StaffMember__department(_target: rich__university_dept_StaffMember__gqlv_input, department: rich__university_dept_Department__gqlv_input): rich__university_dept_StaffMember
   university_dept_StaffMember__grade(_target: rich__university_dept_StaffMember__gqlv_input, grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): rich__university_dept_StaffMember
   university_dept_StaffMember__name(_target: rich__university_dept_StaffMember__gqlv_input, name: String!): rich__university_dept_StaffMember
-  university_dept_StaffMember__photo(_target: rich__university_dept_StaffMember__gqlv_input, photo: String): rich__university_dept_StaffMember
+  university_dept_StaffMember__photo(_target: rich__university_dept_StaffMember__gqlv_input, photo: BlobInput): rich__university_dept_StaffMember
+  university_dept_StaffMember__profile(_target: rich__university_dept_StaffMember__gqlv_input, profile: ClobInput!): rich__university_dept_StaffMember
   university_dept_Staff__createStaffMember(department: rich__university_dept_Department__gqlv_input!, name: String!): rich__university_dept_StaffMember
 }
 
@@ -384,10 +414,10 @@ type rich__causeway_applib_UserMemento__authenticationSource__gqlv_property {
 type rich__causeway_applib_UserMemento__avatarUrl__gqlv_property {
   datatype: String
   disabled: String
-  get: String
+  get: Url
   hidden: Boolean
-  set(avatarUrl: String): rich__causeway_applib_UserMemento
-  validate(avatarUrl: String): String
+  set(avatarUrl: Url): rich__causeway_applib_UserMemento
+  validate(avatarUrl: Url): String
 }
 
 type rich__causeway_applib_UserMemento__gqlv_meta {
@@ -413,10 +443,10 @@ type rich__causeway_applib_UserMemento__isImpersonating__gqlv_property {
 type rich__causeway_applib_UserMemento__languageLocale__gqlv_property {
   datatype: String
   disabled: String
-  get: String
+  get: Locale
   hidden: Boolean
-  set(languageLocale: String): rich__causeway_applib_UserMemento
-  validate(languageLocale: String): String
+  set(languageLocale: Locale): rich__causeway_applib_UserMemento
+  validate(languageLocale: Locale): String
 }
 
 "tenancy (or tenancies) this user has access to"
@@ -442,10 +472,10 @@ type rich__causeway_applib_UserMemento__name__gqlv_property {
 type rich__causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
   datatype: String
   disabled: String
-  get: String
+  get: Locale
   hidden: Boolean
-  set(numberFormatLocale: String): rich__causeway_applib_UserMemento
-  validate(numberFormatLocale: String): String
+  set(numberFormatLocale: Locale): rich__causeway_applib_UserMemento
+  validate(numberFormatLocale: Locale): String
 }
 
 type rich__causeway_applib_UserMemento__realName__gqlv_property {
@@ -468,10 +498,10 @@ type rich__causeway_applib_UserMemento__roles__gqlv_collection {
 type rich__causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
   datatype: String
   disabled: String
-  get: String
+  get: Locale
   hidden: Boolean
-  set(timeFormatLocale: String): rich__causeway_applib_UserMemento
-  validate(timeFormatLocale: String): String
+  set(timeFormatLocale: Locale): rich__causeway_applib_UserMemento
+  validate(timeFormatLocale: Locale): String
 }
 
 type rich__causeway_applib_UserMenu {
@@ -1149,10 +1179,10 @@ type rich__causeway_metamodel_MetamodelInspectView {
 type rich__causeway_metamodel_MetamodelInspectView__details__gqlv_property {
   datatype: String
   disabled: String
-  get: String!
+  get: Markup!
   hidden: Boolean
-  set(details: String!): rich__causeway_metamodel_MetamodelInspectView
-  validate(details: String): String
+  set(details: UnsupportedValue!): rich__causeway_metamodel_MetamodelInspectView
+  validate(details: UnsupportedValue): String
 }
 
 type rich__causeway_metamodel_MetamodelInspectView__gqlv_meta {
@@ -1202,10 +1232,10 @@ type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_params 
 type rich__causeway_metamodel_MetamodelInspectView__tree__gqlv_property {
   datatype: String
   disabled: String
-  get: String!
+  get: UnsupportedValue!
   hidden: Boolean
-  set(tree: String!): rich__causeway_metamodel_MetamodelInspectView
-  validate(tree: String): String
+  set(tree: UnsupportedValue!): rich__causeway_metamodel_MetamodelInspectView
+  validate(tree: UnsupportedValue): String
 }
 
 type rich__causeway_security_LoginRedirect {
@@ -1296,8 +1326,8 @@ type rich__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
-  set(object: String!): rich__causeway_testing_fixtures_FixtureResult
-  validate(object: String): String
+  set(object: UnsupportedValue!): rich__causeway_testing_fixtures_FixtureResult
+  validate(object: UnsupportedValue): String
 }
 
 type rich__java_lang_Record {
@@ -1401,10 +1431,10 @@ type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta
 type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__tree__gqlv_property {
   datatype: String
   disabled: String
-  get: String!
+  get: UnsupportedValue!
   hidden: Boolean
-  set(tree: String!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union
-  validate(tree: String): String
+  set(tree: UnsupportedValue!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union
+  validate(tree: UnsupportedValue): String
 }
 
 type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
@@ -1607,6 +1637,40 @@ type rich__university_calc_Calculator {
   createEditableMementoViewModel: rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action
   "Create Shared View Model"
   createSharedViewModel: rich__university_calc_Calculator__createSharedViewModel__gqlv_action
+  "Echo Application Feature Id"
+  echoApplicationFeatureId: rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action
+  "Echo Blob"
+  echoBlob: rich__university_calc_Calculator__echoBlob__gqlv_action
+  "Echo Bookmark"
+  echoBookmark: rich__university_calc_Calculator__echoBookmark__gqlv_action
+  "Echo Clob"
+  echoClob: rich__university_calc_Calculator__echoClob__gqlv_action
+  "Echo Complex Number"
+  echoComplexNumber: rich__university_calc_Calculator__echoComplexNumber__gqlv_action
+  "Echo Identifier"
+  echoIdentifier: rich__university_calc_Calculator__echoIdentifier__gqlv_action
+  "Echo Java Sql Date"
+  echoJavaSqlDate: rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action
+  "Echo Java Sql Time"
+  echoJavaSqlTime: rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action
+  "Echo Java Sql Timestamp"
+  echoJavaSqlTimestamp: rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action
+  "Echo Java Util Date"
+  echoJavaUtilDate: rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action
+  "Echo Local Date Time"
+  echoLocalDateTime: rich__university_calc_Calculator__echoLocalDateTime__gqlv_action
+  "Echo Local Resource Path"
+  echoLocalResourcePath: rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action
+  "Echo Locale"
+  echoLocale: rich__university_calc_Calculator__echoLocale__gqlv_action
+  "Echo Markup"
+  echoMarkup: rich__university_calc_Calculator__echoMarkup__gqlv_action
+  "Echo Password"
+  echoPassword: rich__university_calc_Calculator__echoPassword__gqlv_action
+  "Echo Unmapped Value"
+  echoUnmappedValue: rich__university_calc_Calculator__echoUnmappedValue__gqlv_action
+  "Echo Url"
+  echoUrl: rich__university_calc_Calculator__echoUrl__gqlv_action
   "Jdk 8 Local Plus Days"
   jdk8LocalPlusDays: rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action
   "Jdk 8 Local Plus Hours And Minutes"
@@ -1621,10 +1685,26 @@ type rich__university_calc_Calculator {
   nextMonth: rich__university_calc_Calculator__nextMonth__gqlv_action
   "Not"
   not: rich__university_calc_Calculator__not__gqlv_action
+  "Optional Blob"
+  optionalBlob: rich__university_calc_Calculator__optionalBlob__gqlv_action
+  "Optional Local Date Time"
+  optionalLocalDateTime: rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action
   "Or"
   or: rich__university_calc_Calculator__or__gqlv_action
   "Read Shared View Model"
   readSharedViewModel: rich__university_calc_Calculator__readSharedViewModel__gqlv_action
+  "Sample Blob"
+  sampleBlob: rich__university_calc_Calculator__sampleBlob__gqlv_action
+  "Sample Clob"
+  sampleClob: rich__university_calc_Calculator__sampleClob__gqlv_action
+  "Sample Identifier"
+  sampleIdentifier: rich__university_calc_Calculator__sampleIdentifier__gqlv_action
+  "Sample Markup"
+  sampleMarkup: rich__university_calc_Calculator__sampleMarkup__gqlv_action
+  "Sample Unmapped Value"
+  sampleUnmappedValue: rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action
+  "Secret Password"
+  secretPassword: rich__university_calc_Calculator__secretPassword__gqlv_action
   "Some Locale"
   someLocale: rich__university_calc_Calculator__someLocale__gqlv_action
   "Some Url"
@@ -2245,6 +2325,556 @@ type rich__university_calc_Calculator__createSharedViewModel__gqlv_action_invoke
   target: String
 }
 
+type rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: ApplicationFeatureId!): rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_params
+  validate(value: ApplicationFeatureId): String
+}
+
+type rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_args {
+  value: ApplicationFeatureId
+}
+
+type rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_args
+  results: ApplicationFeatureId
+  target: String
+}
+
+type rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoApplicationFeatureId__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoApplicationFeatureId__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: ApplicationFeatureId): String
+  hidden: Boolean
+  validity(value: ApplicationFeatureId): String
+}
+
+type rich__university_calc_Calculator__echoBlob__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: BlobInput!): rich__university_calc_Calculator__echoBlob__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoBlob__gqlv_action_params
+  validate(value: BlobInput): String
+}
+
+type rich__university_calc_Calculator__echoBlob__gqlv_action_args {
+  value: BlobValue
+}
+
+type rich__university_calc_Calculator__echoBlob__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoBlob__gqlv_action_args
+  results: BlobValue
+  target: String
+}
+
+type rich__university_calc_Calculator__echoBlob__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoBlob__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoBlob__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: BlobInput): String
+  fileAccept: String
+  hidden: Boolean
+  inlineInputMaxBytes: Int
+  resourceInputMode: String
+  validity(value: BlobInput): String
+}
+
+type rich__university_calc_Calculator__echoBookmark__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: Bookmark!): rich__university_calc_Calculator__echoBookmark__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoBookmark__gqlv_action_params
+  validate(value: Bookmark): String
+}
+
+type rich__university_calc_Calculator__echoBookmark__gqlv_action_args {
+  value: Bookmark
+}
+
+type rich__university_calc_Calculator__echoBookmark__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoBookmark__gqlv_action_args
+  results: Bookmark
+  target: String
+}
+
+type rich__university_calc_Calculator__echoBookmark__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoBookmark__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoBookmark__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: Bookmark): String
+  hidden: Boolean
+  validity(value: Bookmark): String
+}
+
+type rich__university_calc_Calculator__echoClob__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: ClobInput!): rich__university_calc_Calculator__echoClob__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoClob__gqlv_action_params
+  validate(value: ClobInput): String
+}
+
+type rich__university_calc_Calculator__echoClob__gqlv_action_args {
+  value: ClobValue
+}
+
+type rich__university_calc_Calculator__echoClob__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoClob__gqlv_action_args
+  results: ClobValue
+  target: String
+}
+
+type rich__university_calc_Calculator__echoClob__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoClob__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoClob__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: ClobInput): String
+  fileAccept: String
+  hidden: Boolean
+  inlineInputMaxBytes: Int
+  resourceInputMode: String
+  validity(value: ClobInput): String
+}
+
+type rich__university_calc_Calculator__echoComplexNumber__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: ComplexNumber!): rich__university_calc_Calculator__echoComplexNumber__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoComplexNumber__gqlv_action_params
+  validate(value: ComplexNumber): String
+}
+
+type rich__university_calc_Calculator__echoComplexNumber__gqlv_action_args {
+  value: ComplexNumber
+}
+
+type rich__university_calc_Calculator__echoComplexNumber__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoComplexNumber__gqlv_action_args
+  results: ComplexNumber
+  target: String
+}
+
+type rich__university_calc_Calculator__echoComplexNumber__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoComplexNumber__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoComplexNumber__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: ComplexNumber): String
+  hidden: Boolean
+  validity(value: ComplexNumber): String
+}
+
+type rich__university_calc_Calculator__echoIdentifier__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoIdentifier__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoIdentifier__gqlv_action_params
+  validate(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoIdentifier__gqlv_action_args {
+  value: UnsupportedValue
+}
+
+type rich__university_calc_Calculator__echoIdentifier__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoIdentifier__gqlv_action_args
+  results: UnsupportedValue
+  target: String
+}
+
+type rich__university_calc_Calculator__echoIdentifier__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoIdentifier__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoIdentifier__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: UnsupportedValue): String
+  hidden: Boolean
+  validity(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: SqlDate!): rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_params
+  validate(value: SqlDate): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_args {
+  value: SqlDate
+}
+
+type rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_args
+  results: SqlDate
+  target: String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoJavaSqlDate__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoJavaSqlDate__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: SqlDate): String
+  hidden: Boolean
+  validity(value: SqlDate): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: SqlTime!): rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_params
+  validate(value: SqlTime): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_args {
+  value: SqlTime
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_args
+  results: SqlTime
+  target: String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoJavaSqlTime__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTime__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: SqlTime): String
+  hidden: Boolean
+  validity(value: SqlTime): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: SqlTimestamp!): rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_params
+  validate(value: SqlTimestamp): String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_args {
+  value: SqlTimestamp
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_args
+  results: SqlTimestamp
+  target: String
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoJavaSqlTimestamp__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoJavaSqlTimestamp__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: SqlTimestamp): String
+  hidden: Boolean
+  validity(value: SqlTimestamp): String
+}
+
+type rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: LegacyDateTime!): rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_params
+  validate(value: LegacyDateTime): String
+}
+
+type rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_args {
+  value: LegacyDateTime
+}
+
+type rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_args
+  results: LegacyDateTime
+  target: String
+}
+
+type rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoJavaUtilDate__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoJavaUtilDate__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: LegacyDateTime): String
+  hidden: Boolean
+  validity(value: LegacyDateTime): String
+}
+
+type rich__university_calc_Calculator__echoLocalDateTime__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: LocalDateTime!): rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_params
+  validate(value: LocalDateTime): String
+}
+
+type rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_args {
+  value: LocalDateTime
+}
+
+type rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_args
+  results: LocalDateTime
+  target: String
+}
+
+type rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoLocalDateTime__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoLocalDateTime__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: LocalDateTime): String
+  hidden: Boolean
+  validity(value: LocalDateTime): String
+}
+
+type rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: LocalResourcePathInput!): rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_params
+  validate(value: LocalResourcePathInput): String
+}
+
+type rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_args {
+  value: LocalResourcePathValue
+}
+
+type rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_args
+  results: LocalResourcePathValue
+  target: String
+}
+
+type rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoLocalResourcePath__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoLocalResourcePath__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: LocalResourcePathInput): String
+  hidden: Boolean
+  validity(value: LocalResourcePathInput): String
+}
+
+type rich__university_calc_Calculator__echoLocale__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: Locale!): rich__university_calc_Calculator__echoLocale__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoLocale__gqlv_action_params
+  validate(value: Locale): String
+}
+
+type rich__university_calc_Calculator__echoLocale__gqlv_action_args {
+  value: Locale
+}
+
+type rich__university_calc_Calculator__echoLocale__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoLocale__gqlv_action_args
+  results: Locale
+  target: String
+}
+
+type rich__university_calc_Calculator__echoLocale__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoLocale__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoLocale__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: Locale): String
+  hidden: Boolean
+  validity(value: Locale): String
+}
+
+type rich__university_calc_Calculator__echoMarkup__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoMarkup__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoMarkup__gqlv_action_params
+  validate(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoMarkup__gqlv_action_args {
+  value: Markup
+}
+
+type rich__university_calc_Calculator__echoMarkup__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoMarkup__gqlv_action_args
+  results: Markup
+  target: String
+}
+
+type rich__university_calc_Calculator__echoMarkup__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoMarkup__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoMarkup__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: UnsupportedValue): String
+  hidden: Boolean
+  validity(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoPassword__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: Password!): rich__university_calc_Calculator__echoPassword__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoPassword__gqlv_action_params
+  validate(value: Password): String
+}
+
+type rich__university_calc_Calculator__echoPassword__gqlv_action_args {
+  value: Password
+}
+
+type rich__university_calc_Calculator__echoPassword__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoPassword__gqlv_action_args
+  results: Password
+  target: String
+}
+
+type rich__university_calc_Calculator__echoPassword__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoPassword__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoPassword__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: Password): String
+  hidden: Boolean
+  validity(value: Password): String
+}
+
+type rich__university_calc_Calculator__echoUnmappedValue__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_params
+  validate(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_args {
+  value: UnsupportedValue
+}
+
+type rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_args
+  results: UnsupportedValue
+  target: String
+}
+
+type rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoUnmappedValue__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoUnmappedValue__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: UnsupportedValue): String
+  hidden: Boolean
+  validity(value: UnsupportedValue): String
+}
+
+type rich__university_calc_Calculator__echoUrl__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: Url!): rich__university_calc_Calculator__echoUrl__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__echoUrl__gqlv_action_params
+  validate(value: Url): String
+}
+
+type rich__university_calc_Calculator__echoUrl__gqlv_action_args {
+  value: Url
+}
+
+type rich__university_calc_Calculator__echoUrl__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__echoUrl__gqlv_action_args
+  results: Url
+  target: String
+}
+
+type rich__university_calc_Calculator__echoUrl__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__echoUrl__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__echoUrl__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: Url): String
+  hidden: Boolean
+  validity(value: Url): String
+}
+
 type rich__university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_parameter {
   datatype: String
   disabled(date: String): String
@@ -2580,6 +3210,73 @@ type rich__university_calc_Calculator__not__x__gqlv_action_parameter {
   validity(x: Boolean): String
 }
 
+type rich__university_calc_Calculator__optionalBlob__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: BlobInput): rich__university_calc_Calculator__optionalBlob__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__optionalBlob__gqlv_action_params
+  validate(value: BlobInput): String
+}
+
+type rich__university_calc_Calculator__optionalBlob__gqlv_action_args {
+  value: BlobValue
+}
+
+type rich__university_calc_Calculator__optionalBlob__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__optionalBlob__gqlv_action_args
+  results: BlobValue
+  target: String
+}
+
+type rich__university_calc_Calculator__optionalBlob__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__optionalBlob__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__optionalBlob__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: BlobInput): String
+  fileAccept: String
+  hidden: Boolean
+  inlineInputMaxBytes: Int
+  resourceInputMode: String
+  validity(value: BlobInput): String
+}
+
+type rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(value: LocalDateTime): rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_params
+  validate(value: LocalDateTime): String
+}
+
+type rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_args {
+  value: LocalDateTime
+}
+
+type rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_args
+  results: LocalDateTime
+  target: String
+}
+
+type rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_params {
+  "Value"
+  value: rich__university_calc_Calculator__optionalLocalDateTime__value__gqlv_action_parameter
+}
+
+type rich__university_calc_Calculator__optionalLocalDateTime__value__gqlv_action_parameter {
+  datatype: String
+  disabled(value: LocalDateTime): String
+  hidden: Boolean
+  validity(value: LocalDateTime): String
+}
+
 type rich__university_calc_Calculator__or__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -2655,6 +3352,78 @@ type rich__university_calc_Calculator__readSharedViewModel__viewModel__gqlv_acti
   validity(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
 }
 
+type rich__university_calc_Calculator__sampleBlob__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__sampleBlob__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__sampleBlob__gqlv_action_invoke {
+  results: BlobValue
+  target: String
+}
+
+type rich__university_calc_Calculator__sampleClob__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__sampleClob__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__sampleClob__gqlv_action_invoke {
+  results: ClobValue
+  target: String
+}
+
+type rich__university_calc_Calculator__sampleIdentifier__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__sampleIdentifier__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__sampleIdentifier__gqlv_action_invoke {
+  results: UnsupportedValue
+  target: String
+}
+
+type rich__university_calc_Calculator__sampleMarkup__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__sampleMarkup__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__sampleMarkup__gqlv_action_invoke {
+  results: Markup
+  target: String
+}
+
+type rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action_invoke {
+  results: UnsupportedValue
+  target: String
+}
+
+type rich__university_calc_Calculator__secretPassword__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_Calculator__secretPassword__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_Calculator__secretPassword__gqlv_action_invoke {
+  results: Password
+  target: String
+}
+
 type rich__university_calc_Calculator__someLocale__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -2663,7 +3432,7 @@ type rich__university_calc_Calculator__someLocale__gqlv_action {
 }
 
 type rich__university_calc_Calculator__someLocale__gqlv_action_invoke {
-  results: String
+  results: Locale
   target: String
 }
 
@@ -2675,7 +3444,7 @@ type rich__university_calc_Calculator__someUrl__gqlv_action {
 }
 
 type rich__university_calc_Calculator__someUrl__gqlv_action_invoke {
-  results: String
+  results: Url
   target: String
 }
 
@@ -3845,7 +4614,7 @@ type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action {
 }
 
 type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action_invoke {
-  results: String
+  results: Locale
   target: String
 }
 
@@ -3857,7 +4626,7 @@ type rich__university_calc_calculatorHyphenated__someUrl__gqlv_action {
 }
 
 type rich__university_calc_calculatorHyphenated__someUrl__gqlv_action_invoke {
-  results: String
+  results: Url
   target: String
 }
 
@@ -4579,14 +5348,18 @@ type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob
   hidden: Boolean
-  set(hiddenPhoto: String!): rich__university_dept_StaffMember
-  validate(hiddenPhoto: String): String
+  set(hiddenPhoto: BlobInput!): rich__university_dept_StaffMember
+  validate(hiddenPhoto: BlobInput): String
 }
 
 type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob {
+  byteLength: Int
   bytes: String
+  fileAccept: String
+  inlineInputMaxBytes: Int
   mimeType: String
   name: String
+  transferMode: String
 }
 
 type rich__university_dept_StaffMember__name__gqlv_property {
@@ -4603,14 +5376,18 @@ type rich__university_dept_StaffMember__photo__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__photo__gqlv_property_lob
   hidden: Boolean
-  set(photo: String): rich__university_dept_StaffMember
-  validate(photo: String): String
+  set(photo: BlobInput): rich__university_dept_StaffMember
+  validate(photo: BlobInput): String
 }
 
 type rich__university_dept_StaffMember__photo__gqlv_property_lob {
+  byteLength: Int
   bytes: String
+  fileAccept: String
+  inlineInputMaxBytes: Int
   mimeType: String
   name: String
+  transferMode: String
 }
 
 type rich__university_dept_StaffMember__profile__gqlv_property {
@@ -4618,14 +5395,19 @@ type rich__university_dept_StaffMember__profile__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__profile__gqlv_property_lob
   hidden: Boolean
-  set(profile: String!): rich__university_dept_StaffMember
-  validate(profile: String): String
+  set(profile: ClobInput!): rich__university_dept_StaffMember
+  validate(profile: ClobInput): String
 }
 
 type rich__university_dept_StaffMember__profile__gqlv_property_lob {
+  byteLength: Int
+  characterLength: Int
   chars: String
+  fileAccept: String
+  inlineInputMaxBytes: Int
   mimeType: String
   name: String
+  transferMode: String
 }
 
 type rich__university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
@@ -4761,16 +5543,16 @@ type simple__causeway_applib_UserMemento {
   _meta: simple__causeway_applib_UserMemento__gqlv_meta
   authenticationCode: String!
   authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
-  avatarUrl: String
+  avatarUrl: Url
   isImpersonating: Boolean!
-  languageLocale: String
+  languageLocale: Locale
   multiTenancyToken: String
   name: String!
-  numberFormatLocale: String
+  numberFormatLocale: Locale
   realName: String
   "roles associated with this user"
   roles: [simple__causeway_applib_RoleMemento]
-  timeFormatLocale: String
+  timeFormatLocale: Locale
 }
 
 type simple__causeway_applib_UserMemento__gqlv_meta {
@@ -4993,10 +5775,10 @@ type simple__causeway_feat_ApplicationType__gqlv_meta {
 type simple__causeway_metamodel_MetamodelInspectView {
   "Object metadata"
   _meta: simple__causeway_metamodel_MetamodelInspectView__gqlv_meta
-  details: String!
+  details: Markup!
   "Opens a meta-model inspection view for given fully qualified domain class"
   inspect(fullyQualifiedClassName: String!): simple__causeway_metamodel_MetamodelInspectView
-  tree: String!
+  tree: UnsupportedValue!
 }
 
 type simple__causeway_metamodel_MetamodelInspectView__gqlv_meta {
@@ -5133,7 +5915,7 @@ type simple__java_util_stream_Stream__gqlv_meta {
 type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView {
   "Object metadata"
   _meta: simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta
-  tree: String!
+  tree: UnsupportedValue!
 }
 
 type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta {
@@ -5209,6 +5991,40 @@ type simple__university_calc_Calculator {
   createEditableMementoViewModel: simple__university_calc_EditableMementoViewModel
   "Create Shared View Model"
   createSharedViewModel: simple__university_calc_EditableMementoViewModel
+  "Echo Application Feature Id"
+  echoApplicationFeatureId(value: ApplicationFeatureId!): ApplicationFeatureId
+  "Echo Blob"
+  echoBlob(value: BlobInput!): BlobValue
+  "Echo Bookmark"
+  echoBookmark(value: Bookmark!): Bookmark
+  "Echo Clob"
+  echoClob(value: ClobInput!): ClobValue
+  "Echo Complex Number"
+  echoComplexNumber(value: ComplexNumber!): ComplexNumber
+  "Echo Identifier"
+  echoIdentifier(value: UnsupportedValue!): UnsupportedValue
+  "Echo Java Sql Date"
+  echoJavaSqlDate(value: SqlDate!): SqlDate
+  "Echo Java Sql Time"
+  echoJavaSqlTime(value: SqlTime!): SqlTime
+  "Echo Java Sql Timestamp"
+  echoJavaSqlTimestamp(value: SqlTimestamp!): SqlTimestamp
+  "Echo Java Util Date"
+  echoJavaUtilDate(value: LegacyDateTime!): LegacyDateTime
+  "Echo Local Date Time"
+  echoLocalDateTime(value: LocalDateTime!): LocalDateTime
+  "Echo Local Resource Path"
+  echoLocalResourcePath(value: LocalResourcePathInput!): LocalResourcePathValue
+  "Echo Locale"
+  echoLocale(value: Locale!): Locale
+  "Echo Markup"
+  echoMarkup(value: UnsupportedValue!): Markup
+  "Echo Password"
+  echoPassword(value: Password!): Password
+  "Echo Unmapped Value"
+  echoUnmappedValue(value: UnsupportedValue!): UnsupportedValue
+  "Echo Url"
+  echoUrl(value: Url!): Url
   "Jdk 8 Local Plus Days"
   jdk8LocalPlusDays(date: String!, numDays: Int!): String
   "Jdk 8 Local Plus Hours And Minutes"
@@ -5223,14 +6039,30 @@ type simple__university_calc_Calculator {
   nextMonth(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
   "Not"
   not(x: Boolean!): Boolean
+  "Optional Blob"
+  optionalBlob(value: BlobInput): BlobValue
+  "Optional Local Date Time"
+  optionalLocalDateTime(value: LocalDateTime): LocalDateTime
   "Or"
   or(x: Boolean!, y: Boolean!): Boolean
   "Read Shared View Model"
   readSharedViewModel(viewModel: simple__university_calc_EditableMementoViewModel__gqlv_input!): Int
+  "Sample Blob"
+  sampleBlob: BlobValue
+  "Sample Clob"
+  sampleClob: ClobValue
+  "Sample Identifier"
+  sampleIdentifier: UnsupportedValue
+  "Sample Markup"
+  sampleMarkup: Markup
+  "Sample Unmapped Value"
+  sampleUnmappedValue: UnsupportedValue
+  "Secret Password"
+  secretPassword: Password
   "Some Locale"
-  someLocale: String
+  someLocale: Locale
   "Some Url"
-  someUrl: String
+  someUrl: Url
   "Some Uuid"
   someUuid: UUID
 }
@@ -5305,9 +6137,9 @@ type simple__university_calc_calculatorHyphenated {
   "Or"
   or(x: Boolean!, y: Boolean!): Boolean
   "Some Locale"
-  someLocale: String
+  someLocale: Locale
   "Some Url"
-  someUrl: String
+  someUrl: Url
   "Some Uuid"
   someUuid: UUID
 }
@@ -5466,6 +6298,12 @@ type simple__university_dept_StaffMember__profile__gqlv_member {
   name: String
 }
 
+"Browser opening strategy for a Causeway local resource path."
+enum OpenUrlStrategy {
+  NEW_WINDOW
+  SAME_WINDOW
+}
+
 enum logicalTypeNames__gqlv_enum {
   "causeway.applib.DomainObjectList"
   causeway_applib_DomainObjectList
@@ -5547,20 +6385,85 @@ enum rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gql
   SENIOR_LECTURER
 }
 
+"A URL-safe encoded Causeway application feature identifier."
+scalar ApplicationFeatureId
+
+"A Causeway bookmark in logical-type:identifier form."
+scalar Bookmark
+
 "An 8-bit signed integer"
 scalar Byte
+
+"Application-defined reversible complex number in algebraic form, such as 3+4i or 3-4i."
+scalar ComplexNumber
 
 "A slightly refined version of RFC-3339 compliant DateTime Scalar"
 scalar DateTime
 
+"An ISO-8601 UTC instant used for java.util.Date."
+scalar LegacyDateTime
+
+"An ISO-8601 local date-time without an offset or zone; fractional seconds are preserved."
+scalar LocalDateTime
+
+"An IETF BCP 47 language tag used for java.util.Locale."
+scalar Locale
+
+"Causeway markup HTML. This scalar is output-only and clients must treat the content as markup."
+scalar Markup
+
+"A protected Causeway password value. Input constructs the value; output is always suppressed."
+scalar Password
+
 "A 16-bit signed integer"
 scalar Short
+
+"An ISO-8601 date-only value used for java.sql.Date."
+scalar SqlDate
+
+"An ISO-8601 time-only value at second precision used for java.sql.Time."
+scalar SqlTime
+
+"An ISO-8601 local date-time used for java.sql.Timestamp; fractional seconds are preserved."
+scalar SqlTimestamp
 
 "An RFC-3339 compliant Full Time Scalar"
 scalar Time
 
 "A universally unique identifier compliant UUID Scalar"
 scalar UUID
+
+"Unsupported Causeway value. Strict output is redacted and input requires an explicit reversible ScalarMarshaller or TypeMapper."
+scalar UnsupportedValue
+
+"An absolute URL represented by its normalized external form."
+scalar Url
+
+"Bounded inline Causeway Blob input."
+input BlobInput {
+  "RFC 4648 base64 content, bounded after decoding."
+  base64: String!
+  "IANA media type accepted by the target member."
+  mimeType: String!
+  "Resource filename."
+  name: String!
+}
+
+"Bounded inline Causeway Clob input."
+input ClobInput {
+  "UTF-8 character content, bounded by encoded byte length."
+  chars: String!
+  "IANA media type accepted by the target member."
+  mimeType: String!
+  "Resource filename."
+  name: String!
+}
+
+"A Causeway local resource path and browser opening strategy."
+input LocalResourcePathInput {
+  openUrlStrategy: OpenUrlStrategy!
+  path: String!
+}
 
 input rich__causeway_applib_DomainObjectList__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -29,6 +30,7 @@ import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 
 public class RichPropertyGetBlob
         extends ElementCustom {
@@ -37,6 +39,10 @@ public class RichPropertyGetBlob
 
     final RichPropertyGetBlobName blobName;
     final RichPropertyGetBlobMimeType blobMimeType;
+    final RichPropertyGetBlobByteLength blobByteLength;
+    final RichResourceMetadataField fileAccept;
+    final RichResourceMetadataField inputMaxBytes;
+    final RichResourceMetadataField transferMode;
     final RichPropertyGetBlobBytes blobBytes;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
@@ -53,12 +59,32 @@ public class RichPropertyGetBlob
             // type already exists, nothing else to do.
             this.blobName = null;
             this.blobMimeType = null;
+            this.blobByteLength = null;
+            this.fileAccept = null;
+            this.inputMaxBytes = null;
+            this.transferMode = null;
             this.blobBytes = null;
             return;
         }
 
         addChildFieldFor(blobName = new RichPropertyGetBlobName(memberInteractor, context));
         addChildFieldFor(blobMimeType = new RichPropertyGetBlobMimeType(memberInteractor, context));
+        addChildFieldFor(blobByteLength = new RichPropertyGetBlobByteLength(memberInteractor, context));
+        addChildFieldFor(fileAccept = new RichResourceMetadataField(
+                context,
+                "fileAccept",
+                Scalars.GraphQLString,
+                () -> ResourceValueTypes.fileAccept(memberInteractor.getObjectMember()).orElse(null)));
+        addChildFieldFor(inputMaxBytes = new RichResourceMetadataField(
+                context,
+                "inlineInputMaxBytes",
+                Scalars.GraphQLInt,
+                () -> graphqlConfiguration.resources().inlineInputMaxBytes()));
+        addChildFieldFor(transferMode = new RichResourceMetadataField(
+                context,
+                "transferMode",
+                Scalars.GraphQLString,
+                () -> isValueContentEnabled() ? "RESOURCE_LINK" : "METADATA_ONLY"));
         addChildFieldFor(blobBytes = isValueContentEnabled() ? new RichPropertyGetBlobBytes(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
@@ -84,6 +110,10 @@ public class RichPropertyGetBlob
         }
         blobName.addDataFetcher(this);
         blobMimeType.addDataFetcher(this);
+        blobByteLength.addDataFetcher(this);
+        fileAccept.addDataFetcher(this);
+        inputMaxBytes.addDataFetcher(this);
+        transferMode.addDataFetcher(this);
         if (blobBytes != null) {
             blobBytes.addDataFetcher(this);
         }

@@ -66,6 +66,10 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
 			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.outputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathOutputType(contextProvider.get());
         return scalarMapper.scalarTypeFor(clazz);
     }
 
@@ -73,7 +77,11 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLInputType inputTypeFor(final Class<?> clazz){
         if (clazz.isEnum())
 			return contextProvider.get().graphQLTypeRegistry.addEnumTypeIfNotAlreadyPresent(clazz, SchemaType.RICH);
-        return scalarMapper.scalarTypeFor(clazz);
+        if (ResourceValueTypes.isResourceType(clazz))
+            return ResourceValueTypes.inputTypeFor(clazz, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(clazz))
+            return ResourceValueTypes.localResourcePathInputType(contextProvider.get());
+        return scalarMapper.inputScalarTypeFor(clazz);
     }
 
     @Override
@@ -83,6 +91,10 @@ public class TypeMapperDefault implements TypeMapper {
         var correspondingClass = targetObjectSpec.correspondingClass();
         if (correspondingClass.isEnum())
 			return gqlValue;
+        if (ResourceValueTypes.isResourceType(correspondingClass))
+            return ResourceValueTypes.unmarshal(correspondingClass, gqlValue, contextProvider.get());
+        if (ResourceValueTypes.isLocalResourcePathType(correspondingClass))
+            return ResourceValueTypes.unmarshalLocalResourcePath(gqlValue);
         return scalarMapper.unmarshal(gqlValue, correspondingClass);
     }
 
@@ -226,7 +238,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VALUE -> inputTypeFor(elementObjectSpec.correspondingClass());
             case COLLECTION ->
                 throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
-            default -> Scalars.GraphQLString; // for now
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
         };
     }
 
@@ -247,7 +259,7 @@ public class TypeMapperDefault implements TypeMapper {
             case VALUE -> inputTypeFor(elementType.correspondingClass());
             case COLLECTION ->
                 throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
-            default -> Scalars.GraphQLString; // for now
+            default -> GraphQLValueScalars.UNSUPPORTED_INPUT;
         };
     }
 

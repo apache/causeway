@@ -65,11 +65,28 @@ public class ScalarMapperUsingScalarMarshallers implements ScalarMapper {
     }
 
     @Override
+    public GraphQLScalarType inputScalarTypeFor(final Class<?> clazz) {
+        var scalarMarshaller = scalarMarshallerFor(clazz);
+        return scalarMarshaller.supportsInput()
+                ? scalarMarshaller.getGqlScalarType()
+                : GraphQLValueScalars.UNSUPPORTED_INPUT;
+    }
+
+    @Override
+    public boolean supportsInput(final Class<?> clazz) {
+        return scalarMarshallerFor(clazz).supportsInput();
+    }
+
+    @Override
     public Object unmarshal(
             final Object argumentValue,
             final Class<?> targetType) {
 
         ScalarMarshaller<?> scalarMarshaller = scalarMarshallerFor(targetType);
+        if (!scalarMarshaller.supportsInput()) {
+            throw new IllegalArgumentException(
+                    "No reversible GraphQL input strategy is registered for " + targetType.getName());
+        }
         return scalarMarshaller.unmarshal(argumentValue, targetType);
     }
 

@@ -40,7 +40,7 @@ public class ScalarMarshallerBigDecimal extends ScalarMarshallerAbstract<BigDeci
 
     @Inject
     public ScalarMarshallerBigDecimal(final CausewayConfiguration causewayConfiguration) {
-        super(BigDecimal.class, Scalars.GraphQLString, causewayConfiguration);
+        super(BigDecimal.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override

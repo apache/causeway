@@ -40,7 +40,7 @@ public class ScalarMarshallerBigInteger extends ScalarMarshallerAbstract<BigInte
 
     @Inject
     public ScalarMarshallerBigInteger(final CausewayConfiguration causewayConfiguration) {
-        super(BigInteger.class, Scalars.GraphQLString, causewayConfiguration);
+        super(BigInteger.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override

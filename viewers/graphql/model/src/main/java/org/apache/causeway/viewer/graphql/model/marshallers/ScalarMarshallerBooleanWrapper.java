@@ -35,7 +35,7 @@ public class ScalarMarshallerBooleanWrapper extends ScalarMarshallerAbstract<Boo
 
     @Inject
     public ScalarMarshallerBooleanWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Boolean.class, Scalars.GraphQLBoolean, causewayConfiguration);
+        super(Boolean.class, Scalars.GraphQLBoolean, causewayConfiguration, true);
     }
 
     @Override

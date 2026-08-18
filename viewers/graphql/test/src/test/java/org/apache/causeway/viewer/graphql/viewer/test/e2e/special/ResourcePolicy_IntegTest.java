@@ -26,6 +26,7 @@ import java.time.Duration;
 import java.util.Map;
 
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLTypeUtil;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -91,6 +92,30 @@ public class ResourcePolicy_IntegTest extends Abstract_IntegTest {
                 "simple__university_dept_StaffMember__photo__gqlv_member");
         assertThat(richLobType.getFieldDefinition("bytes")).isNull();
         assertThat(simpleLobType.getFieldDefinition("bytes")).isNull();
+
+        var photoProperty = (GraphQLObjectType) schema.getType(
+                "rich__university_dept_StaffMember__photo__gqlv_property");
+        assertThat(GraphQLTypeUtil.simplePrint(
+                photoProperty.getFieldDefinition("set").getArgument("photo").getType()))
+                .isEqualTo("UnsupportedValue");
+
+        var echoBlobAction = (GraphQLObjectType) schema.getType(
+                "rich__university_calc_Calculator__echoBlob__gqlv_action");
+        assertThat(GraphQLTypeUtil.simplePrint(
+                echoBlobAction.getFieldDefinition("invoke").getArgument("value").getType()))
+                .isEqualTo("UnsupportedValue!");
+        var parameterMetadata = executeGraphQl(objectMapper, """
+                {
+                  rich {
+                    university_calc_Calculator {
+                      echoBlob { params { value { resourceInputMode } } }
+                    }
+                  }
+                }
+                """);
+        assertThat(parameterMetadata.at(
+                "/data/rich/university_calc_Calculator/echoBlob/params/value/resourceInputMode").stringValue())
+                .isEqualTo("FORBIDDEN");
 
         var gridResponse = get(gridUrl);
         assertThat(gridResponse.statusCode()).isEqualTo(200);

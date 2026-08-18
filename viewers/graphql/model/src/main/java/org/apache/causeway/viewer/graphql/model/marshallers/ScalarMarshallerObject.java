@@ -26,8 +26,10 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
+import org.apache.causeway.viewer.graphql.model.types.GraphQLValueScalars;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLScalarType;
 
 /**
  * Acts as a fallback.  We put it last in the list
@@ -39,11 +41,21 @@ public class ScalarMarshallerObject extends ScalarMarshallerAbstract<Object> {
     @Inject
     public ScalarMarshallerObject(
             final CausewayConfiguration causewayConfiguration) {
-        super(Object.class, Scalars.GraphQLString, causewayConfiguration);
+        super(Object.class, outputType(causewayConfiguration), causewayConfiguration);
     }
 
     @Override
-    public Object unmarshal(Object graphValue, Class<?> targetType) {
-        return graphValue;
+    public Object unmarshal(final Object graphValue, final Class<?> targetType) {
+        throw new IllegalArgumentException(
+                "No reversible GraphQL input strategy is registered for " + targetType.getName());
+    }
+
+    private static GraphQLScalarType outputType(final CausewayConfiguration causewayConfiguration) {
+        var values = causewayConfiguration.viewer().graphql().values();
+        return values != null
+                && values.unsupportedOutputPolicy()
+                        == CausewayConfiguration.Viewer.Graphql.Values.UnsupportedOutputPolicy.LEGACY_STRING
+                ? Scalars.GraphQLString
+                : GraphQLValueScalars.UNSUPPORTED_VALUE;
     }
 }
