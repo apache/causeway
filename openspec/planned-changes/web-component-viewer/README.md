@@ -3,8 +3,8 @@
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
 The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, value-semantics change, collection-windowing change, application-entry-points change, and composite-object change are archived.
-There is no active change.
-The remaining drafts are queued for serial promotion, beginning with `add-menubar-web-components`.
+The menubar change is active.
+The remaining drafts are queued for serial promotion, beginning with `add-generic-htmx-web-component-viewer`.
 
 Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
 After the active change is archived, promote the next draft verbatim:
@@ -31,7 +31,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 7 | `add-rich-graphql-collection-windowing` *(archived)* | Complete | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
 | 8 | `add-rich-graphql-application-entry-points` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
 | 9 | `add-composite-object-web-component` *(archived)* | Complete | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<causeway-object>` |
-| 10 | `add-menubar-web-components` | P1 | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
+| 10 | `add-menubar-web-components` *(active)* | P1 | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
 | 11 | `add-generic-htmx-web-component-viewer` | P1 | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
 | 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
 | 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
