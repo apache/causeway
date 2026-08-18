@@ -493,6 +493,26 @@ type rich__causeway_applib_UserMemento__roles__gqlv_collection {
   disabled: String
   get: [rich__causeway_applib_RoleMemento]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_applib_UserMemento__roles__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_applib_UserMemento__roles__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_applib_RoleMemento]
+  totalCount: Int
 }
 
 type rich__causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
@@ -593,6 +613,26 @@ type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_conf_ConfigurationProperty]
+  totalCount: Int
 }
 
 type rich__causeway_conf_ConfigurationViewmodel__gqlv_meta {
@@ -611,6 +651,26 @@ type rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_conf_ConfigurationProperty]
+  totalCount: Int
 }
 
 type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
@@ -618,6 +678,26 @@ type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_conf_ConfigurationProperty]
+  totalCount: Int
 }
 
 type rich__causeway_feat_ApplicationFeatureViewModel {
@@ -700,6 +780,26 @@ type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union]
+  totalCount: Int
 }
 
 type rich__causeway_feat_ApplicationNamespace__gqlv_meta {
@@ -1102,6 +1202,26 @@ type rich__causeway_feat_ApplicationType__actions__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeAction]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_feat_ApplicationType__actions__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_feat_ApplicationType__actions__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_feat_ApplicationTypeAction]
+  totalCount: Int
 }
 
 type rich__causeway_feat_ApplicationType__collections__gqlv_collection {
@@ -1109,6 +1229,26 @@ type rich__causeway_feat_ApplicationType__collections__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeCollection]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_feat_ApplicationType__collections__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_feat_ApplicationType__collections__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_feat_ApplicationTypeCollection]
+  totalCount: Int
 }
 
 type rich__causeway_feat_ApplicationType__gqlv_meta {
@@ -1154,6 +1294,26 @@ type rich__causeway_feat_ApplicationType__properties__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeProperty]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__causeway_feat_ApplicationType__properties__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__causeway_feat_ApplicationType__properties__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__causeway_feat_ApplicationTypeProperty]
+  totalCount: Int
 }
 
 type rich__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
@@ -4654,10 +4814,18 @@ type rich__university_dept_Department {
   changeDeptHead: rich__university_dept_Department__changeDeptHead__gqlv_action
   "University department specializing in a field of study"
   changeName: rich__university_dept_Department__changeName__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  configuredStaffMembers: rich__university_dept_Department__configuredStaffMembers__gqlv_collection
   "Departmental head, responsible for curriculum, research, funding and staff"
   deptHead: rich__university_dept_Department__deptHead__gqlv_property
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  disabledStaffMembers: rich__university_dept_Department__disabledStaffMembers__gqlv_collection
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  hiddenStaffMembers: rich__university_dept_Department__hiddenStaffMembers__gqlv_collection
   "Inspect People"
   inspectPeople: rich__university_dept_Department__inspectPeople__gqlv_action
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  instrumentedStaffMembers: rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection
   "Name"
   name: rich__university_dept_Department__name__gqlv_property
   "People"
@@ -4805,6 +4973,34 @@ type rich__university_dept_Department__changeName__newName__gqlv_action_paramete
   validity(newName: String): String
 }
 
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type rich__university_dept_Department__configuredStaffMembers__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [rich__university_dept_StaffMember]
+  hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__configuredStaffMembers__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__configuredStaffMembers__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_StaffMember]
+  totalCount: Int
+}
+
 "Departmental head, responsible for curriculum, research, funding and staff"
 type rich__university_dept_Department__deptHead__gqlv_property {
   autoComplete(search: String!): [rich__university_dept_DeptHead]
@@ -4814,6 +5010,34 @@ type rich__university_dept_Department__deptHead__gqlv_property {
   hidden: Boolean
   set(deptHead: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_Department
   validate(deptHead: rich__university_dept_DeptHead__gqlv_input): String
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type rich__university_dept_Department__disabledStaffMembers__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [rich__university_dept_StaffMember]
+  hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__disabledStaffMembers__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__disabledStaffMembers__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_StaffMember]
+  totalCount: Int
 }
 
 type rich__university_dept_Department__gqlv_meta {
@@ -4826,6 +5050,34 @@ type rich__university_dept_Department__gqlv_meta {
   saveAs(ref: String): String
   title: String!
   version: String
+}
+
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type rich__university_dept_Department__hiddenStaffMembers__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [rich__university_dept_StaffMember]
+  hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__hiddenStaffMembers__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__hiddenStaffMembers__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_StaffMember]
+  totalCount: Int
 }
 
 type rich__university_dept_Department__inspectPeople__gqlv_action {
@@ -4861,6 +5113,34 @@ type rich__university_dept_Department__inspectPeople__people__gqlv_action_parame
   validity(people: [rich__university_dept_Person__gqlv_input]): String
 }
 
+"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+type rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection {
+  datatype: String
+  disabled: String
+  get: [rich__university_dept_StaffMember]
+  hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_StaffMember]
+  totalCount: Int
+}
+
 type rich__university_dept_Department__name__gqlv_property {
   datatype: String
   disabled: String
@@ -4875,6 +5155,26 @@ type rich__university_dept_Department__people__gqlv_collection {
   disabled: String
   get: [rich__university_dept_Person__gqlv_union]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__people__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__people__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_Person__gqlv_union]
+  totalCount: Int
 }
 
 "University department specializing in a field of study"
@@ -4917,6 +5217,26 @@ type rich__university_dept_Department__staffMembers__gqlv_collection {
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Returns a bounded zero-based collection window; the configured maximum size is 100."
+  window(
+    "Zero-based row offset."
+    offset: Int! = 0,
+    "Positive row count, not exceeding the configured maximum of 100."
+    size: Int! = 20
+  ): rich__university_dept_Department__staffMembers__gqlv_collection_window
+}
+
+"A bounded execution-time view of a Causeway collection association."
+type rich__university_dept_Department__staffMembers__gqlv_collection_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_collection_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  rows: [rich__university_dept_StaffMember]
+  totalCount: Int
 }
 
 type rich__university_dept_Departments {
@@ -5308,6 +5628,8 @@ type rich__university_dept_StaffMember {
   photo: rich__university_dept_StaffMember__photo__gqlv_property
   "Profile"
   profile: rich__university_dept_StaffMember__profile__gqlv_property
+  "Window Probe"
+  windowProbe: rich__university_dept_StaffMember__windowProbe__gqlv_property
 }
 
 "University department specializing in a field of study"
@@ -5408,6 +5730,15 @@ type rich__university_dept_StaffMember__profile__gqlv_property_lob {
   mimeType: String
   name: String
   transferMode: String
+}
+
+type rich__university_dept_StaffMember__windowProbe__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(windowProbe: String!): rich__university_dept_StaffMember
+  validate(windowProbe: String): String
 }
 
 type rich__university_dept_Staff__createStaffMember__department__gqlv_action_parameter {
@@ -6156,9 +6487,17 @@ type simple__university_dept_Department {
   changeDeptHead(newDeptHead: simple__university_dept_DeptHead__gqlv_input!): simple__university_dept_Department
   "University department specializing in a field of study"
   changeName(newName: String!): simple__university_dept_Department
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  configuredStaffMembers: [simple__university_dept_StaffMember]
   deptHead: simple__university_dept_DeptHead
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  disabledStaffMembers: [simple__university_dept_StaffMember]
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  hiddenStaffMembers: [simple__university_dept_StaffMember]
   "Inspect People"
   inspectPeople(people: [simple__university_dept_Person__gqlv_input]): String
+  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  instrumentedStaffMembers: [simple__university_dept_StaffMember]
   name: String!
   "People"
   people: [simple__university_dept_Person]
@@ -6263,6 +6602,7 @@ type simple__university_dept_StaffMember {
   name: String!
   photo: simple__university_dept_StaffMember__photo__gqlv_member
   profile: simple__university_dept_StaffMember__profile__gqlv_member
+  windowProbe: String!
 }
 
 type simple__university_dept_StaffMember__gqlv_meta {
@@ -6355,6 +6695,14 @@ enum rich__causeway_applib_annotation_SemanticsOf__gqlv_enum {
   NOT_SPECIFIED
   SAFE
   SAFE_AND_REQUEST_CACHEABLE
+}
+
+"How rows were ordered before selecting a collection window."
+enum rich__gqlv_collection_window_ordering {
+  "A Causeway configured comparator was applied."
+  CONFIGURED
+  "The materialized collection encounter order was retained without a cross-request stability guarantee."
+  ENCOUNTER
 }
 
 enum rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum {

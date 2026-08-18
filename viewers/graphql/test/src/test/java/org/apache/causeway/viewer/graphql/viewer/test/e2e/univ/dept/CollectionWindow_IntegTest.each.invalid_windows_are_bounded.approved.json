@@ -1,0 +1,54 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/negativeOffset/window) : Collection window offset must be zero or greater.",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 8
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "negativeOffset", "window" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  }, {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/zeroSize/window) : Collection window size must be greater than zero.",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 11
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "zeroSize", "window" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  }, {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/oversized/window) : Collection window size exceeds the configured maximum of 100.",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 14
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "oversized", "window" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "negativeOffset" : {
+                "window" : null
+              },
+              "zeroSize" : {
+                "window" : null
+              },
+              "oversized" : {
+                "window" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

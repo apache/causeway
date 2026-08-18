@@ -2386,6 +2386,8 @@ public record CausewayConfiguration(
             @DefaultValue
             Values values,
             @DefaultValue
+            Collections collections,
+            @DefaultValue
             Resources resources,
             @DefaultValue
             Authentication authentication
@@ -2615,6 +2617,31 @@ public record CausewayConfiguration(
                      * Temporarily retain the previous implicit GraphQL String serialization during migration.
                      */
                     LEGACY_STRING
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL collection windows.
+             */
+            public record Collections(
+                    /**
+                     * Default row count used when a collection window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum row count accepted for one collection window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Collections {
+                    if (defaultWindowSize > maxWindowSize) {
+                        throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.collections.default-window-size must not exceed max-window-size");
+                    }
                 }
             }
 

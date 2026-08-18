@@ -46,6 +46,8 @@ export class ObjectContextController extends EventTarget {
       : null;
     this.secondaryCache = new Map();
     this.secondaryAbortControllers = new Set();
+    this.secondaryRequests = new Map();
+    this.secondaryGeneration = 0;
     this.commandGenerations = new Map();
     this.commandAbortControllers = new Map();
     this.mutationTail = Promise.resolve();
@@ -430,34 +432,84 @@ export class ObjectContextController extends EventTarget {
     });
   }
 
-  async loadCollection({member, columns = [], force = false, signal} = {}) {
+  async loadCollection({
+    member,
+    columns = [],
+    offset = 0,
+    size = null,
+    requestKey = null,
+    force = false,
+    signal
+  } = {}) {
     if (this.closed) {
       throw new Error('Cannot load a collection from a disconnected object context.');
     }
     const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
     this.description ??= description;
     const descriptor = description.members.get(member);
-    if (!descriptor || descriptor.kind !== 'collection' || !descriptor.fields.has('get')) {
+    const usesWindow = descriptor?.kind === 'collection' && descriptor.window && descriptor.fields.has('window');
+    if (!descriptor || descriptor.kind !== 'collection' || (!usesWindow && !descriptor.fields.has('get'))) {
       throw new Error(`Collection '${member}' is not readable on '${description.logicalTypeName}'.`);
     }
+    const requestedOffset = usesWindow ? integerAtLeast(offset, 0, 'Collection window offset') : 0;
+    const requestedSize = usesWindow
+      ? integerAtLeast(size ?? descriptor.window.sizeDefault, 1, 'Collection window size')
+      : null;
     const rowSelection = collectionRowSelection(columns);
-    const selection = {[member]: {get: rowSelection}};
-    const cacheKey = JSON.stringify({member, rowSelection});
+    const selection = usesWindow
+      ? null
+      : {[member]: {get: rowSelection}};
+    const cacheKey = JSON.stringify({member, rowSelection, offset: requestedOffset, size: requestedSize, usesWindow});
     if (!force && this.secondaryCache.has(cacheKey)) {
-      return this.secondaryCache.get(cacheKey);
+      const cached = this.secondaryCache.get(cacheKey);
+      if (!cached.abortController.signal.aborted) {
+        return cached.promise;
+      }
+      this.secondaryCache.delete(cacheKey);
     }
+
     const abortController = new AbortController();
     this.secondaryAbortControllers.add(abortController);
     const abort = () => abortController.abort();
     signal?.addEventListener?.('abort', abort, {once: true});
-    const promise = this.client.readObject({
-      description,
-      identity: this.identity,
-      selection,
-      signal: abortController.signal
-    }).then(async result => {
+    if (signal?.aborted) {
+      abortController.abort();
+    }
+
+    let requestGeneration = null;
+    if (requestKey != null) {
+      const previous = this.secondaryRequests.get(requestKey);
+      previous?.abortController.abort();
+      requestGeneration = ++this.secondaryGeneration;
+      this.secondaryRequests.set(requestKey, {abortController, generation: requestGeneration});
+    }
+
+    const readPromise = usesWindow
+      ? this.client.readCollectionWindow({
+          description,
+          identity: this.identity,
+          member,
+          rowSelection,
+          offset: requestedOffset,
+          size: requestedSize,
+          signal: abortController.signal
+        })
+      : this.client.readObject({
+          description,
+          identity: this.identity,
+          selection,
+          signal: abortController.signal
+        });
+    const promise = readPromise.then(async result => {
+      if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+        throw obsoleteRequestError();
+      }
       const data = result.data?.[member] ?? null;
-      const firstObjectRow = data?.get?.find?.(row => row?._meta?.logicalTypeName);
+      const candidateRows = usesWindow
+        ? data?.window?.rows
+        : data?.get;
+      const rows = Array.isArray(candidateRows) ? candidateRows : [];
+      const firstObjectRow = rows.find?.(row => row?._meta?.logicalTypeName);
       let rowDescription = null;
       let errors = result.errors;
       if (firstObjectRow) {
@@ -467,20 +519,34 @@ export class ObjectContextController extends EventTarget {
           errors = Object.freeze([...errors, asGraphQLError(error)]);
         }
       }
+      if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+        throw obsoleteRequestError();
+      }
       return Object.freeze({
         descriptor,
         data,
+        rows: Object.freeze([...rows]),
+        window: usesWindow ? normalizeCollectionWindow(data?.window) : null,
         errors,
         rowDescription,
         rowSelection,
-        selection
+        selection,
+        operation: result.operation
       });
     }).finally(() => {
       signal?.removeEventListener?.('abort', abort);
       this.secondaryAbortControllers.delete(abortController);
+      if (requestKey != null && requestGeneration === this.secondaryRequests.get(requestKey)?.generation) {
+        this.secondaryRequests.delete(requestKey);
+      }
     });
-    this.secondaryCache.set(cacheKey, promise);
-    promise.catch(() => this.secondaryCache.delete(cacheKey));
+    const cacheEntry = {promise, abortController};
+    this.secondaryCache.set(cacheKey, cacheEntry);
+    promise.catch(() => {
+      if (this.secondaryCache.get(cacheKey) === cacheEntry) {
+        this.secondaryCache.delete(cacheKey);
+      }
+    });
     return promise;
   }
 
@@ -509,6 +575,7 @@ export class ObjectContextController extends EventTarget {
     for (const abortController of this.secondaryAbortControllers) {
       abortController.abort();
     }
+    this.secondaryRequests.clear();
     this.#scheduleFlush();
   }
 
@@ -523,6 +590,7 @@ export class ObjectContextController extends EventTarget {
       abortController.abort();
     }
     this.secondaryAbortControllers.clear();
+    this.secondaryRequests.clear();
     for (const abortController of this.commandAbortControllers.values()) {
       abortController.abort();
     }
@@ -957,7 +1025,9 @@ function translateRequirement(requirement, description) {
     memberSelection.get = propertyValueSelection(member);
     return {descriptor: member, selection: {[member.id]: memberSelection}};
   }
-  if (requirement.kind === 'collection' && !member.fields.has('get')) {
+  if (requirement.kind === 'collection'
+      && !member.fields.has('window')
+      && !member.fields.has('get')) {
     throw new Error(`Collection '${requirement.member}' does not expose readable contents.`);
   }
   const supportedFields = ['hidden', 'disabled'].filter(field => member.fields.has(field));
@@ -989,6 +1059,45 @@ function propertyValueSelection(member) {
     return {__typename: true};
   }
   return {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+}
+
+function integerAtLeast(value, minimum, label) {
+  if (!Number.isSafeInteger(value) || value < minimum) {
+    throw new Error(`${label} must be an integer of at least ${minimum}.`);
+  }
+  return value;
+}
+
+function normalizeCollectionWindow(window) {
+  if (!window) {
+    return null;
+  }
+  const offset = window.offset;
+  const requestedSize = window.requestedSize;
+  const returnedCount = window.returnedCount;
+  const hasPrevious = window.hasPrevious === true;
+  const hasNext = window.hasNext === true;
+  return Object.freeze({
+    offset,
+    requestedSize,
+    returnedCount,
+    totalCount: Number.isSafeInteger(window.totalCount) ? window.totalCount : null,
+    countAvailable: Number.isSafeInteger(window.totalCount),
+    maximumSize: window.maximumSize,
+    hasPrevious,
+    hasNext,
+    previousOffset: hasPrevious ? Math.max(0, offset - requestedSize) : null,
+    nextOffset: hasNext ? offset + returnedCount : null,
+    rangeStart: returnedCount > 0 ? offset + 1 : null,
+    rangeEnd: returnedCount > 0 ? offset + returnedCount : null,
+    ordering: window.ordering ?? null
+  });
+}
+
+function obsoleteRequestError() {
+  const error = new Error('Collection window response was superseded by a newer request.');
+  error.name = 'AbortError';
+  return error;
 }
 
 function collectionRowSelection(columns) {
