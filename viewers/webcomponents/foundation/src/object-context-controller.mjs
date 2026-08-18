@@ -23,17 +23,30 @@ import {commandSelection, resultSelectionForType} from './interaction-operations
 import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
+const MAX_STRUCTURAL_RESOURCE_CHARACTERS = 1_048_576;
+
+export class StructuralResourceError extends Error {
+  constructor(code, message, {status = null} = {}) {
+    super(message);
+    this.name = 'StructuralResourceError';
+    this.code = code;
+    this.status = status;
+  }
+}
+
 export class ObjectContextController extends EventTarget {
   constructor({
     client,
     logicalTypeName,
     objectId,
     hydration = null,
+    fetchImpl = globalThis.fetch,
     schedule = callback => globalThis.queueMicrotask(callback)
   } = {}) {
     super();
     this.client = client ?? null;
     this.identity = Object.freeze({logicalTypeName: logicalTypeName ?? '', id: objectId ?? ''});
+    this.fetchImpl = fetchImpl;
     this.schedule = callback => schedule(callback);
     this.description = hydration?.description ?? null;
     this.snapshot = hydration?.data
@@ -93,6 +106,73 @@ export class ObjectContextController extends EventTarget {
         this.#scheduleFlush();
       }
     };
+  }
+
+  async describeObject() {
+    if (this.closed) {
+      throw new Error('Cannot describe an object using a disconnected object context.');
+    }
+    const description = this.description ?? await this.client.describeObject(this.identity.logicalTypeName);
+    this.description ??= description;
+    return description;
+  }
+
+  async loadStructuralResource(resourcePath, {accept = 'application/xml', signal} = {}) {
+    if (this.closed) {
+      throw new StructuralResourceError('CONTEXT_DISCONNECTED', 'Cannot load a structural resource using a disconnected object context.');
+    }
+    if (!isSafeStructuralResourcePath(resourcePath)) {
+      throw new StructuralResourceError('INVALID_RESOURCE_PATH', 'A structural resource must be an opaque origin-relative path beginning with exactly one slash.');
+    }
+    if (typeof this.fetchImpl !== 'function') {
+      throw new StructuralResourceError('FETCH_UNAVAILABLE', 'No Fetch API implementation is available for structural resources.');
+    }
+    const abortController = new AbortController();
+    this.secondaryAbortControllers.add(abortController);
+    const abort = () => abortController.abort();
+    signal?.addEventListener?.('abort', abort, {once: true});
+    if (signal?.aborted) {
+      abortController.abort();
+    }
+    try {
+      const fetchImpl = this.fetchImpl;
+      const response = await fetchImpl(resourcePath, {
+        method: 'GET',
+        headers: {accept},
+        credentials: 'same-origin',
+        cache: 'no-store',
+        redirect: 'error',
+        signal: abortController.signal
+      });
+      if (!response?.ok) {
+        throw new StructuralResourceError(
+          'RESOURCE_REQUEST_FAILED',
+          `Structural resource request failed with HTTP ${response?.status ?? 'unknown'}.`,
+          {status: response?.status ?? null}
+        );
+      }
+      const contentLength = Number(response.headers?.get?.('content-length'));
+      if (Number.isFinite(contentLength) && contentLength > MAX_STRUCTURAL_RESOURCE_CHARACTERS) {
+        throw new StructuralResourceError('RESOURCE_TOO_LARGE', `Structural resource exceeds ${MAX_STRUCTURAL_RESOURCE_CHARACTERS} characters.`);
+      }
+      const text = await response.text();
+      if (text.length > MAX_STRUCTURAL_RESOURCE_CHARACTERS) {
+        throw new StructuralResourceError('RESOURCE_TOO_LARGE', `Structural resource exceeds ${MAX_STRUCTURAL_RESOURCE_CHARACTERS} characters.`);
+      }
+      return Object.freeze({
+        path: resourcePath,
+        mediaType: response.headers?.get?.('content-type') ?? null,
+        text
+      });
+    } catch (error) {
+      if (error?.name === 'AbortError' || error instanceof StructuralResourceError) {
+        throw error;
+      }
+      throw new StructuralResourceError('RESOURCE_REQUEST_FAILED', 'The structural resource request failed.');
+    } finally {
+      signal?.removeEventListener?.('abort', abort);
+      this.secondaryAbortControllers.delete(abortController);
+    }
   }
 
   async describePropertyInteraction(member) {
@@ -559,7 +639,8 @@ export class ObjectContextController extends EventTarget {
       client: this.client,
       logicalTypeName: metadata.logicalTypeName,
       objectId: metadata.id,
-      hydration: {data: row, selection: rowSelection}
+      hydration: {data: row, selection: rowSelection},
+      fetchImpl: this.fetchImpl
     });
   }
 
@@ -829,7 +910,7 @@ export class ObjectContextController extends EventTarget {
       return;
     }
     const mappedStatus = mapRequirementStatus(this.state.status);
-    const pathHead = requirement.kind === 'header'
+    const pathHead = requirement.kind === 'header' || requirement.kind === 'layout'
       ? this.description?.metadata?.id
       : requirement.member;
     const errors = this.snapshot?.errors.filter(error => error.path?.[0] === pathHead) ?? [];
@@ -967,6 +1048,14 @@ function commandError(error) {
   });
 }
 
+function isSafeStructuralResourcePath(value) {
+  return typeof value === 'string'
+    && value.startsWith('/')
+    && !value.startsWith('//')
+    && !value.includes('\\')
+    && !/[\r\n]/.test(value);
+}
+
 function validateIdentity(identity, client) {
   if (!client) {
     return new Error('A Causeway GraphQL client is required.');
@@ -981,8 +1070,8 @@ function validateIdentity(identity, client) {
 }
 
 function normalizeRequirement(requirement) {
-  if (requirement?.kind === 'header') {
-    return Object.freeze({kind: 'header'});
+  if (requirement?.kind === 'header' || requirement?.kind === 'layout') {
+    return Object.freeze({kind: requirement.kind});
   }
   if (['property', 'action', 'collection'].includes(requirement?.kind)
       && typeof requirement.member === 'string'
@@ -993,15 +1082,21 @@ function normalizeRequirement(requirement) {
 }
 
 function translateRequirement(requirement, description) {
-  if (requirement.kind === 'header') {
+  if (requirement.kind === 'header' || requirement.kind === 'layout') {
     const metadata = description.metadata;
     if (!metadata) {
       throw new Error(`Type '${description.generatedTypeName}' does not expose rich object metadata.`);
     }
-    const supportedFields = ['id', 'logicalTypeName', 'title', 'version']
-      .filter(field => metadata.fields.has(field));
-    if (!supportedFields.includes('id') || !supportedFields.includes('logicalTypeName')) {
+    const requestedFields = requirement.kind === 'header'
+      ? ['id', 'logicalTypeName', 'title', 'version']
+      : ['grid', 'layout', 'cssClass'];
+    const supportedFields = requestedFields.filter(field => metadata.fields.has(field));
+    if (requirement.kind === 'header'
+        && (!supportedFields.includes('id') || !supportedFields.includes('logicalTypeName'))) {
       throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks object identity fields.`);
+    }
+    if (supportedFields.length === 0) {
+      throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks ${requirement.kind} fields.`);
     }
     return {
       descriptor: metadata,

@@ -29,6 +29,8 @@ export const PROPERTY_INTERACTION_STATE_EVENT = 'causeway-property-interaction-s
 export const PROPERTY_UPDATED_EVENT = 'causeway-property-updated';
 export const COLLECTION_STATE_EVENT = 'causeway-collection-state-change';
 export const COLLECTION_CONFIGURATION_EVENT = 'causeway-collection-configuration-change';
+export const OBJECT_LAYOUT_STATE_EVENT = 'causeway-object-layout-state-change';
+export const OBJECT_LAYOUT_DIAGNOSTIC_EVENT = 'causeway-object-layout-diagnostic';
 
 export function requestGraphQLClient(requester) {
   let client = null;

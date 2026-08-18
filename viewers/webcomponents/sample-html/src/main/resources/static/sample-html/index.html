@@ -483,6 +483,10 @@
       overflow-wrap: anywhere;
     }
 
+    .sample-composite-grid {
+      margin-block-start: 1.25rem;
+    }
+
     .sample-footer {
       color: var(--sample-muted);
       font-size: 0.85rem;
@@ -668,6 +672,23 @@
         </div>
         <causeway-interaction-controller data-testid="action-interaction-controller"></causeway-interaction-controller>
       </causeway-object-context>
+
+      <div class="sample-grid sample-composite-grid">
+        <section class="sample-card" data-testid="section-composite-object" aria-labelledby="sample-composite-heading">
+          <div class="sample-section-heading">
+            <p class="sample-section-kicker">Automatic semantic composition</p>
+            <h2 id="sample-composite-heading">Complete object from context plus component</h2>
+            <p>This independent context demonstrates effective-grid retrieval, canonical fallback semantics, and generated established children without page-authored member structure.</p>
+          </div>
+          <causeway-object-context
+              logical-type="causeway.webcomponents.sample.SampleObject"
+              object-id="s_sample-1"
+              data-testid="composite-object-context">
+            <causeway-object editable data-testid="composite-object"></causeway-object>
+            <causeway-interaction-controller data-testid="composite-interaction-controller"></causeway-interaction-controller>
+          </causeway-object-context>
+        </section>
+      </div>
     </causeway-graphql-client>
 
     <footer class="sample-footer">Public semantic components · Same-origin GraphQL interactions · No frontend build</footer>

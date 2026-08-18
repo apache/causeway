@@ -67,7 +67,10 @@ export function createRichSchemaTypes() {
       field('id', null, scalar('ID')),
       field('logicalTypeName', null, scalar('String')),
       field('version', null, scalar('String')),
-      field('title', null, scalar('String'))
+      field('title', null, scalar('String')),
+      field('grid', null, scalar('String')),
+      field('layout', null, scalar('String')),
+      field('cssClass', null, scalar('String'))
     ])],
     [NAME_TYPE, propertyType(NAME_TYPE)],
     [CODE_TYPE, propertyType(CODE_TYPE)],
@@ -189,7 +192,10 @@ export function departmentObjectData({
       id: '42',
       logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
       version,
-      title: 'Classics Department'
+      title: 'Classics Department',
+      grid: '/graphql/object/university.dept.Department:42/_meta/grid',
+      layout: null,
+      cssClass: 'department'
     },
     name: {hidden: false, disabled: nameDisabled, get: name, datatype: 'String'},
     code: {hidden: codeHidden, disabled: null, get: code, datatype: 'String'},
