@@ -21,7 +21,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {installDomShim} from './dom-shim.mjs';
 import {
+  collectionWindowResponse,
   createRichSchemaFixtureExecutor,
+  createWindowedRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
   DEPARTMENT_OBJECT_FIELD,
   graphQLObjectResponse,
@@ -139,6 +141,85 @@ test('collection secondary reads are lazy, cached and hydrate row contexts', asy
   assert.equal(codeState.data.get, 'ADA');
 });
 
+test('collection secondary reads prefer bounded windows and expose semantic range state', async () => {
+  const rows = [row({id: 'staff-6', name: 'Dr Six'}), row({id: 'staff-7', name: 'Dr Seven'})];
+  const executor = createRichSchemaFixtureExecutor({
+    types: createWindowedRichSchemaTypes(),
+    readResponses: [graphQLObjectResponse()],
+    windowResponses: [collectionWindowResponse({rows, offset: 5, requestedSize: 2, totalCount: 8})]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({
+    member: 'staffMembers',
+    columns: ['name'],
+    offset: 5,
+    size: 2
+  });
+  assert.equal(executor.windowCalls.length, 1);
+  assert.deepEqual(loaded.rows, rows);
+  assert.deepEqual(loaded.window, {
+    offset: 5,
+    requestedSize: 2,
+    returnedCount: 2,
+    totalCount: 8,
+    countAvailable: true,
+    maximumSize: 100,
+    hasPrevious: true,
+    hasNext: true,
+    previousOffset: 3,
+    nextOffset: 7,
+    rangeStart: 6,
+    rangeEnd: 7,
+    ordering: 'ENCOUNTER'
+  });
+  assert.deepEqual(executor.windowCalls[0].variables, {object: {id: '42'}, offset: 5, size: 2});
+  assert.match(executor.windowCalls[0].document, /requestedSize/);
+  assert.match(executor.windowCalls[0].document, /maximumSize/);
+
+  await context.loadCollection({member: 'staffMembers', columns: ['name'], offset: 5, size: 2});
+  assert.equal(executor.windowCalls.length, 1, 'an identical window should use the secondary cache');
+});
+
+test('collection secondary reads discard responses superseded for the same consumer', async () => {
+  const resolvers = new Map();
+  const executor = createRichSchemaFixtureExecutor({
+    types: createWindowedRichSchemaTypes(),
+    readResponses: [graphQLObjectResponse()],
+    windowResponses: [request => new Promise(resolve => resolvers.set(request.variables.offset, resolve))]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+  const requestKey = {};
+
+  const first = context.loadCollection({member: 'staffMembers', offset: 0, size: 2, requestKey});
+  await waitFor(() => resolvers.has(0));
+  const second = context.loadCollection({member: 'staffMembers', offset: 2, size: 2, requestKey});
+  await waitFor(() => resolvers.has(2));
+  resolvers.get(2)(collectionWindowResponse({rows: [row({id: 'staff-3'})], offset: 2, requestedSize: 2, totalCount: 3}));
+  const latest = await second;
+  assert.equal(latest.window.offset, 2);
+
+  const third = context.loadCollection({member: 'staffMembers', offset: 4, size: 2, requestKey});
+  await waitFor(() => resolvers.has(4));
+  resolvers.get(4)(collectionWindowResponse({rows: [], offset: 4, requestedSize: 2, totalCount: 3}));
+  assert.equal((await third).window.offset, 4);
+
+  resolvers.get(0)(collectionWindowResponse({rows: [row()], offset: 0, requestedSize: 2, totalCount: 3}));
+  await assert.rejects(first, error => error?.name === 'AbortError');
+});
+
 test('collection component does not read until activated and renders declared columns', async () => {
   let requirementListener;
   let loadCount = 0;
@@ -192,6 +273,66 @@ test('collection component does not read until activated and renders declared co
     generation: 2
   });
   assert.equal(collection.hidden, true);
+});
+
+test('collection component forwards window requests and publishes semantic window state', async () => {
+  let request;
+  const context = {
+    registerRequirement(requirement, listener) {
+      listener({
+        status: 'ready',
+        descriptor: {id: 'staffMembers', description: 'Staff members'},
+        data: {hidden: false, disabled: null},
+        errors: [],
+        generation: 1
+      });
+      return () => {};
+    },
+    async loadCollection(options) {
+      request = options;
+      return {
+        descriptor: {id: 'staffMembers'},
+        data: {window: {rows: [row()]}},
+        rows: [row()],
+        window: {
+          offset: 20,
+          requestedSize: 10,
+          returnedCount: 1,
+          totalCount: null,
+          countAvailable: false,
+          maximumSize: 100,
+          hasPrevious: true,
+          hasNext: false,
+          previousOffset: 10,
+          nextOffset: null,
+          rangeStart: 21,
+          rangeEnd: 21,
+          ordering: 'ENCOUNTER'
+        },
+        errors: [],
+        rowSelection: {_meta: {id: true}}
+      };
+    },
+    createHydratedRowContext() {
+      return {disconnect() {}};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  collection.member = 'staffMembers';
+  collection.active = true;
+  collection.context = context;
+  document.body.appendChild(collection);
+  await waitFor(() => collection.collectionState.status === 'ready');
+
+  await collection.load({offset: 20, size: 10, force: true});
+
+  assert.equal(request.offset, 20);
+  assert.equal(request.size, 10);
+  assert.equal(request.requestKey, collection);
+  assert.equal(collection.collectionState.window.countAvailable, false);
+  assert.equal(collection.collectionState.window.rangeStart, 21);
+  assert.match(collection.innerHTML, /Dr Ada/);
+  document.body.removeChild(collection);
 });
 
 test('collection component cancels an in-flight secondary read when disconnected', async () => {

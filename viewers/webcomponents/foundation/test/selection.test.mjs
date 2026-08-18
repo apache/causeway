@@ -21,6 +21,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {RichSchemaNames} from '../src/schema-names.mjs';
 import {
+  buildCollectionWindowReadOperation,
   buildObjectReadOperation,
   deepMerge,
   differenceSelection,
@@ -61,6 +62,25 @@ test('builds a combined-rich object lookup operation', () => {
   assert.match(operation.document, /rich \{/);
   assert.match(operation.document, /university_dept_Department\(object: \$object\)/);
   assert.deepEqual(operation.variables, {object: {id: '42'}});
+  assert.deepEqual(operation.objectPath, ['rich', 'university_dept_Department']);
+});
+
+test('builds a bounded collection-window operation with semantic metadata', () => {
+  const operation = buildCollectionWindowReadOperation({
+    description,
+    identity,
+    member: 'staffMembers',
+    rowSelection: {_meta: {id: true, logicalTypeName: true}, name: {get: true}},
+    offset: 20,
+    size: 10,
+    schemaNames: new RichSchemaNames()
+  });
+  assert.match(operation.document, /query CausewayReadCollectionWindow/);
+  assert.match(operation.document, /window\(offset: \$offset, size: \$size\)/);
+  assert.match(operation.document, /returnedCount/);
+  assert.match(operation.document, /totalCount/);
+  assert.match(operation.document, /rows \{/);
+  assert.deepEqual(operation.variables, {object: {id: '42'}, offset: 20, size: 10});
   assert.deepEqual(operation.objectPath, ['rich', 'university_dept_Department']);
 });
 

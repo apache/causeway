@@ -31,6 +31,8 @@ const CLOB_GET_TYPE = `${CLOB_TYPE}__gqlv_get`;
 const UNSUPPORTED_TYPE = `${OBJECT_TYPE}__unsupportedValue__gqlv_property`;
 const UNSUPPORTED_GET_TYPE = `${UNSUPPORTED_TYPE}__gqlv_get`;
 const COLLECTION_TYPE = `${OBJECT_TYPE}__staffMembers__gqlv_collection`;
+const COLLECTION_WINDOW_TYPE = `${COLLECTION_TYPE}_window`;
+const COLLECTION_WINDOW_ORDERING_TYPE = 'rich__gqlv_collection_window_ordering';
 const EMPTY_COLLECTION_TYPE = `${OBJECT_TYPE}__formerStaff__gqlv_collection`;
 const ACTION_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action`;
 const ACTION_PARAMS_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action_params`;
@@ -131,6 +133,50 @@ export function createRichSchemaTypes() {
   ]);
 }
 
+export function createWindowedRichSchemaTypes() {
+  const types = createRichSchemaTypes();
+  const collectionType = types.get(COLLECTION_TYPE);
+  types.set(COLLECTION_TYPE, objectType(COLLECTION_TYPE, null, [
+    ...collectionType.fields,
+    field(
+      'window',
+      'Returns a bounded zero-based collection window; the configured maximum size is 100.',
+      named(COLLECTION_WINDOW_TYPE),
+      [
+        argument('offset', nonNull(scalar('Int')), {description: 'Zero-based row offset.', defaultValue: '0'}),
+        argument('size', nonNull(scalar('Int')), {description: 'Positive row count.', defaultValue: '20'})
+      ]
+    )
+  ]));
+  types.set(COLLECTION_WINDOW_TYPE, objectType(
+    COLLECTION_WINDOW_TYPE,
+    'A bounded execution-time view of a Causeway collection association.',
+    [
+      field('rows', null, list(named(STAFF_OBJECT_TYPE))),
+      field('offset', null, nonNull(scalar('Int'))),
+      field('requestedSize', null, nonNull(scalar('Int'))),
+      field('returnedCount', null, nonNull(scalar('Int'))),
+      field('totalCount', null, scalar('Int')),
+      field('maximumSize', null, nonNull(scalar('Int'))),
+      field('hasPrevious', null, nonNull(scalar('Boolean'))),
+      field('hasNext', null, nonNull(scalar('Boolean'))),
+      field('ordering', null, nonNull(enumeration(COLLECTION_WINDOW_ORDERING_TYPE)))
+    ]
+  ));
+  types.set(COLLECTION_WINDOW_ORDERING_TYPE, {
+    kind: 'ENUM',
+    name: COLLECTION_WINDOW_ORDERING_TYPE,
+    description: 'How rows were ordered before selecting a collection window.',
+    fields: [],
+    inputFields: [],
+    enumValues: [
+      {name: 'CONFIGURED', description: 'A Causeway configured comparator was applied.'},
+      {name: 'ENCOUNTER', description: 'Encounter order was retained.'}
+    ]
+  });
+  return types;
+}
+
 export function departmentObjectData({
   name = 'Classics',
   code = 'CLA',
@@ -171,6 +217,30 @@ export function departmentObjectData({
   };
 }
 
+export function collectionWindowResponse({rows = [], offset = 0, requestedSize = 20, totalCount = rows.length} = {}) {
+  return {
+    data: {
+      rich: {
+        [DEPARTMENT_OBJECT_FIELD]: {
+          staffMembers: {
+            window: {
+              rows,
+              offset,
+              requestedSize,
+              returnedCount: rows.length,
+              totalCount,
+              maximumSize: 100,
+              hasPrevious: offset > 0 && totalCount > 0,
+              hasNext: offset + rows.length < totalCount,
+              ordering: 'ENCOUNTER'
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
 export function graphQLObjectResponse(options = {}) {
   return {
     data: {
@@ -203,13 +273,16 @@ export function partialPropertyErrorResponse() {
 export function createRichSchemaFixtureExecutor({
   types = createRichSchemaTypes(),
   readResponses = [graphQLObjectResponse()],
+  windowResponses = [],
   operationRoots = {queryTypeName: 'SimpleAndRich', mutationTypeName: null},
   interactionHandler = null
 } = {}) {
   const calls = [];
   const introspectionCalls = [];
   const readCalls = [];
+  const windowCalls = [];
   let readIndex = 0;
+  let windowIndex = 0;
   const executor = async request => {
     if (request.signal?.aborted) {
       throw abortError();
@@ -240,12 +313,20 @@ export function createRichSchemaFixtureExecutor({
       readIndex += 1;
       return typeof response === 'function' ? response(request) : response;
     }
+    if (request.operationName === 'CausewayReadCollectionWindow') {
+      windowCalls.push(request);
+      const response = windowResponses[Math.min(windowIndex, windowResponses.length - 1)];
+      windowIndex += 1;
+      if (response) {
+        return typeof response === 'function' ? response(request) : response;
+      }
+    }
     if (interactionHandler) {
       return interactionHandler(request);
     }
     throw new Error(`Unexpected fixture operation '${request.operationName}'.`);
   };
-  Object.assign(executor, {calls, introspectionCalls, readCalls, types});
+  Object.assign(executor, {calls, introspectionCalls, readCalls, windowCalls, types});
   return executor;
 }
 
@@ -283,8 +364,8 @@ function field(name, description, type, args = []) {
   return {name, description, args, type};
 }
 
-function argument(name, type) {
-  return {name, description: null, defaultValue: null, type};
+function argument(name, type, {description = null, defaultValue = null} = {}) {
+  return {name, description, defaultValue, type};
 }
 
 function scalar(name) {
@@ -301,6 +382,10 @@ function enumeration(name) {
 
 function list(ofType) {
   return {kind: 'LIST', name: null, ofType};
+}
+
+function nonNull(ofType) {
+  return {kind: 'NON_NULL', name: null, ofType};
 }
 
 function abortError() {

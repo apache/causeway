@@ -1,0 +1,254 @@
+{
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "physics" : {
+          "invoke" : {
+            "results" : {
+              "defaultWindow" : {
+                "window" : {
+                  "offset" : 0,
+                  "requestedSize" : 20,
+                  "returnedCount" : 13,
+                  "totalCount" : 13,
+                  "maximumSize" : 100,
+                  "hasPrevious" : false,
+                  "hasNext" : false,
+                  "ordering" : "ENCOUNTER",
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "John Gartner"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Margaret Randall"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Mervin Hughes"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 00"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 01"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 02"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 03"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 04"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 05"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 06"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 07"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 08"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window Error"
+                    }
+                  } ]
+                }
+              },
+              "middleWindow" : {
+                "window" : {
+                  "offset" : 5,
+                  "requestedSize" : 5,
+                  "returnedCount" : 5,
+                  "totalCount" : 13,
+                  "maximumSize" : 100,
+                  "hasPrevious" : true,
+                  "hasNext" : true,
+                  "ordering" : "ENCOUNTER",
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "Window 02"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 03"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 04"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 05"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 06"
+                    }
+                  } ]
+                }
+              },
+              "lastWindow" : {
+                "window" : {
+                  "offset" : 10,
+                  "requestedSize" : 5,
+                  "returnedCount" : 3,
+                  "totalCount" : 13,
+                  "maximumSize" : 100,
+                  "hasPrevious" : true,
+                  "hasNext" : false,
+                  "ordering" : "ENCOUNTER",
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "Window 07"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 08"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window Error"
+                    }
+                  } ]
+                }
+              },
+              "outOfRange" : {
+                "window" : {
+                  "offset" : 99,
+                  "requestedSize" : 5,
+                  "returnedCount" : 0,
+                  "totalCount" : 13,
+                  "maximumSize" : 100,
+                  "hasPrevious" : true,
+                  "hasNext" : false,
+                  "ordering" : "ENCOUNTER",
+                  "rows" : [ ]
+                }
+              },
+              "configuredStaffMembers" : {
+                "window" : {
+                  "ordering" : "CONFIGURED",
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "Window Error"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 08"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 07"
+                    }
+                  } ]
+                }
+              },
+              "disabledStaffMembers" : {
+                "disabled" : "Collection interactions are disabled",
+                "window" : {
+                  "returnedCount" : 2,
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "John Gartner"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Margaret Randall"
+                    }
+                  } ]
+                }
+              },
+              "legacy" : {
+                "get" : [ {
+                  "name" : {
+                    "get" : "John Gartner"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Margaret Randall"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Mervin Hughes"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 00"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 01"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 02"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 03"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 04"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 05"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 06"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 07"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window 08"
+                  }
+                }, {
+                  "name" : {
+                    "get" : "Window Error"
+                  }
+                } ]
+              }
+            }
+          }
+        },
+        "empty" : {
+          "invoke" : {
+            "results" : {
+              "staffMembers" : {
+                "window" : {
+                  "offset" : 0,
+                  "returnedCount" : 0,
+                  "totalCount" : 0,
+                  "hasPrevious" : false,
+                  "hasNext" : false,
+                  "rows" : [ ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
