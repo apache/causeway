@@ -99,4 +99,92 @@ hide empty members
 @enduml
 ----
 
+=== Component Architecture
 
+[plantuml,fig-component-architecture,svg]
+.Component Architecture
+----
+@startuml
+
+package "Bootstrap & Lifecycle Orchestrator" {
+  [SpecificationLoader] as Loader
+  [SpecCache\nConcurrentMap<Class, Facade>] as Cache
+  [IntrospectionStateTracker] as Tracker
+  [FacetProcessingPipeline] as Pipeline
+}
+
+package "Specification Implementation" {
+  [ObjectSpecificationFacade] as Facade
+  [ObjectMetaData\n<<Sealed Interface>>] as Delegate
+  [Ordered Facet Factories] as Factories
+  [PostProcessors] as PostProcs
+  [ObjectMetaDataInitial] as Initial
+  [ObjectMetaDataTypeOnly] as TypeOnly
+  [ObjectMetaDataFull] as Full
+  [ObjectMetaDataHandle] as Handle
+  
+  note right of Delegate
+    Introspection state is reflected
+    by one of 3 permitted types.
+  end note
+}
+
+Loader --> Cache : manages\n & populates
+Loader --> Tracker : drives\n transitions
+Loader --> Pipeline : triggers\n on FULL phase
+Pipeline --> Factories : executes by\n FacetProcessingOrder
+Pipeline --> PostProcs : runs after\n factories
+Facade --> Delegate : delegates\n (swappable on reload)
+Loader --> Facade : creates & caches
+
+Factories --> Handle: modifies Facets via
+PostProcs --> Handle: modifies Facets via
+
+Handle --> Delegate: allows Facet modification
+
+Delegate <|--- Initial 
+Delegate <|--- TypeOnly
+Delegate <|--- Full
+
+@enduml
+----
+
+=== Introspection State Machine
+
+[plantuml,fig-introspection-state-machine,svg]
+.Introspection State Machine
+----
+@startuml
+state "REGISTER\n(Type registered,\nempty spec)" as S1
+state "TYPE_ONLY\n(Hierarchy resolved,\nno members)" as S2
+state "FULLY_INTROSPECTED\n(All facets, associations,\nactions built.\nFor non-mixins and non-values,\n mixins added.)" as S3
+state "SEALED\n(Object Metadata locked,\nunmodifiable)" as S4
+
+S1 --> S2 : Loader.introspectTypeOnly()
+S2 --> S3 : Loader.introspectFully()
+S3 --> S4 : Loader.lockMetamodel()
+
+note right of S1
+  Cache reference stays constant 
+  even when reloading.
+end note
+
+note right of S2
+  Mixin phase enforces
+  TYPE_ONLY on non-mixins.
+  Interface inheritance ignored.
+end note
+
+note right of S3
+  As a side-effect all member's 
+  element types are fully 
+  introspected. Same for 
+  any action params.
+end note
+
+note right of S4
+  Reloading swaps delegate
+  & resets tracker to REGISTER.
+end note
+@enduml
+----
