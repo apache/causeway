@@ -2,9 +2,8 @@
 
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, and first P0 change `fix-rich-graphql-object-interaction-correctness` are archived.
-The second P0 change, `fix-rich-graphql-resource-link-safety`, is now active.
-The remaining drafts stay queued until that change is implemented and archived.
+The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, and both P0 correctness changes are archived.
+The remaining drafts are queued for serial promotion, beginning with `add-rich-graphql-value-and-resource-semantics`.
 
 Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
 After the active change is archived, promote the next draft verbatim:
@@ -26,7 +25,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 2 | `add-domain-web-component-interactions` *(archived)* | Complete | Archived read-only components | MODIFIED `domain-web-components` |
 | 3 | `analyze-rich-graphql-referenceapp-coverage` *(archived; analysis only)* | Complete | Archived foundation and components; pinned reference application | NEW `rich-graphql-referenceapp-analysis` |
 | 4 | `fix-rich-graphql-object-interaction-correctness` *(archived)* | Complete | Completed analysis | NEW `rich-graphql-object-interaction-correctness` |
-| 5 | `fix-rich-graphql-resource-link-safety` *(active)* | P0 | Completed analysis | NEW `rich-graphql-resource-link-safety` |
+| 5 | `fix-rich-graphql-resource-link-safety` *(archived)* | Complete | Completed analysis | NEW `rich-graphql-resource-link-safety` |
 | 6 | `add-rich-graphql-value-and-resource-semantics` | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-value-semantics` |
 | 7 | `add-rich-graphql-collection-windowing` | P1 | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
 | 8 | `add-rich-graphql-application-entry-points` | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
