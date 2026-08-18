@@ -700,7 +700,7 @@ This will result in a response (for the rich schema) such as:
             "results" : {
               "photo" : {
                 "get" : {
-                  "bytes" : "///graphql/object/university.dept.StaffMember:123/photo/blobBytes"
+                  "bytes" : "/graphql/object/university.dept.StaffMember:123/photo/blobBytes"
                 }
               }
             }
@@ -774,9 +774,28 @@ The xref:#the-meta-fieldtype[meta field] mentioned earlier also allows the `icon
 <.> URL to download the grid layout (typically the `.layout.xml` file)
 
 
-Because the resource controller exposes information directly, these fields are suppressed by default.
-To enable, use the xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[causeway.viewer.graphql.resources.response-type] configuration property.
-If you do this, then you should also make sure that the resource controller is made secure in some appropriate fashion.
+Resource references are opaque origin-relative paths beginning with exactly one slash.
+Clients must resolve them against the current origin without adding, removing, or rewriting slash prefixes.
+The path combines the optional xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.external-path-prefix[external path prefix], servlet context, and Spring GraphQL HTTP endpoint path.
+Applications deployed behind a path-rewriting reverse proxy should configure `external-path-prefix` with the externally visible prefix.
+The current Spring endpoint property is `spring.graphql.http.path`; the deprecated `spring.graphql.path` remains a temporary fallback for link construction and controller mapping.
+
+Resource policy is split into structural metadata and domain value content.
+The xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.structural-metadata-response-type[structural metadata response type] governs effective grids and icons.
+The xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.value-content-response-type[value-content response type] governs Blob bytes and Clob characters.
+Each accepts `FORBIDDEN`, `DIRECT`, or `ATTACHMENT`.
+When a category is `FORBIDDEN`, its link fields are omitted from the generated schema and direct endpoint attempts return HTTP 403 without content.
+Blob and Clob names and media types remain available because they are descriptive metadata rather than downloadable content.
+
+For compatibility, either category-specific setting falls back to the deprecated xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[global response type] when unset.
+Existing applications therefore retain their current behavior while they migrate each category independently.
+A manually slash-normalizing client must stop rewriting references because generated paths are now browser-valid.
+
+Every dereference executes inside a Causeway interaction derived from the request principal, configured GraphQL fallback identity, or anonymous context.
+The controller re-resolves the target and rechecks object and property visibility rather than trusting the published link.
+Hosts must still configure transport authentication appropriate to the deployment.
+Hidden, missing, stale, and unauthorized targets return bounded non-disclosing responses.
+Successful responses include the declared media type, content length, `X-Content-Type-Options: nosniff`, and `Cache-Control: private, no-store`; `ATTACHMENT` additionally supplies `Content-Disposition`.
 
 
 

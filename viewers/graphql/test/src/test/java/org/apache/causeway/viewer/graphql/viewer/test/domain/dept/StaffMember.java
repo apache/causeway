@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 
 import jakarta.persistence.AttributeOverride;
@@ -38,7 +39,9 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
 import lombok.Getter;
@@ -104,6 +107,21 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     }
     public void setPhoto(final Blob photo) {
         this.photo = BlobJpaEmbeddable.fromBlob(photo);
+    }
+
+    @Property
+    @PropertyLayout(fieldSetId = "content", sequence = "2")
+    public Clob getProfile() {
+        return new Clob("profile.txt", "text/plain", "Profile for " + name);
+    }
+
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
+    public Blob getHiddenPhoto() {
+        return new Blob(
+                "hidden.pdf",
+                "application/pdf",
+                "CONFIDENTIAL_RESOURCE_CONTENT".getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

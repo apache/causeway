@@ -25,7 +25,7 @@ import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -49,7 +49,7 @@ public abstract class RichPropertyGetClobAbstract extends Element {
                     .build());
     }
 
-    protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
+    protected Object fetchDataFromClob(DataFetchingEnvironment environment, Function<Clob, ?> mapper) {
         var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         var sourcePojoClass = sourcePojo.getClass();
@@ -65,8 +65,8 @@ public abstract class RichPropertyGetClobAbstract extends Element {
 
         return Optional.ofNullable(resultManagedObject)
                 .map(ManagedObject::getPojo)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
+                .filter(Clob.class::isInstance)
+                .map(Clob.class::cast)
                 .map(mapper)
                 .orElse(null);
     }

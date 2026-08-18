@@ -13,7 +13,16 @@
             }
             photo {
               get {
+                name
+                mimeType
                 bytes
+              }
+            }
+            profile {
+              get {
+                name
+                mimeType
+                chars
               }
             }
           }

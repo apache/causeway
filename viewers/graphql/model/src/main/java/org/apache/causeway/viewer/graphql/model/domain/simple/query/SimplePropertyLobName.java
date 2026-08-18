@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
@@ -35,7 +35,7 @@ public class SimplePropertyLobName extends SimplePropertyLobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, Blob::name);
+        return fetchDataFromLob(environment, NamedWithMimeType::name);
     }
 
 }
