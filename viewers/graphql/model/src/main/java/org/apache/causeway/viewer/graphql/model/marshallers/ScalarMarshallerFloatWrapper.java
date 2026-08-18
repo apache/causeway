@@ -35,7 +35,7 @@ public class ScalarMarshallerFloatWrapper extends ScalarMarshallerAbstract<Float
 
     @Inject
     public ScalarMarshallerFloatWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Float.class, Scalars.GraphQLFloat, causewayConfiguration);
+        super(Float.class, Scalars.GraphQLFloat, causewayConfiguration, true);
     }
 
     @Override

@@ -1,0 +1,32 @@
+{
+  rich {
+    university_calc_Calculator {
+      echoJavaSqlTime {
+        invoke(value: "12:34:56") { results }
+      }
+      echoLocale {
+        invoke(value: "en-GB") { results }
+      }
+      echoBookmark {
+        invoke(value: "university.dept.StaffMember:1") { results }
+      }
+      echoApplicationFeatureId {
+        invoke(value: "VFlQRTp1bml2ZXJzaXR5LmNhbGMuQ2FsY3VsYXRvcg==") { results }
+      }
+      echoPassword {
+        invoke(value: "PRIVATE_PASSWORD_INPUT") { results }
+      }
+      sampleMarkup {
+        invoke { results }
+      }
+      echoLocalResourcePath {
+        invoke(value: { path: "docs/index.html", openUrlStrategy: SAME_WINDOW }) {
+          results { path openUrlStrategy }
+        }
+      }
+      sampleUnmappedValue {
+        invoke { results }
+      }
+    }
+  }
+}

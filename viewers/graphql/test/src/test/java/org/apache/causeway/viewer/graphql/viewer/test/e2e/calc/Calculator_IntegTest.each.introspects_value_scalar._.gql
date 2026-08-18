@@ -1,0 +1,7 @@
+{
+  __type(name: "LocalDateTime") {
+    kind
+    name
+    description
+  }
+}

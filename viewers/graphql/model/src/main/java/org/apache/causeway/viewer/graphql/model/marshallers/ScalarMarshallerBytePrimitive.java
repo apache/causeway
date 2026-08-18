@@ -35,7 +35,7 @@ public class ScalarMarshallerBytePrimitive extends ScalarMarshallerAbstract<Byte
 
     @Inject
     public ScalarMarshallerBytePrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
+        super(byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration, true);
     }
 
     @Override

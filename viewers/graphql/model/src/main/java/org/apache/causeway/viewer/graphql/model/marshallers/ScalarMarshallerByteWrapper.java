@@ -35,7 +35,7 @@ public class ScalarMarshallerByteWrapper extends ScalarMarshallerAbstract<Byte> 
 
     @Inject
     public ScalarMarshallerByteWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration);
+        super(Byte.class, ExtendedScalars.GraphQLByte, causewayConfiguration, true);
     }
 
     @Override

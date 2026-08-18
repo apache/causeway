@@ -2384,6 +2384,8 @@ public record CausewayConfiguration(
             @DefaultValue
             ScalarMarshaller scalarMarshaller,
             @DefaultValue
+            Values values,
+            @DefaultValue
             Resources resources,
             @DefaultValue
             Authentication authentication
@@ -2593,9 +2595,33 @@ public record CausewayConfiguration(
             }
 
             /**
+             * Controls GraphQL behavior for values without an explicit marshaller or structured mapping.
+             */
+            public record Values(
+                    /**
+                     * How an unknown value is represented on output.
+                     * Input remains unsupported under every policy.
+                     */
+                    @DefaultValue("REDACTED")
+                    UnsupportedOutputPolicy unsupportedOutputPolicy) {
+
+                public enum UnsupportedOutputPolicy {
+                    /**
+                     * Return a constant non-disclosing unsupported representation without invoking the value's
+                     * {@code toString()} method.
+                     */
+                    REDACTED,
+                    /**
+                     * Temporarily retain the previous implicit GraphQL String serialization during migration.
+                     */
+                    LEGACY_STRING
+                }
+            }
+
+            /**
              * The different ways in which resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-             * resource controller.
+             * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) are made available.
+             * For Blob and Clob values this policy also gates bounded GraphQL input and action-result content.
              */
             public enum ResponseType {
                 /**
@@ -2603,7 +2629,8 @@ public record CausewayConfiguration(
                  *
                  * <p>In this case any {@link org.apache.causeway.applib.value.Blob} and
                  * {@link org.apache.causeway.applib.value.Clob} properties will <i>not</i> provide a link to
-                 * the URL.  Attempting to download from the resource controller will result in a 403 (forbidden).
+                 * the URL, resource input is unsupported, and action results remain metadata-only.
+                 * Attempting to download from the resource controller will result in a 403 (forbidden).
                  */
                 FORBIDDEN,
                 /**
@@ -2643,11 +2670,25 @@ public record CausewayConfiguration(
                 ResponseType structuralMetadataResponseType,
                 /**
                  * How {@link org.apache.causeway.applib.value.Blob} bytes and
-                 * {@link org.apache.causeway.applib.value.Clob} characters are returned.
+                 * {@link org.apache.causeway.applib.value.Clob} characters are returned, and whether bounded
+                 * GraphQL resource input and action-result content are enabled.
                  * If unset, temporarily falls back to {@link #responseType()}.
                  */
                 @Nullable
                 ResponseType valueContentResponseType,
+                /**
+                 * Maximum decoded byte size accepted for inline Blob or UTF-8 Clob GraphQL input.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineInputMaxBytes,
+                /**
+                 * Maximum byte size emitted inline for Blob or UTF-8 Clob action results.
+                 * Larger values remain metadata-only and property content continues to use secured resource links.
+                 */
+                @Min(value = 1)
+                @DefaultValue("1048576")
+                int inlineOutputMaxBytes,
                 /**
                  * Optional externally visible path prefix for a deployment behind a path-rewriting reverse proxy.
                  * The prefix is combined with the servlet context and configured GraphQL endpoint path when links are

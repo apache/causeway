@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 
 import lombok.experimental.UtilityClass;
 
@@ -157,11 +158,13 @@ public class ObjectFeatureUtils {
             }
             var convertedValues = values.stream()
                     .map(value -> unmarshalValue(elementType, value, environment, context))
+                    .peek(value -> ResourceValueTypes.validateFileAccept(parameter, value))
                     .toList();
             return ManagedObject.adaptParameter(parameter, convertedValues);
         }
 
         var convertedValue = unmarshalValue(elementType, argumentValue, environment, context);
+        ResourceValueTypes.validateFileAccept(parameter, convertedValue);
         return ManagedObject.adaptParameter(parameter, convertedValue);
     }
 

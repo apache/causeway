@@ -27,6 +27,10 @@ public interface ScalarMapper {
 
     GraphQLScalarType scalarTypeFor(final Class<?> clazz);
 
+    GraphQLScalarType inputScalarTypeFor(final Class<?> clazz);
+
+    boolean supportsInput(final Class<?> clazz);
+
     Object unmarshal(
             final Object argumentValue,
             final Class<?> targetType);

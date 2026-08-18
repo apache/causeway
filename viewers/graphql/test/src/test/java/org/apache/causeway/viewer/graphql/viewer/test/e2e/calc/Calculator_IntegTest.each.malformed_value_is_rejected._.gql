@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      echoLocalDateTime {
+        invoke(value: "not-a-date") {
+          results
+        }
+      }
+    }
+  }
+}

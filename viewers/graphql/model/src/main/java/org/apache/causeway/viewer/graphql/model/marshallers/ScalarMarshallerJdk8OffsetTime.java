@@ -37,7 +37,7 @@ public class ScalarMarshallerJdk8OffsetTime extends ScalarMarshallerAbstract<Off
 
     @Inject
     public ScalarMarshallerJdk8OffsetTime(final CausewayConfiguration causewayConfiguration) {
-        super(OffsetTime.class, ExtendedScalars.Time, causewayConfiguration);
+        super(OffsetTime.class, ExtendedScalars.Time, causewayConfiguration, true);
     }
 
     @Override

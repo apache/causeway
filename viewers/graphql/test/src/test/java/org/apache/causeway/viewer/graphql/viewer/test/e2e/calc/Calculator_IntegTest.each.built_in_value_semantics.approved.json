@@ -1,0 +1,51 @@
+{
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "echoJavaSqlTime" : {
+          "invoke" : {
+            "results" : "12:34:56"
+          }
+        },
+        "echoLocale" : {
+          "invoke" : {
+            "results" : "en-GB"
+          }
+        },
+        "echoBookmark" : {
+          "invoke" : {
+            "results" : "university.dept.StaffMember:1"
+          }
+        },
+        "echoApplicationFeatureId" : {
+          "invoke" : {
+            "results" : "VFlQRTp1bml2ZXJzaXR5LmNhbGMuQ2FsY3VsYXRvcg=="
+          }
+        },
+        "echoPassword" : {
+          "invoke" : {
+            "results" : "suppressed"
+          }
+        },
+        "sampleMarkup" : {
+          "invoke" : {
+            "results" : "<strong>GraphQL markup</strong>"
+          }
+        },
+        "echoLocalResourcePath" : {
+          "invoke" : {
+            "results" : {
+              "path" : "docs/index.html",
+              "openUrlStrategy" : "SAME_WINDOW"
+            }
+          }
+        },
+        "sampleUnmappedValue" : {
+          "invoke" : {
+            "results" : "[unsupported]"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "__type" : {
+      "kind" : "SCALAR",
+      "name" : "LocalDateTime",
+      "description" : "An ISO-8601 local date-time without an offset or zone; fractional seconds are preserved."
+    }
+  }
+}

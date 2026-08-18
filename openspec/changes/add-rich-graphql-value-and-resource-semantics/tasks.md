@@ -29,9 +29,9 @@
 
 ## 5. Fail-Closed Built-In Coverage Delta
 
-- [ ] 5.1 Inventory and classify every framework-provided `ValueSemanticsProvider` as reversible, structured, protected, output-only, or unsupported.
-- [ ] 5.2 Make `ScalarMarshaller` input support an explicit opt-in while keeping existing implementations binary-safe and output-capable.
-- [ ] 5.3 Replace implicit unknown-value `toString()` output with a non-disclosing default and an explicit temporary `LEGACY_STRING` migration policy.
-- [ ] 5.4 Add canonical mappings for the remaining selected scalar, password, markup, and local-resource-path built-ins while explicitly rejecting composite, image, DTO, and tree values.
-- [ ] 5.5 Add closed-inventory, migration, introspection, round-trip, and non-disclosure tests plus corresponding configuration and user documentation.
-- [ ] 5.6 Regenerate the schema and rerun GraphQL model, viewer, reference-derived, documentation, formatting, approval, and strict OpenSpec validation checks.
+- [x] 5.1 Inventory and classify every framework-provided `ValueSemanticsProvider` as reversible, structured, protected, output-only, or unsupported.
+- [x] 5.2 Make `ScalarMarshaller` input support an explicit opt-in while keeping existing implementations binary-safe and output-capable.
+- [x] 5.3 Replace implicit unknown-value `toString()` output with a non-disclosing default and an explicit temporary `LEGACY_STRING` migration policy.
+- [x] 5.4 Add canonical mappings for the remaining selected scalar, password, markup, and local-resource-path built-ins while explicitly rejecting composite, image, DTO, and tree values.
+- [x] 5.5 Add closed-inventory, migration, introspection, round-trip, and non-disclosure tests plus corresponding configuration and user documentation.
+- [x] 5.6 Regenerate the schema and rerun GraphQL model, viewer, reference-derived, documentation, formatting, approval, and strict OpenSpec validation checks.
