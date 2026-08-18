@@ -32,15 +32,18 @@ An additive offset window provides a bounded response with honest per-request co
 
 Each eligible rich collection wrapper keeps its established `get` list and adds a `window(offset, size)` operation.
 `offset` is zero-based and defaults to zero.
-`size` is positive, required or given a documented bounded server default, and cannot exceed a configured hard maximum.
+`size` is positive, defaults to `20`, and cannot exceed the default hard maximum of `100`.
+Applications configure those values with `causeway.viewer.graphql.collections.default-window-size` and `causeway.viewer.graphql.collections.max-window-size`, and startup fails when the default exceeds the maximum.
 
-The result contains rows, requested offset, returned count, nullable total count, `hasPrevious`, and `hasNext`.
+The result contains rows, requested offset, requested size, returned count, nullable total count, configured maximum size, `hasPrevious`, `hasNext`, and an ordering mode.
 An offset beyond the current authorized collection returns an empty window at that requested offset rather than silently substituting the last page.
+Invalid negative offsets, non-positive sizes, and oversized requests are rejected before the association is read.
 
 ### Apply deterministic ordering before slicing
 
 A supported Causeway comparator or ordering facet is applied consistently before offset selection.
-Where deterministic ordering cannot be established, the result reports per-request ordering limitations and does not imply cross-request positional stability.
+Where a configured comparator is available, the result reports `CONFIGURED` ordering.
+Otherwise the result reports `ENCOUNTER` ordering and does not imply cross-request positional stability.
 Arbitrary GraphQL field-name sorting remains excluded.
 
 ### Describe count and continuation honestly
@@ -61,10 +64,24 @@ The established `get` field remains schema-valid during migration.
 The new `window` field is additive and has a distinct response type, so existing documents keep their list shape.
 Components prefer `window` only after targeted introspection discovers it.
 
+### Preserve authorization and partial data semantics
+
+A hidden collection returns no rows from either `get` or `window` and produces the existing bounded hidden-member error.
+A disabled but visible collection remains readable because collection reads do not modify domain state, while the existing `disabled` field continues to explain interaction availability.
+Nested row errors follow GraphQL partial-data semantics, so safe rows and window metadata remain available when GraphQL can represent the failed nested field as nullable.
+
+### Extend secondary collection operations without adding UI policy
+
+Targeted introspection records whether a collection exposes `window` and its argument defaults.
+The object context keys secondary collection requests by member, row selection, offset, and size, aborts superseded requests, and discards stale responses.
+The collection component state exposes rows, offset, requested size, returned count, nullable total count, configured maximum, previous and next availability, and ordering mode.
+This change does not add paging controls or choose a presentation policy.
+
 ### Be explicit about materialization
 
 Windowing always bounds serialized GraphQL rows.
-Instrumentation and documentation identify whether the full association was materialized before slicing.
+The current association implementation fully materializes the authorized collection before sorting and slicing, and deterministic fixtures measure that behavior.
+Materialization remains an implementation diagnostic and documented limitation rather than a semantic GraphQL field.
 The capability does not claim persistence-level savings until a separate domain query source proves them.
 
 ## Risks / Trade-offs
@@ -82,5 +99,4 @@ Retain and document legacy unargumented reads for the compatibility period.
 
 ## Open Questions
 
-- The default and hard maximum window sizes and their configuration names.
-- Whether materialization behavior should be a stable enum field or bounded diagnostics and documentation only.
+None.

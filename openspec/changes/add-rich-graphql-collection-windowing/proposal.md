@@ -9,10 +9,10 @@ Abstract-element output correctness is handled first by `fix-rich-graphql-object
 ## What Changes
 
 - Add an additive offset-and-size collection window operation with a configured hard maximum.
-- Return rows, requested offset, returned count, nullable total count, and previous or next availability.
+- Return rows, requested offset and size, returned count, nullable total count, configured maximum, ordering mode, and previous or next availability.
 - Apply supported Causeway configured ordering consistently before selecting a window.
 - Preserve the established unargumented collection read during a documented compatibility period.
-- Define out-of-range, concurrent-change, partial-error, hidden, and disabled behavior.
+- Define fail-fast invalid-range, out-of-range, concurrent-change, partial-error, hidden, and disabled behavior.
 - Document whether each implementation bounds only GraphQL response materialization or also persistence retrieval.
 
 ## Capabilities
