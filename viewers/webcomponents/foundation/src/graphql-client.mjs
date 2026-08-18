@@ -20,7 +20,7 @@
 import {normalizeExecutor} from './graphql-executor.mjs';
 import {buildDescribeTypesOperation, fieldsByName, namedType, normalizeTypeDescription} from './introspection.mjs';
 import {RichSchemaNameError, RichSchemaNames} from './schema-names.mjs';
-import {buildObjectReadOperation} from './selection.mjs';
+import {buildCollectionWindowReadOperation, buildObjectReadOperation} from './selection.mjs';
 import {
   buildDescribeOperationRootsOperation,
   buildMutationInteractionOperation,
@@ -138,6 +138,30 @@ export class CausewayGraphQLClient {
     return Object.freeze({
       data: objectData ?? null,
       errors,
+      operation
+    });
+  }
+
+  async readCollectionWindow({description, identity, member, rowSelection, offset, size, signal}) {
+    const operation = buildCollectionWindowReadOperation({
+      description,
+      identity,
+      member,
+      rowSelection,
+      offset,
+      size,
+      schemaNames: this.schemaNames
+    });
+    const response = await this.executor({
+      document: operation.document,
+      variables: operation.variables,
+      operationName: operation.operationName,
+      signal
+    });
+    const objectData = valueAtPath(response.data, operation.objectPath);
+    return Object.freeze({
+      data: objectData ?? null,
+      errors: normalizeErrors(response.errors, operation.objectPath),
       operation
     });
   }
@@ -294,7 +318,8 @@ export class CausewayGraphQLClient {
         description: field.description ?? null,
         generatedTypeName: generatedMemberTypeName,
         fields: fieldsByName(supportType),
-        value: semanticValueDescription(semanticKind, supportType, describedTypes)
+        value: semanticValueDescription(semanticKind, supportType, describedTypes),
+        window: semanticCollectionWindowDescription(semanticKind, supportType, describedTypes)
       });
       if (semanticKind === 'metadata') {
         metadata = member;
@@ -314,6 +339,37 @@ export class CausewayGraphQLClient {
       types: describedTypes
     });
   }
+}
+
+function semanticCollectionWindowDescription(kind, supportType, describedTypes) {
+  if (kind !== 'collection') {
+    return null;
+  }
+  const field = supportType?.fields.find(candidate => candidate.name === 'window') ?? null;
+  if (!field) {
+    return null;
+  }
+  const generatedTypeName = namedType(field.type);
+  const typeDescription = describedTypes.get(generatedTypeName) ?? null;
+  if (!typeDescription) {
+    return null;
+  }
+  const args = new Map(field.args.map(argument => [argument.name, argument]));
+  return Object.freeze({
+    generatedTypeName,
+    typeDescription,
+    fields: fieldsByName(typeDescription),
+    offsetDefault: integerDefault(args.get('offset')?.defaultValue, 0),
+    sizeDefault: integerDefault(args.get('size')?.defaultValue, null)
+  });
+}
+
+function integerDefault(value, fallback) {
+  if (value == null) {
+    return fallback;
+  }
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : fallback;
 }
 
 function semanticValueDescription(kind, supportType, describedTypes) {

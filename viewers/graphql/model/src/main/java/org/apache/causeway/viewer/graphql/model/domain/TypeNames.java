@@ -126,6 +126,13 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + otma.asciiId() + "__gqlv_collection";
     }
 
+    public String collectionWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToManyAssociation otma,
+            final SchemaType schemaType) {
+        return collectionTypeNameFor(owningType, otma, schemaType) + "_window";
+    }
+
     public String memberTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectMember objectMember,

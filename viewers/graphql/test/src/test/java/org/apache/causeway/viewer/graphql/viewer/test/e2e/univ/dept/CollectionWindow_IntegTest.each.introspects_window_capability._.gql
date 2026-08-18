@@ -1,0 +1,19 @@
+{
+  collection: __type(name: "rich__university_dept_Department__staffMembers__gqlv_collection") {
+    fields(includeDeprecated: true) {
+      name
+      description
+      args(includeDeprecated: true) {
+        name
+        description
+        defaultValue
+        type {
+          kind
+          name
+          ofType { kind name }
+        }
+      }
+      type { kind name ofType { kind name } }
+    }
+  }
+}

@@ -92,6 +92,24 @@ target-arg-name
 
 
 |
+[[causeway.viewer.graphql.collections.default-window-size]]
+causeway.viewer.graphql.collections. +
+default-window-size
+
+|  20
+| Default row count used when a rich collection `window` request omits its size. Must not exceed `max-window-size`.
+
+
+|
+[[causeway.viewer.graphql.collections.max-window-size]]
+causeway.viewer.graphql.collections. +
+max-window-size
+
+|  100
+| Hard maximum row count accepted for one rich collection window.
+
+
+|
 [[causeway.viewer.graphql.resources.external-path-prefix]]
 causeway.viewer.graphql.resources. +
 external-path-prefix

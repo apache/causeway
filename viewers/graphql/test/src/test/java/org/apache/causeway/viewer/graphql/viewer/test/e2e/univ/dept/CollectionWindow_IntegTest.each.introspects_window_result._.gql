@@ -1,0 +1,11 @@
+{
+  __type(name: "rich__university_dept_Department__staffMembers__gqlv_collection_window") {
+    kind
+    name
+    description
+    fields(includeDeprecated: true) {
+      name
+      type { kind name ofType { kind name } }
+    }
+  }
+}

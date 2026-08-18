@@ -193,7 +193,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     return true;
   }
 
-  async load({force = false} = {}) {
+  async load({force = false, offset = 0, size = null} = {}) {
     const context = this._resolvedContext;
     if (!context || this.componentState?.status !== 'ready') {
       return null;
@@ -209,6 +209,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       const result = await context.loadCollection({
         member: this.member,
         columns: this._columns,
+        offset,
+        size,
+        requestKey: this,
         force,
         signal: abortController.signal
       });
@@ -218,7 +221,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       for (const rowContext of this.rowContexts) {
         rowContext.disconnect?.();
       }
-      const rows = Array.isArray(result.data?.get) ? result.data.get : [];
+      const rows = collectionRows(result);
       this.rowContexts = rows
         .filter(row => row?._meta?.logicalTypeName && row?._meta?.id)
         .map(row => context.createHydratedRowContext(row, result.rowSelection));
@@ -226,6 +229,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.collectionState = Object.freeze({
         status: result.errors.length > 0 ? 'partial-error' : 'ready',
         data: result.data,
+        rows,
+        window: result.window,
         errors: result.errors,
         descriptor: result.descriptor,
         rowDescription: result.rowDescription,
@@ -310,7 +315,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.innerHTML = shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</span>`);
       return;
     }
-    const rows = Array.isArray(this.collectionState.data?.get) ? this.collectionState.data.get : [];
+    const rows = collectionRows(this.collectionState);
     if (rows.length === 0) {
       this.innerHTML = shell('<span class="causeway-empty" role="status">No items</span>');
       return;
@@ -384,6 +389,16 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       {element: this, member: this.member, state: this.collectionState}
     ));
   }
+}
+
+function collectionRows(state) {
+  if (Array.isArray(state?.rows)) {
+    return state.rows;
+  }
+  if (Array.isArray(state?.data?.window?.rows)) {
+    return state.data.window.rows;
+  }
+  return Array.isArray(state?.data?.get) ? state.data.get : [];
 }
 
 function collectionShell(labelId, label, descriptionId, description, content, attributes = '') {

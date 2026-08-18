@@ -1,0 +1,125 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/configuredStaffMembers/window/rows[0]/windowProbe/get) : IllegalStateException thrown while invoking getWindowProbe Window probe unavailable",
+    "locations" : [ {
+      "column" : 33,
+      "line" : 17
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "configuredStaffMembers", "window", "rows", 0, "windowProbe", "get" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "configuredStaffMembers" : {
+                "window" : {
+                  "offset" : 0,
+                  "requestedSize" : 13,
+                  "returnedCount" : 13,
+                  "totalCount" : 13,
+                  "hasPrevious" : false,
+                  "hasNext" : false,
+                  "rows" : [ {
+                    "name" : {
+                      "get" : "Window Error"
+                    },
+                    "windowProbe" : null
+                  }, {
+                    "name" : {
+                      "get" : "Window 08"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 08"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 07"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 07"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 06"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 06"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 05"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 05"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 04"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 04"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 03"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 03"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 02"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 02"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 01"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 01"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Window 00"
+                    },
+                    "windowProbe" : {
+                      "get" : "Window 00"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Mervin Hughes"
+                    },
+                    "windowProbe" : {
+                      "get" : "Mervin Hughes"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "Margaret Randall"
+                    },
+                    "windowProbe" : {
+                      "get" : "Margaret Randall"
+                    }
+                  }, {
+                    "name" : {
+                      "get" : "John Gartner"
+                    },
+                    "windowProbe" : {
+                      "get" : "John Gartner"
+                    }
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
