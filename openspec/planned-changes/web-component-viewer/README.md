@@ -3,8 +3,8 @@
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
 The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, value-semantics change, and collection-windowing change are archived.
-There is no active change.
-The remaining drafts are queued for serial promotion, beginning with `add-rich-graphql-application-entry-points`.
+The application-entry-points change is active.
+The remaining drafts are queued for serial promotion, beginning with `add-composite-object-web-component`.
 
 Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
 After the active change is archived, promote the next draft verbatim:
@@ -29,7 +29,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 5 | `fix-rich-graphql-resource-link-safety` *(archived)* | Complete | Completed analysis | NEW `rich-graphql-resource-link-safety` |
 | 6 | `add-rich-graphql-value-and-resource-semantics` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-value-semantics` |
 | 7 | `add-rich-graphql-collection-windowing` *(archived)* | Complete | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
-| 8 | `add-rich-graphql-application-entry-points` | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
+| 8 | `add-rich-graphql-application-entry-points` *(active)* | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
 | 9 | `add-composite-object-web-component` | P1 | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<causeway-object>` |
 | 10 | `add-menubar-web-components` | P1 | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
 | 11 | `add-generic-htmx-web-component-viewer` | P1 | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
