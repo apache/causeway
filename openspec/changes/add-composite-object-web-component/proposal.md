@@ -11,8 +11,8 @@ The evidence is recorded in `coverage-matrix.yaml` entries `REF-LAYOUT-01`, `REF
 - Interpret the supported Causeway grid subset for rows, columns, tab groups, tabs, field sets, domain-object headers, actions, properties, collections, and unreferenced-member placement.
 - Use deterministic fallback composition modeled on `core/metamodel/.../GridFallbackLayout.xml` when the effective layout is absent or unusable.
 - Decompose into existing `<causeway-object-header>`, `<causeway-property>`, `<causeway-action>`, and `<causeway-collection>` elements without duplicating their GraphQL or interaction behavior.
-- Provide light-DOM layout regions, diagnostics, customization hooks, responsive behavior, accessible tabs and groups, and real-browser acceptance coverage.
-- Revise the generic HTMX viewer to consume `<causeway-object>` rather than implementing its own browser-side object composer.
+- Provide light-DOM layout regions, bounded diagnostics, customization hooks, responsive behavior, accessible tabs and groups, and real-browser acceptance coverage.
+- Leave adoption by the later generic HTMX, Vue, and Svelte viewers to their separate changes.
 
 ## Capabilities
 
@@ -27,6 +27,7 @@ None.
 ## Impact
 
 - Affects the web-component foundation module, layout parsing, component registration, styling, tests, sample HTML, and documentation.
-- Depends on corrected object interaction, safe structural resource links, and the completed reference-app analysis; it prefers bounded collection windows and consumes narrow member metadata when available.
+- Depends on the archived object-interaction, structural-resource, value-semantics, and collection-windowing contracts and the completed reference-application analysis.
+- Uses the existing targeted rich-schema description and effective-grid resource without depending on the deferred member-metadata change.
 - Does not require HTMX and does not own routes, browser history, or application menus.
 - Preserves explicit low-level component composition for applications that do not want automatic object layout.
