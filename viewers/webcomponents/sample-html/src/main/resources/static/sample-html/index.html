@@ -556,7 +556,7 @@
       <div>
         <p class="sample-eyebrow">Apache Causeway · Vanilla HTML</p>
         <h1>Component interaction showcase</h1>
-        <p class="sample-hero-copy">A deterministic domain page for read-only rendering, property editing, action prompts, and semantic results using packaged native custom elements and the same-origin rich GraphQL endpoint.</p>
+        <p class="sample-hero-copy">A deterministic application shell and domain page for semantic menu bars, object rendering, property editing, action prompts, and typed results using packaged native custom elements and the same-origin rich GraphQL endpoint.</p>
       </div>
       <div class="sample-readiness" aria-label="Object context state">
         <output data-testid="sample-state" aria-live="polite">booting</output>
@@ -564,6 +564,21 @@
     </header>
 
     <causeway-graphql-client endpoint="/graphql" data-testid="graphql-client">
+      <section class="sample-card" data-testid="section-menubars" aria-labelledby="sample-menubars-heading">
+        <div class="sample-section-heading">
+          <p class="sample-section-kicker">Application entry point</p>
+          <h2 id="sample-menubars-heading">Effective semantic menu bars</h2>
+          <p>The composite shares one authorized effective-menu generation across all present bars; the standalone examples exercise the same public bar components independently.</p>
+        </div>
+        <causeway-menubars data-testid="menubars-composite"></causeway-menubars>
+        <details class="sample-standalone-menus">
+          <summary>Standalone semantic bar examples</summary>
+          <causeway-menubar-primary data-testid="menubar-primary-standalone"></causeway-menubar-primary>
+          <causeway-menubar-secondary data-testid="menubar-secondary-standalone"></causeway-menubar-secondary>
+          <causeway-menubar-tertiary data-testid="menubar-tertiary-standalone"></causeway-menubar-tertiary>
+        </details>
+      </section>
+
       <causeway-object-context
           logical-type="causeway.webcomponents.sample.SampleObject"
           object-id="s_sample-1"
@@ -648,6 +663,10 @@
                 <span class="sample-diagnostic-label">Related collection</span>
                 <output data-testid="collection-related-count" aria-live="polite">Waiting for rows</output>
               </div>
+              <div class="sample-diagnostic">
+                <span class="sample-diagnostic-label">Application menu</span>
+                <output data-testid="menubars-state" aria-live="polite">Waiting for menus</output>
+              </div>
             </div>
           </section>
 
@@ -700,6 +719,7 @@
     const eventOutput = document.querySelector('[data-testid="sample-event"]');
     const interactionOutput = document.querySelector('[data-testid="sample-interaction-event"]');
     const collectionCountOutput = document.querySelector('[data-testid="collection-related-count"]');
+    const menuStateOutput = document.querySelector('[data-testid="menubars-state"]');
 
     const report = (output, value) => {
       output.value = value;
@@ -733,12 +753,19 @@
       }
     });
 
+    application.addEventListener('causeway-menubars-state-change', event => {
+      if (event.detail.element?.getAttribute?.('data-testid') === 'menubars-composite') {
+        report(menuStateOutput, event.detail.state.status);
+      }
+    });
+
     application.addEventListener('causeway-navigation-request', event => {
       report(eventOutput, `navigate:${event.detail.target.logicalTypeName}:${event.detail.target.id}`);
     });
 
     application.addEventListener('causeway-action-request', event => {
-      report(eventOutput, `action:${event.detail.actionId}`);
+      const service = event.detail.serviceLogicalTypeName ? `:${event.detail.serviceLogicalTypeName}` : '';
+      report(eventOutput, `action:${event.detail.actionId}${service}`);
     });
 
     application.addEventListener('causeway-property-interaction-state-change', event => {
@@ -756,7 +783,8 @@
     application.addEventListener('causeway-action-result', event => {
       const result = event.detail.result;
       const value = result?.kind === 'scalar' ? `:${result.value}` : '';
-      report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}`);
+      const target = event.detail.target?.kind === 'service' ? `:${event.detail.target.logicalTypeName}` : '';
+      report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}${target}`);
     });
 
     const components = await import('/causeway-webcomponents/index.mjs');

@@ -30,6 +30,11 @@ The composite SHALL own one bounded application-menu generation shared by its ba
 - **THEN** a new generation re-evaluates application metadata, resource content, and current service-action state
 - **AND** superseded metadata, resource, and action-state responses cannot replace the newer generation
 
+#### Scenario: Multiple contexts start against a cold GraphQL viewer
+- **WHEN** object and menu contexts issue concurrent initial requests before the GraphQL execution source exists
+- **THEN** the viewer initializes one complete execution source without corrupting shared schema registries
+- **AND** this initialization guard does not introduce parallel data-fetcher or mutation execution
+
 ### Requirement: Declarative and generated bar composition
 The composite SHALL preserve declaratively supplied semantic bar children and generate only missing effective non-empty bar roles.
 

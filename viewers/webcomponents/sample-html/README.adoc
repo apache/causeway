@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral composite, read-only, and interaction web components against a real rich GraphQL endpoint.
+The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral application-menu, composite-object, read-only, and interaction web components against a real rich GraphQL endpoint.
 Its frontend uses a page-specific responsive application theme built with vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
 It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
@@ -10,7 +10,8 @@ It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
 The application uses the Causeway GraphQL viewer, Causeway JPA persistence with EclipseLink, an in-memory H2 database, security bypass for local verification, and the packaged web-component foundation artifact.
 The sample HTML, foundation modules, and `/graphql` endpoint are served from the same origin.
-The sample explicitly enables direct structural metadata so `<causeway-object>` can dereference the authorized effective-grid resource; applications that keep this policy forbidden receive canonical fallback composition instead.
+The sample explicitly enables direct structural metadata so `<causeway-menubars>` can dereference the authorized effective application menu and `<causeway-object>` can dereference the authorized effective grid.
+Applications that keep this policy forbidden receive bounded unavailable menu state and canonical object fallback composition without resource bodies.
 
 The module is an executable integration fixture and is skipped during Maven install and deployment.
 
@@ -139,6 +140,38 @@ The root identity and expected values are:
 |`clearNotes`, invoked through a top-level mutation and followed by context refresh
 |===
 
+The deterministic `causeway.webcomponents.sample.SampleMenu` service contributes effective actions across all three application bars:
+
+[cols="1,2"]
+|===
+|Action |Contract
+
+|`welcomeMessage`
+|Safe parameterless scalar result
+
+|`greet(name)`
+|Safe parameterized scalar result with default `Ada`, choices `Ada`, `Grace`, and `Linus`, and mandatory-name validation
+
+|`findSample`
+|Safe object result
+
+|`findRelatedObjects`
+|Safe object-collection result
+
+|`statusMessage(status)`
+|Safe enum-parameter scalar result with default `ACTIVE`
+
+|`clearSampleNotes`
+|Void mutating result through the top-level mutation
+
+|`disabledAction`
+|Visible and disabled because `Available to administrators only.`
+
+|`hiddenAction`
+|Hidden and omitted from the authorized effective menu
+|===
+
+The explicit menu layout also contains one malformed action reference so the application entry reports bounded `INVALID_ACTION_REFERENCE` while preserving valid bars and actions.
 The populated `relatedObjects` collection contains these deterministic rows:
 
 [cols="1,1,2,1"]
@@ -162,7 +195,9 @@ The `_meta.version` values are supplied through the JPA `HasVersion` contract.
 
 == Expected page and interaction states
 
-The reference page groups semantic content into labelled object-summary, property, action, collection, live-diagnostic, and automatically composed object cards.
+The reference page groups semantic content into an application-menu shell and labelled object-summary, property, action, collection, live-diagnostic, and automatically composed object cards.
+The menu shell renders one shared `<causeway-menubars>` generation plus independently loading primary, secondary, and tertiary examples.
+The shared composite reaches bounded `partial-error` because the fixture deliberately includes one invalid reference, while all three valid bars, hidden filtering, disabled reason, prompts, and typed service results remain available.
 The automatically composed card uses only an independent `<causeway-object-context>`, `<causeway-object editable>`, and the standard interaction controller.
 It retrieves the authorized effective fallback grid, discovers members through targeted schema introspection, and generates the established semantic children without page-authored member structure.
 The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
@@ -196,6 +231,24 @@ The following selectors are intended as public test hooks for browser automation
 
 |`[data-testid="graphql-client"]`
 |GraphQL client provider
+
+|`[data-testid="section-menubars"]`
+|Application-menu showcase
+
+|`[data-testid="menubars-composite"]`
+|Shared application-menu coordinator; wait for `data-menu-state="ready"` or bounded `partial-error`
+
+|`[data-testid="menubar-primary-standalone"]`
+|Independent primary bar
+
+|`[data-testid="menubar-secondary-standalone"]`
+|Independent secondary bar
+
+|`[data-testid="menubar-tertiary-standalone"]`
+|Independent tertiary bar
+
+|`[data-testid="menubars-state"]`
+|Live composite menu generation state
 
 |`[data-testid="sample-object"]`
 |Object context for the deterministic root entity
@@ -338,6 +391,12 @@ Playwright itself is intentionally not introduced by this slice.
 
 == Manual event verification
 
+Open the composite `Samples` menu and select `Personal Greeting`.
+The standard prompt initializes the `name` choice editor from service-action defaults, validates the pending value, and reports a scalar result with service target `causeway.webcomponents.sample.SampleMenu`.
+Select `Find Sample` and `Related Objects` to observe object and collection results without automatic navigation.
+Select `Clear Sample Notes` in the tertiary bar to observe top-level mutation placement, void result, and menu-generation refresh.
+The disabled action remains represented with its reason, while the hidden and malformed actions remain absent.
+
 Select the object link rendered inside `property-related-object`.
 The page prevents no routing, but the plain application listener reports `navigate:causeway.webcomponents.sample.SampleRelatedObject:s_related-1` through `sample-event`.
 
@@ -351,6 +410,10 @@ After the populated collection loads, `collection-related-count` reports `2 rows
 
 . Start the sample with `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html` and wait for `Started SampleHtmlApplication`.
 . Probe `/graphql` directly as shown below, open `/sample-html/index.html`, and wait for `sample-app[data-state="ready"]`.
+. Confirm the composite application menus reach bounded `partial-error`, render labelled primary, secondary, and tertiary navigation from one menu-resource request, preserve valid entries, omit hidden and malformed entries, and retain the disabled service action with its reason.
+. Confirm each standalone bar independently loads only its primary, secondary, or tertiary role and owns its interaction controller.
+. Open menu disclosures with pointer, Enter, and Space; use arrows, Home, and End among peers; close with Escape; and confirm focus restoration, sibling closing, and ordinary Tab order.
+. Invoke the greeting, object, collection, and void service actions and confirm defaults, choices, validation, typed service-target events, safe query or top-level mutation placement, and no automatic navigation.
 . Confirm the explicit-composition cards and automatically composed object card, interaction controls, static coverage guide, existing read-only values, deliberate disabled reasons, hidden states, two collection rows, row count, and empty collection.
 . Confirm `composite-object` reaches `data-layout-state="ready"`, contains generated header, property, action, collection, group, and tab regions, and exposes no hidden semantic content.
 . Select `Edit Summary`, cancel, and confirm that no mutation ran and the original value remains.
@@ -368,7 +431,14 @@ After the populated collection loads, `collection-related-count` reports `2 rows
 === Recorded interaction verification
 
 On 2026-08-16 the exact Maven profile and direct GraphQL probe returned HTTP 200, and the page reached `sample-app[data-state="ready"]` with the stable read-only content intact.
-On 2026-08-18 the composite reached `data-layout-state="ready"` from one authorized effective-grid request with no diagnostics and generated one header, eight visible properties, five visible actions, and two collections while hidden members remained empty hosts.
+On 2026-08-18 the menu composite reached bounded `data-menu-state="partial-error"` from one authorized effective-menu request, preserved primary, secondary, and tertiary bars, exposed the disabled reason, omitted hidden and malformed entries, and published only the generic `INVALID_ACTION_REFERENCE` diagnostic.
+The three standalone examples each rendered only their own role with a private interaction controller and menu-resource generation.
+Pointer and keyboard checks covered native disclosure toggling, sibling closing, Tab order, arrow, Home, End, Enter, Space, and Escape focus restoration; narrow dark and wide light layouts retained visible focus and had no overflow.
+Service interaction checks covered default and choice recomputation, prompt cancellation, scalar, object, collection, and void outcomes, explicit service targets, top-level mutation placement, and generation refresh without automatic navigation.
+A synthetic capability-absent component reached bounded `unsupported` state without an application read or resource fetch.
+Cold concurrent startup completed without GraphQL schema races, and every browser GraphQL request succeeded without console errors.
+Desktop light-mode and mobile dark-mode Lighthouse navigation audits scored 100 for Accessibility, Best Practices, and SEO.
+On 2026-08-18 the object composite reached `data-layout-state="ready"` from one authorized effective-grid request with no diagnostics and generated one header, eight visible properties, five visible actions, and two collections while hidden members remained empty hosts.
 Pointer and keyboard checks covered composite property validation and cancellation, action-prompt opening and Escape focus restoration, ArrowRight tab selection, and bounded collection-window activation with two hydrated rows.
 A browser-injected partial-error context preserved a successful sibling property and announced the bounded failed member.
 Forced fallback produced canonical 12/4/8 spans without another grid request, and wide light-mode and narrow dark-mode layouts had no horizontal overflow or console errors.
@@ -391,6 +461,9 @@ mvn -f viewers/webcomponents/pom.xml -pl sample-html -am test
 The sample integration test starts the application on a random port and verifies:
 
 * `/sample-html/index.html` is delivered with all documented selectors.
+* The rich application entry returns an authorized effective menu descriptor and bounded invalid-reference issue.
+* `/graphql/application/menu-bars` returns primary, secondary, and tertiary XML using `private, no-store`, retains the disabled action, and omits hidden, malformed, and sensitive content.
+* Real service wrappers expose current hidden and disabled state, defaults, choices, validation, and safe scalar invocation, while the void service mutation uses the existing top-level field.
 * `/causeway-webcomponents/index.mjs` is delivered from the foundation dependency and exports the object element and safe layout planner.
 * The authorized effective-grid resource returns XML with `private, no-store` and never contains the hidden value.
 * The page includes a context-plus-`<causeway-object>` composition with stable acceptance selectors.
@@ -402,7 +475,7 @@ The sample integration test starts the application on a random port and verifies
 * A real secondary-shaped collection operation returns deterministic row metadata and selected `name` and `code` wrappers.
 * The empty collection returns zero rows.
 
-The foundation's dependency-free Node tests verify safe grid parsing, deterministic member allocation, canonical fallback, composite lifecycle and diagnostics, context-owned resource retrieval, renderer and editor selection, semantic commands, property state transitions, action prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
+The foundation's dependency-free Node tests verify targeted application and service discovery, shared safe menu and grid parsing, grouped service state, menu generations and refresh, declarative and standalone bars, service prompts and typed targets, deterministic member allocation, canonical object fallback, composite lifecycle and diagnostics, context-owned resource retrieval, renderer and editor selection, property state transitions, object prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
 
 == GraphQL readiness probe and troubleshooting
 

@@ -21,18 +21,10 @@ import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.
 import {fieldsByName, namedType} from './introspection.mjs';
 import {commandSelection, resultSelectionForType} from './interaction-operations.mjs';
 import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
+import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
-const MAX_STRUCTURAL_RESOURCE_CHARACTERS = 1_048_576;
-
-export class StructuralResourceError extends Error {
-  constructor(code, message, {status = null} = {}) {
-    super(message);
-    this.name = 'StructuralResourceError';
-    this.code = code;
-    this.status = status;
-  }
-}
+export {StructuralResourceError} from './structural-resource.mjs';
 
 export class ObjectContextController extends EventTarget {
   constructor({
@@ -121,12 +113,6 @@ export class ObjectContextController extends EventTarget {
     if (this.closed) {
       throw new StructuralResourceError('CONTEXT_DISCONNECTED', 'Cannot load a structural resource using a disconnected object context.');
     }
-    if (!isSafeStructuralResourcePath(resourcePath)) {
-      throw new StructuralResourceError('INVALID_RESOURCE_PATH', 'A structural resource must be an opaque origin-relative path beginning with exactly one slash.');
-    }
-    if (typeof this.fetchImpl !== 'function') {
-      throw new StructuralResourceError('FETCH_UNAVAILABLE', 'No Fetch API implementation is available for structural resources.');
-    }
     const abortController = new AbortController();
     this.secondaryAbortControllers.add(abortController);
     const abort = () => abortController.abort();
@@ -135,40 +121,11 @@ export class ObjectContextController extends EventTarget {
       abortController.abort();
     }
     try {
-      const fetchImpl = this.fetchImpl;
-      const response = await fetchImpl(resourcePath, {
-        method: 'GET',
-        headers: {accept},
-        credentials: 'same-origin',
-        cache: 'no-store',
-        redirect: 'error',
+      return await fetchStructuralResource(resourcePath, {
+        fetchImpl: this.fetchImpl,
+        accept,
         signal: abortController.signal
       });
-      if (!response?.ok) {
-        throw new StructuralResourceError(
-          'RESOURCE_REQUEST_FAILED',
-          `Structural resource request failed with HTTP ${response?.status ?? 'unknown'}.`,
-          {status: response?.status ?? null}
-        );
-      }
-      const contentLength = Number(response.headers?.get?.('content-length'));
-      if (Number.isFinite(contentLength) && contentLength > MAX_STRUCTURAL_RESOURCE_CHARACTERS) {
-        throw new StructuralResourceError('RESOURCE_TOO_LARGE', `Structural resource exceeds ${MAX_STRUCTURAL_RESOURCE_CHARACTERS} characters.`);
-      }
-      const text = await response.text();
-      if (text.length > MAX_STRUCTURAL_RESOURCE_CHARACTERS) {
-        throw new StructuralResourceError('RESOURCE_TOO_LARGE', `Structural resource exceeds ${MAX_STRUCTURAL_RESOURCE_CHARACTERS} characters.`);
-      }
-      return Object.freeze({
-        path: resourcePath,
-        mediaType: response.headers?.get?.('content-type') ?? null,
-        text
-      });
-    } catch (error) {
-      if (error?.name === 'AbortError' || error instanceof StructuralResourceError) {
-        throw error;
-      }
-      throw new StructuralResourceError('RESOURCE_REQUEST_FAILED', 'The structural resource request failed.');
     } finally {
       signal?.removeEventListener?.('abort', abort);
       this.secondaryAbortControllers.delete(abortController);
@@ -1046,14 +1003,6 @@ function commandError(error) {
     path: Object.freeze([...(error?.path ?? [])]),
     extensions: Object.freeze({...error?.extensions})
   });
-}
-
-function isSafeStructuralResourcePath(value) {
-  return typeof value === 'string'
-    && value.startsWith('/')
-    && !value.startsWith('//')
-    && !value.includes('\\')
-    && !/[\r\n]/.test(value);
 }
 
 function validateIdentity(identity, client) {

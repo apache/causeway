@@ -176,6 +176,148 @@ causeway-object {
   padding: 0.35rem 0.5rem;
   text-align: start;
 }
+causeway-menubars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--causeway-menubars-gap, 0.25rem);
+  position: relative;
+  z-index: var(--causeway-menubars-z-index, 10);
+}
+causeway-menubar-primary,
+causeway-menubar-secondary,
+causeway-menubar-tertiary {
+  display: block;
+  min-inline-size: 0;
+}
+causeway-menubars > [data-causeway-bar-order="0"] {
+  order: 0;
+}
+causeway-menubars > [data-causeway-bar-order="1"] {
+  order: 1;
+}
+causeway-menubars > [data-causeway-bar-order="2"] {
+  order: 2;
+}
+causeway-menubars > [data-causeway-menubars-status],
+causeway-menubars > causeway-interaction-controller {
+  order: 3;
+}
+.causeway-menubar-shell {
+  background: var(--causeway-menubar-background, Canvas);
+  border-block-end: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  color: var(--causeway-menubar-color, CanvasText);
+  min-inline-size: 0;
+}
+.causeway-menubar {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-menubar-menu-gap, 0.25rem);
+  padding: var(--causeway-menubar-padding, 0.25rem 0.5rem);
+}
+.causeway-menubar-bar-disclosure {
+  display: none;
+}
+.causeway-menu {
+  min-inline-size: 0;
+  position: relative;
+}
+.causeway-menubar button {
+  background: var(--causeway-menubar-control-background, transparent);
+  border: var(--causeway-menubar-control-border, 1px solid transparent);
+  border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: var(--causeway-menubar-control-padding, 0.5rem 0.75rem);
+  text-align: start;
+}
+.causeway-menubar button:hover:not(:disabled),
+.causeway-menubar button[aria-expanded="true"] {
+  background: var(--causeway-menubar-control-active-background, color-mix(in srgb, LinkText 14%, transparent));
+}
+.causeway-menubar button:focus-visible,
+.causeway-menubar-bar-disclosure:focus-visible {
+  outline: var(--causeway-menubar-focus, 0.2rem solid LinkText);
+  outline-offset: 0.1rem;
+}
+.causeway-menubar button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.causeway-menu-panel {
+  background: var(--causeway-menu-panel-background, Canvas);
+  border: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+  box-shadow: var(--causeway-menu-panel-shadow, 0 0.5rem 1.5rem color-mix(in srgb, #000 22%, transparent));
+  color: var(--causeway-menubar-color, CanvasText);
+  inline-size: max-content;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  max-inline-size: min(28rem, calc(100vw - 2rem));
+  min-inline-size: min(16rem, calc(100vw - 2rem));
+  padding: 0.5rem;
+  position: absolute;
+}
+.causeway-menu-panel[hidden],
+.causeway-menubar[hidden] {
+  display: none;
+}
+.causeway-menu-section + .causeway-menu-section {
+  border-block-start: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  margin-block-start: 0.5rem;
+  padding-block-start: 0.5rem;
+}
+.causeway-menu-section-label {
+  font-size: 0.85rem;
+  margin: 0.25rem 0.75rem;
+}
+.causeway-service-action-control {
+  inline-size: 100%;
+}
+.causeway-menu-icon {
+  display: inline-block;
+  inline-size: 0.75rem;
+  margin-inline-end: 0.35rem;
+}
+.causeway-menubars-status,
+.causeway-menubar-status {
+  margin-block: 0.5rem;
+}
+@media (min-width: 48.001rem) {
+  .causeway-menubar[data-causeway-bar-content][hidden] {
+    display: flex;
+  }
+}
+@media (max-width: 48rem) {
+  .causeway-menubar-shell {
+    padding: 0.25rem;
+  }
+  .causeway-menubar-bar-disclosure {
+    background: var(--causeway-menubar-control-background, transparent);
+    border: var(--causeway-menubar-control-border, 1px solid transparent);
+    border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+    color: inherit;
+    display: block;
+    font: inherit;
+    inline-size: 100%;
+    padding: 0.6rem 0.75rem;
+    text-align: start;
+  }
+  .causeway-menubar {
+    align-items: stretch;
+    display: grid;
+    padding: 0.25rem;
+  }
+  .causeway-menu-panel {
+    box-shadow: none;
+    inline-size: auto;
+    margin-block-start: 0.25rem;
+    max-inline-size: none;
+    min-inline-size: 0;
+    position: static;
+  }
+}
 `;
 
 export function installCausewayComponentStyles(documentRoot = globalThis.document) {
