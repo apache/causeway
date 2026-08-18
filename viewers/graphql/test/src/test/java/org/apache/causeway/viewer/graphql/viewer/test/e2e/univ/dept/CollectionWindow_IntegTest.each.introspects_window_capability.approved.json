@@ -1,0 +1,79 @@
+{
+  "data" : {
+    "collection" : {
+      "fields" : [ {
+        "name" : "hidden",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "Boolean",
+          "ofType" : null
+        }
+      }, {
+        "name" : "disabled",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "String",
+          "ofType" : null
+        }
+      }, {
+        "name" : "get",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "LIST",
+          "name" : null,
+          "ofType" : {
+            "kind" : "OBJECT",
+            "name" : "rich__university_dept_StaffMember"
+          }
+        }
+      }, {
+        "name" : "window",
+        "description" : "Returns a bounded zero-based collection window; the configured maximum size is 100.",
+        "args" : [ {
+          "name" : "offset",
+          "description" : "Zero-based row offset.",
+          "defaultValue" : "0",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Int"
+            }
+          }
+        }, {
+          "name" : "size",
+          "description" : "Positive row count, not exceeding the configured maximum of 100.",
+          "defaultValue" : "20",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Int"
+            }
+          }
+        } ],
+        "type" : {
+          "kind" : "OBJECT",
+          "name" : "rich__university_dept_Department__staffMembers__gqlv_collection_window",
+          "ofType" : null
+        }
+      }, {
+        "name" : "datatype",
+        "description" : null,
+        "args" : [ ],
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "String",
+          "ofType" : null
+        }
+      } ]
+    }
+  }
+}

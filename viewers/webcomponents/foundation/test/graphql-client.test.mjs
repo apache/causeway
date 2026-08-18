@@ -22,8 +22,10 @@ import test from 'node:test';
 import {CausewayGraphQLClient, CausewaySchemaError} from '../src/graphql-client.mjs';
 import {RichSchemaNames} from '../src/schema-names.mjs';
 import {
+  collectionWindowResponse,
   createRichSchemaFixtureExecutor,
   createRichSchemaTypes,
+  createWindowedRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
   departmentObjectData
 } from './fixtures/rich-schema-fixture.mjs';
@@ -53,6 +55,41 @@ test('targeted introspection classifies object members and caches the descriptio
   const callCount = executor.introspectionCalls.length;
   assert.equal(await client.describeObject(DEPARTMENT_LOGICAL_TYPE), description);
   assert.equal(executor.introspectionCalls.length, callCount);
+});
+
+test('targeted introspection discovers and executes bounded collection windows', async () => {
+  const rows = [{
+    _meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada', version: '1'}
+  }];
+  const executor = createRichSchemaFixtureExecutor({
+    types: createWindowedRichSchemaTypes(),
+    windowResponses: [collectionWindowResponse({rows, offset: 20, requestedSize: 10, totalCount: 31})]
+  });
+  const client = new CausewayGraphQLClient({executor});
+  const description = await client.describeObject(DEPARTMENT_LOGICAL_TYPE);
+  const window = description.members.get('staffMembers').window;
+  assert.equal(window.offsetDefault, 0);
+  assert.equal(window.sizeDefault, 20);
+  assert.equal(window.fields.has('totalCount'), true);
+  assert.equal(window.fields.has('ordering'), true);
+  assert.equal(executor.introspectionCalls.every(call => Object.keys(call.variables).length === 1), true);
+
+  const result = await client.readCollectionWindow({
+    description,
+    identity: {logicalTypeName: DEPARTMENT_LOGICAL_TYPE, id: '42'},
+    member: 'staffMembers',
+    rowSelection: {_meta: {id: true, logicalTypeName: true, title: true, version: true}},
+    offset: 20,
+    size: 10
+  });
+  assert.deepEqual(result.data.staffMembers.window.rows, rows);
+  assert.deepEqual(executor.windowCalls[0].variables, {
+    object: {id: '42'},
+    offset: 20,
+    size: 10
+  });
+  assert.match(executor.windowCalls[0].document, /window\(offset: \$offset, size: \$size\)/);
+  assert.match(executor.windowCalls[0].document, /rows \{/);
 });
 
 test('reports missing object and support type diagnostics', async () => {

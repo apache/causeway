@@ -152,6 +152,26 @@
  */
 
 /**
+ * Semantic metadata for one bounded collection response.
+ * Presentation components may derive labels and controls from this state but do not own its consistency rules.
+ *
+ * @typedef {Object} CollectionWindowState
+ * @property {number} offset
+ * @property {number} requestedSize
+ * @property {number} returnedCount
+ * @property {number|null} totalCount
+ * @property {boolean} countAvailable
+ * @property {number} maximumSize
+ * @property {boolean} hasPrevious
+ * @property {boolean} hasNext
+ * @property {number|null} previousOffset
+ * @property {number|null} nextOffset
+ * @property {number|null} rangeStart
+ * @property {number|null} rangeEnd
+ * @property {'CONFIGURED'|'ENCOUNTER'|null} ordering
+ */
+
+/**
  * @typedef {Object} CollectionRequirement
  * @property {'collection'} kind
  * @property {string} member

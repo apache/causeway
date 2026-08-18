@@ -1,0 +1,76 @@
+= Rich collection windows
+
+The rich GraphQL schema exposes an additive bounded `window` field on every readable collection wrapper.
+The established unargumented `get` field remains available during the compatibility period, but new generic clients should prefer `window` after targeted introspection discovers it.
+
+== Schema contract
+
+A collection wrapper has this conceptual shape, with a generated result type whose `rows` field uses the collection element type:
+
+[source,graphql]
+----
+type rich__example_Object__items__gqlv_collection {
+  get: [rich__example_Item]
+  window(offset: Int! = 0, size: Int! = 20): rich__example_Object__items__gqlv_collection_window
+}
+
+type rich__example_Object__items__gqlv_collection_window {
+  rows: [rich__example_Item]
+  offset: Int!
+  requestedSize: Int!
+  returnedCount: Int!
+  totalCount: Int
+  maximumSize: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+  ordering: rich__gqlv_collection_window_ordering!
+}
+----
+
+`offset` is zero-based and defaults to zero.
+`size` defaults to `causeway.viewer.graphql.collections.default-window-size`, which is 20 unless configured otherwise.
+A request is rejected before the association is read when its offset is negative, its size is not positive, or its size exceeds `causeway.viewer.graphql.collections.max-window-size`.
+The default maximum is 100, and application startup rejects a default size larger than the maximum.
+
+An offset beyond the current collection returns an empty `rows` list at the requested offset.
+It does not substitute the last non-empty range.
+`returnedCount` is always the number of serialized rows, so it never exceeds the requested size.
+`hasPrevious` and `hasNext` describe availability for the execution-time collection represented by that response.
+
+== Count and ordering semantics
+
+`totalCount` is nullable so a future source can omit a count that cannot be obtained safely or efficiently.
+The current Causeway association implementation materializes the complete authorized collection and therefore returns an exact count.
+A missing count is represented as null rather than zero.
+
+The `CONFIGURED` ordering mode means a supported Causeway collection comparator was applied before selecting rows.
+The `ENCOUNTER` ordering mode means the materialized collection's encounter order was retained.
+Encounter ordering does not claim positional stability across requests.
+Clients cannot request arbitrary field-name sorting through this operation.
+
+== Consistency and errors
+
+Each window is a view of the collection during one GraphQL execution.
+An insertion, removal, or ordering change between requests can move elements to different offsets, so windows are not durable cursors.
+The framework-neutral object context aborts superseded secondary requests where possible and discards a response that has been superseded for the same consumer.
+
+A hidden collection returns no rows from either `get` or `window` and reports the bounded hidden-member error.
+A disabled but visible collection remains readable because collection reads do not modify domain state, while its `disabled` field still reports the interaction reason.
+Nullable nested row fields retain normal GraphQL partial-data behavior, so safe row data and window metadata can remain available with a nested error.
+
+== Response bounds and materialization
+
+Windowing bounds the number of rows serialized into one GraphQL response.
+`@CollectionLayout(paged=...)` remains a presentation hint and does not set or cap the GraphQL transport window.
+The current implementation still invokes and fully materializes the Causeway collection association before applying configured ordering and selecting the requested rows.
+Consequently this feature bounds transport payloads and downstream GraphQL work but does not claim database-level pagination or bounded persistence retrieval.
+Materialization is documented and tested as an implementation characteristic rather than exposed as semantic window metadata.
+
+== Client discovery and migration
+
+Clients should introspect only the generated collection wrapper needed for the current member and test for its `window` field.
+The `offset` and `size` argument defaults are available from ordinary GraphQL introspection.
+The generated window result type exposes range, count, maximum, continuation, and ordering metadata.
+
+Clients that do not discover `window` may continue to execute the established `get` selection during the compatibility period.
+The Causeway web-component object context follows that same capability-first rule and falls back to `get` only when bounded windows are unavailable.

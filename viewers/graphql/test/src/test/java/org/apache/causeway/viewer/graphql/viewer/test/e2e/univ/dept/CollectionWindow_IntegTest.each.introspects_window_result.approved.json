@@ -1,0 +1,97 @@
+{
+  "data" : {
+    "__type" : {
+      "kind" : "OBJECT",
+      "name" : "rich__university_dept_Department__staffMembers__gqlv_collection_window",
+      "description" : "A bounded execution-time view of a Causeway collection association.",
+      "fields" : [ {
+        "name" : "rows",
+        "type" : {
+          "kind" : "LIST",
+          "name" : null,
+          "ofType" : {
+            "kind" : "OBJECT",
+            "name" : "rich__university_dept_StaffMember"
+          }
+        }
+      }, {
+        "name" : "offset",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Int"
+          }
+        }
+      }, {
+        "name" : "requestedSize",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Int"
+          }
+        }
+      }, {
+        "name" : "returnedCount",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Int"
+          }
+        }
+      }, {
+        "name" : "totalCount",
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "Int",
+          "ofType" : null
+        }
+      }, {
+        "name" : "maximumSize",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Int"
+          }
+        }
+      }, {
+        "name" : "hasPrevious",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean"
+          }
+        }
+      }, {
+        "name" : "hasNext",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean"
+          }
+        }
+      }, {
+        "name" : "ordering",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "ENUM",
+            "name" : "rich__gqlv_collection_window_ordering"
+          }
+        }
+      } ]
+    }
+  }
+}

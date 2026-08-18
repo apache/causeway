@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLOutputType;
 
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -36,6 +37,19 @@ public class RichCollectionGet extends RichAssociationGet<OneToManyAssociation> 
     GraphQLOutputType outputTypeFor(MemberInteractor<OneToManyAssociation> holder) {
         var oneToManyAssociation = holder.getObjectMember();
         return context.typeMapper.listTypeForElementTypeOf(oneToManyAssociation, holder.getSchemaType());
+    }
+
+    @Override
+    protected Object fetchData(final DataFetchingEnvironment environment) {
+        var association = memberInteractor.getObjectMember();
+        var managedObject = RichCollectionAccess.visibleSource(environment, association, context);
+        if (managedObject == null) {
+            return null;
+        }
+        var resultManagedObject = association.get(managedObject);
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
 }

@@ -102,6 +102,34 @@ export function buildObjectReadOperation({description, identity, selection, sche
   });
 }
 
+export function buildCollectionWindowReadOperation({
+  description,
+  identity,
+  member,
+  rowSelection,
+  offset,
+  size,
+  schemaNames
+}) {
+  const objectField = assertGraphQLName(description.generatedFieldName, 'object field');
+  const collectionField = assertGraphQLName(member, 'collection field');
+  const lookupArgument = assertGraphQLName(schemaNames.lookupArgumentName, 'lookup argument');
+  const rowIndentation = schemaNames.richRootField ? '              ' : '            ';
+  const renderedRows = renderSelectionSet(rowSelection, rowIndentation);
+  const windowSelection = `offset\n${rowIndentation.slice(2)}requestedSize\n${rowIndentation.slice(2)}returnedCount\n${rowIndentation.slice(2)}totalCount\n${rowIndentation.slice(2)}maximumSize\n${rowIndentation.slice(2)}hasPrevious\n${rowIndentation.slice(2)}hasNext\n${rowIndentation.slice(2)}ordering\n${rowIndentation.slice(2)}rows {\n${renderedRows}\n${rowIndentation.slice(2)}}`;
+  const objectRead = schemaNames.richRootField
+    ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${objectField}(${lookupArgument}: $object) {\n      ${collectionField} {\n        window(offset: $offset, size: $size) {\n          ${windowSelection}\n        }\n      }\n    }\n  }`
+    : `  ${objectField}(${lookupArgument}: $object) {\n    ${collectionField} {\n      window(offset: $offset, size: $size) {\n        ${windowSelection}\n      }\n    }\n  }`;
+  return Object.freeze({
+    document: `query CausewayReadCollectionWindow($object: ${description.generatedInputTypeName}!, $offset: Int!, $size: Int!) {\n${objectRead}\n}`,
+    variables: {object: {id: identity.id}, offset, size},
+    operationName: 'CausewayReadCollectionWindow',
+    objectPath: schemaNames.richRootField
+      ? [schemaNames.richRootField, objectField]
+      : [objectField]
+  });
+}
+
 export function deepMerge(target, source) {
   if (!isPlainObject(target) || !isPlainObject(source)) {
     return clone(source);

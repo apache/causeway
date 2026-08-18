@@ -128,6 +128,14 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     }
 
     @Property
+    public String getWindowProbe() {
+        if ("Window Error".equals(name)) {
+            throw new IllegalStateException("Window probe unavailable");
+        }
+        return name;
+    }
+
+    @Property
     @PropertyLayout(hidden = Where.EVERYWHERE)
     public Blob getHiddenPhoto() {
         return new Blob(

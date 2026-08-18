@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -51,6 +52,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -130,10 +132,62 @@ public class Department implements Comparable<Department> {
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
 
-    // because the ordering seems not to be deterministic?
+    private static final AtomicInteger INSTRUMENTED_MATERIALIZATION_COUNT = new AtomicInteger();
+
+    // Presentation paging remains independent from the bounded GraphQL transport window.
     @Collection
+    @CollectionLayout(paged = 5)
     public List<StaffMember> getStaffMembers() {
         return staffMembers.stream().sorted().collect(Collectors.toList());
+    }
+
+    @Collection
+    @CollectionLayout(sortedBy = StaffMemberByNameDescending.class)
+    public List<StaffMember> getConfiguredStaffMembers() {
+        return new ArrayList<>(staffMembers);
+    }
+
+    public static class StaffMemberByNameDescending implements Comparator<StaffMember> {
+        @Override
+        public int compare(final StaffMember left, final StaffMember right) {
+            return Comparator.comparing(StaffMember::getName).reversed().compare(left, right);
+        }
+    }
+
+    @Collection
+    public List<StaffMember> getInstrumentedStaffMembers() {
+        var result = new ArrayList<StaffMember>();
+        staffMembers.forEach(staffMember -> {
+            INSTRUMENTED_MATERIALIZATION_COUNT.incrementAndGet();
+            result.add(staffMember);
+        });
+        return result;
+    }
+
+    public static void resetInstrumentedMaterializationCount() {
+        INSTRUMENTED_MATERIALIZATION_COUNT.set(0);
+    }
+
+    public static int instrumentedMaterializationCount() {
+        return INSTRUMENTED_MATERIALIZATION_COUNT.get();
+    }
+
+    @Collection
+    public List<StaffMember> getHiddenStaffMembers() {
+        return new ArrayList<>(staffMembers);
+    }
+
+    public boolean hideHiddenStaffMembers() {
+        return true;
+    }
+
+    @Collection
+    public List<StaffMember> getDisabledStaffMembers() {
+        return staffMembers.stream().sorted().collect(Collectors.toList());
+    }
+
+    public String disableDisabledStaffMembers() {
+        return "Collection interactions are disabled";
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

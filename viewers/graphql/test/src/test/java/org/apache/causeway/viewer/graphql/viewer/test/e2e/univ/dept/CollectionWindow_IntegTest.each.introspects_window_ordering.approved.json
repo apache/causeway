@@ -1,0 +1,16 @@
+{
+  "data" : {
+    "__type" : {
+      "kind" : "ENUM",
+      "name" : "rich__gqlv_collection_window_ordering",
+      "description" : "How rows were ordered before selecting a collection window.",
+      "enumValues" : [ {
+        "name" : "CONFIGURED",
+        "description" : "A Causeway configured comparator was applied."
+      }, {
+        "name" : "ENCOUNTER",
+        "description" : "The materialized collection encounter order was retained without a cross-request stability guarantee."
+      } ]
+    }
+  }
+}
