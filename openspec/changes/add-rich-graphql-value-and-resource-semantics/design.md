@@ -6,7 +6,8 @@ The domain member then rejects them as incompatible with its declared type.
 
 The confirmed missing standard equivalence class also contains `java.util.Date`, `java.sql.Date`, and `java.sql.Timestamp`.
 Blob and Clob have specialized property output wrappers, but updates, action parameters, action results, and transfer constraints do not yet share one reversible policy.
-The resource-link safety proposal separately corrects malformed URLs, forbidden link exposure, and metadata-versus-content policy.
+The archived resource-link safety change corrects malformed URLs, forbidden link exposure, metadata-versus-content policy, and authorization rechecks.
+This change reuses those established contracts.
 
 ## Goals / Non-Goals
 
@@ -50,22 +51,29 @@ The change does not add a central datatype catalogue that duplicates GraphQL's t
 ### Use canonical standard formats
 
 The confirmed missing standard datatypes receive documented locale-independent representations and typed coercion errors.
+`LocalDateTime` and `java.sql.Timestamp` use ISO local date-time text and preserve fractional precision without inventing an offset.
+`java.net.URL` uses the GraphQL Java `Url` scalar and its normalized external form.
+`java.util.Date` uses an ISO-8601 UTC instant, while `java.sql.Date` uses an ISO date-only value.
 Temporal precision, date-only semantics, offsets, zones, URL normalization, and SQL-versus-util distinctions are explicit.
 Existing scalar names are preserved where they already express the required semantics safely.
 
 ### Keep custom values explicit
 
-Applications register a reversible marshaller and its GraphQL scalar or structured input and output mapping.
-Composite values may use dedicated generated objects or an application-defined scalar when both directions are deterministic.
-Opaque values remain unsupported for input rather than falling back to `toString()` or arbitrary constructor discovery.
+Applications register a reversible `ScalarMarshaller` and application-defined GraphQL scalar for scalar-shaped custom values.
+Applications needing structured custom input or output continue to replace the `TypeMapper` SPI explicitly rather than invoking constructor discovery.
+The fallback marshaller remains output-only for compatibility and maps inputs to a documented unsupported scalar that always rejects coercion before domain invocation.
+Opaque values therefore remain unsupported for input rather than falling back to `toString()` or arbitrary constructor discovery.
 
 ### Layer resource transfer above safe references
 
-Resource metadata can expose filename, media type, bounded size information, transfer mode, and member acceptance constraints without retrieving content.
-A registered input strategy defines how authorized bounded content reconstructs Blob, Clob, or another declared resource type.
+Resource metadata exposes filename, media type, bounded size information, transfer mode, and member `fileAccept` constraints without retrieving content.
+Blob input uses a generated `BlobInput` object containing `name`, `mimeType`, and base64 content.
+Clob input uses a generated `ClobInput` object containing `name`, `mimeType`, and character content.
+Both reconstruct Causeway values only when value-content policy is enabled and the decoded content satisfies the configured inline-input byte limit and member acceptance constraint.
 
-Large content uses the corrected secured resource-reference contract.
-Inline input or output is permitted only under configured media and size limits.
+Action results use generated metadata objects with bounded inline content only when value-content policy is enabled and content is within the configured inline-output byte limit.
+Larger property content continues to use the corrected secured resource-reference contract.
+Inline limits default to one mebibyte and are independently configurable for input and output.
 Password and hidden values never enter the generic resource path.
 
 ## Risks / Trade-offs
@@ -78,11 +86,12 @@ Password and hidden values never enter the generic resource path.
 ## Migration Plan
 
 Add standard marshallers ahead of generic fallback.
-Introduce diagnostics for non-reversible input types before strict input rejection becomes the default if compatibility evidence requires a transition.
+Replace fallback input coercion immediately with the documented unsupported scalar because the established behavior never reconstructed the declared Java value successfully.
 Retain existing safe output fields where they are non-sensitive and label them output-only when no inverse exists.
+Existing custom `ScalarMarshaller` beans remain compatible and become the explicit registration path for reversible scalar-shaped values.
 
-## Open Questions
+## Resolved Questions
 
-- Whether each temporal equivalence class should use a dedicated scalar or a documented existing scalar with distinct rich datatype identity.
-- Which resource inputs can safely use bounded inline base64 or text and at what configured limit.
-- Whether structured application values should use application-defined scalars or generated input and output objects by default.
+- Missing standard temporal equivalence classes use dedicated documented scalars while existing safe scalar identities remain unchanged.
+- Blob and Clob input use generated structured input objects with configurable one-mebibyte limits; bounded action-result content uses generated metadata output objects.
+- Scalar-shaped application values use application-defined scalars through `ScalarMarshaller`; structured application values require an explicit `TypeMapper` replacement.
