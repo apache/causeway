@@ -29,6 +29,7 @@ import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet
 import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ResourcePath;
 
 /**
  * Metadata for every domain object.
@@ -39,7 +40,7 @@ public class CommonMetaFetcher {
     private final BookmarkService bookmarkService;
     private final ObjectManager objectManager;
     private final CausewayConfiguration causewayConfiguration;
-    private final String graphqlPath;
+    private final ResourcePath resourcePath;
 
     public CommonMetaFetcher(
             final Bookmark bookmark,
@@ -51,7 +52,7 @@ public class CommonMetaFetcher {
         this.bookmarkService = bookmarkService;
         this.objectManager = objectManager;
         this.causewayConfiguration = causewayConfiguration;
-        this.graphqlPath = causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
+        this.resourcePath = ResourcePath.from(causewayConfiguration);
     }
 
     public String logicalTypeName() {
@@ -114,10 +115,11 @@ public class CommonMetaFetcher {
 
     private String resource(final String resource) {
         return managedObject()
-                .flatMap(Bookmarkable::getBookmark
-                ).map(bookmark -> String.format(
-                        "//%s/object/%s:%s/%s/%s",
-                        graphqlPath, bookmark.logicalTypeName(), bookmark.identifier(), causewayConfiguration.viewer().graphql().metaData().fieldName(), resource))
+                .flatMap(Bookmarkable::getBookmark)
+                .map(bookmark -> resourcePath.metadata(
+                        bookmark,
+                        causewayConfiguration.viewer().graphql().metaData().fieldName(),
+                        resource))
                 .orElse(null);
     }
 
