@@ -47,6 +47,9 @@ union rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union = rich__causew
 "Concrete rich object types assignable to causeway.feat.ApplicationTypeMember"
 union rich__causeway_feat_ApplicationTypeMember__gqlv_union = rich__causeway_feat_ApplicationTypeAction | rich__causeway_feat_ApplicationTypeCollection | rich__causeway_feat_ApplicationTypeProperty
 
+"Concrete rich object types eligible as an application home page."
+union rich__gqlv_application_home_object = rich__causeway_applib_DomainObjectList | rich__causeway_applib_RoleMemento | rich__causeway_applib_UserMemento | rich__causeway_conf_ConfigurationProperty | rich__causeway_conf_ConfigurationViewmodel | rich__causeway_feat_ApplicationNamespace | rich__causeway_feat_ApplicationType | rich__causeway_feat_ApplicationTypeAction | rich__causeway_feat_ApplicationTypeCollection | rich__causeway_feat_ApplicationTypeProperty | rich__causeway_metamodel_MetamodelInspectView | rich__causeway_security_LoginRedirect | rich__causeway_testing_fixtures_FixtureResult | rich__university_calc_EditableMementoViewModel | rich__university_dept_Department | rich__university_dept_DeptHead | rich__university_dept_StaffMember
+
 "Concrete rich object types assignable to org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
 union rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union = rich__causeway_metamodel_MetamodelInspectView
 
@@ -122,6 +125,8 @@ type Mutation {
 
 type RICHSchema {
   Scenario(name: String): Scenario
+  "Discovers authorized menu bars and the configured object home page."
+  application: rich__gqlv_application_entry!
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
   causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
   causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
@@ -1488,6 +1493,38 @@ type rich__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   hidden: Boolean
   set(object: UnsupportedValue!): rich__causeway_testing_fixtures_FixtureResult
   validate(object: UnsupportedValue): String
+}
+
+"Authorized framework-neutral application entry points."
+type rich__gqlv_application_entry {
+  "The supported configured object home page, when available."
+  home: rich__gqlv_application_home
+  "Bounded non-disclosing application-entry diagnostics."
+  issues: [rich__gqlv_application_issue!]!
+  "The authorized effective menu-bars structural resource."
+  menuBars: rich__gqlv_application_menu_bars
+}
+
+"The current supported object home page."
+type rich__gqlv_application_home {
+  kind: rich__gqlv_application_home_kind!
+  logicalTypeName: String!
+  object: rich__gqlv_application_home_object!
+}
+
+"A bounded non-disclosing application-entry issue."
+type rich__gqlv_application_issue {
+  code: String!
+  message: String!
+}
+
+"Reference metadata for the effective menu-bars XML resource."
+type rich__gqlv_application_menu_bars {
+  cacheControl: String!
+  formatVersion: String!
+  generation: String!
+  href: String!
+  mediaType: String!
 }
 
 type rich__java_lang_Record {
@@ -6695,6 +6732,11 @@ enum rich__causeway_applib_annotation_SemanticsOf__gqlv_enum {
   NOT_SPECIFIED
   SAFE
   SAFE_AND_REQUEST_CACHEABLE
+}
+
+"Supported application home entry kind."
+enum rich__gqlv_application_home_kind {
+  OBJECT
 }
 
 "How rows were ordered before selecting a collection window."

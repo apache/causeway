@@ -1,0 +1,29 @@
+{
+  "data" : {
+    "rich" : {
+      "application" : {
+        "menuBars" : {
+          "href" : "/graphql/application/menu-bars",
+          "mediaType" : "application/xml",
+          "formatVersion" : "https://causeway.apache.org/applib/layout/menubars/bootstrap3",
+          "generation" : "96669526f0b84c521f11448e7c1c39cbd35b20c0faa6e50c244fd152c3c7d017",
+          "cacheControl" : "private, no-store"
+        },
+        "home" : {
+          "kind" : "OBJECT",
+          "logicalTypeName" : "university.calc.EditableMementoViewModel",
+          "object" : {
+            "__typename" : "rich__university_calc_EditableMementoViewModel",
+            "age" : {
+              "get" : 0
+            }
+          }
+        },
+        "issues" : [ {
+          "code" : "INVALID_ACTION_REFERENCE",
+          "message" : "A menu action reference could not be resolved."
+        } ]
+      }
+    }
+  }
+}
