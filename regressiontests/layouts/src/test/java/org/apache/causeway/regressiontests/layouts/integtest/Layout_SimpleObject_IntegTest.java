@@ -93,7 +93,8 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
         var action = lookupAction("openRestApi");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)

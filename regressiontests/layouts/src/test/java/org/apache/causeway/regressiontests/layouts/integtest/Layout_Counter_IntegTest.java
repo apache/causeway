@@ -144,6 +144,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionNoPosition() {
 
         // given
+        @SuppressWarnings("unused")
         var objectSpecification = specificationLoader.loadSpecification(Counter.class);
 
         // when
@@ -151,7 +152,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         // then
         assertThat(action).isNotNull();
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -178,7 +180,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionPositionBelow");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -205,7 +208,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionPositionPanel");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -232,7 +236,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionDetailsFieldSetNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -260,7 +265,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionDetailsFieldSetPositionBelow");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -288,7 +294,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionDetailsFieldSetPositionPanel");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -316,7 +323,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionDetailsFieldSetPositionPanelDropdown");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -344,7 +352,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionEmptyFieldSetNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -371,7 +380,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionEmptyFieldSetPositionBelow");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -398,7 +408,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionEmptyFieldSetPositionPanel");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -425,7 +436,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionEmptyFieldSetPositionPanelDropdown");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -452,7 +464,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -479,7 +492,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyBelow");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -506,7 +520,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyPanel");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -533,7 +548,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyPanelDropdown");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -560,7 +576,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -587,7 +604,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNameAndDetailsFieldSetPropertyBelow");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -614,7 +632,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanel");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -641,7 +660,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -668,7 +688,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -695,7 +716,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("actionAssociatedWithNamePropertyAndSequenceNoPosition");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -722,7 +744,8 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         var action = lookupAction("openRestApi");
 
         // when, then
-        List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
+        @SuppressWarnings("unused")
+        List<Facet> facets = action.facetHolder().streamFacets().collect(Collectors.toList());
 
         var actionPositionFacet = action.lookupFacet(ActionPositionFacet.class).orElse(null);
         assertThat(actionPositionFacet)
@@ -772,6 +795,7 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
     private ObjectAction lookupAction(final String id) {
         var objectSpecification = specificationLoader.loadSpecification(Counter.class);
+        @SuppressWarnings("unused")
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
         return objectSpecification.streamAnyActions(MixedIn.INCLUDED).filter(x -> x.getId().equals(id)).findFirst().orElseThrow();
     }
