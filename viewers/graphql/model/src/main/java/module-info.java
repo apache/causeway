@@ -18,6 +18,7 @@
  */
 module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model;
+    exports org.apache.causeway.viewer.graphql.model.application;
     exports org.apache.causeway.viewer.graphql.model.context;
     exports org.apache.causeway.viewer.graphql.model.domain;
     exports org.apache.causeway.viewer.graphql.model.domain.common;

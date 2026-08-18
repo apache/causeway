@@ -40,6 +40,7 @@ class ResourcePathTest {
         assertEquals(
                 "/graphql/object/example.Customer:cust-1/_meta/grid",
                 path.metadata(BOOKMARK, "_meta", "grid"));
+        assertEquals("/graphql/application/menu-bars", path.application("menu-bars"));
         assertFalse(path.controllerPath().startsWith("//"));
     }
 
@@ -50,6 +51,9 @@ class ResourcePathTest {
         assertEquals(
                 "/causeway/api/query/object/example.Customer:cust-1/photo/blobBytes",
                 path.property(BOOKMARK, "photo", "blobBytes"));
+        assertEquals(
+                "/causeway/api/query/application/menu-bars",
+                path.application("menu-bars"));
     }
 
     @Test

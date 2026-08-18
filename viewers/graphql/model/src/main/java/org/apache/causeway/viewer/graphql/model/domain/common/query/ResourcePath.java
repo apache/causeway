@@ -30,10 +30,10 @@ import org.apache.causeway.core.config.CausewayConfiguration;
  */
 public final class ResourcePath {
 
-    private final String resourceControllerPath;
+    private final String graphqlResourceRoot;
 
-    private ResourcePath(final String resourceControllerPath) {
-        this.resourceControllerPath = resourceControllerPath;
+    private ResourcePath(final String graphqlResourceRoot) {
+        this.graphqlResourceRoot = graphqlResourceRoot;
     }
 
     public static ResourcePath from(final CausewayConfiguration configuration) {
@@ -53,8 +53,7 @@ public final class ResourcePath {
         return new ResourcePath(joinPath(
                 externalPathPrefix,
                 servletContextPath,
-                graphqlPath,
-                "object"));
+                graphqlPath));
     }
 
     public String metadata(
@@ -62,6 +61,7 @@ public final class ResourcePath {
             final String metadataFieldName,
             final String resourceName) {
         return append(
+                "object",
                 bookmarkSegment(bookmark),
                 requireSegment(metadataFieldName),
                 requireSegment(resourceName));
@@ -72,17 +72,22 @@ public final class ResourcePath {
             final String propertyId,
             final String resourceName) {
         return append(
+                "object",
                 bookmarkSegment(bookmark),
                 requireSegment(propertyId),
                 requireSegment(resourceName));
     }
 
+    public String application(final String resourceName) {
+        return append("application", requireSegment(resourceName));
+    }
+
     String controllerPath() {
-        return resourceControllerPath;
+        return append("object");
     }
 
     private String append(final String... segments) {
-        return resourceControllerPath + "/" + String.join("/", segments);
+        return graphqlResourceRoot + "/" + String.join("/", segments);
     }
 
     private static String bookmarkSegment(final Bookmark bookmark) {
