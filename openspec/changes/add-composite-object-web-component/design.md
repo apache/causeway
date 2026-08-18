@@ -59,8 +59,9 @@ Generated member elements then own hidden, disabled, loading, validation, editin
 
 The initial parser recognizes Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action ordering, `named` labels, and unreferenced actions, properties, and collections.
 It recognizes component elements by namespace URI or the established `c` and `cpt` prefixes and grid elements by namespace URI or the established `bs` prefix.
-Unknown nodes, unsupported placement hints, or unknown attributes produce bounded diagnostics and preserve recognized descendants where safe.
-XML declarations and comments are accepted, while document types, entity declarations, processing instructions beyond the XML declaration, scripts, styles, malformed markup, oversized input, and unknown entity references are rejected before planning.
+Known non-semantic presentation hints such as size, label position, typical length, date adjustment, paging, and default view are ignored without changing semantic behavior.
+Unknown nodes, unsupported placement hints, or other unknown attributes produce bounded diagnostics and preserve recognized descendants where safe.
+XML declarations and comments are accepted, while document types, entity declarations, processing instructions beyond the XML declaration, scripts, styles, malformed markup, input beyond one mebibyte, nesting beyond 64 elements, more than 4,096 elements, and unknown entity references are rejected before planning.
 The parser never inserts resource markup into the document and emits only escaped semantic component markup.
 
 ### Model fallback on Causeway's canonical fallback grid
@@ -109,6 +110,6 @@ The sample adds a separate `<causeway-object>` demonstration before the generic 
 ## Resolved Questions
 
 - `<causeway-object>` remains strictly context-consuming and never creates an internal context from identity attributes.
-- The initial grid contract supports semantic structure, spans, IDs, `named` labels, unreferenced markers, and nested member order; other presentation hints are diagnosed and ignored.
+- The initial grid contract supports semantic structure, spans, IDs, `named` labels, unreferenced markers, and nested member order; known non-semantic hints are safely ignored and unknown hints are diagnosed.
 - No framework-neutral layout-plan registry is introduced; applications use effective grid resources or explicit lower-level composition.
 - Ordinary context refresh retains the rendered plan, while an explicit `refreshLayout()` or changed grid reference cancels retrieval and replaces structure after the new plan is available.

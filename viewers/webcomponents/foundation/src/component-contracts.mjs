@@ -23,6 +23,7 @@
 export const CausewayElementName = Object.freeze({
   GRAPHQL_CLIENT: 'causeway-graphql-client',
   OBJECT_CONTEXT: 'causeway-object-context',
+  OBJECT: 'causeway-object',
   OBJECT_HEADER: 'causeway-object-header',
   PROPERTY: 'causeway-property',
   VALUE: 'causeway-value',
@@ -37,6 +38,7 @@ export const CausewayElementName = Object.freeze({
  * Stable semantic host classes emitted by public components.
  */
 export const CausewayHostClass = Object.freeze({
+  OBJECT: 'causeway-object',
   OBJECT_HEADER: 'causeway-object-header',
   PROPERTY: 'causeway-property',
   VALUE: 'causeway-value',
@@ -83,5 +85,7 @@ export const CausewaySemanticEvent = Object.freeze({
   PROPERTY_INTERACTION_STATE: 'causeway-property-interaction-state-change',
   PROPERTY_UPDATED: 'causeway-property-updated',
   COLLECTION_STATE: 'causeway-collection-state-change',
-  COLLECTION_CONFIGURATION: 'causeway-collection-configuration-change'
+  COLLECTION_CONFIGURATION: 'causeway-collection-configuration-change',
+  OBJECT_LAYOUT_STATE: 'causeway-object-layout-state-change',
+  OBJECT_LAYOUT_DIAGNOSTIC: 'causeway-object-layout-diagnostic'
 });

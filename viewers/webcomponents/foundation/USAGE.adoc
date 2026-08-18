@@ -114,6 +114,42 @@ Calling `refresh()` or `invalidate()` on the context controller executes the com
 Disconnecting a component releases its requirement and shrinks future refreshes without causing a request by itself.
 Nested object contexts answer descendant requests at the nearest provider boundary.
 
+== Composite object and effective-grid layout
+
+`<causeway-object>` is a context-only high-level projection that generates the established header, property, action, and collection elements in light DOM.
+It does not accept object identity, create a context, construct GraphQL documents, choose routes, or discover custom pages.
+A complete generic fragment remains ordinary HTML:
+
+[source,html]
+----
+<causeway-object-context logical-type="demo.Customer" object-id="customer-1">
+  <causeway-object editable></causeway-object>
+  <causeway-interaction-controller></causeway-interaction-controller>
+</causeway-object-context>
+----
+
+The optional `editable` attribute enables editing on generated property children.
+The `layout-mode` attribute accepts `auto`, the default, or `fallback`.
+Auto mode adds one layout-metadata requirement to the nearest context, obtains the opaque `grid` reference, and uses the context's same-origin no-store structural-resource operation.
+Fallback mode skips resource retrieval.
+The public `refreshLayout()` method explicitly re-evaluates a changed locale, authorization, or dynamic-layout context; ordinary authoritative object refreshes retain the current layout so active child interactions are not rebuilt.
+
+The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, `named` labels, and unreferenced actions, properties, and collections.
+Explicit valid member references are reserved before unreferenced markers allocate remaining members in targeted-schema order.
+Stale, duplicate, and wrong-kind references never create broken or repeated semantic children.
+A usable explicit grid may intentionally omit members by omitting both their references and the corresponding unreferenced marker.
+
+The parser has a one-mebibyte character bound, a depth bound of 64, an element bound of 4,096, and rejects document types, entity declarations, CDATA, unknown entity references, non-XML processing instructions, scripts, styles, executable attributes, and malformed markup.
+Resource markup is never inserted into the page; only escaped semantic component markup is generated.
+Unknown safe nodes and unsupported attributes produce at most twenty deduplicated diagnostics while recognized descendants remain usable.
+Absent, forbidden, unreachable, wholly malformed, or semantically empty grids use a deterministic semantic plan modeled on `GridFallbackLayout.xml`: header and actions, a leading property region, and a larger collection tab region.
+The implementation uses twelve-column CSS Grid and a narrow container-query layout without Bootstrap.
+
+Stable hooks include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `data-causeway-region`, `data-span`, `data-layout-state`, and `data-layout-source`.
+`causeway-object-layout-state-change` reports loading, ready, fallback, and error transitions.
+`causeway-object-layout-diagnostic` reports one redacted bounded diagnostic without response content or authorization rules.
+Applications that need different structure continue to author the established lower-level elements directly beneath the same context.
+
 == Values and renderer extension
 
 The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
@@ -259,8 +295,8 @@ The hydrated context reuses the parent GraphQL client and serves selected metada
 A later requirement outside the hydrated selection produces only a missing-field delta read.
 The collection's `rowContexts` property exposes the currently hydrated controllers to host adapters and is cleared on rerender or disconnect.
 
-The current rich GraphQL grammar returns complete collection lists.
-Paging, filtering, sorting, selection, bulk actions, and a large-result policy are intentionally deferred until the endpoint provides a concrete paging contract.
+When targeted introspection finds the additive rich `window(offset, size)` field, collections use bounded secondary window operations and retain the documented legacy-list fallback.
+Filtering, selection, bulk actions, and backend query pushdown remain outside the component contract.
 
 == Observable state, accessibility, and styling
 
@@ -271,11 +307,12 @@ GraphQL responses containing both data and errors preserve successful data and m
 The object-context element emits `causeway-object-context-state-change` with the semantic state and context.
 Consumer components emit `causeway-component-state-change` after rendering a requirement state.
 Collections additionally emit `causeway-collection-state-change` for secondary loading and result state.
+Composite objects emit `causeway-object-layout-state-change` and bounded `causeway-object-layout-diagnostic` events.
 Properties emit interaction-state and updated events, while the action controller emits prompt-state and typed result events.
 These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
 
 Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
-Stable classes include `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
+Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
 
 `installCausewayComponentStyles()` installs the optional minimal stylesheet once.
 Applications can replace or override those rules with ordinary design-system CSS:
@@ -293,16 +330,21 @@ causeway-action button {
 causeway-collection .causeway-collection-table {
   border: 1px solid var(--app-border);
 }
+
+causeway-object {
+  --causeway-object-gap: 1.25rem;
+  --causeway-object-tab-accent: var(--app-accent);
+}
 ----
 
 == Deliberate exclusions
 
-This slice does not provide collection editing or paging, automatic action-result navigation, generic page generation, routing, grid interpretation, HTMX integration, or persistent schema caching.
-Those concerns belong to later changes and continue to consume the same semantic context and event contracts.
+This slice does not provide collection editing, filtering, bulk actions, automatic action-result navigation, routing, menu rendering, HTMX integration, framework-specific custom-page selection, or persistent schema caching.
+Those concerns belong to host viewers or later changes and continue to consume the same semantic context and event contracts.
 
 == Demonstrator and tests
 
-`demo/index.html` is a plain HTML object summary, reference, action, and lazy collection example that targets a same-origin rich GraphQL endpoint.
+`demo/index.html` is a plain HTML object summary, composite object, reference, action, and lazy collection example that targets a same-origin rich GraphQL endpoint.
 Serve the module directory through an HTTP server or application resource mapping so browser modules and `/graphql` share an appropriate origin and authentication policy.
 
 Run the dependency-free tests directly:

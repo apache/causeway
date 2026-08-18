@@ -24,6 +24,7 @@ import {CausewayElementName} from './component-contracts.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
 import {CausewayInteractionControllerElement} from './interaction-controller-element.mjs';
 import {CausewayObjectContextElement} from './object-context-element.mjs';
+import {CausewayObjectElement} from './object-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
 import {CausewayObjectLinkElement} from './object-link-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
@@ -32,6 +33,7 @@ import {CausewayValueElement} from './value-element.mjs';
 const DEFINITIONS = Object.freeze([
   [CausewayElementName.GRAPHQL_CLIENT, CausewayGraphQLClientElement],
   [CausewayElementName.OBJECT_CONTEXT, CausewayObjectContextElement],
+  [CausewayElementName.OBJECT, CausewayObjectElement],
   [CausewayElementName.OBJECT_HEADER, CausewayObjectHeaderElement],
   [CausewayElementName.PROPERTY, CausewayPropertyElement],
   [CausewayElementName.VALUE, CausewayValueElement],
