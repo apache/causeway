@@ -2,8 +2,8 @@
 
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, and value-semantics change are archived.
-The collection-windowing change is active.
+The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, value-semantics change, and collection-windowing change are archived.
+There is no active change.
 The remaining drafts are queued for serial promotion, beginning with `add-rich-graphql-application-entry-points`.
 
 Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
@@ -28,7 +28,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 4 | `fix-rich-graphql-object-interaction-correctness` *(archived)* | Complete | Completed analysis | NEW `rich-graphql-object-interaction-correctness` |
 | 5 | `fix-rich-graphql-resource-link-safety` *(archived)* | Complete | Completed analysis | NEW `rich-graphql-resource-link-safety` |
 | 6 | `add-rich-graphql-value-and-resource-semantics` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-value-semantics` |
-| 7 | `add-rich-graphql-collection-windowing` *(active)* | P1 | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
+| 7 | `add-rich-graphql-collection-windowing` *(archived)* | Complete | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
 | 8 | `add-rich-graphql-application-entry-points` | P1 | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
 | 9 | `add-composite-object-web-component` | P1 | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<causeway-object>` |
 | 10 | `add-menubar-web-components` | P1 | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
@@ -37,14 +37,17 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
 | 14 | `add-rich-graphql-member-metadata` | P2 | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
 | 15 | `add-graphql-web-component-diagnostics` *(pending refinement)* | P2 | Archived foundation and component interactions; accepted redaction boundaries | NEW `graphql-web-component-diagnostics` |
-| 16 | `publish-web-component-catalogue-and-workbench` | P2 | Completed public component vocabulary | NEW `web-component-catalogue-and-workbench` |
-| 17 | `analyze-semantic-page-designer` *(analysis only)* | Future gate | Generic HTMX, Vue, and Svelte viewers plus component catalogue | NEW `semantic-page-designer-analysis` |
+| 16 | `analyze-rich-graphql-collection-query-pushdown` *(analysis only)* | P2 performance | Archived collection windowing | NEW `rich-graphql-collection-query-pushdown-analysis` |
+| 17 | `analyze-rich-graphql-parallel-execution` *(analysis only)* | P2 performance | Correct interactions and representative rich operations | NEW `rich-graphql-parallel-execution-analysis` |
+| 18 | `publish-web-component-catalogue-and-workbench` | P2 | Completed public component vocabulary | NEW `web-component-catalogue-and-workbench` |
+| 19 | `analyze-semantic-page-designer` *(analysis only)* | Future gate | Generic HTMX, Vue, and Svelte viewers plus component catalogue | NEW `semantic-page-designer-analysis` |
 
 The two P0 changes correct successful-looking or unsafe established contracts and precede additive capabilities.
 The P1 GraphQL changes are independent bounded capabilities after their stated prerequisites, but the single-active-change rule requires serial promotion.
 The three generic viewers are higher priority than the catalogue workbench and page-designer analysis.
 HTMX is the first reference router implementation, while Vue and Svelte remain sibling production viewers rather than samples or wrappers.
-The narrow member-metadata and diagnostics changes are useful but do not block the generic viewer routers unless implementation evidence reveals a new hard dependency.
+The narrow member-metadata, diagnostics, collection-query-pushdown analysis, and parallel-execution analysis are useful but do not block the generic viewer routers unless implementation evidence reveals a new hard dependency.
+The two performance analyses must preserve the existing semantic contracts and produce separate implementation proposals rather than changing production behavior directly.
 No production semantic page-designer proposal will be drafted until its analysis selects an authoring model and artifact contract.
 
 ## Shared generic-viewer routing contract
