@@ -18,6 +18,86 @@
  */
 
 export const CAUSEWAY_COMPONENT_STYLES = `
+causeway-object {
+  container-name: causeway-object;
+  container-type: inline-size;
+  display: block;
+  --causeway-object-gap: 1rem;
+  --causeway-object-group-border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  --causeway-object-group-radius: 0.5rem;
+  --causeway-object-group-padding: 1rem;
+  --causeway-object-tab-accent: LinkText;
+}
+.causeway-object {
+  display: grid;
+  gap: var(--causeway-object-gap);
+}
+.causeway-object-row {
+  display: grid;
+  gap: var(--causeway-object-gap);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.causeway-object-column {
+  grid-column: span var(--causeway-column-span, 12);
+  min-inline-size: 0;
+}
+.causeway-object-group,
+.causeway-object-tabs {
+  border: var(--causeway-object-group-border);
+  border-radius: var(--causeway-object-group-radius);
+  margin-block: 0.5rem;
+  min-inline-size: 0;
+  padding: var(--causeway-object-group-padding);
+}
+.causeway-object-group > h2 {
+  font-size: 1.1rem;
+  margin-block: 0 0.75rem;
+}
+.causeway-object-tabs [role="tablist"] {
+  border-block-end: var(--causeway-object-group-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-block-end: 0.75rem;
+}
+.causeway-object-tabs [role="tab"] {
+  background: none;
+  border: 0;
+  border-block-end: 0.2rem solid transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+}
+.causeway-object-tabs [role="tab"][aria-selected="true"] {
+  border-block-end-color: var(--causeway-object-tab-accent);
+  color: var(--causeway-object-tab-accent);
+  font-weight: 700;
+}
+.causeway-object-tabs [role="tab"]:focus-visible {
+  outline: 0.2rem solid var(--causeway-object-tab-accent);
+  outline-offset: 0.1rem;
+}
+.causeway-object [data-empty="true"] {
+  display: none;
+}
+.causeway-object-layout-status {
+  margin-block: 0.75rem;
+}
+.causeway-visually-hidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+@container causeway-object (max-width: 48rem) {
+  .causeway-object-column {
+    grid-column: 1 / -1;
+  }
+}
 .causeway-object-header,
 .causeway-property,
 .causeway-action,

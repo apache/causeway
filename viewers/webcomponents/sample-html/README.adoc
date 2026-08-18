@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral read-only and interaction web components against a real rich GraphQL endpoint.
+The `sample-html` module is a runnable Causeway Spring Boot application and illustrative reference showcase for framework-neutral composite, read-only, and interaction web components against a real rich GraphQL endpoint.
 Its frontend uses a page-specific responsive application theme built with vanilla HTML, native custom elements, ECMAScript modules, and plain CSS.
 It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
@@ -10,6 +10,7 @@ It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
 The application uses the Causeway GraphQL viewer, Causeway JPA persistence with EclipseLink, an in-memory H2 database, security bypass for local verification, and the packaged web-component foundation artifact.
 The sample HTML, foundation modules, and `/graphql` endpoint are served from the same origin.
+The sample explicitly enables direct structural metadata so `<causeway-object>` can dereference the authorized effective-grid resource; applications that keep this policy forbidden receive canonical fallback composition instead.
 
 The module is an executable integration fixture and is skipped during Maven install and deployment.
 
@@ -161,7 +162,9 @@ The `_meta.version` values are supplied through the JPA `HasVersion` contract.
 
 == Expected page and interaction states
 
-The reference page groups semantic content into labelled object-summary, property, action, collection, and live-diagnostic cards.
+The reference page groups semantic content into labelled object-summary, property, action, collection, live-diagnostic, and automatically composed object cards.
+The automatically composed card uses only an independent `<causeway-object-context>`, `<causeway-object editable>`, and the standard interaction controller.
+It retrieves the authorized effective fallback grid, discovers members through targeted schema introspection, and generates the established semantic children without page-authored member structure.
 The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
 The `name`, `summary`, `capacity`, `featured`, `status`, null `notes`, and related-object link render through the standard value registry.
 Ordinary values are enabled at the Causeway metamodel level, while the `code` property, related-object property, and `archive` action display deliberate disabled reasons.
@@ -196,6 +199,15 @@ The following selectors are intended as public test hooks for browser automation
 
 |`[data-testid="sample-object"]`
 |Object context for the deterministic root entity
+
+|`[data-testid="composite-object-context"]`
+|Independent context for the automatic composition example
+
+|`[data-testid="composite-object"]`
+|Layout-aware `<causeway-object>` host; wait for `data-layout-state="ready"` or `fallback`
+
+|`[data-testid="section-composite-object"]`
+|Automatically composed complete-object card
 
 |`[data-testid="section-object-summary"]`
 |Semantic identity card
@@ -339,7 +351,8 @@ After the populated collection loads, `collection-related-count` reports `2 rows
 
 . Start the sample with `mvn -f viewers/webcomponents/pom.xml -Prun-sample-html` and wait for `Started SampleHtmlApplication`.
 . Probe `/graphql` directly as shown below, open `/sample-html/index.html`, and wait for `sample-app[data-state="ready"]`.
-. Confirm the five labelled cards, interaction controls, static coverage guide, existing read-only values, deliberate disabled reasons, hidden states, two collection rows, row count, and empty collection.
+. Confirm the explicit-composition cards and automatically composed object card, interaction controls, static coverage guide, existing read-only values, deliberate disabled reasons, hidden states, two collection rows, row count, and empty collection.
+. Confirm `composite-object` reaches `data-layout-state="ready"`, contains generated header, property, action, collection, group, and tab regions, and exposes no hidden semantic content.
 . Select `Edit Summary`, cancel, and confirm that no mutation ran and the original value remains.
 . Enter a summary shorter than 12 characters, confirm the accessible validation reason and blocked Save control, then enter a valid value, save it, and confirm the refreshed semantic value.
 . Edit Capacity with `0` and confirm its range validation; cancel or restore `24`.
@@ -355,6 +368,11 @@ After the populated collection loads, `collection-related-count` reports `2 rows
 === Recorded interaction verification
 
 On 2026-08-16 the exact Maven profile and direct GraphQL probe returned HTTP 200, and the page reached `sample-app[data-state="ready"]` with the stable read-only content intact.
+On 2026-08-18 the composite reached `data-layout-state="ready"` from one authorized effective-grid request with no diagnostics and generated one header, eight visible properties, five visible actions, and two collections while hidden members remained empty hosts.
+Pointer and keyboard checks covered composite property validation and cancellation, action-prompt opening and Escape focus restoration, ArrowRight tab selection, and bounded collection-window activation with two hydrated rows.
+A browser-injected partial-error context preserved a successful sibling property and announced the bounded failed member.
+Forced fallback produced canonical 12/4/8 spans without another grid request, and wide light-mode and narrow dark-mode layouts had no horizontal overflow or console errors.
+Lighthouse navigation audits again scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.
 Pointer and keyboard checks covered property cancellation, invalid and corrected validation, authoritative save, enum choices, action defaults, autocomplete, invalid blocking, Escape cancellation, focus restoration, and disabled and hidden actions.
 The `inspect`, `updateDetails`, `findRelated`, and `clearNotes` flows produced scalar, object, collection, and void semantic results without automatic navigation.
 Network inspection confirmed rich queries for safe behavior, top-level mutations for property updates and mutating actions, typed enum and target variables, successful responses, and complete context refresh after mutation.
@@ -373,7 +391,9 @@ mvn -f viewers/webcomponents/pom.xml -pl sample-html -am test
 The sample integration test starts the application on a random port and verifies:
 
 * `/sample-html/index.html` is delivered with all documented selectors.
-* `/causeway-webcomponents/index.mjs` is delivered from the foundation dependency.
+* `/causeway-webcomponents/index.mjs` is delivered from the foundation dependency and exports the object element and safe layout planner.
+* The authorized effective-grid resource returns XML with `private, no-store` and never contains the hidden value.
+* The page includes a context-plus-`<causeway-object>` composition with stable acceptance selectors.
 * Independent targeted `__type` operations resolve the root, enum-property, and collection wrapper types without triggering GraphQL Java's bad-faith introspection rejection.
 * A real rich GraphQL object lookup resolves `s_sample-1`.
 * Object metadata, enabled ordinary properties, text, numeric, boolean, enum, null, reference, enabled-action, disabled-action, hidden-action, and hidden-property state have deterministic values.
@@ -382,7 +402,7 @@ The sample integration test starts the application on a random port and verifies
 * A real secondary-shaped collection operation returns deterministic row metadata and selected `name` and `code` wrappers.
 * The empty collection returns zero rows.
 
-The foundation's dependency-free Node tests verify renderer and editor selection, component lifecycle, semantic commands, property state transitions, action prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
+The foundation's dependency-free Node tests verify safe grid parsing, deterministic member allocation, canonical fallback, composite lifecycle and diagnostics, context-owned resource retrieval, renderer and editor selection, semantic commands, property state transitions, action prompts and results, accessibility markup, semantic events, lazy collection state, partial errors, cancellation, mutation serialization, stale-response rejection, row hydration reuse, and delta reads without requiring a browser process.
 
 == GraphQL readiness probe and troubleshooting
 
