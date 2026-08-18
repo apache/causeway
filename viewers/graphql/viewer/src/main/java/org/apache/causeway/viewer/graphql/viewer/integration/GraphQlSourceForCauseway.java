@@ -77,18 +77,26 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         }
     }
 
-    GraphQL graphQL;
+    private volatile GraphQL graphQL;
 
     @Override
     public GraphQL graphQl() {
-        if (graphQL == null) {
-            graphQL = GraphQL.newGraphQL(schema())
-                    .defaultDataFetcherExceptionHandler(new SimpleDataFetcherExceptionHandler())
-                    .queryExecutionStrategy(executionStrategy)
-                    .mutationExecutionStrategy(executionStrategy)
-                    .build();
+        var current = graphQL;
+        if (current != null) {
+            return current;
         }
-        return graphQL;
+        synchronized (this) {
+            current = graphQL;
+            if (current == null) {
+                current = GraphQL.newGraphQL(schema())
+                        .defaultDataFetcherExceptionHandler(new SimpleDataFetcherExceptionHandler())
+                        .queryExecutionStrategy(executionStrategy)
+                        .mutationExecutionStrategy(executionStrategy)
+                        .build();
+                graphQL = current;
+            }
+        }
+        return current;
     }
 
     @Override

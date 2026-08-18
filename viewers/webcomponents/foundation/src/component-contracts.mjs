@@ -31,7 +31,11 @@ export const CausewayElementName = Object.freeze({
   ACTION: 'causeway-action',
   INTERACTION_CONTROLLER: 'causeway-interaction-controller',
   COLLECTION: 'causeway-collection',
-  COLLECTION_COLUMN: 'causeway-collection-column'
+  COLLECTION_COLUMN: 'causeway-collection-column',
+  MENUBARS: 'causeway-menubars',
+  MENUBAR_PRIMARY: 'causeway-menubar-primary',
+  MENUBAR_SECONDARY: 'causeway-menubar-secondary',
+  MENUBAR_TERTIARY: 'causeway-menubar-tertiary'
 });
 
 /**
@@ -50,6 +54,11 @@ export const CausewayHostClass = Object.freeze({
   PROPERTY_EDITOR: 'causeway-property-editor',
   COLLECTION: 'causeway-collection',
   COLLECTION_COLUMN: 'causeway-collection-column',
+  MENUBARS: 'causeway-menubars',
+  MENUBAR: 'causeway-menubar',
+  MENU: 'causeway-menu',
+  MENU_SECTION: 'causeway-menu-section',
+  SERVICE_ACTION: 'causeway-service-action',
   LOADING: 'causeway-loading',
   DISABLED: 'causeway-disabled',
   EMPTY: 'causeway-empty',
@@ -68,7 +77,8 @@ export const CausewayAttribute = Object.freeze({
   OBJECT_ID: 'object-id',
   TITLE: 'title',
   DISABLED: 'disabled',
-  EDITABLE: 'editable'
+  EDITABLE: 'editable',
+  BAR: 'bar'
 });
 
 /**
@@ -87,5 +97,7 @@ export const CausewaySemanticEvent = Object.freeze({
   COLLECTION_STATE: 'causeway-collection-state-change',
   COLLECTION_CONFIGURATION: 'causeway-collection-configuration-change',
   OBJECT_LAYOUT_STATE: 'causeway-object-layout-state-change',
-  OBJECT_LAYOUT_DIAGNOSTIC: 'causeway-object-layout-diagnostic'
+  OBJECT_LAYOUT_DIAGNOSTIC: 'causeway-object-layout-diagnostic',
+  MENU_BARS_STATE: 'causeway-menubars-state-change',
+  MENU_BARS_DIAGNOSTIC: 'causeway-menubars-diagnostic'
 });

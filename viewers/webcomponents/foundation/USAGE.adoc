@@ -49,7 +49,7 @@ The collection remains inactive until its load button is selected or its `active
 
 == Public component contract
 
-The public vocabulary consists of `causeway-graphql-client`, `causeway-object-context`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-collection`, and `causeway-collection-column`.
+The public vocabulary consists of `causeway-graphql-client`, `causeway-menubars`, `causeway-menubar-primary`, `causeway-menubar-secondary`, `causeway-menubar-tertiary`, `causeway-object-context`, `causeway-object`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-collection`, and `causeway-collection-column`.
 `CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
 
 Member components use the `member` attribute and accept an optional `label` override.
@@ -95,6 +95,8 @@ The client derives generated rich-schema names from the Causeway logical type an
 It describes the generated object type and then issues independent cached one-type introspection operations for reachable property, collection, action, parameter, metadata, and value wrapper types.
 This pattern is compatible with GraphQL Java's good-faith introspection limits because one operation does not repeat `__Type.fields` across many aliases.
 The client does not request an application-specific member-list field and does not access Causeway Java metamodel services.
+Application-menu discovery separately introspects the operation roots, configured rich root, `application` result, menu descriptor, and referenced public service types through the same cached one-type operations.
+One browser client serializes these initial targeted discovery requests so object and menu contexts do not race a cold GraphQL schema, while the viewer initializes its lazy execution source once without changing data-fetcher or mutation execution policy.
 
 Descriptions include member kind, advertised wrapper fields, output type reference, named type, innermost type kind, collection element type, and reachable value-shape fields.
 Descriptions are cached by generated type name within one `<causeway-graphql-client>` instance.
@@ -149,6 +151,76 @@ Stable hooks include `causeway-object`, `causeway-object-row`, `causeway-object-
 `causeway-object-layout-state-change` reports loading, ready, fallback, and error transitions.
 `causeway-object-layout-diagnostic` reports one redacted bounded diagnostic without response content or authorization rules.
 Applications that need different structure continue to author the established lower-level elements directly beneath the same context.
+
+== Application menu bars and service actions
+
+`<causeway-menubars>` is the framework-neutral high-level coordinator for Causeway's effective primary, secondary, and tertiary application menu bars.
+It connects directly beneath a configured `<causeway-graphql-client>` and does not require an object context:
+
+[source,html]
+----
+<causeway-graphql-client endpoint="/graphql">
+  <causeway-menubars></causeway-menubars>
+</causeway-graphql-client>
+----
+
+The composite uses targeted introspection to discover the rich root's optional `application.menuBars` capability.
+It reads the application descriptor once per generation, fetches the opaque origin-relative resource once with same-origin credentials and no-store semantics, and shares one immutable plan across generated or declarative bar children.
+It generates only effective non-empty roles in primary, secondary, tertiary order and preserves direct declarative bar children that existed before registration or custom-element upgrade.
+A direct authored `<causeway-interaction-controller>` is reused; otherwise the composite generates one standard controller for all service actions.
+
+Each semantic bar is independently usable and owns an equivalent private generation when no composite provides one:
+
+[source,html]
+----
+<causeway-graphql-client endpoint="/graphql">
+  <causeway-menubar-secondary></causeway-menubar-secondary>
+</causeway-graphql-client>
+----
+
+A standalone bar fetches and parses the same effective application resource but renders only its own semantic role.
+It generates a private standard interaction controller unless it consumes composite state.
+No public application-context element is required.
+
+The server must enable structural metadata resources for `application.menuBars` to appear:
+
+[source,properties]
+----
+causeway.viewer.graphql.resources.structural-metadata-response-type=DIRECT
+----
+
+When the capability is omitted, the components report bounded `unsupported` state and do not issue an invalid operation or invent a client-side menu hierarchy.
+The server's explicit or generated effective menu remains the canonical structural source.
+
+The menu parser accepts the Causeway bootstrap menu-bars namespace and the documented `menuBars`, primary/secondary/tertiary, `menu`, `named`, `section`, and `serviceAction` subset.
+It shares the object-grid parser's one-mebibyte input limit, depth limit of 64, element limit of 4,096, and diagnostic limit of 20.
+Document types, entity declarations and references, CDATA, non-XML processing instructions, scripts, styles, executable attributes, malformed nesting, wrong namespaces, and oversized content are rejected.
+Resource markup is never inserted into the page.
+Labels and descriptions are escaped text, while CSS and icon hints are exposed only as inert documented `data-*` attributes.
+
+Entries identify rich service-action wrappers by public logical service type and semantic action ID.
+Current hidden and disabled state is grouped into one read per logical service type for a generation rather than one operation per menu entry.
+Hidden actions expose no entry or presentation metadata.
+Disabled actions remain visible and counted, cannot be invoked, and associate their established reason accessibly.
+Empty sections, menus, and bars collapse after current state has been applied.
+
+Service-bound adapters reuse the standard parameter editors, defaults, choices, autocomplete, validation, prompt, cancellation, stale-response, and typed-result behavior.
+Safe actions use their advertised rich query invocation, while mutating actions use the existing top-level mutation and are serialized within the application-menu coordinator.
+No object bookmark or `_target` is manufactured for a service action.
+`causeway-action-request`, `causeway-action-prompt-state-change`, and `causeway-action-result` retain their established names.
+Service interaction events add `target: {kind: "service", logicalTypeName}`, `serviceLogicalTypeName`, and `identity: null`; object interaction identities remain unchanged.
+Routing, shell closing, result rendering, browser history, home behavior, and navigation remain host policy.
+
+Each non-empty bar renders a labelled `nav` landmark.
+Native buttons expose `aria-expanded` and `aria-controls` for menu and narrow bar disclosures.
+The components deliberately avoid ARIA `menubar` and `menuitem` application-mode roles.
+Tab and Shift+Tab retain native order; Enter and Space toggle disclosures; Escape closes and restores focus; Home, End, and arrow keys traverse documented peer controls; and opening a menu closes siblings within the same bar.
+At the `48rem` narrow threshold, bars and menus stack without changing semantic order or events.
+
+The composite and standalone bars expose `refresh()` to start a new authorization-sensitive and locale-sensitive generation and reject superseded metadata, resource, and service-state responses.
+Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-role`, `data-causeway-menu`, `data-causeway-menu-section`, `data-causeway-service-action`, `data-service-logical-type`, `data-action-id`, inert presentation-hint data, and the `causeway-menubar*`, `causeway-menu*`, and `causeway-service-action*` classes.
+`causeway-menubars-state-change` publishes lifecycle state.
+`causeway-menubars-diagnostic` publishes bounded redacted failures without response bodies, credentials, authorization rules, submitted values, or remote exception text.
 
 == Values and renderer extension
 

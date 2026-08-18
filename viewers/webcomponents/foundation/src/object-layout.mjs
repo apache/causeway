@@ -18,18 +18,24 @@
  */
 
 import {escapeHtml} from './rendering.mjs';
+import {
+  MAX_STRUCTURAL_DIAGNOSTICS,
+  MAX_STRUCTURAL_XML_CHARACTERS,
+  MAX_STRUCTURAL_XML_DEPTH,
+  MAX_STRUCTURAL_XML_NODES,
+  parseStructuralXml
+} from './structural-xml.mjs';
 
 export const CAUSEWAY_COMPONENT_NAMESPACE = 'https://causeway.apache.org/applib/layout/component';
 export const CAUSEWAY_GRID_NAMESPACE = 'https://causeway.apache.org/applib/layout/grid/bootstrap3';
-export const MAX_GRID_XML_CHARACTERS = 1_048_576;
-export const MAX_GRID_XML_DEPTH = 64;
-export const MAX_GRID_XML_NODES = 4_096;
-export const MAX_LAYOUT_DIAGNOSTICS = 20;
+export const MAX_GRID_XML_CHARACTERS = MAX_STRUCTURAL_XML_CHARACTERS;
+export const MAX_GRID_XML_DEPTH = MAX_STRUCTURAL_XML_DEPTH;
+export const MAX_GRID_XML_NODES = MAX_STRUCTURAL_XML_NODES;
+export const MAX_LAYOUT_DIAGNOSTICS = MAX_STRUCTURAL_DIAGNOSTICS;
 
 const MEMBER_KINDS = Object.freeze(['action', 'property', 'collection']);
 const STRUCTURAL_KINDS = Object.freeze(['grid', 'row', 'col', 'tabGroup', 'tab', 'fieldSet', 'domainObject']);
 const PRESENTATION_KINDS = Object.freeze(['named', 'describedAs']);
-const XML_ENTITIES = Object.freeze({amp: '&', lt: '<', gt: '>', quot: '"', apos: "'"});
 
 export class CausewayGridError extends Error {
   constructor(code, message) {
@@ -41,7 +47,11 @@ export class CausewayGridError extends Error {
 
 export function parseCausewayGridXml(xml, {members = new Map(), maxDiagnostics = MAX_LAYOUT_DIAGNOSTICS} = {}) {
   const diagnostics = createDiagnosticCollector(maxDiagnostics);
-  const root = parseSafeXml(xml);
+  const root = parseStructuralXml(xml, {
+    codePrefix: 'GRID',
+    resourceLabel: 'effective grid resource',
+    ErrorType: CausewayGridError
+  });
   if (elementKind(root) !== 'grid') {
     throw new CausewayGridError('GRID_ROOT_REQUIRED', 'The effective grid resource does not contain a supported grid root.');
   }
@@ -96,149 +106,6 @@ export function createFallbackLayoutPlan(members = new Map(), diagnostics = []) 
 export function renderObjectLayoutPlan(plan, {idPrefix = 'causeway-object', editable = false} = {}) {
   const state = {idPrefix: safeId(idPrefix), editable: Boolean(editable), sequence: 0};
   return (plan?.regions ?? []).map(region => renderNode(region, state)).join('');
-}
-
-function parseSafeXml(value) {
-  if (typeof value !== 'string' || value.trim().length === 0) {
-    throw new CausewayGridError('GRID_XML_EMPTY', 'The effective grid resource is empty.');
-  }
-  if (value.length > MAX_GRID_XML_CHARACTERS) {
-    throw new CausewayGridError('GRID_XML_TOO_LARGE', `The effective grid resource exceeds ${MAX_GRID_XML_CHARACTERS} characters.`);
-  }
-  if (/<!\s*(?:DOCTYPE|ENTITY)\b/i.test(value)) {
-    throw new CausewayGridError('GRID_XML_DECLARATION_FORBIDDEN', 'Document type and entity declarations are not supported.');
-  }
-  if (/<!\s*\[CDATA\[/i.test(value)) {
-    throw new CausewayGridError('GRID_XML_CDATA_FORBIDDEN', 'CDATA sections are not supported in effective grid resources.');
-  }
-  let xml = value.replace(/^\uFEFF/, '');
-  xml = xml.replace(/^\s*<\?xml\s+[\s\S]*?\?>/i, '');
-  if (/<\?/.test(xml)) {
-    throw new CausewayGridError('GRID_XML_PROCESSING_INSTRUCTION_FORBIDDEN', 'Processing instructions are not supported.');
-  }
-  xml = xml.replace(/<!--[\s\S]*?-->/g, '');
-  if (xml.includes('<!--') || xml.includes('-->')) {
-    throw new CausewayGridError('GRID_XML_MALFORMED_COMMENT', 'The effective grid resource contains a malformed comment.');
-  }
-  const tokens = xml.match(/<[^>]*>|[^<]+/g) ?? [];
-  if (tokens.join('') !== xml) {
-    throw new CausewayGridError('GRID_XML_MALFORMED', 'The effective grid resource contains malformed markup.');
-  }
-  const documentNode = {qName: '#document', children: [], text: '', namespaces: new Map()};
-  const stack = [documentNode];
-  let nodeCount = 0;
-  for (const token of tokens) {
-    if (!token.startsWith('<')) {
-      const text = decodeXmlEntities(token);
-      if (text.trim() && stack.length === 1) {
-        throw new CausewayGridError('GRID_XML_TEXT_OUTSIDE_ROOT', 'Text is not permitted outside the effective grid root.');
-      }
-      stack.at(-1).text += text;
-      continue;
-    }
-    if (/^<\//.test(token)) {
-      const close = token.match(/^<\/\s*([A-Za-z_][\w.-]*(?::[A-Za-z_][\w.-]*)?)\s*>$/);
-      if (!close || stack.length === 1 || stack.at(-1).qName !== close[1]) {
-        throw new CausewayGridError('GRID_XML_MISMATCHED_ELEMENT', 'The effective grid resource contains mismatched elements.');
-      }
-      stack.pop();
-      continue;
-    }
-    if (/^<!/.test(token)) {
-      throw new CausewayGridError('GRID_XML_DECLARATION_FORBIDDEN', 'XML declarations beyond comments are not supported.');
-    }
-    const open = token.match(/^<\s*([A-Za-z_][\w.-]*(?::[A-Za-z_][\w.-]*)?)([\s\S]*?)(\/?)>$/);
-    if (!open) {
-      throw new CausewayGridError('GRID_XML_MALFORMED_ELEMENT', 'The effective grid resource contains a malformed element.');
-    }
-    const attributes = parseAttributes(open[2]);
-    const namespaces = new Map(stack.at(-1).namespaces);
-    for (const [name, attributeValue] of attributes) {
-      if (name === 'xmlns') {
-        namespaces.set('', attributeValue);
-      } else if (name.startsWith('xmlns:')) {
-        namespaces.set(name.slice('xmlns:'.length), attributeValue);
-      }
-      if (/^on/i.test(localName(name))) {
-        throw new CausewayGridError('GRID_XML_EXECUTABLE_ATTRIBUTE', 'Executable event attributes are not supported.');
-      }
-    }
-    const [prefix = '', name = ''] = splitName(open[1]);
-    if (['script', 'style'].includes(name.toLowerCase())) {
-      throw new CausewayGridError('GRID_XML_EXECUTABLE_ELEMENT', 'Executable or styling elements are not supported.');
-    }
-    nodeCount += 1;
-    if (nodeCount > MAX_GRID_XML_NODES) {
-      throw new CausewayGridError('GRID_XML_TOO_MANY_NODES', `The effective grid resource exceeds ${MAX_GRID_XML_NODES} elements.`);
-    }
-    if (stack.length > MAX_GRID_XML_DEPTH) {
-      throw new CausewayGridError('GRID_XML_TOO_DEEP', `The effective grid resource exceeds ${MAX_GRID_XML_DEPTH} nested elements.`);
-    }
-    const node = {
-      qName: open[1],
-      prefix,
-      localName: name,
-      namespaceURI: namespaces.get(prefix) ?? null,
-      attributes,
-      namespaces,
-      children: [],
-      text: ''
-    };
-    stack.at(-1).children.push(node);
-    if (open[3] !== '/') {
-      stack.push(node);
-    }
-  }
-  if (stack.length !== 1 || documentNode.children.length !== 1) {
-    throw new CausewayGridError('GRID_XML_MALFORMED', 'The effective grid resource must contain exactly one complete root element.');
-  }
-  return documentNode.children[0];
-}
-
-function parseAttributes(source) {
-  const result = new Map();
-  let rest = source;
-  while (rest.trim().length > 0) {
-    const match = rest.match(/^\s+([A-Za-z_][\w.:-]*)\s*=\s*("([^"]*)"|'([^']*)')/);
-    if (!match) {
-      throw new CausewayGridError('GRID_XML_MALFORMED_ATTRIBUTE', 'The effective grid resource contains a malformed attribute.');
-    }
-    if (result.has(match[1])) {
-      throw new CausewayGridError('GRID_XML_DUPLICATE_ATTRIBUTE', 'The effective grid resource contains a duplicate attribute.');
-    }
-    result.set(match[1], decodeXmlEntities(match[3] ?? match[4] ?? ''));
-    rest = rest.slice(match[0].length);
-  }
-  return result;
-}
-
-function decodeXmlEntities(value) {
-  const entityPattern = /&(#x[0-9a-f]+|#\d+|[A-Za-z][\w.-]*);/gi;
-  if (value.replace(entityPattern, '').includes('&')) {
-    throw new CausewayGridError('GRID_XML_MALFORMED_ENTITY', 'The effective grid resource contains a malformed entity reference.');
-  }
-  return value.replace(entityPattern, (match, entity) => {
-    if (entity.toLowerCase().startsWith('#x')) {
-      return validCodePoint(Number.parseInt(entity.slice(2), 16));
-    }
-    if (entity.startsWith('#')) {
-      return validCodePoint(Number.parseInt(entity.slice(1), 10));
-    }
-    if (Object.prototype.hasOwnProperty.call(XML_ENTITIES, entity)) {
-      return XML_ENTITIES[entity];
-    }
-    throw new CausewayGridError('GRID_XML_UNKNOWN_ENTITY', 'The effective grid resource contains an unknown entity reference.');
-  });
-}
-
-function validCodePoint(codePoint) {
-  if (!Number.isSafeInteger(codePoint)
-      || codePoint <= 0
-      || codePoint > 0x10FFFF
-      || codePoint >= 0xD800 && codePoint <= 0xDFFF) {
-    throw new CausewayGridError('GRID_XML_INVALID_CHARACTER', 'The effective grid resource contains an invalid character reference.');
-  }
-  return String.fromCodePoint(codePoint);
 }
 
 function claimExplicitMembers(root, members, diagnostics) {
