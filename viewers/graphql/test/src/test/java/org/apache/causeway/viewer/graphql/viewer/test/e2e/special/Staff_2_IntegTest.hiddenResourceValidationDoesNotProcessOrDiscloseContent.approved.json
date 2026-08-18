@@ -1,0 +1,28 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Staff/findStaffMemberByName/invoke/results/hiddenPhoto/validate) : org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember#hiddenPhoto",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 8
+    } ],
+    "path" : [ "rich", "university_dept_Staff", "findStaffMemberByName", "invoke", "results", "hiddenPhoto", "validate" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Staff" : {
+        "findStaffMemberByName" : {
+          "invoke" : {
+            "results" : {
+              "hiddenPhoto" : {
+                "validate" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

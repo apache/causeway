@@ -1,0 +1,7 @@
+{
+  __type(name: "UnsupportedValue") {
+    kind
+    name
+    description
+  }
+}

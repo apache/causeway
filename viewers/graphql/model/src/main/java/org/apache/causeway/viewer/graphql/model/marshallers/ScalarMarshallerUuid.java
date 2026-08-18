@@ -40,7 +40,7 @@ public class ScalarMarshallerUuid extends ScalarMarshallerAbstract<UUID> {
 
     @Inject
     public ScalarMarshallerUuid(final CausewayConfiguration causewayConfiguration) {
-        super(UUID.class, ExtendedScalars.UUID, causewayConfiguration);
+        super(UUID.class, ExtendedScalars.UUID, causewayConfiguration, true);
     }
 
     @Override

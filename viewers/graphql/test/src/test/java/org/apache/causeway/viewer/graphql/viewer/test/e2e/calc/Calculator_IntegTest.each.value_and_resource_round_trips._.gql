@@ -1,0 +1,132 @@
+{
+  rich {
+    university_calc_Calculator {
+      echoLocalDateTime {
+        invoke(value: "2026-08-18T09:10:11.123456789") {
+          args { value }
+          results
+        }
+      }
+      optionalLocalDateTime {
+        invoke {
+          args { value }
+          results
+        }
+      }
+      echoUrl {
+        invoke(value: "https://causeway.apache.org/docs/index.html?x=1") {
+          args { value }
+          results
+        }
+      }
+      echoJavaUtilDate {
+        invoke(value: "2026-08-18T08:10:11.123Z") {
+          args { value }
+          results
+        }
+      }
+      echoJavaSqlDate {
+        invoke(value: "2026-08-18") {
+          args { value }
+          results
+        }
+      }
+      echoJavaSqlTimestamp {
+        invoke(value: "2026-08-18T09:10:11.123456789") {
+          args { value }
+          results
+        }
+      }
+      positiveComplexNumber: echoComplexNumber {
+        invoke(value: "3+4i") {
+          args { value }
+          results
+        }
+      }
+      negativeComplexNumber: echoComplexNumber {
+        invoke(value: "1.25-2.500i") {
+          args { value }
+          results
+        }
+      }
+      echoBlob {
+        params {
+          value {
+            datatype
+            fileAccept
+            inlineInputMaxBytes
+            resourceInputMode
+          }
+        }
+        invoke(value: {name: "hello.txt", mimeType: "text/plain", base64: "aGVsbG8="}) {
+          args {
+            value {
+              name
+              mimeType
+              byteLength
+              transferMode
+              inlineOutputMaxBytes
+              base64
+            }
+          }
+          results {
+            name
+            mimeType
+            byteLength
+            transferMode
+            inlineOutputMaxBytes
+            base64
+          }
+        }
+      }
+      optionalBlob {
+        invoke {
+          args { value { name } }
+          results { name }
+        }
+      }
+      echoClob {
+        params {
+          value {
+            datatype
+            fileAccept
+            inlineInputMaxBytes
+            resourceInputMode
+          }
+        }
+        invoke(value: {name: "hello.txt", mimeType: "text/plain", chars: "héllo"}) {
+          args {
+            value {
+              name
+              mimeType
+              byteLength
+              characterLength
+              transferMode
+              inlineOutputMaxBytes
+              chars
+            }
+          }
+          results {
+            name
+            mimeType
+            byteLength
+            characterLength
+            transferMode
+            inlineOutputMaxBytes
+            chars
+          }
+        }
+      }
+      someLocale {
+        invoke {
+          results
+        }
+      }
+      secretPassword {
+        invoke {
+          results
+        }
+      }
+    }
+  }
+}

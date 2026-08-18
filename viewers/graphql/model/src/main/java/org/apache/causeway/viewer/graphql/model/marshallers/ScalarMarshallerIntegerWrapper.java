@@ -35,7 +35,7 @@ public class ScalarMarshallerIntegerWrapper extends ScalarMarshallerAbstract<Int
 
     @Inject
     public ScalarMarshallerIntegerWrapper(final CausewayConfiguration causewayConfiguration) {
-        super(Integer.class, Scalars.GraphQLInt, causewayConfiguration);
+        super(Integer.class, Scalars.GraphQLInt, causewayConfiguration, true);
     }
 
     @Override

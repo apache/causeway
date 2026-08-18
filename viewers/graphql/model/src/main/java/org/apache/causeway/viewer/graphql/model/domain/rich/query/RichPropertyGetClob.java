@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -29,6 +30,7 @@ import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 
 public class RichPropertyGetClob
         extends ElementCustom {
@@ -36,6 +38,11 @@ public class RichPropertyGetClob
     final MemberInteractor<OneToOneAssociation> memberInteractor;
     final RichPropertyGetClobName clobName;
     final RichPropertyGetClobMimeType clobMimeType;
+    final RichPropertyGetClobByteLength clobByteLength;
+    final RichPropertyGetClobCharacterLength clobCharacterLength;
+    final RichResourceMetadataField fileAccept;
+    final RichResourceMetadataField inputMaxBytes;
+    final RichResourceMetadataField transferMode;
     final RichPropertyGetClobChars clobChars;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
@@ -52,12 +59,34 @@ public class RichPropertyGetClob
             // type already exists, nothing else to do.
             this.clobName = null;
             this.clobMimeType = null;
+            this.clobByteLength = null;
+            this.clobCharacterLength = null;
+            this.fileAccept = null;
+            this.inputMaxBytes = null;
+            this.transferMode = null;
             this.clobChars = null;
             return;
         }
 
         addChildFieldFor(clobName = new RichPropertyGetClobName(memberInteractor, context));
         addChildFieldFor(clobMimeType = new RichPropertyGetClobMimeType(memberInteractor, context));
+        addChildFieldFor(clobByteLength = new RichPropertyGetClobByteLength(memberInteractor, context));
+        addChildFieldFor(clobCharacterLength = new RichPropertyGetClobCharacterLength(memberInteractor, context));
+        addChildFieldFor(fileAccept = new RichResourceMetadataField(
+                context,
+                "fileAccept",
+                Scalars.GraphQLString,
+                () -> ResourceValueTypes.fileAccept(memberInteractor.getObjectMember()).orElse(null)));
+        addChildFieldFor(inputMaxBytes = new RichResourceMetadataField(
+                context,
+                "inlineInputMaxBytes",
+                Scalars.GraphQLInt,
+                () -> graphqlConfiguration.resources().inlineInputMaxBytes()));
+        addChildFieldFor(transferMode = new RichResourceMetadataField(
+                context,
+                "transferMode",
+                Scalars.GraphQLString,
+                () -> isValueContentEnabled() ? "RESOURCE_LINK" : "METADATA_ONLY"));
         addChildFieldFor(clobChars = isValueContentEnabled() ? new RichPropertyGetClobChars(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
@@ -83,6 +112,11 @@ public class RichPropertyGetClob
         }
         clobName.addDataFetcher(this);
         clobMimeType.addDataFetcher(this);
+        clobByteLength.addDataFetcher(this);
+        clobCharacterLength.addDataFetcher(this);
+        fileAccept.addDataFetcher(this);
+        inputMaxBytes.addDataFetcher(this);
+        transferMode.addDataFetcher(this);
         if(clobChars != null) {
             clobChars.addDataFetcher(this);
         }
