@@ -31,6 +31,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -100,7 +101,10 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     @Embedded
     private BlobJpaEmbeddable photo;
 
-    @Property(optionality = Optionality.OPTIONAL)
+    @Property(
+            optionality = Optionality.OPTIONAL,
+            editing = Editing.ENABLED,
+            fileAccept = "application/pdf")
     @PropertyLayout(fieldSetId = "content", sequence = "1")
     public Blob getPhoto() {
         return BlobJpaEmbeddable.toBlob(photo);
@@ -109,10 +113,18 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
         this.photo = BlobJpaEmbeddable.fromBlob(photo);
     }
 
-    @Property
+    @Transient
+    private Clob profile;
+
+    @Property(editing = Editing.ENABLED, fileAccept = "text/plain")
     @PropertyLayout(fieldSetId = "content", sequence = "2")
     public Clob getProfile() {
-        return new Clob("profile.txt", "text/plain", "Profile for " + name);
+        return profile != null
+                ? profile
+                : new Clob("profile.txt", "text/plain", "Profile for " + name);
+    }
+    public void setProfile(final Clob profile) {
+        this.profile = profile;
     }
 
     @Property

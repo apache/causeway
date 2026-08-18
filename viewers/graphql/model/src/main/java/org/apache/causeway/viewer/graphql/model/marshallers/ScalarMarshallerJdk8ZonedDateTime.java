@@ -40,7 +40,7 @@ public class ScalarMarshallerJdk8ZonedDateTime extends ScalarMarshallerAbstract<
 
     @Inject
     public ScalarMarshallerJdk8ZonedDateTime(final CausewayConfiguration causewayConfiguration) {
-        super(ZonedDateTime.class, Scalars.GraphQLString, causewayConfiguration);
+        super(ZonedDateTime.class, Scalars.GraphQLString, causewayConfiguration, true);
         scalarMarshallerConfig = causewayConfiguration.viewer().graphql().scalarMarshaller();
     }
 

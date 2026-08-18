@@ -95,6 +95,8 @@ class ResourcePathTest {
                 CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT,
                 null,
                 null,
+                1_048_576,
+                1_048_576,
                 null);
         assertEquals(
                 CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT,
@@ -107,6 +109,8 @@ class ResourcePathTest {
                 CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT,
                 CausewayConfiguration.Viewer.Graphql.ResponseType.DIRECT,
                 CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN,
+                1_048_576,
+                1_048_576,
                 "/public");
         assertEquals(
                 CausewayConfiguration.Viewer.Graphql.ResponseType.DIRECT,

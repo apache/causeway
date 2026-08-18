@@ -21,11 +21,15 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.calc;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -34,12 +38,21 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -171,10 +184,137 @@ public class Calculator {
         return new URL("https://causeway.apache.org");
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    public LocalDateTime echoLocalDateTime(final LocalDateTime value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public LocalDateTime optionalLocalDateTime(
+            @Parameter(optionality = Optionality.OPTIONAL) final LocalDateTime value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public URL echoUrl(final URL value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Date echoJavaUtilDate(final Date value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public java.sql.Date echoJavaSqlDate(final java.sql.Date value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Time echoJavaSqlTime(final Time value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Timestamp echoJavaSqlTimestamp(final Timestamp value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public ComplexNumber echoComplexNumber(final ComplexNumber value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Blob echoBlob(@Parameter(fileAccept = "text/plain") final Blob value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Blob optionalBlob(
+            @Parameter(optionality = Optionality.OPTIONAL, fileAccept = "text/plain") final Blob value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Clob echoClob(@Parameter(fileAccept = "text/plain") final Clob value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Blob sampleBlob() {
+        return new Blob("sample.txt", "text/plain", "sample blob".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Clob sampleClob() {
+        return new Clob("sample.txt", "text/plain", "sample clob");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Password secretPassword() {
+        return Password.of("NEVER_DISCLOSE_THIS_PASSWORD");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Password echoPassword(final Password value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Bookmark echoBookmark(final Bookmark value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public ApplicationFeatureId echoApplicationFeatureId(final ApplicationFeatureId value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public LocalResourcePath echoLocalResourcePath(final LocalResourcePath value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Markup sampleMarkup() {
+        return Markup.valueOf("<strong>GraphQL markup</strong>");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Markup echoMarkup(final Markup value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Identifier sampleIdentifier() {
+        return Identifier.classIdentifier(new LogicalType("university.calc.Calculator", Calculator.class));
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Identifier echoIdentifier(final Identifier value) {
+        return value;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public UnmappedValue sampleUnmappedValue() {
+        return new UnmappedValue("NEVER_DISCLOSE_UNMAPPED_VALUE");
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public UnmappedValue echoUnmappedValue(final UnmappedValue value) {
+        return value;
+    }
+
     @SneakyThrows
     @Action(semantics = SemanticsOf.SAFE)
     public Locale someLocale() {
         return Locale.UK;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public Locale echoLocale(final Locale value) {
+        return value;
     }
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)

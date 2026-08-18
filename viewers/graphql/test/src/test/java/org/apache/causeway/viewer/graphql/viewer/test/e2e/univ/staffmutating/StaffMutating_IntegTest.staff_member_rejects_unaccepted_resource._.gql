@@ -1,0 +1,12 @@
+mutation {
+  university_dept_StaffMember__photo(
+      _target: {id: "$staffMemberId"},
+      photo: {name: "private.png", mimeType: "image/png", base64: "U0VOU0lUSVZFX0NPTlRFTlQ="}
+  ) {
+    photo {
+      get {
+        name
+      }
+    }
+  }
+}

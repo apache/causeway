@@ -1,0 +1,16 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/university_dept_StaffMember__photo) : Resource media type is not accepted for member 'org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember#photo'",
+    "locations" : [ {
+      "column" : 3,
+      "line" : 2
+    } ],
+    "path" : [ "university_dept_StaffMember__photo" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "university_dept_StaffMember__photo" : null
+  }
+}

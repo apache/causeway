@@ -40,7 +40,7 @@ public class ScalarMarshallerJdk8LocalTime extends ScalarMarshallerAbstract<Loca
 
     @Inject
     public ScalarMarshallerJdk8LocalTime(final CausewayConfiguration causewayConfiguration) {
-        super(LocalTime.class, Scalars.GraphQLString, causewayConfiguration);
+        super(LocalTime.class, Scalars.GraphQLString, causewayConfiguration, true);
         scalarMarshallerConfig = causewayConfiguration.viewer().graphql().scalarMarshaller();
     }
 

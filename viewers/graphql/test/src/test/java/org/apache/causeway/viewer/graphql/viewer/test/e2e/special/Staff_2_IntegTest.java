@@ -100,6 +100,16 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
                 .doesNotContain("diagnostic-secret-id");
     }
 
+    @Test
+    @UseReporter(DiffReporter.class)
+    void hiddenResourceValidationDoesNotProcessOrDiscloseContent(
+            final CapturedOutput output) throws Exception {
+        var response = submit();
+        Approvals.verify(response, jsonOptions());
+        assertThat(response).doesNotContain("PRIVATE_HIDDEN_RESOURCE_INPUT");
+        assertThat(output).doesNotContain("PRIVATE_HIDDEN_RESOURCE_INPUT");
+    }
+
     private void assertNotFoundWithoutDisclosure(final String url) throws Exception {
         var response = submitReturningBytes(url);
         assertThat(response.statusCode()).isEqualTo(404);

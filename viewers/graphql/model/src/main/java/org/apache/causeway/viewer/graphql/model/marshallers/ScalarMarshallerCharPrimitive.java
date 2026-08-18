@@ -35,7 +35,7 @@ public class ScalarMarshallerCharPrimitive extends ScalarMarshallerAbstract<Char
 
     @Inject
     public ScalarMarshallerCharPrimitive(final CausewayConfiguration causewayConfiguration) {
-        super(char.class, Scalars.GraphQLString, causewayConfiguration);
+        super(char.class, Scalars.GraphQLString, causewayConfiguration, true);
     }
 
     @Override

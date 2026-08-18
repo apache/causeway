@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
+import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 
@@ -36,6 +37,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParameterProvider;
+import org.apache.causeway.viewer.graphql.model.types.ResourceValueTypes;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
@@ -67,6 +69,9 @@ public class RichActionParamsParam
     private final RichActionParamsParamDefault default_;
     private final RichActionParamsParamValidate validate;
     private final RichActionParamsParamDatatype datatype;
+    private final RichResourceMetadataField resourceFileAccept;
+    private final RichResourceMetadataField resourceInputMaxBytes;
+    private final RichResourceMetadataField resourceInputMode;
 
     public RichActionParamsParam(
             final ActionInteractor holder,
@@ -86,6 +91,9 @@ public class RichActionParamsParam
             this.default_ = null;
             this.validate = null;
             this.datatype = null;
+            this.resourceFileAccept = null;
+            this.resourceInputMaxBytes = null;
+            this.resourceInputMode = null;
 
             // nothing else to be done
             return;
@@ -98,6 +106,29 @@ public class RichActionParamsParam
         addChildFieldFor(this.default_ = new RichActionParamsParamDefault(this, context));
         addChildFieldFor(this.validate = new RichActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new RichActionParamsParamDatatype(this, context));
+
+        var resourceParameter = ResourceValueTypes.isResourceType(oap.getElementType().getCorrespondingClass());
+        addChildFieldFor(this.resourceFileAccept = resourceParameter
+                ? new RichResourceMetadataField(
+                        context,
+                        "fileAccept",
+                        Scalars.GraphQLString,
+                        () -> ResourceValueTypes.fileAccept(oap).orElse(null))
+                : null);
+        addChildFieldFor(this.resourceInputMaxBytes = resourceParameter
+                ? new RichResourceMetadataField(
+                        context,
+                        "inlineInputMaxBytes",
+                        Scalars.GraphQLInt,
+                        () -> context.causewayConfiguration.viewer().graphql().resources().inlineInputMaxBytes())
+                : null);
+        addChildFieldFor(this.resourceInputMode = resourceParameter
+                ? new RichResourceMetadataField(
+                        context,
+                        "resourceInputMode",
+                        Scalars.GraphQLString,
+                        () -> ResourceValueTypes.inputMode(context))
+                : null);
 
         buildObjectTypeAndField(oap.asciiId(), oap.getCanonicalDescription().orElse(oap.getCanonicalFriendlyName()));
     }
@@ -137,6 +168,11 @@ public class RichActionParamsParam
         validate.addDataFetcher(this);
 
         datatype.addDataFetcher(this);
+        if (resourceFileAccept != null) {
+            resourceFileAccept.addDataFetcher(this);
+            resourceInputMaxBytes.addDataFetcher(this);
+            resourceInputMode.addDataFetcher(this);
+        }
     }
 
     @Override

@@ -52,6 +52,17 @@ public interface ScalarMarshaller<K> {
     GraphQLScalarType getGqlScalarType();
 
     /**
+     * Whether this marshaller provides reversible GraphQL input coercion.
+     *
+     * <p>The default is {@code false}: registering output coercion never implicitly grants input
+     * capability. Reversible marshallers must opt in explicitly so unsupported inputs are rejected
+     * before domain invocation.</p>
+     */
+    default boolean supportsInput() {
+        return false;
+    }
+
+    /**
      * Unmarshal the provided graphQL value into its Java equivalent.
      *
      * @param graphValue - to be unmarshalled.  This will never be null.
