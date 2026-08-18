@@ -35,9 +35,9 @@ public class RichPropertyGetBlob
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;
 
-    final RichPropertyGetBlobBytes blobName;
+    final RichPropertyGetBlobName blobName;
     final RichPropertyGetBlobMimeType blobMimeType;
-    final RichPropertyGetBlobName blobBytes;
+    final RichPropertyGetBlobBytes blobBytes;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
 
@@ -57,9 +57,9 @@ public class RichPropertyGetBlob
             return;
         }
 
-        addChildFieldFor(blobName = new RichPropertyGetBlobBytes(memberInteractor, context));
+        addChildFieldFor(blobName = new RichPropertyGetBlobName(memberInteractor, context));
         addChildFieldFor(blobMimeType = new RichPropertyGetBlobMimeType(memberInteractor, context));
-        addChildFieldFor(blobBytes = isResourceNotForbidden() ? new RichPropertyGetBlobName(memberInteractor, context) : null);
+        addChildFieldFor(blobBytes = isValueContentEnabled() ? new RichPropertyGetBlobBytes(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -67,8 +67,9 @@ public class RichPropertyGetBlob
                     .build());
     }
 
-    private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    private boolean isValueContentEnabled() {
+        return graphqlConfiguration.resources().effectiveValueContentResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override

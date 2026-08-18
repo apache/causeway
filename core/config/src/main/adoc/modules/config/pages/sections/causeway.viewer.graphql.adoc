@@ -92,12 +92,39 @@ target-arg-name
 
 
 |
+[[causeway.viewer.graphql.resources.external-path-prefix]]
+causeway.viewer.graphql.resources. +
+external-path-prefix
+
+|
+| null
+
+
+|
 [[causeway.viewer.graphql.resources.response-type]]
 causeway.viewer.graphql.resources. +
 response-type
 
 |  FORBIDDEN
-| null
+| Deprecated compatibility fallback; prefer the category-specific settings.
+
+
+|
+[[causeway.viewer.graphql.resources.structural-metadata-response-type]]
+causeway.viewer.graphql.resources. +
+structural-metadata-response-type
+
+|
+| Falls back to `response-type` when unset.
+
+
+|
+[[causeway.viewer.graphql.resources.value-content-response-type]]
+causeway.viewer.graphql.resources. +
+value-content-response-type
+
+|
+| Falls back to `response-type` when unset.
 
 
 |

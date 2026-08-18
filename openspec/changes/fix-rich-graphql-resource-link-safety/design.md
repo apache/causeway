@@ -33,7 +33,7 @@ The same global response policy controls effective grids and icons, which are st
 GraphQL publishes an origin-relative path beginning with exactly one slash, or another documented relative-reference form that resolves against the current application origin.
 It does not publish a protocol-relative authority.
 
-URL construction uses the configured GraphQL endpoint and deployment base path as path components rather than string concatenation.
+URL construction uses `spring.graphql.http.path`, with temporary fallback to deprecated `spring.graphql.path`, together with the servlet context and configured external reverse-proxy prefix as path components rather than string concatenation.
 Tests cover root deployment, servlet context, reverse-proxy prefix, encoded object identity, and non-default GraphQL endpoint paths.
 
 ### Separate metadata and value-content policy
@@ -48,10 +48,11 @@ Enabling value content does not bypass object or member authorization.
 
 ### Do not advertise forbidden references
 
-When a category is statically forbidden, its optional resource field is absent from the generated shape or resolves to null according to the selected additive compatibility design.
+When a category is statically forbidden, its optional resource field is absent from the generated schema.
+Blob and Clob descriptive name and media-type fields remain available while their `bytes` or `chars` link field is omitted.
 It never publishes a dereferenceable or object-bearing URL that is guaranteed to fail by policy.
 
-The exact migration shape is selected by schema compatibility tests.
+Schema compatibility tests pin this omission behavior.
 The behavior and policy are discoverable without attempting a download.
 
 ### Authorize every dereference
@@ -78,11 +79,12 @@ Malformed, stale, unauthorized, and forbidden requests return bounded statuses w
 ## Migration Plan
 
 Introduce separate metadata and value-content settings while reading the existing global resource response type as a temporary compatibility fallback.
+Both categories therefore retain the legacy default of `FORBIDDEN` until explicitly enabled.
 Correct generated paths for all enabled categories.
 Deprecate the global setting after applications can select each category explicitly.
 Document that clients must treat returned references as opaque same-origin references rather than rewriting slash prefixes.
 
-## Open Questions
+## Resolved Questions
 
-- Whether forbidden optional fields should be omitted at schema construction or retained as documented null fields during the compatibility period.
-- Whether authorized structural metadata should default to direct response or remain explicitly enabled.
+- Forbidden optional link fields are omitted at schema construction while Blob and Clob descriptive fields remain available.
+- Structural metadata remains forbidden through the legacy default unless its category-specific setting explicitly enables it.
