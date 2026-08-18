@@ -117,6 +117,17 @@ public class ResourcePolicy_IntegTest extends Abstract_IntegTest {
                 "/data/rich/university_calc_Calculator/echoBlob/params/value/resourceInputMode").stringValue())
                 .isEqualTo("FORBIDDEN");
 
+        var applicationType = (GraphQLObjectType) schema.getType("rich__gqlv_application_entry");
+        assertThat(applicationType.getFieldDefinition("menuBars")).isNotNull();
+
+        var menuBarsResponse = get("/graphql/application/menu-bars");
+        assertThat(menuBarsResponse.statusCode()).isEqualTo(200);
+        assertThat(menuBarsResponse.headers().firstValue("Content-Type").orElseThrow())
+                .startsWith("application/xml");
+        assertThat(menuBarsResponse.headers().firstValue("Cache-Control").orElseThrow())
+                .isEqualTo("private, no-store");
+        assertThat(menuBarsResponse.headers().firstValue("Content-Disposition")).isEmpty();
+
         var gridResponse = get(gridUrl);
         assertThat(gridResponse.statusCode()).isEqualTo(200);
         assertThat(gridResponse.headers().firstValue("Content-Type").orElseThrow())
