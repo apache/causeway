@@ -2625,16 +2625,48 @@ public record CausewayConfiguration(
 
             public record Resources(
                 /**
-                 * How resources ({@link org.apache.causeway.applib.value.Blob} bytes,
-                 * {@link org.apache.causeway.applib.value.Clob} chars, grids and icons) can be downloaded from the
-                 * resource controller.
+                 * Compatibility setting used for a resource category whose category-specific response type is not
+                 * configured.
                  *
-                 * <p>By default the download of these resources if {@link ResponseType#FORBIDDEN}, but alternatively
-                 * they can be enabled to download either {@link ResponseType#DIRECT}ly or as an
-                 * {@link ResponseType#ATTACHMENT}.
+                 * <p>By default resources are {@link ResponseType#FORBIDDEN}.
+                 * Prefer {@link #structuralMetadataResponseType()} and {@link #valueContentResponseType()} for new
+                 * applications.
                  */
+                @Deprecated
                 @DefaultValue("FORBIDDEN")
-                ResponseType responseType) {
+                ResponseType responseType,
+                /**
+                 * How effective grids, icons, and other structural metadata resources are returned.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType structuralMetadataResponseType,
+                /**
+                 * How {@link org.apache.causeway.applib.value.Blob} bytes and
+                 * {@link org.apache.causeway.applib.value.Clob} characters are returned.
+                 * If unset, temporarily falls back to {@link #responseType()}.
+                 */
+                @Nullable
+                ResponseType valueContentResponseType,
+                /**
+                 * Optional externally visible path prefix for a deployment behind a path-rewriting reverse proxy.
+                 * The prefix is combined with the servlet context and configured GraphQL endpoint path when links are
+                 * published.
+                 */
+                @Nullable
+                String externalPathPrefix) {
+
+                public ResponseType effectiveStructuralMetadataResponseType() {
+                    return structuralMetadataResponseType != null
+                            ? structuralMetadataResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
+
+                public ResponseType effectiveValueContentResponseType() {
+                    return valueContentResponseType != null
+                            ? valueContentResponseType
+                            : Objects.requireNonNullElse(responseType, ResponseType.FORBIDDEN);
+                }
             }
 
             public record Authentication(

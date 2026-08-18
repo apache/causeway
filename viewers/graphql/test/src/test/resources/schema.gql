@@ -4531,10 +4531,14 @@ type rich__university_dept_StaffMember {
   department: rich__university_dept_StaffMember__department__gqlv_property
   "Grade"
   grade: rich__university_dept_StaffMember__grade__gqlv_property
+  "Hidden Photo"
+  hiddenPhoto: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property
   "Name"
   name: rich__university_dept_StaffMember__name__gqlv_property
   "Photo"
   photo: rich__university_dept_StaffMember__photo__gqlv_property
+  "Profile"
+  profile: rich__university_dept_StaffMember__profile__gqlv_property
 }
 
 "University department specializing in a field of study"
@@ -4570,6 +4574,21 @@ type rich__university_dept_StaffMember__grade__gqlv_property {
   validate(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
 }
 
+type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property {
+  datatype: String
+  disabled: String
+  get: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob
+  hidden: Boolean
+  set(hiddenPhoto: String!): rich__university_dept_StaffMember
+  validate(hiddenPhoto: String): String
+}
+
+type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob {
+  bytes: String
+  mimeType: String
+  name: String
+}
+
 type rich__university_dept_StaffMember__name__gqlv_property {
   datatype: String
   disabled: String
@@ -4590,6 +4609,21 @@ type rich__university_dept_StaffMember__photo__gqlv_property {
 
 type rich__university_dept_StaffMember__photo__gqlv_property_lob {
   bytes: String
+  mimeType: String
+  name: String
+}
+
+type rich__university_dept_StaffMember__profile__gqlv_property {
+  datatype: String
+  disabled: String
+  get: rich__university_dept_StaffMember__profile__gqlv_property_lob
+  hidden: Boolean
+  set(profile: String!): rich__university_dept_StaffMember
+  validate(profile: String): String
+}
+
+type rich__university_dept_StaffMember__profile__gqlv_property_lob {
+  chars: String
   mimeType: String
   name: String
 }
@@ -5393,8 +5427,10 @@ type simple__university_dept_StaffMember {
   _meta: simple__university_dept_StaffMember__gqlv_meta
   department: simple__university_dept_Department
   grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
+  hiddenPhoto: simple__university_dept_StaffMember__hiddenPhoto__gqlv_member
   name: String!
   photo: simple__university_dept_StaffMember__photo__gqlv_member
+  profile: simple__university_dept_StaffMember__profile__gqlv_member
 }
 
 type simple__university_dept_StaffMember__gqlv_meta {
@@ -5409,9 +5445,23 @@ type simple__university_dept_StaffMember__gqlv_meta {
   version: String
 }
 
+"Hidden Photo"
+type simple__university_dept_StaffMember__hiddenPhoto__gqlv_member {
+  bytes: String
+  mimeType: String
+  name: String
+}
+
 "Photo"
 type simple__university_dept_StaffMember__photo__gqlv_member {
   bytes: String
+  mimeType: String
+  name: String
+}
+
+"Profile"
+type simple__university_dept_StaffMember__profile__gqlv_member {
+  chars: String
   mimeType: String
   name: String
 }

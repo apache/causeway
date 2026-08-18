@@ -58,7 +58,7 @@ public class RichPropertyGetClob
 
         addChildFieldFor(clobName = new RichPropertyGetClobName(memberInteractor, context));
         addChildFieldFor(clobMimeType = new RichPropertyGetClobMimeType(memberInteractor, context));
-        addChildFieldFor(clobChars = isResourceNotForbidden() ? new RichPropertyGetClobChars(memberInteractor, context) : null);
+        addChildFieldFor(clobChars = isValueContentEnabled() ? new RichPropertyGetClobChars(memberInteractor, context) : null);
 
         setField(newFieldDefinition()
                     .name("get")
@@ -66,8 +66,9 @@ public class RichPropertyGetClob
                     .build());
     }
 
-    private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    private boolean isValueContentEnabled() {
+        return graphqlConfiguration.resources().effectiveValueContentResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class RichPropertyGetClobMimeType extends RichPropertyGetClobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, blob -> blob.mimeType().toString());
+        return fetchDataFromClob(environment, clob -> clob.mimeType().toString());
     }
 
 }

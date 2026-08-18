@@ -82,15 +82,16 @@ public class CommonMeta extends ElementCustom {
         addChildFieldFor(this.metaLayout = new CommonMetaLayout(context));
         addChildFieldFor(this.metaSaveAs = new CommonMetaSaveAs(context));
 
-        addChildFieldFor(this.metaIcon = isResourceNotForbidden() ? new CommonMetaIcon(context) : null);
-        addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new CommonMetaGrid(context) : null);
+        addChildFieldFor(this.metaIcon = isStructuralMetadataEnabled() ? new CommonMetaIcon(context) : null);
+        addChildFieldFor(this.metaGrid = isStructuralMetadataEnabled() ? new CommonMetaGrid(context) : null);
 
         var fieldName = graphqlConfiguration.metaData().fieldName();
         buildObjectTypeAndField(fieldName, "Object metadata");
     }
 
-    private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+    private boolean isStructuralMetadataEnabled() {
+        return graphqlConfiguration.resources().effectiveStructuralMetadataResponseType()
+                != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     private boolean isEntity() {

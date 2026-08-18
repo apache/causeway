@@ -18,8 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 import jakarta.inject.Inject;
 
@@ -35,199 +39,277 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
+import org.apache.causeway.applib.services.user.RoleMemento;
+import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-@RestController()
-@RequestMapping("/graphql/object")
+@RestController
+@RequestMapping("${spring.graphql.http.path:${spring.graphql.path:/graphql}}/object")
 public record ResourceController(
     BookmarkService bookmarkService,
     ObjectManager objectManager,
     GridService gridService,
+    InteractionService interactionService,
     CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
+
+    private static final String PRIVATE_NO_STORE = "private, no-store";
+    private static final String NOSNIFF = "nosniff";
 
     @Inject
     public ResourceController(
             final BookmarkService bookmarkService,
             final ObjectManager objectManager,
             final GridService gridService,
+            final InteractionService interactionService,
             final CausewayConfiguration causewayConfiguration) {
-        this(bookmarkService, objectManager, gridService, causewayConfiguration.viewer().graphql());
+        this(
+                bookmarkService,
+                objectManager,
+                gridService,
+                interactionService,
+                causewayConfiguration.viewer().graphql());
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/blobBytes")
     public ResponseEntity<byte[]> propertyBlobBytes(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String propertyId
-    ) {
-        var responseType = graphqlConfiguration.resources().responseType();
+            @PathVariable final String propertyId,
+            final Principal principal) {
+        return callWithinInteraction(
+                principal,
+                () -> propertyBlobBytesWithinInteraction(logicalTypeName, id, propertyId));
+    }
 
-        // TODO: perhaps a filter would factor this check out?
+    private ResponseEntity<byte[]> propertyBlobBytesWithinInteraction(
+            final String logicalTypeName,
+            final String id,
+            final String propertyId) {
+        var responseType = graphqlConfiguration.resources().effectiveValueContentResponseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return forbidden();
         }
 
-        return valueOfProperty(logicalTypeName, id, propertyId)
-                .filter(Blob.class::isInstance)
-                .map(Blob.class::cast)
-                .map(blob -> {
-                    var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(blob.mimeType().toString())));
-                    if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder
-                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.name()).build().toString())
-                                .contentLength(blob.bytes().length);
-                    }
-                    return bodyBuilder.body(blob.bytes());
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return valueOfVisibleProperty(logicalTypeName, id, propertyId, Blob.class)
+                .map(blob -> resourceResponse(
+                        blob.bytes(),
+                        MediaType.asMediaType(MimeType.valueOf(blob.mimeType().toString())),
+                        blob.name(),
+                        responseType))
+                .orElseGet(ResourceController::notFound);
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/clobChars")
-    public ResponseEntity<CharSequence> propertyClobChars(
+    public ResponseEntity<byte[]> propertyClobChars(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String propertyId
-    ) {
-        var responseType = graphqlConfiguration.resources().responseType();
+            @PathVariable final String propertyId,
+            final Principal principal) {
+        return callWithinInteraction(
+                principal,
+                () -> propertyClobCharsWithinInteraction(logicalTypeName, id, propertyId));
+    }
 
-        // TODO: perhaps a filter would factor this check out?
+    private ResponseEntity<byte[]> propertyClobCharsWithinInteraction(
+            final String logicalTypeName,
+            final String id,
+            final String propertyId) {
+        var responseType = graphqlConfiguration.resources().effectiveValueContentResponseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return forbidden();
         }
 
-        return valueOfProperty(logicalTypeName, id, propertyId)
-                .filter(Clob.class::isInstance)
-                .map(Clob.class::cast)
-                .map(clob -> {
-                    var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(clob.mimeType().toString())));
-                    if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.name()).build().toString())
-                                .contentLength(clob.chars().length());
-                    }
-                    return bodyBuilder.body(clob.chars());
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return valueOfVisibleProperty(logicalTypeName, id, propertyId, Clob.class)
+                .map(clob -> resourceResponse(
+                        clob.chars().toString().getBytes(StandardCharsets.UTF_8),
+                        MediaType.asMediaType(MimeType.valueOf(clob.mimeType().toString())),
+                        clob.name(),
+                        responseType))
+                .orElseGet(ResourceController::notFound);
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{_meta}/grid")
-    public ResponseEntity<String> grid(
+    public ResponseEntity<byte[]> grid(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String _meta
-    ) {
-        var responseType = graphqlConfiguration.resources().responseType();
+            @PathVariable final String _meta,
+            final Principal principal) {
+        return callWithinInteraction(
+                principal,
+                () -> gridWithinInteraction(logicalTypeName, id, _meta));
+    }
 
-        // TODO: perhaps a filter would factor this check out?
+    private ResponseEntity<byte[]> gridWithinInteraction(
+            final String logicalTypeName,
+            final String id,
+            final String _meta) {
+        var responseType = graphqlConfiguration.resources().effectiveStructuralMetadataResponseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return forbidden();
         }
-
         if (!_meta.equals(graphqlConfiguration.metaData().fieldName())) {
-            return ResponseEntity.notFound().build();
+            return notFound();
         }
 
-        return lookup(logicalTypeName, id)
-                .map(mo->gridAsXml(mo).orElse(null))
+        return lookupVisible(logicalTypeName, id)
+                .map(managedObject -> gridAsXml(managedObject).orElse(null))
                 .filter(Objects::nonNull)
-                .map(gridText -> {
-                    var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_XML);
-                    if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder
-                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".layout.xml").build().toString())
-                                .contentLength(gridText.length());
-                    }
-                    return bodyBuilder.body(gridText);
-                })
-                .orElse(ResponseEntity.notFound().build());
+                .map(gridText -> resourceResponse(
+                        gridText.getBytes(StandardCharsets.UTF_8),
+                        MediaType.APPLICATION_XML,
+                        logicalTypeName + ".layout.xml",
+                        responseType))
+                .orElseGet(ResourceController::notFound);
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{_meta}/icon")
     public ResponseEntity<byte[]> icon(
             @PathVariable final String logicalTypeName,
             @PathVariable final String id,
-            @PathVariable final String _meta
-    ) {
-        // TODO: perhaps a filter would factor this check out?
-        var responseType = graphqlConfiguration.resources().responseType();
+            @PathVariable final String _meta,
+            final Principal principal) {
+        return callWithinInteraction(
+                principal,
+                () -> iconWithinInteraction(logicalTypeName, id, _meta));
+    }
+
+    private ResponseEntity<byte[]> iconWithinInteraction(
+            final String logicalTypeName,
+            final String id,
+            final String _meta) {
+        var responseType = graphqlConfiguration.resources().effectiveStructuralMetadataResponseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return forbidden();
         }
         if (!_meta.equals(graphqlConfiguration.metaData().fieldName())) {
-            return ResponseEntity.notFound().build();
+            return notFound();
         }
 
-        return lookup(logicalTypeName, id)
-                .map(mo->mo.getIcon(IconSize.MEDIUM))
+        return lookupVisible(logicalTypeName, id)
+                .map(managedObject -> managedObject.getIcon(IconSize.MEDIUM))
                 .filter(Objects::nonNull)
-                .map(objectIcon -> {
-                    var bytes = objectIcon.iconData();
-                    var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.parseMediaType(objectIcon.mediaType()));
-                    if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder
-                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".png").build().toString())
-                                .contentLength(bytes.length);
-                    }
-                    return bodyBuilder.body(bytes);
-                })
-                .orElse(ResponseEntity.notFound().build());
+                .map(objectIcon -> resourceResponse(
+                        objectIcon.iconData(),
+                        MediaType.parseMediaType(objectIcon.mediaType()),
+                        logicalTypeName + ".png",
+                        responseType))
+                .orElseGet(ResourceController::notFound);
+    }
+
+    private <T> T callWithinInteraction(
+            final Principal principal,
+            final Callable<T> callable) {
+        var userMemento = userMemento(principal);
+        return userMemento != null
+                ? interactionService.call(
+                        InteractionContext.builder().user(userMemento).build(),
+                        callable)
+                : interactionService.callAnonymous(callable);
+    }
+
+    private UserMemento userMemento(final Principal principal) {
+        if (principal != null) {
+            return UserMemento.builder(principal.getName()).build();
+        }
+        var fallback = graphqlConfiguration.authentication().fallback();
+        if (fallback == null || fallback.username() == null) {
+            return null;
+        }
+        var roleNames = Optional.ofNullable(fallback.roles()).orElseGet(List::of);
+        var roles = Can.ofStream(roleNames.stream()
+                .map(roleName -> RoleMemento.builder().name(roleName).build()));
+        return UserMemento.builder(fallback.username())
+                .roles(roles)
+                .build();
     }
 
     private Optional<String> gridAsXml(final ManagedObject managedObject) {
         return managedObject.objSpec().lookupFacet(GridFacet.class)
-            .map(facet->facet.getGrid(managedObject))
-            .flatMap(grid->gridService().marshaller(CommonMimeType.XML).map(mars->mars.marshal(grid, CommonMimeType.XML)))
-            .map(x -> x.replaceAll("(\r\n)", "\n"));
+            .map(facet -> facet.getGrid(managedObject))
+            .flatMap(grid -> gridService().marshaller(CommonMimeType.XML)
+                    .map(marshaller -> marshaller.marshal(grid, CommonMimeType.XML)))
+            .map(xml -> xml.replace("\r\n", "\n"));
     }
 
-    private Optional<Object> valueOfProperty(final String logicalTypeName, final String id, final String propertyId) {
-        return lookup(logicalTypeName, id)
-                .map(managedObject -> new ManagedObjectAndPropertyIfAny(managedObject, managedObject.objSpec().getProperty(propertyId)))
-                .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
-                .map(ManagedObjectAndProperty::of)
-                .map(ManagedObjectAndProperty::value)
-                .map(ManagedObject::getPojo);
+    private <T> Optional<T> valueOfVisibleProperty(
+            final String logicalTypeName,
+            final String id,
+            final String propertyId,
+            final Class<T> requiredType) {
+        return lookupVisible(logicalTypeName, id)
+                .flatMap(managedObject -> managedObject.objSpec().getProperty(propertyId)
+                        .filter(property -> isVisible(property, managedObject))
+                        .map(property -> property.get(managedObject)))
+                .map(ManagedObject::getPojo)
+                .filter(requiredType::isInstance)
+                .map(requiredType::cast);
     }
 
-    private Optional<ManagedObject> lookup(final String logicalTypeName, final String id) {
-        return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
-                .map(objectManager::adapt);
+    private static boolean isVisible(
+            final OneToOneAssociation property,
+            final ManagedObject owningObject) {
+        return property.isVisible(owningObject, InteractionInitiatedBy.FRAMEWORK, Where.ANYWHERE).isAllowed()
+                && property.isVisible(owningObject, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed();
     }
 
-    private record ManagedObjectAndPropertyIfAny(
-            ManagedObject owningObject,
-            Optional<OneToOneAssociation> propertyIfAny) {
-        boolean isPropertyPresent() {
-            return propertyIfAny.isPresent();
+    private Optional<ManagedObject> lookupVisible(final String logicalTypeName, final String id) {
+        try {
+            return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
+                    .map(objectManager::adapt)
+                    .filter(managedObject -> MmVisibilityUtils.isVisible(
+                            managedObject,
+                            InteractionInitiatedBy.FRAMEWORK))
+                    .filter(managedObject -> MmVisibilityUtils.isVisible(
+                            managedObject,
+                            InteractionInitiatedBy.USER));
+        } catch (RuntimeException ex) {
+            return Optional.empty();
         }
     }
 
-    private static class ManagedObjectAndProperty {
-        private static ManagedObjectAndProperty of(final ManagedObjectAndPropertyIfAny tuple) {
-            return new ManagedObjectAndProperty(tuple);
+    private static ResponseEntity<byte[]> resourceResponse(
+            final byte[] content,
+            final MediaType mediaType,
+            final String fileName,
+            final CausewayConfiguration.Viewer.Graphql.ResponseType responseType) {
+        var bodyBuilder = ResponseEntity.ok()
+                .contentType(mediaType)
+                .contentLength(content.length)
+                .header(HttpHeaders.CACHE_CONTROL, PRIVATE_NO_STORE)
+                .header("X-Content-Type-Options", NOSNIFF);
+        if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
+            bodyBuilder.header(
+                    HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.attachment().filename(fileName).build().toString());
         }
-        private ManagedObjectAndProperty(final ManagedObjectAndPropertyIfAny tuple) {
-            this.owningObject = tuple.owningObject;
-            this.property = tuple.propertyIfAny.orElse(null);
-        }
-        ManagedObject owningObject;
-        OneToOneAssociation property;
+        return bodyBuilder.body(content);
+    }
 
-        ManagedObject value() {
-            return property.get(owningObject);
-        }
+    private static <T> ResponseEntity<T> forbidden() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .header(HttpHeaders.CACHE_CONTROL, PRIVATE_NO_STORE)
+                .build();
+    }
+
+    private static <T> ResponseEntity<T> notFound() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .header(HttpHeaders.CACHE_CONTROL, PRIVATE_NO_STORE)
+                .build();
     }
 }

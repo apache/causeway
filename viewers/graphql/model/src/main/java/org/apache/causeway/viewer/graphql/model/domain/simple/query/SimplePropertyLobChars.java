@@ -24,18 +24,19 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
+import org.apache.causeway.viewer.graphql.model.domain.common.query.ResourcePath;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 public class SimplePropertyLobChars extends SimplePropertyLobAbstract {
 
-    private final String graphqlPath;
+    private final ResourcePath resourcePath;
 
     public SimplePropertyLobChars(
             final MemberInteractor<OneToOneAssociation> memberInteractor,
             final Context context) {
         super(memberInteractor, context, "chars");
 
-        this.graphqlPath = context.causewayConfiguration.valueOf("spring.graphql.path").orElse("/graphql");
+        this.resourcePath = ResourcePath.from(context.causewayConfiguration);
     }
 
     @Override
@@ -45,8 +46,7 @@ public class SimplePropertyLobChars extends SimplePropertyLobAbstract {
         var bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> {
             final ObjectFeature objectFeature = memberInteractor.getObjectMember();
-            return String.format(
-                    "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.logicalTypeName(), x.identifier(), objectFeature.asciiId());
+            return resourcePath.property(x, objectFeature.asciiId(), "clobChars");
         }).orElse(null);
 
     }
