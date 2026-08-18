@@ -5,7 +5,8 @@ The same source equivalence class includes `java.util.Date`, `java.sql.Date`, an
 Clients need reversible schema shapes and explicit extension or rejection behavior rather than input fields that accept strings and fail only during invocation.
 
 The evidence is recorded in `coverage-matrix.yaml` entries `REF-VALUE-02`, `REF-VALUE-03`, and `REF-RESOURCE-01`.
-Resource URL and policy safety are handled first by `fix-rich-graphql-resource-link-safety` under entries `REF-RESOURCE-02` and `REF-RESOURCE-03`.
+Resource URL and policy safety are provided by the archived `fix-rich-graphql-resource-link-safety` change under entries `REF-RESOURCE-02` and `REF-RESOURCE-03`.
+This change builds on its same-origin `ResourcePath`, independent value-content policy, forbidden-field omission, and dereference authorization rather than replacing them.
 
 ## What Changes
 
