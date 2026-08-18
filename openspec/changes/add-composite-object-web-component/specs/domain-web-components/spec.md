@@ -7,6 +7,7 @@ The component library SHALL provide `<causeway-object>` as a framework-neutral h
 - **WHEN** `<causeway-object>` connects beneath an authoritative object context
 - **THEN** it discovers the logical type's members through the context's targeted schema description
 - **AND** composes the object's supported layout without constructing GraphQL documents itself
+- **AND** only generated properties are affected by the component's optional `editable` attribute
 
 #### Scenario: Object context is absent
 - **WHEN** the component has no usable object context
@@ -18,7 +19,12 @@ The component library SHALL provide `<causeway-object>` as a framework-neutral h
 
 #### Scenario: Supported grid is available
 - **WHEN** object metadata references an accessible grid containing supported rows, columns, tabs, field sets, domain-object placement, and member references
-- **THEN** the component maps them into responsive semantic layout regions
+- **THEN** the context retrieves the opaque origin-relative resource using same-origin no-store semantics
+- **AND** the component maps it into responsive semantic layout regions
+
+#### Scenario: Application forces fallback composition
+- **WHEN** `layout-mode="fallback"` is configured
+- **THEN** the component uses the canonical fallback plan without dereferencing the effective-grid resource
 
 #### Scenario: Grid contains unsupported content
 - **WHEN** one layout region contains an unknown node or unsupported instruction
@@ -26,9 +32,9 @@ The component library SHALL provide `<causeway-object>` as a framework-neutral h
 - **AND** preserves unrelated recognized regions while applying local fallback where possible
 
 #### Scenario: Grid resource is unsafe
-- **WHEN** layout XML attempts external entity resolution or executable content
+- **WHEN** layout XML is oversized, malformed, uses unknown entities, declares a document type or entity, or contains executable content
 - **THEN** the parser rejects that content
-- **AND** no external entity or executable markup is processed
+- **AND** no external entity, response markup, or executable content is processed
 
 ### Requirement: Canonical fallback object layout
 The component SHALL provide deterministic fallback composition modeled on Causeway's `GridFallbackLayout.xml` when no usable effective grid is available.
@@ -60,6 +66,10 @@ Every introspected member claimed by automatic composition SHALL be placed at mo
 - **WHEN** a member has already been claimed by an explicit layout reference
 - **THEN** an unreferenced marker does not place it again
 
+#### Scenario: Member is intentionally omitted
+- **WHEN** a usable explicit grid neither references a member nor provides the corresponding unreferenced marker
+- **THEN** automatic composition does not invent placement for that member
+
 #### Scenario: Layout reference is stale or wrong-kind
 - **WHEN** the layout names a missing member or uses a member in an incompatible role
 - **THEN** the component records a diagnostic
@@ -83,6 +93,11 @@ Generated light DOM SHALL expose documented stable styling, region, lifecycle, a
 #### Scenario: Application themes generated layout
 - **WHEN** an application supplies supported CSS variables and selectors
 - **THEN** it can style regions and established child components without replacing object semantics
+
+#### Scenario: Layout state changes
+- **WHEN** effective-grid loading, fallback, successful planning, or bounded diagnostics occur
+- **THEN** documented `data-layout-state`, layout state events, and redacted diagnostic events expose the transition
+- **AND** an explicit `refreshLayout()` can re-evaluate locale-sensitive or authorization-sensitive layout context
 
 #### Scenario: Application needs custom structure
 - **WHEN** automatic layout is not suitable
