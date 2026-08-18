@@ -85,6 +85,10 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"section-collections\"")
                 .contains("data-testid=\"section-events\"")
                 .contains("data-testid=\"sample-coverage\"")
+                .contains("data-testid=\"section-composite-object\"")
+                .contains("data-testid=\"composite-object-context\"")
+                .contains("data-testid=\"composite-object\"")
+                .contains("<causeway-object editable")
                 .contains("Component interaction showcase")
                 .contains("prefers-color-scheme: dark")
                 .contains("await import('/causeway-webcomponents/index.mjs')")
@@ -100,7 +104,25 @@ class SampleHtmlApplication_IntegTest {
                 .contains("./editor-registry.mjs")
                 .contains("./interaction-controller-element.mjs")
                 .contains("./interaction-operations.mjs")
+                .contains("./object-element.mjs")
+                .contains("./object-layout.mjs")
                 .contains("./value-renderers.mjs");
+    }
+
+    @Test
+    void exposesAuthorizedEffectiveGridForCompositeObject() throws Exception {
+        final var response = get("/graphql/object/causeway.webcomponents.sample.SampleObject:s_sample-1/_meta/grid");
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.headers().firstValue("content-type").orElse(""))
+                .contains("application/xml");
+        assertThat(response.headers().firstValue("cache-control").orElse(""))
+                .isEqualTo("private, no-store");
+        assertThat(response.body())
+                .contains("<bs:grid")
+                .contains("<cpt:domainObject")
+                .contains("unreferencedProperties=\"true\"")
+                .contains("unreferencedCollections=\"true\"")
+                .doesNotContain(SampleObject.SAMPLE_SECRET);
     }
 
     @Test

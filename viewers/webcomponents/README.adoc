@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The Causeway web-component modules provide framework-neutral browser components backed by the Causeway rich GraphQL schema.
-The foundation module includes a GraphQL client provider, coordinated object contexts, semantic read-only rendering, explicitly enabled property editing, action prompts and invocation, normalized interaction results, and lazy collections.
+The foundation module includes a GraphQL client provider, coordinated object contexts, safe effective-grid and fallback composite objects, semantic read-only rendering, explicitly enabled property editing, action prompts and invocation, normalized interaction results, and lazy collections.
 It deliberately has no dependency on HTMX, React, Vue, Svelte, or a browser component-authoring framework.
 
 This page explains how to run the automated verification and how to exercise the components manually against a Causeway application.
@@ -34,8 +34,8 @@ A successful run reports the Node test totals and completes both Maven modules:
 
 [source,text]
 ----
-tests 55
-pass 55
+tests 78
+pass 78
 fail 0
 BUILD SUCCESS
 ----
@@ -53,7 +53,7 @@ cd viewers/webcomponents/foundation
 node --test --test-concurrency=1
 ----
 
-The tests cover generated rich-schema naming, targeted introspection, schema diagnostics, executor behavior, selection coordination, property and action semantic commands, editor selection, validation, cancellation, mutation serialization, prompts, typed outcomes, partial errors, component lifecycle, context propagation, and integrated state distribution.
+The tests cover safe grid parsing, deterministic and fallback layout planning, composite-object lifecycle and diagnostics, context-owned structural resources, generated rich-schema naming, targeted introspection, schema diagnostics, executor behavior, selection coordination, property and action semantic commands, editor selection, validation, cancellation, mutation serialization, prompts, typed outcomes, partial errors, component lifecycle, context propagation, and integrated state distribution.
 
 === Related GraphQL modules
 
@@ -74,14 +74,14 @@ mvn -f bom/pom.xml validate
 
 git diff --check
 
-openspec validate establish-graphql-web-component-foundation --strict
+openspec validate add-composite-object-web-component --strict
 ----
 
 The OpenSpec command should report:
 
 [source,text]
 ----
-Change 'establish-graphql-web-component-foundation' is valid
+Change 'add-composite-object-web-component' is valid
 ----
 
 === Packaged browser resources
@@ -148,11 +148,13 @@ A representative application configuration is:
 [source,properties]
 ----
 causeway.viewer.graphql.schema-style=SIMPLE_AND_RICH
+causeway.viewer.graphql.resources.structural-metadata-response-type=DIRECT
 spring.graphql.path=/graphql
 ----
 
 `RICH_AND_SIMPLE` also places the rich API beneath its configured top-level field.
 The default rich top-level field name is `rich`.
+Direct structural metadata enables authorized effective-grid retrieval; if the policy remains `FORBIDDEN`, `<causeway-object>` uses its canonical fallback without disclosing the resource body or authorization policy.
 
 If the application uses `RICH_ONLY`, the generated object lookup fields are at the query root.
 Set an empty `rich-root-field` attribute in that case:
@@ -187,16 +189,15 @@ Serve a temporary page from the Causeway application with markup similar to the 
     <causeway-object-context
         logical-type="university.dept.Department"
         object-id="1">
-      <causeway-object-header></causeway-object-header>
-      <causeway-property member="name"></causeway-property>
-      <causeway-property member="code"></causeway-property>
+      <causeway-object editable></causeway-object>
+      <causeway-interaction-controller></causeway-interaction-controller>
     </causeway-object-context>
   </causeway-graphql-client>
 </body>
 </html>
 ----
 
-Replace the example logical type, object identifier, and member names with values present in the application under test.
+Replace the example logical type and object identifier with values present in the application under test.
 The logical type is the Causeway logical type name, not the generated GraphQL type name.
 The object identifier is the identifier accepted by the rich GraphQL lookup input.
 
@@ -222,7 +223,8 @@ For realistic authentication behavior, same-origin serving is usually simpler.
 
 === Rendered content
 
-Verify that the object title and identity are rendered by `<causeway-object-header>`.
+Verify that `<causeway-object>` reaches `data-layout-state="ready"` for an authorized effective grid or `fallback` when the resource is unavailable.
+Verify that its generated `<causeway-object-header>` renders object title and identity and each discovered member is placed at most once.
 Verify that each visible property has a label and an `<output>` value.
 Verify that values containing markup-like characters are escaped rather than interpreted as HTML.
 Verify that hidden properties produce no visible content.
@@ -236,7 +238,8 @@ The initial load should perform a small series of operations named `CausewayDesc
 It should not download and inspect the complete GraphQL schema.
 
 After schema discovery, one operation named `CausewayReadObject` should contain the combined active selection for the object header and all properties mounted during the initial rendering turn.
-For the example page, that object operation should include `_meta`, `name`, and `code` selections.
+For the composite example, the first object operation includes `_meta.grid`; generated children then contribute member requirements to a coordinated delta operation.
+Auto layout also performs one same-origin no-store GET for the opaque grid reference, while forced fallback performs no structural-resource request.
 There should not be one object operation per component.
 
 === Context and component state events
@@ -335,9 +338,14 @@ Adjust the `<causeway-graphql-client>` attributes to match those settings.
 Prefer a page served from the same application origin as `/graphql`.
 For a cross-origin page, configure CORS explicitly and inject an executor if credentials, CSRF handling, or application-specific headers are required.
 
+=== Effective grid is unavailable
+
+Confirm the structural metadata response policy and inspect the grid GET status without logging its response body.
+A forbidden, missing, malformed, or unsafe resource should produce a bounded layout diagnostic and canonical fallback rather than an empty object.
+
 === The page remains empty
 
-Inspect `causeway-object-context-state-change` events and the GraphQL response body.
+Inspect `causeway-object-context-state-change` and `causeway-object-layout-state-change` events and the GraphQL response body.
 Check for `terminal-error`, an unsupported member, a hidden member, or a missing object.
 Verify that `/causeway-webcomponents/index.mjs` and all imported `.mjs` resources return JavaScript rather than an HTML error page.
 
