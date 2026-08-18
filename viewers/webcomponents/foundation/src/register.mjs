@@ -23,6 +23,12 @@ import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './
 import {CausewayElementName} from './component-contracts.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
 import {CausewayInteractionControllerElement} from './interaction-controller-element.mjs';
+import {
+  CausewayMenubarPrimaryElement,
+  CausewayMenubarSecondaryElement,
+  CausewayMenubarTertiaryElement
+} from './menubar-element.mjs';
+import {CausewayMenubarsElement} from './menubars-element.mjs';
 import {CausewayObjectContextElement} from './object-context-element.mjs';
 import {CausewayObjectElement} from './object-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
@@ -40,6 +46,10 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],
+  [CausewayElementName.MENUBARS, CausewayMenubarsElement],
+  [CausewayElementName.MENUBAR_PRIMARY, CausewayMenubarPrimaryElement],
+  [CausewayElementName.MENUBAR_SECONDARY, CausewayMenubarSecondaryElement],
+  [CausewayElementName.MENUBAR_TERTIARY, CausewayMenubarTertiaryElement],
   [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
   [CausewayElementName.COLLECTION, CausewayCollectionElement]
 ]);

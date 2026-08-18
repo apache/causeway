@@ -31,6 +31,9 @@ export const COLLECTION_STATE_EVENT = 'causeway-collection-state-change';
 export const COLLECTION_CONFIGURATION_EVENT = 'causeway-collection-configuration-change';
 export const OBJECT_LAYOUT_STATE_EVENT = 'causeway-object-layout-state-change';
 export const OBJECT_LAYOUT_DIAGNOSTIC_EVENT = 'causeway-object-layout-diagnostic';
+export const MENU_BARS_CONTEXT_REQUEST_EVENT = 'causeway-menubars-context-request';
+export const MENU_BARS_STATE_EVENT = 'causeway-menubars-state-change';
+export const MENU_BARS_DIAGNOSTIC_EVENT = 'causeway-menubars-diagnostic';
 
 export function requestGraphQLClient(requester) {
   let client = null;
@@ -40,6 +43,16 @@ export function requestGraphQLClient(requester) {
     }
   }));
   return client;
+}
+
+export function requestMenuBarsContext(requester) {
+  let context = null;
+  requester.dispatchEvent(createSemanticEvent(MENU_BARS_CONTEXT_REQUEST_EVENT, {
+    provide(candidate) {
+      context ??= candidate;
+    }
+  }));
+  return context;
 }
 
 export function requestObjectContext(requester) {

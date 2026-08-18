@@ -23,28 +23,57 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.causeway.viewer.webcomponents.sample.html.domain.SampleMenu;
 import org.apache.causeway.viewer.webcomponents.sample.html.domain.SampleObject;
 import org.apache.causeway.viewer.webcomponents.sample.html.domain.SampleRelatedObject;
 
 @SpringBootTest(
         classes = SampleHtmlApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SampleHtmlApplication_IntegTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @LocalServerPort
     private int port;
+
+    @Test
+    @Order(1)
+    void initializesGraphQLSourceOnceForConcurrentFirstRequests() throws Exception {
+        final var start = new CountDownLatch(1);
+        final var executor = Executors.newFixedThreadPool(6);
+        try {
+            final var requests = IntStream.range(0, 6)
+                    .mapToObj(index -> executor.submit(() -> {
+                        start.await();
+                        return graphQL("query CausewayConcurrentStartup" + index + " { __typename }");
+                    }))
+                    .toList();
+            start.countDown();
+            for (var request : requests) {
+                assertNoGraphQLErrors(request.get());
+            }
+        } finally {
+            executor.shutdownNow();
+        }
+    }
 
     @Test
     void servesSamplePageAndPackagedFoundationModule() throws Exception {
@@ -55,6 +84,12 @@ class SampleHtmlApplication_IntegTest {
         assertThat(page.body())
                 .contains("data-testid=\"sample-app\"")
                 .contains("data-testid=\"sample-object\"")
+                .contains("data-testid=\"section-menubars\"")
+                .contains("data-testid=\"menubars-composite\"")
+                .contains("data-testid=\"menubar-primary-standalone\"")
+                .contains("data-testid=\"menubar-secondary-standalone\"")
+                .contains("data-testid=\"menubar-tertiary-standalone\"")
+                .contains("data-testid=\"menubars-state\"")
                 .contains("data-testid=\"object-header\"")
                 .contains("data-testid=\"property-name\"")
                 .contains("data-testid=\"property-code\"")
@@ -104,6 +139,10 @@ class SampleHtmlApplication_IntegTest {
                 .contains("./editor-registry.mjs")
                 .contains("./interaction-controller-element.mjs")
                 .contains("./interaction-operations.mjs")
+                .contains("./menu-context-controller.mjs")
+                .contains("./menu-layout.mjs")
+                .contains("./menubar-element.mjs")
+                .contains("./menubars-element.mjs")
                 .contains("./object-element.mjs")
                 .contains("./object-layout.mjs")
                 .contains("./value-renderers.mjs");
@@ -123,6 +162,106 @@ class SampleHtmlApplication_IntegTest {
                 .contains("unreferencedProperties=\"true\"")
                 .contains("unreferencedCollections=\"true\"")
                 .doesNotContain(SampleObject.SAMPLE_SECRET);
+    }
+
+    @Test
+    void exposesAuthorizedEffectiveMenuBarsAndServiceActions() throws Exception {
+        final var application = graphQL("""
+                query CausewaySampleApplicationEntry {
+                  rich {
+                    application {
+                      menuBars {
+                        href
+                        mediaType
+                        formatVersion
+                        generation
+                        cacheControl
+                      }
+                      issues { code message }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(application);
+        assertThat(application.at("/data/rich/application/menuBars/href").asString())
+                .isEqualTo("/graphql/application/menu-bars");
+        assertThat(application.at("/data/rich/application/menuBars/cacheControl").asString())
+                .isEqualTo("private, no-store");
+        assertThat(application.at("/data/rich/application/issues").toString())
+                .contains("INVALID_ACTION_REFERENCE")
+                .doesNotContain("missingAction");
+
+        final var menuBars = get(application.at("/data/rich/application/menuBars/href").asString());
+        assertThat(menuBars.statusCode()).isEqualTo(200);
+        assertThat(menuBars.headers().firstValue("content-type").orElse(""))
+                .contains("application/xml");
+        assertThat(menuBars.headers().firstValue("cache-control").orElse(""))
+                .isEqualTo("private, no-store");
+        assertThat(menuBars.body())
+                .contains("<mb:primary")
+                .contains("<mb:secondary")
+                .contains("<mb:tertiary")
+                .contains("objectType=\"" + SampleMenu.LOGICAL_TYPE_NAME + "\"")
+                .contains("id=\"welcomeMessage\"")
+                .contains("id=\"greet\"")
+                .contains("id=\"clearSampleNotes\"")
+                .contains("id=\"disabledAction\"")
+                .doesNotContain("hiddenAction")
+                .doesNotContain("missingAction")
+                .doesNotContain(SampleObject.SAMPLE_SECRET);
+
+        final var service = graphQL("""
+                query CausewaySampleServiceActions {
+                  rich {
+                    causeway_webcomponents_sample_SampleMenu {
+                      welcomeMessage {
+                        hidden
+                        disabled
+                        invoke { results }
+                      }
+                      greet {
+                        hidden
+                        disabled
+                        params {
+                          name {
+                            hidden
+                            disabled
+                            default
+                            choices
+                            datatype
+                          }
+                        }
+                        validate(name: "")
+                      }
+                      disabledAction { hidden disabled }
+                      hiddenAction { hidden }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(service);
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/welcomeMessage/invoke/results").asString())
+                .isEqualTo("Welcome to Causeway web components.");
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/greet/params/name/default").asString())
+                .isEqualTo("Ada");
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/greet/params/name/choices").toString())
+                .contains("Ada", "Grace", "Linus");
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/greet/validate").asString())
+                .contains(SampleMenu.GREETING_VALIDATION_REASON)
+                .contains("'Name' is mandatory");
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/disabledAction/disabled").asString())
+                .isEqualTo(SampleMenu.DISABLED_REASON);
+        assertThat(service.at("/data/rich/causeway_webcomponents_sample_SampleMenu/hiddenAction/hidden").asBoolean())
+                .isTrue();
+
+        final var mutation = graphQL("""
+                mutation CausewaySampleClearNotes {
+                  causeway_webcomponents_sample_SampleMenu__clearSampleNotes
+                }
+                """);
+        assertNoGraphQLErrors(mutation);
+        assertThat(mutation.at("/data/causeway_webcomponents_sample_SampleMenu__clearSampleNotes").isNull())
+                .isTrue();
     }
 
     @Test

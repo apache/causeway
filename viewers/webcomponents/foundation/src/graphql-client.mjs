@@ -17,6 +17,7 @@
  * under the License.
  */
 
+import {buildApplicationEntryReadOperation} from './application-operations.mjs';
 import {normalizeExecutor} from './graphql-executor.mjs';
 import {buildDescribeTypesOperation, fieldsByName, namedType, normalizeTypeDescription} from './introspection.mjs';
 import {RichSchemaNameError, RichSchemaNames} from './schema-names.mjs';
@@ -24,7 +25,8 @@ import {buildCollectionWindowReadOperation, buildObjectReadOperation} from './se
 import {
   buildDescribeOperationRootsOperation,
   buildMutationInteractionOperation,
-  buildObjectInteractionOperation
+  buildObjectInteractionOperation,
+  buildServiceInteractionOperation
 } from './interaction-operations.mjs';
 
 export class CausewaySchemaError extends Error {
@@ -42,8 +44,11 @@ export class CausewayGraphQLClient {
     this.schemaNames = schemaNames;
     this.typeCache = new Map();
     this.objectDescriptionCache = new Map();
+    this.serviceDescriptionCache = new Map();
     this.operationRootsPromise = null;
     this.mutationDescriptionPromise = null;
+    this.applicationDescriptionPromise = null;
+    this.schemaDiscoveryTail = Promise.resolve();
   }
 
   describeObject(logicalTypeName) {
@@ -79,7 +84,7 @@ export class CausewayGraphQLClient {
   async describeOperationRoots({signal} = {}) {
     if (!this.operationRootsPromise) {
       const operation = buildDescribeOperationRootsOperation();
-      this.operationRootsPromise = this.executor({
+      this.operationRootsPromise = this.#executeSchemaDiscovery({
         document: operation.document,
         variables: operation.variables,
         operationName: operation.operationName,
@@ -118,6 +123,44 @@ export class CausewayGraphQLClient {
       });
     }
     return this.mutationDescriptionPromise;
+  }
+
+  describeService(logicalTypeName) {
+    if (!this.serviceDescriptionCache.has(logicalTypeName)) {
+      const promise = this.#describeObject(logicalTypeName)
+        .then(description => Object.freeze({...description, kind: 'service'}))
+        .catch(error => {
+          this.serviceDescriptionCache.delete(logicalTypeName);
+          throw error;
+        });
+      this.serviceDescriptionCache.set(logicalTypeName, promise);
+    }
+    return this.serviceDescriptionCache.get(logicalTypeName);
+  }
+
+  describeApplicationEntry() {
+    if (!this.applicationDescriptionPromise) {
+      this.applicationDescriptionPromise = this.#describeApplicationEntry().catch(error => {
+        this.applicationDescriptionPromise = null;
+        throw error;
+      });
+    }
+    return this.applicationDescriptionPromise;
+  }
+
+  async readApplicationEntry({description, signal} = {}) {
+    const operation = buildApplicationEntryReadOperation({description, schemaNames: this.schemaNames});
+    const response = await this.executor({
+      document: operation.document,
+      variables: operation.variables,
+      operationName: operation.operationName,
+      signal
+    });
+    return Object.freeze({
+      data: valueAtPath(response.data, operation.applicationPath) ?? null,
+      errors: normalizeErrors(response.errors, operation.applicationPath),
+      operation
+    });
   }
 
   async readObject({description, identity, selection, signal}) {
@@ -187,6 +230,26 @@ export class CausewayGraphQLClient {
     });
   }
 
+  async executeServiceInteraction({description, selection, operationName, signal}) {
+    const operation = buildServiceInteractionOperation({
+      description,
+      selection,
+      schemaNames: this.schemaNames,
+      operationName
+    });
+    const response = await this.executor({
+      document: operation.document,
+      variables: operation.variables,
+      operationName: operation.operationName,
+      signal
+    });
+    return Object.freeze({
+      data: valueAtPath(response.data, operation.servicePath) ?? null,
+      errors: normalizeErrors(response.errors, operation.servicePath),
+      operation
+    });
+  }
+
   async executeMutationInteraction({
     description,
     mutationType,
@@ -222,14 +285,75 @@ export class CausewayGraphQLClient {
   clearSchemaCache() {
     this.typeCache.clear();
     this.objectDescriptionCache.clear();
+    this.serviceDescriptionCache.clear();
     this.operationRootsPromise = null;
     this.mutationDescriptionPromise = null;
+    this.applicationDescriptionPromise = null;
+  }
+
+  async #describeApplicationEntry(signal) {
+    const roots = await this.describeOperationRoots({signal});
+    if (!roots.queryTypeName) {
+      return unsupportedApplicationDescription('QUERY_ROOT_UNAVAILABLE');
+    }
+    const queryTypes = await this.describeTypes([roots.queryTypeName], {signal});
+    const queryType = queryTypes.get(roots.queryTypeName) ?? null;
+    if (!queryType) {
+      return unsupportedApplicationDescription('QUERY_ROOT_UNAVAILABLE');
+    }
+    let richType = queryType;
+    if (this.schemaNames.richRootField) {
+      const richField = fieldsByName(queryType).get(this.schemaNames.richRootField) ?? null;
+      const richTypeName = richField ? namedType(richField.type) : null;
+      if (!richTypeName) {
+        return unsupportedApplicationDescription('RICH_ROOT_UNAVAILABLE');
+      }
+      const richTypes = await this.describeTypes([richTypeName], {signal});
+      richType = richTypes.get(richTypeName) ?? null;
+      if (!richType) {
+        return unsupportedApplicationDescription('RICH_ROOT_UNAVAILABLE');
+      }
+    }
+    const applicationField = fieldsByName(richType).get('application') ?? null;
+    const applicationTypeName = applicationField ? namedType(applicationField.type) : null;
+    if (!applicationTypeName) {
+      return unsupportedApplicationDescription('APPLICATION_UNAVAILABLE');
+    }
+    const applicationTypes = await this.describeTypes([applicationTypeName], {signal});
+    const applicationType = applicationTypes.get(applicationTypeName) ?? null;
+    if (!applicationType) {
+      return unsupportedApplicationDescription('APPLICATION_UNAVAILABLE');
+    }
+    const applicationFields = fieldsByName(applicationType);
+    const menuBarsField = applicationFields.get('menuBars') ?? null;
+    const menuBarsTypeName = menuBarsField ? namedType(menuBarsField.type) : null;
+    if (!menuBarsTypeName) {
+      return unsupportedApplicationDescription('MENU_BARS_UNAVAILABLE', {applicationField, applicationType});
+    }
+    const issuesField = applicationFields.get('issues') ?? null;
+    const issueTypeName = issuesField ? namedType(issuesField.type) : null;
+    const requestedTypes = [menuBarsTypeName, issueTypeName].filter(Boolean);
+    const supportTypes = await this.describeTypes(requestedTypes, {signal});
+    const menuBarsType = supportTypes.get(menuBarsTypeName) ?? null;
+    if (!menuBarsType) {
+      return unsupportedApplicationDescription('MENU_BARS_UNAVAILABLE', {applicationField, applicationType});
+    }
+    return Object.freeze({
+      supported: true,
+      reason: null,
+      applicationField,
+      applicationType,
+      menuBarsField,
+      menuBarsType,
+      issuesField,
+      issueType: issueTypeName ? supportTypes.get(issueTypeName) ?? null : null
+    });
   }
 
   async #fetchTypes(typeNames, signal) {
     const entries = await Promise.all(typeNames.map(async typeName => {
       const operation = buildDescribeTypesOperation([typeName]);
-      const response = await this.executor({
+      const response = await this.#executeSchemaDiscovery({
         document: operation.document,
         variables: operation.variables,
         operationName: operation.operationName,
@@ -246,6 +370,13 @@ export class CausewayGraphQLClient {
       return [typeName, normalizeTypeDescription(response.data?.[alias])];
     }));
     return new Map(entries);
+  }
+
+  #executeSchemaDiscovery(request) {
+    const execute = () => this.executor(request);
+    const result = this.schemaDiscoveryTail.then(execute, execute);
+    this.schemaDiscoveryTail = result.catch(() => undefined);
+    return result;
   }
 
   async #describeObject(logicalTypeName) {
@@ -445,6 +576,19 @@ function semanticMemberKind(generatedKind) {
     action: 'action',
     metadata: 'metadata'
   }[generatedKind] ?? null;
+}
+
+function unsupportedApplicationDescription(reason, details = {}) {
+  return Object.freeze({
+    supported: false,
+    reason,
+    applicationField: details.applicationField ?? null,
+    applicationType: details.applicationType ?? null,
+    menuBarsField: null,
+    menuBarsType: null,
+    issuesField: null,
+    issueType: null
+  });
 }
 
 function valueAtPath(root, path) {
