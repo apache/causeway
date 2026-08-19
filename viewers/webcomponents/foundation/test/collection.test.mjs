@@ -73,7 +73,7 @@ function staffDeltaResponse() {
   };
 }
 
-test('captures declarative columns before browser upgrade reactions replace source children', () => {
+test('captures declarative columns before browser upgrade reactions replace source children', async () => {
   const collection = new CausewayCollectionElement();
   const column = new CausewayCollectionColumnElement();
   column.member = 'name';
@@ -83,6 +83,7 @@ test('captures declarative columns before browser upgrade reactions replace sour
   captureDeclarativeCollectionColumns({querySelectorAll: () => [collection]});
   collection.removeChild(column);
   document.body.appendChild(collection);
+  await waitFor(() => collection.columns.length === 1);
   assert.deepEqual(collection.columns, [{member: 'name', label: 'Name', testId: 'column-name'}]);
   document.body.removeChild(collection);
 });
@@ -255,6 +256,7 @@ test('collection component does not read until activated and renders declared co
   collection.columns = [{member: 'name', label: 'Name'}, {member: 'code', label: 'Code'}];
   collection.context = context;
   document.body.appendChild(collection);
+  await waitFor(() => collection.innerHTML.includes('Load Staff Members'));
   assert.equal(loadCount, 0);
   assert.match(collection.innerHTML, /Load Staff Members/);
 
@@ -262,6 +264,8 @@ test('collection component does not read until activated and renders declared co
   await waitFor(() => collection.collectionState.status === 'ready');
   assert.equal(loadCount, 1);
   assert.match(collection.innerHTML, /causeway-collection-table/);
+  assert.match(collection.innerHTML, /<th scope="col">Item<\/th>/);
+  assert.match(collection.innerHTML, /<causeway-object-link/);
   assert.match(collection.innerHTML, /Dr Ada/);
   assert.match(collection.innerHTML, /ADA/);
 

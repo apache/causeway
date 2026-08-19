@@ -1,0 +1,252 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+.causeway-app-shell {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--causeway-page-background);
+  color: var(--causeway-text);
+}
+
+.causeway-app-shell > causeway-graphql-client {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+}
+
+.causeway-skip-link {
+  position: fixed;
+  z-index: 10000;
+  inset-block-start: var(--causeway-space-2);
+  inset-inline-start: var(--causeway-space-2);
+  padding: var(--causeway-space-2) var(--causeway-space-3);
+  border-radius: var(--causeway-radius-sm);
+  background: var(--causeway-surface);
+  color: var(--causeway-link);
+  transform: translateY(-180%);
+}
+
+.causeway-skip-link:focus {
+  transform: translateY(0);
+}
+
+.causeway-shell-header {
+  position: sticky;
+  z-index: 100;
+  inset-block-start: 0;
+  color: var(--causeway-nav-text);
+  background: var(--causeway-nav-background);
+  box-shadow: var(--causeway-shadow-sm);
+}
+
+.causeway-shell-navbar {
+  width: min(100%, var(--causeway-shell-width));
+  min-height: var(--causeway-nav-height);
+  margin-inline: auto;
+  padding-inline: var(--causeway-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--causeway-space-3);
+}
+
+.causeway-shell-brand {
+  min-height: 2.75rem;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--causeway-space-2);
+  color: var(--causeway-nav-text);
+  font-size: var(--causeway-font-size-lg);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.causeway-shell-brand:hover {
+  color: var(--causeway-nav-text);
+  text-decoration: none;
+}
+
+.causeway-shell-mark {
+  width: 2rem;
+  height: 2rem;
+  display: inline-grid;
+  place-items: center;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.causeway-shell-navbar > causeway-menubars {
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.causeway-shell-navbar > causeway-menubars > causeway-menubar-primary {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.causeway-shell-navbar > causeway-menubars > :is(causeway-menubar-secondary, causeway-menubar-tertiary) {
+  flex: 0 1 auto;
+}
+
+.causeway-route-loading {
+  position: fixed;
+  z-index: 120;
+  inset-block-start: calc(var(--causeway-nav-height) + var(--causeway-space-2));
+  inset-inline-end: var(--causeway-space-4);
+  padding: var(--causeway-space-2) var(--causeway-space-3);
+  border: 1px solid var(--causeway-border);
+  border-radius: var(--causeway-radius-pill);
+  background: var(--causeway-surface);
+  color: var(--causeway-text);
+  box-shadow: var(--causeway-shadow-md);
+}
+
+.htmx-indicator {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator,
+[data-route-loading="true"] .causeway-route-loading {
+  visibility: visible;
+  opacity: 1;
+}
+
+.causeway-shell-result,
+.causeway-shell-main,
+.causeway-shell-footer {
+  width: min(calc(100% - (2 * var(--causeway-space-4))), var(--causeway-content-width));
+  margin-inline: auto;
+}
+
+.causeway-shell-result {
+  margin-block-start: var(--causeway-space-4);
+  padding: var(--causeway-space-4);
+  border: 1px solid var(--causeway-border);
+  border-inline-start: 0.3rem solid var(--causeway-info);
+  border-radius: var(--causeway-radius-md);
+  background: var(--causeway-surface);
+  box-shadow: var(--causeway-shadow-sm);
+}
+
+.causeway-shell-result[hidden] {
+  display: none;
+}
+
+.causeway-shell-result h2 {
+  margin-block: 0 var(--causeway-space-2);
+  font-size: var(--causeway-font-size-lg);
+}
+
+.causeway-result-list {
+  margin-block-end: 0;
+}
+
+.causeway-shell-main {
+  min-width: 0;
+  padding-block: var(--causeway-space-5) var(--causeway-space-8);
+}
+
+.causeway-route-page {
+  min-width: 0;
+  outline: none;
+}
+
+.causeway-shell-main .causeway-object-identity {
+  display: none;
+}
+
+.causeway-route-page:focus-visible {
+  outline: none;
+}
+
+.causeway-landing-card,
+.causeway-status-card {
+  max-width: 48rem;
+  margin: clamp(2rem, 8vh, 6rem) auto;
+  padding: clamp(var(--causeway-space-5), 5vw, var(--causeway-space-8));
+  border: 1px solid var(--causeway-border);
+  border-radius: var(--causeway-radius-lg);
+  background: var(--causeway-surface);
+  box-shadow: var(--causeway-shadow-md);
+}
+
+.causeway-eyebrow {
+  margin: 0 0 var(--causeway-space-2);
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.causeway-status-danger {
+  border-inline-start: 0.35rem solid var(--causeway-danger);
+}
+
+.causeway-shell-footer {
+  padding-block: var(--causeway-space-4);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--causeway-space-3);
+  border-block-start: 1px solid var(--causeway-border);
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
+}
+
+@media (max-width: 48rem) {
+  .causeway-shell-navbar {
+    min-height: auto;
+    padding-block: var(--causeway-space-2);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .causeway-shell-navbar > causeway-menubars {
+    flex-basis: 100%;
+    flex-direction: column;
+  }
+
+  .causeway-shell-result,
+  .causeway-shell-main,
+  .causeway-shell-footer {
+    width: min(calc(100% - (2 * var(--causeway-space-3))), var(--causeway-content-width));
+  }
+
+  .causeway-shell-main {
+    padding-block-start: var(--causeway-space-4);
+  }
+
+  .causeway-shell-footer {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .htmx-indicator,
+  .causeway-skip-link {
+    transition: none;
+  }
+}

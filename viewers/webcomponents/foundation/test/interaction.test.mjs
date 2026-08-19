@@ -321,4 +321,7 @@ test('parameterless actions invoke without opening a parameter form', async () =
   assert.equal(controller.promptState, null);
   assert.equal(controller.resultState.result.kind, 'void');
   assert.doesNotMatch(controller.innerHTML, /<dialog/);
+  assert.equal(controller.dismissResult(), true);
+  assert.equal(controller.resultState, null);
+  assert.equal(controller.dismissResult(), false);
 });

@@ -26,6 +26,7 @@ export const SAMPLE_SERVICE_TYPE = 'rich__causeway_webcomponents_sample_SampleMe
 export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
   const applicationFields = [
     ...(menuBarsAvailable ? [field('menuBars', named('rich__gqlv_application_menu_bars'))] : []),
+    field('home', named('rich__gqlv_application_home')),
     field('issues', list(named('rich__gqlv_application_issue')))
   ];
   return new Map([
@@ -46,6 +47,12 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
       field('code', nonNull(scalar('String'))),
       field('message', nonNull(scalar('String')))
     ])],
+    ['rich__gqlv_application_home', objectType('rich__gqlv_application_home', [
+      field('kind', nonNull(named('rich__gqlv_application_home_kind'))),
+      field('logicalTypeName', nonNull(scalar('String'))),
+      field('object', nonNull(named('rich__gqlv_application_home_object')))
+    ])],
+    ['rich__gqlv_application_home_object', unionType('rich__gqlv_application_home_object', ['rich__sample_Home'])],
     [SAMPLE_SERVICE_TYPE, objectType(SAMPLE_SERVICE_TYPE, [
       field('welcomeMessage', named(`${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`)),
       field('greet', named(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action`)),
@@ -187,7 +194,11 @@ export function createMenuGraphQLExecutor({
   return executor;
 }
 
-export function applicationEntryResponse({href = '/graphql/application/menu-bars', issues = []} = {}) {
+export function applicationEntryResponse({href = '/graphql/application/menu-bars', issues = [], home = {
+  kind: 'OBJECT',
+  logicalTypeName: 'sample.Home',
+  object: {__typename: 'rich__sample_Home', _meta: {id: 'home-1', logicalTypeName: 'sample.Home', title: 'Home'}}
+}} = {}) {
   return {data: {rich: {application: {
     menuBars: {
       href,
@@ -196,6 +207,7 @@ export function applicationEntryResponse({href = '/graphql/application/menu-bars
       generation: 'fixture-generation',
       cacheControl: 'private, no-store'
     },
+    home,
     issues
   }}}};
 }
@@ -214,6 +226,16 @@ function invokeType(name, resultType) {
 
 function objectType(name, fields) {
   return {kind: 'OBJECT', name, description: null, fields};
+}
+
+function unionType(name, possibleTypeNames) {
+  return {
+    kind: 'UNION',
+    name,
+    description: null,
+    fields: [],
+    possibleTypes: possibleTypeNames.map(possibleName => ({kind: 'OBJECT', name: possibleName}))
+  };
 }
 
 function field(name, type, args = []) {
