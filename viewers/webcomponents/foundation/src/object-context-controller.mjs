@@ -19,7 +19,7 @@
 
 import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
-import {commandSelection, resultSelectionForType} from './interaction-operations.mjs';
+import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
 import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
 import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
@@ -946,16 +946,6 @@ function actionInvocationField(descriptor) {
   return ['invoke', 'invokeIdempotent', 'invokeNonIdempotent']
     .map(name => descriptor.fields.get(name))
     .find(Boolean) ?? null;
-}
-
-function argumentsFromValues(field, values) {
-  const result = {};
-  for (const argument of field?.args ?? []) {
-    if (Object.prototype.hasOwnProperty.call(values, argument.name)) {
-      result[argument.name] = values[argument.name];
-    }
-  }
-  return result;
 }
 
 function commandResponse(result, data) {

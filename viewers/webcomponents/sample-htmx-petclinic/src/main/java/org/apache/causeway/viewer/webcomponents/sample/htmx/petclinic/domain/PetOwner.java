@@ -196,7 +196,7 @@ public class PetOwner implements Comparable<PetOwner> {
         return pets;
     }
 
-    @Property
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "3")
     public Long getDaysSinceLastVisit() {
         return lastVisit == null || clockService == null
@@ -224,6 +224,7 @@ public class PetOwner implements Comparable<PetOwner> {
     @Action(choicesFrom = "pets")
     @ActionLayout(associateWith = "pets", sequence = "2")
     public PetOwner removePet(final Pet pet) {
+        pet.clearVisits();
         pets.remove(pet);
         return this;
     }

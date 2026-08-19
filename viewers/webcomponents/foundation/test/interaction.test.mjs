@@ -106,6 +106,15 @@ test('editor registry selects standard inputs and supports application overrides
   assert.equal(number.editorId, 'number');
   assert.equal(parseCausewayEditorValue(number.editor, {value: '25', inputType: scalar('Int')}), 25);
 
+  const dateTime = renderCausewayEditor({
+    name: 'visitAt', value: '2026-08-20T09:00:00', choices: [], enumValues: [], inputType: scalar('LocalDateTime'),
+    inputId: 'visit-at-input', labelId: 'visit-at-label', descriptionId: '', errorId: '', testId: ''
+  });
+  assert.equal(dateTime.editorId, 'temporal');
+  assert.match(dateTime.html, /type="datetime-local"/);
+  assert.match(dateTime.html, /step="1"/);
+  assert.equal(parseCausewayEditorValue(dateTime.editor, {value: '2026-08-21T10:15:00'}), '2026-08-21T10:15:00');
+
   const choices = renderCausewayEditor({
     name: 'status', value: 'ACTIVE', choices: ['ACTIVE', 'PAUSED'], enumValues: [], inputType: {kind: 'ENUM', name: 'Status'},
     inputId: 'status-input', labelId: 'status-label', descriptionId: '', errorId: '', testId: ''

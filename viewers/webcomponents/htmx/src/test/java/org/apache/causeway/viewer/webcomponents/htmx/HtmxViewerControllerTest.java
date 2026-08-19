@@ -90,12 +90,18 @@ class HtmxViewerControllerTest {
     }
 
     @Test
-    void historyRestoreReceivesACompleteDocument() {
+    void historyRestoreReceivesOnlyTheRouteFragmentWithoutChangingHistory() {
         final var controller = controller(List.of());
         final var request = request("/htmx/object/petclinic.PetOwner/owner-1", "", true);
         request.addHeader("HX-History-Restore-Request", "true");
 
-        assertThat(controller.route(request).getBody()).contains("<!doctype html>");
+        final var response = controller.route(request);
+
+        assertThat(response.getBody())
+                .doesNotContain("<!doctype html>")
+                .contains("data-page-kind=\"generic\"")
+                .containsOnlyOnce("<causeway-object-context");
+        assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
     }
 
     private HtmxViewerController controller(final List<HtmxPageFragmentFactory> factories) {

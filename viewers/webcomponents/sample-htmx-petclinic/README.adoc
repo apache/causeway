@@ -24,6 +24,42 @@ The Wicket comparison is available at `http://localhost:8080/wicket/`.
 Sign in to Wicket with username `sven` and password `pass`; the bypass authenticator accepts the demonstration credentials.
 GraphiQL remains available through the configured Spring GraphQL endpoint when enabled.
 
+== Headless Playwright acceptance
+
+The opt-in `playwright` profile adds Playwright for Java only to the dedicated browser-test source set, so ordinary reactor builds do not resolve a browser or compile the Playwright suite.
+Playwright runs Chromium headlessly by default and does not take foreground focus.
+
+Install the profile's reactor dependencies and Chromium once:
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml -pl htmx -am install -DskipTests
+mvn -f viewers/webcomponents/sample-htmx-petclinic/pom.xml \
+    -Pplaywright \
+    -Dexec.mainClass=com.microsoft.playwright.CLI \
+    -Dexec.classpathScope=test \
+    -Dexec.args="install chromium" \
+    test-compile exec:java
+----
+
+Run the complete headless UI suite from the web-components reactor:
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml \
+    -pl sample-htmx-petclinic -am \
+    -Pplaywright \
+    -Dtest=PetClinicHtmxPlaywrightTest \
+    -Dsurefire.failIfNoSpecifiedTests=false \
+    test
+----
+
+Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
+Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
+
+The suite starts the application on a random port and exercises custom and generic routes, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, every Petclinic service action, and every Pet Owner object action.
+It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, or incorrect semantic results.
+
 == Stable fixture routes
 
 The HTMX root discovers the configured `petclinic.HomePage` object through targeted application-entry introspection and replaces the landing page with its canonical object route.
@@ -42,7 +78,7 @@ The custom home fragment is registered only for exact logical type `petclinic.Ho
 It composes a standard object header and declared collection tables beneath the viewer-provided route context.
 Pet Owner, Pet, and Visit routes exercise generic `<causeway-object>` fallback and their effective grids.
 
-The primary menus cover Pet Owner creation, search, list, and upcoming visits.
+The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.
 Object pages cover editable properties, enum values, references, tabs, grouped actions, choices, defaults, validation, related Pets, contributed Visits, and contributed booking.
 The sample's current integration tests cover fixture identities, application home, menu and grid resources, rich service and object operations, shell and fragment responses, custom precedence, generic fallback, browser assets, and Wicket availability.
 
