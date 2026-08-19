@@ -142,6 +142,35 @@ export function commandSelection(args = {}, select = true) {
   return Object.freeze({__args: Object.freeze({...args}), __select: select});
 }
 
+export function argumentsFromValues(field, values) {
+  const result = {};
+  for (const argument of field?.args ?? []) {
+    if (Object.prototype.hasOwnProperty.call(values, argument.name)) {
+      result[argument.name] = normalizeInteractionInput(values[argument.name]);
+    }
+  }
+  return result;
+}
+
+export function normalizeInteractionInput(value) {
+  if (Array.isArray(value)) {
+    return value.map(normalizeInteractionInput);
+  }
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  const metadata = value._meta;
+  if (metadata?.id) {
+    return {id: metadata.id};
+  }
+  if (value.id && value.logicalTypeName) {
+    return {id: value.id};
+  }
+  return Object.fromEntries(Object.entries(value)
+    .filter(([name]) => name !== '__typename')
+    .map(([name, nested]) => [name, normalizeInteractionInput(nested)]));
+}
+
 export function renderGraphQLType(typeRef) {
   if (!typeRef) {
     throw new Error('Cannot render a missing GraphQL type reference.');

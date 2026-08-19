@@ -564,16 +564,21 @@ function directSupportTypeNames(objectType, generatedTypeName, schemaNames) {
 
 function referencedInteractionTypeNames(typeDescription, generatedTypeName, schemaNames) {
   const result = new Set();
-  const consider = typeRef => {
+  const consider = (typeRef, fieldName = '') => {
     const typeName = namedType(typeRef);
     const kind = innermostType(typeRef)?.kind;
+    const choiceValue = ['choices', 'default', 'autoComplete'].includes(fieldName)
+      && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
+    const objectMetadata = fieldName === '_meta' && kind === 'OBJECT';
     if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)
-        || kind === 'ENUM' && typeName.startsWith('rich__'))) {
+        || kind === 'ENUM' && typeName.startsWith('rich__')
+        || choiceValue
+        || objectMetadata)) {
       result.add(typeName);
     }
   };
   for (const field of typeDescription.fields) {
-    consider(field.type);
+    consider(field.type, field.name);
     for (const argument of field.args) {
       consider(argument.type);
     }

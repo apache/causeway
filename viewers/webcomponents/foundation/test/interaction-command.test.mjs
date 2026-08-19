@@ -19,6 +19,7 @@
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {argumentsFromValues, normalizeInteractionInput} from '../src/interaction-operations.mjs';
 import {ObjectContextController} from '../src/object-context-controller.mjs';
 
 const scalar = name => ({kind: 'SCALAR', name, ofType: null});
@@ -70,6 +71,23 @@ function fixtureMutation(description) {
     ])
   ]);
 }
+
+test('interaction arguments reduce object choices to public input identities recursively', () => {
+  const parameterField = field('invoke', scalar('String'), [
+    argument('pet', named('rich__petclinic_Pet__gqlv_input')),
+    argument('structured', named('StructuredInput'))
+  ]);
+  const pet = {_meta: {id: 's_pet-turing', logicalTypeName: 'petclinic.Pet', title: 'Turing · dog'}};
+
+  assert.deepEqual(normalizeInteractionInput(pet), {id: 's_pet-turing'});
+  assert.deepEqual(argumentsFromValues(parameterField, {
+    pet,
+    structured: {label: 'Visit', nested: pet, __typename: 'StructuredValue'}
+  }), {
+    pet: {id: 's_pet-turing'},
+    structured: {label: 'Visit', nested: {id: 's_pet-turing'}}
+  });
+});
 
 test('object context executes property validation and update through semantic commands', async () => {
   const description = fixtureDescription();

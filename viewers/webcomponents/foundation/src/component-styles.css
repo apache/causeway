@@ -37,9 +37,22 @@ causeway-object {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 .causeway-object-column {
-  grid-column: span var(--causeway-column-span, 12);
+  grid-column: span 12;
   min-inline-size: 0;
 }
+
+.causeway-object-column[data-span="1"] { grid-column: span 1; }
+.causeway-object-column[data-span="2"] { grid-column: span 2; }
+.causeway-object-column[data-span="3"] { grid-column: span 3; }
+.causeway-object-column[data-span="4"] { grid-column: span 4; }
+.causeway-object-column[data-span="5"] { grid-column: span 5; }
+.causeway-object-column[data-span="6"] { grid-column: span 6; }
+.causeway-object-column[data-span="7"] { grid-column: span 7; }
+.causeway-object-column[data-span="8"] { grid-column: span 8; }
+.causeway-object-column[data-span="9"] { grid-column: span 9; }
+.causeway-object-column[data-span="10"] { grid-column: span 10; }
+.causeway-object-column[data-span="11"] { grid-column: span 11; }
+.causeway-object-column[data-span="12"] { grid-column: span 12; }
 .causeway-object-group,
 .causeway-object-tabs {
   border: var(--causeway-object-group-border);

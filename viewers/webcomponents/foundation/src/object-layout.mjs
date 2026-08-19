@@ -390,7 +390,7 @@ function renderNode(node, state) {
     return `<div class="causeway-object-row" data-causeway-region="row">${node.children.map(child => renderNode(child, state)).join('')}</div>`;
   }
   if (node.kind === 'column') {
-    return `<div class="causeway-object-column" data-causeway-region="column" data-span="${node.span}" style="--causeway-column-span:${node.span}">${node.children.map(child => renderNode(child, state)).join('')}</div>`;
+    return `<div class="causeway-object-column" data-causeway-region="column" data-span="${node.span}">${node.children.map(child => renderNode(child, state)).join('')}</div>`;
   }
   if (node.kind === 'group') {
     const id = `${state.idPrefix}-group-${++state.sequence}`;

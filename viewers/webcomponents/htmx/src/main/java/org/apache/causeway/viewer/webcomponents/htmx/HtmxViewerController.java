@@ -68,8 +68,8 @@ public class HtmxViewerController {
             }
         }
 
-        final var fragmentRequest = isTrue(request.getHeader("HX-Request"))
-                && !isTrue(request.getHeader("HX-History-Restore-Request"));
+        final var historyRestoreRequest = isTrue(request.getHeader("HX-History-Restore-Request"));
+        final var fragmentRequest = isTrue(request.getHeader("HX-Request")) || historyRestoreRequest;
         final var contextPath = request.getContextPath() == null ? "" : request.getContextPath();
         final var body = fragmentRequest
                 ? fragment
@@ -79,9 +79,9 @@ public class HtmxViewerController {
                 .cacheControl(CacheControl.noStore().cachePrivate())
                 .header(HttpHeaders.VARY, "HX-Request", "HX-History-Restore-Request")
                 .header("X-Causeway-Route-State", routeState);
-        if (fragmentRequest) {
+        if (fragmentRequest && !historyRestoreRequest) {
             response.header("HX-Push-Url", contextPath + canonicalPath);
-        } else {
+        } else if (!fragmentRequest) {
             response.header("Content-Security-Policy", CONTENT_SECURITY_POLICY);
         }
         return response.body(body);

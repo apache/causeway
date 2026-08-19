@@ -19,6 +19,7 @@
                 <mb:serviceAction objectType="petclinic.PetOwners" id="findByName"/>
                 <mb:serviceAction objectType="petclinic.PetOwners" id="findByNameLike"/>
                 <mb:serviceAction objectType="petclinic.PetOwners" id="listAll"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="count"/>
             </mb:section>
         </mb:menu>
         <mb:menu cssClassFa="fa-calendar">

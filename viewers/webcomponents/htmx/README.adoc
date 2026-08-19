@@ -36,7 +36,8 @@ Parsing rejects empty values, malformed escapes, encoded separators, backslashes
 
 An ordinary browser request receives a complete document containing one GraphQL client, stable menu bars, announcements, result presentation, and the requested route page.
 A request carrying `HX-Request: true` receives only the route fragment and an `HX-Push-Url` response header.
-A history-restore request receives a complete document, and the shell disables authorization-sensitive HTMX history snapshots.
+A history-restore request receives only the route fragment and swaps it into the declared history element, so back and forward navigation never replace the stable shell or strand browser-bridge references.
+The shell disables authorization-sensitive HTMX history snapshots and re-fetches the authorized route fragment on a history cache miss.
 Normal home and result links remain canonical anchors, while the browser bridge enhances same-origin navigation with `htmx.ajax()` target, swap, push, and replace options.
 
 == Generic and custom pages
@@ -59,7 +60,7 @@ A valid object home replaces the landing route with its canonical object route.
 Absent, hidden, invalid, unsupported, or partially failing home state leaves an accessible landing page and stable menus.
 The viewer does not invent a home service-action descriptor.
 
-Default result policy routes object results, presents scalar and collection results in the shell result region, and announces void completion before refreshing a current route context.
+Default result policy routes object results, presents scalar and collection results in the shell result region, and announces void completion before authoritatively replacing the current route context while preserving the result announcement.
 An application can provide `window.causewayHtmxPolicy.navigate`, `handleHome`, or `handleResult` functions and return `true` to claim the corresponding policy decision.
 These policy functions receive semantic public payloads and do not replace component interaction behavior.
 
