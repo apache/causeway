@@ -127,6 +127,9 @@ Applications can override base path, brand, fragments, route policy, home policy
 The browser package exposes versioned assets beneath a module-owned path and uses external scripts and styles compatible with a restrictive same-origin content-security policy.
 No inline script is required.
 
+`core/pom.xml` aggregates `../viewers/webcomponents` beside the established viewer reactors so the ordinary top-level build validates this optional module without enabling it in applications.
+This reactor aggregation changes build coverage only and does not change runtime auto-configuration.
+
 ### Port Petclinic as the cohesive acceptance application
 
 `viewers/webcomponents/sample-htmx-petclinic` copies and ports the pinned Petclinic domain under Causeway's current Jakarta, persistence, programming-model, GraphQL, and layout contracts.
@@ -162,6 +165,20 @@ The comparison records screenshots and checks equivalent presence and ordering o
 
 Automated browser checks also assert no horizontal page overflow, non-overlapping controls, usable target sizes, stable focus, bounded modal dimensions, readable line lengths, responsive table containment, light/dark contrast, and zero browser console errors.
 Lighthouse accessibility, best-practices, and SEO targets remain 100 for the executable HTMX Petclinic routes and repaired vanilla sample.
+
+### Make Petclinic browser acceptance executable and interaction-complete
+
+The Petclinic sample provides an opt-in Maven `playwright` profile backed by Playwright for Java and a real Chromium browser.
+The profile starts the sample on a random port inside the test process and uses public page semantics, accessible names, and stable `data-testid` hooks rather than private component implementation details.
+
+The suite exercises home and generic object routes, menus, canonical history, object links, property editing, collection hydration, validation, cancellation, every exposed Petclinic service action, and every exposed Petclinic object action.
+Destructive coverage creates disposable data before removing it and restores deterministic fixtures after mutable journeys.
+
+Each interaction asserts the relevant semantic result or route, successful GraphQL responses, no unexpected browser console errors, no failed resources, and deterministic focus ownership.
+Prompt opening moves focus into the prompt, failed validation keeps focus in the invalid field, Escape and Cancel restore the invoking control, completed non-navigation returns focus to the refreshed semantic control or result region, and route navigation moves focus to the documented route landmark exactly once.
+
+The browser executable is configurable for CI and local machines, and the profile documents the Playwright browser installation command.
+Default reactor builds compile the ordinary sample tests without requiring a downloaded browser; explicit Playwright verification activates the browser suite.
 
 ## Risks / Trade-offs
 
