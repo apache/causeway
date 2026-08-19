@@ -97,6 +97,19 @@ const booleanEditor = Object.freeze({
   parse: ({checked}) => Boolean(checked)
 });
 
+const temporalEditor = Object.freeze({
+  id: 'temporal',
+  priority: 195,
+  supports: context => ['LocalDate', 'LocalDateTime', 'LocalTime'].includes(namedType(context.inputType)),
+  render: context => {
+    const typeName = namedType(context.inputType);
+    const inputType = typeName === 'LocalDate' ? 'date' : typeName === 'LocalTime' ? 'time' : 'datetime-local';
+    const step = typeName === 'LocalDate' ? '' : ' step="1"';
+    return `<input type="${inputType}" ${inputAttributes(context)} value="${escapeHtml(context.value ?? '')}"${step}>`;
+  },
+  parse: ({value}) => value || null
+});
+
 const numberEditor = Object.freeze({
   id: 'number',
   priority: 190,
@@ -141,6 +154,7 @@ export const defaultEditorRegistry = new CausewayEditorRegistry([
   choiceEditor,
   autoCompleteEditor,
   booleanEditor,
+  temporalEditor,
   numberEditor,
   enumEditor,
   textEditor

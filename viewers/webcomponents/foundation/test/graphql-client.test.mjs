@@ -57,6 +57,25 @@ test('targeted introspection classifies object members and caches the descriptio
   assert.equal(executor.introspectionCalls.length, callCount);
 });
 
+test('targeted introspection discovers object-valued action choices and their metadata', async () => {
+  const types = createRichSchemaTypes();
+  const parameterType = types.get('rich__university_dept_Department__changeName__newName__gqlv_action_parameter');
+  parameterType.fields.push({
+    name: 'choices',
+    description: null,
+    args: [],
+    type: {kind: 'LIST', name: null, ofType: {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'}}
+  });
+  const executor = createRichSchemaFixtureExecutor({types});
+  const client = new CausewayGraphQLClient({executor});
+
+  const description = await client.describeObject(DEPARTMENT_LOGICAL_TYPE);
+
+  assert.equal(description.types.has('rich__university_staff_StaffMember'), true);
+  assert.equal(description.types.has('rich__university_staff_StaffMember__gqlv_meta'), true);
+  assert.equal(executor.introspectionCalls.every(call => Object.keys(call.variables).length === 1), true);
+});
+
 test('targeted introspection discovers and executes bounded collection windows', async () => {
   const rows = [{
     _meta: {id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada', version: '1'}

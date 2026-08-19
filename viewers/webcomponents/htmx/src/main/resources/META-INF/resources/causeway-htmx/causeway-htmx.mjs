@@ -19,6 +19,7 @@
 
 import {
   ACTION_RESULT_EVENT,
+  COMPONENT_STATE_EVENT,
   MENU_BARS_STATE_EVENT,
   NAVIGATION_REQUEST_EVENT,
   OBJECT_CONTEXT_STATE_EVENT,
@@ -64,7 +65,13 @@ function setBusy(busy) {
   document.body.dataset.routeLoading = String(busy);
 }
 
-async function navigate(path, {replace = false} = {}) {
+function activateRouteCollections() {
+  for (const collection of routeRegion?.querySelectorAll('causeway-collection:not([active])') ?? []) {
+    collection.activate?.();
+  }
+}
+
+async function navigate(path, {replace = false, preserveResult = false} = {}) {
   const policy = globalThis.causewayHtmxPolicy;
   if (typeof policy?.navigate === 'function' && await policy.navigate({path, replace}) === true) {
     return;
@@ -74,12 +81,15 @@ async function navigate(path, {replace = false} = {}) {
     return;
   }
   const generation = ++navigationGeneration;
+  routeRegion.dataset.navigationGeneration = String(generation);
   for (const disclosure of document.querySelectorAll('[data-causeway-menu-disclosure][aria-expanded="true"]')) {
     disclosure.click();
   }
-  resultRegion?.replaceChildren();
-  if (resultRegion) {
-    resultRegion.hidden = true;
+  if (!preserveResult) {
+    resultRegion?.replaceChildren();
+    if (resultRegion) {
+      resultRegion.hidden = true;
+    }
   }
   setBusy(true);
   try {
@@ -169,7 +179,13 @@ function presentResult(detail) {
   } else {
     output.textContent = 'Completed';
     resultRegion.append(heading, output);
-    routeRegion?.querySelector('causeway-object-context')?.context?.refresh?.();
+    const context = routeRegion?.querySelector('causeway-object-context')?.context;
+    if (context) {
+      globalThis.setTimeout(() => navigate(
+        globalThis.location.pathname + globalThis.location.search,
+        {replace: true, preserveResult: true}
+      ), 0);
+    }
   }
   resultRegion.hidden = false;
   announce(`${heading.textContent}: ${output.textContent}`);
@@ -235,6 +251,15 @@ document.addEventListener(ACTION_RESULT_EVENT, event => {
   queueMicrotask(() => event.target?.dismissResult?.());
 });
 
+document.addEventListener(COMPONENT_STATE_EVENT, event => {
+  const collection = event.target;
+  if (collection?.matches?.('causeway-collection:not([active])')
+      && collection.closest?.('#causeway-route')
+      && ['ready', 'partial-error'].includes(event.detail?.state?.status)) {
+    collection.activate?.();
+  }
+});
+
 document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
   const contextElement = event.target;
   if (!contextElement?.closest?.('#causeway-route')) {
@@ -252,11 +277,7 @@ document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
     if (objectTitle) {
       document.title = brand ? `${objectTitle} · ${brand}` : objectTitle;
     }
-    globalThis.setTimeout(() => {
-      for (const collection of routeRegion?.querySelectorAll('causeway-collection:not([active])') ?? []) {
-        collection.activate?.();
-      }
-    }, 0);
+    globalThis.setTimeout(activateRouteCollections, 0);
     announce(state.status === 'ready' ? 'Page ready' : 'Page ready with partial information');
   } else if (state.status === 'terminal-error') {
     const code = state.errors?.[0]?.extensions?.classification ?? state.errors?.[0]?.extensions?.code;
@@ -297,6 +318,11 @@ document.body.addEventListener('htmx:responseError', event => {
 });
 
 document.body.addEventListener('htmx:historyCacheMiss', () => setBusy(true));
+document.body.addEventListener('htmx:historyRestore', () => {
+  setBusy(false);
+  queueMicrotask(() => routeRegion?.querySelector('[tabindex="-1"]')?.focus());
+  globalThis.setTimeout(activateRouteCollections, 0);
+});
 globalThis.matchMedia?.('(max-width: 48rem)').addEventListener?.('change', collapseNarrowBars);
 
 resolveHome();

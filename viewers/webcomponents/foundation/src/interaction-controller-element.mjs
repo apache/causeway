@@ -213,6 +213,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
     }
+    clearTimeout(this.parameterTimer);
     const focusState = this.#captureControlFocus();
     const generation = ++this.generation;
     this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.VALIDATING, error: null});
@@ -230,7 +231,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.FAILED, error: validationReason});
       this.#publishPromptState();
       this.render();
-      this.#restoreControlFocus(focusState);
+      this.#focusFirstInvalidControl();
       return false;
     }
     return this.#invoke(
@@ -298,6 +299,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         });
         this.#publishPromptState();
         this.render();
+        this.#focusFirstInvalidControl();
       }
       return false;
     }
@@ -312,6 +314,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       });
       this.#publishPromptState();
       this.render();
+      this.#focusFirstInvalidControl();
       return false;
     }
     this.promptState = null;
@@ -347,11 +350,13 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       suggestions: parameter.state?.suggestions ?? [],
       inputType: parameter.inputType
     });
-    if (event.type === 'input' && parameter.fields.has('autoComplete')) {
+    const textEditor = rendered.editor.id === 'text';
+    if (textEditor) {
       this.promptState = Object.freeze({
         ...this.promptState,
         values: Object.freeze({...this.promptState.values, [parameterId]: value}),
-        error: null
+        error: null,
+        status: InteractionStatus.EDITING
       });
       clearTimeout(this.parameterTimer);
       this.parameterTimer = setTimeout(() => void this.setParameterValue(parameterId, value), 250);
@@ -456,6 +461,14 @@ export class CausewayInteractionControllerElement extends HTMLElement {
 
   #focusFirstControl() {
     queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+  }
+
+  #focusFirstInvalidControl() {
+    queueMicrotask(() => {
+      const invalid = this.querySelector?.('.causeway-action-parameter.causeway-error [data-causeway-editor]')
+        ?? this.querySelector?.('[data-causeway-editor]');
+      invalid?.focus?.();
+    });
   }
 
   #captureControlFocus() {
