@@ -51,3 +51,12 @@
 - [x] 7.2 Document Petclinic provenance, launch workflow, stable fixture bookmarks, HTMX routes, Wicket comparison route, and intentional differences from the pinned source.
 - [x] 7.3 Maintain cross-viewer canonical-route and fallback fixtures shared with planned Vue and Svelte viewers.
 - [x] 7.4 Run Node, Maven, GraphQL, Petclinic integration, vanilla integration, real-browser pointer and keyboard, direct-link and history, responsive light/dark, Wicket-relative screenshot, console, accessibility, Lighthouse, AsciiDoc, syntax, source-approval, formatting, and strict OpenSpec validation checks.
+
+## 8. Playwright Interaction Hardening and Reactor Integration
+
+- [ ] 8.1 Add `viewers/webcomponents` to the established top-level viewer aggregation and verify ordinary reactor discovery without changing application opt-in behavior.
+- [ ] 8.2 Add an opt-in Playwright-for-Java Petclinic profile, configurable Chromium launch, browser installation documentation, stable UI hooks, and Maven wiring that leaves ordinary builds browser-download independent.
+- [ ] 8.3 Add Playwright journeys for home, custom and generic routes, menus, direct links, back and forward history, object links, property edits, collection hydration, responsive behavior, console failures, failed resources, and GraphQL response failures.
+- [ ] 8.4 Exercise every exposed Petclinic service action and object action through the UI, including defaults, choices, valid invocation, invalid input, cancellation, scalar, object, collection, void, mutation, refresh, and disposable destructive coverage.
+- [ ] 8.5 Reproduce and fix prompt, validation, cancellation, refresh, result, and route focus regressions so each transition has deterministic documented focus ownership.
+- [ ] 8.6 Run Playwright, Node, Maven module, top-level reactor-discovery, GraphQL, syntax, AsciiDoc, formatting, source-approval, and strict OpenSpec validation checks.

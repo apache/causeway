@@ -25,6 +25,8 @@ The evidence and ownership boundary are recorded in `coverage-matrix.yaml` entri
 - Run the Wicket and HTMX viewers over the same demonstration model so their shell, object, action, property, tab, card, collection, table, and prompt presentation can be compared directly.
 - Introduce one cohesive Wicket-inspired theme for the generic viewer and semantic components without adding Bootstrap or Wicket dependencies to the framework-neutral component layer.
 - Eradicate the known spacing, alignment, overflow, hierarchy, disclosure, form, table, prompt, focus, responsive, and light/dark styling defects in `sample-html` while preserving its established URL, selectors, bookmark, readiness, and vanilla-HTML contracts.
+- Add opt-in Playwright acceptance tests that exercise every Petclinic service action and object action through the HTMX UI, verify representative property and collection interactions, and make focus, navigation, GraphQL, and console regressions executable.
+- Include the web-components reactor beneath the existing top-level `core` aggregation so ordinary full-project builds compile and test it with the other viewers.
 
 ## Capabilities
 
@@ -39,6 +41,7 @@ None.
 ## Impact
 
 - Adds optional `viewers/webcomponents/htmx` and `viewers/webcomponents/sample-htmx-petclinic` Maven modules, server routes, browser assets, fragment handling, a default theme, and executable acceptance coverage.
+- Adds an opt-in Playwright profile to the Petclinic sample and aggregates `viewers/webcomponents` from `core/pom.xml` alongside the established viewer reactors.
 - Updates the framework-neutral theme hooks and the existing `sample-html` presentation without changing its semantic component ownership or stable automation contract.
 - Depends on accepted P0 and P1 rich GraphQL coverage plus completed application-entry, composite-object, and menu-bar capabilities.
 - Uses the public rich GraphQL endpoint and semantic component events; it does not access Causeway metamodel internals or parse layout resources itself.
