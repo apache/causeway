@@ -1,0 +1,66 @@
+= HTMX Petclinic reference application
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This module is the cohesive executable acceptance application for the generic HTMX web-component viewer.
+It ports the Pet Owner, Pet, Visit, home, fixture, menu, and grid concepts from the pinned Apache Petclinic source recorded in `PROVENANCE.adoc`.
+
+The application runs the GraphQL, generic HTMX, and current Wicket viewers over one Causeway metamodel, H2 database, security policy, effective menu definition, effective grid definitions, and deterministic fixture.
+The Wicket viewer is a side-by-side presentation reference rather than a dependency of the generic HTMX module.
+
+== Run
+
+Use JDK 17 or later.
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic
+----
+
+The root URL redirects to `http://localhost:8080/htmx`.
+The Wicket comparison is available at `http://localhost:8080/wicket/`.
+Sign in to Wicket with username `sven` and password `pass`; the bypass authenticator accepts the demonstration credentials.
+GraphiQL remains available through the configured Spring GraphQL endpoint when enabled.
+
+== Stable fixture routes
+
+The HTMX root discovers the configured `petclinic.HomePage` object through targeted application-entry introspection and replaces the landing page with its canonical object route.
+The home memento identifier is execution-generated, so tests discover it rather than treating it as durable.
+
+Mary Smith is the stable representative entity.
+Her database identifier is `owner-mary`, her GraphQL object identifier is `s_owner-mary`, and her canonical generic route is `/htmx/object/petclinic.PetOwner/s_owner-mary`.
+The corresponding Wicket route is `/wicket/object/petclinic.PetOwner:s_owner-mary` after authentication.
+
+The sample contains four pet owners, five pets, and three upcoming visits.
+Mary owns Basil and Samantha and has two scheduled visits.
+
+== Viewer coverage
+
+The custom home fragment is registered only for exact logical type `petclinic.HomePage`.
+It composes a standard object header and declared collection tables beneath the viewer-provided route context.
+Pet Owner, Pet, and Visit routes exercise generic `<causeway-object>` fallback and their effective grids.
+
+The primary menus cover Pet Owner creation, search, list, and upcoming visits.
+Object pages cover editable properties, enum values, references, tabs, grouped actions, choices, defaults, validation, related Pets, contributed Visits, and contributed booking.
+The sample's current integration tests cover fixture identities, application home, menu and grid resources, rich service and object operations, shell and fragment responses, custom precedence, generic fallback, browser assets, and Wicket availability.
+
+== Wicket-relative presentation
+
+The HTMX theme intentionally follows Wicket's recognizable hierarchy rather than copying its DOM.
+Both viewers present a primary-color application bar, ordered menus, contained page content, object title and actions, cards, tabs, labels and values, related-object links, compact collections, modal interactions, and responsive navigation.
+Framework-specific URLs, markup, table widgets, authentication chrome, and lifecycle behavior remain different.
+
+Browser acceptance records desktop and mobile screenshots of home and Mary Smith routes, checks responsive light and dark presentation, and verifies keyboard focus, prompts, navigation history, overflow, console output, and accessibility.
+
+On 2026-08-19 the current Wicket and HTMX home and Mary Smith pages were compared over the same running model.
+The HTMX shell matched Wicket's primary navigation, right-aligned system menu, contained content, object hierarchy, actions, tabs, labels, collection cards, related-object links, and responsive collapse while retaining independent semantic markup.
+Canonical direct loads, home replacement, custom-page precedence, generic fallback, menu-originated collection results, object-result routing, back, forward, invalid routes, absent objects, automatic first collection windows, prompt validation, Escape cancellation, and focus restoration were exercised in a real browser.
+Desktop light-mode and mobile dark-mode Lighthouse navigation audits each scored 100 for Accessibility, Best Practices, and SEO.
+No HTMX application console messages, failed GraphQL requests, page overflow, or overlapping controls were observed.
+
+== Provenance and omissions
+
+Read `PROVENANCE.adoc` before copying or expanding this sample.
+The port intentionally omits the upstream starter SimpleObject module and historical operational, security-administration, calendar, PDF, Flyway, Quartz, and deployment integrations that are not needed to demonstrate the generic viewer.

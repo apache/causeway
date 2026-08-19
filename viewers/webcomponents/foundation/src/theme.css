@@ -1,0 +1,654 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+:root {
+  color-scheme: light dark;
+  --causeway-font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --causeway-font-size-sm: 0.82rem;
+  --causeway-font-size-base: 0.95rem;
+  --causeway-font-size-lg: 1.12rem;
+  --causeway-line-height: 1.5;
+  --causeway-page-background: #f3f5f8;
+  --causeway-surface: #ffffff;
+  --causeway-surface-subtle: #f8fafc;
+  --causeway-surface-raised: #ffffff;
+  --causeway-text: #1f2937;
+  --causeway-muted: #56657a;
+  --causeway-border: #d7dee8;
+  --causeway-border-strong: #aeb9c8;
+  --causeway-nav-background: #1769aa;
+  --causeway-nav-text: #ffffff;
+  --causeway-link: #18704a;
+  --causeway-link-hover: #0e5134;
+  --causeway-action-background: #18704a;
+  --causeway-action-background-hover: #0e5134;
+  --causeway-focus: #f59e0b;
+  --causeway-info: #1976b9;
+  --causeway-success: #18794e;
+  --causeway-warning: #9a6700;
+  --causeway-danger: #b42318;
+  --causeway-disabled: #5d6978;
+  --causeway-space-1: 0.25rem;
+  --causeway-space-2: 0.5rem;
+  --causeway-space-3: 0.75rem;
+  --causeway-space-4: 1rem;
+  --causeway-space-5: 1.5rem;
+  --causeway-space-6: 2rem;
+  --causeway-space-8: 3rem;
+  --causeway-radius-sm: 0.25rem;
+  --causeway-radius-md: 0.45rem;
+  --causeway-radius-lg: 0.75rem;
+  --causeway-radius-pill: 999px;
+  --causeway-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.12);
+  --causeway-shadow-md: 0 0.5rem 1.5rem rgb(15 23 42 / 0.14);
+  --causeway-label-width: 10rem;
+  --causeway-content-width: 82rem;
+  --causeway-shell-width: 96rem;
+  --causeway-nav-height: 3.25rem;
+  --causeway-control-height: 2.35rem;
+  --causeway-object-gap: var(--causeway-space-4);
+  --causeway-object-group-border: var(--causeway-border);
+  --causeway-object-group-radius: var(--causeway-radius-md);
+  --causeway-object-group-padding: var(--causeway-space-4);
+  --causeway-object-tab-accent: var(--causeway-link);
+  --causeway-menubars-gap: var(--causeway-space-2);
+  --causeway-menubar-background: transparent;
+  --causeway-menubar-border: transparent;
+  --causeway-menubar-color: var(--causeway-nav-text);
+  --causeway-menubar-menu-gap: var(--causeway-space-1);
+  --causeway-menubar-padding: 0;
+  --causeway-menubar-control-background: transparent;
+  --causeway-menubar-control-border: transparent;
+  --causeway-menubar-control-radius: var(--causeway-radius-sm);
+  --causeway-menubar-control-padding: 0.65rem 0.7rem;
+  --causeway-menubar-control-active-background: rgb(255 255 255 / 0.22);
+  --causeway-menubar-focus: 0.2rem solid var(--causeway-focus);
+  --causeway-menu-panel-background: var(--causeway-surface-raised);
+  --causeway-menu-panel-color: var(--causeway-text);
+  --causeway-menu-panel-shadow: var(--causeway-shadow-md);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --causeway-page-background: #101722;
+    --causeway-surface: #17202d;
+    --causeway-surface-subtle: #1d2837;
+    --causeway-surface-raised: #202c3c;
+    --causeway-text: #e8edf4;
+    --causeway-muted: #aab6c5;
+    --causeway-border: #3a4859;
+    --causeway-border-strong: #637287;
+    --causeway-nav-background: #104d7d;
+    --causeway-link: #6fd5a3;
+    --causeway-link-hover: #9ce6c2;
+    --causeway-action-background: #176044;
+    --causeway-action-background-hover: #0f5137;
+    --causeway-focus: #fbc14f;
+    --causeway-info: #6cb7e8;
+    --causeway-success: #66d19e;
+    --causeway-warning: #f0bd5b;
+    --causeway-danger: #ff8b82;
+    --causeway-disabled: #98a4b3;
+    --causeway-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --causeway-shadow-md: 0 0.6rem 1.8rem rgb(0 0 0 / 0.45);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 20rem;
+  font-family: var(--causeway-font-family);
+  font-size: 100%;
+  line-height: var(--causeway-line-height);
+  background: var(--causeway-page-background);
+  color: var(--causeway-text);
+  text-rendering: optimizeLegibility;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  color: var(--causeway-text);
+}
+
+a {
+  color: var(--causeway-link);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  color: var(--causeway-link-hover);
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  border: 1px solid var(--causeway-border-strong);
+  border-radius: var(--causeway-radius-sm);
+  background: var(--causeway-surface);
+  color: var(--causeway-text);
+}
+
+button,
+select,
+input:not([type="checkbox"]):not([type="radio"]) {
+  min-height: var(--causeway-control-height);
+}
+
+button {
+  padding: 0.42rem 0.75rem;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--causeway-link);
+  background: var(--causeway-surface-subtle);
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--causeway-focus);
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  padding: 0.45rem 0.6rem;
+}
+
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.causeway-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+causeway-object,
+causeway-object-context,
+causeway-object-header,
+causeway-property,
+causeway-collection,
+causeway-interaction-controller {
+  min-width: 0;
+  display: block;
+}
+
+causeway-action {
+  min-width: 0;
+  display: inline-block;
+}
+
+.causeway-object-header {
+  min-height: 3.4rem;
+  margin-block-end: var(--causeway-space-4);
+  padding-block: var(--causeway-space-2) var(--causeway-space-3);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--causeway-space-4);
+  border-block-end: 1px solid var(--causeway-border);
+}
+
+.causeway-object-header h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  font-weight: 520;
+}
+
+.causeway-object-identity {
+  margin: 0;
+  color: var(--causeway-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-object-row {
+  align-items: start;
+}
+
+.causeway-object-column {
+  min-width: 0;
+}
+
+.causeway-object-group,
+.causeway-collection {
+  overflow: hidden;
+  border: 1px solid var(--causeway-border);
+  border-radius: var(--causeway-radius-md);
+  background: var(--causeway-surface);
+  box-shadow: var(--causeway-shadow-sm);
+}
+
+.causeway-object-group {
+  container-type: inline-size;
+}
+
+.causeway-object-group > h2,
+.causeway-collection-label {
+  margin: 0;
+  padding: var(--causeway-space-3) var(--causeway-space-4);
+  display: block;
+  border-block-end: 1px solid var(--causeway-border);
+  background: var(--causeway-surface-subtle);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.causeway-object-group > :not(h2),
+.causeway-collection-content {
+  margin-inline: var(--causeway-space-4);
+}
+
+.causeway-object-tabs [role="tablist"] {
+  gap: 0;
+  border-block-end: 1px solid var(--causeway-border);
+}
+
+.causeway-object-tabs [role="tab"] {
+  min-height: 2.7rem;
+  border: 0;
+  border-block-end: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--causeway-muted);
+}
+
+.causeway-object-tabs [role="tab"][aria-selected="true"] {
+  border-block-end-color: var(--causeway-link);
+  background: var(--causeway-surface);
+  color: var(--causeway-text);
+}
+
+.causeway-object-tabs [role="tabpanel"] {
+  padding-block-start: var(--causeway-space-4);
+}
+
+.causeway-property {
+  min-width: 0;
+  padding-block: 0.42rem;
+  display: grid;
+  grid-template-columns: minmax(7rem, var(--causeway-label-width)) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--causeway-space-2) var(--causeway-space-3);
+  border-block-end: 1px solid color-mix(in srgb, var(--causeway-border) 65%, transparent);
+}
+
+causeway-property:last-child .causeway-property {
+  border-block-end: 0;
+}
+
+.causeway-property-label {
+  padding-block-start: 0.28rem;
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
+  font-weight: 650;
+}
+
+.causeway-property-value {
+  min-width: 0;
+  padding-block-start: 0.2rem;
+  color: var(--causeway-text);
+  overflow-wrap: anywhere;
+}
+
+.causeway-property-description,
+.causeway-collection-description {
+  grid-column: 2 / -1;
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-action-description {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.causeway-property-edit {
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-property-disabled-reason,
+.causeway-action-disabled-reason,
+.causeway-collection-disabled-reason,
+.causeway-disabled-reason {
+  color: var(--causeway-disabled);
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-property-editor {
+  min-width: 0;
+}
+
+.causeway-property-editor > :where(input, select, textarea) {
+  width: 100%;
+}
+
+.causeway-property-editor-actions,
+.causeway-action-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-space-2);
+}
+
+.causeway-property-validation,
+.causeway-action-prompt-error,
+.causeway-error {
+  color: var(--causeway-danger);
+}
+
+.causeway-action {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--causeway-space-2);
+}
+
+.causeway-action > button,
+.causeway-property-editor-actions button:first-child,
+.causeway-action-prompt-actions button:first-child,
+.causeway-button-primary {
+  border-color: var(--causeway-action-background);
+  background: var(--causeway-action-background);
+  color: #fff;
+}
+
+.causeway-action > button:hover:not(:disabled),
+.causeway-property-editor-actions button:first-child:hover:not(:disabled),
+.causeway-action-prompt-actions button:first-child:hover:not(:disabled),
+.causeway-button-primary:hover {
+  border-color: var(--causeway-action-background-hover);
+  background: var(--causeway-action-background-hover);
+  color: #fff;
+}
+
+.causeway-collection {
+  margin-block-end: var(--causeway-space-4);
+}
+
+.causeway-collection-content {
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.causeway-collection-table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-collection-table th,
+.causeway-collection-table td {
+  padding: 0.58rem 0.7rem;
+  border-block-end: 1px solid var(--causeway-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.causeway-collection-table th:first-child,
+.causeway-collection-table td:first-child {
+  min-width: 10rem;
+}
+
+.causeway-collection-table td:first-child .causeway-object-link {
+  min-width: 8rem;
+}
+
+.causeway-collection-table th {
+  background: var(--causeway-surface-subtle);
+  color: var(--causeway-text);
+  font-weight: 700;
+}
+
+.causeway-collection-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--causeway-surface-subtle) 65%, transparent);
+}
+
+.causeway-collection-table tbody tr:hover {
+  background: color-mix(in srgb, var(--causeway-link) 8%, var(--causeway-surface));
+}
+
+.causeway-collection-rows {
+  margin: 0;
+  padding: var(--causeway-space-3) 0;
+  list-style: none;
+}
+
+.causeway-object-link {
+  max-width: 100%;
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--causeway-link);
+  text-align: start;
+}
+
+.causeway-object-link:hover:not(:disabled) {
+  border: 0;
+  background: transparent;
+  color: var(--causeway-link-hover);
+  text-decoration: underline;
+}
+
+.causeway-object-link-title {
+  overflow-wrap: anywhere;
+}
+
+.causeway-object-link-identity {
+  display: none;
+}
+
+causeway-interaction-controller:has(.causeway-action-prompt)::before {
+  content: "";
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgb(0 0 0 / 0.46);
+}
+
+.causeway-action-prompt {
+  position: fixed;
+  z-index: 1000;
+  inset: 50% auto auto 50%;
+  width: min(calc(100% - (2 * var(--causeway-space-4))), 40rem);
+  max-height: min(82vh, 46rem);
+  padding: var(--causeway-space-5);
+  overflow: auto;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--causeway-border-strong);
+  border-radius: var(--causeway-radius-lg);
+  background: var(--causeway-surface-raised);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.35);
+}
+
+.causeway-action-prompt h2,
+.causeway-action-result h2 {
+  margin-block-start: 0;
+}
+
+.causeway-action-prompt form {
+  display: grid;
+  gap: var(--causeway-space-4);
+}
+
+.causeway-action-parameter {
+  display: grid;
+  gap: var(--causeway-space-1);
+}
+
+.causeway-action-parameter :where(input, select, textarea) {
+  width: 100%;
+}
+
+.causeway-action-result {
+  margin-block: var(--causeway-space-4);
+  padding: var(--causeway-space-4);
+  border: 1px solid var(--causeway-border);
+  border-inline-start: 0.3rem solid var(--causeway-success);
+  border-radius: var(--causeway-radius-md);
+  background: var(--causeway-surface);
+}
+
+.causeway-loading {
+  color: var(--causeway-muted);
+}
+
+.causeway-empty,
+.causeway-unsupported {
+  display: block;
+  padding-block: var(--causeway-space-3);
+  color: var(--causeway-muted);
+  font-style: italic;
+}
+
+@container (max-width: 32rem) {
+  .causeway-property {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .causeway-property-label,
+  .causeway-property-description {
+    grid-column: 1 / -1;
+  }
+
+  .causeway-property-value,
+  .causeway-property-editor {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --causeway-label-width: 100%;
+    --causeway-object-gap: var(--causeway-space-3);
+    --causeway-object-group-padding: var(--causeway-space-3);
+  }
+
+  .causeway-object-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--causeway-space-1);
+  }
+
+  .causeway-object-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .causeway-object-column {
+    grid-column: 1 / -1 !important;
+  }
+
+  .causeway-property {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .causeway-property-label,
+  .causeway-property-description {
+    grid-column: 1 / -1;
+  }
+
+  .causeway-property-value,
+  .causeway-property-editor {
+    grid-column: 1;
+  }
+
+  .causeway-action-prompt {
+    width: calc(100% - (2 * var(--causeway-space-3)));
+    max-height: calc(100vh - (2 * var(--causeway-space-3)));
+    padding: var(--causeway-space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  button,
+  input,
+  select,
+  textarea,
+  .causeway-object-group,
+  .causeway-collection,
+  .causeway-action-prompt {
+    border: 1px solid CanvasText;
+  }
+}

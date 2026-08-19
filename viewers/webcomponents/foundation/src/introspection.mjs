@@ -66,6 +66,10 @@ const TYPE_DESCRIPTION_SELECTION = `
     enumValues(includeDeprecated: true) {
       name
       description
+    }
+    possibleTypes {
+      kind
+      name
     }`;
 
 export function buildDescribeTypesOperation(typeNames) {
@@ -128,6 +132,10 @@ export function normalizeTypeDescription(type) {
     enumValues: Object.freeze((type.enumValues ?? []).map(value => Object.freeze({
       name: assertGraphQLName(value.name, 'introspected enum value'),
       description: value.description ?? null
+    }))),
+    possibleTypes: Object.freeze((type.possibleTypes ?? []).map(value => Object.freeze({
+      kind: value.kind,
+      name: assertGraphQLName(value.name, 'introspected possible type')
     })))
   });
 }

@@ -30,7 +30,10 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
   if (!root?.querySelectorAll) {
     return;
   }
-  for (const collection of root.querySelectorAll('causeway-collection')) {
+  const collections = root.localName === 'causeway-collection'
+    ? [root]
+    : root.querySelectorAll('causeway-collection');
+  for (const collection of collections) {
     const columns = [...(collection.children ?? collection.childNodes ?? [])]
       .filter(child => child.localName === 'causeway-collection-column' || child?.configuration?.member)
       .map(child => ({
@@ -62,19 +65,21 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.loadRevision = 0;
     this.loadAbortController = null;
     this.loadedGeneration = -1;
+    this.connectionStarted = false;
+    this.columnObserver = typeof globalThis.MutationObserver === 'function'
+      ? new MutationObserver(records => {
+        for (const record of records) {
+          for (const node of record.addedNodes ?? []) {
+            if (node.localName === 'causeway-collection-column' && node.configuration?.member) {
+              this.#acceptColumn(node.configuration);
+            }
+          }
+        }
+      })
+      : null;
+    this.columnObserver?.observe(this, {childList: true});
     this.addEventListener(CausewaySemanticEvent.COLLECTION_CONFIGURATION, event => {
-      const column = event.detail?.column;
-      if (column?.member) {
-        const existing = this._columns.findIndex(candidate => candidate.member === column.member);
-        if (existing >= 0) {
-          this._columns.splice(existing, 1, column);
-        } else {
-          this._columns.push(column);
-        }
-        if (this.active && this.componentState?.status === 'ready') {
-          void this.load({force: true});
-        }
-      }
+      this.#acceptColumn(event.detail?.column);
     });
     this.addEventListener('click', event => {
       if (event.target?.hasAttribute?.('data-causeway-activate')) {
@@ -138,11 +143,19 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
-    this.#captureColumns();
-    super.connectedCallback();
+    globalThis.setTimeout(() => {
+      if (!this.isConnected) {
+        return;
+      }
+      captureDeclarativeCollectionColumns(this);
+      this.#captureColumns();
+      this.connectionStarted = true;
+      super.connectedCallback();
+    }, 0);
   }
 
   disconnectedCallback() {
+    this.connectionStarted = false;
     this.loadRevision += 1;
     this.loadAbortController?.abort();
     this.loadAbortController = null;
@@ -154,7 +167,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue || !this.isConnected) {
+    if (oldValue === newValue || !this.connectionStarted) {
       return;
     }
     if (name === 'member') {
@@ -182,7 +195,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   activate() {
-    if (this.componentState?.data?.hidden === true || this.componentState?.data?.disabled) {
+    if (this.componentState?.data?.hidden === true) {
       return false;
     }
     if (!this.active) {
@@ -296,15 +309,11 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const disabledReason = typeof state.data?.disabled === 'string'
       ? state.data.disabled
       : state.data?.disabled === true ? 'Disabled' : '';
-    if (disabledReason) {
-      this.innerHTML = shell(
-        `<span class="causeway-collection-disabled-reason">${escapeHtml(disabledReason)}</span>`,
-        ' aria-disabled="true"'
-      );
-      return;
-    }
+    const disabledMarkup = disabledReason
+      ? `<p class="causeway-collection-disabled-reason">${escapeHtml(disabledReason)}</p>`
+      : '';
     if (!this.active) {
-      this.innerHTML = shell(`<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`);
+      this.innerHTML = shell(`${disabledMarkup}<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`);
       return;
     }
     if (this.collectionState.status === 'idle' || this.collectionState.status === 'loading') {
@@ -326,7 +335,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const errors = this.collectionState.errors?.length
       ? `<p class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</p>`
       : '';
-    this.innerHTML = shell(`${content}${errors}`);
+    this.innerHTML = shell(`${disabledMarkup}${content}${errors}`);
   }
 
   #renderDefaultRows(rows) {
@@ -337,10 +346,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   #renderTable(rows) {
-    const header = this._columns.map(column => `<th scope="col"${column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : ''}>${escapeHtml(column.label || humanize(column.member))}</th>`).join('');
+    const header = `<th scope="col">Item</th>${this._columns.map(column => `<th scope="col"${column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : ''}>${escapeHtml(column.label || humanize(column.member))}</th>`).join('')}`;
     const body = rows.map((row, rowIndex) => {
+      const metadata = row?._meta ?? {};
+      const item = `<td><causeway-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></causeway-object-link></td>`;
       const cells = this._columns.map(column => this.#renderCell(row, rowIndex, column)).join('');
-      return `<tr data-row-index="${rowIndex}">${cells}</tr>`;
+      return `<tr data-row-index="${rowIndex}">${item}${cells}</tr>`;
     }).join('');
     return `<table class="causeway-collection-table"><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
   }
@@ -361,6 +372,22 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const descriptor = this.collectionState.rowDescription?.members?.get(column.member) ?? null;
     const rendered = renderCausewayValue({value: property?.get, descriptor}, this._rendererRegistry);
     return `<td${disabledReason ? ` aria-disabled="true" title="${escapeHtml(disabledReason)}"` : ''}>${rendered.html}</td>`;
+  }
+
+  #acceptColumn(column) {
+    if (!column?.member) {
+      return;
+    }
+    const frozen = Object.freeze({...column});
+    const existing = this._columns.findIndex(candidate => candidate.member === column.member);
+    if (existing >= 0) {
+      this._columns.splice(existing, 1, frozen);
+    } else {
+      this._columns.push(frozen);
+    }
+    if (this.active && this.componentState?.status === 'ready') {
+      void this.load({force: true});
+    }
   }
 
   #captureColumns() {

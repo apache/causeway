@@ -3,8 +3,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The Causeway web-component modules provide framework-neutral browser components backed by the Causeway rich GraphQL schema.
-The foundation module includes a GraphQL client provider, coordinated application menu bars, service-action prompts and invocation, coordinated object contexts, safe effective-grid and fallback composite objects, semantic read-only rendering, explicitly enabled property editing, normalized interaction results, and lazy collections.
-It deliberately has no dependency on HTMX, React, Vue, Svelte, or a browser component-authoring framework.
+The foundation module includes a GraphQL client provider, coordinated application menu bars, service-action prompts and invocation, coordinated object contexts, safe effective-grid and fallback composite objects, semantic read-only rendering, explicitly enabled property editing, normalized interaction results, lazy collections, and an optional cohesive theme.
+It deliberately has no dependency on HTMX, React, Vue, Svelte, Wicket, Bootstrap, or a browser component-authoring framework.
+The separate optional HTMX module adds canonical routing, a stable shell, history, custom-page selection, and fragment lifecycle above those components.
 
 This page explains how to run the automated verification and how to exercise the components manually against a Causeway application.
 
@@ -30,12 +31,16 @@ export PATH="$JAVA_HOME/bin:$PATH"
 mvn -f viewers/webcomponents/pom.xml clean verify
 ----
 
-A successful run reports the Node test totals and completes both Maven modules:
+A successful run reports the foundation and HTMX Node test totals and completes the foundation, HTMX, vanilla sample, and Petclinic sample modules:
 
 [source,text]
 ----
-tests 102
-pass 102
+tests 103
+pass 103
+fail 0
+
+tests 4
+pass 4
 fail 0
 BUILD SUCCESS
 ----
@@ -74,14 +79,14 @@ mvn -f bom/pom.xml validate
 
 git diff --check
 
-openspec validate add-menubar-web-components --strict
+openspec validate add-generic-htmx-web-component-viewer --strict
 ----
 
 The OpenSpec command should report:
 
 [source,text]
 ----
-Change 'add-menubar-web-components' is valid
+Change 'add-generic-htmx-web-component-viewer' is valid
 ----
 
 === Packaged browser resources
@@ -101,9 +106,20 @@ The listing should include `META-INF/resources/causeway-webcomponents/index.mjs`
 The preferred manual test serves the page and GraphQL endpoint from the same Causeway application origin.
 This avoids cross-origin and authentication-cookie differences that can obscure component behavior.
 
-The repository provides `viewers/webcomponents/sample-html` as the standard executable vanilla-HTML verification application.
-It supplies deterministic JPA/H2 data, the real rich GraphQL endpoint, packaged foundation modules, and stable hooks for future Playwright tests.
-Start it from the repository root with the reactor profile so that the foundation and GraphQL runtime are included:
+The repository provides `viewers/webcomponents/sample-htmx-petclinic` as the cohesive generic-viewer reference application and `viewers/webcomponents/sample-html` as the stable low-level vanilla-component fixture.
+The Petclinic application supplies deterministic JPA/H2 data, real rich GraphQL, effective menus and grids, canonical HTMX routes, and a side-by-side current Wicket viewer.
+Start Petclinic from the repository root with:
+
+[source,shell]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic
+----
+
+Open `http://localhost:8080/htmx`, or open `/wicket/` and sign in as `sven` with password `pass` for comparison.
+See link:sample-htmx-petclinic/README.adoc[`sample-htmx-petclinic/README.adoc`] and link:htmx/README.adoc[`htmx/README.adoc`] for routes, provenance, customization, and acceptance contracts.
+
+The vanilla sample supplies its own deterministic JPA/H2 data, the same rich GraphQL endpoint, packaged foundation modules, and stable low-level automation hooks.
+Start it from the repository root with:
 
 [source,shell]
 ----
@@ -122,7 +138,7 @@ When testing from a source checkout, install the web-component artifact into the
 mvn -f viewers/webcomponents/pom.xml install
 ----
 
-Add the foundation artifact to the application under test:
+Add the foundation artifact to an application using components directly:
 
 [source,xml]
 ----
@@ -133,11 +149,13 @@ Add the foundation artifact to the application under test:
 </dependency>
 ----
 
-The artifact exposes its entry module as a standard `META-INF/resources` resource:
+Add `causeway-viewer-webcomponents-htmx` as well when the application requires the generic server router and shell.
+The foundation artifact exposes its entry module and theme as standard `META-INF/resources` resources:
 
 [source,text]
 ----
 /causeway-webcomponents/index.mjs
+/causeway-webcomponents/theme.css
 ----
 
 === Configure the GraphQL schema

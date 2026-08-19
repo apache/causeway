@@ -332,12 +332,20 @@ export class CausewayGraphQLClient {
     }
     const issuesField = applicationFields.get('issues') ?? null;
     const issueTypeName = issuesField ? namedType(issuesField.type) : null;
-    const requestedTypes = [menuBarsTypeName, issueTypeName].filter(Boolean);
+    const homeField = applicationFields.get('home') ?? null;
+    const homeTypeName = homeField ? namedType(homeField.type) : null;
+    const requestedTypes = [menuBarsTypeName, issueTypeName, homeTypeName].filter(Boolean);
     const supportTypes = await this.describeTypes(requestedTypes, {signal});
     const menuBarsType = supportTypes.get(menuBarsTypeName) ?? null;
     if (!menuBarsType) {
       return unsupportedApplicationDescription('MENU_BARS_UNAVAILABLE', {applicationField, applicationType});
     }
+    const homeType = homeTypeName ? supportTypes.get(homeTypeName) ?? null : null;
+    const homeObjectField = homeType ? fieldsByName(homeType).get('object') ?? null : null;
+    const homeObjectTypeName = homeObjectField ? namedType(homeObjectField.type) : null;
+    const homeObjectUnion = homeObjectTypeName
+      ? (await this.describeTypes([homeObjectTypeName], {signal})).get(homeObjectTypeName) ?? null
+      : null;
     return Object.freeze({
       supported: true,
       reason: null,
@@ -346,7 +354,11 @@ export class CausewayGraphQLClient {
       menuBarsField,
       menuBarsType,
       issuesField,
-      issueType: issueTypeName ? supportTypes.get(issueTypeName) ?? null : null
+      issueType: issueTypeName ? supportTypes.get(issueTypeName) ?? null : null,
+      homeField,
+      homeType,
+      homeObjectField,
+      homeObjectUnion
     });
   }
 

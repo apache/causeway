@@ -250,7 +250,7 @@ causeway-menubars > causeway-interaction-controller {
   border: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
   border-radius: var(--causeway-menubar-control-radius, 0.25rem);
   box-shadow: var(--causeway-menu-panel-shadow, 0 0.5rem 1.5rem color-mix(in srgb, #000 22%, transparent));
-  color: var(--causeway-menubar-color, CanvasText);
+  color: var(--causeway-menu-panel-color, var(--causeway-menubar-color, CanvasText));
   inline-size: max-content;
   inset-block-start: 100%;
   inset-inline-start: 0;

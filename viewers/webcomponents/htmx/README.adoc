@@ -1,0 +1,96 @@
+= Generic HTMX web-component viewer
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The `causeway-viewer-webcomponents-htmx` module provides an optional server-routed application shell over the framework-neutral Causeway custom elements.
+HTMX owns canonical navigation, fragment replacement, browser history, loading, announcements, and route errors.
+The semantic components continue to own GraphQL projections, effective layouts, menus, interactions, validation, mutations, and typed results.
+
+== Enablement
+
+Add `org.apache.causeway.viewer:causeway-viewer-webcomponents-htmx` and import `CausewayModuleViewerWebcomponentsHtmx` in the application bootstrap.
+Merely using the foundation component module does not install any HTMX route or asset.
+
+The viewer packages `org.webjars.npm:htmx.org:2.0.6` and serves the module-owned browser bridge and shell stylesheet from `/causeway-htmx/`.
+The shell uses external same-origin scripts and styles and requires no inline script.
+
+== Configuration
+
+`causeway.viewer.webcomponents.htmx.base-path` defaults to `/htmx` and accepts a bounded non-root origin-relative mount path.
+`causeway.viewer.webcomponents.htmx.graph-ql-endpoint` defaults to `/graphql`.
+`causeway.viewer.webcomponents.htmx.brand` defaults to `Apache Causeway`.
+`causeway.viewer.webcomponents.htmx.language` defaults to `en`.
+`causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
+`causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
+
+The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
+Applications adding third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
+
+== Canonical routes
+
+The canonical object route is `<base-path>/object/<logical-type>/<identifier>`.
+The public logical type and opaque identifier are independently UTF-8 percent-encoded as path segments.
+Parsing rejects empty values, malformed escapes, encoded separators, backslashes, controls, dot segments, overlong values, and non-canonical spellings.
+
+An ordinary browser request receives a complete document containing one GraphQL client, stable menu bars, announcements, result presentation, and the requested route page.
+A request carrying `HX-Request: true` receives only the route fragment and an `HX-Push-Url` response header.
+A history-restore request receives a complete document, and the shell disables authorization-sensitive HTMX history snapshots.
+Normal home and result links remain canonical anchors, while the browser bridge enhances same-origin navigation with `htmx.ajax()` target, swap, push, and replace options.
+
+== Generic and custom pages
+
+Every object route creates exactly one `<causeway-object-context>`.
+Without an exact custom registration, its child is `<causeway-object editable>`.
+
+Applications can register one Spring bean implementing `HtmxPageFragmentFactory` for a public logical type.
+The factory returns trusted application HTML that the viewer places inside the route context.
+It receives only `HtmxObjectRoute`, not a metamodel object, persistence session, authorization object, or GraphQL response.
+Duplicate registrations for one logical type fail during startup.
+
+Custom pages can compose ordinary HTML, application custom elements, `<causeway-object>`, and low-level Causeway property, action, and collection elements.
+Those elements consume the one nearest route context and therefore do not create a parallel data plane.
+
+== Home and results
+
+The shell extends targeted application-entry discovery only far enough to read the established optional object-home metadata and its public `_meta` identity.
+A valid object home replaces the landing route with its canonical object route.
+Absent, hidden, invalid, unsupported, or partially failing home state leaves an accessible landing page and stable menus.
+The viewer does not invent a home service-action descriptor.
+
+Default result policy routes object results, presents scalar and collection results in the shell result region, and announces void completion before refreshing a current route context.
+An application can provide `window.causewayHtmxPolicy.navigate`, `handleHome`, or `handleResult` functions and return `true` to claim the corresponding policy decision.
+These policy functions receive semantic public payloads and do not replace component interaction behavior.
+
+== Styling and accessibility
+
+The shell loads `/causeway-webcomponents/theme.css` and `/causeway-htmx/causeway-htmx.css`.
+The default theme follows the current Wicket viewer's application hierarchy with a sticky primary navigation surface, contained content, title and actions, cards, tabs, aligned properties, compact tables, bounded prompts, visible disabled state, and responsive collapse.
+It uses ordinary CSS variables and documented light-DOM hooks rather than Bootstrap or Wicket markup.
+
+The theme supports light, dark, reduced-motion, and forced-colors preferences.
+At narrow widths navigation becomes disclosed, object columns and property labels stack, tables scroll inside their own collection regions, and the page does not overflow horizontally.
+Applications may override the documented `--causeway-*` design tokens without replacing semantic behavior.
+
+Navigation exposes loading and route announcements, moves focus to the installed route page, preserves existing content until replacement succeeds, and maps non-disclosing terminal state locally.
+Escape, native controls, menu keyboard behavior, prompt focus containment, and visible focus remain component-owned.
+
+== Petclinic reference application
+
+Run the cohesive sample with:
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic
+----
+
+Open `http://localhost:8080/htmx` for the generic viewer.
+Open `http://localhost:8080/wicket/` and sign in as `sven` with password `pass` for the current Wicket comparison over the same model and fixture data.
+See `../sample-htmx-petclinic/PROVENANCE.adoc` for the pinned Apache Petclinic source and porting boundaries.
+
+== Non-goals
+
+The module does not add routing awareness to `<causeway-object>`.
+It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, or define Vue and Svelte lifecycle APIs.
+It does not require applications that use only the component library to adopt HTMX, Wicket, Petclinic, or the default theme.
