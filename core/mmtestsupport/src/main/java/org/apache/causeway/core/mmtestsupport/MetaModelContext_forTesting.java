@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.mmtestsupport;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -31,6 +29,13 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -105,9 +110,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
-import org.jspecify.annotations.NonNull;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.util.ClassUtils;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -357,7 +359,7 @@ implements MetaModelContext {
 
     public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
         if(causewayBeanTypeClassifier==null) {
-            causewayBeanTypeClassifier = causewayBeanFactoryPostProcessorForSpring.getCausewayBeanTypeClassifier();
+            causewayBeanTypeClassifier = causewayBeanFactoryPostProcessorForSpring.causewayBeanTypeClassifier();
         }
         return causewayBeanTypeClassifier;
     }

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.config.beans;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import jakarta.inject.Named;
 
@@ -35,8 +34,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
@@ -67,7 +64,9 @@ implements
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(applicationContext);
+        this.causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(
+                applicationContext.getEnvironment().getActiveProfiles(),
+                ContextType.SPRING);
     }
 
     @Override
@@ -78,23 +77,19 @@ implements
         Objects.requireNonNull(causewayBeanTypeClassifier,
                 "postProcessBeanFactory() called before app-ctx was made available");
 
-        var registry = (BeanDefinitionRegistry) beanFactory;
-        var beanDefNames = registry.getBeanDefinitionNames();
-
-        TransactionInterceptorPatcher.setDefaultTransactionInterceptorToFallback(registry);
-
-        var componentCollector = new CausewayComponentCollector(registry, causewayBeanTypeClassifier);
-
-        Stream.of(beanDefNames)
-            //.parallel()
-            .forEach(componentCollector::collect);
-
         beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
-        this.componentScanResult = new CausewayBeanTypeRegistry(
-                Can.ofCollection(componentCollector.introspectableTypes().values()));
+        var introspectableTypes = new CausewayComponentCollector(
+                (BeanDefinitionRegistry) beanFactory,
+                causewayBeanTypeClassifier)
+            .snaphotIntrospectableTypes();
 
-        log.info("post processing {} bean definitions took {}ms", _NullSafe.size(beanDefNames), stopWatch.getMillis());
+        this.componentScanResult = new CausewayBeanTypeRegistry(introspectableTypes);
+
+        log.info("post processing {}/{} bean definitions took {}ms",
+                beanFactory.getBeanDefinitionCount(),
+                introspectableTypes.size(),
+                stopWatch.getMillis());
 
         if(log.isDebugEnabled()) {
             componentScanResult.streamScannedTypes()
@@ -103,14 +98,14 @@ implements
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeClassifier")
-    public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
+    public CausewayBeanTypeClassifier causewayBeanTypeClassifier() {
         return causewayBeanTypeClassifier!=null
                 ? causewayBeanTypeClassifier
-                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty(), ContextType.MOCKUP)); // JUnit support
+                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(null, ContextType.MOCKUP)); // JUnit support
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeRegistry")
-    public CausewayBeanTypeRegistry getComponentScanResult() {
+    public CausewayBeanTypeRegistry componentScanResult() {
         return componentScanResult;
     }
 

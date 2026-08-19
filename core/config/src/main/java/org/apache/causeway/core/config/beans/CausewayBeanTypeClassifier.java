@@ -26,7 +26,6 @@ import jakarta.persistence.Entity;
 
 import org.jspecify.annotations.NonNull;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
@@ -47,8 +46,8 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeV
 @Programmatic
 public record CausewayBeanTypeClassifier(
         @NonNull Can<String> activeProfiles,
-        @NonNull _ClassCache classCache,
-        @NonNull ContextType contextType) {
+        @NonNull ContextType contextType,
+        @NonNull _ClassCache classCache) {
 
     public enum ContextType {
         SPRING,
@@ -57,12 +56,8 @@ public record CausewayBeanTypeClassifier(
 
     // -- CONSTRUCTION
 
-    CausewayBeanTypeClassifier(final ApplicationContext applicationContext) {
-        this(Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()), ContextType.SPRING);
-    }
-
-    CausewayBeanTypeClassifier(final Can<String> activeProfiles, final ContextType contextType) {
-        this(activeProfiles, _ClassCache.getInstance(), contextType);
+    CausewayBeanTypeClassifier(final String[] activeProfiles, final ContextType contextType) {
+        this(Can.ofArray(activeProfiles), contextType, _ClassCache.getInstance());
     }
 
     // -- CLASSIFY
