@@ -54,9 +54,9 @@
 
 ## 8. Playwright Interaction Hardening and Reactor Integration
 
-- [ ] 8.1 Add `viewers/webcomponents` to the established top-level viewer aggregation and verify ordinary reactor discovery without changing application opt-in behavior.
-- [ ] 8.2 Add an opt-in Playwright-for-Java Petclinic profile, configurable Chromium launch, browser installation documentation, stable UI hooks, and Maven wiring that leaves ordinary builds browser-download independent.
-- [ ] 8.3 Add Playwright journeys for home, custom and generic routes, menus, direct links, back and forward history, object links, property edits, collection hydration, responsive behavior, console failures, failed resources, and GraphQL response failures.
-- [ ] 8.4 Exercise every exposed Petclinic service action and object action through the UI, including defaults, choices, valid invocation, invalid input, cancellation, scalar, object, collection, void, mutation, refresh, and disposable destructive coverage.
-- [ ] 8.5 Reproduce and fix prompt, validation, cancellation, refresh, result, and route focus regressions so each transition has deterministic documented focus ownership.
-- [ ] 8.6 Run Playwright, Node, Maven module, top-level reactor-discovery, GraphQL, syntax, AsciiDoc, formatting, source-approval, and strict OpenSpec validation checks.
+- [x] 8.1 Add `viewers/webcomponents` to the established top-level viewer aggregation and verify ordinary reactor discovery without changing application opt-in behavior.
+- [x] 8.2 Add an opt-in Playwright-for-Java Petclinic profile, configurable Chromium launch, browser installation documentation, stable UI hooks, and Maven wiring that leaves ordinary builds browser-download independent.
+- [x] 8.3 Add Playwright journeys for home, custom and generic routes, menus, direct links, back and forward history, object links, property edits, collection hydration, responsive behavior, console failures, failed resources, and GraphQL response failures.
+- [x] 8.4 Exercise every exposed Petclinic service action and object action through the UI, including defaults, choices, valid invocation, invalid input, cancellation, scalar, object, collection, void, mutation, refresh, and disposable destructive coverage.
+- [x] 8.5 Reproduce and fix prompt, validation, cancellation, refresh, result, and route focus regressions so each transition has deterministic documented focus ownership.
+- [x] 8.6 Run Playwright, Node, Maven module, top-level reactor-discovery, GraphQL, syntax, AsciiDoc, formatting, source-approval, and strict OpenSpec validation checks.

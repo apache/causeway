@@ -132,6 +132,14 @@ public class Pet implements Comparable<Pet> {
         return notes;
     }
 
+    void addVisit(final Visit visit) {
+        visits.add(visit);
+    }
+
+    void clearVisits() {
+        visits.clear();
+    }
+
     public void setNotes(final String notes) {
         this.notes = notes;
     }

@@ -18,7 +18,7 @@
  */
 
 import {fieldsByName, namedType} from './introspection.mjs';
-import {commandSelection, resultSelectionForType} from './interaction-operations.mjs';
+import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
 import {InteractionResultKind, InteractionStatus} from './types.mjs';
 
 export class ServiceActionContextController {
@@ -383,16 +383,6 @@ function parameterInputType(wrapper) {
     }
   }
   return null;
-}
-
-function argumentsFromValues(field, values) {
-  const result = {};
-  for (const argument of field?.args ?? []) {
-    if (Object.prototype.hasOwnProperty.call(values, argument.name)) {
-      result[argument.name] = values[argument.name];
-    }
-  }
-  return result;
 }
 
 function commandResponse(result, data) {

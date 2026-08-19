@@ -44,7 +44,7 @@ final class HtmxPageRenderer {
                 .orElse("<causeway-object editable></causeway-object>");
         final var pageKind = custom.isPresent() ? "custom" : "generic";
         return """
-                <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" tabindex="-1" aria-label="Object page">
+                <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
                   <causeway-object-context logical-type="%s" object-id="%s">
                     %s
                     <causeway-interaction-controller data-causeway-route-interactions></causeway-interaction-controller>
@@ -59,7 +59,7 @@ final class HtmxPageRenderer {
 
     String renderLandingFragment() {
         return """
-                <section class="causeway-route-page causeway-route-landing" data-route-state="landing" tabindex="-1" aria-labelledby="causeway-route-heading">
+                <section class="causeway-route-page causeway-route-landing" data-route-state="landing" data-testid="causeway-route-page" tabindex="-1" aria-labelledby="causeway-route-heading">
                   <div class="causeway-landing-card">
                     <p class="causeway-eyebrow">Apache Causeway</p>
                     <h1 id="causeway-route-heading">Welcome</h1>
@@ -71,7 +71,7 @@ final class HtmxPageRenderer {
 
     String renderInvalidRouteFragment() {
         return """
-                <section class="causeway-route-page causeway-route-error" data-route-state="invalid-route" tabindex="-1" aria-labelledby="causeway-route-heading">
+                <section class="causeway-route-page causeway-route-error" data-route-state="invalid-route" data-testid="causeway-route-page" tabindex="-1" aria-labelledby="causeway-route-heading">
                   <div class="causeway-status-card causeway-status-danger" role="alert">
                     <p class="causeway-eyebrow">Invalid route</p>
                     <h1 id="causeway-route-heading">This application route is not valid</h1>
@@ -120,8 +120,8 @@ final class HtmxPageRenderer {
                     </header>
                     <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
                     <div id="causeway-route-announcement" class="causeway-visually-hidden" aria-live="polite" aria-atomic="true"></div>
-                    <aside id="causeway-result" class="causeway-shell-result" aria-live="polite" hidden></aside>
-                    <main id="causeway-route" class="causeway-shell-main" hx-history="false" aria-busy="false">
+                    <aside id="causeway-result" class="causeway-shell-result" data-testid="causeway-shell-result" aria-live="polite" hidden></aside>
+                    <main id="causeway-route" class="causeway-shell-main" data-testid="causeway-route" data-navigation-generation="0" hx-history-elt hx-history="false" aria-busy="false">
                       %s
                     </main>
                     <footer class="causeway-shell-footer">

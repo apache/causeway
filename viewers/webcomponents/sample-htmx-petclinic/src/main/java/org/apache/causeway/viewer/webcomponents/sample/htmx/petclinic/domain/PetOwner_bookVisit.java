@@ -51,7 +51,9 @@ public class PetOwner_bookVisit {
             final Pet pet,
             final LocalDateTime visitAt,
             @Parameter(maxLength = 120) final String reason) {
-        visitRepository.persist(new Visit("visit-" + UUID.randomUUID(), pet, visitAt, reason));
+        final var visit = new Visit("v-" + UUID.randomUUID(), pet, visitAt, reason);
+        pet.addVisit(visit);
+        visitRepository.persist(visit);
         return petOwner;
     }
 

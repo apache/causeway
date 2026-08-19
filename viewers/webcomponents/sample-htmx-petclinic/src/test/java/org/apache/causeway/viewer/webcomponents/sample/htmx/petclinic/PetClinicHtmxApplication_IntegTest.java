@@ -74,6 +74,8 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(shell.body())
                 .contains("<causeway-menubars>")
                 .contains("id=\"causeway-route\"")
+                .contains("hx-history-elt")
+                .contains("data-navigation-generation=\"0\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
                 .contains("/webjars/htmx.org/2.0.6/dist/htmx.min.js")
                 .contains("Compare Wicket viewer");
@@ -87,6 +89,16 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("data-page-kind=\"generic\"")
                 .contains("logical-type=\"petclinic.PetOwner\"")
                 .contains("object-id=\"s_owner-mary\"");
+
+        final var historyRestore = get(
+                "/htmx/object/petclinic.PetOwner/s_owner-mary",
+                "HX-History-Restore-Request",
+                "true");
+        assertThat(historyRestore.body())
+                .doesNotContain("<!doctype html>")
+                .contains("data-page-kind=\"generic\"")
+                .containsOnlyOnce("<causeway-object-context");
+        assertThat(historyRestore.headers().firstValue("hx-push-url")).isEmpty();
 
         final var custom = get("/htmx/object/petclinic.HomePage/home-fixture", "HX-Request", "true");
         assertThat(custom.body())
@@ -143,7 +155,9 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(menuBars.body())
                 .contains("Pet Owners")
                 .contains("objectType=\"petclinic.PetOwners\"")
-                .contains("objectType=\"petclinic.Visits\"");
+                .contains("objectType=\"petclinic.Visits\"")
+                .contains("id=\"count\"")
+                .doesNotContain("findByNameExact");
 
         final var grid = get("/graphql/object/petclinic.PetOwner:s_owner-mary/_meta/grid");
         assertThat(grid.statusCode()).isEqualTo(200);

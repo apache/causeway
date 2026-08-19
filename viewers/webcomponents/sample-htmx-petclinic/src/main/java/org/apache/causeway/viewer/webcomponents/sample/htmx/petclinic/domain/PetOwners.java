@@ -73,7 +73,9 @@ public class PetOwners {
         return repository.findAll();
     }
 
-    public PetOwner findByNameExact(final String name) {
-        return repository.findByName(name);
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(describedAs = "Counts the registered pet owners.")
+    public long count() {
+        return repository.count();
     }
 }
