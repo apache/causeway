@@ -44,9 +44,12 @@ test('targeted application discovery reads the effective menu descriptor and cac
 
   const result = await client.readApplicationEntry({description: capability});
   assert.equal(result.data.menuBars.href, '/graphql/application/menu-bars');
+  assert.equal(result.data.home.object._meta.id, 'home-1');
   assert.match(executor.applicationCalls[0].document, /application\s*\{/);
   assert.match(executor.applicationCalls[0].document, /menuBars\s*\{/);
-  assert.doesNotMatch(executor.applicationCalls[0].document, /home\s*\{/);
+  assert.match(executor.applicationCalls[0].document, /home\s*\{/);
+  assert.match(executor.applicationCalls[0].document, /\.\.\. on rich__sample_Home/);
+  assert.match(executor.applicationCalls[0].document, /_meta \{ id logicalTypeName title \}/);
 });
 
 test('one GraphQL client serializes initial targeted schema discovery across application and service contexts', async () => {

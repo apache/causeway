@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+-->
+<mb:menuBars
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:mb="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mb:primary>
+        <mb:menu cssClassFa="fa-paw">
+            <mb:named>Pet Owners</mb:named>
+            <mb:section>
+                <mb:named>Manage</mb:named>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="create"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="findByName"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="findByNameLike"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="listAll"/>
+            </mb:section>
+        </mb:menu>
+        <mb:menu cssClassFa="fa-calendar">
+            <mb:named>Visits</mb:named>
+            <mb:section>
+                <mb:named>Schedule</mb:named>
+                <mb:serviceAction objectType="petclinic.Visits" id="listUpcoming"/>
+            </mb:section>
+        </mb:menu>
+    </mb:primary>
+    <mb:secondary>
+        <mb:menu unreferencedActions="true">
+            <mb:named>System</mb:named>
+        </mb:menu>
+    </mb:secondary>
+    <mb:tertiary>
+        <mb:menu>
+            <mb:named>Account</mb:named>
+        </mb:menu>
+    </mb:tertiary>
+</mb:menuBars>

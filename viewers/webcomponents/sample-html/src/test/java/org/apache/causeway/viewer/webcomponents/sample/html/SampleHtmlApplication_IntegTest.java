@@ -125,9 +125,21 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"composite-object\"")
                 .contains("<causeway-object editable")
                 .contains("Component interaction showcase")
-                .contains("prefers-color-scheme: dark")
+                .contains("/causeway-webcomponents/component-styles.css")
+                .contains("/causeway-webcomponents/theme.css")
                 .contains("await import('/causeway-webcomponents/index.mjs')")
                 .doesNotContain(SampleObject.SAMPLE_SECRET);
+
+        final var structuralStyles = get("/causeway-webcomponents/component-styles.css");
+        assertThat(structuralStyles.statusCode()).isEqualTo(200);
+        assertThat(structuralStyles.body()).contains(".causeway-menubar-bar-disclosure");
+
+        final var theme = get("/causeway-webcomponents/theme.css");
+        assertThat(theme.statusCode()).isEqualTo(200);
+        assertThat(theme.body())
+                .contains("prefers-color-scheme: dark")
+                .contains("prefers-reduced-motion: reduce")
+                .contains("forced-colors: active");
 
         final var module = get("/causeway-webcomponents/index.mjs");
         assertThat(module.statusCode()).isEqualTo(200);

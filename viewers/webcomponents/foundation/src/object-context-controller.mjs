@@ -780,7 +780,10 @@ export class ObjectContextController extends EventTarget {
         return;
       }
       if (result.data === null) {
-        const error = new Error(result.errors[0]?.message ?? `Object '${this.identity.logicalTypeName}:${this.identity.id}' was not found.`);
+        const error = new Error(result.errors[0]?.message ?? 'The requested object was not found.');
+        if (result.errors.length === 0) {
+          error.code = 'NOT_FOUND';
+        }
         this.#setState({
           status: ObjectContextStatus.TERMINAL_ERROR,
           generation,
