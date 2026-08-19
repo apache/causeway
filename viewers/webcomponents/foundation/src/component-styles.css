@@ -1,0 +1,319 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+causeway-object {
+  container-name: causeway-object;
+  container-type: inline-size;
+  display: block;
+  --causeway-object-gap: 1rem;
+  --causeway-object-group-border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  --causeway-object-group-radius: 0.5rem;
+  --causeway-object-group-padding: 1rem;
+  --causeway-object-tab-accent: LinkText;
+}
+.causeway-object {
+  display: grid;
+  gap: var(--causeway-object-gap);
+}
+.causeway-object-row {
+  display: grid;
+  gap: var(--causeway-object-gap);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.causeway-object-column {
+  grid-column: span var(--causeway-column-span, 12);
+  min-inline-size: 0;
+}
+.causeway-object-group,
+.causeway-object-tabs {
+  border: var(--causeway-object-group-border);
+  border-radius: var(--causeway-object-group-radius);
+  margin-block: 0.5rem;
+  min-inline-size: 0;
+  padding: var(--causeway-object-group-padding);
+}
+.causeway-object-group > h2 {
+  font-size: 1.1rem;
+  margin-block: 0 0.75rem;
+}
+.causeway-object-tabs [role="tablist"] {
+  border-block-end: var(--causeway-object-group-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-block-end: 0.75rem;
+}
+.causeway-object-tabs [role="tab"] {
+  background: none;
+  border: 0;
+  border-block-end: 0.2rem solid transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+}
+.causeway-object-tabs [role="tab"][aria-selected="true"] {
+  border-block-end-color: var(--causeway-object-tab-accent);
+  color: var(--causeway-object-tab-accent);
+  font-weight: 700;
+}
+.causeway-object-tabs [role="tab"]:focus-visible {
+  outline: 0.2rem solid var(--causeway-object-tab-accent);
+  outline-offset: 0.1rem;
+}
+.causeway-object [data-empty="true"] {
+  display: none;
+}
+.causeway-object-layout-status {
+  margin-block: 0.75rem;
+}
+.causeway-visually-hidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+@container causeway-object (max-width: 48rem) {
+  .causeway-object-column {
+    grid-column: 1 / -1;
+  }
+}
+.causeway-object-header,
+.causeway-property,
+.causeway-action,
+.causeway-collection {
+  margin-block: 0.75rem;
+}
+.causeway-property,
+.causeway-collection-table {
+  inline-size: 100%;
+}
+.causeway-property-editing,
+.causeway-action-prompt form {
+  display: grid;
+  gap: 0.6rem;
+}
+.causeway-property-editor-actions,
+.causeway-action-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.causeway-property-editor input:not([type="checkbox"]),
+.causeway-property-editor select,
+.causeway-action-parameter input:not([type="checkbox"]),
+.causeway-action-parameter select {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+}
+.causeway-action-prompt {
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  max-inline-size: min(36rem, calc(100vw - 2rem));
+  padding: 1rem;
+}
+.causeway-action-parameter {
+  display: grid;
+  gap: 0.25rem;
+  margin-block: 0.75rem;
+}
+.causeway-action-result {
+  margin-block: 1rem;
+  padding: 0.75rem;
+}
+.causeway-property-label,
+.causeway-collection-label {
+  font-weight: 600;
+}
+.causeway-object-link {
+  align-items: baseline;
+  background: none;
+  border: 0;
+  color: LinkText;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0;
+  text-decoration: underline;
+}
+.causeway-object-link-identity {
+  font-size: 0.8em;
+}
+.causeway-error {
+  color: #a40000;
+}
+.causeway-empty,
+.causeway-value-null {
+  font-style: italic;
+}
+.causeway-collection-table {
+  border-collapse: collapse;
+}
+.causeway-collection-table th,
+.causeway-collection-table td {
+  border-block-end: 1px solid #d0d0d0;
+  padding: 0.35rem 0.5rem;
+  text-align: start;
+}
+causeway-menubars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--causeway-menubars-gap, 0.25rem);
+  position: relative;
+  z-index: var(--causeway-menubars-z-index, 10);
+}
+causeway-menubar-primary,
+causeway-menubar-secondary,
+causeway-menubar-tertiary {
+  display: block;
+  min-inline-size: 0;
+}
+causeway-menubars > [data-causeway-bar-order="0"] {
+  order: 0;
+}
+causeway-menubars > [data-causeway-bar-order="1"] {
+  order: 1;
+}
+causeway-menubars > [data-causeway-bar-order="2"] {
+  order: 2;
+}
+causeway-menubars > [data-causeway-menubars-status],
+causeway-menubars > causeway-interaction-controller {
+  order: 3;
+}
+.causeway-menubar-shell {
+  background: var(--causeway-menubar-background, Canvas);
+  border-block-end: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  color: var(--causeway-menubar-color, CanvasText);
+  min-inline-size: 0;
+}
+.causeway-menubar {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-menubar-menu-gap, 0.25rem);
+  padding: var(--causeway-menubar-padding, 0.25rem 0.5rem);
+}
+.causeway-menubar-bar-disclosure {
+  display: none;
+}
+.causeway-menu {
+  min-inline-size: 0;
+  position: relative;
+}
+.causeway-menubar button {
+  background: var(--causeway-menubar-control-background, transparent);
+  border: var(--causeway-menubar-control-border, 1px solid transparent);
+  border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: var(--causeway-menubar-control-padding, 0.5rem 0.75rem);
+  text-align: start;
+}
+.causeway-menubar button:hover:not(:disabled),
+.causeway-menubar button[aria-expanded="true"] {
+  background: var(--causeway-menubar-control-active-background, color-mix(in srgb, LinkText 14%, transparent));
+}
+.causeway-menubar button:focus-visible,
+.causeway-menubar-bar-disclosure:focus-visible {
+  outline: var(--causeway-menubar-focus, 0.2rem solid LinkText);
+  outline-offset: 0.1rem;
+}
+.causeway-menubar button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.causeway-menu-panel {
+  background: var(--causeway-menu-panel-background, Canvas);
+  border: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+  box-shadow: var(--causeway-menu-panel-shadow, 0 0.5rem 1.5rem color-mix(in srgb, #000 22%, transparent));
+  color: var(--causeway-menu-panel-color, var(--causeway-menubar-color, CanvasText));
+  inline-size: max-content;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  max-inline-size: min(28rem, calc(100vw - 2rem));
+  min-inline-size: min(16rem, calc(100vw - 2rem));
+  padding: 0.5rem;
+  position: absolute;
+}
+.causeway-menu-panel[hidden],
+.causeway-menubar[hidden] {
+  display: none;
+}
+.causeway-menu-section + .causeway-menu-section {
+  border-block-start: var(--causeway-menubar-border, 1px solid color-mix(in srgb, currentColor 25%, transparent));
+  margin-block-start: 0.5rem;
+  padding-block-start: 0.5rem;
+}
+.causeway-menu-section-label {
+  font-size: 0.85rem;
+  margin: 0.25rem 0.75rem;
+}
+.causeway-service-action-control {
+  inline-size: 100%;
+}
+.causeway-menu-icon {
+  display: inline-block;
+  inline-size: 0.75rem;
+  margin-inline-end: 0.35rem;
+}
+.causeway-menubars-status,
+.causeway-menubar-status {
+  margin-block: 0.5rem;
+}
+@media (min-width: 48.001rem) {
+  .causeway-menubar[data-causeway-bar-content][hidden] {
+    display: flex;
+  }
+}
+@media (max-width: 48rem) {
+  .causeway-menubar-shell {
+    padding: 0.25rem;
+  }
+  .causeway-menubar-bar-disclosure {
+    background: var(--causeway-menubar-control-background, transparent);
+    border: var(--causeway-menubar-control-border, 1px solid transparent);
+    border-radius: var(--causeway-menubar-control-radius, 0.25rem);
+    color: inherit;
+    display: block;
+    font: inherit;
+    inline-size: 100%;
+    padding: 0.6rem 0.75rem;
+    text-align: start;
+  }
+  .causeway-menubar {
+    align-items: stretch;
+    display: grid;
+    padding: 0.25rem;
+  }
+  .causeway-menu-panel {
+    box-shadow: none;
+    inline-size: auto;
+    margin-block-start: 0.25rem;
+    max-inline-size: none;
+    min-inline-size: 0;
+    position: static;
+  }
+}

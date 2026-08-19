@@ -54,8 +54,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       } else if (action === 'submit') {
         void this.submitPrompt();
       } else if (action === 'dismiss-result') {
-        this.resultState = null;
-        this.render();
+        this.dismissResult();
       }
     });
     this.addEventListener('input', event => this.#captureParameter(event));
@@ -158,12 +157,14 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
     }
+    const focusState = this.#captureControlFocus();
     const generation = ++this.generation;
     const values = Object.freeze({...this.promptState.values, [parameterId]: value});
     this.promptState = Object.freeze({...this.promptState, values, error: null, status: InteractionStatus.EDITING});
     this.#publishPromptState();
     if (!recompute) {
       this.render();
+      this.#restoreControlFocus(focusState);
       return true;
     }
     const prepared = await this.promptState.context.prepareAction(this.promptState.actionId, values);
@@ -204,6 +205,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     this.#publishPromptState();
     this.render();
+    this.#restoreControlFocus(focusState);
     return true;
   }
 
@@ -211,10 +213,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
     }
+    const focusState = this.#captureControlFocus();
     const generation = ++this.generation;
     this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.VALIDATING, error: null});
     this.#publishPromptState();
     this.render();
+    this.#restoreControlFocus(focusState);
     const validation = await this.promptState.context.validateAction(this.promptState.actionId, this.promptState.values);
     if (generation !== this.generation) {
       return false;
@@ -226,6 +230,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.FAILED, error: validationReason});
       this.#publishPromptState();
       this.render();
+      this.#restoreControlFocus(focusState);
       return false;
     }
     return this.#invoke(
@@ -254,6 +259,15 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     })));
     this.render();
     this.#restoreFocus(source);
+    return true;
+  }
+
+  dismissResult() {
+    if (!this.resultState) {
+      return false;
+    }
+    this.resultState = null;
+    this.render();
     return true;
   }
 
@@ -442,6 +456,35 @@ export class CausewayInteractionControllerElement extends HTMLElement {
 
   #focusFirstControl() {
     queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+  }
+
+  #captureControlFocus() {
+    const active = globalThis.document?.activeElement;
+    if (!active || !this.contains?.(active)) {
+      return null;
+    }
+    return Object.freeze({
+      editor: active.getAttribute?.('data-causeway-editor') ?? null,
+      action: active.getAttribute?.('data-causeway-action') ?? null,
+      selectionStart: active.selectionStart ?? null,
+      selectionEnd: active.selectionEnd ?? null
+    });
+  }
+
+  #restoreControlFocus(focusState) {
+    if (!focusState) {
+      return;
+    }
+    queueMicrotask(() => {
+      const controls = [...(this.querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])];
+      const control = controls.find(candidate => focusState.editor
+        ? candidate.getAttribute?.('data-causeway-editor') === focusState.editor
+        : candidate.getAttribute?.('data-causeway-action') === focusState.action);
+      control?.focus?.();
+      if (focusState.selectionStart != null && typeof control?.setSelectionRange === 'function') {
+        control.setSelectionRange(focusState.selectionStart, focusState.selectionEnd ?? focusState.selectionStart);
+      }
+    });
   }
 
   #containPromptFocus(event) {

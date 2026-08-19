@@ -492,6 +492,13 @@ identified
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-webcomponents-htmx</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>

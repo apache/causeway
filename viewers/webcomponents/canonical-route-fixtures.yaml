@@ -1,0 +1,30 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements. See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0.
+
+version: 1
+basePath: /viewer
+valid:
+  - logicalTypeName: petclinic.PetOwner
+    objectId: s_owner-mary
+    path: /viewer/object/petclinic.PetOwner/s_owner-mary
+  - logicalTypeName: example.Type With Space
+    objectId: id ?#42 café
+    path: /viewer/object/example.Type%20With%20Space/id%20%3F%2342%20caf%C3%A9
+  - logicalTypeName: example.Δοκιμή
+    objectId: 日本語
+    path: /viewer/object/example.%CE%94%CE%BF%CE%BA%CE%B9%CE%BC%CE%AE/%E6%97%A5%E6%9C%AC%E8%AA%9E
+invalid:
+  - /viewer/object/type
+  - /viewer/object/type/
+  - /viewer/object/type/%
+  - /viewer/object/type/%2F
+  - /viewer/object/type/%5C
+  - /viewer/object/type/%00
+  - /viewer/object/type/%2E%2E
+  - /viewer/object/type/%41
+customPagePrecedence:
+  exactLogicalType: petclinic.HomePage
+  unrelatedLogicalType: petclinic.PetOwner
+fallbackElement: causeway-object
