@@ -218,6 +218,37 @@ The existing vanilla HTML sample SHALL use the cohesive design tokens and semant
 - **THEN** headings, cards, columns, menus, properties, collections, forms, prompts, results, disclosures, focus, spacing, alignment, and overflow satisfy the same documented visual quality gates
 - **AND** no HTMX or Petclinic dependency is required by the sample
 
+### Requirement: Full-project reactor integration
+The existing top-level project aggregation SHALL include the web-components reactor with the other viewer reactors while preserving application-level opt-in enablement.
+
+#### Scenario: Full project is built
+- **WHEN** Maven builds the ordinary top-level released reactor
+- **THEN** `viewers/webcomponents` and its non-skipped modules are compiled and tested through the established `core` aggregation
+- **AND** no application enables the HTMX viewer unless it imports the viewer module configuration
+
+### Requirement: Executable Playwright Petclinic acceptance
+The Petclinic sample SHALL provide opt-in Playwright browser tests that exercise its complete exposed service-action and object-action vocabulary through the HTMX user interface.
+
+#### Scenario: Playwright acceptance profile runs
+- **WHEN** a maintainer activates the documented Petclinic Playwright profile with an available Chromium browser
+- **THEN** tests exercise home and generic routes, menus, object links, history, properties, collections, validation, cancellation, every exposed service action, and every exposed object action
+- **AND** mutable and destructive journeys use disposable data or restore deterministic fixture state
+
+#### Scenario: Action interaction completes
+- **WHEN** a service or object action is opened, validated, cancelled, invoked, or returns a scalar, object, collection, or void outcome
+- **THEN** the UI reaches the expected prompt, result, refreshed context, or canonical route without an unexpected GraphQL or browser failure
+- **AND** tests fail on unexpected console errors, failed resources, or unsuccessful GraphQL responses
+
+#### Scenario: Interaction focus changes
+- **WHEN** a prompt opens, validation fails, a prompt is cancelled, a non-navigation interaction completes, or route navigation completes
+- **THEN** focus moves to the documented prompt field, invalid field, invoking control, refreshed semantic control or result region, or route landmark respectively
+- **AND** focus is not lost to the document body or moved by an unrelated refresh
+
+#### Scenario: Ordinary reactor build runs
+- **WHEN** the Playwright profile is not active
+- **THEN** ordinary unit and integration tests remain browser-download independent
+- **AND** the documented profile remains available for explicit end-to-end verification
+
 ### Requirement: Cross-viewer route compatibility
 Canonical route meaning, custom-page precedence, and generic `<causeway-object>` fallback SHALL remain semantically compatible with the generic Vue and Svelte viewers.
 
