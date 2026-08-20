@@ -29,11 +29,9 @@ import java.util.stream.Collectors;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -65,8 +63,8 @@ implements MetaModelRefiner {
 
         if (homepageAnnot == null)
 			return;
-        final FacetedMethod facetHolder = processMethodContext.facetHolder();
-        FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
+        var facetHolder = processMethodContext.facetHolder();
+        new HomePageFacetAnnotation(facetHolder);
     }
 
     @Override

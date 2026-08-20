@@ -47,15 +47,13 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         var facetHolder = processMethodContext.facetHolder();
-        addFacet(
-                new PropertyValidateFacetDefault(facetHolder));
+        new PropertyValidateFacetDefault(facetHolder);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
         var facetHolder = processParameterContext.facetHolder();
-        addFacet(
-                new PropertyValidateFacetDefault(facetHolder));
+        new PropertyValidateFacetDefault(facetHolder);
     }
 
 }

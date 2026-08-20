@@ -23,16 +23,15 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacet;
@@ -44,6 +43,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.springframework.util.ClassUtils;
 
 /**
  * Installed by {@link CssOnActionFromConfiguredRegexPostProcessor},
@@ -52,34 +52,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  *
  * <p>Supports imperative action naming, if required.
  */
-public record FaFacetOnMemberFromConfiguredRegex(
-    ObjectSpecification objectSpecification,
-    Map<Pattern, String> faIconByPattern,
-    MemberNamedFacet memberNamedFacet,
-    /**
-     * If the memberNamedFacet provides static names,
-     * we can also provide a static {@link FaLayersProvider}.
-     */
-    _StableValue<Optional<FaLayersProvider>> staticCssClassFaFactoryRef,
-
-    FacetHolder facetHolder
-) implements FaImperativeFacet {
-
-    @Override public Class<? extends Facet> facetType() { return FaFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
-
-    @Override
-    public Either<FaStaticFacet, FaImperativeFacet> getSpecialization() {
-        return Either.right(this);
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", precedence().name());
-        visitor.accept("position", "!imperative");
-        visitor.accept("classes", "!imperative");
-    }
+public final class FaFacetOnMemberFromConfiguredRegex
+extends FacetAbstract
+implements FaImperativeFacet {
 
     public static Optional<FaFacet> create(
             final ObjectSpecification objectSpecification,
@@ -89,6 +64,15 @@ public record FaFacetOnMemberFromConfiguredRegex(
                 new FaFacetOnMemberFromConfiguredRegex(
                     objectSpecification, memberNamedFacet, objectAction));
     }
+
+    private final ObjectSpecification objectSpecification;
+    private final Map<Pattern, String> faIconByPattern;
+    private final MemberNamedFacet memberNamedFacet;
+    /**
+     * If the memberNamedFacet provides static names,
+     * we can also provide a static {@link FaLayersProvider}.
+     */
+    private final _StableValue<Optional<FaLayersProvider>> staticCssClassFaFactoryRef;
 
     // non-canonical constructor
     private FaFacetOnMemberFromConfiguredRegex(
@@ -103,13 +87,49 @@ public record FaFacetOnMemberFromConfiguredRegex(
             facetHolder);
     }
 
+    private FaFacetOnMemberFromConfiguredRegex(
+    	    final ObjectSpecification objectSpecification,
+    	    final Map<Pattern, String> faIconByPattern,
+    	    final MemberNamedFacet memberNamedFacet,
+    	    /**
+    	     * If the memberNamedFacet provides static names,
+    	     * we can also provide a static {@link FaLayersProvider}.
+    	     */
+    	    final _StableValue<Optional<FaLayersProvider>> staticCssClassFaFactoryRef,
+
+    	    final FacetHolder facetHolder
+    	) {
+    	super(FaFacet.class, facetHolder);
+    	this.objectSpecification = objectSpecification;
+    	this.faIconByPattern = faIconByPattern;
+    	this.memberNamedFacet = memberNamedFacet;
+	    /**
+	     * If the memberNamedFacet provides static names,
+	     * we can also provide a static {@link FaLayersProvider}.
+	     */
+    	this.staticCssClassFaFactoryRef = staticCssClassFaFactoryRef;
+    }
+
+    @Override
+    public Either<FaStaticFacet, FaImperativeFacet> getSpecialization() {
+    	return Either.right(this);
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	visitor.accept("facet", ClassUtils.getShortName(getClass()));
+    	visitor.accept("precedence", precedence().name());
+    	visitor.accept("position", "!imperative");
+    	visitor.accept("classes", "!imperative");
+    }
+
     @Override
     public FaLayersProvider getFaLayersProvider(final ManagedObject domainObject) {
         var staticCssClassFaFactory = staticCssClassFaFactoryRef.orElseSet(()->
             memberNamedFacet
                 .getSpecialization()
                 .left()
-                .map(hasStaticName->hasStaticName.translated())
+                .map(HasStaticText::translated)
                 .flatMap(this::faLayersProviderForMemberFriendlyName));
         return staticCssClassFaFactory
             .orElse(() -> faLayersProviderForConfiguredRegexIfPossible(domainObject)
@@ -123,9 +143,8 @@ public record FaFacetOnMemberFromConfiguredRegex(
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
             final String faIcon = entry.getValue();
-            if (pattern.matcher(name).matches()) {
-                return _Strings.nonEmpty(faIcon);
-            }
+            if (pattern.matcher(name).matches())
+				return _Strings.nonEmpty(faIcon);
         }
         return Optional.empty();
     }
@@ -136,16 +155,15 @@ public record FaFacetOnMemberFromConfiguredRegex(
         final String memberFriendlyName = memberNamedFacet
         .getSpecialization()
         .fold(
-                hasStaticName->hasStaticName.translated(), // unexpected code reach, due to optimization above
+                HasStaticText::translated, // unexpected code reach, due to optimization above
                 hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObject)));
 
         return faLayersProviderForMemberFriendlyName(memberFriendlyName);
     }
 
     private ManagedObject targetFor(final ManagedObject domainObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
-            return ManagedObject.empty(objectSpecification);
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject))
+			return ManagedObject.empty(objectSpecification);
         return objectSpecification.isMixin()
                 ? ManagedObject.mixin(
                         objectSpecification,
@@ -180,9 +198,9 @@ public record FaFacetOnMemberFromConfiguredRegex(
      * @implNote because {@link FaStaticFacetAbstract} has all the fa-icon logic,
      * we simply reuse it here by creating an anonymous instance
      */
-    private static FaLayersProvider faIconProvider(final String faIcon, final CssClassFaPosition position) {
+    private FaLayersProvider faIconProvider(final String faIcon, final CssClassFaPosition position) {
         return new FaStaticFacetAbstract(
-                faIcon, position, null) {};
+                faIcon, position, FacetHolder.simple(getMetaModelContext(), null)) {};
     }
 
 }

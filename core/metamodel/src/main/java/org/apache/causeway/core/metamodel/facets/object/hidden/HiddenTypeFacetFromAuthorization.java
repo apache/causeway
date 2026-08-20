@@ -18,32 +18,32 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-public record HiddenTypeFacetFromAuthorization(
-		FacetHolder facetHolder
-		) implements HiddenTypeFacet {
-	
-	@Override
-	public Class<? extends Facet> facetType() {
-		return HiddenTypeFacet.class;
+public final class HiddenTypeFacetFromAuthorization
+extends FacetAbstract
+implements HiddenTypeFacet {
+
+	public HiddenTypeFacetFromAuthorization(final FacetHolder facetHolder) {
+		super(HiddenTypeFacet.class, facetHolder);
 	}
-	
+
 	@Override
 	public Precedence precedence() {
 		return Precedence.HIGH; // facet has final say, don't override;
 	}
-	
+
     @Override
     public String hides(final VisibilityContext vc) {
         var spec = (ObjectSpecification) facetHolder();
 
-        if(!spec.isEntityOrViewModelOrAbstract()) return null;
+        if(!spec.isEntityOrViewModelOrAbstract())
+        	return null;
 
         /*[CAUSEWAY-3657] Don't hide members based on their element type having no visible actions,
          * properties or collections in case the element type is an interface.
@@ -53,7 +53,8 @@ public record HiddenTypeFacetFromAuthorization(
          * and it is the case that any interface when PROTOTYPING has some Object_ actions mixed in,
          * but not necessarily in production.
          */
-        if(spec.correspondingClass().isInterface()) return null;
+        if(spec.correspondingClass().isInterface())
+        	return null;
 
         var hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));

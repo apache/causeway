@@ -49,9 +49,9 @@ extends FacetFactoryAbstract {
 
             if(semantics.isEnabled())
 				return;
-            addFacet(
-                    DisabledFacetOnPropertyFromImmutable
-                    .forImmutable(facetHolder, immutableFacet));
+
+            DisabledFacetOnPropertyFromImmutable
+            	.forImmutable(facetHolder, immutableFacet);
         });
     }
 

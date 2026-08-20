@@ -38,7 +38,7 @@ extends FacetFactoryAbstract {
         var facetHolder = processClassContext.facetHolder();
         if (!cls.isEnum())
 			return;
-        addFacet(new ChoicesFacetFromEnum(facetHolder, cls));
+        new ChoicesFacetFromEnum(facetHolder, cls);
     }
 
 }

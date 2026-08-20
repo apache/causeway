@@ -75,33 +75,27 @@ implements MetaModelRefiner {
     }
 
     private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
-
         var xmlJavaTypeAdapterIfAny = processClassContext.synthesizeOnType(XmlJavaTypeAdapter.class);
         if(!xmlJavaTypeAdapterIfAny.isPresent())
 			return;
 
         var facetHolder = processClassContext.facetHolder();
-
-        addFacet(
-                new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
+        new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value());
     }
 
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
-
         var xmlAccessorTypeIfAny = processClassContext.synthesizeOnType(XmlAccessorType.class);
         if(!xmlAccessorTypeIfAny.isPresent())
 			return;
 
         var facetHolder = processClassContext.facetHolder();
-        addFacet(
-                new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value()));
+        new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value());
     }
 
     // -- METHOD CONTEXT
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         //[ahuber] accessType not yet used, but could be in future extensions
         final Optional<XmlAccessorTypeFacet> accessorTypeFacet =
                 Optional.ofNullable(processMethodContext.facetHolder().lookupFacet(XmlAccessorTypeFacet.class).orElse(null));
@@ -112,37 +106,32 @@ implements MetaModelRefiner {
 
         processXmlJavaTypeAdapter(processMethodContext, accessType);
         processXmlTransient(processMethodContext, accessType);
-
     }
 
     private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
-
         var xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
 
         if(!xmlJavaTypeAdapterIfAny.isPresent())
 			return;
 
         var facetHolder = processMethodContext.facetHolder();
-        addFacet(
-                new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
+        new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value());
     }
 
     private void processXmlTransient(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
-
         var xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
 
         if(!xmlTransientIfAny.isPresent())
 			return;
 
         var facetHolder = processMethodContext.facetHolder();
-        addFacet(new XmlTransientFacetDefault(facetHolder));
+        new XmlTransientFacetDefault(facetHolder);
     }
 
     // --
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<AssociationValidator> associationValidators = getAssociationValidators(getConfiguration());
 
@@ -164,20 +153,19 @@ implements MetaModelRefiner {
                     .streamAssociations(MixedIn.EXCLUDED);
 
             associations
-            // ignore derived
-            .filter(association->association.containsNonFallbackFacet(PropertySetterFacet.class))
-            .forEach(association->{
-                for (final AssociationValidator adapterValidator : associationValidators) {
-                    adapterValidator.validate(objectSpec, association);
-                }
-            });
+	            // ignore derived
+	            .filter(association->association.containsNonFallbackFacet(PropertySetterFacet.class))
+	            .forEach(association->{
+	                for (final AssociationValidator adapterValidator : associationValidators) {
+	                    adapterValidator.validate(objectSpec, association);
+	                }
+	            });
 
         });
 
     }
 
     private List<TypeValidator> getTypeValidators(final CausewayConfiguration configuration) {
-
         final List<TypeValidator> typeValidators = new ArrayList<>();
         if(configuration.core().metaModel().validator().jaxbViewModel().notAbstract()) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
@@ -332,7 +320,6 @@ implements MetaModelRefiner {
     private static class JaxbViewModelPublicNoArgConstructorValidator extends TypeValidator {
         @Override
         void validate(final ObjectSpecification objectSpec) {
-
             var correspondingClass = objectSpec.correspondingClass();
 
             var publicNoArgConstructors = _Reflect

@@ -48,49 +48,41 @@ extends FacetFactoryAbstract {
                         () -> ValidationFailureUtils
                         .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), CollectionLayout.class));
 
-        addFacetIfPresent(
-            CssClassFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
 
-        addFacet(
-            DefaultViewFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder)
-                .orElseGet(()->DefaultViewFacetAsConfigured.create(facetHolder)));
+        CssClassFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            MemberDescribedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        DefaultViewFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder)
+            .orElseGet(()->DefaultViewFacetAsConfigured.create(facetHolder));
 
-        addFacetIfPresent(
-            HiddenFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        MemberDescribedFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            LayoutOrderFacetFromCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-            MemberNamedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        HiddenFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            TableDecoratorFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        LayoutOrderFacetFromCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            PagedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        MemberNamedFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            SortedByFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
+        TableDecoratorFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            collectionLayoutIfAny
-                .map(CollectionLayout::navigableSubtree)
-                .filter(StringUtils::hasLength)
-                .flatMap(sequence->NavigableSubtreeSequenceFacet.create("CollectionLayout annotation",
-                    processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder)));
+	    PagedFacetForCollectionLayoutAnnotation
+	        .create(collectionLayoutIfAny, facetHolder);
+
+        SortedByFacetForCollectionLayoutAnnotation
+            .create(collectionLayoutIfAny, facetHolder);
+
+        collectionLayoutIfAny
+            .map(CollectionLayout::navigableSubtree)
+            .filter(StringUtils::hasLength)
+            .flatMap(sequence->NavigableSubtreeSequenceFacet.create("CollectionLayout annotation",
+                processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder));
     }
 
 }

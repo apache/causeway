@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 

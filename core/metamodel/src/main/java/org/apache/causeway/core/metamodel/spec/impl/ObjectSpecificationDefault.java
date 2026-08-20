@@ -296,10 +296,10 @@ implements
     //TODO this is a facet factory responsibility, should be done when the facet processor runs on the type ... see constructor
     @Deprecated
     private void addNamedFacetIfRequired() {
-        if (getFacet(MemberNamedFacet.class) == null) {
-            addFacet(new MemberNamedFacetForStaticMemberName(
+        if (lookupFacet(MemberNamedFacet.class).isEmpty()) {
+            new MemberNamedFacetForStaticMemberName(
                     _Strings.asNaturalName.apply(shortIdentifier()),
-                    this));
+                    this);
         }
     }
 

@@ -24,11 +24,11 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 

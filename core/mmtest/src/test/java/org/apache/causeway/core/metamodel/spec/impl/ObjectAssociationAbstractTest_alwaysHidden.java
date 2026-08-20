@@ -29,9 +29,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
@@ -206,19 +205,17 @@ class ObjectAssociationAbstractTest_alwaysHidden {
             final Where where,
             final FacetedMethod holder,
             final boolean noop) {
-
-        FacetUtil.addFacet(
-            new HiddenFacetAbstract(where, holder) {
-                @Override
-                protected String hiddenReason(final ManagedObject target, final Where whereContext) {
-                    return null;
-                }
-                @Override
-                public Precedence precedence() {
-                	return noop
-                            ? Facet.Precedence.FALLBACK
-                            : Facet.Precedence.DEFAULT;
-                }
-            });
+        new HiddenFacetAbstract(where, holder) {
+            @Override
+            protected String hiddenReason(final ManagedObject target, final Where whereContext) {
+                return null;
+            }
+            @Override
+            public Precedence precedence() {
+            	return noop
+                        ? Facet.Precedence.FALLBACK
+                        : Facet.Precedence.DEFAULT;
+            }
+        };
     }
 }

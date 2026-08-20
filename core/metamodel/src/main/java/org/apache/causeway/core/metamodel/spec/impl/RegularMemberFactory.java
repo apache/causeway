@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetImpl;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;

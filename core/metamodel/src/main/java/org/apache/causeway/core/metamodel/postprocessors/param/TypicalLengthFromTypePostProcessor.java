@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.postprocessors.param;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterFromType;
 import org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType;
@@ -50,9 +49,8 @@ extends MetaModelPostProcessorAbstract {
             .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
-                    FacetUtil.addFacet(
-                            TypicalLengthFacetOnParameterFromType
-                            .createWhilePostprocessing(typicalLengthFacet, parameter.facetHolder())));
+                TypicalLengthFacetOnParameterFromType
+                    .createWhilePostprocessing(typicalLengthFacet, parameter.facetHolder()));
     }
 
     @Override
@@ -65,10 +63,8 @@ extends MetaModelPostProcessorAbstract {
             .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
-                    FacetUtil.addFacet(
-                            TypicalLengthFacetOnPropertyFromType
-                            .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
-
+                TypicalLengthFacetOnPropertyFromType
+                    .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property)));
     }
 
 }

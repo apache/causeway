@@ -55,12 +55,10 @@ extends FacetFactoryAbstract {
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
 
-        addFacet(
-                new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
+        new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar);
 
-        addFacetIfPresent(
-                ObjectNamedFacetForDomainServiceLayoutAnnotation
-                .create(domainServiceLayoutIfAny, facetHolder));
+        ObjectNamedFacetForDomainServiceLayoutAnnotation
+                .create(domainServiceLayoutIfAny, facetHolder);
     }
 
 }

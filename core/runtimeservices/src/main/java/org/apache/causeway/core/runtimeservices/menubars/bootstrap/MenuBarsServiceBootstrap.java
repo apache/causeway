@@ -327,7 +327,7 @@ implements MenuBarsService {
                 var actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
                 var named = objectAction
-                    .getFacetRanking(MemberNamedFacet.class)
+                    .lookupFacetRanking(MemberNamedFacet.class)
                     // assuming layout from annotations never installs higher than Precedence.DEFAULT
                     .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT))
                     .map(MemberNamedFacet::getSpecialization)

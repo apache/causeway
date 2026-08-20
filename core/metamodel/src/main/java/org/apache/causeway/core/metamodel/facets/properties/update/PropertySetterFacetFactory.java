@@ -68,12 +68,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
             setterMethods
             .forEach(setterMethod->{
-                addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
-                addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
+                new PropertySetterFacetViaSetterMethod(setterMethod, property);
+                new PropertyInitializationFacetViaSetterMethod(setterMethod, property);
             });
 
         } else {
-            addFacet(new SnapshotExcludeFacetFromImmutableMember(property));
+            new SnapshotExcludeFacetFromImmutableMember(property);
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.

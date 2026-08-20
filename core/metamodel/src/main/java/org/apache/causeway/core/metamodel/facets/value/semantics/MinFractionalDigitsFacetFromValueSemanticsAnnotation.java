@@ -21,13 +21,15 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 
-record MinFractionalDigitsFacetFromValueSemanticsAnnotation(
-        int minFractionalDigits,
-        FacetHolder facetHolder)
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+final class MinFractionalDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
 implements MinFractionalDigitsFacet {
 
     static Optional<MinFractionalDigitsFacet> create(
@@ -39,7 +41,14 @@ implements MinFractionalDigitsFacet {
                     valueSemantics.minFractionalDigits(), holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return MinFractionalDigitsFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int minFractionalDigits;
+
+    private MinFractionalDigitsFacetFromValueSemanticsAnnotation(
+            final int minFractionalDigits,
+            final FacetHolder facetHolder) {
+    	super(MinFractionalDigitsFacet.class, facetHolder);
+    	this.minFractionalDigits = minFractionalDigits;
+    }
 
 }

@@ -102,8 +102,7 @@ implements MixedInAction {
 
         if(!isExplicitlyNamed) {
             var memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
-            this.addFacet(
-                    new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
+            new MemberNamedFacetForStaticMemberName(memberName, facetHolder);
         }
     }
 

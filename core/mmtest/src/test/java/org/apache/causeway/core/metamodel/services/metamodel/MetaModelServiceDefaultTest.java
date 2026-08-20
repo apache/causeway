@@ -29,7 +29,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;

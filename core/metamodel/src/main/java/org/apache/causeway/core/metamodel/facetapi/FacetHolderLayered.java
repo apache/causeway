@@ -22,11 +22,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides a merged view of the <i>local</i> and the <i>shared</i> list of {@link Facet}s,
@@ -46,7 +45,7 @@ record FacetHolderLayered(
     @NonNull Identifier featureIdentifier,
     @NonNull FacetHolder shared,
     @NonNull FacetHolder local)
-implements FacetHolder {
+implements FacetHolderInternal {
 
     @Override
     public Identifier getFeatureIdentifier() { return featureIdentifier; }
@@ -66,12 +65,27 @@ implements FacetHolder {
     }
 
     @Override
-    public void addFacet(final @NonNull Facet facet) {
+    public void addFacet(final @Nullable Facet facet) {
+    	if(facet==null)
+    		return;
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
         var facetHolder = facet.isObjectTypeSpecific()
                 ? local
                 : shared;
-        facetHolder.addFacet(facet);
+        _BindUtil.resolveInternalElseFail(facetHolder)
+        	.addFacet(facet);
+    }
+
+    @Override
+    public void removeFacet(@Nullable final Facet facet) {
+    	if(facet==null)
+    		return;
+        // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
+        var facetHolder = facet.isObjectTypeSpecific()
+                ? local
+                : shared;
+        _BindUtil.resolveInternalElseFail(facetHolder)
+        	.removeFacet(facet);
     }
 
     @Override
@@ -134,13 +148,13 @@ implements FacetHolder {
         if(local.getFacetCount()==0)
             return shared.streamFacetRankings();
         return streamPopulatedFacetTypes()
-                .map(facetType->getFacetRanking(facetType).orElseThrow());
+                .map(facetType->lookupFacetRanking(facetType).orElseThrow());
     }
 
     @Override
-    public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        var localFacetRanking = local.getFacetRanking(facetType);
-        var sharedFacetRanking = shared.getFacetRanking(facetType);
+    public Optional<FacetRanking> lookupFacetRanking(final Class<? extends Facet> facetType) {
+        var localFacetRanking = local.lookupFacetRanking(facetType);
+        var sharedFacetRanking = shared.lookupFacetRanking(facetType);
 
         if(localFacetRanking.isEmpty())
             return sharedFacetRanking;

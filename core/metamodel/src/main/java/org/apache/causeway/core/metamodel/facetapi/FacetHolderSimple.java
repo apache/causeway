@@ -23,10 +23,10 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides a (simple) list of {@link Facet}s.
@@ -35,7 +35,7 @@ record FacetHolderSimple(
     MetaModelContext metaModelContext,
     Identifier featureIdentifier,
     Map<Class<? extends Facet>, FacetRanking> rankingByType)
-implements FacetHolder {
+implements FacetHolderInternal {
 
     public FacetHolderSimple(
             final @NonNull MetaModelContext metaModelContext,
@@ -61,14 +61,26 @@ implements FacetHolder {
     }
 
     @Override
-    public void addFacet(final @NonNull Facet facet) {
+    public void addFacet(final @Nullable Facet facet) {
+    	if(facet==null)
+    		return;
         rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new)
             .add(facet);
     }
 
     @Override
+    public void removeFacet(@Nullable final Facet facet) {
+    	if(facet==null)
+    		return;
+    	lookupFacetRanking(facet.facetType())
+    		.ifPresent(ranking->{
+    			ranking.remove(facet);
+    		});
+    }
+
+    @Override
     public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
-        return getFacetRanking(facetType)
+        return lookupFacetRanking(facetType)
             .flatMap(facetRanking->facetRanking.getWinner(facetType));
     }
 
@@ -92,7 +104,7 @@ implements FacetHolder {
     }
 
     @Override
-    public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
+    public Optional<FacetRanking> lookupFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
     }
 

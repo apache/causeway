@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegex;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
@@ -29,6 +26,8 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.annotprop.FaFace
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+
+import jakarta.inject.Inject;
 
 public class CssOnActionFromConfiguredRegexPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -41,20 +40,17 @@ extends MetaModelPostProcessorAbstract {
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
-        if(objectAction.isDeclaredOnMixin()) {
-            return; // don't process mixin main method, instead process its peer
-        }
+        if(objectAction.isDeclaredOnMixin())
+			return; // don't process mixin main method, instead process its peer
 
         if(!objectAction.containsNonFallbackFacet(FaFacet.class)) {
-            FacetUtil.addFacetIfPresent(
-                FaFacetOnMemberFromConfiguredRegex
-                    .create(objectSpecification, objectAction));
+            FaFacetOnMemberFromConfiguredRegex
+                .create(objectSpecification, objectAction);
         }
 
         if(!objectAction.containsNonFallbackFacet(CssClassFacet.class)) {
-            FacetUtil.addFacetIfPresent(
-                CssClassFacetOnActionFromConfiguredRegex
-                    .create(objectAction.getId(), objectAction));
+            CssClassFacetOnActionFromConfiguredRegex
+                .create(objectAction.getId(), objectAction);
         }
     }
 

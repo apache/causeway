@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -65,9 +68,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
-
 record XmlLayoutRespectingFacetInstaller(
         SpecificationLoader specLoader) {
 
@@ -88,7 +88,7 @@ record XmlLayoutRespectingFacetInstaller(
         var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
         // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
-        var precedence = bsGrid.fallback()
+        final var precedence = bsGrid.fallback()
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 

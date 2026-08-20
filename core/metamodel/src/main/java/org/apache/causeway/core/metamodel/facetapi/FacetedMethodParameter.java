@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets;
+package org.apache.causeway.core.metamodel.facetapi;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 public record FacetedMethodParameter(
     int paramIndex,
@@ -58,5 +56,6 @@ public record FacetedMethodParameter(
     public String toString() {
         return resolvedType.toString();
     }
+
 
 }

@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
@@ -52,7 +51,6 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-
         var parameterName = processParameterContext.parameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
@@ -62,9 +60,7 @@ extends FacetFactoryAbstract {
 
         var naturalName = _Strings.asNaturalName.apply(parameterName);
         var facetHolder = processParameterContext.facetHolder();
-
-        FacetUtil.addFacet(
-                new NamedFacetForParameterUsingReflection(naturalName, facetHolder));
+        new NamedFacetForParameterUsingReflection(naturalName, facetHolder);
     }
 
 }

@@ -39,6 +39,8 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.AccessorFacetFactory;
@@ -46,8 +48,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;

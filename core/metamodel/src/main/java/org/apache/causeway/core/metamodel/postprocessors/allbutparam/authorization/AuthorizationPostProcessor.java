@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
@@ -27,6 +25,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.inject.Inject;
 
 public class AuthorizationPostProcessor
     extends MetaModelPostProcessorAbstract {
@@ -38,26 +38,26 @@ public class AuthorizationPostProcessor
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
-        addFacet(objectSpecification);
+        createFacet(objectSpecification);
     }
 
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
-        addFacet(act);
+        createFacet(act);
     }
 
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        addFacet(prop);
+        createFacet(prop);
     }
 
     @Override
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        addFacet(coll);
+        createFacet(coll);
     }
 
-    private static void addFacet(final FacetHolder facetHolder) {
-        facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder));
+    private static void createFacet(final FacetHolder facetHolder) {
+        new AuthorizationFacetImpl(facetHolder);
     }
 
 }

@@ -44,10 +44,8 @@ implements MetaModelRefiner {
         if (!domainServiceIfAny.isPresent())
 			return;
         var facetHolder = processClassContext.facetHolder();
-
-        addFacetIfPresent(
-                AliasedFacetForDomainServiceAnnotation
-                    .create(domainServiceIfAny, processClassContext.cls(), facetHolder));
+        AliasedFacetForDomainServiceAnnotation
+            .create(domainServiceIfAny, processClassContext.cls(), facetHolder);
     }
 
     @Override

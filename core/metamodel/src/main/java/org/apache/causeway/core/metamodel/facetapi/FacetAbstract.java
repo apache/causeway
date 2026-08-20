@@ -27,7 +27,7 @@ import lombok.experimental.Accessors;
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
-	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull Class<? extends Facet> facetType;
 
     @Override
@@ -35,7 +35,7 @@ implements Facet, HasMetaModelContext {
     	return Precedence.DEFAULT;
     }
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull FacetHolder facetHolder;
 
     protected FacetAbstract(
@@ -43,7 +43,7 @@ implements Facet, HasMetaModelContext {
             final FacetHolder facetHolder) {
         this.facetType = facetType;
         this.facetHolder = facetHolder;
-        //TODO refactor facetHolder.addFacet(this);
+        _BindUtil.bind(this);
     }
 
     @Override

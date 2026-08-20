@@ -21,26 +21,21 @@ package org.apache.causeway.core.metamodel.facets.object.layout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.LayoutUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
+import org.jspecify.annotations.NonNull;
 
-public record LayoutPrefixFacetForUiEvent(
-    @NonNull String origin,
-    @NonNull Class<? extends LayoutUiEvent<Object>> layoutUiEventClass,
-    @NonNull MetamodelEventService metamodelEventService,
-    @NonNull FacetHolder facetHolder,
-    Facet.@NonNull Precedence precedence
-) implements LayoutPrefixFacet {
+public final class LayoutPrefixFacetForUiEvent
+extends FacetAbstract
+implements LayoutPrefixFacet {
 
     // -- FACTORIES
 
@@ -59,12 +54,28 @@ public record LayoutPrefixFacetForUiEvent(
                             .domainObjectLayout().layoutUiEvent().postForDefault()))
                 .map(layoutUiEvent -> new LayoutPrefixFacetForUiEvent("DomainObjectLayoutAnnotationWithLayoutUiEvent",
                     _Casts.uncheckedCast(layoutUiEvent), metamodelEventService,
-                    facetHolder, Precedence.EVENT));
+                    facetHolder));
+    }
+
+    private final String origin;
+    private final Class<? extends LayoutUiEvent<Object>> layoutUiEventClass;
+	private final MetamodelEventService metamodelEventService;
+
+    private LayoutPrefixFacetForUiEvent(
+    	    @NonNull final String origin,
+    	    @NonNull final Class<? extends LayoutUiEvent<Object>> layoutUiEventClass,
+    	    @NonNull final MetamodelEventService metamodelEventService,
+    	    @NonNull final FacetHolder facetHolder) {
+    	super(LayoutPrefixFacet.class, facetHolder);
+    	this.origin = origin;
+    	this.layoutUiEventClass = layoutUiEventClass;
+    	this.metamodelEventService = metamodelEventService;
     }
 
     // -- METHODS
 
-    @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
+    @Override
+    public Precedence precedence() { return Precedence.EVENT; }
 
     @Override
     public String layoutPrefix(final ManagedObject managedObject) {
@@ -87,7 +98,7 @@ public record LayoutPrefixFacetForUiEvent(
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
     	LayoutPrefixFacet.super.visitAttributes(visitor);
-        visitor.accept("origin", origin());
+        visitor.accept("origin", origin);
         visitor.accept("layoutUiEventClass", layoutUiEventClass);
     }
 

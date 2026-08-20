@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -51,9 +50,6 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        var facetHolder = processMethodContext.facetHolder();
-
         var pdfjsViewerIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                     PdfJsViewer.class,
@@ -62,15 +58,9 @@ extends FacetFactoryAbstract {
 
         pdfjsViewerIfAny.ifPresent(
             pdfjsViewer -> {
-
                 getServiceInjector().injectServicesInto(
-
-                    FacetUtil.addFacet(
-                            PdfJsViewerFacetFromAnnotation
-                            .create(pdfjsViewer, facetHolder))
-
-                );
-
+                    PdfJsViewerFacetFromAnnotation
+                        .create(pdfjsViewer, processMethodContext.facetHolder()));
             }
         );
     }

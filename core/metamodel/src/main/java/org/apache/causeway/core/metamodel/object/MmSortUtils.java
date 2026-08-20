@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;

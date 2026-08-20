@@ -37,45 +37,42 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-
         var facetHolder = processClassContext.facetHolder();
         var domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
         var metamodelEventService = this.metamodelEventService.get();
 
-        addFacetIfPresent(TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
+            .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(LayoutPrefixFacetForUiEvent.create(
-                    domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        LayoutPrefixFacetForUiEvent
+        	.create(domainObjectLayoutIfAny, metamodelEventService, facetHolder);
 
-        addFacetIfPresent(CssClassFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        CssClassFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(FaFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        FaFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(ObjectDescribedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        ObjectDescribedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(ObjectNamedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        ObjectNamedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(TableDecoratorFacetForDomainObjectLayoutAnnotation
-                        .create(domainObjectLayoutIfAny, facetHolder));
+        TableDecoratorFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(PagedFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
+        PagedFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(BookmarkPolicyFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
-
-        return;
+        BookmarkPolicyFacetForDomainObjectLayoutAnnotation
+            .create(domainObjectLayoutIfAny, facetHolder);
     }
 
     private final _Lazy<MetamodelEventService> metamodelEventService = _Lazy.threadSafe(()->

@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,61 +43,16 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class FacetUtil {
 
-    /**
-     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder()}.
-     * @param facet - non-null
-     * @return the argument as is
-     */
-    public static <F extends Facet> F addFacet(final @NonNull F facet) {
-        facet.facetHolder().addFacet(facet);
-        return facet;
-    }
-
-    /**
-     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder} based on precedence. Acts as a no-op if facet is <tt>null</tt>.
-     * @param facetIfAny - null-able (for fail-safety)
-     * @return the argument as is - or just in case if null converted to an Optional.empty()
-     */
-    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
-        if (facetIfAny == null) return Optional.empty();
-
-        facetIfAny
-            .ifPresent(facet->facet.facetHolder().addFacet(facet));
-        return facetIfAny;
-    }
-
-    /**
-     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder} based on precedence.
-     *
-     * @return whether given {@code facetList} contains any non-<tt>null</tt> facets
-     */
-    public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
-        boolean addedFacets = false;
-        for (var facet : facetList) {
-            addedFacets = addFacetIfPresent(Optional.ofNullable(facet)).isPresent()
-                    | addedFacets;
-        }
-        return addedFacets;
-    }
-
     public static <T extends Facet> XmlSchema.ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
-
         return new XmlSchema.ExtensionData<>() {
-
-            @Override
-            public int size() {
+            @Override public int size() {
                 return facetHolder.getFacetCount();
             }
-
             @SuppressWarnings("unchecked")
-            @Override
-            public void visit(final BiConsumer<Class<T>, T> elementConsumer) {
+            @Override public void visit(final BiConsumer<Class<T>, T> elementConsumer) {
                 facetHolder.streamFacets()
-                .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
+                	.forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
             }
-
         };
     }
 
@@ -108,11 +64,15 @@ public final class FacetUtil {
      * then adds given facet to its facetHolder, honoring precedence.
      */
     public static void updateFacet(final @Nullable Facet facet) {
-        if(facet==null) return;
+        if(facet==null)
+        	return;
 
+        var facetHolder = facet.facetHolder();
         var qualifierKey = QualifiedFacet.Key.forFacet(facet);
 
-        facet.facetHolder().getFacetRanking(facet.facetType())
+        _BindUtil.unbind(facet);
+
+        facetHolder.lookupFacetRanking(facet.facetType())
             .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
                     qualifierKey, // discriminate by qualifier
                     facet.getClass()::isInstance, // facet filter
@@ -121,7 +81,7 @@ public final class FacetUtil {
                         : prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
                 ));
 
-        addFacet(facet);
+        _BindUtil.bind(facet);
     }
 
     /**
@@ -185,13 +145,13 @@ public final class FacetUtil {
         if(facetHolders==null)
             return Optional.empty();
         return Stream.of(facetHolders)
-        .filter(Objects::nonNull)
-        .filter(x -> !excluded.test(x))
-        .map(facetHolder->facetHolder.lookupFacet(facetType).orElse(null))
-        .filter(Objects::nonNull)
-        .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
-                ? b
-                : a);
+	        .filter(Objects::nonNull)
+	        .filter(x -> !excluded.test(x))
+	        .map(facetHolder->facetHolder.lookupFacet(facetType).orElse(null))
+	        .filter(Objects::nonNull)
+	        .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
+	                ? b
+	                : a);
     }
 
     /**
@@ -209,17 +169,18 @@ public final class FacetUtil {
             final Function<FacetHolder, E> facetFactory) {
 
         T winnerFacet = facetHolder.lookupFacet(facetType).orElse(null);
-        if(winnerFacet==null) return Optional.of(addFacet(facetFactory.apply(facetHolder)));
+        if(winnerFacet==null)
+        	return Optional.of(_BindUtil.bind(facetFactory.apply(facetHolder)));
         if(winnerFacet.getClass().equals(facetExactClass)) return Optional.of(winnerFacet).map(facetExactClass::cast);
         // check if we are allowed to override based on precedence
         if(winnerFacet.precedence().ordinal()<=overrideUpToIncluding.ordinal())
-            return Optional.of(addFacet(facetFactory.apply(facetHolder)));
+            return Optional.of(_BindUtil.bind(facetFactory.apply(facetHolder)));
         // not allowed to override
         return Optional.empty();
     }
 
 	public static void visitAttributes(final Facet facet, final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(facet.getClass()));
+        visitor.accept("facet", canonicalFacetShortName(facet));
         visitor.accept("precedence", facet.precedence().name());
 
         var interactionAdvisors = interactionAdvisors(facet, ", ");
@@ -228,6 +189,13 @@ public final class FacetUtil {
         if(!interactionAdvisors.isEmpty()) {
             visitor.accept("interactionAdvisors", interactionAdvisors);
         }
+	}
+
+	// for anonymous inner classes use the container class name instead.
+	private static final Pattern NUMERIC_ENDING = Pattern.compile("\\.\\d{1,2}$");
+	private String canonicalFacetShortName(final Facet facet) {
+		var matcher = NUMERIC_ENDING.matcher(ClassUtils.getShortName(facet.getClass()));
+		return matcher.replaceAll("");
 	}
 
     private String interactionAdvisors(final Facet facet, final String delimiter) {

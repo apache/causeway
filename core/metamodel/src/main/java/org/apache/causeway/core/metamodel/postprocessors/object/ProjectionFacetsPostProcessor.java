@@ -18,13 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.object;
 
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
@@ -34,6 +29,9 @@ import org.apache.causeway.core.metamodel.facets.object.projection.ident.TitleFa
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.Nullable;
+
+import jakarta.inject.Inject;
 
 public class ProjectionFacetsPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -45,26 +43,22 @@ extends MetaModelPostProcessorAbstract {
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
+        ProjectionFacetFromProjectingProperty.create(objectSpecification)
+	        .ifPresent(projectionFacet->{
 
-        FacetUtil.addFacetIfPresent(
-                ProjectionFacetFromProjectingProperty.create(objectSpecification))
-        .ifPresent(projectionFacet->{
-
-            var titleFacet = objectSpecification.lookupFacet(TitleFacet.class).orElse(null);
-            if(canOverwrite(titleFacet)) {
-                FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-            var iconFacet = objectSpecification.lookupFacet(IconFacet.class).orElse(null);
-            if(canOverwrite(iconFacet)) {
-                FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-            var cssClassFacet = objectSpecification.lookupFacet(CssClassFacet.class).orElse(null);
-            if(canOverwrite(cssClassFacet)) {
-                FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
-            }
-
-        });
-
+	            var titleFacet = objectSpecification.lookupFacet(TitleFacet.class).orElse(null);
+	            if(canOverwrite(titleFacet)) {
+	                new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	            var iconFacet = objectSpecification.lookupFacet(IconFacet.class).orElse(null);
+	            if(canOverwrite(iconFacet)) {
+	                new IconFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	            var cssClassFacet = objectSpecification.lookupFacet(CssClassFacet.class).orElse(null);
+	            if(canOverwrite(cssClassFacet)) {
+	                new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification);
+	            }
+	        });
     }
 
     // -- HELPER

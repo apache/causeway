@@ -38,15 +38,12 @@ extends MemberSupportFacetFactoryAbstract {
     protected void search(
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
-
         methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(describedMethod->{
-            addFacet(
-                    new MemberDescribedFacetViaMethod(
-                            describedMethod, processMethodContext.facetHolder()));
-        });
+	        .streamMethodsMatchingSignature(NO_ARG)
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(describedMethod->
+	            new MemberDescribedFacetViaMethod(
+	                    describedMethod, processMethodContext.facetHolder()));
     }
 
 }

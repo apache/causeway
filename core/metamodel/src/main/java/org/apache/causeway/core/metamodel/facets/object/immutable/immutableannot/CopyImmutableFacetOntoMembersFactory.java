@@ -19,10 +19,9 @@
 package org.apache.causeway.core.metamodel.facets.object.immutable.immutableannot;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -47,7 +46,7 @@ public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
         owningSpec
             .lookupFacet(ImmutableFacet.class)
             .ifPresent(immutableFacet->
-                FacetUtil.addFacet(immutableFacet.clone(member)));
+                immutableFacet.clone(member));
     }
 
 }

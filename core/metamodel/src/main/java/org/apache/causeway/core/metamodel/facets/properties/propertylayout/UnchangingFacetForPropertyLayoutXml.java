@@ -22,15 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class UnchangingFacetForPropertyLayoutXml
 extends UnchangingFacetAbstract
@@ -48,23 +44,16 @@ implements QualifiedFacet {
                 || repainting == Repainting.NOT_SPECIFIED)
             return Optional.empty();
         return Optional.of(
-            new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder, precedence, qualifier));
+            new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 @Override final public @Nullable String qualifier() { return qualifier; }
+            });
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
 
     private UnchangingFacetForPropertyLayoutXml(
             final boolean unchanging,
-            final FacetHolder holder,
-            final Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(unchanging, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

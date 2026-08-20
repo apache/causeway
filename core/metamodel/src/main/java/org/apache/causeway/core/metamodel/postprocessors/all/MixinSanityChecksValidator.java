@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

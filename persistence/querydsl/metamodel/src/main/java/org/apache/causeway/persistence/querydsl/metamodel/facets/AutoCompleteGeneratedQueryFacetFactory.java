@@ -77,13 +77,12 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
 
         var queryDslSupport = queryDslSupport();
 
-        addFacet(new AutoCompleteUsingQueryDslFacet(
+        new AutoCompleteUsingQueryDslFacet(
                 processClassContext.cls(),
                 processClassContext.facetHolder(),
                 repositoryAdditionalPredicateObject, repositoryAdditionalPredicateMethod,
                 limitResults, minLength,
-                queryDslSupport
-        ));
+                queryDslSupport);
     }
 
     @Override
@@ -115,11 +114,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
         var autoCompleteUsingQueryDslFacet = Optional.ofNullable(declaringSpec.lookupFacet(AutoCompleteFacet.class).orElse(null))
                 .filter(AutoCompleteUsingQueryDslFacet.class::isInstance)
                 .map(AutoCompleteUsingQueryDslFacet.class::cast)
-                .orElseGet(() -> {
-                    var newFacet = new AutoCompleteUsingQueryDslFacet(declaringSpec.correspondingClass(), declaringSpec, null, null, null, null, queryDslSupport());
-                    declaringSpec.addFacet(newFacet);
-                    return newFacet;
-                });
+                .orElseGet(() -> new AutoCompleteUsingQueryDslFacet(declaringSpec.correspondingClass(), declaringSpec, null, null, null, null, queryDslSupport()));
 
         autoCompleteUsingQueryDslFacet.addSearchableProperty(propertyId, queryDslAutoCompletePolicy);
     }

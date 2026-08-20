@@ -22,10 +22,10 @@ import java.math.BigDecimal;
 
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
@@ -52,20 +52,17 @@ implements MetaModelRefiner {
 
         var jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-        addFacetIfPresent(
-                MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder));
+
+        MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder);
 
         if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))
             return; // skip fractional facets
 
-        addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder));
+        MaxFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder);
 
         if (getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()) {
-            addFacetIfPresent(
-                    MinFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder));
+            MinFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder);
         }
-
     }
 
     @Override

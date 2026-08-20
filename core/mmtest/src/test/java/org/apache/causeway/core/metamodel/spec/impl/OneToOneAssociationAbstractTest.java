@@ -18,26 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -45,6 +36,11 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class OneToOneAssociationAbstractTest {
@@ -65,7 +61,7 @@ class OneToOneAssociationAbstractTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
         facetedMethod = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "firstName");
 
@@ -73,7 +69,7 @@ class OneToOneAssociationAbstractTest {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod, objectSpecification) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public ManagedObject get(
                     final ManagedObject fromObject,
@@ -142,29 +138,14 @@ class OneToOneAssociationAbstractTest {
     }
 
     @Test
-    public void notPersistedWhenDerived() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
-        facetedMethod.addFacet(mockFacet);
+    void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
+    	new SnapshotExcludeFacetAbstract(facetedMethod) {};
         assertTrue(objectAssociation.isExcludedFromSnapshots());
     }
 
     @Test
-    public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
-        facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isExcludedFromSnapshots());
-    }
-
-    @Test
-    public void persisted() throws Exception {
+    void persisted() throws Exception {
         assertFalse(objectAssociation.isExcludedFromSnapshots());
-    }
-
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {
-        final T facet = Mockito.mock(typeToMock);
-        Mockito.when(facet.facetType()).thenReturn(_Casts.uncheckedCast(typeToMock));
-        Mockito.when(facet.precedence()).thenReturn(precedence);
-        return facet;
     }
 
 }

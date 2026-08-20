@@ -24,9 +24,9 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
@@ -109,8 +109,8 @@ extends FacetFactoryAbstract {
     void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacet("InferSafeForMixedInProperty", SemanticsOf.SAFE, facetedMethod));
-        addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
+        new ActionSemanticsFacet("InferSafeForMixedInProperty", SemanticsOf.SAFE, facetedMethod);
+        ContributingFacetAbstract.createAsProperty(facetedMethod);
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -143,8 +143,6 @@ extends FacetFactoryAbstract {
         var propertyDomainEventFacet = PropertyDomainEventFacet
                 .create(propertyIfAny, processMethodContext, getterFacetIfAny);
 
-        addFacet(propertyDomainEventFacet);
-
         getterFacetIfAny.ifPresent(getterFacet->{
             /* if the property is mutable (never true for mixed-in props),
              * then replace the current setter and clear facets with equivalents that
@@ -156,9 +154,9 @@ extends FacetFactoryAbstract {
                      * such that any changes to the latter during post processing
                      * are reflected here as well
                      */
-                    addFacet(new PropertyModifyFacet(
+                    new PropertyModifyFacet(
                     		PropertySetterFacet.class,
-                            propertyDomainEventFacet, getterFacet, setterFacet, holder)));
+                            propertyDomainEventFacet, getterFacet, setterFacet, holder));
         });
 
     }
@@ -167,9 +165,8 @@ extends FacetFactoryAbstract {
         var facetHolder = processMethodContext.facetHolder();
 
         // search for @Property(editing=...)
-        addFacetIfPresent(
-                DisabledFacetForPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
+        DisabledFacetForPropertyAnnotation
+            .create(propertyIfAny, facetHolder);
     }
 
     void processCommandPublishing(
@@ -192,19 +189,17 @@ extends FacetFactoryAbstract {
             return;
 
         // check for @Property(commandPublishing=...)
-        addFacet(
-                CommandPublishingFacetForPropertyAnnotation
-                .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector()));
+
+        CommandPublishingFacetForPropertyAnnotation
+            .create(propertyIfAny, getConfiguration(), facetHolder,  getServiceInjector());
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         var facetHolder = processMethodContext.facetHolder();
 
-        addFacetIfPresent(
-                ProjectingFacetFromPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
-
+        ProjectingFacetFromPropertyAnnotation
+            .create(propertyIfAny, facetHolder);
     }
 
     void processExecutionPublishing(
@@ -229,9 +224,8 @@ extends FacetFactoryAbstract {
             return;
 
         // check for @Property(executionPublishing=...)
-        addFacet(
-                ExecutionPublishingFacetForPropertyAnnotation
-                .create(propertyIfAny, getConfiguration(), holder));
+        ExecutionPublishingFacetForPropertyAnnotation
+            .create(propertyIfAny, getConfiguration(), holder);
     }
 
     void processMaxLength(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -239,36 +233,32 @@ extends FacetFactoryAbstract {
         var holder = processMethodContext.facetHolder();
 
         // search for @Property(maxLength=...)
-        addFacetIfPresent(
-                MaxLengthFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        MaxLengthFacetForPropertyAnnotation
+                .create(propertyIfAny, holder);
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         var holder = processMethodContext.facetHolder();
 
         // search for @Property(mustSatisfy=...)
-        addFacetIfPresent(
-                MustSatisfySpecificationFacetForPropertyAnnotation
-                .create(propertyIfAny, holder, getFactoryService()));
+        MustSatisfySpecificationFacetForPropertyAnnotation
+            .create(propertyIfAny, holder, getFactoryService());
     }
 
     void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         var holder = processMethodContext.facetHolder();
 
         // search for @Property(entityPropertyChangePublishing=...)
-        addFacetIfPresent(
-                EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
 
     void processSnapshot(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         var holder = processMethodContext.facetHolder();
 
         // search for @Property(notPersisted=...)
-        addFacetIfPresent(
-                SnapshotExcludeFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        SnapshotExcludeFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
 
     void processOptional(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -279,14 +269,12 @@ extends FacetFactoryAbstract {
         // check for @Nullable
         var hasNullable = method.isAnnotatedAsNullable();
 
-        addFacetIfPresent(
-                MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method, holder));
+        MandatoryFacetInvertedByNullableAnnotationOnProperty
+            .create(hasNullable, method, holder);
 
         // search for @Property(optional=...)
-        addFacetIfPresent(
-                MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method, holder));
+        MandatoryFacetForPropertyAnnotation
+            .create(propertyIfAny, method, holder);
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -295,25 +283,22 @@ extends FacetFactoryAbstract {
 
         // check for @Pattern first
         var patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
-        if (addFacetIfPresent(
-                RegExFacetForPatternAnnotationOnProperty
-                .create(patternIfAny, returnType, holder))
+        if (RegExFacetForPatternAnnotationOnProperty
+            	.create(patternIfAny, returnType, holder)
                 .isPresent())
 			return;
 
         // else search for @Property(pattern=...)
-        addFacetIfPresent(
-                RegExFacetForPropertyAnnotation
-                .create(propertyIfAny, returnType, holder));
+        RegExFacetForPropertyAnnotation
+                .create(propertyIfAny, returnType, holder);
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         var holder = processMethodContext.facetHolder();
 
         // check for @Property(maxLength=...)
-        addFacetIfPresent(
-                FileAcceptFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
+        FileAcceptFacetForPropertyAnnotation
+            .create(propertyIfAny, holder);
     }
 
 }

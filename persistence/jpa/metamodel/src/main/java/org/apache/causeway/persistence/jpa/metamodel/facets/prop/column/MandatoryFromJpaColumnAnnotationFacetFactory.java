@@ -21,7 +21,6 @@ package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -45,7 +44,6 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         final Optional<Boolean> nullable1 = processMethodContext.synthesizeOnMethod(JoinColumn.class)
                 .map(JoinColumn::nullable);
 
@@ -60,18 +58,15 @@ implements MetaModelRefiner {
         var semantics = Semantics.required(!nullable);
 
         var facetHolder = processMethodContext.facetHolder();
-        FacetUtil.addFacet(
-                new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder));
+        new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder);
     }
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(objectSpec->{
-
             objectSpec
                     .streamProperties(MixedIn.EXCLUDED)
                     .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
-
         });
     }
 

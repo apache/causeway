@@ -40,14 +40,14 @@ extends FacetFactoryAbstract {
         var cls = processClassContext.cls();
 
         CollectionSemantics.valueOf(cls)
-        .ifPresent(collectionType->{
-            var facetHolder = processClassContext.facetHolder();
-            if (collectionType.isArray()) {
-                addFacet(new JavaArrayFacet(facetHolder));
-            }
-            addFacet(new JavaCollectionFacet(facetHolder));
-            addFacetIfPresent(TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder));
-        });
+	        .ifPresent(collectionType->{
+	            var facetHolder = processClassContext.facetHolder();
+	            if (collectionType.isArray()) {
+	                new JavaArrayFacet(facetHolder);
+	            }
+	            new JavaCollectionFacet(facetHolder);
+	            TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder);
+	        });
     }
 
 }

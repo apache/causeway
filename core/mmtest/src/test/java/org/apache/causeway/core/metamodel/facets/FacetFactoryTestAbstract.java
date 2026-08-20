@@ -37,6 +37,8 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;

@@ -30,9 +30,6 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 public class FaFacetForDomainObjectLayoutXml
 extends FaStaticFacetAbstract
 implements QualifiedFacet {
@@ -47,25 +44,18 @@ implements QualifiedFacet {
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = domainObjectLayout.getCssClassFaPosition();
         return cssClassFa != null
-            ? Optional.of(new FaFacetForDomainObjectLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence, qualifier))
+            ? Optional.of(new FaFacetForDomainObjectLayoutXml(cssClassFa, cssClassFaPosition, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
 
     private FaFacetForDomainObjectLayoutXml(
             final String value,
             final CssClassFaPosition position,
-            final FacetHolder holder,
-            final Facet.Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(value, position, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

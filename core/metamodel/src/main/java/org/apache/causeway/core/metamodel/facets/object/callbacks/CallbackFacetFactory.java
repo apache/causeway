@@ -76,7 +76,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             .collect(Can.toCan());
 
         if(callbackMethods.isNotEmpty()) {
-            addFacet(callbackFacetConstructor.apply(callbackMethods, facetHolder));
+            callbackFacetConstructor.apply(callbackMethods, facetHolder);
         }
 
     }

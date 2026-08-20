@@ -20,12 +20,18 @@ package org.apache.causeway.core.metamodel.facets.object.navchild;
 
 import java.lang.invoke.MethodHandle;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.util.DeweyOrderComparator;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides the parent/child relationship information between pojos
@@ -33,23 +39,67 @@ import org.apache.causeway.core.metamodel.util.DeweyOrderComparator;
  *
  * @since 3.2
  */
-public sealed interface NavigableSubtreeFacet 
-extends Facet, TreeAdapter<Object>
-permits NavigableSubtreeFacetRecord {
-    
+@Slf4j
+public final class NavigableSubtreeFacet
+extends FacetAbstract
+implements TreeAdapter<Object>{
+
     // -- FACTORY
-    
+
     static <T> Optional<NavigableSubtreeFacet> create(
         final Can<NavigableSubtreeSequenceFacet> navigableSubtreeSequenceFacets,
         final FacetHolder facetHolder) {
         if(navigableSubtreeSequenceFacets.isEmpty()) return Optional.empty();
-        
+
         var comparator = new DeweyOrderComparator();
         Can<MethodHandle> subNodesMethodHandles = navigableSubtreeSequenceFacets
             .sorted((a, b)->comparator.compare(a.sequence(), b.sequence()))
             .map(NavigableSubtreeSequenceFacet::methodHandle);
-        
-        return Optional.of(new NavigableSubtreeFacetRecord(subNodesMethodHandles, facetHolder));
+
+        return Optional.of(new NavigableSubtreeFacet(subNodesMethodHandles, facetHolder));
     }
-    
+
+
+	private final Can<MethodHandle> subNodesMethodHandles;
+
+	NavigableSubtreeFacet(
+			final Can<MethodHandle> subNodesMethodHandles,
+		    final FacetHolder facetHolder) {
+    	super(NavigableSubtreeFacet.class, facetHolder);
+    	this.subNodesMethodHandles = subNodesMethodHandles;
+    }
+
+    @Override
+    public final int childCountOf(final Object node) {
+        return subNodesMethodHandles.stream()
+            .mapToInt(mh->{
+                try {
+                    return _NullSafe.sizeAutodetect(mh.invoke(node));
+                } catch (Throwable e) {
+                    log.error("failed to invoke subNodesMethodHandle {}",
+                            mh.toString(), e);
+                    return 0;
+                }
+            })
+            .sum();
+    }
+
+    @Override
+    public final Stream<Object> childrenOf(final Object node) {
+        return subNodesMethodHandles.stream()
+            .flatMap(mh->{
+                try {
+                    return _NullSafe.streamAutodetect(mh.invoke(node));
+                } catch (Throwable e) {
+                    throw _Exceptions.unrecoverable(e);
+                }
+            });
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	NavigableSubtreeFacet.super.visitAttributes(visitor);
+        visitor.accept("subNodesMethodHandles", subNodesMethodHandles.map(MethodHandle::toString));
+    }
+
 }

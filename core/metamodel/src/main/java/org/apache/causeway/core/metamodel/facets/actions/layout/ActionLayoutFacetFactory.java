@@ -54,50 +54,40 @@ extends FacetFactoryAbstract {
                         .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), ActionLayout.class));
 
         // cssClass
-        addFacetIfPresent(
-                CssClassFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        CssClassFacetForActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // cssClassFa
-        addFacetIfPresent(
-                FaFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        FaFacetForActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // describedAs
-        addFacetIfPresent(
-                MemberDescribedFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        MemberDescribedFacetForActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // hidden
-        addFacetIfPresent(
-                HiddenFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        HiddenFacetForActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // layoutGroup (explicit via field set, or implicit via associated collection)
-        addFacetIfPresent(
-                LayoutGroupFacetFromActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        LayoutGroupFacetFromActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // named
-        addFacetIfPresent(
-                NamedFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        NamedFacetForActionLayoutAnnotation
+            .create(actionLayoutIfAny, facetHolder);
 
         // promptStyle
-        addFacetIfPresent(
-            createPromptStyleFacetForActionLayoutAnnotation(actionLayoutIfAny, getConfiguration(), facetHolder));
+        createPromptStyleFacetForActionLayoutAnnotation(actionLayoutIfAny, getConfiguration(), facetHolder);
 
         // position
-        var actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
+        ActionPositionFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder)
                 .orElseGet(()->new ActionPositionFacetFallback(facetHolder));
 
-        addFacet(actionPositionFacet);
-
         // sequence (layout)
-        addFacetIfPresent(
-                LayoutOrderFacetFromActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
+        LayoutOrderFacetFromActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder);
     }
 
     // -- HELPER

@@ -32,8 +32,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForParentedCollectionNavigation;
 import org.apache.causeway.core.metamodel.facets.actions.synthetic.ActionInvocationFacetForScalarReferenceNavigation;
@@ -178,15 +177,15 @@ record SyntheticNavigationActionFactory(
                 parameterNames);
 
         installCommonFacets(facetedMethod);
-        FacetUtil.addFacet(new LayoutGroupFacetForParentedCollectionNavigation(
-                collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod));
-        FacetUtil.addFacet(new LayoutOrderFacetForParentedCollectionNavigation(collection, facetedMethod));
-        FacetUtil.addFacet(new ParentedCollectionNavigationFacetDefault(collection, facetedMethod));
-        FacetUtil.addFacet(new DisabledFacetForEmptyParentedCollectionNavigation(collection, facetedMethod));
-        FacetUtil.addFacet(new ActionValidationFacetForParentedCollectionNavigation(
-                collection, filterProperties, facetedMethod));
-        FacetUtil.addFacet(new ActionInvocationFacetForParentedCollectionNavigation(
-                ownerSpec, collection.getElementType(), collection, filterProperties, facetedMethod));
+        new LayoutGroupFacetForParentedCollectionNavigation(
+                collection.getId(), collection.getCanonicalFriendlyName(), facetedMethod);
+        new LayoutOrderFacetForParentedCollectionNavigation(collection, facetedMethod);
+        new ParentedCollectionNavigationFacetDefault(collection, facetedMethod);
+        new DisabledFacetForEmptyParentedCollectionNavigation(collection, facetedMethod);
+        new ActionValidationFacetForParentedCollectionNavigation(
+                collection, filterProperties, facetedMethod);
+        new ActionInvocationFacetForParentedCollectionNavigation(
+                ownerSpec, collection.getElementType(), collection, filterProperties, facetedMethod);
         installParameterFacets(filterProperties, facetedMethod);
 
         return ObjectActionDefault.forMethod(facetedMethod);
@@ -205,28 +204,28 @@ record SyntheticNavigationActionFactory(
                 new String[0]);
 
         installCommonFacets(facetedMethod);
-        FacetUtil.addFacet(new LayoutGroupFacetForScalarReferenceNavigation(
-                reference.getId(), reference.getCanonicalFriendlyName(), facetedMethod));
-        FacetUtil.addFacet(new ScalarReferenceNavigationFacetDefault(reference, facetedMethod));
-        FacetUtil.addFacet(new DisabledFacetForNullScalarReferenceNavigation(reference, facetedMethod));
-        FacetUtil.addFacet(new ActionInvocationFacetForScalarReferenceNavigation(
-                ownerSpec, reference.getElementType(), reference, facetedMethod));
+        new LayoutGroupFacetForScalarReferenceNavigation(
+                reference.getId(), reference.getCanonicalFriendlyName(), facetedMethod);
+        new ScalarReferenceNavigationFacetDefault(reference, facetedMethod);
+        new DisabledFacetForNullScalarReferenceNavigation(reference, facetedMethod);
+        new ActionInvocationFacetForScalarReferenceNavigation(
+                ownerSpec, reference.getElementType(), reference, facetedMethod);
 
         return ObjectActionDefault.forMethod(facetedMethod);
     }
 
     private static void installCommonFacets(
             final FacetedMethod facetedMethod) {
-        FacetUtil.addFacet(new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod));
-        FacetUtil.addFacet(new CssClassFacetForParentedCollectionNavigation(facetedMethod));
-        FacetUtil.addFacet(new FaFacetForParentedCollectionNavigation(facetedMethod));
-        FacetUtil.addFacet(new ActionSemanticsFacet(
-                "synthetic navigation", SemanticsOf.SAFE, facetedMethod));
-        FacetUtil.addFacetIfPresent(CommandPublishingFacetForActionAnnotation.create(
+        new MemberNamedFacetForStaticMemberName("Navigate To", facetedMethod);
+        new CssClassFacetForParentedCollectionNavigation(facetedMethod);
+        new FaFacetForParentedCollectionNavigation(facetedMethod);
+        new ActionSemanticsFacet(
+                "synthetic navigation", SemanticsOf.SAFE, facetedMethod);
+        CommandPublishingFacetForActionAnnotation.create(
                 Optional.empty(),
                 facetedMethod.getConfiguration(),
                 facetedMethod.getServiceInjector(),
-                facetedMethod));
+                facetedMethod);
     }
 
     private static Can<ObjectAssociation> filterPropertiesOf(
@@ -269,9 +268,9 @@ record SyntheticNavigationActionFactory(
         for (int i = 0; i < filterProperties.size(); i++) {
             var property = filterProperties.getElseFail(i);
             var parameter = facetedMethod.parameters().getElseFail(i);
-            FacetUtil.addFacet(new ParamNamedFacetForParentedCollectionNavigation(
-                    property.getCanonicalFriendlyName(), parameter));
-            FacetUtil.addFacet(new MandatoryFacetForParameterAnnotation.Optional(parameter));
+            new ParamNamedFacetForParentedCollectionNavigation(
+                    property.getCanonicalFriendlyName(), parameter);
+            new MandatoryFacetForParameterAnnotation.Optional(parameter);
         }
     }
 

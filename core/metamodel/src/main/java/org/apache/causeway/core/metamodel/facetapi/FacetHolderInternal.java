@@ -16,22 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets;
+package org.apache.causeway.core.metamodel.facetapi;
 
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
+import org.jspecify.annotations.Nullable;
 
-/**
- * A {@link FacetHolder} that also has a {@link ResolvedType}.
- * <p>
- * Used to represent class members when building up the metamodel.
- */
-public sealed interface TypedFacetHolder extends HasFacetHolder
-permits FacetedMethod, FacetedMethodParameter {
+interface FacetHolderInternal extends FacetHolder {
 
-    FeatureType featureType();
-    ResolvedType resolvedType();
+    /**
+     * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
+     *
+     * <p> Any previously added facet of the same type will be overwritten,
+     * when given {@link Facet} has equal or higher precedence.
+     * Otherwise is ignored.
+     *
+     * <p> If facet is <code>null</code> acts as a no-op.
+     */
+	void addFacet(@Nullable Facet facet);
+
+	void removeFacet(@Nullable Facet facet);
 
 }

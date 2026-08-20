@@ -22,15 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class BookmarkPolicyFacetForDomainObjectLayoutXml
 extends BookmarkPolicyFacetAbstract
@@ -46,24 +42,17 @@ implements QualifiedFacet {
         final BookmarkPolicy bookmarkPolicy = domainObjectLayout.getBookmarking();
         return bookmarkPolicy != null
                 && bookmarkPolicy != BookmarkPolicy.NEVER
-            ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(bookmarkPolicy, holder, precedence, qualifier))
+            ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(bookmarkPolicy, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private BookmarkPolicyFacetForDomainObjectLayoutXml(
             final BookmarkPolicy bookmarkPolicy,
-            final FacetHolder holder,
-            final Facet.Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(bookmarkPolicy, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

@@ -45,7 +45,7 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Objec
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

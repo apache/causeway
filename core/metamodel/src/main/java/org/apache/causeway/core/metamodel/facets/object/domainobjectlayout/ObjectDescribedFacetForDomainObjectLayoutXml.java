@@ -29,9 +29,6 @@ import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 public class ObjectDescribedFacetForDomainObjectLayoutXml
 extends ObjectDescribedFacetAbstract
 implements QualifiedFacet {
@@ -45,24 +42,17 @@ implements QualifiedFacet {
             return Optional.empty();
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null
-            ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder, precedence, qualifier))
+            ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private ObjectDescribedFacetForDomainObjectLayoutXml(
             final String described,
-            final FacetHolder holder,
-            final Facet.Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(described, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

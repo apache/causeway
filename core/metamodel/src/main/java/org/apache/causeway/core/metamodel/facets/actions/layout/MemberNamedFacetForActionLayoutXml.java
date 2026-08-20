@@ -22,15 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class MemberNamedFacetForActionLayoutXml
 extends MemberNamedFacetWithStaticTextAbstract
@@ -45,24 +41,17 @@ implements QualifiedFacet {
             return Optional.empty();
         final String named = _Strings.emptyToNull(actionLayout.getNamed());
         return named != null
-            ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder, precedence, qualifier))
+            ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private MemberNamedFacetForActionLayoutXml(
             final String named,
-            final FacetHolder holder,
-            final Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(named, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

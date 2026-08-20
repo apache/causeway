@@ -18,11 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members.navigation;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -30,6 +27,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.inject.Inject;
 
 /**
  * Installs the {@link NavigationFacetFromHiddenType} on all of the
@@ -61,7 +60,8 @@ public class NavigationFacetFromHiddenTypePostProcessor extends MetaModelPostPro
 
     private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {
         if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
-            FacetUtil.addFacetIfPresent(NavigationFacetFromHiddenType.create(navigatedType, facetHolder));
+            NavigationFacetFromHiddenType
+            	.create(navigatedType, facetHolder);
         }
     }
 

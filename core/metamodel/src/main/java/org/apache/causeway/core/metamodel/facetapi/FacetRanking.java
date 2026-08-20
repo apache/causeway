@@ -22,11 +22,10 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Acts as a facade to {@link TypedFacetRanking}, encapsulating type casting complexity.
@@ -47,6 +46,10 @@ public record FacetRanking(
 
     public <F extends Facet> void add(final F facet) {
         delegate(facet).add(facet);
+    }
+
+    public <F extends Facet> void remove(final F facet) {
+    	delegate(facet).remove(facet);
     }
 
     public <F extends Facet> void addAll(final FacetRanking facetRanking) {

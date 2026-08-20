@@ -16,24 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
+package org.apache.causeway.core.metamodel.facetapi;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
-import jakarta.inject.Inject;
+/**
+ * A {@link FacetHolder} that also has a {@link ResolvedType}.
+ * <p>
+ * Used to represent class members when building up the metamodel.
+ */
+public sealed interface TypedFacetHolder extends HasFacetHolder
+permits FacetedMethod, FacetedMethodParameter {
 
-public class ObjectValidPropertiesFacetImplFactory
-extends FacetFactoryAbstract {
+    FeatureType featureType();
+    ResolvedType resolvedType();
 
-    @Inject
-    public ObjectValidPropertiesFacetImplFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY);
-    }
-
-    @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        new ObjectValidPropertiesFacetImpl(processClassContaxt.facetHolder());
-    }
 }

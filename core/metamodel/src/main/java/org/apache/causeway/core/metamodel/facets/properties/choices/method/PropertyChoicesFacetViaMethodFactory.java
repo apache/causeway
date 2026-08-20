@@ -43,14 +43,11 @@ extends MemberSupportFacetFactoryAbstract {
         var getterType = getterOrMixinMain.getReturnType();
 
         methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(choicesMethod->{
-            addFacet(
-                    new PropertyChoicesFacetViaMethod(
-                            choicesMethod, getterType, processMethodContext.facetHolder()));
-        });
-
+	        .streamMethodsMatchingSignature(NO_ARG)
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(choicesMethod->
+	        	new PropertyChoicesFacetViaMethod(
+	        			choicesMethod, getterType, processMethodContext.facetHolder()));
     }
 
 }

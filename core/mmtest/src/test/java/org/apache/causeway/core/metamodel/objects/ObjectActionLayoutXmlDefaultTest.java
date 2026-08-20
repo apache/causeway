@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.objects;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -30,15 +26,19 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.apache.causeway.core.mmtestsupport.TranslationService_forTesting;
+import org.junit.jupiter.api.Test;
 
 class ObjectActionLayoutXmlDefaultTest
 extends MetaModelTestAbstract {
@@ -51,6 +51,10 @@ extends MetaModelTestAbstract {
     protected void afterSetUp() {
 
         mockFacetedMethod = mock(FacetedMethod.class);
+
+        var facetHolder = FacetHolder.simple(null, null);
+        when(mockFacetedMethod.facetHolder())
+        .thenReturn(facetHolder);
 
         when(mockFacetedMethod.getFeatureIdentifier())
         .thenReturn(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));

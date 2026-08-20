@@ -40,13 +40,11 @@ extends MemberSupportFacetFactoryAbstract {
             final MethodFinder methodFinder) {
 
         methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(namedMethod->{
-            addFacet(
-                    new MemberNamedFacetViaMethod(
-                            namedMethod, processMethodContext.facetHolder()));
-        });
+	        .streamMethodsMatchingSignature(NO_ARG)
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(namedMethod->
+                new MemberNamedFacetViaMethod(
+                        namedMethod, processMethodContext.facetHolder()));
     }
 
 }

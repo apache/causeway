@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.hide.method;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 /**
  * Sets up {@link ActionParameterHiddenFacet}.
@@ -44,9 +44,8 @@ extends ActionParameterSupportFacetFactoryAbstract {
             final ParamSupportingMethodSearchResult searchResult) {
         var hideMethod = searchResult.supportingMethod();
         var patConstructor = searchResult.patConstructor();
-        addFacet(
-                new ActionParameterHiddenFacetViaMethod(
-                        hideMethod, patConstructor, paramAsHolder));
+		new ActionParameterHiddenFacetViaMethod(
+		        hideMethod, patConstructor, paramAsHolder);
     }
 
 }

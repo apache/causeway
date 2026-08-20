@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -45,12 +44,11 @@ implements QualifiedFacet {
             return Optional.empty();
         final String named = _Strings.emptyToNull(collectionLayout.getNamed());
         return named != null
-            ? Optional.of(new MemberNamedFacetForCollectionLayoutXml(named, holder, precedence, qualifier))
+            ? Optional.of(new MemberNamedFacetForCollectionLayoutXml(named, holder, qualifier) {
+            	@Override public Precedence precedence() { return precedence; }
+            })
             : Optional.empty();
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
@@ -58,10 +56,8 @@ implements QualifiedFacet {
     private MemberNamedFacetForCollectionLayoutXml(
             final String named,
             final FacetHolder holder,
-            final Precedence precedence,
             final @Nullable String qualifier) {
         super(named, holder);
-        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

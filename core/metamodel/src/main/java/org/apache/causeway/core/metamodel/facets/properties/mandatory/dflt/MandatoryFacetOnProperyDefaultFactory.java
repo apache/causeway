@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.properties.mandatory.dflt;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -50,9 +49,8 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(
-                MandatoryFacetDefault
-                .required(processMethodContext.facetHolder()));
+        MandatoryFacetDefault
+            .required(processMethodContext.facetHolder());
     }
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+
 @FunctionalInterface
 public interface HasFacetedMethod {
 

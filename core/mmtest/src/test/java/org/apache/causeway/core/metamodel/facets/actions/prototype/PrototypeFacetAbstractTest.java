@@ -18,34 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.prototype;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ActionVisibilityContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mockito;
 
 class PrototypeFacetAbstractTest {
 
-    @Mock VisibilityContext mockVisibilityContext;
-    @Mock FacetHolder mockFacetHolder;
-
-    @Test
-    public void allCombinations() throws Exception {
-        givenWhenThen(DeploymentType.PROTOTYPING, null);
-        givenWhenThen(DeploymentType.PRODUCTION, "Prototyping action not visible in production mode");
-    }
-
-    protected void givenWhenThen(final DeploymentType deploymentType, final String expected) {
+    @ParameterizedTest
+    @EnumSource(DeploymentType.class)
+    void allCombinations(final DeploymentType deploymentType)  {
         // given
-        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder, deploymentType){};
+    	var facetHolder = FacetHolder.forTesting(null);
+        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(facetHolder, deploymentType){};
 
         // when
+        var mockVisibilityContext = Mockito.mock(ActionVisibilityContext.class);
         final String reason = facet.hides(mockVisibilityContext);
 
         // then
-        assertEquals(expected, reason);
+        switch (deploymentType) {
+			case PROTOTYPING -> assertEquals(null, reason);
+			case PRODUCTION -> assertEquals("Prototyping action not visible in production mode", reason);
+		}
     }
+
 }

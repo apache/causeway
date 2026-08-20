@@ -43,13 +43,14 @@ extends FacetFactoryAbstract {
         var facetHolder = processClassContext.facetHolder();
 
         var entityIfAny = processClassContext.synthesizeOnType(Entity.class);
-        if(!entityIfAny.isPresent()) return;
+        if(!entityIfAny.isPresent())
+        	return;
 
         var embeddableIfAny = processClassContext.synthesizeOnType(Embeddable.class);
-        if(embeddableIfAny.isPresent()) return; // ignore when also has @Embeddable
+        if(embeddableIfAny.isPresent())
+        	return; // ignore when also has @Embeddable
 
-        addFacet(
-                new JpaEntityFacet(facetHolder, cls));
+        new JpaEntityFacet(facetHolder, cls);
     }
 
 }

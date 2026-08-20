@@ -22,43 +22,46 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.Nullable;
 
-record BSGridFacet(
-    GridService gridService,
-    Map<String, BSGrid> normalizedGridByLayoutPrefix,
-    _Lazy<LayoutPrefixFacet> layoutFacetLazy,
-    @NonNull FacetHolder facetHolder,
-    Facet.@NonNull Precedence precedence)
+final class BSGridFacet
+extends FacetAbstract
 implements GridFacet {
 
-    // -- FACTORIES
+	// -- FACTORIES
 
-    public static GridFacet create(
-            final FacetHolder facetHolder,
-            final GridService gridService) {
-        return new BSGridFacet(gridService, new ConcurrentHashMap<>(),
-            _Lazy.threadSafe(()->facetHolder.lookupFacet(LayoutPrefixFacet.class).orElse(null)),
-                facetHolder, Precedence.DEFAULT);
-    }
+	public static GridFacet create(
+			final FacetHolder facetHolder,
+			final GridService gridService) {
+		return new BSGridFacet(gridService, facetHolder);
+	}
+
+	// -- CONSTRUCTION
+
+	private final GridService gridService;
+	private final Map<String, BSGrid> normalizedGridByLayoutPrefix;
+	private final _Lazy<LayoutPrefixFacet> layoutFacetLazy;
+
+    private BSGridFacet(final GridService gridService, final FacetHolder facetHolder) {
+		super(GridFacet.class, facetHolder);
+		this.gridService = gridService;
+		this.normalizedGridByLayoutPrefix = new ConcurrentHashMap<>();
+		this.layoutFacetLazy = _Lazy.threadSafe(()->facetHolder.lookupFacet(LayoutPrefixFacet.class).orElse(null));
+	}
 
     // -- METHODS
-
-    @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
 
     @Override
     public BSGrid getGrid(final @Nullable ManagedObject mo) {
@@ -123,18 +126,20 @@ implements GridFacet {
         return (ObjectSpecification) facetHolder();
     }
 
-    record NoLayout(
-            @NonNull FacetHolder facetHolder,
-            Facet.@NonNull Precedence precedence) implements GridFacet {
-        @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
-
-        @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        	GridFacet.super.visitAttributes(visitor);
-        }
+    final static class NoLayout extends FacetAbstract implements GridFacet {
+    	NoLayout(final FacetHolder facetHolder) {
+    		super(GridFacet.class, facetHolder);
+    	}
+    	@Override public Precedence precedence() {
+    		return Precedence.LOW;
+    	}
         @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
             return null;
         }
         @Override public void clearCache() {}
+        @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        	GridFacet.super.visitAttributes(visitor);
+        }
     }
 
 }

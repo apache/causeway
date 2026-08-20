@@ -23,7 +23,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -79,35 +78,27 @@ extends MetaModelPostProcessorAbstract {
 			return;
 
         if(!hasChoicesOrAutoComplete(param)) {
-
-            if(FacetUtil
-                    .addFacetIfPresent(
-                        ActionParameterChoicesFacetFromAction
-                            .create(objectAction, objectSpecification, param))
-                    .isPresent())
+            if(ActionParameterChoicesFacetFromAction
+	                .create(objectAction, objectSpecification, param)
+	                .isPresent())
 				/* ActionParameterChoicesFacetFromAction has precedence over
                  * ActionParameterChoicesFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
 
-            if(FacetUtil
-                    .addFacetIfPresent(
-                        ActionParameterChoicesFacetFromElementType
-                            .create(param))
+            if(ActionParameterChoicesFacetFromElementType
+                    .create(param)
                     .isPresent())
 				/* ActionParameterChoicesFacetFromElementType has precedence over
                  * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
 
-            if(FacetUtil
-                    .addFacetIfPresent(
-                            ActionParameterAutoCompleteFacetFromElementType
-                                .create(param))
+            if(ActionParameterAutoCompleteFacetFromElementType
+                    .create(param)
                     .isPresent())
 				/* skips validation below */
                 return;
-
         }
 
         if(MetaModelVisitor.SKIP_ABSTRACT.test(objectSpecification)) {
@@ -125,17 +116,16 @@ extends MetaModelPostProcessorAbstract {
         if(!hasMemberLevelDefaults(prop)) {
             prop.getElementType()
             .lookupNonFallbackFacet(DefaultedFacet.class)
-            .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
-                                        specFacet, facetedMethodFor(prop))));
+            .ifPresent(specFacet -> new PropertyDefaultFacetFromDefaultedFacet(
+                                        specFacet, facetedMethodFor(prop)));
         }
         if(!hasChoicesOrAutoComplete(prop)) {
 
             var choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
 
-            FacetUtil.addFacetIfPresent(
-                    PropertyChoicesFacetFromChoicesFacet
-                    .create(choicesFacetIfAny, facetedMethodFor(prop)));
+            PropertyChoicesFacetFromChoicesFacet
+                .create(choicesFacetIfAny, facetedMethodFor(prop));
         }
     }
 
@@ -209,9 +199,8 @@ extends MetaModelPostProcessorAbstract {
     private static void addCollectionParamDefaultsFacetIfNoneAlready(
             final ObjectActionParameter collectionParam) {
         if(!hasMemberLevelDefaults(collectionParam)) {
-            FacetUtil.addFacet(
-                    ActionParameterDefaultsFacetFromAssociatedCollection
-                    .create(collectionParam));
+            ActionParameterDefaultsFacetFromAssociatedCollection
+                    .create(collectionParam);
         }
     }
 
@@ -219,8 +208,7 @@ extends MetaModelPostProcessorAbstract {
             final OneToManyAssociation coll,
             final ObjectActionParameter param) {
         if(!hasChoicesOrAutoComplete(param)) {
-            FacetUtil.addFacet(
-                    new ActionParameterChoicesFacetFromParentedCollection(param, coll));
+            new ActionParameterChoicesFacetFromParentedCollection(param, coll);
         }
     }
 

@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -34,13 +34,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
-public record IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-    Class<? extends IconUiEvent<Object>> iconUiEventClass,
-    MetamodelEventService metamodelEventService,
-    FacetHolder facetHolder)
+public final class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+extends FacetAbstract
 implements IconFacet {
 
-    public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
+	public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
@@ -57,7 +55,18 @@ implements IconFacet {
                 _Casts.uncheckedCast(iconUiEvent), metamodelEventService, facetHolder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
+	private final Class<? extends IconUiEvent<Object>> iconUiEventClass;
+	private final MetamodelEventService metamodelEventService;
+
+	private IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
+			final Class<? extends IconUiEvent<Object>> iconUiEventClass,
+			final MetamodelEventService metamodelEventService,
+			final FacetHolder facetHolder) {
+		super(IconFacet.class, facetHolder);
+		this.iconUiEventClass = iconUiEventClass;
+    	this.metamodelEventService = metamodelEventService;
+	}
+
     @Override public Precedence precedence() { return Precedence.EVENT; }
 
     @Override
@@ -87,6 +96,8 @@ implements IconFacet {
     	IconFacet.super.visitAttributes(visitor);
         visitor.accept("iconUiEventClass", iconUiEventClass);
     }
+
+    // --HELPER
 
     private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, final ObjectSupport.IconSize iconSize) {
         var iconUiEvent = EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo)

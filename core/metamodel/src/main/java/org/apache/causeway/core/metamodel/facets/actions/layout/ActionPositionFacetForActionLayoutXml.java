@@ -21,15 +21,11 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class ActionPositionFacetForActionLayoutXml
 extends ActionPositionFacetAbstract
@@ -45,23 +41,16 @@ implements QualifiedFacet {
 
         final var position = actionLayout.getPosition();
         return Optional.ofNullable(position)
-                .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence, qualifier));
+                .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder) {
+                	 @Override final public Precedence precedence() { return precedence; }
+                	 @Override final public @Nullable String qualifier() { return qualifier; }
+                });
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
 
     private ActionPositionFacetForActionLayoutXml(
             final org.apache.causeway.applib.annotation.ActionLayout.Position position,
-            final FacetHolder holder,
-            final Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(position, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

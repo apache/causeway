@@ -20,15 +20,16 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import jakarta.validation.constraints.Digits;
-
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 
-record MaxFractionalDigitsFacetFromJakartaDigitsAnnotation(
-        int maxFractionalDigits,
-        FacetHolder facetHolder)
+import jakarta.validation.constraints.Digits;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+final class MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
+extends FacetAbstract
 implements MaxFractionalDigitsFacet {
 
     static Optional<MaxFractionalDigitsFacet> create(
@@ -38,7 +39,14 @@ implements MaxFractionalDigitsFacet {
             .map(digits-> new MaxFractionalDigitsFacetFromJakartaDigitsAnnotation(digits.fraction(), holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return MaxFractionalDigitsFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxFractionalDigits;
+
+    private MaxFractionalDigitsFacetFromJakartaDigitsAnnotation(
+            final int maxFractionalDigits,
+            final FacetHolder facetHolder) {
+    	super(MaxFractionalDigitsFacet.class, facetHolder);
+    	this.maxFractionalDigits = maxFractionalDigits;
+    }
 
 }

@@ -22,14 +22,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.HasTranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -86,16 +85,6 @@ extends HasMetaModelContext, HasTranslationContext {
         return lookupFacet(facetType, facet->!facet.precedence().isFallback());
     }
 
-    /**
-     * Get the facet of the specified type (as per the type it reports from
-     * {@link Facet#facetType()}).
-     * @deprecated
-     */
-    @Deprecated
-    default <T extends Facet> T getFacet(final Class<T> facetType) {
-        return lookupFacet(facetType).orElse(null);
-    }
-
     // -- CONTAINS
 
     /**
@@ -135,20 +124,10 @@ extends HasMetaModelContext, HasTranslationContext {
                 .map(requiredType::cast);
     }
 
-    /**
-     * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
-     *
-     * <p>
-     * Any previously added facet of the same type will be overwritten,
-     * when given {@link Facet} has equal or higher precedence.
-     * Otherwise is ignored.
-     */
-    void addFacet(@NonNull Facet facet);
-
     // -- VALIDATION SUPPORT
 
     Stream<FacetRanking> streamFacetRankings();
-    Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
+    Optional<FacetRanking> lookupFacetRanking(Class<? extends Facet> facetType);
 
     // -- TRANSLATION CONTEXT
 

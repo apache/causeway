@@ -21,13 +21,15 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 
-record MaxTotalDigitsFacetFromValueSemanticsAnnotation(
-        int maxTotalDigits,
-        FacetHolder facetHolder)
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+final class  MaxTotalDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
 implements MaxTotalDigitsFacet {
 
     static Optional<MaxTotalDigitsFacet> create(
@@ -39,7 +41,14 @@ implements MaxTotalDigitsFacet {
                 new MaxTotalDigitsFacetFromValueSemanticsAnnotation(valueSemantics.maxTotalDigits(), holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return MaxTotalDigitsFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxTotalDigits;
+
+    private MaxTotalDigitsFacetFromValueSemanticsAnnotation(
+            final int maxTotalDigits,
+            final FacetHolder facetHolder) {
+    	super(MaxTotalDigitsFacet.class, facetHolder);
+    	this.maxTotalDigits = maxTotalDigits;
+    }
 
 }

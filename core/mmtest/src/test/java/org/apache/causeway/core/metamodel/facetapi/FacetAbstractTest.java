@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class FacetAbstractTest {
 
@@ -47,7 +46,6 @@ class FacetAbstractTest {
     protected void setUp() throws Exception {
         facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
-        facetHolder.addFacet(fooFacet);
     }
 
     @AfterEach

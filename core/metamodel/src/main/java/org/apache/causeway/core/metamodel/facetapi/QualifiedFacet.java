@@ -1,8 +1,7 @@
 package org.apache.causeway.core.metamodel.facetapi;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Facet} can be qualified (similar to Spring beans) in order to allow for alternative
@@ -19,7 +18,6 @@ import org.apache.causeway.commons.internal.base._Strings;
  *
  * @since 4.0
  */
-@FunctionalInterface
 public interface QualifiedFacet {
 
     record Key(
@@ -55,6 +53,6 @@ public interface QualifiedFacet {
         }
     }
 
-    @Nullable String qualifier();
+    default @Nullable String qualifier() { return null; }
 
 }
