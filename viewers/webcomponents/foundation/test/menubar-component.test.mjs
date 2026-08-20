@@ -74,6 +74,7 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
   const secondPanel = {id: 'second-panel', hidden: true};
   const firstDisclosure = fakeDisclosure('first-panel', true);
   const secondDisclosure = fakeDisclosure('second-panel', false);
+  const barDisclosure = fakeDisclosure('bar-content', true);
   const action = {
     disabled: false,
     getAttribute(name) {
@@ -89,15 +90,18 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
       return bar.dispatchEvent(event);
     }
   };
-  const known = new Set([firstDisclosure, secondDisclosure, firstPanel, secondPanel, action]);
+  const known = new Set([firstDisclosure, secondDisclosure, barDisclosure, firstPanel, secondPanel, action]);
   bar.contains = candidate => known.has(candidate);
   bar.querySelector = selector => {
     if (selector.startsWith('#first-panel')) return firstPanel;
     if (selector.startsWith('#second-panel')) return secondPanel;
     if (selector.includes('aria-controls="first-panel"')) return firstDisclosure;
     if (selector.includes('aria-controls="second-panel"')) return secondDisclosure;
-    if (selector.includes('aria-expanded="true"')) {
+    if (selector.includes('[data-causeway-menu-disclosure]') && selector.includes('aria-expanded="true"')) {
       return [firstDisclosure, secondDisclosure].find(disclosure => disclosure.getAttribute('aria-expanded') === 'true') ?? null;
+    }
+    if (selector.includes('[data-causeway-bar-disclosure]') && selector.includes('aria-expanded="true"')) {
+      return barDisclosure.getAttribute('aria-expanded') === 'true' ? barDisclosure : null;
     }
     return null;
   };
@@ -106,11 +110,16 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
     : [];
 
   let request;
-  bar.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => request = event.detail);
+  let requestCount = 0;
+  bar.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => {
+    request = event.detail;
+    requestCount += 1;
+  });
   const actionClick = new Event('click');
   actionClick.target = action;
   bar.dispatchEvent(actionClick);
   assert.equal(request.actionId, 'welcomeMessage');
+  assert.equal(requestCount, 1);
   assert.equal(Object.hasOwn(request, 'focusTarget'), false);
   assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
   assert.equal(firstPanel.hidden, true);
@@ -137,8 +146,12 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
   escape.key = 'Escape';
   escape.target = {closest: () => null};
   bar.dispatchEvent(escape);
+  assert.equal(escape.defaultPrevented, true);
   assert.equal(secondDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(secondPanel.hidden, true);
   assert.equal(secondDisclosure.focusCount, 1);
+  assert.equal(barDisclosure.getAttribute('aria-expanded'), 'true');
+  assert.equal(requestCount, 1);
   document.body.removeChild(bar);
 });
 
