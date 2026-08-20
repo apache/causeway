@@ -71,4 +71,4 @@ A later implementation proposal may modify `generic-htmx-web-component-viewer` a
 - Adds research notes, disposable prototypes, visual comparisons, accessibility evidence, performance measurements, a dependency and licensing assessment, and an architectural decision record.
 - May identify future changes to foundation theme CSS, web-component renderers, HTMX shell asset loading, Maven dependencies, or frontend build tooling.
 - Does not change GraphQL contracts, domain interaction semantics, canonical routing, HTMX fragment ownership, or public Causeway component APIs.
-- Is not ready for promotion until the current menu behavior is resolved and complete design, specification, and task artifacts have been reviewed.
+- Requires complete design, specification, task, and evidence artifacts before any toolkit implementation is proposed.

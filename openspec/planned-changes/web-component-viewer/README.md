@@ -3,12 +3,12 @@
 These are fully drafted follow-on changes for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
 The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, value-semantics change, collection-windowing change, application-entry-points change, composite-object change, and menubar change are archived.
-The generic HTMX viewer change is active.
-The remaining drafts are queued for serial promotion, beginning with `add-generic-vue-web-component-viewer`.
+The generic HTMX viewer change is archived.
+The theming-kit analysis `analyze-web-component-theming-kit` is the current active change and was promoted outside the evidence-backed viewer sequence to evaluate shared visual infrastructure.
+The remaining sequenced drafts are queued for serial promotion, beginning with `add-generic-vue-web-component-viewer`.
 
-Unless marked outline-only, each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
-The outline-only research draft `analyze-web-component-theming-kit` currently contains only `proposal.md` and is not ready for promotion or placement in the promotion order.
-After the active change is archived, promote the next complete draft verbatim:
+Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
+After the active change is archived, promote the next draft verbatim:
 
 ```shell
 git mv openspec/planned-changes/web-component-viewer/<name> openspec/changes/<name>
@@ -33,7 +33,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 8 | `add-rich-graphql-application-entry-points` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
 | 9 | `add-composite-object-web-component` *(archived)* | Complete | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<causeway-object>` |
 | 10 | `add-menubar-web-components` *(archived)* | Complete | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
-| 11 | `add-generic-htmx-web-component-viewer` *(active)* | P1 | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
+| 11 | `add-generic-htmx-web-component-viewer` *(archived)* | Complete | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
 | 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
 | 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
 | 14 | `add-rich-graphql-member-metadata` | P2 | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
