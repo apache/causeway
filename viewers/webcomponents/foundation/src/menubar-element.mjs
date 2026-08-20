@@ -190,6 +190,9 @@ export class CausewayMenubarElement extends HTMLElementBase {
     const disclosure = panel?.id
       ? this.querySelector?.(`[data-causeway-menu-disclosure][aria-controls="${globalThis.CSS?.escape ? CSS.escape(panel.id) : panel.id}"]`)
       : null;
+    if (disclosure) {
+      this.#closeMenu(disclosure, {focus: true});
+    }
     actionButton.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_REQUEST, Object.freeze({
       actionId,
       serviceLogicalTypeName,
@@ -197,9 +200,6 @@ export class CausewayMenubarElement extends HTMLElementBase {
       identity: null,
       context
     }), {cancelable: true}));
-    if (disclosure) {
-      this.#closeMenu(disclosure, {focus: true});
-    }
   }
 
   #handleKeydown(event) {
@@ -209,12 +209,14 @@ export class CausewayMenubarElement extends HTMLElementBase {
       const expanded = this.querySelector?.('[data-causeway-menu-disclosure][aria-expanded="true"]');
       if (expanded) {
         event.preventDefault();
+        event.stopPropagation();
         this.#closeMenu(expanded, {focus: true});
         return;
       }
       const barButton = this.querySelector?.('[data-causeway-bar-disclosure][aria-expanded="true"]');
       if (barButton) {
         event.preventDefault();
+        event.stopPropagation();
         this.#toggleDisclosure(barButton, false);
         barButton.focus?.();
       }

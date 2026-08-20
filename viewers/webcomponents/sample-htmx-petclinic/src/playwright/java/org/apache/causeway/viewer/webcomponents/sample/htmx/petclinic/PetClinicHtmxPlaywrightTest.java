@@ -207,6 +207,11 @@ class PetClinicHtmxPlaywrightTest {
         openHome();
 
         openMenu("Pet Owners");
+        menuDisclosure("Pet Owners").press("Escape");
+        assertMenuClosedAndFocused("Pet Owners");
+        assertThat(page.locator(PROMPT).count()).isZero();
+
+        openMenu("Pet Owners");
         page.locator(ROUTE_PAGE).dispatchEvent("click");
         assertMenuClosed("Pet Owners");
         openMenu("Pet Owners");
@@ -311,6 +316,8 @@ class PetClinicHtmxPlaywrightTest {
         openMenu("Pet Owners");
         serviceAction("create").click();
         waitForPrompt("create");
+        assertMenuClosed("Pet Owners");
+        assertFocused(parameter("name"));
         fillParameter("name", "Playwright Owner");
         fillParameter("knownAs", "PW");
         fillParameter("telephoneNumber", "020 7000 0000");
