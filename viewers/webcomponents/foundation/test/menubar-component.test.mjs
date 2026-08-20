@@ -63,6 +63,85 @@ test('semantic bar renders labelled navigation, disclosures, text-safe hints, di
   document.body.removeChild(bar);
 });
 
+test('menu action selection, outside activation, Escape, and sibling opening close transient disclosures', () => {
+  const parsed = parseCausewayMenuBarsXml(MENU_BARS_XML);
+  const plan = applyServiceActionStates(parsed.plan, MENU_ACTION_STATES);
+  const bar = new CausewayMenubarPrimaryElement();
+  bar.context = fakeMenuContext(plan);
+  document.body.appendChild(bar);
+
+  const firstPanel = {id: 'first-panel', hidden: false};
+  const secondPanel = {id: 'second-panel', hidden: true};
+  const firstDisclosure = fakeDisclosure('first-panel', true);
+  const secondDisclosure = fakeDisclosure('second-panel', false);
+  const action = {
+    disabled: false,
+    getAttribute(name) {
+      return {['data-service-logical-type']: 'causeway.webcomponents.sample.SampleMenu', ['data-action-id']: 'welcomeMessage'}[name] ?? null;
+    },
+    closest(selector) {
+      if (selector === '[data-causeway-service-action]') return this;
+      if (selector === '[data-causeway-menu-panel]') return firstPanel;
+      return null;
+    },
+    dispatchEvent(event) {
+      event.target = this;
+      return bar.dispatchEvent(event);
+    }
+  };
+  const known = new Set([firstDisclosure, secondDisclosure, firstPanel, secondPanel, action]);
+  bar.contains = candidate => known.has(candidate);
+  bar.querySelector = selector => {
+    if (selector.startsWith('#first-panel')) return firstPanel;
+    if (selector.startsWith('#second-panel')) return secondPanel;
+    if (selector.includes('aria-controls="first-panel"')) return firstDisclosure;
+    if (selector.includes('aria-controls="second-panel"')) return secondDisclosure;
+    if (selector.includes('aria-expanded="true"')) {
+      return [firstDisclosure, secondDisclosure].find(disclosure => disclosure.getAttribute('aria-expanded') === 'true') ?? null;
+    }
+    return null;
+  };
+  bar.querySelectorAll = selector => selector.includes('aria-expanded="true"')
+    ? [firstDisclosure, secondDisclosure].filter(disclosure => disclosure.getAttribute('aria-expanded') === 'true')
+    : [];
+
+  let request;
+  bar.addEventListener(CausewaySemanticEvent.ACTION_REQUEST, event => request = event.detail);
+  const actionClick = new Event('click');
+  actionClick.target = action;
+  bar.dispatchEvent(actionClick);
+  assert.equal(request.actionId, 'welcomeMessage');
+  assert.equal(Object.hasOwn(request, 'focusTarget'), false);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(firstPanel.hidden, true);
+  assert.equal(firstDisclosure.focusCount, 1);
+
+  firstDisclosure.setAttribute('aria-expanded', 'true');
+  firstPanel.hidden = false;
+  const outsideClick = new Event('click');
+  outsideClick.target = {};
+  document.dispatchEvent(outsideClick);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(firstDisclosure.focusCount, 1);
+
+  firstDisclosure.setAttribute('aria-expanded', 'true');
+  firstPanel.hidden = false;
+  const siblingClick = new Event('click');
+  siblingClick.target = {closest: selector => selector === '[data-causeway-menu-disclosure]' ? secondDisclosure : null};
+  bar.dispatchEvent(siblingClick);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(secondDisclosure.getAttribute('aria-expanded'), 'true');
+  assert.equal(secondPanel.hidden, false);
+
+  const escape = new Event('keydown', {cancelable: true});
+  escape.key = 'Escape';
+  escape.target = {closest: () => null};
+  bar.dispatchEvent(escape);
+  assert.equal(secondDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(secondDisclosure.focusCount, 1);
+  document.body.removeChild(bar);
+});
+
 test('composite preserves declarative bars, generates only missing effective roles, and shares one generation', async () => {
   const executor = createMenuGraphQLExecutor();
   const composite = new CausewayMenubarsElement();
@@ -138,6 +217,24 @@ test('standard interaction result adds public service target detail', async () =
   assert.equal(detail.result.value, 'Welcome!');
   document.body.removeChild(controller);
 });
+
+function fakeDisclosure(panelId, expanded) {
+  const attributes = new Map([
+    ['aria-controls', panelId],
+    ['aria-expanded', String(expanded)]
+  ]);
+  return {
+    focusCount: 0,
+    getAttribute: name => attributes.get(name) ?? null,
+    setAttribute: (name, value) => attributes.set(name, String(value)),
+    focus() {
+      this.focusCount += 1;
+    },
+    closest(selector) {
+      return selector === '[data-causeway-menu-disclosure]' ? this : null;
+    }
+  };
+}
 
 function fakeMenuContext(plan) {
   const state = Object.freeze({

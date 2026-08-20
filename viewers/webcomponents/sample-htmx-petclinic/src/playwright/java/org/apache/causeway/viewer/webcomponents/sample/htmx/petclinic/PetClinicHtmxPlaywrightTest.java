@@ -172,6 +172,13 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
+        assertThat(page.locator(".causeway-object-actions causeway-action[member='delete']").count()).isEqualTo(1);
+        assertThat(page.locator("[data-causeway-associated-member='name'] causeway-action[member='updateName']").count()).isEqualTo(1);
+        assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='addPet']").count()).isEqualTo(1);
+        assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='removePet']").count()).isEqualTo(1);
+        assertThat(page.locator("[data-causeway-associated-member='visits'] causeway-action[member='bookVisit']").count()).isEqualTo(1);
+        assertThat(page.locator(".causeway-object-associated-actions").first()
+                .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         page.goBack();
         waitForPageKind("custom");
@@ -200,18 +207,22 @@ class PetClinicHtmxPlaywrightTest {
         openHome();
 
         openMenu("Pet Owners");
+        page.locator(ROUTE_PAGE).dispatchEvent("click");
+        assertMenuClosed("Pet Owners");
+        openMenu("Pet Owners");
         assertThat(petclinicServiceActionIds()).containsExactlyInAnyOrder(
                 "create", "findByName", "findByNameLike", "listAll", "count", "listUpcoming");
 
         final var listAll = serviceAction("listAll");
         listAll.click();
         waitForShellResult("listAll", "4 results");
-        assertFocused("[data-action-id='listAll']");
+        assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
         final var findByName = serviceAction("findByName");
         findByName.click();
         waitForPrompt("findByName");
+        assertMenuClosed("Pet Owners");
         assertFocused(parameter("name"));
         submitPrompt();
         waitForPromptError("mandatory");
@@ -219,7 +230,7 @@ class PetClinicHtmxPlaywrightTest {
         fillParameter("name", "Mary");
         submitPrompt();
         waitForShellResult("findByName", "1 results");
-        assertFocused("[data-action-id='findByName']");
+        assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
         final var findByNameLike = serviceAction("findByNameLike");
@@ -227,28 +238,47 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         cancelPrompt();
-        assertFocused("[data-action-id='findByNameLike']");
-        findByNameLike.click();
+        assertMenuClosedAndFocused("Pet Owners");
+        openMenu("Pet Owners");
+        serviceAction("findByNameLike").click();
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         submitPrompt();
         waitForShellResult("findByNameLike", "1 results");
+        assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
         serviceAction("count").click();
         waitForShellResult("count", "4");
-        assertFocused("[data-action-id='count']");
+        assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Visits");
         serviceAction("listUpcoming").click();
         waitForShellResult("listUpcoming", "3 results");
-        assertFocused("[data-action-id='listUpcoming']");
+        assertMenuClosedAndFocused("Visits");
     }
 
     @Test
     @Order(3)
     void propertyEditingAndPromptFocusRemainDeterministic() {
         openObject("petclinic.PetOwner", "s_owner-mary");
+
+        final var disabledName = page.locator("causeway-property[member='name'] .causeway-property-disabled-indicator");
+        disabledName.waitFor();
+        assertThat(disabledName.getAttribute("data-tooltip")).isNotBlank();
+        assertThat(disabledName.getAttribute("tabindex")).isEqualTo("0");
+
+        final var notes = page.locator("causeway-property[member='notes']");
+        final var notesEdit = notes.locator("[data-causeway-action='edit']");
+        revealContainingTab(notes, notesEdit);
+        assertThat(notes.locator(".causeway-property-label").getAttribute("title"))
+                .isEqualTo("Additional notes about this pet owner.");
+        notesEdit.click();
+        final var notesEditor = notes.locator("textarea[data-causeway-editor='notes']");
+        notesEditor.waitFor();
+        assertThat(notesEditor.getAttribute("rows")).isEqualTo("5");
+        notesEditor.fill("First line\nSecond line");
+        notes.locator("[data-causeway-action='cancel']").click();
 
         editProperty("telephoneNumber", "020 7000 1234");
         waitForPropertyValue("telephoneNumber", "020 7000 1234");
@@ -408,12 +438,29 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void openMenu(final String name) {
-        final var disclosure = page.locator("[data-causeway-menu-disclosure]")
-                .filter(new Locator.FilterOptions().setHasText(name)).first();
+        final var disclosure = menuDisclosure(name);
         disclosure.waitFor();
         if (!"true".equals(disclosure.getAttribute("aria-expanded"))) {
             disclosure.click();
         }
+    }
+
+    private Locator menuDisclosure(final String name) {
+        return page.locator("[data-causeway-menu-disclosure]")
+                .filter(new Locator.FilterOptions().setHasText(name)).first();
+    }
+
+    private void assertMenuClosed(final String name) {
+        final var disclosure = menuDisclosure(name);
+        page.waitForFunction("id => { const disclosure = document.querySelector(`[data-causeway-menu-disclosure][aria-controls='${id}']`); const panel = document.getElementById(id); return disclosure?.getAttribute('aria-expanded') === 'false' && panel?.hidden === true; }",
+                disclosure.getAttribute("aria-controls"));
+    }
+
+    private void assertMenuClosedAndFocused(final String name) {
+        final var disclosure = menuDisclosure(name);
+        final var panelId = disclosure.getAttribute("aria-controls");
+        assertMenuClosed(name);
+        assertFocused("[data-causeway-menu-disclosure][aria-controls='" + panelId + "']");
     }
 
     private Locator serviceAction(final String actionId) {
