@@ -25,8 +25,12 @@ public class TypeOfFacetFromType
 extends TypeOfFacetAbstract {
 
     TypeOfFacetFromType(final ResolvedType type, final FacetHolder holder) {
-        // generic type argument resolution on plain type are low priority
-        super(type, holder, Precedence.LOW);
+        super(type, holder);
     }
 
+    @Override
+    public Precedence precedence() {
+    	// generic type argument resolution on plain type are low priority
+    	return Precedence.LOW;
+    }
 }

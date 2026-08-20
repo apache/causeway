@@ -28,7 +28,12 @@ extends MaxLengthFacetAbstract
 implements HasSemanticEqualityByClass {
 
     public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
+        super(Integer.MAX_VALUE, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     /**

@@ -24,8 +24,13 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 public class BookmarkPolicyFacetFallback
 extends BookmarkPolicyFacetAbstract {
 
-    public BookmarkPolicyFacetFallback(FacetHolder facetHolder) {
-        super(BookmarkPolicy.NEVER, facetHolder, Precedence.FALLBACK);
+    public BookmarkPolicyFacetFallback(final FacetHolder facetHolder) {
+        super(BookmarkPolicy.NEVER, facetHolder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

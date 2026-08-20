@@ -62,8 +62,13 @@ extends TypicalLengthFacetAbstract {
             final int typicalLength,
             final TypicalLengthFacet typicalLengthFacet,
             final FacetHolder holder) {
-        super(typicalLength, holder, Precedence.INFERRED);
+        super(typicalLength, holder);
         this.typicalLengthFacet = typicalLengthFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     // -- IMPL

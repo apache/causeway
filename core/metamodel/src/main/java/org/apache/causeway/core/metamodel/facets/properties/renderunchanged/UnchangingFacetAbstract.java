@@ -27,10 +27,6 @@ public abstract class UnchangingFacetAbstract extends SingleValueFacetAbstract<B
         return UnchangingFacet.class;
     }
 
-    protected UnchangingFacetAbstract(final Boolean value, final FacetHolder holder, final Precedence precedence) {
-        super(type(), value, holder, precedence);
-    }
-
     protected UnchangingFacetAbstract(final Boolean value, final FacetHolder holder) {
         super(type(), value, holder);
     }

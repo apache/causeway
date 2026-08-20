@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -29,6 +27,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -52,6 +51,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private BookmarkPolicyFacetForDomainObjectLayoutXml(
@@ -59,7 +61,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Facet.Precedence precedence,
             final @Nullable String qualifier) {
-        super(bookmarkPolicy, holder, precedence);
+        super(bookmarkPolicy, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

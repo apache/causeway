@@ -26,8 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
@@ -40,9 +38,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
@@ -112,8 +111,13 @@ extends SecureViewModelFacet {
             final @Nullable ResolvedConstructor constructorAnyArgs,
             final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
-        super(hmacUrlCodec, holder, Precedence.HIGH);
+        super(hmacUrlCodec, holder);
         this.constructorAnyArgs = constructorAnyArgs;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.HIGH;
     }
 
     @Override

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 /**
@@ -36,8 +35,13 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
     }
 
     private MandatoryFacetDefault(final FacetHolder holder, final Semantics semantics) {
-        // unconditionally created, hence acting as a fallback
-        super(semantics, holder, Facet.Precedence.FALLBACK);
+        super(semantics, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// unconditionally created, hence acting as a fallback
+    	return Precedence.FALLBACK;
     }
 
 }

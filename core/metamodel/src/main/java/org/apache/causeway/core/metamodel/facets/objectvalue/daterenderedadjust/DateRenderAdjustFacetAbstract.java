@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class DateRenderAdjustFacetAbstract
@@ -35,11 +34,6 @@ implements DateRenderAdjustFacet {
     }
 
     private final int dateRenderAdjustDays;
-
-    protected DateRenderAdjustFacetAbstract(final int adjustByDays, final FacetHolder holder, final Precedence precedence) {
-        super(type(), holder, precedence);
-        this.dateRenderAdjustDays = adjustByDays;
-    }
 
     protected DateRenderAdjustFacetAbstract(final int adjustByDays, final FacetHolder holder) {
         super(type(), holder);
@@ -59,8 +53,8 @@ implements DateRenderAdjustFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof DateRenderAdjustFacet
-                ? this.getDateRenderAdjustDays() == ((DateRenderAdjustFacet)other).getDateRenderAdjustDays()
+        return other instanceof DateRenderAdjustFacet d
+                ? this.getDateRenderAdjustDays() == d.getDateRenderAdjustDays()
                 : false;
     }
 

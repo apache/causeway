@@ -21,13 +21,12 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.jspecify.annotations.NonNull;
 
 public final class ViewModelFacetForXmlRootElementAnnotation
 extends SecureViewModelFacet {
@@ -52,7 +51,7 @@ extends SecureViewModelFacet {
             final JaxbService jaxbService,
             final FacetHolder facetHolder) {
         // overruled by other non fallback ViewModelFacet types
-        super(hmacUrlCodec, facetHolder, Precedence.DEFAULT);
+        super(hmacUrlCodec, facetHolder);
         this.jaxbService = jaxbService;
     }
 

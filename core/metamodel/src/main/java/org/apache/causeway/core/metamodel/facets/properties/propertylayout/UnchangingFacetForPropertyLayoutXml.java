@@ -20,14 +20,14 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -52,6 +52,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private UnchangingFacetForPropertyLayoutXml(
@@ -59,7 +62,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(unchanging, holder, precedence);
+        super(unchanging, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

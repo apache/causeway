@@ -23,16 +23,6 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Function;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceUnitUtil;
-import jakarta.persistence.TypedQuery;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.data.jpa.repository.JpaContext;
-
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
@@ -53,7 +43,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.jpa.repository.JpaContext;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceUnitUtil;
+import jakarta.persistence.TypedQuery;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,7 +72,7 @@ class JpaEntityFacet
     protected JpaEntityFacet(
             final FacetHolder holder,
             final Class<?> entityClass) {
-        super(EntityFacet.class, holder, Precedence.HIGH);
+        super(EntityFacet.class, holder);
         getServiceInjector().injectServicesInto(this);
 
         this.entityClass = entityClass;
@@ -85,6 +82,11 @@ class JpaEntityFacet
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
                 .andThen(obs->new ObservationWithTimeThreshold(obs, timeThreshold)));
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.HIGH;
     }
 
     // -- ENTITY FACET

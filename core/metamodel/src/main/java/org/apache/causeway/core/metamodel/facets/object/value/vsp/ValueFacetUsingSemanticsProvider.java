@@ -37,7 +37,7 @@ extends ValueFacetAbstract<T> {
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
-        super(valueClass, valueSemantics, holder, Precedence.DEFAULT);
+        super(valueClass, valueSemantics, holder);
     }
 
 }

@@ -21,11 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.util.StringUtils;
-
 import org.apache.causeway.applib.exceptions.unrecoverable.DigitalVerificationException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -38,6 +33,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.StringUtils;
 
 sealed abstract class SecureViewModelFacet
 extends FacetAbstract implements ViewModelFacet
@@ -58,14 +56,6 @@ permits
             final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
         super(type(), holder);
-        this.hmacUrlCodec = Objects.requireNonNull(hmacUrlCodec);
-    }
-
-    protected SecureViewModelFacet(
-            final HmacUrlCodec hmacUrlCodec,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
         this.hmacUrlCodec = Objects.requireNonNull(hmacUrlCodec);
     }
 
@@ -98,10 +88,9 @@ permits
             .map(untrustedBookmarkId->hmacUrlCodec.decodeFromUrl(untrustedBookmarkId).orElse(null))
             .orElse(null);
 
-        if(trustedBookmarkIdAsBytes==null) {
-            // verification failed
+        if(trustedBookmarkIdAsBytes==null)
+			// verification failed
             throw new DigitalVerificationException("invalid request for " + viewmodelSpec.logicalTypeName());
-        }
 
         var viewModel = ManagedObject.bookmarked(
             viewmodelSpec,

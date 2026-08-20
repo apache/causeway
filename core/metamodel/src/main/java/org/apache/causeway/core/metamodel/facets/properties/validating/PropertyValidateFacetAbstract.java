@@ -32,19 +32,15 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
         return PropertyValidateFacet.class;
     }
 
-    public PropertyValidateFacetAbstract(final FacetHolder holder) {
+    protected PropertyValidateFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
-    }
-
-    public PropertyValidateFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
     }
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext)) return null;
+        if (!(context instanceof PropertyModifyContext propertyModifyContext))
+        	return null;
 
-        final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
         ManagedObject proposed = propertyModifyContext.proposed();
 
         // skip validation if null value and optional property.

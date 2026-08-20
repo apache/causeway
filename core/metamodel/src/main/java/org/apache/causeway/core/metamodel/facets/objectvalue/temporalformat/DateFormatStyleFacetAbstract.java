@@ -25,9 +25,9 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class DateFormatStyleFacetAbstract
 extends FacetAbstract
@@ -47,20 +47,12 @@ implements DateFormatStyleFacet {
         this.dateFormatStyle = dateFormatStyle;
     }
 
-    protected DateFormatStyleFacetAbstract(
-            final FormatStyle dateFormatStyle,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.dateFormatStyle = dateFormatStyle;
-    }
-
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof DateFormatStyleFacet
+        return other instanceof DateFormatStyleFacet d
                 ? Objects.equals(
                         this.getDateFormatStyle(),
-                        ((DateFormatStyleFacet)other).getDateFormatStyle())
+                        d.getDateFormatStyle())
                 : false;
     }
 

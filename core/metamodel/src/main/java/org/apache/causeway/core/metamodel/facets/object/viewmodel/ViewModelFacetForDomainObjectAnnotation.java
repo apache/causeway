@@ -81,9 +81,14 @@ extends SecureViewModelFacet {
 
     protected ViewModelFacetForDomainObjectAnnotation(
             final MementoHmacContext mementoContext, final FacetHolder holder) {
-        // is overruled by any other ViewModelFacet type
-        super(mementoContext.hmacUrlCodec(), holder, Precedence.LOW);
+        super(mementoContext.hmacUrlCodec(), holder);
         this.mementoContext = mementoContext;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// is overruled by any other ViewModelFacet type
+    	return Precedence.LOW;
     }
 
     @Override

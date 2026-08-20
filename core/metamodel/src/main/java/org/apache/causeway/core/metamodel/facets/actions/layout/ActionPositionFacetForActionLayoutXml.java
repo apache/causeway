@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -49,6 +49,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private ActionPositionFacetForActionLayoutXml(
@@ -56,7 +59,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(position, holder, precedence);
+        super(position, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

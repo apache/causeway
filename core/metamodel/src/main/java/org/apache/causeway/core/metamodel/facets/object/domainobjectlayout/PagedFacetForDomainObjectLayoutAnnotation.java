@@ -34,9 +34,8 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
             final FacetHolder holder) {
 
         var tableDecoratorFacet = holder.lookupFacet(TableDecoratorFacet.class).orElse(null);
-        if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
-            return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
-        }
+        if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value()))
+			return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::paged)
@@ -45,6 +44,6 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
     }
 
     private PagedFacetForDomainObjectLayoutAnnotation(final int value, final FacetHolder holder) {
-        super(value, holder, Precedence.DEFAULT);
+        super(value, holder);
     }
 }

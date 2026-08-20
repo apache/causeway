@@ -25,7 +25,12 @@ public class PropertyValidateFacetNone
 extends PropertyValidateFacetAbstract {
 
     public PropertyValidateFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+        super(holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     /**

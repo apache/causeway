@@ -46,19 +46,10 @@ implements FaStaticFacet {
     private final FontAwesomeLayers layers; // serializable
 
     protected FaStaticFacetAbstract(
-            final String value,
-            final CssClassFaPosition position,
-            final FacetHolder holder) {
-        this(value, position, holder, Precedence.DEFAULT);
-    }
-
-    protected FaStaticFacetAbstract(
             final String quickNotation,
             final CssClassFaPosition position,
-            final FacetHolder holder,
-            final Precedence precedence) {
-
-        super(type(), holder, precedence);
+            final FacetHolder holder) {
+        super(type(), holder);
         this.layers = position == null
                 ? FontAwesomeLayers.fromQuickNotation(quickNotation)
                 : FontAwesomeLayers.fromQuickNotation(quickNotation)

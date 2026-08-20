@@ -34,8 +34,4 @@ implements HelpFacet {
         super(type(), holder, value);
     }
 
-    protected HelpFacetAbstract(final String value, final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, value, precedence);
-    }
-
 }

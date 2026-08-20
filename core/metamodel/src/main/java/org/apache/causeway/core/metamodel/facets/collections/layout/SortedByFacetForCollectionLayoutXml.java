@@ -18,19 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout;
 
+import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Comparator;
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
-
-import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -59,6 +59,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private SortedByFacetForCollectionLayoutXml(
@@ -66,7 +69,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(sortedBy, holder, precedence);
+        super(sortedBy, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

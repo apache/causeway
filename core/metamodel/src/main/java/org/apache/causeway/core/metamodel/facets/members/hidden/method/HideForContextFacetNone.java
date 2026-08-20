@@ -25,7 +25,12 @@ public class HideForContextFacetNone
 extends HideForContextFacetAbstract {
 
     public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+        super(holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     /**

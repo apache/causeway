@@ -59,8 +59,14 @@ extends ActionParameterChoicesFacetAbstract {
     private ActionParameterChoicesFacetFromAction(
             final OneToManyAssociation choicesFromCollection,
             final FacetHolder holder) {
-        super(holder, Precedence.LOW); // precedence low, so is overridden by imperative facets (member support)
+        super(holder);
         this.choicesFromCollection = choicesFromCollection;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// precedence low, so is overridden by imperative facets (member support)
+    	return Precedence.LOW;
     }
 
     @Override

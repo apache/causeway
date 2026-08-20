@@ -49,8 +49,13 @@ extends TypeOfFacetAbstract {
 
     private TypeOfFacetForCollectionAnnotation(
             final ResolvedType type, final FacetHolder holder) {
-        // overrules any generic type argument resolution that is based on reflection
-        super(type, holder, Precedence.HIGH);
+        super(type, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// overrules any generic type argument resolution that is based on reflection
+    	return Precedence.HIGH;
     }
 
 }

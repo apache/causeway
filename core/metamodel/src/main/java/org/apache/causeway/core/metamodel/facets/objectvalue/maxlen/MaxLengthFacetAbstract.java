@@ -40,13 +40,6 @@ implements MaxLengthFacet {
         super(type(), holder, maxLength);
     }
 
-    protected MaxLengthFacetAbstract(
-            final int maxLength,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, maxLength, precedence);
-    }
-
     /**
      * Whether the provided argument exceeds the {@link #value() maximum length}
      * .
@@ -62,9 +55,8 @@ implements MaxLengthFacet {
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof ProposedHolder)) return null;
+        if (!(context instanceof ProposedHolder proposedHolder)) return null;
 
-        var proposedHolder = (ProposedHolder) context;
         var proposedArgument = proposedHolder.proposed();
         if (!exceeds(proposedArgument)) return null;
 

@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -31,26 +30,20 @@ implements Facet, HasMetaModelContext {
 	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
-    private final Facet.@NonNull Precedence precedence;
+    @Override
+	public Precedence precedence() {
+    	return Precedence.DEFAULT;
+    }
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull FacetHolder facetHolder;
 
-    public FacetAbstract(
-            final Class<? extends Facet> facetType,
-            final FacetHolder facetHolder,
-            final Facet.Precedence precedence) {
-
-        this.facetType = facetType;
-        this.facetHolder = facetHolder;
-        this.precedence = precedence;
-    }
-
     protected FacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder facetHolder) {
-        this(facetType, facetHolder, Facet.Precedence.DEFAULT);
+        this.facetType = facetType;
+        this.facetHolder = facetHolder;
+        //TODO refactor facetHolder.addFacet(this);
     }
 
     @Override

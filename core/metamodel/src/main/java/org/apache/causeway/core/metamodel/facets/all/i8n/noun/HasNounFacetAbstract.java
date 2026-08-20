@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class HasNounFacetAbstract
@@ -44,16 +43,7 @@ implements HasNoun {
             final TranslationContext translationContext,
             final Noun noun,
             final FacetHolder holder) {
-        this(facetType, translationContext, noun, holder, Precedence.DEFAULT);
-    }
-
-    protected HasNounFacetAbstract(
-            final Class<? extends Facet> facetType,
-            final TranslationContext translationContext,
-            final Noun noun,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(facetType, holder, precedence);
+        super(facetType, holder);
         this.noun = noun;
         this.translationContext = translationContext;
         this.translatedNounForms = _Lazy.threadSafe(()->
@@ -93,9 +83,8 @@ implements HasNoun {
 
         // equality by facet-type, (original) text and translation-context
 
-        if(!this.facetType().equals(other.facetType())) {
-            return false;
-        }
+        if(!this.facetType().equals(other.facetType()))
+			return false;
 
         var otherFacet =  (HasNounFacetAbstract)other;
 

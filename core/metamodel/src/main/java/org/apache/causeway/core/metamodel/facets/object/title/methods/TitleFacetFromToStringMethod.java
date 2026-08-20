@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.title.methods;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -31,9 +29,10 @@ import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public class TitleFacetFromToStringMethod
 extends TitleFacetAbstract
@@ -56,8 +55,13 @@ implements HasImperativeAspect {
     private TitleFacetFromToStringMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+        super(holder);
         this.imperativeAspect = imperativeAspect;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     @Override

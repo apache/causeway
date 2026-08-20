@@ -77,11 +77,16 @@ extends TitleFacetAbstract {
             final TranslationContext translationContext,
             final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
-        super(holder, Precedence.EVENT);
+        super(holder);
         this.titleUiEventClass = _Casts.uncheckedCast(titleUiEventClass);
         this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
         this.metamodelEventService = metamodelEventService;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.EVENT;
     }
 
     @Override

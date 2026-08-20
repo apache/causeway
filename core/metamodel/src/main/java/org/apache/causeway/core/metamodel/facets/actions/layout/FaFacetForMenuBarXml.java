@@ -20,14 +20,13 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 public class FaFacetForMenuBarXml
 extends FaStaticFacetAbstract {
@@ -49,7 +48,13 @@ extends FaStaticFacetAbstract {
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
-        super(value, position, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
+        super(value, position, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// XML menu-bar entries overrule layout from annotations
+    	return Precedence.HIGH;
     }
 
 }

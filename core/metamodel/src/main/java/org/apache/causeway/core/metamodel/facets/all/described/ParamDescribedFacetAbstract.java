@@ -37,21 +37,10 @@ implements ParamDescribedFacet {
     protected ParamDescribedFacetAbstract(
             final String originalText,
             final FacetHolder holder) {
-        this(
-                originalText,
-                holder,
-                Precedence.DEFAULT);
-    }
-
-    protected ParamDescribedFacetAbstract(
-            final String originalText,
-            final FacetHolder holder,
-            final Precedence precedence) {
         super(type(),
                 holder.getTranslationContext(),
                 originalText,
-                holder,
-                precedence);
+                holder);
     }
 
 }

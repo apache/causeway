@@ -45,14 +45,7 @@ implements IntrospectionPolicyFacet {
     protected IntrospectionPolicyFacetAbstract(
             final Introspection introspection,
             final FacetHolder holder) {
-        this(introspection, holder, Precedence.DEFAULT);
-    }
-
-    protected IntrospectionPolicyFacetAbstract(
-            final Introspection introspection,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(IntrospectionPolicyFacetAbstract.type(), holder, precedence);
+        super(IntrospectionPolicyFacetAbstract.type(), holder);
         this.introspection = introspection;
     }
 

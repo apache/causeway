@@ -46,8 +46,13 @@ public class LayoutOrderFacetForParentedCollectionNavigation
     public LayoutOrderFacetForParentedCollectionNavigation(
             final @NonNull OneToManyAssociation collection,
             final @NonNull FacetHolder holder) {
-        super(type(), holder, Facet.Precedence.INFERRED);
+        super(type(), holder);
         this.collection = collection;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Facet.Precedence.INFERRED;
     }
 
     @Override

@@ -36,7 +36,12 @@ extends LayoutGroupFacetAbstract {
     }
 
     private LayoutGroupFacetForActionAnnotation(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
-        super(groupIdAndName, holder, Precedence.FALLBACK);
+        super(groupIdAndName, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

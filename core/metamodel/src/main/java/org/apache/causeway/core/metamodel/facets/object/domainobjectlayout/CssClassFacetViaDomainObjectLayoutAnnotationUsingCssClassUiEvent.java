@@ -61,10 +61,14 @@ extends CssClassFacetAbstract {
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
             final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
-
-        super(holder, Precedence.EVENT);
+        super(holder);
         this.cssClassUiEventClass = _Casts.uncheckedCast(cssClassUiEventClass);
         this.metamodelEventService = metamodelEventService;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.EVENT;
     }
 
     @Override

@@ -20,15 +20,15 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -52,6 +52,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private HiddenFacetForActionLayoutXml(
@@ -59,7 +62,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(where, holder, precedence);
+        super(where, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

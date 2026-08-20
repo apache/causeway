@@ -25,9 +25,9 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class AliasedFacetAbstract
 extends FacetAbstract
@@ -44,14 +44,6 @@ implements AliasedFacet {
             final Can<LogicalType> aliases,
             final FacetHolder holder) {
         super(AliasedFacetAbstract.type(), holder);
-        this.aliases = aliases;
-    }
-
-    protected AliasedFacetAbstract(
-            final Can<LogicalType> aliases,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(AliasedFacetAbstract.type(), holder, precedence);
         this.aliases = aliases;
     }
 

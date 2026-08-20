@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.members.hidden;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -36,17 +35,10 @@ implements HiddenFacet {
         return HiddenFacet.class;
     }
 
-    public HiddenFacetAbstract(
+    protected HiddenFacetAbstract(
             final Where where,
             final FacetHolder holder) {
         super(type(), holder, where);
-    }
-
-    public HiddenFacetAbstract(
-            final Where where,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, where, precedence);
     }
 
     // to instantiate contributed facets

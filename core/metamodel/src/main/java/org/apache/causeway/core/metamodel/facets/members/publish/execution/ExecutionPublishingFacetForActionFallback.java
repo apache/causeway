@@ -24,7 +24,12 @@ public class ExecutionPublishingFacetForActionFallback extends ExecutionPublishi
 
     ExecutionPublishingFacetForActionFallback(
             final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+        super(holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     @Override

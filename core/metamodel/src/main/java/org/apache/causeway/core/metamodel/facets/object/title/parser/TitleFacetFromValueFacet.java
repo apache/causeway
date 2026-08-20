@@ -41,9 +41,14 @@ implements TitleFacet {
     }
 
     private TitleFacetFromValueFacet(final ValueFacet<?> valueFacet, final FacetHolder holder) {
-        // facets from the title() method have higher precedence
-        super(TitleFacet.class, holder, Precedence.LOW);
+        super(TitleFacet.class, holder);
         this.valueFacet = valueFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// facets from the title() method have higher precedence
+    	return Precedence.LOW;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

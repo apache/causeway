@@ -29,14 +29,9 @@ implements DefaultViewFacet {
         return DefaultViewFacet.class;
     }
 
-    protected DefaultViewFacetAbstract(final String value, final FacetHolder holder) {
-        this(value, holder, Precedence.DEFAULT);
-    }
-
     protected DefaultViewFacetAbstract(
             final String value,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(type(), holder, value, precedence);
+            final FacetHolder holder) {
+        super(type(), holder, value);
     }
 }

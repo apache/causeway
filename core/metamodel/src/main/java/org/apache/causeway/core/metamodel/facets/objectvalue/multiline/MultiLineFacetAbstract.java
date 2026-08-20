@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class MultiLineFacetAbstract
@@ -41,11 +40,6 @@ implements MultiLineFacet {
         this.numberOfLines = numberOfLines;
     }
 
-    public MultiLineFacetAbstract(final int numberOfLines, final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.numberOfLines = numberOfLines;
-    }
-
     @Override
     public int numberOfLines() {
         return numberOfLines;
@@ -59,8 +53,8 @@ implements MultiLineFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof MultiLineFacet
-                ? this.numberOfLines() == ((MultiLineFacet)other).numberOfLines()
+        return other instanceof MultiLineFacet m
+                ? this.numberOfLines() == m.numberOfLines()
                 : false;
     }
 }

@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,6 +39,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ObjectAssociationAbstractTest_alwaysHidden {
@@ -208,15 +207,17 @@ class ObjectAssociationAbstractTest_alwaysHidden {
             final FacetedMethod holder,
             final boolean noop) {
 
-        var precedence = noop
-                ? Facet.Precedence.FALLBACK
-                : Facet.Precedence.DEFAULT;
-
         FacetUtil.addFacet(
-            new HiddenFacetAbstract(where, holder, precedence) {
+            new HiddenFacetAbstract(where, holder) {
                 @Override
                 protected String hiddenReason(final ManagedObject target, final Where whereContext) {
                     return null;
+                }
+                @Override
+                public Precedence precedence() {
+                	return noop
+                            ? Facet.Precedence.FALLBACK
+                            : Facet.Precedence.DEFAULT;
                 }
             });
     }

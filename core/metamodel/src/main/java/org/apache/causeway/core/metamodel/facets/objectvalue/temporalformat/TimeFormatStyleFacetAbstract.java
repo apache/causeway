@@ -25,9 +25,9 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class TimeFormatStyleFacetAbstract
 extends FacetAbstract
@@ -47,20 +47,12 @@ implements TimeFormatStyleFacet {
         this.timeFormatStyle = timeFormatStyle;
     }
 
-    protected TimeFormatStyleFacetAbstract(
-            final FormatStyle timeFormatStyle,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.timeFormatStyle = timeFormatStyle;
-    }
-
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TimeFormatStyleFacet
+        return other instanceof TimeFormatStyleFacet t
                 ? Objects.equals(
                         this.getTimeFormatStyle(),
-                        ((TimeFormatStyleFacet)other).getTimeFormatStyle())
+                        t.getTimeFormatStyle())
                 : false;
     }
 

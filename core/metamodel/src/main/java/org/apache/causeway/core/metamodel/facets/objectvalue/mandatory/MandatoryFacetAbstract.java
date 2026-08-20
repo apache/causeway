@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -40,6 +37,8 @@ import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 
@@ -52,15 +51,11 @@ implements MandatoryFacet {
     }
 
     @Getter(onMethod_ = {@Override})
-    private Semantics semantics;
-
-    protected MandatoryFacetAbstract(final Semantics semantics, final FacetHolder holder) {
-        this(semantics, holder, Precedence.DEFAULT);
-    }
+    private final Semantics semantics;
 
     protected MandatoryFacetAbstract(
-            final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
+            final Semantics semantics, final FacetHolder holder) {
+        super(type(), holder);
         this.semantics = semantics;
         if(!getSystemEnvironment().isUnitTesting()) {
             raiseIfConflictingOptionality(this);
@@ -69,8 +64,8 @@ implements MandatoryFacet {
 
     @Override
     public final boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof MandatoryFacetAbstract
-                ? this.getSemantics() == ((MandatoryFacetAbstract)other).getSemantics()
+        return other instanceof MandatoryFacetAbstract m
+                ? this.getSemantics() == m.getSemantics()
                 : false;
     }
 
@@ -83,14 +78,12 @@ implements MandatoryFacet {
             var pojo = MmUnwrapUtils.single(adapter);
 
             // special case string handling.
-            if(pojo instanceof String) {
-                return _Strings.isEmpty((String)pojo);
-            }
+            if(pojo instanceof String)
+				return _Strings.isEmpty((String)pojo);
 
             return pojo == null;
-        } else {
-            return false; // policy is not enforced
-        }
+        } else
+			return false; // policy is not enforced
     }
 
     @Override
@@ -102,9 +95,8 @@ implements MandatoryFacet {
                         : null;
 
         if(proposedHolder==null
-                || !isRequiredButNull(proposedHolder.proposed())) {
-            return null;
-        }
+                || !isRequiredButNull(proposedHolder.proposed()))
+			return null;
 
         return _Strings.nonEmpty(context.friendlyName())
             .map(named->"'" + named + "' is mandatory")
@@ -134,9 +126,8 @@ implements MandatoryFacet {
 
         if(mandatoryFacet == null
                 || !PRECEDENCE_ORDINALS_CONSIDERED_FOR_CONFLICTING_OPTIONALITY
-                    .contains(mandatoryFacet.precedence().ordinal())) {
-            return; // ignore
-        }
+                    .contains(mandatoryFacet.precedence().ordinal()))
+			return; // ignore
 
         final Can<MandatoryFacet> conflictingFacets = findConflictingMandatoryFacets(mandatoryFacet);
 
@@ -164,10 +155,9 @@ implements MandatoryFacet {
 
         var isTopRanking = mandatoryFacet.precedence()
                 .equals(facetRanking.getTopPrecedence().orElse(null));
-        if(!isTopRanking) {
-            // ignore validation of lower than top-rank
+        if(!isTopRanking)
+			// ignore validation of lower than top-rank
             return Can.empty();
-        }
 
         var topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
         var firstOfTopRanking = (MandatoryFacet)topRankingFacets.getFirstElseFail();

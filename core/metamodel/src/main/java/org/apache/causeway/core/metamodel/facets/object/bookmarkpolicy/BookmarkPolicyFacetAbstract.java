@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
@@ -39,14 +38,6 @@ implements BookmarkPolicyFacet {
             final BookmarkPolicy bookmarkPolicy,
             final FacetHolder facetHolder) {
         super(type(), facetHolder);
-        this.bookmarkPolicy = bookmarkPolicy;
-    }
-
-    protected BookmarkPolicyFacetAbstract(
-            final BookmarkPolicy bookmarkPolicy,
-            final FacetHolder facetHolder,
-            final Facet.Precedence precedence) {
-        super(type(), facetHolder, precedence);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 

@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class CssClassFacetSimple
@@ -34,11 +33,7 @@ implements CssClassFacet {
     private final String cssClass;
 
     protected CssClassFacetSimple(final String cssClass, final FacetHolder holder) {
-        this(cssClass, holder, Precedence.DEFAULT);
-    }
-
-    protected CssClassFacetSimple(final String cssClass, final FacetHolder holder, final Precedence precedence) {
-        super(holder, precedence);
+        super(holder);
         this.cssClass = cssClass;
     }
 
@@ -55,8 +50,8 @@ implements CssClassFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof CssClassFacetSimple
-                ? Objects.equals(this.cssClass, ((CssClassFacetSimple)other).cssClass)
+        return other instanceof CssClassFacetSimple c
+                ? Objects.equals(this.cssClass, c.cssClass)
                 : false;
     }
 }

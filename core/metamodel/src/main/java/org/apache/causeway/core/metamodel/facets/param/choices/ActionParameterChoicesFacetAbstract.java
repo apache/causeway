@@ -34,8 +34,4 @@ implements ActionParameterChoicesFacet {
         super(type(), holder);
     }
 
-    protected ActionParameterChoicesFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
 }

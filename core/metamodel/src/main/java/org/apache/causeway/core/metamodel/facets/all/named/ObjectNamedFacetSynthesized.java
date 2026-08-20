@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.named;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
+import org.springframework.util.Assert;
 
 /**
  * To be installed by facet-post-processing only,
@@ -34,9 +34,13 @@ extends ObjectNamedFacetAbstract {
     public ObjectNamedFacetSynthesized(
             final Noun noun,
             final FacetHolder holder) {
-        super(noun, holder, Precedence.SYNTHESIZED);
-        // assert that we have a noun
-        _Assert.assertFalse(noun.isEmpty());
+        super(noun, holder);
+        Assert.isTrue(!noun.isEmpty(), ()->"a noun is required to not be emtpy");
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.SYNTHESIZED;
     }
 
 }

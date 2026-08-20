@@ -21,16 +21,6 @@ package org.apache.causeway.persistence.jdbc.metamodel;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
-import org.springframework.data.relational.core.mapping.RelationalMappingContext;
-import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
-import org.springframework.data.relational.core.query.Criteria;
-
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -46,7 +36,14 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
+import org.springframework.data.relational.core.mapping.RelationalMappingContext;
+import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
+import org.springframework.data.relational.core.query.Criteria;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,8 +58,8 @@ implements EntityFacet {
     @Inject private JdbcAggregateTemplate jdbcAggregateTemplate;
 
     private final Class<?> entityClass;
-    private PrimaryKeyType<?> primaryKeyType;
-    private RelationalPersistentEntity<?> persistentEntity;
+    private final PrimaryKeyType<?> primaryKeyType;
+    private final RelationalPersistentEntity<?> persistentEntity;
 
     @Getter
     private final EntityOrmMetadata ormMetadata;
@@ -70,7 +67,7 @@ implements EntityFacet {
     protected JdbcEntityFacet(
             final FacetHolder holder,
             final Class<?> entityClass) {
-        super(EntityFacet.class, holder, Precedence.HIGH);
+        super(EntityFacet.class, holder);
         getServiceInjector().injectServicesInto(this);
 
         this.entityClass = entityClass;
@@ -78,6 +75,11 @@ implements EntityFacet {
         this.ormMetadata = _MetadataUtil.ormMetadataFor(persistentEntity);
         this.primaryKeyType = idStringifierLookupService
             .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.HIGH;
     }
 
     // -- ENTITY FACET
@@ -148,9 +150,8 @@ implements EntityFacet {
 
     @Override
     public void persist(final Object pojo) {
-        if (pojo == null) {
-            return; // nothing to do
-        }
+        if (pojo == null)
+			return; // nothing to do
 
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);

@@ -34,6 +34,11 @@ extends DefaultViewFacetAbstract {
     }
 
     private DefaultViewFacetAsConfigured(final String value, final FacetHolder holder) {
-        super(value, holder, Precedence.LOW);
+        super(value, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.LOW;
     }
 }

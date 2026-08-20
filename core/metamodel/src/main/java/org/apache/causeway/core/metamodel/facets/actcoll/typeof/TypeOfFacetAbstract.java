@@ -27,9 +27,9 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 public abstract class TypeOfFacetAbstract
@@ -41,16 +41,9 @@ implements TypeOfFacet {
     }
 
     protected TypeOfFacetAbstract(
-            final ResolvedType value,
-            final FacetHolder holder) {
-        this(value, holder, Precedence.DEFAULT);
-    }
-
-    protected TypeOfFacetAbstract(
             final ResolvedType type,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(type(), holder, precedence);
+            final FacetHolder holder) {
+        super(type(), holder);
         this.value = type;
     }
 
@@ -79,8 +72,8 @@ implements TypeOfFacet {
 
     @Override
     public final boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TypeOfFacet
-                ? this.value() == ((TypeOfFacet)other).value()
+        return other instanceof TypeOfFacet t
+                ? this.value() == t.value()
                 : false;
     }
 

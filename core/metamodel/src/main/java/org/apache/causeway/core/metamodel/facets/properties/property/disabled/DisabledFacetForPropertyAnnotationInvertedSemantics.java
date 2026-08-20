@@ -31,7 +31,7 @@ extends DisabledFacetAbstract {
                 // arbitrarily using explicit, because flag is ignored when semantics is inverted
                 VetoReason.explicit(
                         "enabled, based on Property annotation with inverted semantics"),
-                holder, Semantics.ENABLED, Precedence.DEFAULT);
+                holder, Semantics.ENABLED);
     }
 
 }

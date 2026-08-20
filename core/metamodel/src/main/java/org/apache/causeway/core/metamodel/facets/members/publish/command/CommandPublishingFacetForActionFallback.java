@@ -26,7 +26,12 @@ public class CommandPublishingFacetForActionFallback extends CommandPublishingFa
     CommandPublishingFacetForActionFallback(
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
-        super(null, holder, servicesInjector, Precedence.FALLBACK);
+        super(null, holder, servicesInjector);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     @Override

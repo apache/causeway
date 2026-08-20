@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class SingleStringValueFacetAbstract
@@ -33,15 +32,9 @@ implements SingleStringValueFacet {
 
     private final String value;
 
-    public SingleStringValueFacetAbstract(
+    protected SingleStringValueFacetAbstract(
             final Class<? extends Facet> type, final FacetHolder holder, final String value) {
         super(type, holder);
-        this.value = value;
-    }
-
-    public SingleStringValueFacetAbstract(
-            final Class<? extends Facet> type, final FacetHolder holder, final String value, final Facet.Precedence precedence) {
-        super(type, holder, precedence);
         this.value = value;
     }
 
@@ -58,8 +51,8 @@ implements SingleStringValueFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof SingleStringValueFacet
-                ? Objects.equals(this.value(), ((SingleStringValueFacet)other).value())
+        return other instanceof SingleStringValueFacet s
+                ? Objects.equals(this.value(), s.value())
                 : false;
     }
 

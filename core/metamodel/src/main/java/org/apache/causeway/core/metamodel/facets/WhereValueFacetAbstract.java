@@ -24,7 +24,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 import org.jspecify.annotations.NonNull;
 
 public abstract class WhereValueFacetAbstract
@@ -33,22 +32,11 @@ implements WhereValueFacet {
 
     private final @NonNull Where where;
 
-    public WhereValueFacetAbstract(
+    protected WhereValueFacetAbstract(
             final @NonNull Class<? extends Facet> facetType,
             final @NonNull FacetHolder holder,
             final @NonNull Where where) {
-
         super(facetType, holder);
-        this.where = where;
-    }
-
-    public WhereValueFacetAbstract(
-            final @NonNull Class<? extends Facet> facetType,
-            final @NonNull FacetHolder holder,
-            final @NonNull Where where,
-            final Facet.@NonNull Precedence precedence) {
-
-        super(facetType, holder, precedence);
         this.where = where;
     }
 

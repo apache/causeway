@@ -47,8 +47,13 @@ extends ActionParameterAutoCompleteFacetAbstract {
     private ActionParameterAutoCompleteFacetFromElementType(
             final AutoCompleteFacet autoCompleteFacet,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+        super(holder);
         this.autoCompleteFacet = autoCompleteFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     @Override

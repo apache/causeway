@@ -20,13 +20,12 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
+import org.jspecify.annotations.Nullable;
 
 public class CssClassFacetForMenuBarXml
 extends CssClassFacetSimple {
@@ -42,7 +41,13 @@ extends CssClassFacetSimple {
     }
 
     private CssClassFacetForMenuBarXml(final String value, final FacetHolder holder) {
-        super(value, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
+        super(value, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// XML menu-bar entries overrule layout from annotations
+    	return Precedence.HIGH;
     }
 
 }

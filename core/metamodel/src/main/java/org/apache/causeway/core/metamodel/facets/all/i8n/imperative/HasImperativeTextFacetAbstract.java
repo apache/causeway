@@ -32,9 +32,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public class HasImperativeTextFacetAbstract
 extends FacetAbstract
@@ -51,10 +51,15 @@ implements
             final TranslationContext translationContext,
             final ResolvedMethod method,
             final FacetHolder holder) {
-        // imperative takes precedence over any other (except for events)
-        super(facetType, holder, Precedence.IMPERATIVE);
+        super(facetType, holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
         this.translationContext = translationContext;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// imperative takes precedence over any other (except for events)
+    	return Precedence.IMPERATIVE;
     }
 
     @Override
@@ -80,9 +85,8 @@ implements
 
         // equality by facet-type, java-method and translation-context
 
-        if(!this.facetType().equals(other.facetType())) {
-            return false;
-        }
+        if(!this.facetType().equals(other.facetType()))
+			return false;
 
         var otherFacet = (HasImperativeTextFacetAbstract)other;
 

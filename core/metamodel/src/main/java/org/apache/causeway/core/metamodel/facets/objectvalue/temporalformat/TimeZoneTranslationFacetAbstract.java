@@ -25,9 +25,9 @@ import org.apache.causeway.applib.annotation.TimeZoneTranslation;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class TimeZoneTranslationFacetAbstract
 extends FacetAbstract
@@ -47,20 +47,12 @@ implements TimeZoneTranslationFacet {
         this.timeZoneTranslation = timeZoneTranslation;
     }
 
-    protected TimeZoneTranslationFacetAbstract(
-            final TimeZoneTranslation timeZoneTranslation,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.timeZoneTranslation = timeZoneTranslation;
-    }
-
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TimeZoneTranslationFacet
+        return other instanceof TimeZoneTranslationFacet t
                 ? Objects.equals(
                         this.getTimeZoneTranslation(),
-                        ((TimeZoneTranslationFacet)other).getTimeZoneTranslation())
+                        t.getTimeZoneTranslation())
                 : false;
     }
 

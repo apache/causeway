@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -29,6 +27,7 @@ import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -51,6 +50,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private ObjectNamedFacetForDomainObjectLayoutXml(
@@ -58,7 +60,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Facet.Precedence precedence,
             final @Nullable String qualifier) {
-        super(noun, holder, precedence);
+        super(noun, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

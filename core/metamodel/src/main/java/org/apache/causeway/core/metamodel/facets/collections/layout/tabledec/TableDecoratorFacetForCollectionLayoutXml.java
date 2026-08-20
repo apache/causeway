@@ -20,14 +20,14 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -48,6 +48,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private TableDecoratorFacetForCollectionLayoutXml(
@@ -55,7 +58,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(value, holder, precedence);
+        super(value, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

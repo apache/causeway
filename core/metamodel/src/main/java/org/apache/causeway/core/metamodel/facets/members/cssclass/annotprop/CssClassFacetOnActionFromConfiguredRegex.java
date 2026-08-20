@@ -35,7 +35,13 @@ public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimpl
     }
 
     private CssClassFacetOnActionFromConfiguredRegex(final String css, final FacetHolder holder) {
-        super(css, holder, Precedence.INFERRED); // inferred from config, if not specified otherwise
+        super(css, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	// inferred from config, if not specified otherwise
+    	return Precedence.INFERRED;
     }
 
     // -- HELPER
@@ -49,9 +55,8 @@ public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimpl
         for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
             final String cssClass = entry.getValue();
-            if(pattern.matcher(name).matches()) {
-                return Optional.ofNullable(cssClass);
-            }
+            if(pattern.matcher(name).matches())
+				return Optional.ofNullable(cssClass);
         }
         return Optional.empty();
     }

@@ -28,12 +28,8 @@ public abstract class HideForContextFacetAbstract extends FacetAbstract implemen
         return HideForContextFacet.class;
     }
 
-    public HideForContextFacetAbstract(final FacetHolder holder) {
+    protected HideForContextFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
-    }
-
-    public HideForContextFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
     }
 
 }

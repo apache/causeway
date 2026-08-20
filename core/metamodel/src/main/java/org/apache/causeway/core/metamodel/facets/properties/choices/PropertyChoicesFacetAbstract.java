@@ -32,8 +32,4 @@ public abstract class PropertyChoicesFacetAbstract extends FacetAbstract impleme
         super(type(), holder);
     }
 
-    protected PropertyChoicesFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
 }

@@ -43,7 +43,12 @@ extends ParamDescribedFacetAbstract {
     private ParamDescribedFacetFromType(
             final String described,
             final FacetHolder holder) {
-        super(described, holder, Precedence.INFERRED);
+        super(described, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
 }

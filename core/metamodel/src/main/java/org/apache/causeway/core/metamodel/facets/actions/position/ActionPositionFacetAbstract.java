@@ -37,14 +37,7 @@ implements ActionPositionFacet {
     protected ActionPositionFacetAbstract(
             final ActionLayout.Position position,
             final FacetHolder holder) {
-        this(position, holder, Precedence.DEFAULT);
-    }
-
-    protected ActionPositionFacetAbstract(
-            final ActionLayout.Position position,
-            final FacetHolder holder,
-            final Precedence precedence) {
-        super(type(), holder, precedence);
+        super(type(), holder);
         this.position = position;
     }
 

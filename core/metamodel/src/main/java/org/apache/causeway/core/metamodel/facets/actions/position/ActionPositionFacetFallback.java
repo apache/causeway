@@ -24,7 +24,12 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 public class ActionPositionFacetFallback extends ActionPositionFacetAbstract {
 
     public ActionPositionFacetFallback(final FacetHolder holder) {
-        super(ActionLayout.Position.BELOW, holder, Precedence.FALLBACK);
+        super(ActionLayout.Position.BELOW, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

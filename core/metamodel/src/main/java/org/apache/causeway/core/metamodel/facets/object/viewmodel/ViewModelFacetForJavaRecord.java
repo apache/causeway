@@ -25,15 +25,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.util.Assert;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.hmac.Memento;
 import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.jspecify.annotations.NonNull;
+import org.springframework.util.Assert;
 
 import lombok.SneakyThrows;
 
@@ -61,7 +59,7 @@ extends SecureViewModelFacet {
             final MementoHmacContext mementoContext,
             final FacetHolder holder) {
         // is overruled by ViewModel interface semantics
-        super(mementoContext.hmacUrlCodec(), holder, Precedence.DEFAULT);
+        super(mementoContext.hmacUrlCodec(), holder);
         this.mementoContext = mementoContext;
         this.canonicalConstructor = canonicalConstructor(recordClass);
     }

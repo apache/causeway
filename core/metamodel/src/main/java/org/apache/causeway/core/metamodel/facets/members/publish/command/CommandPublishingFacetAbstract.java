@@ -46,21 +46,10 @@ implements CommandPublishingFacet {
         this.processor = processor;
     }
 
-    public CommandPublishingFacetAbstract(
-            final CommandDtoProcessor processor,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector,
-            final Precedence precedence) {
-        super(type(), holder, precedence);
-        inject(processor, servicesInjector);
-        this.processor = processor;
-    }
-
     private static void inject(
             final CommandDtoProcessor processor, final ServiceInjector servicesInjector) {
-        if(processor == null || servicesInjector == null) {
-            return;
-        }
+        if(processor == null || servicesInjector == null)
+			return;
         servicesInjector.injectServicesInto(processor);
     }
 
@@ -73,16 +62,13 @@ implements CommandPublishingFacet {
      * For benefit of subclasses.
      */
     protected static CommandDtoProcessor newProcessorElseNull(final Class<?> cls) {
-        if(cls == null) {
+        if(cls == null)
+			return null;
+        if(cls == CommandDtoProcessor.class)
+			// ie the default value, namely the interface
             return null;
-        }
-        if(cls == CommandDtoProcessor.class) {
-            // ie the default value, namely the interface
-            return null;
-        }
-        if (!(CommandDtoProcessor.class.isAssignableFrom(cls))) {
-            return null;
-        }
+        if (!(CommandDtoProcessor.class.isAssignableFrom(cls)))
+			return null;
         try {
             return (CommandDtoProcessor) cls.getConstructor().newInstance();
         } catch (final InstantiationException | IllegalAccessException

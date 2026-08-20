@@ -28,8 +28,12 @@ extends MemberNamedFacetForStaticMemberName {
     public NamedFacetFallbackFromMemberName(final FacetHolder holder) {
         super(
                 _Strings.asNaturalName.apply(holder.getFeatureIdentifier().memberLogicalName()),
-                holder,
-                Precedence.FALLBACK);
+                holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
 }

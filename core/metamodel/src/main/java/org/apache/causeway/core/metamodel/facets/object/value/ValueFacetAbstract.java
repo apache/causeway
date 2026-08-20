@@ -71,10 +71,9 @@ implements ValueFacet<T> {
     protected ValueFacetAbstract(
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> allValueSemantics,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
+            final FacetHolder holder) {
 
-        super(type(), holder, precedence);
+        super(type(), holder);
         this.valueClass = valueClass;
         this.allValueSemantics = allValueSemantics;
         this.valueSerializer = selectDefaultSemantics()

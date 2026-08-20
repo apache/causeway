@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
+import org.jspecify.annotations.Nullable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -50,6 +50,9 @@ implements QualifiedFacet {
     }
 
     @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final Facet.Precedence precedence;
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
     private final @Nullable String qualifier;
 
     private MultiLineFacetForPropertyLayoutXml(
@@ -57,7 +60,8 @@ implements QualifiedFacet {
             final FacetHolder holder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        super(numberOfLines, holder, precedence);
+        super(numberOfLines, holder);
+        this.precedence = precedence;
         this.qualifier = qualifier;
     }
 

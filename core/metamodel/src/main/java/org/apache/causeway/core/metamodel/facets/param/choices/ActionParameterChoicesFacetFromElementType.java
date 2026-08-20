@@ -47,8 +47,13 @@ extends ActionParameterChoicesFacetAbstract {
     private ActionParameterChoicesFacetFromElementType(
             final ChoicesFacet choicesFacet,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+        super(holder);
         this.choicesFacet = choicesFacet;
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.INFERRED;
     }
 
     @Override

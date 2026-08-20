@@ -25,9 +25,9 @@ import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class TimeFormatPrecisionFacetAbstract
 extends FacetAbstract
@@ -47,20 +47,12 @@ implements TimeFormatPrecisionFacet {
         this.timePrecision = timePrecision;
     }
 
-    protected TimeFormatPrecisionFacetAbstract(
-            final TimePrecision timePrecision,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.timePrecision = timePrecision;
-    }
-
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TimeFormatPrecisionFacet
+        return other instanceof TimeFormatPrecisionFacet t
                 ? Objects.equals(
                         this.getTimePrecision(),
-                        ((TimeFormatPrecisionFacet)other).getTimePrecision())
+                        t.getTimePrecision())
                 : false;
     }
 

@@ -24,9 +24,9 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class ValueSemanticsFacetAbstract<T>
 extends FacetAbstract
@@ -40,15 +40,6 @@ implements ValueSemanticsProvider<T> {
             final ValueSemanticsProvider<T> valueSemantics,
             final FacetHolder facetHolder) {
         super(facetType, facetHolder);
-        this.valueSemantics = valueSemantics;
-    }
-
-    protected ValueSemanticsFacetAbstract(
-            final Class<? extends Facet> facetType,
-            final ValueSemanticsProvider<T> valueSemantics,
-            final FacetHolder facetHolder,
-            final Precedence precedence) {
-        super(facetType, facetHolder, precedence);
         this.valueSemantics = valueSemantics;
     }
 

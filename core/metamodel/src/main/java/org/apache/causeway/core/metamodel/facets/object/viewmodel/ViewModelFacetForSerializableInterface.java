@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.resources._Serializables;
@@ -30,6 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.jspecify.annotations.NonNull;
+
 import lombok.SneakyThrows;
 
 /**
@@ -54,7 +54,12 @@ extends SecureViewModelFacet {
     protected ViewModelFacetForSerializableInterface(
             final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
-        super(hmacUrlCodec, holder, Precedence.HIGH);
+        super(hmacUrlCodec, holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.HIGH;
     }
 
     @SneakyThrows

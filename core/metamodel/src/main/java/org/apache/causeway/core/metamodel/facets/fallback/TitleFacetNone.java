@@ -25,7 +25,12 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 public class TitleFacetNone extends TitleFacetAbstract {
 
     public TitleFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+        super(holder);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.FALLBACK;
     }
 
     @Override
