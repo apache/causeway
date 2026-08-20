@@ -40,7 +40,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.onActionRequest = event => {
       const actionId = event.detail?.actionId;
       const context = event.detail?.context;
-      const source = event.target;
+      const source = focusRestoreTarget(event.target);
       queueMicrotask(() => {
         if (!event.defaultPrevented && actionId && context) {
           void this.beginAction(actionId, context, source);
@@ -525,6 +525,16 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       focusTarget?.focus?.();
     });
   }
+}
+
+function focusRestoreTarget(source) {
+  const panel = source?.closest?.('[data-causeway-menu-panel]');
+  const panelId = panel?.id;
+  if (!panelId) {
+    return source;
+  }
+  const escapedId = globalThis.CSS?.escape ? CSS.escape(panelId) : panelId;
+  return panel.parentNode?.querySelector?.(`[data-causeway-menu-disclosure][aria-controls="${escapedId}"]`) ?? source;
 }
 
 function interactionTargetDetail(context) {

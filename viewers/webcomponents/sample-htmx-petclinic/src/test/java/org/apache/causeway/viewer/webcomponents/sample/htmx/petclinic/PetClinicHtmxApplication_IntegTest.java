@@ -165,8 +165,12 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("private, no-store");
         assertThat(grid.body())
                 .contains("<bs:grid")
+                .contains("<cpt:property id=\"notes\" multiLine=\"5\"")
                 .contains("<cpt:collection id=\"pets\"")
-                .contains("<cpt:collection id=\"visits\"");
+                .contains("<cpt:action id=\"addPet\"")
+                .contains("<cpt:action id=\"removePet\"")
+                .contains("<cpt:collection id=\"visits\"")
+                .contains("<cpt:action id=\"bookVisit\"");
     }
 
     @Test

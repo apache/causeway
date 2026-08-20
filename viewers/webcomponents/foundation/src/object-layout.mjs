@@ -32,6 +32,7 @@ export const MAX_GRID_XML_CHARACTERS = MAX_STRUCTURAL_XML_CHARACTERS;
 export const MAX_GRID_XML_DEPTH = MAX_STRUCTURAL_XML_DEPTH;
 export const MAX_GRID_XML_NODES = MAX_STRUCTURAL_XML_NODES;
 export const MAX_LAYOUT_DIAGNOSTICS = MAX_STRUCTURAL_DIAGNOSTICS;
+export const MAX_MULTI_LINE_ROWS = 50;
 
 const MEMBER_KINDS = Object.freeze(['action', 'property', 'collection']);
 const STRUCTURAL_KINDS = Object.freeze(['grid', 'row', 'col', 'tabGroup', 'tab', 'fieldSet', 'domainObject']);
@@ -135,7 +136,7 @@ function claimExplicitMembers(root, members, diagnostics) {
       return;
     }
     claims.add(id);
-    node.claim = memberNode(member, labelFrom(node));
+    node.claim = memberNode(member, labelFrom(node), memberPresentation(node, diagnostics));
   });
   return claims;
 }
@@ -167,13 +168,12 @@ function buildNode(node, context) {
     return null;
   }
   if (MEMBER_KINDS.includes(kind)) {
-    const result = [];
+    const children = buildChildren(node, context);
     if (node.claim && !context.allocated.has(node.claim.memberId)) {
       context.allocated.add(node.claim.memberId);
-      result.push(node.claim);
+      return {...node.claim, children};
     }
-    result.push(...buildChildren(node, context));
-    return result;
+    return children;
   }
   if (kind === 'domainObject') {
     return {kind: 'header'};
@@ -270,10 +270,11 @@ function supportedAttributes(kind) {
     return ['bookmarking'];
   }
   if (MEMBER_KINDS.includes(kind)) {
-    return [
+    const attributes = [
       'id', 'position', 'defaultView', 'paged', 'hidden',
       'labelPosition', 'dateRenderAdjustDays', 'typicalLength'
     ];
+    return kind === 'property' ? [...attributes, 'multiLine'] : attributes;
   }
   return [];
 }
@@ -343,13 +344,31 @@ function normalizeMembers(members) {
   return result;
 }
 
-function memberNode(member, label = '') {
+function memberNode(member, label = '', presentation = {}) {
   return {
     kind: 'member',
     memberKind: member.kind,
     memberId: member.id,
-    label: label || humanize(member.id)
+    label: label || humanize(member.id),
+    presentation
   };
+}
+
+function memberPresentation(node, diagnostics) {
+  if (elementKind(node) !== 'property' || !node.attributes.has('multiLine')) {
+    return {};
+  }
+  const candidate = node.attributes.get('multiLine');
+  const rows = Number(candidate);
+  if (!Number.isSafeInteger(rows) || rows <= 1) {
+    diagnostics.add('INVALID_MULTI_LINE', `Property multiLine '${candidate}' must be an integer greater than one and was ignored.`);
+    return {};
+  }
+  if (rows > MAX_MULTI_LINE_ROWS) {
+    diagnostics.add('MULTI_LINE_CAPPED', `Property multiLine '${candidate}' exceeds ${MAX_MULTI_LINE_ROWS} rows and was capped.`);
+    return {multiLine: MAX_MULTI_LINE_ROWS};
+  }
+  return {multiLine: rows};
 }
 
 function rowNode(children) {
@@ -387,14 +406,14 @@ function countSemanticNodes(nodes) {
 
 function renderNode(node, state) {
   if (node.kind === 'row') {
-    return `<div class="causeway-object-row" data-causeway-region="row">${node.children.map(child => renderNode(child, state)).join('')}</div>`;
+    return `<div class="causeway-object-row" data-causeway-region="row">${renderChildren(node.children, state)}</div>`;
   }
   if (node.kind === 'column') {
-    return `<div class="causeway-object-column" data-causeway-region="column" data-span="${node.span}">${node.children.map(child => renderNode(child, state)).join('')}</div>`;
+    return `<div class="causeway-object-column" data-causeway-region="column" data-span="${node.span}">${renderChildren(node.children, state)}</div>`;
   }
   if (node.kind === 'group') {
     const id = `${state.idPrefix}-group-${++state.sequence}`;
-    return `<section class="causeway-object-group" data-causeway-region="group"${node.id ? ` data-layout-id="${escapeHtml(node.id)}"` : ''} aria-labelledby="${id}"><h2 id="${id}">${escapeHtml(node.label)}</h2>${node.children.map(child => renderNode(child, state)).join('')}</section>`;
+    return `<section class="causeway-object-group" data-causeway-region="group"${node.id ? ` data-layout-id="${escapeHtml(node.id)}"` : ''} aria-labelledby="${id}"><h2 id="${id}">${escapeHtml(node.label)}</h2>${renderChildren(node.children, state)}</section>`;
   }
   if (node.kind === 'tabs') {
     return renderTabs(node, state);
@@ -404,15 +423,40 @@ function renderNode(node, state) {
   }
   if (node.kind === 'member') {
     const label = ` label="${escapeHtml(node.label)}"`;
+    let memberMarkup;
     if (node.memberKind === 'property') {
-      return `<causeway-property data-causeway-region="property" member="${escapeHtml(node.memberId)}"${label}${state.editable ? ' editable' : ''}></causeway-property>`;
+      const multiLine = node.presentation?.multiLine ? ` multiline="${node.presentation.multiLine}"` : '';
+      memberMarkup = `<causeway-property data-causeway-region="property" member="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></causeway-property>`;
+    } else if (node.memberKind === 'action') {
+      memberMarkup = `<causeway-action data-causeway-region="action" member="${escapeHtml(node.memberId)}"${label}></causeway-action>`;
+    } else {
+      memberMarkup = `<causeway-collection data-causeway-region="collection" member="${escapeHtml(node.memberId)}"${label}></causeway-collection>`;
     }
-    if (node.memberKind === 'action') {
-      return `<causeway-action data-causeway-region="action" member="${escapeHtml(node.memberId)}"${label}></causeway-action>`;
+    if ((node.children?.length ?? 0) === 0) {
+      return memberMarkup;
     }
-    return `<causeway-collection data-causeway-region="collection" member="${escapeHtml(node.memberId)}"${label}></causeway-collection>`;
+    return `<section class="causeway-object-member-composition" data-causeway-associated-member="${escapeHtml(node.memberId)}">${memberMarkup}${renderChildren(node.children, state, 'causeway-object-associated-actions')}</section>`;
   }
   return '';
+}
+
+function renderChildren(nodes, state, actionGroupClass = 'causeway-object-actions') {
+  const markup = [];
+  for (let index = 0; index < (nodes?.length ?? 0); index += 1) {
+    const node = nodes[index];
+    if (node.kind === 'member' && node.memberKind === 'action') {
+      const actions = [];
+      while (index < nodes.length && nodes[index].kind === 'member' && nodes[index].memberKind === 'action') {
+        actions.push(renderNode(nodes[index], state));
+        index += 1;
+      }
+      index -= 1;
+      markup.push(`<div class="${actionGroupClass}" data-causeway-action-group>${actions.join('')}</div>`);
+    } else {
+      markup.push(renderNode(node, state));
+    }
+  }
+  return markup.join('');
 }
 
 function renderTabs(node, state) {
@@ -426,7 +470,7 @@ function renderTabs(node, state) {
   const panels = tabs.map((tab, index) => {
     const tabId = `${groupId}-tab-${index}`;
     const panelId = `${groupId}-panel-${index}`;
-    return `<section role="tabpanel" id="${panelId}" aria-labelledby="${tabId}" data-causeway-tab-panel="${index}"${index === 0 ? '' : ' hidden'}>${tab.children.map(child => renderNode(child, state)).join('')}</section>`;
+    return `<section role="tabpanel" id="${panelId}" aria-labelledby="${tabId}" data-causeway-tab-panel="${index}"${index === 0 ? '' : ' hidden'}>${renderChildren(tab.children, state)}</section>`;
   }).join('');
   return `<section class="causeway-object-tabs" data-causeway-region="tabs" data-causeway-tab-group="${groupId}"><div role="tablist" aria-label="Object sections">${buttons}</div>${panels}</section>`;
 }

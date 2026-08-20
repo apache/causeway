@@ -24,6 +24,7 @@ import {
   createFallbackLayoutPlan,
   MAX_GRID_XML_CHARACTERS,
   MAX_GRID_XML_DEPTH,
+  MAX_MULTI_LINE_ROWS,
   parseCausewayGridXml,
   renderObjectLayoutPlan
 } from '../src/object-layout.mjs';
@@ -126,6 +127,51 @@ test('creates a deterministic semantic fallback modeled on the canonical Causewa
   assert.deepEqual(columns.map(column => column.span), [12, 4, 8]);
   assert.equal(semanticNodes(plan).find(node => node.memberId === 'formerStaff').label, 'Former Staff');
   assert.ok(semanticNodes(plan).filter(node => node.kind === 'member').every(node => typeof node.label === 'string'));
+});
+
+test('preserves associated actions and bounded multiline hints in semantic member composition', () => {
+  const members = objectLayoutMembers();
+  members.set('addStaff', {id: 'addStaff', kind: 'action'});
+  const xml = `<bs:grid ${GRID_NAMESPACES}><bs:row><bs:col unreferencedActions="true"><cpt:property id="notes" multiLine="5"><cpt:action id="changeName"/></cpt:property><cpt:collection id="staffMembers"><cpt:action id="addStaff"/></cpt:collection></bs:col></bs:row></bs:grid>`;
+  const result = parseCausewayGridXml(xml, {members});
+  const notes = semanticNodes(result.plan).find(node => node.memberId === 'notes');
+  const staff = semanticNodes(result.plan).find(node => node.memberId === 'staffMembers');
+  assert.equal(notes.presentation.multiLine, 5);
+  assert.deepEqual(notes.children.map(node => node.memberId), ['changeName']);
+  assert.deepEqual(staff.children.map(node => node.memberId), ['addStaff']);
+  assert.equal(memberIds(result.plan).filter(id => id === 'changeName').length, 1);
+  assert.equal(memberIds(result.plan).filter(id => id === 'addStaff').length, 1);
+
+  const html = renderObjectLayoutPlan(result.plan, {editable: true});
+  assert.match(html, /data-causeway-associated-member="notes"/);
+  assert.match(html, /member="notes"[^>]*multiline="5"/);
+  assert.match(html, /class="causeway-object-associated-actions"/);
+  assert.match(html, /data-causeway-associated-member="staffMembers"/);
+});
+
+test('diagnoses invalid multiline hints and caps excessive row counts', () => {
+  const invalid = parseCausewayGridXml(
+    `<bs:grid ${GRID_NAMESPACES}><cpt:property id="notes" multiLine="many"/></bs:grid>`,
+    {members: objectLayoutMembers()}
+  );
+  assert.ok(invalid.diagnostics.some(diagnostic => diagnostic.code === 'INVALID_MULTI_LINE'));
+  assert.deepEqual(semanticNodes(invalid.plan).find(node => node.memberId === 'notes').presentation, {});
+
+  const excessive = parseCausewayGridXml(
+    `<bs:grid ${GRID_NAMESPACES}><cpt:property id="notes" multiLine="500"/></bs:grid>`,
+    {members: objectLayoutMembers()}
+  );
+  assert.ok(excessive.diagnostics.some(diagnostic => diagnostic.code === 'MULTI_LINE_CAPPED'));
+  assert.equal(semanticNodes(excessive.plan).find(node => node.memberId === 'notes').presentation.multiLine, MAX_MULTI_LINE_ROWS);
+});
+
+test('groups consecutive fallback actions with a responsive semantic wrapper', () => {
+  const members = objectLayoutMembers();
+  members.set('delete', {id: 'delete', kind: 'action'});
+  const html = renderObjectLayoutPlan(createFallbackLayoutPlan(members));
+  assert.match(html, /class="causeway-object-actions" data-causeway-action-group/);
+  assert.match(html, /member="changeName"/);
+  assert.match(html, /member="delete"/);
 });
 
 test('renders escaped light-DOM semantic children, accessible tabs, and editable properties', () => {

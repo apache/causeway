@@ -41,6 +41,20 @@ causeway-object {
   grid-column: span 12;
   min-inline-size: 0;
 }
+.causeway-object-actions,
+.causeway-object-associated-actions {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-object-action-gap, 0.5rem);
+}
+.causeway-object-member-composition {
+  display: block;
+  min-inline-size: 0;
+}
+.causeway-object-associated-actions {
+  margin-block: -0.25rem 0.75rem;
+}
 
 .causeway-object-column[data-span="1"] { grid-column: span 1; }
 .causeway-object-column[data-span="2"] { grid-column: span 2; }
@@ -134,11 +148,18 @@ causeway-object {
 }
 .causeway-property-editor input:not([type="checkbox"]),
 .causeway-property-editor select,
+.causeway-property-editor textarea,
 .causeway-action-parameter input:not([type="checkbox"]),
-.causeway-action-parameter select {
+.causeway-action-parameter select,
+.causeway-action-parameter textarea {
   box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 32rem;
+}
+.causeway-property-editor textarea,
+.causeway-action-parameter textarea {
+  min-block-size: 5rem;
+  resize: vertical;
 }
 .causeway-action-prompt {
   border: 1px solid currentColor;
@@ -158,6 +179,45 @@ causeway-object {
 .causeway-property-label,
 .causeway-collection-label {
   font-weight: 600;
+}
+.causeway-property-disabled-indicator {
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  cursor: help;
+  display: inline-flex;
+  font-size: 0.75em;
+  inline-size: 1.25rem;
+  justify-content: center;
+  margin-inline-start: 0.35rem;
+  position: relative;
+}
+.causeway-property-disabled-indicator::after {
+  background: CanvasText;
+  border-radius: 0.25rem;
+  color: Canvas;
+  content: attr(data-tooltip);
+  font-size: 0.85rem;
+  font-weight: 400;
+  inline-size: max-content;
+  inset-block-end: calc(100% + 0.4rem);
+  inset-inline-start: 0;
+  max-inline-size: min(24rem, calc(100vw - 2rem));
+  opacity: 0;
+  padding: 0.4rem 0.55rem;
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(0.25rem);
+  transition: opacity 120ms ease, transform 120ms ease;
+  visibility: hidden;
+  white-space: normal;
+  z-index: 20;
+}
+.causeway-property-disabled-indicator:hover::after,
+.causeway-property-disabled-indicator:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
 }
 .causeway-object-link {
   align-items: baseline;

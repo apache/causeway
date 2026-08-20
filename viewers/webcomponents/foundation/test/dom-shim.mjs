@@ -136,14 +136,13 @@ export function installDomShim() {
   };
   const body = new ShimHTMLElement();
   body.isConnected = true;
-  const document = {
-    body,
-    createElement(name) {
-      const Constructor = registry.get(name) ?? ShimHTMLElement;
-      const element = new Constructor();
-      element.localName = name;
-      return element;
-    }
+  const document = new ShimEventTarget();
+  document.body = body;
+  document.createElement = name => {
+    const Constructor = registry.get(name) ?? ShimHTMLElement;
+    const element = new Constructor();
+    element.localName = name;
+    return element;
   };
 
   Object.assign(globalThis, {

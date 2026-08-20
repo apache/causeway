@@ -95,7 +95,8 @@ public class PetOwner implements Comparable<PetOwner> {
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Column(length = 400)
-    @PropertyLayout(fieldSetId = "details", sequence = "1")
+    @PropertyLayout(fieldSetId = "details", sequence = "1", multiLine = 5,
+            describedAs = "Additional notes about this pet owner.")
     private String notes;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)

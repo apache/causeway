@@ -58,7 +58,7 @@ Set `-Dplaywright.headless=false` only when deliberately debugging in a visible 
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
 
 The suite starts the application on a random port and exercises custom and generic routes, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, every Petclinic service action, and every Pet Owner object action.
-It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, or incorrect semantic results.
+It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, undisclosed menus, incorrect member-associated action placement, or incorrect semantic results.
 
 == Stable fixture routes
 
@@ -79,7 +79,7 @@ It composes a standard object header and declared collection tables beneath the 
 Pet Owner, Pet, and Visit routes exercise generic `<causeway-object>` fallback and their effective grids.
 
 The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.
-Object pages cover editable properties, enum values, references, tabs, grouped actions, choices, defaults, validation, related Pets, contributed Visits, and contributed booking.
+Object pages cover editable properties, multiline notes, enum values, references, tabs, spaced top-level actions, property- and collection-associated actions, disabled-reason tooltips, choices, defaults, validation, related Pets, contributed Visits, and contributed booking.
 The sample's current integration tests cover fixture identities, application home, menu and grid resources, rich service and object operations, shell and fragment responses, custom precedence, generic fallback, browser assets, and Wicket availability.
 
 == Wicket-relative presentation

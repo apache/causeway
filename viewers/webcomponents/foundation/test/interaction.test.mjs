@@ -99,6 +99,15 @@ test('editor registry selects standard inputs and supports application overrides
   assert.equal(text.editorId, 'text');
   assert.match(text.html, /type="text"/);
 
+  const multiline = renderCausewayEditor({
+    name: 'notes', value: 'First line\nSecond line', choices: [], enumValues: [], inputType: scalar('String'), multiLine: 5,
+    inputId: 'notes-input', labelId: 'notes-label', descriptionId: 'notes-description', errorId: '', testId: 'notes-editor'
+  });
+  assert.equal(multiline.editorId, 'multiline');
+  assert.match(multiline.html, /<textarea[^>]+rows="5"/);
+  assert.match(multiline.html, /First line\nSecond line<\/textarea>/);
+  assert.equal(parseCausewayEditorValue(multiline.editor, {value: 'Updated\nnotes'}), 'Updated\nnotes');
+
   const number = renderCausewayEditor({
     name: 'capacity', value: 24, choices: [], enumValues: [], inputType: scalar('Int'),
     inputId: 'capacity-input', labelId: 'capacity-label', descriptionId: '', errorId: '', testId: ''
@@ -159,23 +168,31 @@ test('editable properties support prepare, validation, cancel and authoritative 
   const property = new CausewayPropertyElement();
   property.member = 'name';
   property.editable = true;
+  property.multiLine = 5;
   property.setAttribute('data-testid', 'property-name');
   property.context = context;
   document.body.appendChild(property);
   stateListener({
     status: 'ready',
-    descriptor: {id: 'name', description: 'Name', value: {typeRef: scalar('String')}},
-    data: {hidden: false, disabled: 'Locked', get: 'Classics'}, errors: [], generation: 1
+    descriptor: {id: 'name', description: "Owner's full name", value: {typeRef: scalar('String')}},
+    data: {hidden: false, disabled: 'Locked by policy', get: 'Classics'}, errors: [], generation: 1
   });
   assert.doesNotMatch(property.innerHTML, /property-name-edit/);
+  assert.match(property.innerHTML, /title="Owner&#39;s full name"/);
+  assert.match(property.innerHTML, /causeway-property-disabled-indicator/);
+  assert.match(property.innerHTML, /tabindex="0"/);
+  assert.match(property.innerHTML, /data-tooltip="Locked by policy"/);
+  assert.match(property.innerHTML, /causeway-visually-hidden">Locked by policy/);
+  assert.doesNotMatch(property.innerHTML, /<p[^>]*causeway-property-disabled-reason/);
   stateListener({
     status: 'ready',
-    descriptor: {id: 'name', description: 'Name', value: {typeRef: scalar('String')}},
+    descriptor: {id: 'name', description: "Owner's full name", value: {typeRef: scalar('String')}},
     data: {hidden: false, disabled: null, get: 'Classics'}, errors: [], generation: 2
   });
   assert.match(property.innerHTML, /property-name-edit/);
   assert.equal(await property.beginEdit(), true);
   assert.match(property.innerHTML, /property-name-editor/);
+  assert.match(property.innerHTML, /<textarea[^>]+rows="5"/);
   property.setPendingValue('Deferred');
   const pendingValidation = property.validatePending();
   const editorTarget = {

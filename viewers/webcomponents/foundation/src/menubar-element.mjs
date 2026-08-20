@@ -42,6 +42,11 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this.lastDiagnosticGeneration = -1;
+    this.onOutsideClick = event => {
+      if (!this.contains?.(event.target)) {
+        this.#closeExpandedMenus();
+      }
+    };
     this.addEventListener('click', event => this.#handleClick(event));
     this.addEventListener('keydown', event => this.#handleKeydown(event));
   }
@@ -81,10 +86,12 @@ export class CausewayMenubarElement extends HTMLElementBase {
   }
 
   connectedCallback() {
+    globalThis.document?.addEventListener?.('click', this.onOutsideClick);
     this.#connectContext();
   }
 
   disconnectedCallback() {
+    globalThis.document?.removeEventListener?.('click', this.onOutsideClick);
     this._release?.();
     this._release = null;
     this._privateContext?.disconnect();
@@ -179,6 +186,10 @@ export class CausewayMenubarElement extends HTMLElementBase {
       return;
     }
     const context = this._context.serviceContext(serviceLogicalTypeName);
+    const panel = actionButton.closest?.('[data-causeway-menu-panel]');
+    const disclosure = panel?.id
+      ? this.querySelector?.(`[data-causeway-menu-disclosure][aria-controls="${globalThis.CSS?.escape ? CSS.escape(panel.id) : panel.id}"]`)
+      : null;
     actionButton.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_REQUEST, Object.freeze({
       actionId,
       serviceLogicalTypeName,
@@ -186,6 +197,9 @@ export class CausewayMenubarElement extends HTMLElementBase {
       identity: null,
       context
     }), {cancelable: true}));
+    if (disclosure) {
+      this.#closeMenu(disclosure, {focus: true});
+    }
   }
 
   #handleKeydown(event) {
@@ -259,6 +273,12 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this.#toggleDisclosure(button, false);
     if (focus) {
       button.focus?.();
+    }
+  }
+
+  #closeExpandedMenus() {
+    for (const expanded of this.querySelectorAll?.('[data-causeway-menu-disclosure][aria-expanded="true"]') ?? []) {
+      this.#closeMenu(expanded);
     }
   }
 
