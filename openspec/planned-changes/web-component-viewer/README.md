@@ -6,8 +6,9 @@ The foundation change `establish-graphql-web-component-foundation`, read-only ch
 The generic HTMX viewer change is active.
 The remaining drafts are queued for serial promotion, beginning with `add-generic-vue-web-component-viewer`.
 
-Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
-After the active change is archived, promote the next draft verbatim:
+Unless marked outline-only, each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
+The outline-only research draft `analyze-web-component-theming-kit` currently contains only `proposal.md` and is not ready for promotion or placement in the promotion order.
+After the active change is archived, promote the next complete draft verbatim:
 
 ```shell
 git mv openspec/planned-changes/web-component-viewer/<name> openspec/changes/<name>
