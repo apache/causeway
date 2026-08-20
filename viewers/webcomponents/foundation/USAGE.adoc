@@ -137,7 +137,8 @@ Auto mode adds one layout-metadata requirement to the nearest context, obtains t
 Fallback mode skips resource retrieval.
 The public `refreshLayout()` method explicitly re-evaluates a changed locale, authorization, or dynamic-layout context; ordinary authoritative object refreshes retain the current layout so active child interactions are not rebuilt.
 
-The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, `named` labels, and unreferenced actions, properties, and collections.
+The safe parser supports Bootstrap-grid rows and columns, spans from one through twelve, tab groups, tabs, field sets, domain-object placement, action/property/collection references, nested action order, bounded property `multiLine` hints, `named` labels, and unreferenced actions, properties, and collections.
+Actions nested beneath a property or collection remain associated with that member and render immediately after it, while consecutive unassociated actions render in a wrapping top-level action group.
 Explicit valid member references are reserved before unreferenced markers allocate remaining members in targeted-schema order.
 Stale, duplicate, and wrong-kind references never create broken or repeated semantic children.
 A usable explicit grid may intentionally omit members by omitting both their references and the corresponding unreferenced marker.
@@ -210,12 +211,13 @@ Safe actions use their advertised rich query invocation, while mutating actions 
 No object bookmark or `_target` is manufactured for a service action.
 `causeway-action-request`, `causeway-action-prompt-state-change`, and `causeway-action-result` retain their established names.
 Service interaction events add `target: {kind: "service", logicalTypeName}`, `serviceLogicalTypeName`, and `identity: null`; object interaction identities remain unchanged.
-Routing, shell closing, result rendering, browser history, home behavior, and navigation remain host policy.
+Routing, result rendering, browser history, home behavior, and navigation remain host policy.
+Selecting an enabled menu action closes its transient menu before interaction presentation, clicking outside closes an expanded menu without moving focus, and cancellation restores focus to the visible originating disclosure.
 
 Each non-empty bar renders a labelled `nav` landmark.
 Native buttons expose `aria-expanded` and `aria-controls` for menu and narrow bar disclosures.
 The components deliberately avoid ARIA `menubar` and `menuitem` application-mode roles.
-Tab and Shift+Tab retain native order; Enter and Space toggle disclosures; Escape closes and restores focus; Home, End, and arrow keys traverse documented peer controls; and opening a menu closes siblings within the same bar.
+Tab and Shift+Tab retain native order; Enter and Space toggle disclosures; Escape closes and restores focus; Home, End, and arrow keys traverse documented peer controls; opening a menu closes siblings within the same bar; and action selection or outside activation dismisses transient menu content.
 At the `48rem` narrow threshold, bars and menus stack without changing semantic order or events.
 
 The composite and standalone bars expose `refresh()` to start a new authorization-sensitive and locale-sensitive generation and reject superseded metadata, resource, and service-state responses.
@@ -257,6 +259,7 @@ Renderer input is normalized semantic state containing `value`, `descriptor`, `t
 
 `<causeway-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
 It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer, and an accessible disabled reason.
+A non-redundant property description remains the label's default title, while a disabled property adds a separate focusable reason indicator whose tooltip and hidden description do not replace the stable domain description.
 A hidden property renders no label, value, or interactive content.
 Changing `member` releases the old requirement and registers the new one.
 
@@ -279,7 +282,8 @@ Cancel restores the authoritative value without a command.
 A successful save invalidates the complete active object projection so supporting-method changes are reflected by every mounted component.
 Hidden, disabled, query-only, and unsupported properties expose no enabled save path.
 
-The default editor registry covers text, numeric, boolean, enum, fixed-choice, and advertised autocomplete inputs.
+The default editor registry covers single-line and effective-grid-directed multiline text, numeric, temporal, boolean, enum, fixed-choice, and advertised autocomplete inputs.
+A valid `multiLine` value greater than one selects a textarea and is capped at 50 rows; malformed and non-positive values retain the single-line editor.
 Applications can register a more-specific editor through `defaultEditorRegistry.register(...)`, or assign another `CausewayEditorRegistry` to a property's `editorRegistry` JavaScript property.
 Editors render and parse pending semantic values but never execute GraphQL independently.
 
@@ -385,7 +389,7 @@ Properties emit interaction-state and updated events, while the action controlle
 These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
 
 Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
-Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
+Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-actions`, `causeway-object-associated-actions`, `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-property-disabled-indicator`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
 
 `installCausewayComponentStyles()` installs the optional minimal structural stylesheet once.
 The packaged `/causeway-webcomponents/theme.css` adds a cohesive Wicket-inspired visual system for applications that want a ready default.

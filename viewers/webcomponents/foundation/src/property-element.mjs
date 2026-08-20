@@ -33,7 +33,7 @@ let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['member', 'label', 'editable'];
+    return ['member', 'label', 'editable', 'multiline'];
   }
 
   constructor() {
@@ -82,6 +82,19 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       this.setAttribute('editable', '');
     } else {
       this.removeAttribute('editable');
+    }
+  }
+
+  get multiLine() {
+    const rows = Number(this.getAttribute('multiline'));
+    return Number.isSafeInteger(rows) && rows > 1 ? Math.min(rows, 50) : 0;
+  }
+
+  set multiLine(value) {
+    if (Number.isSafeInteger(value) && value > 1) {
+      this.setAttribute('multiline', String(Math.min(value, 50)));
+    } else {
+      this.removeAttribute('multiline');
     }
   }
 
@@ -313,11 +326,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const presentation = this.#presentation(state);
     if (presentation.loading) {
-      this.innerHTML = `<div class="causeway-property" aria-busy="true"><span id="${this.labelId}" class="causeway-property-label">${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span role="status">Loading value…</span></div>`;
+      this.innerHTML = `<div class="causeway-property" aria-busy="true"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span role="status">Loading value…</span></div>`;
       return;
     }
     if (presentation.error) {
-      this.innerHTML = `<div class="causeway-property causeway-error" role="alert"><span id="${this.labelId}" class="causeway-property-label">${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`;
+      this.innerHTML = `<div class="causeway-property causeway-error" role="alert"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`;
       return;
     }
     const propertyState = state.data ?? {};
@@ -334,11 +347,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit"${this.#testId('edit')}>Edit ${escapeHtml(presentation.label)}</button>`
       : '';
     this.innerHTML = `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
-  <span id="${this.labelId}" class="causeway-property-label">${escapeHtml(presentation.label)}</span>
+  <span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>
+  ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
   <output class="causeway-property-value" aria-labelledby="${this.labelId}"${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${rendered.html}</output>
   ${editMarkup}
-  ${presentation.disabledMarkup}
 </div>`;
     this.#restoreSavedEditFocus(state);
   }
@@ -367,7 +380,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       suggestions: this.interactionState.suggestions ?? [],
       inputType: this.interactionState.capabilities?.inputType
     });
-    const textEditor = editor.id === 'text';
+    const textEditor = ['text', 'multiline'].includes(editor.id);
     this.setPendingValue(value, {validate: textEditor});
     if (!textEditor) {
       void this.validatePending();
@@ -395,14 +408,16 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const disabledReason = typeof state.data?.disabled === 'string'
       ? state.data.disabled
       : state.data?.disabled === true ? 'Disabled' : '';
-    const disabledMarkup = disabledReason
-      ? `<p id="${this.reasonId}" class="causeway-property-disabled-reason">${escapeHtml(disabledReason)}</p>`
+    const boundedDisabledReason = boundedTooltip(disabledReason);
+    const disabledMarkup = boundedDisabledReason
+      ? `<span class="causeway-property-disabled-indicator" tabindex="0" role="img" aria-label="Disabled: ${escapeHtml(boundedDisabledReason)}" aria-describedby="${this.reasonId}" data-tooltip="${escapeHtml(boundedDisabledReason)}">&#9432;</span><span id="${this.reasonId}" class="causeway-visually-hidden">${escapeHtml(boundedDisabledReason)}</span>`
       : '';
     return {
       label,
       description,
       descriptionMarkup,
-      disabledReason,
+      descriptionTitle: description ? ` title="${escapeHtml(description)}"` : '',
+      disabledReason: boundedDisabledReason,
       disabledMarkup,
       describedBy: [description ? this.descriptionId : '', disabledReason ? this.reasonId : ''].filter(Boolean).join(' '),
       loading: ['idle', 'schema-loading', 'object-loading'].includes(state.status),
@@ -420,6 +435,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       autoComplete: interaction.capabilities?.autoComplete === true,
       enumValues: interaction.capabilities?.enumValues ?? [],
       inputType: interaction.capabilities?.inputType,
+      multiLine: this.multiLine,
       inputId: this.inputId,
       labelId: this.labelId,
       descriptionId: presentation.description ? this.descriptionId : '',
@@ -449,7 +465,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.renderingInteraction = true;
     try {
       this.innerHTML = `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" aria-busy="${busy}">
-  <span id="${this.labelId}" class="causeway-property-label">${escapeHtml(presentation.label)}</span>
+  <span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>
   ${presentation.descriptionMarkup}
   <div class="causeway-property-editor">${renderedEditor.html}</div>
   ${errorMarkup}
@@ -496,6 +512,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const host = this.getAttribute('data-testid');
     return host ? `${host}-${suffix}` : '';
   }
+}
+
+function boundedTooltip(value, maximum = 240) {
+  const text = String(value ?? '').trim();
+  return text.length > maximum ? `${text.slice(0, maximum - 1)}…` : text;
 }
 
 function interactionStatusLabel(status) {

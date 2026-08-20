@@ -123,6 +123,14 @@ const numberEditor = Object.freeze({
   }
 });
 
+const multilineEditor = Object.freeze({
+  id: 'multiline',
+  priority: 110,
+  supports: context => namedType(context.inputType) === 'String' && Number.isSafeInteger(context.multiLine) && context.multiLine > 1,
+  render: context => `<textarea ${inputAttributes(context)} rows="${Math.min(context.multiLine, 50)}">${escapeHtml(context.value ?? '')}</textarea>`,
+  parse: ({value}) => value
+});
+
 const textEditor = Object.freeze({
   id: 'text',
   priority: 100,
@@ -157,6 +165,7 @@ export const defaultEditorRegistry = new CausewayEditorRegistry([
   temporalEditor,
   numberEditor,
   enumEditor,
+  multilineEditor,
   textEditor
 ]);
 
