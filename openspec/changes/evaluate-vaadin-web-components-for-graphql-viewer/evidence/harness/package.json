@@ -1,0 +1,35 @@
+{
+  "name": "causeway-vaadin-web-component-evaluation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit-security": "node audit.mjs",
+    "build": "node build.mjs",
+    "capture": "node capture.mjs --write",
+    "measure": "node measure.mjs --write",
+    "verify": "node verify.mjs --write",
+    "integrate-petclinic": "node integrate-petclinic.mjs",
+    "serve": "node server.mjs"
+  },
+  "dependencies": {
+    "@vaadin/button": "25.2.8",
+    "@vaadin/checkbox": "25.2.8",
+    "@vaadin/combo-box": "25.2.8",
+    "@vaadin/date-picker": "25.2.8",
+    "@vaadin/date-time-picker": "25.2.8",
+    "@vaadin/dialog": "25.2.8",
+    "@vaadin/grid": "25.2.8",
+    "@vaadin/multi-select-combo-box": "25.2.8",
+    "@vaadin/select": "25.2.8",
+    "@vaadin/tabs": "25.2.8",
+    "@vaadin/text-area": "25.2.8",
+    "@vaadin/text-field": "25.2.8",
+    "@vaadin/time-picker": "25.2.8",
+    "@vaadin/upload": "25.2.8"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "esbuild": "0.28.2",
+    "playwright": "1.61.0"
+  }
+}

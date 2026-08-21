@@ -1,0 +1,9 @@
+[data-analysis-adapter="vaadin-probe"] {
+  margin: 1rem;
+  padding: 1rem;
+  border: 2px dashed currentColor;
+  display: grid;
+  gap: 0.75rem;
+  background: var(--causeway-surface, #fff);
+}
+[data-analysis-adapter="vaadin-probe"] vaadin-grid { height: 12rem; }

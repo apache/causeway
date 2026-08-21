@@ -1,0 +1,328 @@
+{
+  "generatedAt": "2026-08-21T17:55:13.050Z",
+  "lockfileVersion": 3,
+  "directPackages": [
+    {
+      "name": "@vaadin/button",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-9uEdI9BrFoz8595C0MNeuc98NgleIfZW7rlcrfp6HxVXnHQ5sFKHuMAvBBrSrf3XCuK2xKIztlOB2Xo1pVlg8g==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/button"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/checkbox",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-JvpCGbfK46RRE1cYEIej4QFA7BeQjtLdzAQhKZz/sCF4QRt32Bz4fK/XrgFS5+hk2HGSkdJOGBOWi5X6Z/zTlg==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/checkbox"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/combo-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-8tiBo1Zq+70nr7OTzK4VPj92cerCdWdQXpTqiz+upUJOt/a5vzLoHaTqe1mmv7VTc+h2cK6qE7qJUQnapoI0wA==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/combo-box"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/date-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-wJwhBmSAeRIFMGqHoiATvWqAmhsFRlejdMtfZNgDx9BoHOhJYLngFwexkzooBcePnJVKsnJg2Gy1Z9qKMC/5kw==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/date-picker"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/date-time-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-Qn4xsE4sIOMjhLWWKiCJRiwBpuT2ssX0idypnl72VQzzAIYjFxbZ0/aDzka0rtmgP7g5yYzNtMWdc/NBXTokGQ==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/date-time-picker"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/dialog",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ZTRlvYn4GJbQlp/FV2O9zlCEzySdoH5adc+E3JaFW/j0bObbRWftRVXpPYDU5DXBp1Gm6ZYQ0cMARM38iKduKQ==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/dialog"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/grid",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-J32kJBHMw3U5D9ge7QwgxIH2Ll9NGMTPNLDWtPi2OmHfuJUDx0JExNx9+ne+EcMkRdt+I6VOcKc7qJ3ci7Obsg==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/grid"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/multi-select-combo-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-Ydm/M8WgT2UFXo8ld4pclN3vmW6vblPW+1NZ04VPCrcMKfQIKaR2wfn1J17uy4WFGjay6Oh5gsZGDQYQ0NL9VQ==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/multi-select-combo-box"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/select",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-I/pXuqSeBwqtIduabgcvjUzbjwBnrTUOBIg6Ov/mDq2rHzx9LukmnAjnK51pWivofiFJ8A9Qth9dZJSY2R1UxQ==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/select"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/tabs",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-NHl/nGLJpbAkFVNl5fUcVrEBtzTjoDcALXzWYwC71CPdpL12lIhtDfGjLig26WlQY4J7boquSEiXHwDU56ohYg==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/tabs"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/text-area",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-v3jmksO6WLQMFznW//4Q9+DLkxwBFV5EBtAVOXoMHQjTVFhIe7kVK+nRL/xtMfu6C10VjM0Tnr9MPKexJGztyw==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/text-area"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/text-field",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-VFImNUSN0gmfRgUqWdW/XaijIkBMJjBtgS2hxwL1RlvHhCBb2O/TuUmGDYwWvimuWYaBlhcV2xZYnMRBVeLQCg==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/text-field"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/time-picker",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-oFjYUyabUGkU9VGBWg20VuCPOaBVW12T60qPKYC++fVq1+ZP/ufuDVEn6W85LQLm06iLwTxfFXSMK2IEd/87BA==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/time-picker"
+      },
+      "installed": true,
+      "direct": true
+    },
+    {
+      "name": "@vaadin/upload",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ZdoLXr65e6NyTC8ofPZ4a888vJYtd/KSW409yKi0KOKl2gqJmOikbryEGXrKrAwcpM/FNpXMKq2IFTscj5LWrQ==",
+      "dev": false,
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/vaadin/web-components.git",
+        "directory": "packages/upload"
+      },
+      "installed": true,
+      "direct": true
+    }
+  ],
+  "packageCount": 64,
+  "runtimePackageCount": 33,
+  "licenseCounts": {
+    "development:MIT": 28,
+    "runtime:BSD-3-Clause": 5,
+    "runtime:MIT": 2,
+    "runtime:Apache-2.0": 26,
+    "development:MPL-2.0": 1,
+    "development:Apache-2.0": 2
+  },
+  "unknownLicenses": [],
+  "prohibitedPackages": [],
+  "generatedFiles": [
+    {
+      "path": "generated/licenses/vaadin__button-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "6fc33458f44aba6f1658102007221e6cae7c4a20ba861227adb674ef20671ec3"
+    },
+    {
+      "path": "generated/licenses/vaadin__checkbox-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "6fc33458f44aba6f1658102007221e6cae7c4a20ba861227adb674ef20671ec3"
+    },
+    {
+      "path": "generated/licenses/vaadin__combo-box-LICENSE.txt",
+      "bytes": 10761,
+      "sha256": "f0a203074a669060fe4a25511ac7396f00bcee1328c2a0f6edc59b78f55c52fc"
+    },
+    {
+      "path": "generated/licenses/vaadin__date-picker-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "6fc33458f44aba6f1658102007221e6cae7c4a20ba861227adb674ef20671ec3"
+    },
+    {
+      "path": "generated/licenses/vaadin__date-time-picker-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "d7686de5d6e733df37301a55bc638921f595ff5dab929407d274596a8df0d8b6"
+    },
+    {
+      "path": "generated/licenses/vaadin__dialog-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "2279baa5f993733860961bf9531a964e21615a835ca181798fc3bac88e001341"
+    },
+    {
+      "path": "generated/licenses/vaadin__grid-LICENSE.txt",
+      "bytes": 10761,
+      "sha256": "8a0a1dc90e4ace7958878e02a5833a610c139cb11e9913c3fb96989b0f1da088"
+    },
+    {
+      "path": "generated/licenses/vaadin__multi-select-combo-box-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "318487da11a2e4e1bf71d6e9942863f41b794f23a97ae9a61635b8f71565a558"
+    },
+    {
+      "path": "generated/licenses/vaadin__select-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "2279baa5f993733860961bf9531a964e21615a835ca181798fc3bac88e001341"
+    },
+    {
+      "path": "generated/licenses/vaadin__tabs-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "2279baa5f993733860961bf9531a964e21615a835ca181798fc3bac88e001341"
+    },
+    {
+      "path": "generated/licenses/vaadin__text-area-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "6fc33458f44aba6f1658102007221e6cae7c4a20ba861227adb674ef20671ec3"
+    },
+    {
+      "path": "generated/licenses/vaadin__text-field-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "6fc33458f44aba6f1658102007221e6cae7c4a20ba861227adb674ef20671ec3"
+    },
+    {
+      "path": "generated/licenses/vaadin__time-picker-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "2279baa5f993733860961bf9531a964e21615a835ca181798fc3bac88e001341"
+    },
+    {
+      "path": "generated/licenses/vaadin__upload-LICENSE.txt",
+      "bytes": 10756,
+      "sha256": "79001079f9a2ccdf8d2508c6a2ad39aa816f96f9a54459bdefdc5c75323c4244"
+    },
+    {
+      "path": "generated/split/chunks/chunk-6DJFYO7X.js",
+      "bytes": 4807,
+      "sha256": "9242d45da49ceaa320941453f86b4195ba63e7796101803c58afcc513cf8774e"
+    },
+    {
+      "path": "generated/split/chunks/chunk-JAZKWOIA.js",
+      "bytes": 98728,
+      "sha256": "3fd02f69b78ef1d8a5cc5d5e0eadb1d93a34906e6cf10c5f3190900192377086"
+    },
+    {
+      "path": "generated/split/chunks/chunk-T6TECDK2.js",
+      "bytes": 75710,
+      "sha256": "b4f83e67d8472e8e5c7f7c3a4ff20b4803b21260aff7d22263c281f5719eefb6"
+    },
+    {
+      "path": "generated/split/chunks/chunk-V7PLVXUQ.js",
+      "bytes": 7835,
+      "sha256": "178ae7c23b981ea48c8ade31d0c1e1172893437ffea490caf52978a42c4f0ea7"
+    },
+    {
+      "path": "generated/split/fields.js",
+      "bytes": 202317,
+      "sha256": "03886ced32e3484d2e70697a388a62c0a756a077b19d3abd7681be61cd94b9a0"
+    },
+    {
+      "path": "generated/split/grid.js",
+      "bytes": 103168,
+      "sha256": "c4d113d706470c03db4fe57b0cc45fa8cca4fb1cbc53726999448e5e36056b6d"
+    },
+    {
+      "path": "generated/split/reference.js",
+      "bytes": 40867,
+      "sha256": "7f1defbeaca81005b7e56419e4530a0a06b090cec31cbeadb34efe8027456143"
+    },
+    {
+      "path": "generated/vaadin-selective.js",
+      "bytes": 527772,
+      "sha256": "25755ef2396767e927270deeac700d2dc6038eac8c6e4536d05ecbdbe870fdf8"
+    }
+  ],
+  "externalRuntimeDependencyPolicy": "All resolved @vaadin runtime packages must be Apache-2.0; complete ASF dependency review remains required before adoption.",
+  "failures": []
+}
