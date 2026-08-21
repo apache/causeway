@@ -1,0 +1,903 @@
+{
+  "generatedAt": "2026-08-21T17:55:32.036Z",
+  "environment": {
+    "browser": "151.0.7922.172",
+    "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "origin": "http://127.0.0.1:4184",
+    "headless": true
+  },
+  "journey": {
+    "initial": {
+      "standalone": true,
+      "flowRuntime": false,
+      "flowClients": false,
+      "contextCount": 1,
+      "defined": true
+    },
+    "keyboardSingle": {
+      "selected": "petclinic.owner.Owner:19",
+      "active": "input"
+    },
+    "keyboardMulti": {
+      "selected": [
+        "petclinic.owner.Owner:2"
+      ],
+      "closedByEscape": true
+    },
+    "keyboardGrid": {
+      "target": {
+        "localName": "table",
+        "part": null
+      },
+      "active": "vaadin-grid",
+      "shadowActive": "th"
+    },
+    "single": {
+      "items": [
+        "petclinic.owner.Owner:19"
+      ],
+      "totalCount": 1
+    },
+    "multi": {
+      "selected": [
+        "petclinic.owner.Owner:1",
+        "petclinic.owner.Owner:2",
+        "petclinic.owner.Owner:3"
+      ]
+    },
+    "grid": {
+      "first": "petclinic.visit.Visit:101",
+      "count": 50,
+      "totalCount": 1200
+    },
+    "stale": {
+      "old": "AbortError",
+      "current": [
+        "petclinic.owner.Owner:19"
+      ],
+      "staleApplied": false
+    },
+    "representativeStates": {
+      "partialChoices": 2,
+      "choiceError": "Representative GraphQL autocomplete failure",
+      "partialWindow": "Representative partial row error",
+      "collectionError": "Representative GraphQL collection failure",
+      "outcomes": {
+        "scalar": "scalar",
+        "object": "object",
+        "collection": "collection",
+        "void": "void",
+        "error": "error"
+      }
+    },
+    "validation": {
+      "invalid": true,
+      "errorMessage": "Display name is required"
+    },
+    "actionOpen": {
+      "opened": true,
+      "openEvents": 1
+    },
+    "actionClose": {
+      "opened": false,
+      "focusRestored": true
+    },
+    "semantic": {
+      "mode": "semantic",
+      "contexts": 1,
+      "wrappers": 3
+    },
+    "raw": {
+      "mode": "raw",
+      "contexts": 1,
+      "rawWidgets": 3
+    },
+    "lifecycle": {
+      "iterations": 20,
+      "before": {
+        "bodyElements": 206,
+        "overlays": 0
+      },
+      "after": {
+        "bodyElements": 206,
+        "overlays": 0
+      },
+      "elementGrowth": 0,
+      "overlayGrowth": 0,
+      "contextCount": 1
+    },
+    "graphqlEvents": [
+      {
+        "sequence": 98,
+        "generation": 11,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 100,
+        "generation": 11,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 103,
+        "generation": 12,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 105,
+        "generation": 12,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 107,
+        "generation": 13,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 109,
+        "generation": 13,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 112,
+        "generation": 14,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 114,
+        "generation": 14,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 117,
+        "generation": 15,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 119,
+        "generation": 15,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 121,
+        "generation": 16,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 123,
+        "generation": 16,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 126,
+        "generation": 17,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 128,
+        "generation": 17,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 131,
+        "generation": 18,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 133,
+        "generation": 18,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 135,
+        "generation": 19,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 137,
+        "generation": 19,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 140,
+        "generation": 20,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 142,
+        "generation": 20,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 145,
+        "generation": 21,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 147,
+        "generation": 21,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 149,
+        "generation": 22,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 151,
+        "generation": 22,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 154,
+        "generation": 23,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 156,
+        "generation": 23,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 159,
+        "generation": 24,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 161,
+        "generation": 24,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 163,
+        "generation": 25,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 165,
+        "generation": 25,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 168,
+        "generation": 26,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 170,
+        "generation": 26,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 173,
+        "generation": 27,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 175,
+        "generation": 27,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 177,
+        "generation": 28,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 179,
+        "generation": 28,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 182,
+        "generation": 29,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 184,
+        "generation": 29,
+        "kind": "graphql-autocomplete-start",
+        "operationName": "CausewayPropertyAutoComplete",
+        "variables": {
+          "search": "slow"
+        },
+        "publicContract": true,
+        "serverPaging": false
+      },
+      {
+        "sequence": 187,
+        "generation": 30,
+        "kind": "graphql-collection-window-start",
+        "operationName": "CausewayCollectionWindow",
+        "variables": {
+          "offset": 0,
+          "size": 50
+        },
+        "publicContract": true,
+        "unsupportedSortOrders": [],
+        "unsupportedFilters": []
+      },
+      {
+        "sequence": 189,
+        "generation": 30,
+        "kind": "graphql-collection-window-complete",
+        "request": 187,
+        "offset": 0,
+        "returnedCount": 50,
+        "totalCount": 1200
+      }
+    ],
+    "externalRequests": [],
+    "consoleErrors": [],
+    "pageErrors": [],
+    "assertions": {
+      "standaloneNoFlow": true,
+      "oneRouteContext": true,
+      "componentsDefined": true,
+      "keyboardSingleReference": true,
+      "keyboardMultiReference": true,
+      "keyboardGridFocus": true,
+      "singleReference": true,
+      "multiReference": true,
+      "gridWindow": true,
+      "sortFilterGapRecorded": true,
+      "staleSearchSuppressed": true,
+      "representativeStates": true,
+      "validationAuthoritative": true,
+      "actionPrompt": true,
+      "semanticCustomPage": true,
+      "rawTier": true,
+      "lifecycleBounded": true,
+      "noExternalRequests": true,
+      "noBrowserErrors": true
+    }
+  },
+  "scenarios": [
+    {
+      "name": "generic-desktop-light",
+      "mode": "generic",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 44
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": null,
+        "readyMark": 92.40000009536743
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    },
+    {
+      "name": "semantic-desktop-dark",
+      "mode": "semantic",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 44
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": "dark",
+        "readyMark": 96.39999997615814
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    },
+    {
+      "name": "raw-desktop-light",
+      "mode": "raw",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 33
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": null,
+        "readyMark": 101.10000002384186
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    },
+    {
+      "name": "generic-narrow-light",
+      "mode": "generic",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 36
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": null,
+        "readyMark": 100.39999997615814
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    },
+    {
+      "name": "semantic-narrow-dark",
+      "mode": "semantic",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 36
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": "dark",
+        "readyMark": 140.20000004768372
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    },
+    {
+      "name": "generic-forced-colors",
+      "mode": "generic",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "forcedColors": "active",
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "nodes": 2
+          },
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": 36
+          }
+        ]
+      },
+      "errors": [],
+      "overflow": 0,
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "activeElement": "body",
+        "contextCount": 1,
+        "theme": null,
+        "readyMark": 107.80000007152557
+      },
+      "externalRequests": [],
+      "requestCount": 4
+    }
+  ],
+  "performance": {
+    "runs": [
+      {
+        "navigation": 124.80000007152557,
+        "readyMark": 111.80000007152557,
+        "resources": 3,
+        "transferSize": 559141,
+        "decodedBodySize": 558241,
+        "wallClock": 603.8255410000002
+      },
+      {
+        "navigation": 121.79999995231628,
+        "readyMark": 108.10000002384186,
+        "resources": 3,
+        "transferSize": 559141,
+        "decodedBodySize": 558241,
+        "wallClock": 592.0728749999998
+      },
+      {
+        "navigation": 115.5,
+        "readyMark": 102.5,
+        "resources": 3,
+        "transferSize": 559141,
+        "decodedBodySize": 558241,
+        "wallClock": 568.0206660000003
+      },
+      {
+        "navigation": 129.30000007152557,
+        "readyMark": 116,
+        "resources": 3,
+        "transferSize": 559141,
+        "decodedBodySize": 558241,
+        "wallClock": 581.9157500000001
+      },
+      {
+        "navigation": 125.59999990463257,
+        "readyMark": 112.09999990463257,
+        "resources": 3,
+        "transferSize": 559141,
+        "decodedBodySize": 558241,
+        "wallClock": 588.0749580000011
+      }
+    ],
+    "medians": {
+      "navigation": 124.80000007152557,
+      "readyMark": 111.80000007152557,
+      "resources": 3,
+      "transferSize": 559141,
+      "decodedBodySize": 558241,
+      "wallClock": 588.0749580000011
+    }
+  }
+}

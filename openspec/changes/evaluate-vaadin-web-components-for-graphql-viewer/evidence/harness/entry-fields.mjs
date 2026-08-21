@@ -1,0 +1,11 @@
+import '@vaadin/button';
+import '@vaadin/checkbox';
+import '@vaadin/date-picker';
+import '@vaadin/date-time-picker';
+import '@vaadin/dialog';
+import '@vaadin/select';
+import '@vaadin/tabs';
+import '@vaadin/text-area';
+import '@vaadin/text-field';
+import '@vaadin/time-picker';
+import '@vaadin/upload';

@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-08-21T09:13:26.376Z",
+  "jar": "packaging/target/causeway-vaadin-web-component-analysis-assets-1.0.0-analysis.jar",
+  "jarBytes": 320248,
+  "entryCount": 35,
+  "broadAssets": 1,
+  "splitAssets": 7,
+  "directLicenses": 14,
+  "runtimeCdnRequired": false
+}
