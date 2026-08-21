@@ -18,15 +18,18 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test;
 
+import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
-import jakarta.inject.Inject;
-
-import tools.jackson.databind.ObjectMapper;
-
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.jspecify.annotations.Nullable;
@@ -37,30 +40,23 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClient.Builder;
 import org.springframework.web.client.RestClient.ResponseSpec;
+import org.springframework.web.client.RestClient.ResponseSpec.ErrorHandler;
 
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
-
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
-
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Intended as a base class for integration testing.
@@ -117,7 +113,7 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
      */
     protected TestInfo testInfo;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     protected String baseUrl() {
         return "http://0.0.0.0:%d/restful/".formatted(port);
@@ -139,33 +135,26 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
             .uri(uri)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .onStatus(assertStatusOkResponseErrorHandler());
+            .onStatus(_Predicates.alwaysTrue(), assertStatusOkResponseErrorHandler());
     }
 
-    protected ResponseErrorHandler assertStatusOkResponseErrorHandler() {
-        return new ResponseErrorHandler() {
-            @Override
-            public boolean hasError(final ClientHttpResponse response) throws IOException {
-                return !response.getStatusCode().equals(HttpStatus.OK);
-            }
-            @Override
-            public void handleError(final URI url, final HttpMethod method, final ClientHttpResponse response) throws IOException {
-                throw new AssertionFailedError("StatusCode not OK: " + response.getStatusCode());
-            }
+    protected ErrorHandler assertStatusOkResponseErrorHandler() {
+        return new ErrorHandler() {
+			@Override
+			public void handle(final HttpRequest request, final ClientHttpResponse response) throws IOException {
+				if(!response.getStatusCode().equals(HttpStatus.OK))
+					throw new AssertionFailedError("StatusCode not OK: " + response.getStatusCode());
+			}
         };
     }
 
-    protected ResponseErrorHandler assertStatusNotFoundResponseErrorHandler() {
-        return new ResponseErrorHandler() {
-            @Override
-            public boolean hasError(final ClientHttpResponse response) throws IOException {
-                return true; //handle any status
-            }
-            @Override
-            public void handleError(final URI url, final HttpMethod method, final ClientHttpResponse response) throws IOException {
-                if(!response.getStatusCode().equals(HttpStatus.NOT_FOUND))
-                    throw new AssertionFailedError("StatusCode NOT_FOUND expected, but got: " + response.getStatusCode());
-            }
+    protected ErrorHandler assertStatusNotFoundResponseErrorHandler() {
+        return new ErrorHandler() {
+			@Override
+			public void handle(final HttpRequest request, final ClientHttpResponse response) throws IOException {
+				if(!response.getStatusCode().equals(HttpStatus.NOT_FOUND))
+					throw new AssertionFailedError("StatusCode NOT_FOUND expected, but got: " + response.getStatusCode());
+			}
         };
     }
 

@@ -18,17 +18,16 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.dept;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
+import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
-import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,7 +98,7 @@ class Department_IntegTest extends Abstract_IntegTest {
             .uri("/objects/university.dept.Department/9999999")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .onStatus(assertStatusNotFoundResponseErrorHandler());
+            .onStatus(_Predicates.alwaysTrue(), assertStatusNotFoundResponseErrorHandler());
 
         // then
         var entity = response.body(String.class);

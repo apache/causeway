@@ -18,30 +18,29 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.staff;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.handler.RetryHandler;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ActionParameterModel;
+import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
+import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSources;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.springframework.transaction.annotation.Propagation;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.handler.RetryHandler;
-import org.apache.causeway.commons.io.DataSource;
-import org.apache.causeway.viewer.restfulobjects.applib.client.ActionParameterModel;
-import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
-import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -113,7 +112,7 @@ class Staff_IntegTest extends Abstract_IntegTest {
             .uri(scenario.uri())
             .body(argModel.toJson())
             .retrieve()
-            .onStatus(assertStatusOkResponseErrorHandler());
+            .onStatus(_Predicates.alwaysTrue(), assertStatusOkResponseErrorHandler());
 
         // then
         var entity = response.body(String.class);
