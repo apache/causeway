@@ -19,12 +19,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class DatatablesCssReferenceWkt extends WebjarsCssResourceReference {
     private static final long serialVersionUID = 1L;
@@ -41,9 +41,7 @@ public class DatatablesCssReferenceWkt extends WebjarsCssResourceReference {
      * Private constructor.
      */
     private DatatablesCssReferenceWkt() {
-        super(RESOURCE);
+        super(WebJar.DATATABLES_CSS.resource());
     }
 
-    private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
-            "datatables/%s/css/dataTables.dataTables.min.css");
 }

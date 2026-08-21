@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.temporal;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
-import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
-
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class MomentJsReference extends WebjarsJavaScriptResourceReference {
 
@@ -37,9 +35,7 @@ public class MomentJsReference extends WebjarsJavaScriptResourceReference {
         new MomentJsReference();
 
     private MomentJsReference() {
-        super("momentjs/%s/min/moment.min.js"
-                .formatted(WebjarEnumerator.lookupElseFail("momentjs")
-                        .version()));
+        super(WebJar.MOMENTJS_JS.resource());
     }
 
     /**

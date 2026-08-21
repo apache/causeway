@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
+import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceType;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
-import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
-import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -40,12 +38,7 @@ extends JavaScriptResourceReference {
         new PdfJsIntegrationReference();
 
     private PdfJsIntegrationReference() {
-        super(PdfJsIntegrationReference.class,
-                String.format("pdfjs-integration-%s.%s",
-                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().integrationScriptSuffix(),
-                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType()==JavaScriptReferenceType.MODULE
-                        ? "mjs"
-                        : "js"));
+        super(PdfJsIntegrationReference.class, "pdfjs-integration-v4x5x.mjs");
     }
 
     /**
@@ -53,7 +46,7 @@ extends JavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
-                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType());
+                .setType(JavaScriptReferenceType.MODULE);
     }
 
     public static OnDomReadyHeaderItem domReadyScript(

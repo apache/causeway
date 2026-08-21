@@ -18,15 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 
-import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
-import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
-
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
     private static final long serialVersionUID = 1L;
@@ -43,9 +40,7 @@ public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
      * Private constructor.
      */
     private FontAwesomeCssReferenceWkt() {
-        super(IconDecorator.FONTAWESOME_RESOURCE_FORMAT
-                .formatted(WebjarEnumerator.lookupElseFail("font-awesome")
-                        .version()));
+        super(WebJar.FONT_AWESOME_CSS.resource());
     }
 
 }

@@ -19,13 +19,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class DatatablesJavaScriptReferenceWkt extends WebjarsJavaScriptResourceReference {
     private static final long serialVersionUID = 1L;
@@ -42,9 +42,7 @@ public class DatatablesJavaScriptReferenceWkt extends WebjarsJavaScriptResourceR
      * Private constructor.
      */
     private DatatablesJavaScriptReferenceWkt() {
-        super(RESOURCE);
+        super(WebJar.DATATABLES_JS.resource());
     }
 
-    private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
-            "datatables/%s/js/dataTables.min.js");
 }

@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration;
 
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
-
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 /**
  * @since 2.0 {@index}
@@ -42,12 +39,6 @@ implements WicketApplicationInitializer {
         resourceGuard.addPattern("+*.bcmap");
         // allows *.mjs, otherwise Wicket throws 'Access denied to (static) package resource'
         resourceGuard.addPattern("+*.mjs");
-    }
-
-    private final static _Lazy<PdfJsVersion> pdfJsVersionLazy = _Lazy.threadSafe(PdfJsVersion::new);
-
-    public static PdfJsVersion getPdfJsVersion() {
-        return pdfJsVersionLazy.get();
     }
 
 }

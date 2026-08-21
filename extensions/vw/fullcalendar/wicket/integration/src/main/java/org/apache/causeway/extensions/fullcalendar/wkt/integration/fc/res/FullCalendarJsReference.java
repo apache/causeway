@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
-import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
-
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class FullCalendarJsReference
 extends WebjarsJavaScriptResourceReference {
@@ -38,9 +36,7 @@ extends WebjarsJavaScriptResourceReference {
         new FullCalendarJsReference();
 
     private FullCalendarJsReference() {
-        super("fullcalendar/%s/index.global.min.js"
-                .formatted(WebjarEnumerator.lookupElseFail("fullcalendar")
-                        .version()));
+        super(WebJar.FULL_CALENDAR_JS.resource());
     }
 
     /**

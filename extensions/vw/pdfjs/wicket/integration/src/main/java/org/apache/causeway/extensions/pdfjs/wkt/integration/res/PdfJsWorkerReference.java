@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebJar;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceType;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
-
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class PdfJsWorkerReference
 extends WebjarsJavaScriptResourceReference {
@@ -41,11 +39,7 @@ extends WebjarsJavaScriptResourceReference {
         new PdfJsWorkerReference();
 
     private PdfJsWorkerReference() {
-        super(String.format("%s/build/pdf.worker.min.%s",
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().webjarPath(),
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType()==JavaScriptReferenceType.MODULE
-                    ? "mjs"
-                    : "js"));
+        super(WebJar.PDFJS_WORKER_JS.resource());
     }
 
     /**
@@ -53,7 +47,7 @@ extends WebjarsJavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
-                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType());
+                .setType(JavaScriptReferenceType.MODULE);
     }
 
     public static String workerUrl() {
