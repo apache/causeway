@@ -1,0 +1,93 @@
+{
+  "generatedAt": "2026-08-21T09:13:24.837Z",
+  "measurements": {
+    "currentViewerBrowserAssets": {
+      "fileCount": 42,
+      "rawBytes": 390614,
+      "gzipBytes": 106713,
+      "contentSetSha256": "d20410b27c514bc558fc3568b5b4c92d26059fd26a2ef4617406eb7b6cf75913"
+    },
+    "vaadinBroadSelectiveBundle": {
+      "fileCount": 1,
+      "rawBytes": 527772,
+      "gzipBytes": 127143,
+      "contentSetSha256": "e5f545348e722373c266e36c443b92754defd010578d0d07982d035f4f5b6afb"
+    },
+    "vaadinRouteSplitBundle": {
+      "fileCount": 7,
+      "rawBytes": 533432,
+      "gzipBytes": 132936,
+      "contentSetSha256": "a26428a1f04f8ec2984861fa81ccbe80417b98b731086cdc854d99c269ac092b"
+    },
+    "vaadinDirectInstalledSources": {
+      "fileCount": 443,
+      "rawBytes": 3449469,
+      "gzipBytes": 683018,
+      "contentSetSha256": "d34d435e0274788128370b5dd0ba29b691114e40d55088e26b904a1940e0fd30"
+    }
+  },
+  "splitFiles": {
+    "chunks/chunk-6DJFYO7X.js": {
+      "fileCount": 1,
+      "rawBytes": 4807,
+      "gzipBytes": 1696,
+      "contentSetSha256": "fa267366bc4c6340f0ae4f48098d086e76dcf1ffb77833f264fc60e2d01a2ffb"
+    },
+    "chunks/chunk-JAZKWOIA.js": {
+      "fileCount": 1,
+      "rawBytes": 98728,
+      "gzipBytes": 27501,
+      "contentSetSha256": "78a1e8e24e4089a837969e28a1028f9b0d4e85317e85d60122c78444b4bd49e6"
+    },
+    "chunks/chunk-T6TECDK2.js": {
+      "fileCount": 1,
+      "rawBytes": 75710,
+      "gzipBytes": 18413,
+      "contentSetSha256": "7b708155eb51d99b87214dcced3aab66773011c4cab5496a8d9f6ac45fdff8be"
+    },
+    "chunks/chunk-V7PLVXUQ.js": {
+      "fileCount": 1,
+      "rawBytes": 7835,
+      "gzipBytes": 3103,
+      "contentSetSha256": "3896d398169d9d697db7bde73d3f9f58ddee9b2597d92deec3d7c43a8ec171fb"
+    },
+    "fields.js": {
+      "fileCount": 1,
+      "rawBytes": 202317,
+      "gzipBytes": 46692,
+      "contentSetSha256": "1e958a0cc47f878e70005be045782fce85d22d9b647a7bb33cd2a6f403e52999"
+    },
+    "grid.js": {
+      "fileCount": 1,
+      "rawBytes": 103168,
+      "gzipBytes": 25996,
+      "contentSetSha256": "f45b40f086e3e33147a68b4da4737ba5c982c10cd6c3f2d21b4689de9aea03c6"
+    },
+    "reference.js": {
+      "fileCount": 1,
+      "rawBytes": 40867,
+      "gzipBytes": 9535,
+      "contentSetSha256": "c60cb6d7a69d6db9e4ba75d1c399f5319b6979b88eb8f9b94e3be692f595e69f"
+    }
+  },
+  "entryClosures": {
+    "reference.js": {
+      "fileCount": 4,
+      "rawBytes": 220112,
+      "gzipBytes": 57145,
+      "contentSetSha256": "d2735ce47f0f73d008357773c15e16f564465e4fcd6a78aa54609ce62a869bf6"
+    },
+    "grid.js": {
+      "fileCount": 4,
+      "rawBytes": 214538,
+      "gzipBytes": 58296,
+      "contentSetSha256": "440c0ebfc123e8061668b32b9ed732b9f021d14ea0ff3246a97db6c2e5967db9"
+    },
+    "fields.js": {
+      "fileCount": 4,
+      "rawBytes": 384590,
+      "gzipBytes": 95709,
+      "contentSetSha256": "151e181e0269260da6bd52ead8879146649583f929e75269d8346d9a4baeda76"
+    }
+  }
+}
