@@ -20,13 +20,14 @@ package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
-
-import jakarta.validation.constraints.Digits;
-
-import org.jspecify.annotations.NonNull;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
+
+import jakarta.validation.constraints.Digits;
 
 /**
  * The maximum allowed number of digits to the right of the decimal place (fractional part)
@@ -68,15 +69,23 @@ extends Facet {
      * The stronger constraint wins. If equal, first argument wins over second.
      */
     static Optional<MaxFractionalDigitsFacet> strongestConstraint(
-            final Optional<MaxFractionalDigitsFacet> a,
-            final Optional<MaxFractionalDigitsFacet> b) {
+    		final FacetHolder facetHolder,
+            final Function<FacetHolder, Optional<MaxFractionalDigitsFacet>> factoryA,
+            final Function<FacetHolder, Optional<MaxFractionalDigitsFacet>> factoryB) {
+
+    	var tmp = FacetHolder.simple(facetHolder.getMetaModelContext(), null);
+
+    	var b = factoryB.apply(tmp);
         if(b.isEmpty())
-            return a;
+            return factoryA.apply(facetHolder);
+
+        var a = factoryA.apply(tmp);
         if(a.isEmpty())
-            return b;
+            return factoryB.apply(facetHolder);
+
         return a.get().maxFractionalDigits() <= b.get().maxFractionalDigits()
-                ? a
-                : b;
+                ? factoryA.apply(facetHolder)
+                : factoryB.apply(facetHolder);
     }
 
 }

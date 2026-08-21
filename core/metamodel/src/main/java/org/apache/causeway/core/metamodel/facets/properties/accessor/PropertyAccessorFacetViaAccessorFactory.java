@@ -25,9 +25,9 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.AccessorFacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 

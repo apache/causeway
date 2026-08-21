@@ -29,9 +29,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 public class ObjectNamedFacetForDomainObjectLayoutXml
 extends ObjectNamedFacetAbstract
 implements QualifiedFacet {
@@ -46,23 +43,16 @@ implements QualifiedFacet {
         var noun = new Noun(domainObjectLayout.getNamed());
         return noun.isEmpty()
             ? Optional.empty()
-            : Optional.of(new ObjectNamedFacetForDomainObjectLayoutXml(noun, holder, precedence, qualifier));
+            : Optional.of(new ObjectNamedFacetForDomainObjectLayoutXml(noun, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            });
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
 
     private ObjectNamedFacetForDomainObjectLayoutXml(
             final Noun noun,
-            final FacetHolder holder,
-            final Facet.Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(noun, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

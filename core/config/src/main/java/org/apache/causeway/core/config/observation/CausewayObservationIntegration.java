@@ -146,7 +146,6 @@ public record CausewayObservationIntegration(
     	ObservationClosure.discard(obs);
     }
 
-
     //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
     // that are way off a base-line; this would require some profiling to establish base-lines
     public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {

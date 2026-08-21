@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.collections.parented;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -48,7 +47,7 @@ extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContaxt) {
         if (!processClassContaxt.facetHolder().containsFacet(CollectionFacet.class))
 			return;
-        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.facetHolder()));
+        new ParentedCollectionFacetDefault(processClassContaxt.facetHolder());
     }
 
 }

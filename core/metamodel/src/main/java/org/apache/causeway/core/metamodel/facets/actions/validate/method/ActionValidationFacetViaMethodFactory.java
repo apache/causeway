@@ -56,9 +56,9 @@ extends MemberSupportFacetFactoryAbstract {
             var validateMethod = searchResult.supportingMethod();
             processMethodContext.removeMethod(validateMethod);
             var patConstructor = searchResult.patConstructor();
-            addFacet(
-                    new ActionValidationFacetViaMethod(
-                            validateMethod, patConstructor, processMethodContext.facetHolder()));
+
+            new ActionValidationFacetViaMethod(
+                    validateMethod, patConstructor, processMethodContext.facetHolder());
         });
 
     }

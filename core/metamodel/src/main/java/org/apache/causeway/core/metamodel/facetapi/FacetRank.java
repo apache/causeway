@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet.Key;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * Multiple {@link FacetRank}(s) are collected into a single {@link FacetRanking}.
@@ -68,6 +68,21 @@ record FacetRank<F extends Facet>(
 
         facetsByQualifier.putElement(QualifiedFacet.Key.forFacet(facet), facet);
         return this;
+    }
+
+    /**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+    @Deprecated
+	public void remove(final F facet) {
+    	if(facet==null)
+            return; // no-op
+
+    	var key = QualifiedFacet.Key.forFacet(facet);
+    	var list = facetsByQualifier.getOrElseEmpty(key);
+    	var success = list.remove(facet);
+    	Assert.isTrue(success, ()->"facet not found " + facet);
     }
 
     /**

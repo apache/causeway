@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.defaults.methodnum;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
+
+import jakarta.inject.Inject;
 
 public class ActionParameterDefaultsFacetViaMethodFactory
 extends ActionParameterSupportFacetFactoryAbstract {
@@ -41,9 +41,8 @@ extends ActionParameterSupportFacetFactoryAbstract {
         var defaultMethod = searchResult.supportingMethod();
         var paramIndex = searchResult.paramIndex();
         var patConstructor = searchResult.patConstructor();
-        addFacet(
-                new ActionParameterDefaultsFacetViaMethod(
-                        defaultMethod, paramIndex, patConstructor, paramAsHolder));
+        new ActionParameterDefaultsFacetViaMethod(
+                defaultMethod, paramIndex, patConstructor, paramAsHolder);
     }
 
 }

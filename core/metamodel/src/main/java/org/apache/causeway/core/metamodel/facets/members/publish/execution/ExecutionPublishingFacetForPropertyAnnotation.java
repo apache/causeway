@@ -27,7 +27,7 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.util.Facets;

@@ -48,7 +48,6 @@ public record ExecutionContext(
 		MetamodelEventService metamodelEventService,
 		QueryResultsCache queryResultsCache) {
 
-
     public CommandPublisher commandPublisher() {
         return commandPublisherProvider.get();
     }

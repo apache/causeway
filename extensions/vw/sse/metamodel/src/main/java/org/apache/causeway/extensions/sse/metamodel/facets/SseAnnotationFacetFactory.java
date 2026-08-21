@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.sse.metamodel.facets;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -54,12 +53,10 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
     void processObserve(final ProcessMethodContext processMethodContext) {
         var facetHolder = processMethodContext.facetHolder();
-
         var serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
 
-        FacetUtil.addFacetIfPresent(
-                SseObserveFacetForServerSentEventsAnnotation
-                .create(serverSentEventsIfAny, facetHolder));
+        SseObserveFacetForServerSentEventsAnnotation
+            .create(serverSentEventsIfAny, facetHolder);
     }
 
 }

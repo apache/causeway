@@ -46,12 +46,12 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        addFacet(new BookmarkPolicyFacetFallback(processClassContext.facetHolder()));
+        new BookmarkPolicyFacetFallback(processClassContext.facetHolder());
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        addFacet(new BookmarkPolicyFacetFallback(processMethodContext.facetHolder()));
+        new BookmarkPolicyFacetFallback(processMethodContext.facetHolder());
     }
 
     /**
@@ -59,7 +59,6 @@ implements MetaModelRefiner {
      */
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-
         programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
             // as an optimization only checking 'declared' members (skipping inherited ones)

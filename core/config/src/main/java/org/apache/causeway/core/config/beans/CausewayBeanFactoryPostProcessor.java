@@ -20,8 +20,11 @@ package org.apache.causeway.core.config.beans;
 
 import java.util.Objects;
 
-import jakarta.inject.Named;
-
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -32,12 +35,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
-
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -87,8 +85,8 @@ implements
         this.componentScanResult = new CausewayBeanTypeRegistry(introspectableTypes);
 
         log.info("post processing {}/{} bean definitions took {}ms",
+        		introspectableTypes.size(),
                 beanFactory.getBeanDefinitionCount(),
-                introspectableTypes.size(),
                 stopWatch.getMillis());
 
         if(log.isDebugEnabled()) {

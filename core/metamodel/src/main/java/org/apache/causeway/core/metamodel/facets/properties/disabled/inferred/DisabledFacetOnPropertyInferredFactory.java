@@ -19,10 +19,9 @@
 package org.apache.causeway.core.metamodel.facets.properties.disabled.inferred;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
@@ -41,7 +40,6 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         final FacetedMethod property = processMethodContext.facetHolder();
 
         if(property.containsNonFallbackFacet(DisabledFacet.class))
@@ -52,7 +50,7 @@ extends FacetFactoryAbstract {
             return;
 
         // else, infer that this is not modifiable
-        FacetUtil.addFacet(new DisabledFacetOnPropertyFromMissingSetter(property));
+        new DisabledFacetOnPropertyFromMissingSetter(property);
     }
 
 }

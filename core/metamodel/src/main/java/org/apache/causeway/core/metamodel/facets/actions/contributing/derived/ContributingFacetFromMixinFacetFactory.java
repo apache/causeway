@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.actions.contributing.derived;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
@@ -61,7 +60,7 @@ extends FacetFactoryAbstract {
                 || processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class, ()->{}).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacet(ContributingFacetAbstract.createAsAction(facetedMethod));
+            ContributingFacetAbstract.createAsAction(facetedMethod);
         }
 
     }

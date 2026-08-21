@@ -21,36 +21,34 @@ package org.apache.causeway.core.metamodel.facets.object.promptStyle;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.jspecify.annotations.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Provides the prompt style for editing of a property.
  */
-public record PromptStyleFacet(
-       @NonNull String origin,
-       @NonNull PromptStyle value,
-       @NonNull FacetHolder facetHolder,
-       Facet.@NonNull Precedence precedence,
-       @Nullable String qualifier,
-       boolean isObjectTypeSpecific
-   ) implements Facet, QualifiedFacet {
+public class PromptStyleFacet
+   extends FacetAbstract
+   implements QualifiedFacet {
 
    public static PromptStyleFacet compositeValueEdit(final FacetHolder facetHolder) {
-       return new PromptStyleFacet("CompositeValueEdit", PromptStyle.INLINE_AS_IF_EDIT, facetHolder, Precedence.SYNTHESIZED, null, false);
+       return new PromptStyleFacet("CompositeValueEdit", PromptStyle.INLINE_AS_IF_EDIT, facetHolder){
+    	   @Override public Precedence precedence() { return Precedence.SYNTHESIZED; }
+       };
    }
    public static PromptStyleFacet asConfgured(final CausewayConfiguration configuration, final FacetHolder facetHolder) {
-       return new PromptStyleFacet("Configuration", configuration.viewer().wicket().promptStyle(), facetHolder, Precedence.DEFAULT, null, false);
+       return new PromptStyleFacet("Configuration", configuration.viewer().wicket().promptStyle(), facetHolder);
    }
    public static Optional<PromptStyleFacet> createForActionLayoutXml(
            final ActionLayoutData actionLayoutData,
@@ -59,7 +57,11 @@ public record PromptStyleFacet(
            @Nullable final String qualifier) {
        return Optional.ofNullable(actionLayoutData)
            .map(ActionLayoutData::getPromptStyle)
-           .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction, precedence, qualifier, true));
+           .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction) {
+        	   @Override final public Precedence precedence() { return precedence; }
+        	   @Override final public @Nullable String qualifier() { return qualifier; }
+        	   @Override final public boolean isObjectTypeSpecific() { return true; }
+    	   });
    }
    public static Optional<PromptStyleFacet> createForPropertyLayoutXml(
            final PropertyLayoutData propertyLayoutData,
@@ -68,24 +70,31 @@ public record PromptStyleFacet(
            @Nullable final String qualifier) {
        return Optional.ofNullable(propertyLayoutData)
            .map(PropertyLayoutData::getPromptStyle)
-           .map(promptStyle->new PromptStyleFacet("PropertyLayoutXml", promptStyle, oneToOneAssociation, precedence, qualifier, true));
+           .map(promptStyle->new PromptStyleFacet("PropertyLayoutXml", promptStyle, oneToOneAssociation) {
+        	   @Override final public Precedence precedence() { return precedence; }
+        	   @Override final public @Nullable String qualifier() { return qualifier; }
+        	   @Override final public boolean isObjectTypeSpecific() { return true; }
+           });
    }
 
-   public PromptStyleFacet(final String origin, final PromptStyle of, final FacetHolder holder) {
-       this(origin, of, holder, Precedence.DEFAULT, null, false);
-   }
+   @Getter @Accessors(fluent = true)
+   private final String origin;
+   @Getter @Accessors(fluent = true)
+   private final PromptStyle value;
 
-   public PromptStyleFacet(final String origin, final PromptStyle of, final FacetHolder holder,
-           final @Nullable String qualifier, final boolean isObjectTypeSpecific) {
-       this(origin, of, holder, Precedence.DEFAULT, qualifier, isObjectTypeSpecific);
+   public PromptStyleFacet(
+	       final String origin,
+	       final PromptStyle value,
+	       final FacetHolder facetHolder) {
+	   super(PromptStyleFacet.class, facetHolder);
+	   this.origin = origin;
+	   this.value = value;
    }
-
-   @Override public Class<? extends Facet> facetType() { return getClass(); }
 
    @Override
    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-	   Facet.super.visitAttributes(visitor);
-       visitor.accept("origin", origin());
+	   super.visitAttributes(visitor);
+       visitor.accept("origin", origin);
        visitor.accept("promptStyle", value);
    }
 

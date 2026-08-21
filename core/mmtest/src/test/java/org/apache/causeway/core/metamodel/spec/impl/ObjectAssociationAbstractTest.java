@@ -18,34 +18,31 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ObjectAssociationAbstractTest {
@@ -66,7 +63,7 @@ class ObjectAssociationAbstractTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
         facetedMethod = FacetedMethod.testing.createGetterForProperty(mmc , Customer.class, "firstName");
@@ -149,38 +146,33 @@ class ObjectAssociationAbstractTest {
     }
 
     @Test
-    public void notHidden() throws Exception {
+    void notHidden() throws Exception {
         assertFalse(objectAssociation.isAlwaysHidden());
     }
 
     @Test
-    public void optional() throws Exception {
+    void optional() throws Exception {
         assertFalse(objectAssociation.isMandatory());
     }
 
     @Test
-    public void mandatory() throws Exception {
-        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class, Precedence.DEFAULT);
-        facetedMethod.addFacet(mockFacet);
+    void mandatory() throws Exception {
+		new MandatoryFacetAbstract(Semantics.REQUIRED, facetedMethod) {};
         assertTrue(objectAssociation.isMandatory());
     }
 
     @Test
-    public void hasNoChoices() throws Exception {
+    void hasNoChoices() throws Exception {
         assertFalse(objectAssociation.hasChoices());
     }
 
     @Test
-    public void hasChoices() throws Exception {
-        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class, Precedence.DEFAULT);
-        facetedMethod.addFacet(mockFacet);
+    void hasChoices() throws Exception {
+    	new PropertyChoicesFacetAbstract(facetedMethod) {
+			@Override
+			public Can<ManagedObject> getChoices(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy) {
+				return Can.empty();
+			}};
         assertTrue(objectAssociation.hasChoices());
-    }
-
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {
-        final T facet = Mockito.mock(typeToMock);
-        Mockito.when(facet.facetType()).thenReturn(_Casts.uncheckedCast(typeToMock));
-        Mockito.when(facet.precedence()).thenReturn(precedence);
-        return facet;
     }
 }

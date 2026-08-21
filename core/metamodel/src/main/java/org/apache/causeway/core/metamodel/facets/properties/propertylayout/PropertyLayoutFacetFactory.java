@@ -25,9 +25,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeSequenceFacet;
@@ -55,45 +55,43 @@ extends FacetFactoryAbstract {
                         () -> ValidationFailureUtils
                         .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), PropertyLayout.class));
 
-        addFacetIfPresent(CssClassFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        CssClassFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(MemberDescribedFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        MemberDescribedFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(HiddenFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        HiddenFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(LabelAtFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        LabelAtFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(LayoutGroupFacetFromPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        LayoutGroupFacetFromPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(LayoutOrderFacetFromPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        LayoutOrderFacetFromPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(MultiLineFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        MultiLineFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(NamedFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        NamedFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            createPromptStyleFacetForPropertyLayoutAnnotation(propertyLayoutIfAny, getConfiguration(), facetHolder));
+        createPromptStyleFacetForPropertyLayoutAnnotation(propertyLayoutIfAny, getConfiguration(), facetHolder);
 
-        addFacetIfPresent(TypicalLengthFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        TypicalLengthFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(UnchangingFacetForPropertyLayoutAnnotation
-            .create(propertyLayoutIfAny, facetHolder));
+        UnchangingFacetForPropertyLayoutAnnotation
+            .create(propertyLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-            propertyLayoutIfAny
-                .map(PropertyLayout::navigableSubtree)
-                .filter(StringUtils::hasLength)
-                .flatMap(sequence->NavigableSubtreeSequenceFacet.create("PropertyLayout annotation",
-                    processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder)));
+        propertyLayoutIfAny
+            .map(PropertyLayout::navigableSubtree)
+            .filter(StringUtils::hasLength)
+            .flatMap(sequence->NavigableSubtreeSequenceFacet.create("PropertyLayout annotation",
+                processMethodContext.cls(), processMethodContext.methodFacade().asMethod(), sequence, facetHolder));
     }
 
     // -- HELPER

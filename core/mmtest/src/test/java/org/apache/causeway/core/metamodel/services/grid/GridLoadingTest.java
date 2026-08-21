@@ -85,7 +85,7 @@ extends MetaModelTestAbstract {
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
-        var facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
+        var facetRanking = objectAction.lookupFacetRanking(MemberNamedFacet.class).orElse(null);
         assertNotNull(facetRanking);
 
         // XML layout facets are installed at precedence HIGH

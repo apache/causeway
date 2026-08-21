@@ -1,8 +1,7 @@
 package org.apache.causeway.core.metamodel.facetapi;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Facet} can be qualified (similar to Spring beans) in order to allow for alternative
@@ -15,12 +14,15 @@ import org.apache.causeway.commons.internal.base._Strings;
  * to find the winning {@link Facet}.
  *
  * @implNote We have only one use-case yet, which is honoring layout variants.
- * Should other use-cases emerge, this interface will need a redesign.
+ * 		Should other use-cases emerge, this interface will need a redesign.
+ *
+ * @apiNote at the time of writing, every {@link QualifiedFacet} is also reloadable,
+ * 		but that may well change in the future; then we need to remove `extends ReloadableFacet`.
  *
  * @since 4.0
  */
-@FunctionalInterface
-public interface QualifiedFacet {
+public interface QualifiedFacet
+extends ReloadableFacet {
 
     record Key(
             Class<? extends Facet> facetType,
@@ -55,6 +57,6 @@ public interface QualifiedFacet {
         }
     }
 
-    @Nullable String qualifier();
+    default @Nullable String qualifier() { return null; }
 
 }

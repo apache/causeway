@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Projecting;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 
 public class ProjectingFacetFromPropertyAnnotation
 extends ProjectingFacetAbstract {

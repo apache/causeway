@@ -18,11 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.cssclass;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,10 +29,14 @@ import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class CssClassFacetMethodWithProblemTest {
 
-    private Mocking mocking = new Mocking();
+    private final Mocking mocking = new Mocking();
     private CssClassFacetViaCssClassMethod facet;
     private ManagedObject mockOwningAdapter;
 
@@ -57,14 +56,13 @@ class CssClassFacetMethodWithProblemTest {
         final ResolvedMethod iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInCssClassMethod.class, "cssClass");
         facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
-                .create(iconNameMethod, Mockito.mock(FacetHolder.class))
+                .create(iconNameMethod, FacetHolder.simple(null, null))
                 .orElse(null);
 
         var mockSpec = Mockito.mock(ObjectSpecification.class);
         Mockito.when(mockSpec.isViewModel()).thenReturn(true);
 
         mockOwningAdapter = mocking.asViewmodel(pojo);
-
     }
 
     @AfterEach

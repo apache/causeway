@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 

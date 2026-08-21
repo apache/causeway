@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
@@ -71,9 +70,8 @@ extends MetaModelPostProcessorAbstract {
         member.getElementType()
 	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
 	        .ifPresent(objectDescribedFacet ->
-	            FacetUtil.addFacetIfPresent(
-                    MemberDescribedFacetFromType
-                    	.create(objectDescribedFacet, facetedMethodFor(member))));
+                MemberDescribedFacetFromType
+                	.create(objectDescribedFacet, facetedMethodFor(member)));
     }
 
     private void handleParam(final ObjectActionParameter parameter) {
@@ -82,9 +80,8 @@ extends MetaModelPostProcessorAbstract {
         parameter.getElementType()
 	        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
 	        .ifPresent(objectDescribedFacet->
-	            FacetUtil.addFacetIfPresent(
-                    ParamDescribedFacetFromType
-	                    .create(objectDescribedFacet, parameter.facetHolder())));
+                ParamDescribedFacetFromType
+                    .create(objectDescribedFacet, parameter.facetHolder()));
     }
 
 }

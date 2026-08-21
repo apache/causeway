@@ -37,6 +37,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * JavaScript widget
  * @see DatetimePickerConfig
  */
+@SuppressWarnings("deprecation") // it seems, nothing we can do about deprecations, hence suppress
 public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
 

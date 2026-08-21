@@ -29,14 +29,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.jspecify.annotations.NonNull;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -111,6 +110,24 @@ public final class TypedFacetRanking<F extends Facet> {
             .forEach((k, rank)->rank.facetsByQualifier().streamElements()
                     .forEach(this::add));
     }
+
+    /**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+	@Deprecated
+	public void remove(final F facet) {
+		if(facet == null)
+			return;
+		// guard against invalidly mocked facets
+        var facetPrecedence = Objects.requireNonNull(facet.precedence(),
+                ()->String.format("facet %s declares no precedence", facet.getClass()));
+        if(facetPrecedence.ordinal()>=Facet.Precedence.EVENT.ordinal())
+			throw new IllegalArgumentException("removal of facet with EVENT precedence is not supported");
+		ranksByPrecedence.get(facetPrecedence)
+			.remove(facet);
+		nonEventWinnerCache.clear(); // for simplicity invalidate the entire cache
+	}
 
     /**
      * Optionally returns the winning facet, considering the event facet (if any) and the top rank,

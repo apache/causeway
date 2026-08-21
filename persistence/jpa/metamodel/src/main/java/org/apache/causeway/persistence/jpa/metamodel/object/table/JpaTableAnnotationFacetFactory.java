@@ -20,7 +20,6 @@ package org.apache.causeway.persistence.jpa.metamodel.object.table;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -58,12 +57,10 @@ implements ObjectTypeFacetFactory {
         }
 
         var facetHolder = processClassContext.facetHolder();
-
-        FacetUtil.addFacet(
-                new JpaTableFacetAnnotationImpl(
-                    annotationSchemaAttribute,
-                    annotationTableAttribute,
-                    facetHolder));
+        new JpaTableFacetAnnotationImpl(
+                annotationSchemaAttribute,
+                annotationTableAttribute,
+                facetHolder);
     }
 
 }

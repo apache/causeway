@@ -23,12 +23,14 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Holder of a {@link Map} that is mutable during runtime and collects column order patching information.
@@ -39,22 +41,14 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
  *
  * @since 4.0
  */
-public record ColumnOrderPatchingFacet(
-		FacetHolder facetHolder,
-		Map<Identifier, Can<String>> columnOrder) implements Facet {
+public final class ColumnOrderPatchingFacet extends FacetAbstract {
+
+	@Getter @Accessors(fluent = true)
+	private final Map<Identifier, Can<String>> columnOrder;
 
 	public ColumnOrderPatchingFacet(final FacetHolder facetHolder) {
-		this(facetHolder, new ConcurrentHashMap<>());
-	}
-
-	@Override
-	public Class<? extends Facet> facetType() {
-		return ColumnOrderPatchingFacet.class;
-	}
-
-	@Override
-	public Precedence precedence() {
-		return Precedence.DEFAULT;
+		super(ColumnOrderPatchingFacet.class, facetHolder);
+		this.columnOrder = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -87,7 +81,7 @@ public record ColumnOrderPatchingFacet(
 
 	@Override
 	public void visitAttributes(final BiConsumer<String, Object> visitor) {
-	    Facet.super.visitAttributes(visitor);
+	    super.visitAttributes(visitor);
 	    columnOrder.forEach((identifier, order)->{
 	        visitor.accept(identifier.toString(), order.join(","));
 	    });

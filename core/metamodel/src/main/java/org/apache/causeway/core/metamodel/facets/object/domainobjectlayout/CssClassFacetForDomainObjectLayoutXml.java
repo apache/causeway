@@ -29,9 +29,6 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 public class CssClassFacetForDomainObjectLayoutXml
 extends CssClassFacetSimple
 implements QualifiedFacet {
@@ -45,24 +42,17 @@ implements QualifiedFacet {
             return Optional.empty();
         final String cssClass = _Strings.emptyToNull(domainObjectLayout.getCssClass());
         return cssClass != null
-            ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder, precedence, qualifier))
+            ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private CssClassFacetForDomainObjectLayoutXml(
             final String value,
-            final FacetHolder holder,
-            final Facet.Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(value, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

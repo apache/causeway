@@ -24,12 +24,14 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.ReloadableFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 import org.jspecify.annotations.Nullable;
 
-public class FaFacetForMenuBarXml
-extends FaStaticFacetAbstract {
+public final class FaFacetForMenuBarXml
+extends FaStaticFacetAbstract
+implements ReloadableFacet {
 
     public static Optional<FaFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
@@ -52,7 +54,7 @@ extends FaStaticFacetAbstract {
     }
 
     @Override
-    public Precedence precedence() {
+    public final Precedence precedence() {
     	// XML menu-bar entries overrule layout from annotations
     	return Precedence.HIGH;
     }

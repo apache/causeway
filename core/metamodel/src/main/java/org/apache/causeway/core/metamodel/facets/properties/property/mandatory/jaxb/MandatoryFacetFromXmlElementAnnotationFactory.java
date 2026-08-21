@@ -42,8 +42,7 @@ extends FacetFactoryAbstract {
         var facetHolder = processMethodContext.facetHolder();
 
         // search for @XmlElement(required=...)
-        addFacetIfPresent(
-                MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder));
+        MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder);
     }
 
 }

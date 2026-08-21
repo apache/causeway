@@ -328,7 +328,6 @@ implements
         	// that is currently we evict the spec from the cache but the Spec reference must stay constant
 			throw _Exceptions.illegalState("brokenSpecCount=%d", brokenSpecCount);
 
-
         introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL); //TODO no mixins required either
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
                 specs.entitySpecs(), IntrospectionRequest.FULL);
@@ -374,7 +373,6 @@ implements
         //perf ..
         log.info("\n{}", Profiler.getInstance());
     }
-
 
     @Override
     public Optional<ValidationFailures> getValidationResult() {

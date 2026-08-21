@@ -18,15 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -34,11 +29,13 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class JavaCollectionFacetTest {
 
     private MetaModelContext metaModelContext;
-    private Mocking mocking = new Mocking();
+    private final Mocking mocking = new Mocking();
 
     @BeforeEach
     void setUp() throws Exception {
@@ -47,9 +44,7 @@ class JavaCollectionFacetTest {
 
     @Test
     void firstElementForEmptyCollectionIsEmptyOptional() {
-        var mockFacetHolder = mock(FacetHolder.class);
-        when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
-
+        var mockFacetHolder = FacetHolder.simple(metaModelContext, null);
         var mockCollection = mocking.asPacked(Can.empty());
 
         var facet = new JavaCollectionFacet(mockFacetHolder);

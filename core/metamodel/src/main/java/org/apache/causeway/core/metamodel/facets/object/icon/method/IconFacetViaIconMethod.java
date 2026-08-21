@@ -21,21 +21,21 @@ package org.apache.causeway.core.metamodel.facets.object.icon.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.Nullable;
 
-public record IconFacetViaIconMethod(
-    ImperativeAspect imperativeAspect,
-    FacetHolder facetHolder)
+import lombok.Getter;
+
+public final class IconFacetViaIconMethod
+extends FacetAbstract
 implements IconFacet, HasImperativeAspect {
 
     public static Optional<IconFacet> create(
@@ -48,12 +48,16 @@ implements IconFacet, HasImperativeAspect {
                         holder));
     }
 
-    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
-    @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
+    @Getter(onMethod_ = {@Override})
+    private final ImperativeAspect imperativeAspect;
+
+    private IconFacetViaIconMethod(final ImperativeAspect imperativeAspect, final FacetHolder facetHolder) {
+    	super(IconFacet.class, facetHolder);
+    	this.imperativeAspect = imperativeAspect;
+    }
 
     @Override
-    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, IconSize iconSize) {
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject domainObject, final IconSize iconSize) {
         return Optional.ofNullable(imperativeAspect.eval(domainObject, (ObjectSupport.IconResource)null, iconSize));
     }
 

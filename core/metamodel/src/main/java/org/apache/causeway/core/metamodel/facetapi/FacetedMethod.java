@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets;
+package org.apache.causeway.core.metamodel.facetapi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,6 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -144,11 +141,7 @@ public record FacetedMethod(
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
             var facetedMethodParamToUse = TypeOfFacet
                 .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
-                .map(typeOfFacet->{
-                    // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                    FacetUtil.addFacet(typeOfFacet);
-                    return facetedMethodParam.withResolvedType(typeOfFacet.value());
-                })
+                .map(typeOfFacet -> facetedMethodParam.withResolvedType(typeOfFacet.value()))
                 .orElse(facetedMethodParam);
 
             actionParams.add(facetedMethodParamToUse);

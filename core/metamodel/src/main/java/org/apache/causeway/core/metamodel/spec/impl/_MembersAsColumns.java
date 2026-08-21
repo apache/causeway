@@ -160,7 +160,6 @@ record _MembersAsColumns(
                 .thenComparing(Comparator.naturalOrder()));
     }
 
-
     /**
      * @return whether a column-order patch was found and applied
      */

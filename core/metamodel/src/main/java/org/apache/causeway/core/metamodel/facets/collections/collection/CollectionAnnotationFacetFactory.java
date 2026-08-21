@@ -24,9 +24,9 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -83,8 +83,8 @@ extends FacetFactoryAbstract {
     void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacet("InferSafeForMixedInCollection", SemanticsOf.SAFE, facetedMethod));
-        addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
+        new ActionSemanticsFacet("InferSafeForMixedInCollection", SemanticsOf.SAFE, facetedMethod);
+        ContributingFacetAbstract.createAsCollection(facetedMethod);
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -104,9 +104,8 @@ extends FacetFactoryAbstract {
         //
 
         // search for @Collection(domainEvent=...)
-        addFacet(
-            CollectionDomainEventFacet
-                .create(collectionIfAny, processMethodContext));
+        CollectionDomainEventFacet
+            .create(collectionIfAny, processMethodContext);
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -116,18 +115,15 @@ extends FacetFactoryAbstract {
 
         var methodReturnType = method.getReturnType();
         CollectionSemantics.valueOf(methodReturnType)
-        .ifPresent(collectionType->{
-            addFacetIfPresent(
-                    // check for @Collection(typeOf=...)
-                    TypeOfFacetForCollectionAnnotation
-                    .create(collectionIfAny, collectionType, facetHolder)
-                    .or(
-                        // else infer from return type
-                        ()-> TypeOfFacet.inferFromMethodReturnType(
-                                method,
-                                facetHolder))
-                );
-
+        	.ifPresent(collectionType->{
+                // check for @Collection(typeOf=...)
+                TypeOfFacetForCollectionAnnotation
+                .create(collectionIfAny, collectionType, facetHolder)
+                .or(
+                    // else infer from return type
+                    ()-> TypeOfFacet.inferFromMethodReturnType(
+                            method,
+                            facetHolder));
         });
     }
 

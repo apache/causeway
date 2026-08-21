@@ -18,11 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -30,16 +25,20 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.junit.jupiter.api.Test;
 
 class OneToManyAssociationDefaultTest
 extends MetaModelTestAbstract {

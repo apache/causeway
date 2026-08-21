@@ -18,9 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
-import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
+import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Property;
@@ -32,15 +36,9 @@ import org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandL
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Answers.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
 
 class RecordingAwareCommandPublishingFacetTest {
 
@@ -228,10 +226,8 @@ class RecordingAwareCommandPublishingFacetTest {
 
     @Test
     void enabledRecordingPublishesContributedMixinProperty() {
-        var holder = mock(FacetHolder.class);
-        var contributingFacet = mock(ContributingFacet.class);
-        when(contributingFacet.contributed()).thenReturn(MixinFacet.Contributing.AS_PROPERTY);
-        when(holder.lookupFacet(ContributingFacet.class)).thenReturn(Optional.of(contributingFacet));
+        var holder = FacetHolder.simple(null, null);
+        ContributingFacetAbstract.createAsProperty(holder);
 
         var facet = CommandPublishingFacetForPropertyAnnotation.create(
                 Optional.empty(),
@@ -255,7 +251,7 @@ class RecordingAwareCommandPublishingFacetTest {
                         RecordingSupport.ENABLED,
                         ActionConfigOptions.PublishingPolicy.NONE,
                         PropertyConfigOptions.PublishingPolicy.NONE),
-                mock(FacetHolder.class),
+                FacetHolder.simple(null, null),
                 null);
 
         assertThat(facet).isInstanceOf(CommandPublishingFacetForActionFromConfiguration.None.class);
@@ -297,14 +293,13 @@ class RecordingAwareCommandPublishingFacetTest {
     }
 
     private FacetHolder safeHolder(final SemanticsOf semantics) {
-        var holder = mock(FacetHolder.class);
-        when(holder.lookupFacet(ActionSemanticsFacet.class)).thenReturn(Optional.of(
-                new ActionSemanticsFacet("test", semantics, holder)));
+        var holder = FacetHolder.simple(null, null);
+        new ActionSemanticsFacet("test", semantics, holder);
         return holder;
     }
 
     private FacetHolder propertyHolder() {
-        return mock(FacetHolder.class);
+    	return FacetHolder.simple(null, null);
     }
 
     private CausewayConfiguration configuration(

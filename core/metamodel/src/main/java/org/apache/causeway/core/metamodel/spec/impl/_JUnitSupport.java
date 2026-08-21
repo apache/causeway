@@ -25,7 +25,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

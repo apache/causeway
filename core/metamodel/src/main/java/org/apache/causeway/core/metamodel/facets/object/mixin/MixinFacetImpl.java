@@ -33,19 +33,17 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 
-public record MixinFacetImpl(
-		Class<?> mixinType,
-        String mainMethodName,
-        ResolvedConstructor resolvedConstructor,
-        FacetHolder facetHolder,
-    	Class<?> mixeeType,
-    	AtomicReference<Contributing> contributingRef)
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+public final class MixinFacetImpl
+extends FacetAbstract
 implements MixinFacet {
 
     public static Optional<MixinFacetImpl> createForDomainObjectAnnotation(
@@ -70,7 +68,7 @@ implements MixinFacet {
             final String mainMethodName,
             final Constructor<?> constructor) {
     	return new MixinFacetImpl(mixinType, mainMethodName,
-    			_GenericResolver.resolveConstructor(constructor, mixinType), null);
+    			_GenericResolver.resolveConstructor(constructor, mixinType), FacetHolder.simple(null, null));
     }
 
     private MixinFacetImpl(
@@ -84,8 +82,30 @@ implements MixinFacet {
     			new AtomicReference<>());
     }
 
-    @Override public Class<? extends Facet> facetType() { return MixinFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final Class<?> mixinType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final Class<?> mixeeType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final String mainMethodName;
+
+    private final ResolvedConstructor resolvedConstructor;
+    private final AtomicReference<Contributing> contributingRef;
+
+    MixinFacetImpl(
+    		final Class<?> mixinType,
+            final String mainMethodName,
+            final ResolvedConstructor resolvedConstructor,
+            final FacetHolder facetHolder,
+        	final Class<?> mixeeType,
+        	final AtomicReference<Contributing> contributingRef) {
+    	super(MixinFacet.class, facetHolder);
+        this.mixinType = mixinType;
+        this.mainMethodName = mainMethodName;
+        this.resolvedConstructor = resolvedConstructor;
+        this.mixeeType = mixeeType;
+        this.contributingRef = contributingRef;
+    }
 
     @Override
     public boolean isMixinFor(final Class<?> candidateDomainType) {
@@ -123,7 +143,6 @@ implements MixinFacet {
                     + "failing instance construction with %s", mixinType, e);
         }
     }
-
 
 	@Override
     public boolean isCandidateForMain(final ResolvedMethod method) {

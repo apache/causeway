@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.navchild;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -28,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 /**
- * Installs the {@link NavigableSubtreeFacet} 
+ * Installs the {@link NavigableSubtreeFacet}
  * as aggregated via {@link NavigableSubtreeSequenceFacet} collected from {@link ObjectAssociation}s.
  * {@link ObjectMember}s of the {@link ObjectSpecification}.
  */
@@ -40,12 +39,13 @@ public class NavigableSubtreeFacetPostProcessor extends MetaModelPostProcessorAb
 
     @Override
     public void postProcessObject(final ObjectSpecification objSpec) {
-        var navigableSubtreeSequenceFacets = 
+        var navigableSubtreeSequenceFacets =
             objSpec.streamAssociations(MixedIn.EXCLUDED)
                 .flatMap(assoc->assoc.lookupFacet(NavigableSubtreeSequenceFacet.class).stream())
                 .collect(Can.toCan());
-        
-        FacetUtil.addFacetIfPresent(NavigableSubtreeFacet.create(navigableSubtreeSequenceFacets, objSpec));
+
+        NavigableSubtreeFacet
+        	.create(navigableSubtreeSequenceFacets, objSpec);
     }
 
 }

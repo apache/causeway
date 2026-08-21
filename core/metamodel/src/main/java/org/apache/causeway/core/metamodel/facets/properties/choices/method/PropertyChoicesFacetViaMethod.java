@@ -25,7 +25,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

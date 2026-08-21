@@ -22,15 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class DefaultViewFacetForCollectionLayoutXml
 extends DefaultViewFacetAbstract
@@ -45,24 +41,17 @@ implements QualifiedFacet {
             return Optional.empty();
         final String defaultView = _Strings.emptyToNull(collectionLayout.getDefaultView());
         return defaultView != null
-            ? Optional.of(new DefaultViewFacetForCollectionLayoutXml(defaultView, holder, precedence, qualifier))
+            ? Optional.of(new DefaultViewFacetForCollectionLayoutXml(defaultView, holder) {
+            	@Override final public Precedence precedence() { return precedence; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
+            })
             : Optional.empty();
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private DefaultViewFacetForCollectionLayoutXml(
             final String value,
-            final FacetHolder holder,
-            final Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(value, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

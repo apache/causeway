@@ -24,8 +24,8 @@ import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxIntegerDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
@@ -85,9 +85,8 @@ extends FacetFactoryAbstract {
             final Optional<ValueSemantics> valueSemanticsOpt) {
 
         // check for @ValueSemantics(provider=...)
-        addFacetIfPresent(
-            ValueSemanticsSelectingFacetForAnnotation
-                .create(valueSemanticsOpt, facetHolder));
+        ValueSemanticsSelectingFacetForAnnotation
+            .create(valueSemanticsOpt, facetHolder);
     }
 
     private void processDigits(
@@ -96,71 +95,64 @@ extends FacetFactoryAbstract {
             final Optional<Digits> digitsOpt){
 
         // max total digits
-        addFacetIfPresent(
-            MaxTotalDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsOpt, facetHolder));
+        MaxTotalDigitsFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsOpt, facetHolder);
 
         // max integer digits
-        addFacetIfPresent(
-            MaxIntegerDigitsFacet.strongestConstraint(
-                MaxIntegerDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsOpt, facetHolder),
-                // support for @jakarta.validation.constraints.Digits
-                MaxIntegerDigitsFacetFromJakartaDigitsAnnotation
-                    .create(digitsOpt, facetHolder)));
+        MaxIntegerDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MaxIntegerDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits
+            fh->MaxIntegerDigitsFacetFromJakartaDigitsAnnotation
+                .create(digitsOpt, fh));
 
         // min integer digits
-        addFacetIfPresent(
-            MinIntegerDigitsFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsOpt, facetHolder));
+        MinIntegerDigitsFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsOpt, facetHolder);
 
         if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))
             return; // skip fractional facets
 
         // max fractional digits
-        addFacetIfPresent(
-            MaxFractionalDigitsFacet.strongestConstraint(
-                MaxFractionalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsOpt, facetHolder),
-                // support for @jakarta.validation.constraints.Digits
-                MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
-                    .create(digitsOpt, facetHolder)));
+        MaxFractionalDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits
+            fh->MaxFractionalDigitsFacetFromJakartaDigitsAnnotation
+                .create(digitsOpt, fh));
 
         // min fractional digits
-        addFacetIfPresent(
-            MinFractionalDigitsFacet.strongestConstraint(
-                MinFractionalDigitsFacetFromValueSemanticsAnnotation
-                    .create(valueSemanticsOpt, facetHolder),
-                // support for @jakarta.validation.constraints.Digits (if enabled)
-                getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
-                    ? MinFractionalDigitsFacetFromJakartaDigitsAnnotation
-                        .create(digitsOpt, facetHolder)
-                    : Optional.empty()));
+        MinFractionalDigitsFacet.strongestConstraint(
+    		facetHolder,
+            fh->MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsOpt, fh),
+            // support for @jakarta.validation.constraints.Digits (if enabled)
+            fh->getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
+                ? MinFractionalDigitsFacetFromJakartaDigitsAnnotation
+                    .create(digitsOpt, fh)
+                : Optional.empty());
     }
 
     private void processTemporalFormat(
             final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny){
 
-        addFacetIfPresent(
-            DateFormatStyleFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+	    DateFormatStyleFacetFromValueSemanticsAnnotation
+	        .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-            TimeFormatStyleFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+	    TimeFormatStyleFacetFromValueSemanticsAnnotation
+	        .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-            TimeFormatPrecisionFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        TimeFormatPrecisionFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-            DateRenderAdjustFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        DateRenderAdjustFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
 
-        addFacetIfPresent(
-            TimeZoneTranslationFacetFromValueSemanticsAnnotation
-                .create(valueSemanticsIfAny, facetHolder));
+        TimeZoneTranslationFacetFromValueSemanticsAnnotation
+            .create(valueSemanticsIfAny, facetHolder);
     }
 
 }

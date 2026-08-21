@@ -25,7 +25,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -89,7 +88,7 @@ implements MixedInMember {
         //
         // ensure the contributed property cannot be modified
         //
-        FacetUtil.addFacet(disabledFacet());
+        disabledFacet();
 
         // adjust name if necessary
         var isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
@@ -97,8 +96,7 @@ implements MixedInMember {
 
         if(!isExplicitlyNamed) {
             String memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
-            FacetUtil.addFacet(
-                    new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
+            new MemberNamedFacetForStaticMemberName(memberName, facetHolder);
         }
 
     }

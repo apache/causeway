@@ -21,22 +21,25 @@ package org.apache.causeway.core.metamodel.facets.object.projection.ident;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.jspecify.annotations.NonNull;
 
-public record IconFacetFromProjectionFacet(
-    ProjectionFacet projectionFacet,
-    FacetHolder facetHolder)
+public final class IconFacetFromProjectionFacet
+extends FacetAbstract
 implements IconFacet {
 
-    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+    private final ProjectionFacet projectionFacet;
+
+    public IconFacetFromProjectionFacet(final ProjectionFacet projectionFacet, final FacetHolder facetHolder) {
+    	super(IconFacet.class, facetHolder);
+    	this.projectionFacet = projectionFacet;
+    }
 
     @Override
     public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconSize iconSize) {
@@ -52,9 +55,9 @@ implements IconFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof IconFacetFromProjectionFacet
+        return other instanceof IconFacetFromProjectionFacet i
             ? this.projectionFacet
-                    .semanticEquals(((IconFacetFromProjectionFacet)other).projectionFacet)
+                    .semanticEquals(i.projectionFacet)
             : false;
     }
 

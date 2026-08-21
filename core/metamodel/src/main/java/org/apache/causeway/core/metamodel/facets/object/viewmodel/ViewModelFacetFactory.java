@@ -26,7 +26,6 @@ import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -81,21 +80,16 @@ implements
 
         // XmlRootElement annotation (with default precedence)
         var hasXmlRootElementAnnotation = _ClassCache.getInstance().head(type).hasJaxbRootElementSemantics();
-        FacetUtil
-        .addFacetIfPresent(
-                ViewModelFacetForXmlRootElementAnnotation
-                .create(hasXmlRootElementAnnotation, hmacUrlCodec, jaxbService, facetHolder));
 
-        // (with high precedence)
-        FacetUtil
-        .addFacetIfPresent(
-            // either ViewModel interface (highest precedence)
-            ViewModelFacetForViewModelInterface.create(type, hmacUrlCodec, facetHolder)
-            // or Serializable interface (if any)
-            .or(()->ViewModelFacetForSerializableInterface.create(type, hmacUrlCodec, facetHolder))
-            // or else Java record (if any)
-            .or(()->ViewModelFacetForJavaRecord.create(type, mementoHmacContext, facetHolder))
-        );
+        ViewModelFacetForXmlRootElementAnnotation
+                .create(hasXmlRootElementAnnotation, hmacUrlCodec, jaxbService, facetHolder);
+
+        // either ViewModel interface (highest precedence)
+        ViewModelFacetForViewModelInterface.create(type, hmacUrlCodec, facetHolder)
+        // or Serializable interface (if any)
+        .or(()->ViewModelFacetForSerializableInterface.create(type, hmacUrlCodec, facetHolder))
+        // or else Java record (if any)
+        .or(()->ViewModelFacetForJavaRecord.create(type, mementoHmacContext, facetHolder));
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }

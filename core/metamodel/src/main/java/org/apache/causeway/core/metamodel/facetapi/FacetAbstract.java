@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
+import java.util.Objects;
+
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.jspecify.annotations.NonNull;
 
@@ -27,28 +29,43 @@ import lombok.experimental.Accessors;
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
-	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Override
-	public Precedence precedence() {
-    	return Precedence.DEFAULT;
-    }
-
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull FacetHolder facetHolder;
 
     protected FacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder facetHolder) {
-        this.facetType = facetType;
-        this.facetHolder = facetHolder;
-        //TODO refactor facetHolder.addFacet(this);
+        this.facetType = Objects.requireNonNull(facetType);
+        this.facetHolder = Objects.requireNonNull(facetHolder);
+        prebind(facetHolder);
+        // binding by contract
+        _BindUtil.resolveInternalElseFail(facetHolder)
+    			.addFacet(this);
+    }
+
+    @Override
+    public Precedence precedence() {
+    	return Precedence.DEFAULT;
     }
 
     @Override
     public String toString() {
         return FacetUtil.toString(this);
+    }
+
+    // -- HELPER
+
+    /**
+     * Some {@link Facet}(s) may need certain adjustments to the {@link FacetHolder} which they are about to be added to.
+     * This method is called before binding this {@link Facet} to its holder. It is called inside the {@link Facet}'s constructor.
+     */
+    private final void prebind(final FacetHolder facetHolder) {
+    	if(this instanceof ReloadableFacet reloadableFacet) {
+    		reloadableFacet.onPrebind(facetHolder); // dynamic update support
+    	}
     }
 
 }

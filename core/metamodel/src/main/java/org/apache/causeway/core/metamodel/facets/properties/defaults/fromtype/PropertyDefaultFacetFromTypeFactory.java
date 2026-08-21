@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.properties.defaults.fromtype;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -52,11 +51,9 @@ extends FacetFactoryAbstract {
         // try to infer defaults from the underlying return type
         processMethodContext.loadSpecificationTypeOnly(processMethodContext.methodFacade().getReturnType())
         	.lookupFacet(DefaultedFacet.class)
-	        .ifPresent(returnTypeDefaultedFacet->{
-	            FacetUtil.addFacet(
-	                    new PropertyDefaultFacetFromDefaultedFacet(
-	                            returnTypeDefaultedFacet, processMethodContext.facetHolder()));
-	        });
+	        .ifPresent(returnTypeDefaultedFacet->
+                new PropertyDefaultFacetFromDefaultedFacet(
+                        returnTypeDefaultedFacet, processMethodContext.facetHolder()));
     }
 
 }

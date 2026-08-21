@@ -86,9 +86,8 @@ extends FacetFactoryAbstract {
         var holder = processMethodContext.facetHolder();
 
         // check for @Action at all.
-        addFacetIfPresent(
-                ActionExplicitFacetForActionAnnotation
-                .create(actionIfAny, holder));
+        ActionExplicitFacetForActionAnnotation
+            .create(actionIfAny, holder);
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
@@ -115,22 +114,21 @@ extends FacetFactoryAbstract {
 
             // search for @Action(domainEvent=...), else use the default event type
             var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, processMethodContext.facetHolder());
-            addFacet(actionDomainEventFacet);
 
             // replace the current actionInvocationFacet with one that will
             // emit the appropriate domain event and then delegate onto the underlying
-            addFacet(
-                /* lazily binds the event-type to the actionDomainEventFacet,
-                 * such that any changes to the latter during post processing
-                 * are reflected here as well
-                 */
-                isAction
-                    ? new ActionInvocationFacetForAction(
-                            actionDomainEventFacet,
-                            actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder())
-                    // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
-                    : new ActionInvocationFacetForMixedInPropertyOrCollection(
-                            actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder()));
+            /* lazily binds the event-type to the actionDomainEventFacet,
+             * such that any changes to the latter during post processing
+             * are reflected here as well
+             */
+            @SuppressWarnings("unused")
+			var actionInvocationFacet = isAction
+                ? new ActionInvocationFacetForAction(
+                        actionDomainEventFacet,
+                        actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder())
+                // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
+                : new ActionInvocationFacetForMixedInPropertyOrCollection(
+                        actionMethod, typeSpec, returnSpec, processMethodContext.facetHolder());
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }
@@ -140,24 +138,21 @@ extends FacetFactoryAbstract {
         var facetedMethod = processMethodContext.facetHolder();
 
         // search for @Action(restrictTo=...)
-        addFacetIfPresent(
-                PrototypeFacetForActionAnnotation
-                .create(
-                        actionIfAny, facetedMethod,
-                        ()->super.getSystemEnvironment().deploymentType()));
+        PrototypeFacetForActionAnnotation
+            .create(
+                    actionIfAny, facetedMethod,
+                    ()->super.getSystemEnvironment().deploymentType());
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
         var facetedMethod = processMethodContext.facetHolder();
 
         // check for @Action(semantics=...)
-        addFacet(
-            actionIfAny
-                .map(Action::semantics)
-                .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
-                .map(semanticsOf -> new ActionSemanticsFacet("ActionAnnotation", semanticsOf, facetedMethod))
-                .orElseGet(()->new ActionSemanticsFacet("FallbackToNonIdempotent", SemanticsOf.NON_IDEMPOTENT, facetedMethod))
-        );
+        actionIfAny
+            .map(Action::semantics)
+            .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
+            .map(semanticsOf -> new ActionSemanticsFacet("ActionAnnotation", semanticsOf, facetedMethod))
+            .orElseGet(()->new ActionSemanticsFacet("FallbackToNonIdempotent", SemanticsOf.NON_IDEMPOTENT, facetedMethod));
     }
 
     void processCommandPublishing(
@@ -175,8 +170,8 @@ extends FacetFactoryAbstract {
             return;
 
         // check for @Action(commandPublishing=...)
-        addFacetIfPresent(CommandPublishingFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod));
+        CommandPublishingFacetForActionAnnotation
+            .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
     }
 
     void processExecutionPublishing(
@@ -196,9 +191,9 @@ extends FacetFactoryAbstract {
             return;
 
         // check for @Action(executionPublishing=...)
-        addFacetIfPresent(
-                ExecutionPublishingFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));
+
+        ExecutionPublishingFacetForActionAnnotation
+            .create(actionIfAny, getConfiguration(), facetedMethod);
 
     }
 
@@ -210,15 +205,13 @@ extends FacetFactoryAbstract {
         var methodReturnType = method.getReturnType();
 
         CollectionSemantics.valueOf(methodReturnType)
-        .ifPresent(collectionType->{
-            addFacetIfPresent(
+        	.ifPresent(collectionType->{
                     TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)
                     .or(
                         // else infer from generic type arg if any
                         ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod)
-                        ));
-
-        });
+                    );
+        	});
     }
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
@@ -226,14 +219,11 @@ extends FacetFactoryAbstract {
         var holder = processMethodContext.facetHolder();
 
         // check for @Action(choicesFrom=...)
-        addFacetIfPresent(
-                ChoicesFromFacetForActionAnnotation
-                .create(actionIfAny, holder));
+        ChoicesFromFacetForActionAnnotation
+            .create(actionIfAny, holder);
 
-        addFacetIfPresent(
-                LayoutGroupFacetForActionAnnotation
-                .create(actionIfAny, holder));
-
+        LayoutGroupFacetForActionAnnotation
+            .create(actionIfAny, holder);
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
@@ -241,9 +231,8 @@ extends FacetFactoryAbstract {
         var holder = processMethodContext.facetHolder();
 
         // check for @Action(fileAccept=...)
-        addFacetIfPresent(
-                FileAcceptFacetForActionAnnotation
-                .create(actionIfAny, holder));
+        FileAcceptFacetForActionAnnotation
+            .create(actionIfAny, holder);
     }
 
 }

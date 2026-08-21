@@ -54,54 +54,41 @@ extends FacetFactoryAbstract {
 
     // check for @Parameter(precedingParamsPolicy=...)
     void processPrecedingParamsPolicy(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-
-        addFacetIfPresent(
-                PrecedingParametersPolicyFacet
-                        .create(parameterIfAny, getConfiguration(), holder));
+        PrecedingParametersPolicyFacet
+            .create(parameterIfAny, getConfiguration(), holder);
     }
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-
-        addFacetIfPresent(
-                MaxLengthFacetForParameterAnnotation
-                .create(parameterIfAny, holder));
+        MaxLengthFacetForParameterAnnotation
+            .create(parameterIfAny, holder);
     }
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-
-        addFacetIfPresent(
-                MustSatisfySpecificationFacetForParameterAnnotation
-                .create(parameterIfAny, holder, getFactoryService()));
+        MustSatisfySpecificationFacetForParameterAnnotation
+            .create(parameterIfAny, holder, getFactoryService());
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         var parameterType = processParameterContext.parameterType();
 
         var patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
-        addFacetIfPresent(
-                RegExFacetForPatternAnnotationOnParameter
-                .create(patternIfAny, parameterType, holder));
 
-        addFacetIfPresent(
-                RegExFacetForParameterAnnotation
-                .create(parameterIfAny, parameterType, holder));
+        RegExFacetForPatternAnnotationOnParameter
+            .create(patternIfAny, parameterType, holder);
+        RegExFacetForParameterAnnotation
+            .create(parameterIfAny, parameterType, holder);
     }
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
@@ -110,23 +97,17 @@ extends FacetFactoryAbstract {
 
         var parameterType = processParameterContext.parameterType();
 
-        addFacetIfPresent(
-                MandatoryFacetInvertedByNullableAnnotationOnParameter
-                .create(hasNullable, parameterType, holder));
-
-        addFacetIfPresent(
-                MandatoryFacetForParameterAnnotation
-                .create(parameterIfAny, parameterType, holder));
+        MandatoryFacetInvertedByNullableAnnotationOnParameter
+            .create(hasNullable, parameterType, holder);
+        MandatoryFacetForParameterAnnotation
+                .create(parameterIfAny, parameterType, holder);
     }
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
-
         var holder = processParameterContext.facetHolder();
         var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-
-        addFacetIfPresent(
-                FileAcceptFacetForParameterAnnotation
-                .create(parameterIfAny, holder));
+        FileAcceptFacetForParameterAnnotation
+            .create(parameterIfAny, holder);
     }
 
 }

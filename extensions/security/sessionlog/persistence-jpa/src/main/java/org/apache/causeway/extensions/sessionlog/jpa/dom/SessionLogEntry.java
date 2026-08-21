@@ -201,5 +201,4 @@ public class SessionLogEntry implements org.apache.causeway.extensions.sessionlo
         return CONTRACT.toString(SessionLogEntry.this);
     }
 
-
 }

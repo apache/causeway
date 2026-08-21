@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
@@ -42,6 +40,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.junit.jupiter.api.Test;
 
 /**
  * Switching between Layout Variants may result in Members staying hidden.
@@ -110,12 +109,12 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
 
     private void assertTotalFacetCountIsInvariant(final List<FacetHolder> facetHolders, final Runnable runnable) {
         final var totalFacetCountsBefore = facetHolders.stream()
-                .map(facetHolder->facetHolder.getFacetRanking(HiddenFacet.class).orElseThrow())
+                .map(facetHolder->facetHolder.lookupFacetRanking(HiddenFacet.class).orElseThrow())
                 .map(FacetRanking::totalFacetCount)
                 .toList();
         runnable.run();
         final var totalFacetCountsAfter = facetHolders.stream()
-                .map(facetHolder->facetHolder.getFacetRanking(HiddenFacet.class).orElseThrow())
+                .map(facetHolder->facetHolder.lookupFacetRanking(HiddenFacet.class).orElseThrow())
                 .map(FacetRanking::totalFacetCount)
                 .toList();
         assertEquals(totalFacetCountsBefore, totalFacetCountsAfter);
@@ -140,6 +139,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     private void assertHiddenActionCount(final ObjectSpecification spec, final long n) {
         assertEquals(n,
             spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+            	.peek(it->System.err.println("hidden " +it))
                 .flatMap(act->act.lookupFacet(HiddenFacet.class).stream())
                 .map(HiddenFacet::getSemantics)
                 .filter(Semantics::isHidden)

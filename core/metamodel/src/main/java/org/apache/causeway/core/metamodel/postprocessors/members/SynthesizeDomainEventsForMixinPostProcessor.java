@@ -96,7 +96,6 @@ extends MetaModelPostProcessorAbstract {
         ActionDomainEventFacet
             .createObjectTypeSpecificForMixin(objectSpecification, objectAction.facetHolder())
             .ifPresent(mixeeSpecificActionDomainEventFacet -> {
-                objectAction.addFacet(mixeeSpecificActionDomainEventFacet);
                 installMixeeSpecificActionInvocationFacet(objectAction, mixeeSpecificActionDomainEventFacet);
             });
     }
@@ -107,12 +106,12 @@ extends MetaModelPostProcessorAbstract {
         var actionInvocationFacet = objectAction.lookupFacet(ActionInvocationFacet.class).orElse(null);
         if (!(actionInvocationFacet instanceof ActionInvocationFacetForAction actionInvocationFacetForAction))
 			return;
-        objectAction.addFacet(ActionInvocationFacetForAction.createObjectTypeSpecific(
+        ActionInvocationFacetForAction.createObjectTypeSpecific(
                 mixeeSpecificActionDomainEventFacet,
                 actionInvocationFacetForAction.getMethods().getFirstElseFail(),
                 actionInvocationFacetForAction.getDeclaringType(),
                 actionInvocationFacetForAction.getReturnType(),
-                objectAction.facetHolder()));
+                objectAction.facetHolder());
     }
 
     private void initPropertyWithMixee(
@@ -122,8 +121,7 @@ extends MetaModelPostProcessorAbstract {
         if (!propertyDomainEventFacet.getEventTypeOrigin().isDefault())
 			return; // skip if already set explicitly on the property or mixin type
         PropertyDomainEventFacet
-            .createObjectTypeSpecificForMixin(objectSpecification, property.facetHolder())
-            .ifPresent(property::addFacet);
+            .createObjectTypeSpecificForMixin(objectSpecification, property.facetHolder());
     }
 
     private void initCollectionWithMixee(
@@ -133,8 +131,7 @@ extends MetaModelPostProcessorAbstract {
         if (!collectionDomainEventFacet.getEventTypeOrigin().isDefault())
 			return; // skip if already set explicitly on the collection or mixin type
         CollectionDomainEventFacet
-            .createObjectTypeSpecificForMixin(objectSpecification, collection.facetHolder())
-            .ifPresent(collection::addFacet);
+            .createObjectTypeSpecificForMixin(objectSpecification, collection.facetHolder());
     }
 
     private void reportMissing(final ObjectAction act) {

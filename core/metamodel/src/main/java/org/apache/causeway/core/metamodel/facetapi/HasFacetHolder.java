@@ -58,18 +58,13 @@ public interface HasFacetHolder extends FacetHolder {
     }
 
     @Override
-    default void addFacet(final Facet facet) {
-    	facetHolder().addFacet(facet);
-    }
-
-    @Override
     default Stream<FacetRanking> streamFacetRankings() {
         return facetHolder().streamFacetRankings();
     }
 
     @Override
-    default Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        return facetHolder().getFacetRanking(facetType);
+    default Optional<FacetRanking> lookupFacetRanking(final Class<? extends Facet> facetType) {
+        return facetHolder().lookupFacetRanking(facetType);
     }
 
 }

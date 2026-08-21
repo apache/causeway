@@ -50,7 +50,7 @@ implements MetaModelRefiner {
         var cls = processClassContext.cls();
         var facetHolder = processClassContext.facetHolder();
 
-        addFacetIfPresent(TitleFacetViaTitleAnnotation.create(cls, facetHolder));
+        TitleFacetViaTitleAnnotation.create(cls, facetHolder);
     }
 
     /**
@@ -70,7 +70,7 @@ implements MetaModelRefiner {
 
             var titleFacetTopRank =
                 objectSpec
-                .getFacetRanking(TitleFacet.class)
+                .lookupFacetRanking(TitleFacet.class)
                 .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
                 .orElse(Can.empty())
                 .distinct(TitleFacet::semanticEquals);

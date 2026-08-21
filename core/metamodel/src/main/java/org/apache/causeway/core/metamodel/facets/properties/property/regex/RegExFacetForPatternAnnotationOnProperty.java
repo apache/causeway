@@ -33,9 +33,8 @@ extends RegExFacetAbstract {
             final Class<?> returnType,
             final FacetHolder holder) {
 
-        if (!returnType.equals(String.class)) {
-            return null;
-        }
+        if (!returnType.equals(String.class))
+			return Optional.empty();
 
         return patternIfAny
                 .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)

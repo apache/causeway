@@ -37,9 +37,9 @@ class JdbcEntityFacetFactory extends FacetFactoryAbstract {
         var facetHolder = processClassContext.facetHolder();
 
         var entityAnnotation = processClassContext.synthesizeOnType(Persistent.class);
-        if(!entityAnnotation.isPresent()) return;
+        if(!entityAnnotation.isPresent())
+        	return;
 
-        addFacet(
-                new JdbcEntityFacet(facetHolder, cls));
+        new JdbcEntityFacet(facetHolder, cls);
     }
 }

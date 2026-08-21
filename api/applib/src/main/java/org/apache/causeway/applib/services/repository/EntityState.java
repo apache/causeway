@@ -66,11 +66,10 @@ public enum EntityState {
      */
     TRANSIENT_OR_REMOVED(false),
     /**
-     * @deprecated - This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
+     * Set by the framework after entity removal.
+     * <p> However, detecting an entity's state in the JPA context will never yield {@link #REMOVED}.
      */
-    @Deprecated // JDO specific
-    REMOVED(false)
-    ;
+    REMOVED(false);
 
     // -- PREDICATES
 
@@ -89,7 +88,6 @@ public enum EntityState {
     public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED
             || this == REMOVED; }
     /** @see #REMOVED */
-    @Deprecated // JDO specific
     public boolean isRemoved() { return this == REMOVED; }
 
     // -- SPECIAL STATES

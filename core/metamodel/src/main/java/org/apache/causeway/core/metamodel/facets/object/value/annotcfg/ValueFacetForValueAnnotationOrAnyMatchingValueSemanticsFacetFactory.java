@@ -29,7 +29,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -130,13 +129,11 @@ extends FacetFactoryAbstract {
         final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
                 .create(valueClass, valueSemanticsProviders, valueSpec);
 
-        valueSpec.addFacet(valueFacet);
-        valueSpec.addFacet(new ImmutableFacetViaValueSemantics(valueSpec));
-        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
-
-        FacetUtil.addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec));
-        FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
-        FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
+        new ImmutableFacetViaValueSemantics(valueSpec);
+        TitleFacetFromValueFacet.create(valueFacet, valueSpec);
+        TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec);
+        MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec);
+        DefaultedFacetFromValueFacet.create(valueFacet, valueSpec);
 
         _Assert.assertTrue(valueSpec.valueFacet().isPresent(), ()->"value facet not created for %s (provider-count=%d)"
                     .formatted(valueSpec.correspondingClass().getName(),

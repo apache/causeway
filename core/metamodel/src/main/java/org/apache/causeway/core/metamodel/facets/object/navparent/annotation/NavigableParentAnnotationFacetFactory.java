@@ -96,8 +96,7 @@ implements MetaModelRefiner {
         } else
 			return; // no parent resolvable
 
-        addFacetIfPresent(
-                NavigableParentFacetViaMethod.create(processClassContext, method));
+        NavigableParentFacetViaMethod.create(processClassContext, method);
     }
 
     private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){

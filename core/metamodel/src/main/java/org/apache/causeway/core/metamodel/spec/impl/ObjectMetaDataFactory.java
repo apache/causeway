@@ -95,9 +95,9 @@ record ObjectMetaDataFactory(
 
         // name
         if (facetHolder.lookupFacet(MemberNamedFacet.class).isEmpty()) {
-        	facetHolder.addFacet(new MemberNamedFacetForStaticMemberName(
+        	new MemberNamedFacetForStaticMemberName(
                     _Strings.asNaturalName.apply(typeMeta.logicalType().logicalSimpleName()),
-                    facetHolder));
+                    facetHolder);
         }
 
         var hierarchical = typeMeta.beanSort().isValue()

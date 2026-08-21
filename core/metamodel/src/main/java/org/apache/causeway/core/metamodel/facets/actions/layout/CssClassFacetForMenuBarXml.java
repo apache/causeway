@@ -23,12 +23,14 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.ReloadableFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 import org.jspecify.annotations.Nullable;
 
-public class CssClassFacetForMenuBarXml
-extends CssClassFacetSimple {
+public final class CssClassFacetForMenuBarXml
+extends CssClassFacetSimple
+implements ReloadableFacet {
 
     public static Optional<CssClassFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
@@ -45,7 +47,7 @@ extends CssClassFacetSimple {
     }
 
     @Override
-    public Precedence precedence() {
+    public final Precedence precedence() {
     	// XML menu-bar entries overrule layout from annotations
     	return Precedence.HIGH;
     }

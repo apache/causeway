@@ -20,11 +20,12 @@ package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
-
-import org.jspecify.annotations.NonNull;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The maximum allowed number of digits to the left of the decimal place
@@ -61,16 +62,24 @@ extends Facet {
     /**
      * The stronger constraint wins. If equal, first argument wins over second.
      */
-    public static Optional<MaxIntegerDigitsFacet> strongestConstraint(
-            final Optional<MaxIntegerDigitsFacet> a,
-            final Optional<MaxIntegerDigitsFacet> b) {
+    static Optional<MaxIntegerDigitsFacet> strongestConstraint(
+    		final FacetHolder facetHolder,
+            final Function<FacetHolder, Optional<MaxIntegerDigitsFacet>> factoryA,
+            final Function<FacetHolder, Optional<MaxIntegerDigitsFacet>> factoryB) {
+
+    	var tmp = FacetHolder.simple(facetHolder.getMetaModelContext(), null);
+
+    	var b = factoryB.apply(tmp);
         if(b.isEmpty())
-            return a;
+            return factoryA.apply(facetHolder);
+
+        var a = factoryA.apply(tmp);
         if(a.isEmpty())
-            return b;
+            return factoryB.apply(facetHolder);
+
         return a.get().maxIntegerDigits() <= b.get().maxIntegerDigits()
-            ? a
-            : b;
+                ? factoryA.apply(facetHolder)
+                : factoryB.apply(facetHolder);
     }
 
 }

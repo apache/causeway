@@ -43,14 +43,11 @@ extends MemberSupportFacetFactoryAbstract  {
         var argType = getterMethod.getReturnType();
 
         methodFinder
-        .streamMethodsMatchingSignature(new Class[] { argType })
-        .peek(processMethodContext::removeMethod)
-        .forEach(validateMethod->{
-            addFacet(
-                    new PropertyValidateFacetViaMethod(
-                            validateMethod, processMethodContext.facetHolder()));
-        });
-
+	        .streamMethodsMatchingSignature(new Class[] { argType })
+	        .peek(processMethodContext::removeMethod)
+	        .forEach(validateMethod->
+	                new PropertyValidateFacetViaMethod(
+	                        validateMethod, processMethodContext.facetHolder()));
     }
 
 }

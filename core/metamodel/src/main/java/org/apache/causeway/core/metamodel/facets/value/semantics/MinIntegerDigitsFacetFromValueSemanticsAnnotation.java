@@ -21,25 +21,34 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
 
-record MinIntegerDigitsFacetFromValueSemanticsAnnotation(
-        int minIntegerDigits,
-        FacetHolder facetHolder)
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+final class MinIntegerDigitsFacetFromValueSemanticsAnnotation
+extends FacetAbstract
 implements MinIntegerDigitsFacet {
 
-    public static Optional<MinIntegerDigitsFacet> create(
-            final Optional<ValueSemantics> valueSemanticsOpt,
-            final FacetHolder holder) {
-        return valueSemanticsOpt
-            .filter(valueSemantics->valueSemantics.minIntegerDigits()>1)
-            .map(valueSemantics->
-                new MinIntegerDigitsFacetFromValueSemanticsAnnotation(valueSemantics.minIntegerDigits(), holder));
-   }
+	static Optional<MinIntegerDigitsFacet> create(
+			final Optional<ValueSemantics> valueSemanticsOpt,
+			final FacetHolder holder) {
+		return valueSemanticsOpt
+			.filter(valueSemantics->valueSemantics.minIntegerDigits()>1)
+			.map(valueSemantics->
+				new MinIntegerDigitsFacetFromValueSemanticsAnnotation(valueSemantics.minIntegerDigits(), holder));
+	}
 
-    @Override public Class<? extends Facet> facetType() { return MinIntegerDigitsFacet.class; }
-    @Override public Precedence precedence() { return Precedence.DEFAULT; }
+	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+	private final int minIntegerDigits;
+
+	private MinIntegerDigitsFacetFromValueSemanticsAnnotation(
+			final int minIntegerDigits,
+			final FacetHolder facetHolder) {
+		super(MinIntegerDigitsFacet.class, facetHolder);
+    	this.minIntegerDigits = minIntegerDigits;
+	}
 
 }

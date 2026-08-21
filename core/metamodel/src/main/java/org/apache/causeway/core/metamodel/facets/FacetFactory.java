@@ -34,6 +34,8 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover.HasMethodRemover;

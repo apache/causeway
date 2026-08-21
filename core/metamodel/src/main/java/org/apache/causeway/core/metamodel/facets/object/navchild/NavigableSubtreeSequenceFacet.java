@@ -21,27 +21,33 @@ package org.apache.causeway.core.metamodel.facets.object.navchild;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Provides a MethodHandle and its associated Dewey order.
  *
  * @since 3.2
  */
-public sealed interface NavigableSubtreeSequenceFacet
-extends Facet
-permits NavigableSubtreeSequenceFacetRecord {
+public final class NavigableSubtreeSequenceFacet
+extends FacetAbstract {
 
-    String sequence();
-    MethodHandle methodHandle();
+	@Getter @Accessors(fluent = true)
+    private final String sequence;
+	@Getter @Accessors(fluent = true)
+    private final MethodHandle methodHandle;
+    private final String origin;
 
     // -- FACTORY
 
-    static Optional<NavigableSubtreeSequenceFacet> create(
+    public static Optional<NavigableSubtreeSequenceFacet> create(
         /**
          * Informal text, describing the origin of this facet.
          */
@@ -56,9 +62,29 @@ permits NavigableSubtreeSequenceFacetRecord {
             .flatMap(method->Try.call(()->MethodHandles
                     .privateLookupIn(cls, MethodHandles.lookup())
                     .unreflect(method))
-                .ifFailure(e->e.printStackTrace())
+                .ifFailure(Throwable::printStackTrace)
                 .getValue()
-                .map(mh->new NavigableSubtreeSequenceFacetRecord(sequence, mh, origin, facetHolder)));
+                .map(mh->new NavigableSubtreeSequenceFacet(sequence, mh, origin, facetHolder)));
+    }
+
+    private NavigableSubtreeSequenceFacet(
+    	    final String sequence,
+    	    final MethodHandle methodHandle,
+    	    final String origin,
+    	    final FacetHolder facetHolder) {
+    	super(NavigableSubtreeSequenceFacet.class, facetHolder);
+    	this.sequence = sequence;
+    	this.methodHandle = methodHandle;
+    	this.origin = origin;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	super.visitAttributes(visitor);
+        visitor.accept("origin", origin);
+        visitor.accept("sequence", sequence);
+        visitor.accept("methodHandle", methodHandle);
     }
 
 }
+

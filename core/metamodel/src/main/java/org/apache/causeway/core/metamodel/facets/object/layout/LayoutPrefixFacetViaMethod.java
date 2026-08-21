@@ -21,23 +21,23 @@ package org.apache.causeway.core.metamodel.facets.object.layout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-public record LayoutPrefixFacetViaMethod(
-    @NonNull String origin,
-    @NonNull ImperativeAspect imperativeAspect,
-    @NonNull FacetHolder facetHolder,
-    Facet.@NonNull Precedence precedence
-) implements LayoutPrefixFacet, HasImperativeAspect {
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+public final class LayoutPrefixFacetViaMethod
+extends FacetAbstract
+implements LayoutPrefixFacet, HasImperativeAspect {
 
     // -- FACTORIES
 
@@ -54,9 +54,22 @@ public record LayoutPrefixFacetViaMethod(
                 new LayoutPrefixFacetViaMethod("LayoutMethod", imperativeAspect, holder, Precedence.DEFAULT));
     }
 
-    // -- METHODS
+    @Getter @Accessors(fluent = true)
+    private final String origin;
+    @Getter(onMethod_ = {@Override})
+    private final ImperativeAspect imperativeAspect;
 
-    @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
+    private LayoutPrefixFacetViaMethod(
+    		@NonNull final String origin,
+    	    @NonNull final ImperativeAspect imperativeAspect,
+    	    @NonNull final FacetHolder facetHolder,
+    	    final Facet.@NonNull Precedence precedence) {
+    	super(LayoutPrefixFacet.class, facetHolder);
+    	this.origin = origin;
+        this.imperativeAspect = imperativeAspect;
+    }
+
+    // -- METHODS
 
     @Override
     public String layoutPrefix(final ManagedObject managedObject) {
@@ -69,14 +82,9 @@ public record LayoutPrefixFacetViaMethod(
     }
 
     @Override
-    public ImperativeAspect getImperativeAspect() {
-        return imperativeAspect();
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
     	LayoutPrefixFacet.super.visitAttributes(visitor);
-        visitor.accept("origin", origin());
+        visitor.accept("origin", origin);
         imperativeAspect.visitAttributes(visitor);
     }
 

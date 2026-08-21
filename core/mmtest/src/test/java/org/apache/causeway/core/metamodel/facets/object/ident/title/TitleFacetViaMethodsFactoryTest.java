@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -28,10 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {

@@ -409,7 +409,6 @@ public final class _Bytes {
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
 
-
     // -- EXTERNAL FORMAT
 
     public static byte[] fromInts(final int[] ints) {

@@ -18,12 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.navchild;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.collections.Can;
@@ -32,6 +29,9 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class NavigableSubtreeFacetFactoryTest extends FacetFactoryTestAbstract {
 
@@ -55,49 +55,41 @@ class NavigableSubtreeFacetFactoryTest extends FacetFactoryTestAbstract {
 
     @Test
     void treeNodeFacetShouldBeInstalledWhenNodeHasAnnotations() {
-        
+
         collectionScenario(_TreeSample.A.class, "childrenB", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
-            // copy over facets to spec for testing later
+            assertTrue(facetedMethod.containsFacet(NavigableSubtreeSequenceFacet.class));
             var spec = specLoader.specForType(_TreeSample.A.class).orElseThrow();
-            spec.getAssociationElseFail("childrenB")
-                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
+            spec.getAssociationElseFail("childrenB");
         });
-        
+
         collectionScenario(_TreeSample.A.class, "childrenC", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
-            // copy over facets to spec for testing later
+            assertTrue(facetedMethod.containsFacet(NavigableSubtreeSequenceFacet.class));
             var spec = specLoader.specForType(_TreeSample.A.class).orElseThrow();
-            spec.getAssociationElseFail("childrenC")
-                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
+            spec.getAssociationElseFail("childrenC");
         });
-        
+
         collectionScenario(_TreeSample.B.class, "childrenD", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
-            // copy over facets to spec for testing later
+            assertTrue(facetedMethod.containsFacet(NavigableSubtreeSequenceFacet.class));
             var spec = specLoader.specForType(_TreeSample.B.class).orElseThrow();
-            spec.getAssociationElseFail("childrenD")
-                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
+            spec.getAssociationElseFail("childrenD");
         });
-        
+
         collectionScenario(_TreeSample.C.class, "childrenD", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
-            assertNotNull(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
-            // copy over facets to spec for testing later
+            assertTrue(facetedMethod.containsFacet(NavigableSubtreeSequenceFacet.class));
             var spec = specLoader.specForType(_TreeSample.C.class).orElseThrow();
-            spec.getAssociationElseFail("childrenD")
-                .addFacet(facetedMethod.lookupFacet(NavigableSubtreeSequenceFacet.class).orElse(null));
+            spec.getAssociationElseFail("childrenD");
         });
-        
+
         var specs = Can.of(_TreeSample.A.class, _TreeSample.B.class, _TreeSample.C.class, _TreeSample.D.class)
             .map(specLoader::specForType)
             .map(opt->opt.orElse(null));
         // now run the post-processor
         specs.forEach(postProcessor::postProcessObject);
-        
+
         specs.forEach(spec->{
             switch(spec.correspondingClass().getSimpleName()) {
                 case "A" -> assertNotNull(spec.lookupFacet(NavigableSubtreeFacet.class).orElse(null));

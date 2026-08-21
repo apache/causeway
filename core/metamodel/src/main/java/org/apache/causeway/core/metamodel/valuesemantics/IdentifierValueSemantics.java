@@ -120,7 +120,6 @@ implements
         return faIconAndTitle(faLayers, toMonospace(identifier.getFullIdentityString()));
     }
 
-
     @Override
     public Can<Identifier> getExamples() {
         return Can.of(

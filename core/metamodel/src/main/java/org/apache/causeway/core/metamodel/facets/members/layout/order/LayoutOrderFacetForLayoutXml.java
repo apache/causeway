@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.layout.order;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.jspecify.annotations.Nullable;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 public class LayoutOrderFacetForLayoutXml
 extends LayoutOrderFacetAbstract
@@ -32,26 +28,20 @@ implements QualifiedFacet {
 
     public static LayoutOrderFacetForLayoutXml create(
             final int sequenceAsInt,
-            final FacetHolder holder,
+            final FacetHolder facetHolder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder, precedence, qualifier);
+
+        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, facetHolder) {
+        	@Override final public Precedence precedence() { return precedence; }
+        	@Override final public @Nullable String qualifier() { return qualifier; }
+        };
     }
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final Facet.Precedence precedence;
-
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
 
     private LayoutOrderFacetForLayoutXml(
             final String sequence,
-            final FacetHolder holder,
-            final Precedence precedence,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(sequence, holder);
-        this.precedence = precedence;
-        this.qualifier = qualifier;
     }
 
     @Override

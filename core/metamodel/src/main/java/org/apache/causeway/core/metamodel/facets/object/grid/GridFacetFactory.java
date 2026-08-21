@@ -19,7 +19,6 @@ package org.apache.causeway.core.metamodel.facets.object.grid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -42,8 +41,8 @@ extends FacetFactoryAbstract {
 
         if(facetHolder instanceof ObjectSpecification objSpec) {
             if(objSpec.isEntityOrViewModelOrAbstract()) {
-                addFacet(BSGridFacet
-                        .create(facetHolder, gridService.get()));
+                BSGridFacet
+                    .create(facetHolder, gridService.get());
             } else {
                 /* as of time of writing, when not installing a facet here, we end up in recursive update cycle later (test code)
                  *
@@ -76,7 +75,7 @@ extends FacetFactoryAbstract {
                 at org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract.collectionScenario(FacetFactoryTestAbstract.java:367)
                 at org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeFacetFactoryTest.treeNodeFacetShouldBeInstalledWhenNodeHasAnnotations(NavigableSubtreeFacetFactoryTest.java:59)
                  */
-                addFacet(new BSGridFacet.NoLayout(facetHolder, Precedence.LOW));
+                new BSGridFacet.NoLayout(facetHolder);
             }
         }
 

@@ -21,17 +21,10 @@ package org.apache.causeway.extensions.secman.integration.facets;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -42,6 +35,11 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.stereotype.Component;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 public class TenantedAuthorizationPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -68,7 +66,7 @@ extends MetaModelPostProcessorAbstract {
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
-        FacetUtil.addFacetIfPresent(createFacet(objectSpecification.correspondingClass(), objectSpecification));
+        createFacet(objectSpecification.correspondingClass(), objectSpecification);
     }
 
     @Override
@@ -89,7 +87,7 @@ extends MetaModelPostProcessorAbstract {
     // -- HELPER
 
     private void addFacetTo(final ObjectSpecification specification, final ObjectFeature objectFeature) {
-        FacetUtil.addFacetIfPresent(createFacet(specification.correspondingClass(), objectFeature));
+        createFacet(specification.correspondingClass(), objectFeature);
     }
 
     private Optional<TenantedAuthorizationFacetDefault> createFacet(

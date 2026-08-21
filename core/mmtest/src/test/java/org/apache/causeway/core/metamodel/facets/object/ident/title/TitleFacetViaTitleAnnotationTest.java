@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -31,10 +27,12 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class TitleFacetViaTitleAnnotationTest {
 
-    private Mocking mocking = new Mocking();
+    private final Mocking mocking = new Mocking();
     MetaModelContext metaModelContext;
     FacetHolder mockFacetHolder;
 
@@ -57,7 +55,7 @@ class TitleFacetViaTitleAnnotationTest {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
 
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        mockFacetHolder = FacetHolder.simple(metaModelContext, null);
     }
 
     @Test
@@ -69,8 +67,6 @@ class TitleFacetViaTitleAnnotationTest {
                 .orElse(null);
 
         final NormalDomainObject normalPojo = new NormalDomainObject();
-
-        Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
         var managedObject =
                 metaModelContext.getObjectManager().adapt(normalPojo);
@@ -89,8 +85,6 @@ class TitleFacetViaTitleAnnotationTest {
 
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo =
                 new DomainObjectWithProblemInItsAnnotatedTitleMethod();
-
-        Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
         var mockManagedObject = mocking.asViewmodel(screwedPojo);
 

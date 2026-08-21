@@ -133,7 +133,6 @@ public interface ObjectAssociationContainer {
                 .map(OneToManyAssociation.class::cast);
     }
 
-
     /**
      * Bundles parameters to query for Properties and Collections visible as columns.
      *

@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.properties;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.immutable.EditingEnabledFacet;
@@ -32,6 +29,8 @@ import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorA
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import jakarta.inject.Inject;
 
 /**
  * Replaces {@link DisabledFacetOnPropertyFromImmutableFactory}
@@ -53,9 +52,8 @@ extends MetaModelPostProcessorAbstract {
 
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(DisabledFacet.class)) {
-            return;
-        }
+        if(property.containsNonFallbackFacet(DisabledFacet.class))
+			return;
 
         var typeSpec = property.getDeclaringType();
 
@@ -64,19 +62,15 @@ extends MetaModelPostProcessorAbstract {
         .ifPresent(immutableFacet->{
 
             if(immutableFacet instanceof ImmutableFacetFromConfiguration) {
-
                 var isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
                         .isPresent();
-
-                if(isEditingEnabledOnType) {
-                    // @DomainObject(editing=ENABLED)
+                if(isEditingEnabledOnType)
+					// @DomainObject(editing=ENABLED)
                     return;
-                }
-
             }
 
-            FacetUtil.addFacet(DisabledFacetOnPropertyFromImmutable
-                            .forImmutable(facetedMethodFor(property), immutableFacet));
+            DisabledFacetOnPropertyFromImmutable
+                .forImmutable(facetedMethodFor(property), immutableFacet);
         });
     }
 

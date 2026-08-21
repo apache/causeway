@@ -150,5 +150,4 @@ public final class LinkRepresentation extends JsonRepresentation {
 		return node.stringValue();
 	}
 
-
 }

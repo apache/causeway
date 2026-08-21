@@ -65,7 +65,6 @@ implements MemberRegion<FieldSetOwner>, ActionLayoutDataOwner, Serializable {
     @Getter @Setter
     private String id;
 
-
     /**
      * Whether this fieldset should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
      *

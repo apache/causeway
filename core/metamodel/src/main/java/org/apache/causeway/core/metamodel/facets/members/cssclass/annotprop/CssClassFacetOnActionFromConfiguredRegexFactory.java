@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 
 import jakarta.inject.Inject;
@@ -47,9 +47,8 @@ extends FacetFactoryAbstract {
         // the name which we match the regex against
         var actionName = processMethodContext.methodFacade().getName();
 
-        addFacetIfPresent(
-                CssClassFacetOnActionFromConfiguredRegex
-                    .create(actionName, facetHolder));
+        CssClassFacetOnActionFromConfiguredRegex
+                    .create(actionName, facetHolder);
     }
 
 }

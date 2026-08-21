@@ -45,7 +45,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.collections.layout.columnorder.ColumnOrderPatchingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -362,7 +361,7 @@ public record MetaModelServiceDefault(
 		};
 
 		var columnOrderPatchingFacet = elementType.lookupFacet(ColumnOrderPatchingFacet.class)
-			.orElseGet(()->FacetUtil.addFacet(new ColumnOrderPatchingFacet(elementType)));
+			.orElseGet(()->new ColumnOrderPatchingFacet(elementType));
 
 		columnOrderPatchingFacet.putColumnOrder(identifier, columnsInOrder);
 	}

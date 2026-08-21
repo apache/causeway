@@ -18,15 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.util.regex.Pattern;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.regex.Pattern;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -49,11 +42,10 @@ import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facetapi.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -76,6 +68,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockito.Mockito;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -148,18 +146,18 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         private void addGetterFacet(final FacetHolder holder) {
             var mockOnType = Mockito.mock(ObjectSpecification.class);
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
+            new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getAssociationValueAsPojo(
                         final ManagedObject inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }
-            });
+            };
         }
 
         private void addSetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
+            new PropertySetterFacetAbstract(holder) {
                 @Override
                 public ManagedObject setProperty(
                         final OneToOneAssociation owningAssociation,
@@ -168,7 +166,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return inObject;
                 }
-            });
+            };
         }
 
         private void assertHasPropertyDomainEventFacet(
@@ -179,9 +177,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
-            if(facetedMethod.methodFacade().getName().equals("prop")) {
+            if(facetedMethod.methodFacade().getName().equals("prop"))
 				return; // skip further checks, when in a mixed-in scenario
-			}
 
             // then
             var setterFacet = facetedMethod.lookupFacet(PropertySetterFacet.class).orElse(null);

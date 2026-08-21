@@ -47,29 +47,23 @@ extends FacetFactoryAbstract {
 
         var facetHolder = processParameterContext.facetHolder();
 
-        addFacetIfPresent(
-                CssClassFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        CssClassFacetForParameterLayoutAnnotation
+            .create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                ParamDescribedFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        ParamDescribedFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                LabelAtFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        LabelAtFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                MultiLineFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        MultiLineFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(
-                NamedFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
+        NamedFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
 
-        addFacetIfPresent(TypicalLengthFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
-
+        TypicalLengthFacetForParameterLayoutAnnotation
+        	.create(parameterLayoutIfAny, facetHolder);
     }
 
 }
