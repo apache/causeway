@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements. See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership. The ASF licenses this file
+  to you under the Apache License, Version 2.0.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.causeway.analysis</groupId>
+    <artifactId>causeway-theming-candidate-assets</artifactId>
+    <version>1.0.0-analysis</version>
+    <packaging>jar</packaging>
+
+    <name>Apache Causeway Theming Candidate Assets - Analysis Only</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>../harness/node_modules/bootstrap/dist/css</directory>
+                <targetPath>META-INF/resources/causeway-toolkit/bootstrap</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>bootstrap.min.css</include>
+                    <include>bootstrap.min.css.map</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/node_modules/bootstrap</directory>
+                <targetPath>META-INF/licenses/bootstrap</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>LICENSE</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/generated</directory>
+                <targetPath>META-INF/resources/causeway-toolkit/webawesome</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>webawesome-selective.css</include>
+                    <include>webawesome-selective.js</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/node_modules/@awesome.me/webawesome</directory>
+                <targetPath>META-INF/licenses/webawesome</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>LICENSE.md</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/node_modules/open-props</directory>
+                <targetPath>META-INF/resources/causeway-toolkit/open-props</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>open-props.min.css</include>
+                    <include>normalize.min.css</include>
+                    <include>buttons.min.css</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../harness/node_modules/open-props</directory>
+                <targetPath>META-INF/licenses/open-props</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>LICENSE</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>

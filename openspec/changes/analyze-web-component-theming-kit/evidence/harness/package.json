@@ -1,0 +1,23 @@
+{
+  "name": "causeway-theming-kit-analysis",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "node server.mjs",
+    "verify-assets": "node verify-assets.mjs",
+    "measure-assets": "node measure-assets.mjs",
+    "build-webawesome": "node build-webawesome.mjs",
+    "capture": "node capture.mjs --write",
+    "integrate-petclinic": "node integrate-petclinic.mjs",
+    "summarize-lighthouse": "node summarize-lighthouse.mjs"
+  },
+  "dependencies": {
+    "@awesome.me/webawesome": "3.11.0",
+    "bootstrap": "5.3.8",
+    "open-props": "1.7.23"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.61.0"
+  }
+}

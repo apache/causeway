@@ -1,0 +1,14 @@
+:root { --fixture-shell-width: 82rem; --fixture-content-width: 76rem; }
+body { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
+.fixture-header { background: var(--bs-dark); color: var(--bs-white); box-shadow: var(--bs-box-shadow-sm); }
+.fixture-mark { background: var(--bs-primary); color: var(--bs-white); }
+.fixture-card, .fixture-status, .fixture-menu-panel { background: var(--bs-body-bg); border: var(--bs-border-width) solid var(--bs-border-color); border-radius: var(--bs-border-radius); box-shadow: var(--bs-box-shadow-sm); }
+.fixture-menu-panel { --bs-dropdown-zindex: 1000; }
+.fixture-eyebrow, .fixture-property-label { color: var(--bs-secondary-color); }
+.fixture-error { color: var(--bs-danger-text-emphasis); }
+.fixture-status[data-tone="success"] { border-inline-start: .35rem solid var(--bs-success); }
+.fixture-status[data-tone="warning"] { border-inline-start: .35rem solid var(--bs-warning); }
+.fixture-status[data-tone="danger"] { border-inline-start: .35rem solid var(--bs-danger); }
+.fixture-tabs [role="tablist"] { border-block-end: var(--bs-border-width) solid var(--bs-border-color); }
+.fixture-table-region { border-radius: var(--bs-border-radius); }
+.fixture-footer { background: var(--bs-secondary-bg); color: var(--bs-secondary-color); }

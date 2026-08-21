@@ -1,0 +1,852 @@
+{
+  "generatedAt": "2026-08-20T23:16:09.223Z",
+  "origin": "http://127.0.0.1:4173",
+  "playwrightVersion": "1.61.0",
+  "candidates": {
+    "baseline": {
+      "screenshots": [
+        {
+          "case": "desktop-light-menu",
+          "file": "screenshots/baseline-desktop-light-menu.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=light&state=menu-open&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(243, 245, 248)",
+            "bodyColor": "rgb(31, 41, 55)"
+          },
+          "failures": []
+        },
+        {
+          "case": "desktop-dark-prompt",
+          "file": "screenshots/baseline-desktop-dark-prompt.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=dark&state=prompt&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(16, 23, 34)",
+            "bodyColor": "rgb(232, 237, 244)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-light-nav",
+          "file": "screenshots/baseline-narrow-light-nav.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=light&state=responsive-nav&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(243, 245, 248)",
+            "bodyColor": "rgb(31, 41, 55)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-dark-all",
+          "file": "screenshots/baseline-narrow-dark-all.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=baseline&theme=dark&state=all&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(16, 23, 34)",
+            "bodyColor": "rgb(232, 237, 244)"
+          },
+          "failures": []
+        }
+      ],
+      "interactions": {
+        "menuOpened": {
+          "open": true,
+          "ariaExpanded": "true",
+          "panelHidden": false,
+          "panelDisplay": "block",
+          "focused": true
+        },
+        "menuEscape": {
+          "open": false,
+          "ariaExpanded": "false",
+          "panelHidden": true,
+          "panelDisplay": "none",
+          "focused": true
+        },
+        "actionSelection": {
+          "menu": {
+            "open": false,
+            "ariaExpanded": "false",
+            "panelHidden": true,
+            "panelDisplay": "none",
+            "focused": false
+          },
+          "prompt": {
+            "open": true,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "input",
+            "id": "owner-name",
+            "text": null,
+            "testField": true
+          }
+        },
+        "promptEscape": {
+          "prompt": {
+            "open": false,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "button",
+            "id": null,
+            "text": "Pet Owners",
+            "testField": false
+          }
+        },
+        "tabs": [
+          {
+            "text": "Details",
+            "active": "false",
+            "focused": false
+          },
+          {
+            "text": "Notes and preferences",
+            "active": "true",
+            "focused": true
+          }
+        ],
+        "failures": []
+      },
+      "media": {
+        "reducedMotion": true,
+        "forcedColors": true,
+        "dark": true,
+        "horizontalOverflow": 0,
+        "navVisible": true,
+        "failures": []
+      },
+      "performance": {
+        "samples": [
+          {
+            "domContentLoaded": 7.399999976158142,
+            "load": 9.300000011920929,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 20,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 37255,
+            "candidateEncodedBytes": 36055,
+            "candidateResourceDuration": 5.199999988079071
+          },
+          {
+            "domContentLoaded": 3.400000035762787,
+            "load": 4.800000011920929,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 12,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 37255,
+            "candidateEncodedBytes": 36055,
+            "candidateResourceDuration": 3.699999988079071
+          },
+          {
+            "domContentLoaded": 6.100000023841858,
+            "load": 7.900000035762787,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 37255,
+            "candidateEncodedBytes": 36055,
+            "candidateResourceDuration": 5.399999976158142
+          },
+          {
+            "domContentLoaded": 7.199999988079071,
+            "load": 9.299999952316284,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 37255,
+            "candidateEncodedBytes": 36055,
+            "candidateResourceDuration": 5.799999892711639
+          },
+          {
+            "domContentLoaded": 5.5,
+            "load": 7.600000023841858,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 37255,
+            "candidateEncodedBytes": 36055,
+            "candidateResourceDuration": 5.100000023841858
+          }
+        ],
+        "median": {
+          "domContentLoaded": 6.100000023841858,
+          "load": 7.900000035762787,
+          "firstContentfulPaint": 16,
+          "largestContentfulPaint": 16,
+          "candidateRequestCount": 4,
+          "candidateTransferBytes": 37255,
+          "candidateEncodedBytes": 36055,
+          "candidateResourceDuration": 5.199999988079071
+        }
+      }
+    },
+    "bootstrap": {
+      "screenshots": [
+        {
+          "case": "desktop-light-menu",
+          "file": "screenshots/bootstrap-desktop-light-menu.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=light&state=menu-open&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(248, 249, 250)",
+            "bodyColor": "rgb(33, 37, 41)"
+          },
+          "failures": []
+        },
+        {
+          "case": "desktop-dark-prompt",
+          "file": "screenshots/bootstrap-desktop-dark-prompt.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=dark&state=prompt&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(43, 48, 53)",
+            "bodyColor": "rgb(222, 226, 230)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-light-nav",
+          "file": "screenshots/bootstrap-narrow-light-nav.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=light&state=responsive-nav&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(248, 249, 250)",
+            "bodyColor": "rgb(33, 37, 41)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-dark-all",
+          "file": "screenshots/bootstrap-narrow-dark-all.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=bootstrap&theme=dark&state=all&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(43, 48, 53)",
+            "bodyColor": "rgb(222, 226, 230)"
+          },
+          "failures": []
+        }
+      ],
+      "interactions": {
+        "menuOpened": {
+          "open": true,
+          "ariaExpanded": "true",
+          "panelHidden": false,
+          "panelDisplay": "block",
+          "focused": true
+        },
+        "menuEscape": {
+          "open": false,
+          "ariaExpanded": "false",
+          "panelHidden": true,
+          "panelDisplay": "none",
+          "focused": true
+        },
+        "actionSelection": {
+          "menu": {
+            "open": false,
+            "ariaExpanded": "false",
+            "panelHidden": true,
+            "panelDisplay": "none",
+            "focused": false
+          },
+          "prompt": {
+            "open": true,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "input",
+            "id": "owner-name",
+            "text": null,
+            "testField": true
+          }
+        },
+        "promptEscape": {
+          "prompt": {
+            "open": false,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "button",
+            "id": null,
+            "text": "Pet Owners",
+            "testField": false
+          }
+        },
+        "tabs": [
+          {
+            "text": "Details",
+            "active": "false",
+            "focused": false
+          },
+          {
+            "text": "Notes and preferences",
+            "active": "true",
+            "focused": true
+          }
+        ],
+        "failures": []
+      },
+      "media": {
+        "reducedMotion": true,
+        "forcedColors": true,
+        "dark": true,
+        "horizontalOverflow": 0,
+        "navVisible": true,
+        "failures": []
+      },
+      "performance": {
+        "samples": [
+          {
+            "domContentLoaded": 4,
+            "load": 6.800000011920929,
+            "firstContentfulPaint": 8,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 2,
+            "candidateTransferBytes": 233995,
+            "candidateEncodedBytes": 233395,
+            "candidateResourceDuration": 2.1000000834465027
+          },
+          {
+            "domContentLoaded": 12.099999964237213,
+            "load": 15.899999976158142,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 24,
+            "candidateRequestCount": 2,
+            "candidateTransferBytes": 233995,
+            "candidateEncodedBytes": 233395,
+            "candidateResourceDuration": 3.100000023841858
+          },
+          {
+            "domContentLoaded": 3.300000011920929,
+            "load": 5.200000047683716,
+            "firstContentfulPaint": 20,
+            "largestContentfulPaint": 20,
+            "candidateRequestCount": 2,
+            "candidateTransferBytes": 233995,
+            "candidateEncodedBytes": 233395,
+            "candidateResourceDuration": 1.3999999165534973
+          },
+          {
+            "domContentLoaded": 5.5,
+            "load": 8.800000011920929,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 2,
+            "candidateTransferBytes": 233995,
+            "candidateEncodedBytes": 233395,
+            "candidateResourceDuration": 2.100000023841858
+          },
+          {
+            "domContentLoaded": 5,
+            "load": 9.599999964237213,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 20,
+            "candidateRequestCount": 2,
+            "candidateTransferBytes": 233995,
+            "candidateEncodedBytes": 233395,
+            "candidateResourceDuration": 2.399999976158142
+          }
+        ],
+        "median": {
+          "domContentLoaded": 5,
+          "load": 8.800000011920929,
+          "firstContentfulPaint": 16,
+          "largestContentfulPaint": 20,
+          "candidateRequestCount": 2,
+          "candidateTransferBytes": 233995,
+          "candidateEncodedBytes": 233395,
+          "candidateResourceDuration": 2.1000000834465027
+        }
+      }
+    },
+    "webawesome": {
+      "screenshots": [
+        {
+          "case": "desktop-light-menu",
+          "file": "screenshots/webawesome-desktop-light-menu.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=light&state=menu-open&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(241, 242, 243)",
+            "bodyColor": "rgb(27, 29, 38)"
+          },
+          "failures": []
+        },
+        {
+          "case": "desktop-dark-prompt",
+          "file": "screenshots/webawesome-desktop-dark-prompt.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=dark&state=prompt&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "oklab(0.146735 0.000504202 -0.0117588)",
+            "bodyColor": "rgb(241, 242, 243)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-light-nav",
+          "file": "screenshots/webawesome-narrow-light-nav.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=light&state=responsive-nav&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(241, 242, 243)",
+            "bodyColor": "rgb(27, 29, 38)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-dark-all",
+          "file": "screenshots/webawesome-narrow-dark-all.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=webawesome&theme=dark&state=all&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "oklab(0.146735 0.000504202 -0.0117588)",
+            "bodyColor": "rgb(241, 242, 243)"
+          },
+          "failures": []
+        }
+      ],
+      "interactions": {
+        "menuOpened": {
+          "open": true,
+          "focused": false,
+          "trigger": "Pet Owners"
+        },
+        "menuEscape": {
+          "open": false,
+          "focused": true,
+          "trigger": "Pet Owners"
+        },
+        "actionSelection": {
+          "menu": {
+            "open": false,
+            "focused": false,
+            "trigger": "Pet Owners"
+          },
+          "prompt": {
+            "open": true,
+            "localName": "wa-dialog"
+          },
+          "focused": {
+            "localName": "wa-input",
+            "id": null,
+            "text": null,
+            "testField": true
+          }
+        },
+        "promptEscape": {
+          "prompt": {
+            "open": false,
+            "localName": "wa-dialog"
+          },
+          "focused": {
+            "localName": "wa-button",
+            "id": null,
+            "text": "Pet Owners",
+            "testField": false
+          }
+        },
+        "tabs": [
+          {
+            "text": "Details",
+            "active": false
+          },
+          {
+            "text": "Notes and preferences",
+            "active": true
+          }
+        ],
+        "failures": []
+      },
+      "media": {
+        "reducedMotion": true,
+        "forcedColors": true,
+        "dark": true,
+        "horizontalOverflow": 0,
+        "navVisible": true,
+        "failures": []
+      },
+      "performance": {
+        "samples": [
+          {
+            "domContentLoaded": 3.399999976158142,
+            "load": 11.300000011920929,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 24,
+            "candidateRequestCount": 132,
+            "candidateTransferBytes": 654833,
+            "candidateEncodedBytes": 615233,
+            "candidateResourceDuration": 586.1999998092651
+          },
+          {
+            "domContentLoaded": 6.800000011920929,
+            "load": 16.69999998807907,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 32,
+            "candidateRequestCount": 132,
+            "candidateTransferBytes": 654833,
+            "candidateEncodedBytes": 615233,
+            "candidateResourceDuration": 662.1999998092651
+          },
+          {
+            "domContentLoaded": 4.299999952316284,
+            "load": 12.399999976158142,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 32,
+            "candidateRequestCount": 132,
+            "candidateTransferBytes": 654833,
+            "candidateEncodedBytes": 615233,
+            "candidateResourceDuration": 714.299999833107
+          },
+          {
+            "domContentLoaded": 8,
+            "load": 17.099999964237213,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 36,
+            "candidateRequestCount": 132,
+            "candidateTransferBytes": 654833,
+            "candidateEncodedBytes": 615233,
+            "candidateResourceDuration": 537.799999833107
+          },
+          {
+            "domContentLoaded": 3.299999952316284,
+            "load": 9.5,
+            "firstContentfulPaint": 8,
+            "largestContentfulPaint": 20,
+            "candidateRequestCount": 132,
+            "candidateTransferBytes": 654833,
+            "candidateEncodedBytes": 615233,
+            "candidateResourceDuration": 551.1999996900558
+          }
+        ],
+        "median": {
+          "domContentLoaded": 4.299999952316284,
+          "load": 12.399999976158142,
+          "firstContentfulPaint": 12,
+          "largestContentfulPaint": 32,
+          "candidateRequestCount": 132,
+          "candidateTransferBytes": 654833,
+          "candidateEncodedBytes": 615233,
+          "candidateResourceDuration": 586.1999998092651
+        }
+      }
+    },
+    "openprops": {
+      "screenshots": [
+        {
+          "case": "desktop-light-menu",
+          "file": "screenshots/openprops-desktop-light-menu.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=light&state=menu-open&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(241, 243, 245)",
+            "bodyColor": "rgb(33, 37, 41)"
+          },
+          "failures": []
+        },
+        {
+          "case": "desktop-dark-prompt",
+          "file": "screenshots/openprops-desktop-dark-prompt.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=dark&state=prompt&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(52, 58, 64)",
+            "bodyColor": "rgb(241, 243, 245)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-light-nav",
+          "file": "screenshots/openprops-narrow-light-nav.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=light&state=responsive-nav&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(241, 243, 245)",
+            "bodyColor": "rgb(33, 37, 41)"
+          },
+          "failures": []
+        },
+        {
+          "case": "narrow-dark-all",
+          "file": "screenshots/openprops-narrow-dark-all.jpg",
+          "url": "http://127.0.0.1:4173/openspec/changes/analyze-web-component-theming-kit/evidence/harness/prototype.html?candidate=openprops&theme=dark&state=all&motion=normal",
+          "audit": {
+            "title": "Causeway theming prototype",
+            "heading": "Mary Smith and a deliberately long contextual title",
+            "duplicateIds": [],
+            "unlabeledButtons": [],
+            "unlabeledInputs": [],
+            "dialogsWithoutName": [],
+            "hiddenFocus": false,
+            "horizontalOverflow": 0,
+            "fixtureReady": "true",
+            "bodyBackground": "rgb(52, 58, 64)",
+            "bodyColor": "rgb(241, 243, 245)"
+          },
+          "failures": []
+        }
+      ],
+      "interactions": {
+        "menuOpened": {
+          "open": true,
+          "ariaExpanded": "true",
+          "panelHidden": false,
+          "panelDisplay": "grid",
+          "focused": true
+        },
+        "menuEscape": {
+          "open": false,
+          "ariaExpanded": "false",
+          "panelHidden": false,
+          "panelDisplay": "none",
+          "focused": true
+        },
+        "actionSelection": {
+          "menu": {
+            "open": false,
+            "ariaExpanded": "false",
+            "panelHidden": false,
+            "panelDisplay": "none",
+            "focused": false
+          },
+          "prompt": {
+            "open": true,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "input",
+            "id": "owner-name",
+            "text": null,
+            "testField": true
+          }
+        },
+        "promptEscape": {
+          "prompt": {
+            "open": false,
+            "localName": "dialog"
+          },
+          "focused": {
+            "localName": "button",
+            "id": null,
+            "text": "Pet Owners",
+            "testField": false
+          }
+        },
+        "tabs": [
+          {
+            "text": "Details",
+            "active": "false",
+            "focused": false
+          },
+          {
+            "text": "Notes and preferences",
+            "active": "true",
+            "focused": true
+          }
+        ],
+        "failures": []
+      },
+      "media": {
+        "reducedMotion": true,
+        "forcedColors": true,
+        "dark": true,
+        "horizontalOverflow": 0,
+        "navVisible": true,
+        "failures": []
+      },
+      "performance": {
+        "samples": [
+          {
+            "domContentLoaded": 4.199999988079071,
+            "load": 6.099999964237213,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 52147,
+            "candidateEncodedBytes": 50947,
+            "candidateResourceDuration": 3.6000000834465027
+          },
+          {
+            "domContentLoaded": 6.099999964237213,
+            "load": 8.099999964237213,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 52147,
+            "candidateEncodedBytes": 50947,
+            "candidateResourceDuration": 4.200000047683716
+          },
+          {
+            "domContentLoaded": 3.199999988079071,
+            "load": 4.699999988079071,
+            "firstContentfulPaint": 12,
+            "largestContentfulPaint": 12,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 52147,
+            "candidateEncodedBytes": 50947,
+            "candidateResourceDuration": 2.8999999165534973
+          },
+          {
+            "domContentLoaded": 3.899999976158142,
+            "load": 5.699999988079071,
+            "firstContentfulPaint": 8,
+            "largestContentfulPaint": 20,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 52147,
+            "candidateEncodedBytes": 50947,
+            "candidateResourceDuration": 2.5
+          },
+          {
+            "domContentLoaded": 5.799999952316284,
+            "load": 7.799999952316284,
+            "firstContentfulPaint": 16,
+            "largestContentfulPaint": 16,
+            "candidateRequestCount": 4,
+            "candidateTransferBytes": 52147,
+            "candidateEncodedBytes": 50947,
+            "candidateResourceDuration": 3.900000035762787
+          }
+        ],
+        "median": {
+          "domContentLoaded": 4.199999988079071,
+          "load": 6.099999964237213,
+          "firstContentfulPaint": 16,
+          "largestContentfulPaint": 16,
+          "candidateRequestCount": 4,
+          "candidateTransferBytes": 52147,
+          "candidateEncodedBytes": 50947,
+          "candidateResourceDuration": 3.6000000834465027
+        }
+      }
+    }
+  },
+  "notes": [
+    "Screenshots use identical fixture content and deterministic viewport, theme, and state parameters.",
+    "DOM audits are bounded structural checks and do not replace Lighthouse or manual assistive-technology review.",
+    "Performance values are local medians after one warm-up and exclude shared harness files from candidate transfer summaries."
+  ]
+}
