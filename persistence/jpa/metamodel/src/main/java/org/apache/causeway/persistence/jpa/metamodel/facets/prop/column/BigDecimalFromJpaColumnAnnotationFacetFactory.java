@@ -52,7 +52,6 @@ implements MetaModelRefiner {
 
         var jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-
         MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, facetHolder);
 
         if(ClassUtil.isJavaBuiltInInteger(facetHolder.getFeatureIdentifier().logicalType().correspondingClass()))

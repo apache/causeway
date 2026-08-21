@@ -98,7 +98,6 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
 
     private final ReplayableCommandParticipantTracker participantTracker;
 
-
 	private final ObjectReference<CommandRecord> recordRef;
     @Programmatic
     public ObjectReference<CommandRecord> recordRef() { return recordRef; }
@@ -460,7 +459,6 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
                 .map(entry -> new ReplayableCommand(entry.getInteractionId(), replayContext));
     }
 
-
     ReplayableCommand makeExportable() {
         if(disableMakeExportable()!=null)
             return this; // safeguard when called programmatically
@@ -479,7 +477,6 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
                 ? null
                 : "Cannot make exportable, if not EXPORTED";
     }
-
 
     ReplayableCommand excludeFromReplay() {
         if(disableExcludeFromReplay()!=null)
@@ -500,7 +497,6 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
                 : "Cannot mark for exclusion, if neither PENDING nor FAILED";
     }
 
-
     @Programmatic
     void deleteObj() {
         commandLogEntry()
@@ -509,7 +505,6 @@ implements ViewModel, Comparable<ReplayableCommand>, CommandRecordingSuppressed 
                     invalidateCachedRecord();
                 });
     }
-
 
     // -- EXECUTION ORDER GOVERNED BY TIMESTAMP
 

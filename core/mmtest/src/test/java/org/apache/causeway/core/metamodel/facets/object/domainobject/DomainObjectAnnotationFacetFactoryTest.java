@@ -419,7 +419,6 @@ extends FacetFactoryTestAbstract {
         }
     }
 
-
     @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.AS_CONFIGURED)
     static class CustomerWithDomainObjectAndEditingSetToAsConfigured {
     }

@@ -59,7 +59,6 @@ implements TreeAdapter<Object>{
         return Optional.of(new NavigableSubtreeFacet(subNodesMethodHandles, facetHolder));
     }
 
-
 	private final Can<MethodHandle> subNodesMethodHandles;
 
 	NavigableSubtreeFacet(

@@ -57,7 +57,6 @@ class _Observation {
         _Strings.nonEmpty(ic.getUser().name())
             .ifPresent(value->obs.highCardinalityKeyValue(userName(value)));
 
-
     }
 
 }

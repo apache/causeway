@@ -57,5 +57,4 @@ public record FacetedMethodParameter(
         return resolvedType.toString();
     }
 
-
 }

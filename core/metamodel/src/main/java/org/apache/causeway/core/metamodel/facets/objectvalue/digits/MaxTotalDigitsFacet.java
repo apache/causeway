@@ -58,7 +58,6 @@ extends Facet {
      */
     int maxTotalDigits();
 
-
     @Override
     default boolean semanticEquals(final @NonNull Facet facet) {
         return facet instanceof MaxTotalDigitsFacet other

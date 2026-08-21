@@ -69,7 +69,6 @@ extends HasMetaModelContext, HasTranslationContext {
 
     int getFacetCount();
 
-
     // -- FACET LOOKUP
 
     <T extends Facet> Optional<T> lookupFacet(final @NonNull Class<T> facetType);

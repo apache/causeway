@@ -139,7 +139,6 @@ extends FacetFactoryAbstract {
             final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny){
 
-
 	    DateFormatStyleFacetFromValueSemanticsAnnotation
 	        .create(valueSemanticsIfAny, facetHolder);
 

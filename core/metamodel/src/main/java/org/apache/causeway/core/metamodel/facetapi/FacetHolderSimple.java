@@ -68,14 +68,13 @@ implements FacetHolderInternal {
             .add(facet);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void removeFacet(@Nullable final Facet facet) {
     	if(facet==null)
     		return;
     	lookupFacetRanking(facet.facetType())
-    		.ifPresent(ranking->{
-    			ranking.remove(facet);
-    		});
+    		.ifPresent(ranking->ranking.remove(facet));
     }
 
     @Override

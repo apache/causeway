@@ -144,7 +144,6 @@ implements MixinFacet {
         }
     }
 
-
 	@Override
     public boolean isCandidateForMain(final ResolvedMethod method) {
         /* include methods from super classes or interfaces

@@ -48,7 +48,6 @@ extends FacetFactoryAbstract {
                         () -> ValidationFailureUtils
                         .raiseAmbiguousMixinAnnotations(processMethodContext.facetHolder(), CollectionLayout.class));
 
-
         CssClassFacetForCollectionLayoutAnnotation
             .create(collectionLayoutIfAny, facetHolder);
 
@@ -58,7 +57,6 @@ extends FacetFactoryAbstract {
 
         MemberDescribedFacetForCollectionLayoutAnnotation
             .create(collectionLayoutIfAny, facetHolder);
-
 
         HiddenFacetForCollectionLayoutAnnotation
             .create(collectionLayoutIfAny, facetHolder);

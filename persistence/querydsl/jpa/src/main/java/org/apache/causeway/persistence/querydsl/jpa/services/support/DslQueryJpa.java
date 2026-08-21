@@ -102,12 +102,14 @@ public class DslQueryJpa<T> implements DslQuery<T> {
         return jpaQuery.iterate();
     }
 
-    @Override
+    @SuppressWarnings("deprecation") // it seems, nothing we can do about this deprecation, hence suppress
+	@Override
     public QueryResults<T> fetchResults() {
         return jpaQuery.fetchResults();
     }
 
-    @Override
+    @SuppressWarnings("deprecation") // it seems, nothing we can do about this deprecation, hence suppress
+	@Override
     public long fetchCount() {
         return jpaQuery.fetchCount();
     }

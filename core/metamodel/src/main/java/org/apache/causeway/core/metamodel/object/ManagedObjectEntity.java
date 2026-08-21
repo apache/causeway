@@ -79,9 +79,12 @@ implements ManagedObject {
                 case TRANSIENT->{
                     var stayTransient = !entityState.isRemoved()
                         && !entityState.isAttached();
-                    if(stayTransient){yield Optional.empty();}
-                    if(entityState.hasOid()){yield Optional.of(PhaseState.BOOKMARKED);}
-                    if(entityState.isTransientOrRemoved()){yield Optional.of(PhaseState.REMOVED);}
+                    if(stayTransient)
+                    	yield Optional.empty();
+                    if(entityState.hasOid())
+                    	yield Optional.of(PhaseState.BOOKMARKED);
+                    if(entityState.isTransientOrRemoved())
+                    	yield Optional.of(PhaseState.REMOVED);
                     yield Optional.empty();
                 }
                 case BOOKMARKED->entityState.isTransientOrRemoved()

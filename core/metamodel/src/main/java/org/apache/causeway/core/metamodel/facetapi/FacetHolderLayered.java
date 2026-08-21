@@ -76,7 +76,8 @@ implements FacetHolderInternal {
         	.addFacet(facet);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void removeFacet(@Nullable final Facet facet) {
     	if(facet==null)
     		return;

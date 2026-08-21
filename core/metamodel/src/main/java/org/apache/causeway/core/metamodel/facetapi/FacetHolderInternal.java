@@ -33,6 +33,11 @@ interface FacetHolderInternal extends FacetHolder {
      */
 	void addFacet(@Nullable Facet facet);
 
+	/**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+	@Deprecated
 	void removeFacet(@Nullable Facet facet);
 
 }

@@ -111,6 +111,11 @@ public final class TypedFacetRanking<F extends Facet> {
                     .forEach(this::add));
     }
 
+    /**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+	@Deprecated
 	public void remove(final F facet) {
 		if(facet == null)
 			return;
@@ -118,7 +123,7 @@ public final class TypedFacetRanking<F extends Facet> {
         var facetPrecedence = Objects.requireNonNull(facet.precedence(),
                 ()->String.format("facet %s declares no precedence", facet.getClass()));
         if(facetPrecedence.ordinal()>=Facet.Precedence.EVENT.ordinal())
-			throw new UnsupportedOperationException();
+			throw new IllegalArgumentException("removal of facet with EVENT precedence is not supported");
 		ranksByPrecedence.get(facetPrecedence)
 			.remove(facet);
 		nonEventWinnerCache.clear(); // for simplicity invalidate the entire cache

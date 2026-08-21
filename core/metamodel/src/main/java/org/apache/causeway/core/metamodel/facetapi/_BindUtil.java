@@ -55,6 +55,11 @@ class _BindUtil {
 		return Optional.empty();
 	}
 
+	/**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+	@Deprecated
 	void unbind(@Nullable final Facet facet) {
 		resolveInternalElseFail(facet.facetHolder())
 			.removeFacet(facet);

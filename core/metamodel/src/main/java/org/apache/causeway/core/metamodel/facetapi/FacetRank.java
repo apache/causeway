@@ -70,7 +70,12 @@ record FacetRank<F extends Facet>(
         return this;
     }
 
-    public void remove(final F facet) {
+    /**
+     * @deprecated Use for debugging only! Breaks the contract, that every facet is contained by its holder.
+     * @throws {@link IllegalArgumentException} when facet is not found, or facet is of EVENT precedence.
+     */
+    @Deprecated
+	public void remove(final F facet) {
     	if(facet==null)
             return; // no-op
 

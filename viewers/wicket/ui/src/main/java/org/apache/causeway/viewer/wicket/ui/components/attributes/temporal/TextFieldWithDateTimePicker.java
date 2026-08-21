@@ -24,17 +24,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
-
 import org.jspecify.annotations.NonNull;
+
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
@@ -102,9 +101,8 @@ extends TextFieldWithConverter<T> {
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
-        if(!isEnabled()) {
-            return;
-        }
+        if(!isEnabled())
+			return;
 
         checkComponentTag(tag, "input");
         Attributes.addClass(tag, "datetimepicker-input");
@@ -118,9 +116,8 @@ extends TextFieldWithConverter<T> {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        if(!isEnabled()) {
-            return;
-        }
+        if(!isEnabled())
+			return;
 
         response.render(DatetimePickerCssReference.asHeaderItem());
         response.render(DatetimePickerJsReference.asHeaderItem());
@@ -129,6 +126,7 @@ extends TextFieldWithConverter<T> {
 
     // -- HELPER
 
+    @SuppressWarnings("deprecation") // it seems, nothing we can do about deprecations, hence suppress
     private DateTimeConfig createDatePickerConfig(
             final String temporalPattern,
             final boolean isInputNullable) {

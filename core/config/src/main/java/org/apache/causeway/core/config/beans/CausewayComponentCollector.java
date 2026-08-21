@@ -93,7 +93,6 @@ record CausewayComponentCollector(
         }
     }
 
-
     /**
      * Allows for the given type-meta to be modified before bean-definition registration
      * is finalized by Spring, immediately after the type-scan phase.
