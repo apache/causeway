@@ -52,7 +52,7 @@ implements QualifiedFacet {
         return sortedByClass != null
             ? Optional.of(new SortedByFacetForCollectionLayoutXml(uncheckedCast(sortedByClass), holder) {
             	@Override final public Precedence precedence() { return precedence; }
-           	 	@Override final public @Nullable String qualifier() { return qualifier; }
+            	@Override final public @Nullable String qualifier() { return qualifier; }
             })
             : Optional.empty();
     }

@@ -14,11 +14,15 @@ import org.jspecify.annotations.Nullable;
  * to find the winning {@link Facet}.
  *
  * @implNote We have only one use-case yet, which is honoring layout variants.
- * Should other use-cases emerge, this interface will need a redesign.
+ * 		Should other use-cases emerge, this interface will need a redesign.
+ *
+ * @apiNote at the time of writing, every {@link QualifiedFacet} is also reloadable,
+ * 		but that may well change in the future; then we need to remove `extends ReloadableFacet`.
  *
  * @since 4.0
  */
-public interface QualifiedFacet {
+public interface QualifiedFacet
+extends ReloadableFacet {
 
     record Key(
             Class<? extends Facet> facetType,

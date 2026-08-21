@@ -45,7 +45,6 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
@@ -170,36 +169,24 @@ implements MenuBarsService {
                     serviceActionLayoutData));
 
         metaModelContext.streamServiceAdapters()
-        .filter(this::isVisibleAdapterForMenu)
-        .forEach(serviceAdapter->{
+	        .filter(this::isVisibleAdapterForMenu)
+	        .map(ManagedObject::objSpec)
+	        .flatMap(serviceSpec->serviceSpec.streamAnyActions(MixedIn.INCLUDED))
+	        .forEach(serviceAction->{
+	                var serviceActionIdentifier = serviceAction.getFeatureIdentifier();
+	                var actionId = serviceActionIdentifier.logicalTypeName()
+	                        + "#" + serviceActionIdentifier.memberLogicalName();
+	                var layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
-            var serviceSpec = serviceAdapter.objSpec();
-
-            serviceSpec.streamAnyActions(MixedIn.INCLUDED)
-            .forEach(objectAction->{
-
-                var serviceActionIdentifier = objectAction.getFeatureIdentifier();
-
-                var actionId = serviceActionIdentifier.logicalTypeName()
-                        + "#" + serviceActionIdentifier.memberLogicalName();
-
-                var layoutData = serviceActionLayoutDataByActionId.get(actionId);
-
-                FacetUtil.updateFacetIfPresent(
-                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction));
-
-                FacetUtil.updateFacetIfPresent(
-                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction));
-
-                FacetUtil.updateFacetIfPresent(
-                        CssClassFacetForMenuBarXml.create(layoutData, objectAction));
-
-                FacetUtil.updateFacetIfPresent(
-                        FaFacetForMenuBarXml.create(layoutData, objectAction));
-
-            });
-
-        });
+	                MemberNamedFacetForMenuBarXml
+	                	.create(layoutData, serviceAction);
+	                MemberDescribedFacetForMenuBarXml
+	                	.create(layoutData, serviceAction);
+	                CssClassFacetForMenuBarXml
+	                	.create(layoutData, serviceAction);
+	                FaFacetForMenuBarXml
+	                	.create(layoutData, serviceAction);
+	        });
 
         return menuBarsFromXml;
     }

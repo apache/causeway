@@ -65,4 +65,41 @@ class _BindUtil {
 			.removeFacet(facet);
 	}
 
+    // -- DYNAMIC UPDATE SUPPORT
+
+    /**
+     * Removes any {@link Facet} from its {@link FacetHolder}, that matches the exactFacetClass
+     * and has no higher precedence than the given one.
+     *
+     * @apiNote {@link Facet}(s) by contract, have a contained-by relation with their {@link FacetHolder}.
+     * 	However, this method breaks this contract, as removed {@link Facet}(s)
+     * 	still reference their former holder, but the holder no longer contains the facet.
+     *
+     * @see ReloadableFacet
+     */
+    void purgeExactFacetClassHonoringPrecedence(
+    		final Class<? extends Facet> exactFacetClass,
+    		final QualifiedFacet.Key qualifierKey,
+    		final FacetHolder facetHolder,
+    		final Facet.@Nullable Precedence precedence,
+    		final @Nullable String qualifier) {
+
+    	Objects.requireNonNull(exactFacetClass);
+    	Objects.requireNonNull(qualifierKey);
+    	Objects.requireNonNull(facetHolder);
+    	Objects.requireNonNull(precedence);
+    	Assert.isTrue(precedence.ordinal() < Facet.Precedence.EVENT.ordinal(), "Purge not supported for facets with EVENT precedence");
+    	Assert.isTrue(qualifierKey.facetType().isAssignableFrom(exactFacetClass), "Exact facet-class %s is not an instace of facet-type %s"
+    			.formatted(exactFacetClass.getName(), qualifierKey.facetType().getName()));
+
+        facetHolder.lookupFacetRanking(qualifierKey.facetType())
+            .ifPresent(ranking->ranking.purgeIf(qualifierKey.facetType(),
+                    qualifierKey, // discriminate by qualifier
+                    exactFacetClass::isInstance, // facet filter
+                    prec->qualifierKey.isQualified()
+                        ? true // if qualified, purge all ranks
+                        : prec.ordinal()<=precedence.ordinal() // don't change ranks of higher precedence
+                ));
+    }
+
 }

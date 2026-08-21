@@ -46,7 +46,7 @@ implements QualifiedFacet {
         return Optional.of(
             new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder) {
             	@Override final public Precedence precedence() { return precedence; }
-           	 @Override final public @Nullable String qualifier() { return qualifier; }
+           	 	@Override final public @Nullable String qualifier() { return qualifier; }
             });
     }
 

@@ -28,9 +28,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.jspecify.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 public class MemberNamedFacetForPropertyLayoutXml
 extends MemberNamedFacetWithStaticTextAbstract
 implements QualifiedFacet {
@@ -44,20 +41,16 @@ implements QualifiedFacet {
             .map(PropertyLayoutData::getNamed)
             .filter(_Strings::isNotEmpty)
             .map(named->
-                new MemberNamedFacetForPropertyLayoutXml(named, holder, qualifier) {
+                new MemberNamedFacetForPropertyLayoutXml(named, holder) {
                 	@Override public Precedence precedence() { return precedence; }
+                	@Override final public @Nullable String qualifier() { return qualifier; }
                 });
     }
 
-    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
-    private final @Nullable String qualifier;
-
     private MemberNamedFacetForPropertyLayoutXml(
             final String named,
-            final FacetHolder holder,
-            final @Nullable String qualifier) {
+            final FacetHolder holder) {
         super(named, holder);
-        this.qualifier = qualifier;
     }
 
     @Override

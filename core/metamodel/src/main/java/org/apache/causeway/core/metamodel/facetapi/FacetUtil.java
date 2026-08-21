@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrS
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Validating;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import lombok.experimental.UtilityClass;
@@ -54,45 +53,6 @@ public final class FacetUtil {
                 	.forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
             }
         };
-    }
-
-    // -- DYNAMIC UPDATE SUPPORT
-
-    /**
-     * Removes any facet from its FacetHolder, that matches the facet's java class
-     * and has no higher precedence than the given one,
-     * then adds given facet to its facetHolder, honoring precedence.
-     */
-    public static void updateFacet(final @Nullable Facet facet) {
-        if(facet==null)
-        	return;
-
-        var facetHolder = facet.facetHolder();
-        var qualifierKey = QualifiedFacet.Key.forFacet(facet);
-
-        _BindUtil.unbind(facet);
-
-        facetHolder.lookupFacetRanking(facet.facetType())
-            .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
-                    qualifierKey, // discriminate by qualifier
-                    facet.getClass()::isInstance, // facet filter
-                    prec->qualifierKey.isQualified()
-                        ? true // if qualified, purge all ranks
-                        : prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
-                ));
-
-        _BindUtil.bind(facet);
-    }
-
-    /**
-     * If facetIfAny is present,
-     * calls {@link #updateFacet(Facet)}, that is,
-     * adds it to its facetHolder, replacing any pre-existing, honoring precedence.
-     * Otherwise acts as a no-op.
-     */
-    public static <F extends Facet> void updateFacetIfPresent(
-            final @NonNull Optional<? extends F> facetIfAny) {
-        updateFacet(facetIfAny.orElse(null));
     }
 
     // -- FACET ATTRIBUTES
@@ -168,13 +128,14 @@ public final class FacetUtil {
             final Precedence overrideUpToIncluding,
             final Function<FacetHolder, E> facetFactory) {
 
-        T winnerFacet = facetHolder.lookupFacet(facetType).orElse(null);
+        final T winnerFacet = facetHolder.lookupFacet(facetType).orElse(null);
         if(winnerFacet==null)
-        	return Optional.of(_BindUtil.bind(facetFactory.apply(facetHolder)));
-        if(winnerFacet.getClass().equals(facetExactClass)) return Optional.of(winnerFacet).map(facetExactClass::cast);
+        	return Optional.of(facetFactory.apply(facetHolder));
+        if(winnerFacet.getClass().equals(facetExactClass))
+        	return Optional.of(winnerFacet).map(facetExactClass::cast);
         // check if we are allowed to override based on precedence
         if(winnerFacet.precedence().ordinal()<=overrideUpToIncluding.ordinal())
-            return Optional.of(_BindUtil.bind(facetFactory.apply(facetHolder)));
+            return Optional.of(facetFactory.apply(facetHolder));
         // not allowed to override
         return Optional.empty();
     }

@@ -28,10 +28,11 @@ implements QualifiedFacet {
 
     public static LayoutOrderFacetForLayoutXml create(
             final int sequenceAsInt,
-            final FacetHolder holder,
+            final FacetHolder facetHolder,
             final Precedence precedence,
             final @Nullable String qualifier) {
-        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder) {
+
+        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, facetHolder) {
         	@Override final public Precedence precedence() { return precedence; }
         	@Override final public @Nullable String qualifier() { return qualifier; }
         };

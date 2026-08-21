@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -106,32 +103,26 @@ record XmlLayoutRespectingFacetInstaller(
 
                 var qualifier = layoutKey.layoutIfAny();
 
-                updateFacetIfPresent(
-                        BookmarkPolicyFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
-                updateFacetIfPresent(
-                        CssClassFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
-                updateFacetIfPresent(
-                        FaFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
-                updateFacetIfPresent(
-                        ObjectDescribedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
-                updateFacetIfPresent(
-                        ObjectNamedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
-                updateFacetIfPresent(
-                        TableDecoratorFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
+                BookmarkPolicyFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
+                CssClassFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
+                FaFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
+                ObjectDescribedFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
+                ObjectNamedFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
+                TableDecoratorFacetForDomainObjectLayoutXml
+                    .create(domainObjectLayoutData, objectSpec, precedence, qualifier);
             }
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-
                 var actionLayoutDataOwner = actionLayoutData.owner();
                 var objectAction = objectActionById.get(actionLayoutData.getId());
-                if(objectAction == null) return;
+                if(objectAction == null)
+                	return;
 
                 var qualifier = layoutKey.layoutIfAny();
 
@@ -164,16 +155,15 @@ record XmlLayoutRespectingFacetInstaller(
                         groupIdAndName = null;
                         memberOrderSequence = actionDomainObjectSequence++;
                     }
-                    updateFacet(
-                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier));
+
+                    LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier);
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
                     var precedenceHotfix = bsGrid.fallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 
-                    updateFacetIfPresent(
-                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix, qualifier));
+                    LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix, qualifier);
                 }
 
                 // fix up the action position if required
@@ -194,118 +184,88 @@ record XmlLayoutRespectingFacetInstaller(
                     actionLayoutData.setPosition(null);
                 }
 
-                updateFacetIfPresent(
-                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        PromptStyleFacet.createForActionLayoutXml(actionLayoutData, objectAction, precedence, qualifier));
+                ActionPositionFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                CssClassFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                FaFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                MemberDescribedFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                HiddenFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                MemberNamedFacetForActionLayoutXml
+                	.create(actionLayoutData, objectAction, precedence, qualifier);
+                PromptStyleFacet
+                	.createForActionLayoutXml(actionLayoutData, objectAction, precedence, qualifier);
             }
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
-                if(oneToOneAssociation == null) return;
+                if(oneToOneAssociation == null)
+                	return;
 
                 var qualifier = layoutKey.layoutIfAny();
 
-                updateFacetIfPresent(
-                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        PromptStyleFacet.createForPropertyLayoutXml(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
+                CssClassFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                MemberDescribedFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                HiddenFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                LabelAtFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                MultiLineFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                MemberNamedFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                PromptStyleFacet
+                	.createForPropertyLayoutXml(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                RenderedAdjustedFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                UnchangingFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
+                TypicalLengthFacetForPropertyLayoutXml
+                	.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier);
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.owner();
 
-                updateFacet(
-                        LayoutOrderFacetForLayoutXml.create(propertySequence++, oneToOneAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence, qualifier));
+                LayoutOrderFacetForLayoutXml
+                	.create(propertySequence++, oneToOneAssociation, precedence, qualifier);
+                LayoutGroupFacetForLayoutXml
+                	.create(fieldSet, oneToOneAssociation, precedence, qualifier);
             }
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
                 var oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
-                if(oneToManyAssociation == null) return;
+                if(oneToManyAssociation == null)
+                	return;
 
                 var qualifier = layoutKey.layoutIfAny();
 
-                updateFacetIfPresent(
-                        CssClassFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        DefaultViewFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        TableDecoratorFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberDescribedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        HiddenFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        MemberNamedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        PagedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacetIfPresent(
-                        SortedByFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
-
-                updateFacet(LayoutOrderFacetForLayoutXml
-                        .create(collectionSequence++, oneToManyAssociation, precedence, qualifier));
+                CssClassFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                DefaultViewFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                TableDecoratorFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                MemberDescribedFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                HiddenFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                MemberNamedFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                PagedFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                SortedByFacetForCollectionLayoutXml
+                    .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier);
+                LayoutOrderFacetForLayoutXml
+                    .create(collectionSequence++, oneToManyAssociation, precedence, qualifier);
             }
 
         });
