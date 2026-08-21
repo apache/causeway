@@ -18,20 +18,7 @@
  */
 package org.apache.causeway.extensions.layoutloaders.github.spiimpl;
 
-import java.util.HashMap;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.jspecify.annotations.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
+import java.util.Map;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.resource.LayoutResource;
@@ -42,35 +29,30 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClient;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 @Service
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutResourceLoaderFromGithub")
 @Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("Github")
 //@Slf4j
-public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
-
-    final RestTemplate restTemplateForSearch;
-    final RestTemplate restTemplateForContent;
-    final CausewayConfiguration causewayConfiguration;
-    final LayoutLoadersGitHubMenu layoutLoadersGitHubMenu;
-    final Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    @Inject
-    public LayoutResourceLoaderFromGithub(
-            final @Qualifier("GithubSearch")  RestTemplate restTemplateForSearch,
-            final @Qualifier("GithubContent") RestTemplate restTemplateForContent,
-            final CausewayConfiguration causewayConfiguration,
-            final LayoutLoadersGitHubMenu layoutLoadersGitHubMenu,
-            final Provider<QueryResultsCache> queryResultsCacheProvider) {
-        this.restTemplateForSearch = restTemplateForSearch;
-        this.restTemplateForContent = restTemplateForContent;
-        this.causewayConfiguration = causewayConfiguration;
-        this.layoutLoadersGitHubMenu = layoutLoadersGitHubMenu;
-        this.queryResultsCacheProvider = queryResultsCacheProvider;
-    }
+public record LayoutResourceLoaderFromGithub(
+		@Qualifier("GithubSearch")  RestClient restClientForSearch,
+        @Qualifier("GithubContent") RestClient restClientForContent,
+        CausewayConfiguration causewayConfiguration,
+        LayoutLoadersGitHubMenu layoutLoadersGitHubMenu,
+        Provider<QueryResultsCache> queryResultsCacheProvider)
+implements LayoutResourceLoader {
 
     @Override
     public Try<LayoutResource> tryLoadLayoutResource(
@@ -95,17 +77,17 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
         try {
             var repo = causewayConfiguration.extensions().layoutLoaders().github().repository();
-            var searchParams = new HashMap<String, String>();
-            searchParams.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
+            var q = "filename:%s+repo:%s".formatted(candidateResourceName, repo);
 
-            var responseEntity = restTemplateForSearch
-                    .exchange("/search/code?q={q}", HttpMethod.GET, null,
-                            new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
+            var responseEntity = restClientForSearch
+            		.get()
+            		.uri("/search/code?q={q}", Map.of("q", q))
+            		.retrieve()
+            		.toEntity(new ParameterizedTypeReference<GitHubResponse>() {});
 
             GitHubResponse searchResponse = responseEntity.getBody();
-            if (searchResponse.getTotal_count() != 1) {
-                return Try.empty();
-            }
+            if (searchResponse.getTotal_count() != 1)
+				return Try.empty();
             return Try.success(searchResponse.getItems().get(0).getPath());
         } catch (Exception ex) {
             return Try.failure(ex);
@@ -120,10 +102,15 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
             final @NonNull String candidateResourceName,
             final @Nullable String path) {
 
-        if(path==null) return Try.empty();
+        if(path==null)
+        	return Try.empty();
 
         try {
-            var contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
+            var contentResponse = restClientForContent
+            		.get()
+            		.uri("/contents/" + path)
+            		.retrieve()
+            		.toEntity(String.class);
             var content = contentResponse.getBody();
 
             return StringUtils.hasLength(content)

@@ -22,11 +22,10 @@ import org.apache.causeway.applib.layout.menubars.Menu;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 import org.apache.causeway.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub;
-import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 /**
  * Adds the {@link Menu} with its auto-configured menu entries.
@@ -50,13 +49,11 @@ public class CausewayModuleExtLayoutLoadersGithub {
     /**
      * Returns a template configured to search for a file in the git repo.
      *
-     * <p>
-     * Append for example:
+     * <p>Append for example:
      *
      * <pre>/search/code?q=SimpleObject.layout.xml+in:path+repo:apache/causeway-app-simpleapp</pre>
      *
-     * <p>
-     * Returns for example:
+     * <p>Returns for example:
      *
      * <pre>
      * {
@@ -76,41 +73,38 @@ public class CausewayModuleExtLayoutLoadersGithub {
      * @param causewayConfiguration
      */
     @Bean(name = "GithubSearch")
-    public RestTemplate restTemplateForGithubSearch(final CausewayConfiguration causewayConfiguration) {
-
+    public RestClient restClientForGithubSearch(final CausewayConfiguration causewayConfiguration) {
         var apiKey = causewayConfiguration.extensions().layoutLoaders().github().apiKey();
+        return RestClient.builder()
+        		.baseUrl("https://api.github.com")
+        		.requestInterceptor((request, body, execution) -> {
+        			request.getHeaders().add("Authorization", "Bearer " + apiKey);
+        			request.getHeaders().remove("Accept");
+        			request.getHeaders().add("Accept", "application/vnd.github+json");
+        			request.getHeaders().add("X-GitHub-Api-Version", "2022-11-28");
+        			return execution.execute(request, body);
+    			})
+        		.build();}
 
-        return new RestTemplateBuilder()
-                .baseUri("https://api.github.com")
-                .additionalInterceptors((request, body, execution) -> {
-                    request.getHeaders().add("Authorization", "Bearer " + apiKey);
-                    request.getHeaders().remove("Accept");
-                    request.getHeaders().add("Accept", "application/vnd.github+json");
-                    request.getHeaders().add("X-GitHub-Api-Version", "2022-11-28");
-                    return execution.execute(request, body);
-                })
-                .build();
-    }
 
     /**
      * Returns a template configured to obtain the content of a file in a repo (from the default branch).
      *
-     * <p>
-     * Append for example:
+     * <p>Append for example:
      *
      * <pre>/contents/module-simple/src/main/java/domainapp/modules/simple/dom/so/SimpleObject.layout.xml</pre>
      *
      * @param causewayConfiguration
      */
     @Bean(name = "GithubContent")
-    public RestTemplate restTemplateForGithubContent(final CausewayConfiguration causewayConfiguration) {
+    public RestClient restClientForGithubContent(final CausewayConfiguration causewayConfiguration) {
 
         var apiKey = causewayConfiguration.extensions().layoutLoaders().github().apiKey();
         var repo = causewayConfiguration.extensions().layoutLoaders().github().repository();
 
-        return new RestTemplateBuilder()
-                .baseUri(String.format("https://api.github.com/repos/%s", repo))
-                .additionalInterceptors((request, body, execution) -> {
+        return RestClient.builder()
+                .baseUrl("https://api.github.com/repos/%s".formatted(repo))
+                .requestInterceptor((request, body, execution) -> {
                     request.getHeaders().add("Authorization", "Bearer " + apiKey);
                     request.getHeaders().remove("Accept");
                     request.getHeaders().add("Accept", "application/vnd.github.v3.raw");

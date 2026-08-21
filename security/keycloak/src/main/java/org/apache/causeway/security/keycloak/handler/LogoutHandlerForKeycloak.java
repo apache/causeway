@@ -18,35 +18,28 @@
  */
 package org.apache.causeway.security.keycloak.handler;
 
+import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
-
-import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Propagates logouts to Keycloak.
  *
- * <p>
- * Necessary because Spring Security 5 (currently) doesn't support
+ * <p>Necessary because Spring Security 5 (currently) doesn't support
  * end-session-endpoints.
- * </p>
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
-public class LogoutHandlerForKeycloak implements LogoutHandler {
-
-    private final RestTemplate restTemplate;
+public record LogoutHandlerForKeycloak(
+		RestClient restClient) implements LogoutHandler {
 
     public LogoutHandlerForKeycloak() {
-        this(new RestTemplate());
+        this(RestClient.create());
     }
 
     @Override public void logout() {
@@ -58,13 +51,17 @@ public class LogoutHandlerForKeycloak implements LogoutHandler {
     }
     private void propagateLogoutToKeycloak(final OidcUser user) {
 
-        var endSessionEndpoint = String.format("%s/protocol/openid-connect/logout", user.getIssuer());
+        var endSessionEndpoint = "%s/protocol/openid-connect/logout".formatted(user.getIssuer());
 
         var builder = UriComponentsBuilder
                 .fromUriString(endSessionEndpoint)
                 .queryParam("id_token_hint", user.getIdToken().getTokenValue());
 
-        var logoutResponse = restTemplate.getForEntity(builder.toUriString(), String.class);
+        var logoutResponse = restClient.get()
+        		.uri(builder.toUriString())
+        		.retrieve()
+        		.toEntity(String.class);
+
         if (logoutResponse.getStatusCode().is2xxSuccessful()) {
             log.info("Successfully logged out in Keycloak");
         } else {
