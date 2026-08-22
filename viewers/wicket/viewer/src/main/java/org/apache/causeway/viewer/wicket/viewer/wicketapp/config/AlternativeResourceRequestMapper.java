@@ -50,7 +50,7 @@ class AlternativeResourceRequestMapper implements IRequestMapper {
 
 	AlternativeResourceRequestMapper(final WebApplication webApplication){
         Supplier<String> parentFolderPlaceholderProvider = () -> webApplication.getResourceSettings().getParentFolderPlaceholder();
-        cachingStrategyProvider = () -> webApplication.getResourceSettings().getCachingStrategy();
+        this.cachingStrategyProvider = () -> webApplication.getResourceSettings().getCachingStrategy();
         this.chain = new ResourceReferenceMapper(new PageParametersEncoder(), parentFolderPlaceholderProvider, cachingStrategyProvider);
 	}
 
