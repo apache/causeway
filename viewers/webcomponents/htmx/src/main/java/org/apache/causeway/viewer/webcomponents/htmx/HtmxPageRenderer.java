@@ -91,12 +91,13 @@ final class HtmxPageRenderer {
         final var applicationStylesheet = applicationStylesheet(context);
         return """
                 <!doctype html>
-                <html lang="%s" data-causeway-htmx-base="%s" data-causeway-canonical-path="%s">
+                <html lang="%s" data-causeway-htmx-base="%s" data-causeway-canonical-path="%s"%s>
                 <head>
                   <meta charset="utf-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1">
                   <meta name="description" content="Generic Apache Causeway application viewer using semantic web components and HTMX routing.">
                   <meta name="color-scheme" content="light dark">
+                  <link rel="icon" href="data:,">
                   <meta name="htmx-config" content='{"historyCacheSize":0,"historyRestoreAsHxRequest":false,"includeIndicatorStyles":false}'>
                   <title>%s</title>
                   <link rel="stylesheet" href="%s/causeway-webcomponents/component-styles.css">
@@ -135,6 +136,7 @@ final class HtmxPageRenderer {
                         language,
                         escape(basePath),
                         escape(context + canonicalPath),
+                        referenceWidgetAttributes(),
                         escape(properties.getBrand()),
                         escape(context),
                         escape(context),
@@ -149,6 +151,17 @@ final class HtmxPageRenderer {
                         escape(properties.getBrand()),
                         fragment,
                         comparisonLink);
+    }
+
+    private String referenceWidgetAttributes() {
+        if (!properties.isVaadinReferenceWidgets()) {
+            return "";
+        }
+        final var minimumSearchLength = Math.max(0, properties.getReferenceMinimumSearchLength());
+        final var maximumResults = Math.max(1, properties.getReferenceMaximumResults());
+        return " data-causeway-reference-widgets=\"vaadin\""
+                + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
+                + " data-causeway-reference-maximum-results=\"" + maximumResults + "\"";
     }
 
     private String applicationStylesheet(final String contextPath) {

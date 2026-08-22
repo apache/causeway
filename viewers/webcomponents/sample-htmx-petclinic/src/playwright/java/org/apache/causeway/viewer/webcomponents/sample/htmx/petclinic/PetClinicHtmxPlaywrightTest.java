@@ -354,10 +354,10 @@ class PetClinicHtmxPlaywrightTest {
 
         objectAction("bookVisit").click();
         waitForPrompt("bookVisit");
-        assertThat(page.locator(parameter("pet") + " option").count())
-                .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
-                .isGreaterThanOrEqualTo(1);
-        assertThat(page.locator(parameter("pet")).inputValue()).isNotBlank();
+        final var petReference = page.locator(parameter("pet"));
+        petReference.waitFor();
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
+        assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
         assertThat(page.locator(parameter("visitAt")).count())
                 .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
                 .isEqualTo(1);
@@ -511,6 +511,18 @@ class PetClinicHtmxPlaywrightTest {
 
     private void selectFirstAvailableChoice(final String parameterId) {
         final var control = page.locator(parameter(parameterId));
+        if ("causeway-reference-editor".equals(control.evaluate("element => element.localName"))) {
+            page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter(parameterId));
+            final var label = (String) control.evaluate("element => element.querySelector('vaadin-combo-box').items[0].title");
+            final var input = control.locator("vaadin-combo-box input");
+            input.fill(label);
+            page.waitForTimeout(100);
+            input.focus();
+            page.keyboard().press("ArrowDown");
+            page.keyboard().press("Enter");
+            page.waitForFunction("selector => document.querySelector(selector)?.value?.id", parameter(parameterId));
+            return;
+        }
         final var value = (String) control.evaluate("select => [...select.options].find(option => option.value)?.value");
         assertThat(value).isNotBlank();
         selectParameter(parameterId, value);

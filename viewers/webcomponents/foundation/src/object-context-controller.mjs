@@ -1080,6 +1080,9 @@ function propertyValueSelection(member) {
     return true;
   }
   const typeFields = value.typeDescription?.fields ?? [];
+  if (typeFields.some(field => field.name === '_meta')) {
+    return {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+  }
   const lobFields = typeFields
     .filter(field => ['name', 'mimeType', 'bytes', 'chars'].includes(field.name))
     .map(field => field.name);

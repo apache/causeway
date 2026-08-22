@@ -259,6 +259,16 @@ public class SampleObject implements HasVersion<Long> {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    public SampleRelatedObject selectRelated(final SampleRelatedObject related) {
+        return related;
+    }
+
+    @MemberSupport
+    public List<SampleRelatedObject> choices0SelectRelated() {
+        return getRelatedObjects();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     public List<SampleRelatedObject> findRelated(final String search) {
         final String normalized = search == null ? "" : search.toLowerCase();
         return relatedObjects.stream()

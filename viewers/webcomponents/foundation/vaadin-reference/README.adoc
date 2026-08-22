@@ -1,0 +1,27 @@
+= Vaadin reference-widget asset build
+
+This directory owns the pinned, selective browser bundle used by the opt-in Causeway reference-widget pilot.
+The bundle contains Vaadin Combo Box and Multi-Select Combo Box free-core components, aliases usage-statistics collection to Vaadin's no-op module, and packages no Flow or commercial component.
+
+Normal Maven builds verify the checked-in generated assets, package metadata, licenses, checksums, CSP hashes, and compressed budget without contacting npm.
+
+To reproduce after a clean checkout:
+
+[source,shell]
+----
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund
+npm run build
+npm run verify
+npm audit --omit=dev
+----
+
+A dependency update deliberately refreshes the checksum only after package, license, vulnerability, CSP, and browser review:
+
+[source,shell]
+----
+npm run update-policy
+npm run verify
+----
+
+The CSP style hashes are byte-exact outputs of Vaadin's static global and slotted style blocks.
+An unexpected style block or changed bundle fails qualification and must not be added to the viewer policy automatically.
