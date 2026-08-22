@@ -73,14 +73,6 @@ public interface Hierarchical {
         		.orElseGet(Stream::empty);
     }
 
-    /**
-     * Returns {@link Stream} of the class hierarchy upwards starting with superSpec,
-     * then includes all (collected) interfaces at the end.
-     */
-    default Stream<ObjectSpecification> streamSuperTypeHierarchyAndInterfaces() {
-        return Stream.concat(streamSuperTypeHierarchy(), interfaceSpecs().stream());
-    }
-
 	static <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType,
 			final FacetHolder facetHolder,
 			final Hierarchical hierarchical) {

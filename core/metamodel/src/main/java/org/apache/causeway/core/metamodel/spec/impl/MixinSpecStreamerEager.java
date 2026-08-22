@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -50,8 +52,9 @@ implements MixinSpecStreamer {
 
 	@Override
 	public Stream<ObjectSpecification> streamMixinSpecsFor(final ObjectSpecification mixeeSpec) {
-		return mixeeSpec.streamTypeHierarchyAndInterfaces()
-			.map(ObjectSpecification::correspondingClass)
+		// not using spec.streamTypeHierarchy.. here,
+		// because we want all interfaces not only those that have Domain.Inlcude semantics
+		return _Reflect.streamTypeHierarchy(mixeeSpec.correspondingClass(), InterfacePolicy.INCLUDE)
 			.flatMap(mixinsByMixeeClass::streamElements);
 	}
 

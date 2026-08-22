@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
@@ -131,7 +132,9 @@ record ObjectMetaDataFactory(
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-        typeOnly.hierarchical().streamSuperTypeHierarchyAndInterfaces()
+        Stream.concat(
+        		typeOnly.hierarchical().streamSuperTypeHierarchy(),
+        		typeOnly.hierarchical().interfaceSpecs().stream())
     		.map(ObjectSpecification::correspondingClass)
     		.forEach(cls->specLoaderInternal.loadSpecification(cls, IntrospectionRequest.FULL)); //TODO not a perfect match with LEGACY
 

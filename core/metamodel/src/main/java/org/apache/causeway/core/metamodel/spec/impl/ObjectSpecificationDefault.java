@@ -254,7 +254,7 @@ implements
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-    	streamSuperTypeHierarchyAndInterfaces()
+        streamTypeHierarchyAndInterfaces()
     		.map(ObjectSpecificationDefault.class::cast)
     		.forEach(spec->spec.introspectionStateHandler.introspectFully());
 

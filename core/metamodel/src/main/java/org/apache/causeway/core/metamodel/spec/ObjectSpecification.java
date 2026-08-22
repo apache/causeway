@@ -647,7 +647,7 @@ extends
      * @since 4.0
      */
     default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
-    	return Stream.concat(Stream.of(this), Hierarchical.super.streamSuperTypeHierarchyAndInterfaces());
+    	return Stream.concat(streamTypeHierarchy(), interfaceSpecs().stream());
     }
 
     /**
