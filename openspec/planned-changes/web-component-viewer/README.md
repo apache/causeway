@@ -1,14 +1,15 @@
 # Web-component viewer planned changes
 
-These are fully drafted follow-on changes for the Causeway web-component viewer programme.
+This directory contains complete follow-on changes and evidence-gated proposal-only drafts for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
-The foundation change `establish-graphql-web-component-foundation`, read-only change `add-read-only-domain-web-components`, interaction change `add-domain-web-component-interactions`, analysis change `analyze-rich-graphql-referenceapp-coverage`, both P0 correctness changes, value-semantics change, collection-windowing change, application-entry-points change, composite-object change, and menubar change are archived.
-The generic HTMX viewer change is archived.
-The theming-kit analysis `analyze-web-component-theming-kit` is the current active change and was promoted outside the evidence-backed viewer sequence to evaluate shared visual infrastructure.
-The remaining sequenced drafts are queued for serial promotion, beginning with `add-generic-vue-web-component-viewer`.
+The foundation, domain-component, rich GraphQL correctness, value-semantics, collection-windowing, application-entry, composite-object, menubar, generic HTMX, theming, Vaadin evaluation, and Vaadin reference-widget pilot changes are archived.
+The current active change is `add-referenceapp-webcomponent-regression-suite`.
+Its broad capability inventory precedes the proposal-only Vaadin-default sequence in `vaadin-default-roadmap.md`.
+The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
 
-Each child directory is a complete planned change containing `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications.
-After the active change is archived, promote the next draft verbatim:
+Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
+Proposal-only directories contain only `proposal.md`; they require current evidence, full artifact generation, and strict validation before promotion.
+After the active change is archived, promote an applicable complete draft with:
 
 ```shell
 git mv openspec/planned-changes/web-component-viewer/<name> openspec/changes/<name>
@@ -17,6 +18,7 @@ openspec validate <name> --strict
 
 The OpenSpec CLI does not scan this planned-change directory, so drafts must be strictly validated after promotion and before implementation.
 Review each draft against discoveries made by preceding changes and update stale assumptions before promotion.
+Do not promote the proposal-only Vaadin-default follow-ons out of the order and gates recorded in `vaadin-default-roadmap.md`.
 Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/referenceapp-analysis/coverage-matrix.yaml` and provide the scope gate for evidence-derived drafts.
 
 ## Evidence-backed promotion order
