@@ -35,13 +35,22 @@ public class HtmxViewerController {
     private static final MediaType HTML_UTF8 = MediaType.parseMediaType("text/html;charset=UTF-8");
     private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; script-src 'self'; style-src 'self'; "
             + "img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
+    private static final String VAADIN_REFERENCE_STYLE_SOURCES = "'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=' "
+            + "'sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=' "
+            + "'sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=' "
+            + "'sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g='";
 
     private final HtmxRouteCodec routeCodec;
     private final HtmxPageRenderer renderer;
+    private final HtmxViewerProperties properties;
 
-    public HtmxViewerController(final HtmxRouteCodec routeCodec, final HtmxPageRenderer renderer) {
+    public HtmxViewerController(
+            final HtmxRouteCodec routeCodec,
+            final HtmxPageRenderer renderer,
+            final HtmxViewerProperties properties) {
         this.routeCodec = routeCodec;
         this.renderer = renderer;
+        this.properties = properties;
     }
 
     @GetMapping({"", "/", "/**"})
@@ -82,9 +91,19 @@ public class HtmxViewerController {
         if (fragmentRequest && !historyRestoreRequest) {
             response.header("HX-Push-Url", contextPath + canonicalPath);
         } else if (!fragmentRequest) {
-            response.header("Content-Security-Policy", CONTENT_SECURITY_POLICY);
+            response.header("Content-Security-Policy", contentSecurityPolicy());
         }
         return response.body(body);
+    }
+
+    private String contentSecurityPolicy() {
+        if (!properties.isVaadinReferenceWidgets()) {
+            return CONTENT_SECURITY_POLICY;
+        }
+        final var vaadinStylePolicy = "style-src 'self' " + VAADIN_REFERENCE_STYLE_SOURCES
+                + "; style-src-elem 'self' " + VAADIN_REFERENCE_STYLE_SOURCES
+                + "; style-src-attr 'none';";
+        return CONTENT_SECURITY_POLICY.replace("style-src 'self';", vaadinStylePolicy);
     }
 
     private String applicationPath(final HttpServletRequest request) {

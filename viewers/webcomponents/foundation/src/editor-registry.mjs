@@ -19,6 +19,7 @@
 
 import {namedType} from './introspection.mjs';
 import {escapeHtml} from './rendering.mjs';
+import {renderCausewayReferenceWidget, supportsCausewayReferenceWidget} from './reference-widget.mjs';
 
 export class CausewayEditorRegistry {
   constructor(registrations = []) {
@@ -49,6 +50,14 @@ export class CausewayEditorRegistry {
     return this.registrations.find(registration => registration.supports(context)) ?? unsupportedEditor;
   }
 }
+
+const referenceWidgetEditor = Object.freeze({
+  id: 'vaadin-reference',
+  priority: 400,
+  supports: supportsCausewayReferenceWidget,
+  render: renderCausewayReferenceWidget,
+  parse: ({value}) => value
+});
 
 const choiceEditor = Object.freeze({
   id: 'choice',
@@ -159,6 +168,7 @@ const unsupportedEditor = Object.freeze({
 });
 
 export const defaultEditorRegistry = new CausewayEditorRegistry([
+  referenceWidgetEditor,
   choiceEditor,
   autoCompleteEditor,
   booleanEditor,

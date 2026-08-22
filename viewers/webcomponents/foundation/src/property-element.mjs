@@ -25,6 +25,7 @@ import {
   parseCausewayEditorValue,
   renderCausewayEditor
 } from './editor-registry.mjs';
+import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {InteractionStatus} from './types.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
@@ -49,6 +50,8 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.interactionState = null;
     this.interactionGeneration = 0;
     this.validationTimer = null;
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration = 0;
     this.renderingInteraction = false;
     this.restoreEditFocusAfterGeneration = null;
     this.addEventListener('click', event => {
@@ -63,6 +66,28 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     });
     this.addEventListener('input', event => this.#captureEditorEvent(event, true));
     this.addEventListener('change', event => this.#captureEditorEvent(event, false));
+    this.addEventListener('causeway-reference-search', event => {
+      if (event.detail?.name !== this.member || !this.interactionState?.capabilities?.autoComplete) {
+        return;
+      }
+      event.stopPropagation();
+      void this.loadAutoComplete(event.detail.search);
+    });
+    this.addEventListener('causeway-reference-escape', event => {
+      if (this.interactionState) {
+        event.stopPropagation();
+        this.cancelEdit();
+      }
+    });
+    this.addEventListener('causeway-reference-load-failed', event => {
+      if (!this.interactionState) {
+        return;
+      }
+      event.stopPropagation();
+      const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
+      this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
+      this.renderComponentState(this.componentState);
+    });
   }
 
   get member() {
@@ -122,6 +147,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
 
   disconnectedCallback() {
     clearTimeout(this.validationTimer);
+    this.autoCompleteController?.abort();
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration += 1;
     super.disconnectedCallback();
   }
 
@@ -197,6 +225,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return false;
     }
     clearTimeout(this.validationTimer);
+    this.autoCompleteController?.abort();
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration += 1;
     this.interactionGeneration += 1;
     this.interactionState = null;
     this.restoreEditFocusAfterGeneration = null;
@@ -240,14 +271,36 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     if (!this.interactionState?.capabilities?.autoComplete) {
       return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
     }
-    const generation = this.interactionGeneration;
-    const result = await this._resolvedContext.autoCompleteProperty(this.member, search);
-    if (generation !== this.interactionGeneration || result.status !== InteractionStatus.SUCCESS) {
+    this.autoCompleteController?.abort();
+    const controller = new AbortController();
+    this.autoCompleteController = controller;
+    const generation = ++this.autoCompleteGeneration;
+    const result = await this._resolvedContext.autoCompleteProperty(this.member, search, {signal: controller.signal});
+    if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.interactionState) {
+      return {...result, status: InteractionStatus.OBSOLETE};
+    }
+    if (result.status !== InteractionStatus.SUCCESS) {
+      if (result.status !== InteractionStatus.OBSOLETE) {
+        this.#setInteraction({
+          ...this.interactionState,
+          status: InteractionStatus.FAILED,
+          error: result.errors?.[0]?.message ?? 'Reference search failed.'
+        });
+      }
       return result;
+    }
+    const suggestions = [...(result.data ?? [])];
+    const {maximumResults} = causewayReferenceWidgetConfiguration();
+    if (suggestions.length > maximumResults) {
+      const message = `More than ${maximumResults} references matched. Refine the search.`;
+      this.#setInteraction({...this.interactionState, status: InteractionStatus.FAILED, suggestions: Object.freeze([]), error: message});
+      return {status: InteractionStatus.FAILED, data: null, errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]};
     }
     this.interactionState = Object.freeze({
       ...this.interactionState,
-      suggestions: Object.freeze([...(result.data ?? [])])
+      status: InteractionStatus.EDITING,
+      suggestions: Object.freeze(suggestions),
+      error: null
     });
     this.renderComponentState(this.componentState);
     return result;
@@ -429,12 +482,14 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const presentation = this.#presentation(this.componentState);
     return {
       name: this.member,
+      label: presentation.label,
       value: interaction.pendingValue,
       choices: interaction.choices ?? [],
       suggestions: interaction.suggestions ?? [],
       autoComplete: interaction.capabilities?.autoComplete === true,
       enumValues: interaction.capabilities?.enumValues ?? [],
       inputType: interaction.capabilities?.inputType,
+      required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
       multiLine: this.multiLine,
       inputId: this.inputId,
       labelId: this.labelId,

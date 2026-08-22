@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-08-21T20:01:18.837Z",
+  "browserVersion": "151.0.7922.172",
+  "selected": {
+    "id": "s_related-1",
+    "logicalTypeName": "causeway.webcomponents.sample.SampleRelatedObject",
+    "title": "Schema-driven components [ROW-001]"
+  },
+  "requestsBeforePrompt": 0,
+  "candidateRequests": 1,
+  "consoleErrorsBeforePrompt": 0,
+  "httpFailuresBeforePrompt": 0,
+  "consoleErrors": [],
+  "httpFailures": [],
+  "pageErrors": [],
+  "externalRequests": [],
+  "assertions": {
+    "noCandidateBeforePrompt": true,
+    "candidateLoadedOnce": true,
+    "stableReferenceSelected": true,
+    "promptDismissed": true,
+    "focusRestored": true,
+    "noFlowRuntime": true,
+    "noOverflow": true,
+    "zeroConsoleErrors": true,
+    "zeroPageErrors": true,
+    "zeroHttpFailures": true,
+    "zeroExternalRequests": true
+  }
+}

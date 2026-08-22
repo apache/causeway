@@ -44,8 +44,29 @@ class HtmxViewerControllerTest {
                 .contains("<causeway-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
                 .contains("<causeway-object editable>")
                 .contains("<causeway-interaction-controller data-causeway-route-interactions>");
-        assertThat(response.getHeaders().getFirst("Content-Security-Policy")).contains("default-src 'self'");
+        assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
+                .contains("default-src 'self'")
+                .doesNotContain("sha256-")
+                .doesNotContain("style-src-attr");
+        assertThat(response.getBody()).doesNotContain("data-causeway-reference-widgets");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
+    }
+
+    @Test
+    void addsOnlyPinnedReferenceWidgetStyleHashesWhenPilotIsEnabled() {
+        properties.setVaadinReferenceWidgets(true);
+        properties.setReferenceMinimumSearchLength(3);
+        properties.setReferenceMaximumResults(40);
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+
+        assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
+                .contains("style-src-elem 'self' 'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
+        assertThat(response.getBody())
+                .contains("data-causeway-reference-widgets=\"vaadin\"")
+                .contains("data-causeway-reference-minimum-search-length=\"3\"")
+                .contains("data-causeway-reference-maximum-results=\"40\"");
     }
 
     @Test
@@ -106,7 +127,7 @@ class HtmxViewerControllerTest {
 
     private HtmxViewerController controller(final List<HtmxPageFragmentFactory> factories) {
         final var registry = new HtmxPageFragmentRegistry(factories);
-        return new HtmxViewerController(codec, new HtmxPageRenderer(codec, properties, registry));
+        return new HtmxViewerController(codec, new HtmxPageRenderer(codec, properties, registry), properties);
     }
 
     private static MockHttpServletRequest request(

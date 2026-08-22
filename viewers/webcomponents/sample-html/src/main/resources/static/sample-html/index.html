@@ -370,6 +370,7 @@
               <causeway-action member="inspect" data-testid="action-inspect"></causeway-action>
               <causeway-action member="updateDetails" data-testid="action-update-details"></causeway-action>
               <causeway-action member="findRelated" data-testid="action-find-related"></causeway-action>
+              <causeway-action member="selectRelated" data-testid="action-select-related"></causeway-action>
               <causeway-action member="clearNotes" data-testid="action-clear-notes"></causeway-action>
               <causeway-action member="archive" data-testid="action-archive"></causeway-action>
               <causeway-action member="hiddenAction" data-testid="action-hidden"></causeway-action>
@@ -519,6 +520,8 @@
       report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}${target}`);
     });
 
+    const {configureCausewayReferenceWidgets} = await import('/causeway-webcomponents/reference-widget.mjs');
+    configureCausewayReferenceWidgets({enabled: true, minimumSearchLength: 2, maximumResults: 50});
     await import('/causeway-webcomponents/index.mjs');
   </script>
 </body>

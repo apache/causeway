@@ -161,6 +161,39 @@ causeway-object {
   min-block-size: 5rem;
   resize: vertical;
 }
+causeway-reference-editor {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+  min-inline-size: 0;
+  --vaadin-background-color: var(--causeway-surface, Canvas);
+  --vaadin-background-container: var(--causeway-surface-subtle, Canvas);
+  --vaadin-border-color: var(--causeway-border-strong, ButtonBorder);
+  --vaadin-border-color-secondary: var(--causeway-border, ButtonBorder);
+  --vaadin-focus-ring-color: var(--causeway-focus, Highlight);
+  --vaadin-text-color: var(--causeway-text, CanvasText);
+  --vaadin-text-color-secondary: var(--causeway-muted, GrayText);
+  --vaadin-text-color-disabled: var(--causeway-disabled, GrayText);
+  --vaadin-radius-m: var(--causeway-radius-md, 0.45rem);
+  --lumo-base-color: var(--causeway-surface, Canvas);
+  --lumo-body-text-color: var(--causeway-text, CanvasText);
+  --lumo-secondary-text-color: var(--causeway-muted, GrayText);
+  --lumo-primary-color: var(--causeway-link, LinkText);
+  --lumo-primary-text-color: var(--causeway-link, LinkText);
+  --lumo-error-color: var(--causeway-danger, Mark);
+  --lumo-border-radius-m: var(--causeway-radius-md, 0.45rem);
+}
+causeway-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select) {
+  inline-size: 100%;
+  max-inline-size: 32rem;
+}
+causeway-reference-editor[data-widget-state="fallback"]::after {
+  color: var(--causeway-muted, GrayText);
+  content: "Using the standard reference editor";
+  display: block;
+  font-size: 0.8rem;
+  margin-block-start: 0.25rem;
+}
 .causeway-action-prompt {
   border: 1px solid currentColor;
   border-radius: 0.5rem;
@@ -389,6 +422,24 @@ causeway-menubars > causeway-interaction-controller {
     max-inline-size: none;
     min-inline-size: 0;
     position: static;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  causeway-reference-editor {
+    --lumo-animation-duration-s: 0ms;
+    --lumo-animation-duration-m: 0ms;
+  }
+}
+@media (forced-colors: active) {
+  causeway-reference-editor {
+    --vaadin-background-color: Canvas;
+    --vaadin-border-color: ButtonBorder;
+    --vaadin-focus-ring-color: Highlight;
+    --vaadin-text-color: CanvasText;
+    --lumo-base-color: Canvas;
+    --lumo-body-text-color: CanvasText;
+    --lumo-primary-color: Highlight;
+    forced-color-adjust: auto;
   }
 }
 `;

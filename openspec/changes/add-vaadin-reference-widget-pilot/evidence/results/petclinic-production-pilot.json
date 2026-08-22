@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-08-21T20:00:56.537Z",
+  "browserVersion": "151.0.7922.172",
+  "shellCsp": "default-src 'self'; script-src 'self'; style-src 'self' 'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=' 'sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=' 'sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=' 'sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g='; style-src-elem 'self' 'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=' 'sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=' 'sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=' 'sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g='; style-src-attr 'none'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'",
+  "requestsBeforeReferencePrompt": 0,
+  "candidateRequests": 1,
+  "selectedIdentity": {
+    "id": "s_pet-basil",
+    "logicalTypeName": "petclinic.Pet",
+    "title": "Basil · dog"
+  },
+  "snapshot": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "flowRuntime": false,
+    "overlayCount": 0,
+    "horizontalOverflow": 0,
+    "activeMember": "removePet"
+  },
+  "cspViolations": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "httpFailures": [],
+  "externalRequests": [],
+  "screenshot": "petclinic-reference-pilot.jpg",
+  "assertions": {
+    "optInConfigurationPresent": true,
+    "exactHashesPresent": true,
+    "noBlanketInlinePermission": true,
+    "noCandidateBeforePrompt": true,
+    "candidateLoadedOnce": true,
+    "stableReferenceSelected": true,
+    "routeRemainedReady": true,
+    "menuRemainedReady": true,
+    "focusRestored": true,
+    "noFlowRuntime": true,
+    "noOverflow": true,
+    "zeroCspViolations": true,
+    "zeroConsoleErrors": true,
+    "zeroPageErrors": true,
+    "zeroHttpFailures": true,
+    "zeroExternalRequests": true
+  }
+}

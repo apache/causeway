@@ -30,6 +30,7 @@ export const CausewayElementName = Object.freeze({
   OBJECT_LINK: 'causeway-object-link',
   ACTION: 'causeway-action',
   INTERACTION_CONTROLLER: 'causeway-interaction-controller',
+  REFERENCE_EDITOR: 'causeway-reference-editor',
   COLLECTION: 'causeway-collection',
   COLLECTION_COLUMN: 'causeway-collection-column',
   MENUBARS: 'causeway-menubars',

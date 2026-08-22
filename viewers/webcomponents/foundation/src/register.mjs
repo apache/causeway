@@ -34,6 +34,7 @@ import {CausewayObjectElement} from './object-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
 import {CausewayObjectLinkElement} from './object-link-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
+import {CausewayReferenceEditorElement} from './reference-widget.mjs';
 import {CausewayValueElement} from './value-element.mjs';
 
 const DEFINITIONS = Object.freeze([
@@ -46,6 +47,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],
+  [CausewayElementName.REFERENCE_EDITOR, CausewayReferenceEditorElement],
   [CausewayElementName.MENUBARS, CausewayMenubarsElement],
   [CausewayElementName.MENUBAR_PRIMARY, CausewayMenubarPrimaryElement],
   [CausewayElementName.MENUBAR_SECONDARY, CausewayMenubarSecondaryElement],

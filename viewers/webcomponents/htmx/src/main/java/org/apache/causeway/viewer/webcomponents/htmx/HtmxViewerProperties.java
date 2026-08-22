@@ -29,6 +29,9 @@ public class HtmxViewerProperties {
     private String language = "en";
     private String wicketComparisonPath;
     private String applicationStylesheet;
+    private boolean vaadinReferenceWidgets;
+    private int referenceMinimumSearchLength = 2;
+    private int referenceMaximumResults = 50;
 
     public String getBasePath() {
         return basePath;
@@ -76,5 +79,29 @@ public class HtmxViewerProperties {
 
     public void setApplicationStylesheet(final String applicationStylesheet) {
         this.applicationStylesheet = applicationStylesheet;
+    }
+
+    public boolean isVaadinReferenceWidgets() {
+        return vaadinReferenceWidgets;
+    }
+
+    public void setVaadinReferenceWidgets(final boolean vaadinReferenceWidgets) {
+        this.vaadinReferenceWidgets = vaadinReferenceWidgets;
+    }
+
+    public int getReferenceMinimumSearchLength() {
+        return referenceMinimumSearchLength;
+    }
+
+    public void setReferenceMinimumSearchLength(final int referenceMinimumSearchLength) {
+        this.referenceMinimumSearchLength = referenceMinimumSearchLength;
+    }
+
+    public int getReferenceMaximumResults() {
+        return referenceMaximumResults;
+    }
+
+    public void setReferenceMaximumResults(final int referenceMaximumResults) {
+        this.referenceMaximumResults = referenceMaximumResults;
     }
 }

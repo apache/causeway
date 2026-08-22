@@ -287,6 +287,41 @@ A valid `multiLine` value greater than one selects a textarea and is capped at 5
 Applications can register a more-specific editor through `defaultEditorRegistry.register(...)`, or assign another `CausewayEditorRegistry` to a property's `editorRegistry` JavaScript property.
 Editors render and parse pending semantic values but never execute GraphQL independently.
 
+=== Optional Vaadin reference widgets
+
+The foundation artifact packages a pinned free-core Vaadin Combo Box and Multi-Select Combo Box closure for explicitly enabled reference inputs.
+The closure is not requested until the semantic registry renders its first eligible reference editor.
+Routes and applications that leave the option disabled continue to use the existing native choice and autocomplete editors and make no Vaadin request.
+
+A plain HTML application enables the pilot before importing `index.mjs`:
+
+[source,javascript]
+----
+const {configureCausewayReferenceWidgets} =
+  await import('/causeway-webcomponents/reference-widget.mjs');
+configureCausewayReferenceWidgets({
+  enabled: true,
+  minimumSearchLength: 2,
+  maximumResults: 50
+});
+await import('/causeway-webcomponents/index.mjs');
+----
+
+Eligible fixed choices must contain stable object identities and remain within `maximumResults`.
+Eligible autocomplete inputs use the existing public GraphQL search operation, debounce for 250 milliseconds, cancel superseded work, and reject stale route generations.
+The current GraphQL operation is not server-paged; the maximum is an honest accepted-response bound rather than a page size, and an over-bound result produces a refinement error instead of silent truncation.
+
+A list-valued input selects Multi-Select Combo Box only when the introspected input and GraphQL interaction already provide authoritative list pending-value semantics.
+Unsupported shapes, disabled configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
+
+`<causeway-reference-editor>` is a semantic Causeway adapter.
+Applications observe existing property and prompt state events and do not consume Vaadin tags, data-provider callbacks, or value events.
+Vaadin package names, internal tags, theme details, and bundle chunks are not a supported application extension tier.
+
+The candidate bundle is 48,684 bytes gzip for the pinned pilot closure, contains no Flow client or usage-statistics collector, and is served only from the foundation JAR.
+Its four byte-exact style elements require the documented CSP SHA-256 sources while `style-src-attr 'none'` remains in effect.
+Dependency or bundle updates must regenerate and review package metadata, licenses, checksums, CSP hashes, browser evidence, and the compressed budget together.
+
 Object contexts expose `prepareProperty`, `propertyChoices`, `autoCompleteProperty`, `validateProperty`, and `updateProperty` for application-controlled interaction presentation.
 Transient choice, autocomplete, and validation generations are cancellable; mutating commands are serialized per object context.
 Property state and successful updates publish `causeway-property-interaction-state-change` and `causeway-property-updated`.

@@ -9,6 +9,9 @@ It ports the Pet Owner, Pet, Visit, home, fixture, menu, and grid concepts from 
 
 The application runs the GraphQL, generic HTMX, and current Wicket viewers over one Causeway metamodel, H2 database, security policy, effective menu definition, effective grid definitions, and deterministic fixture.
 The Wicket viewer is a side-by-side presentation reference rather than a dependency of the generic HTMX module.
+The sample explicitly enables the route-lazy Vaadin free-core reference-widget pilot for eligible object-reference action parameters.
+Its strict CSP adds only the four pinned style hashes, preserves `style-src-attr 'none'`, and makes no candidate request until an eligible prompt opens.
+The current editor remains the configuration fallback.
 
 == Run
 
@@ -57,7 +60,7 @@ mvn -f viewers/webcomponents/pom.xml \
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
 
-The suite starts the application on a random port and exercises custom and generic routes, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, every Petclinic service action, and every Pet Owner object action.
+The suite starts the application on a random port and exercises custom and generic routes, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, route-lazy reference selection, every Petclinic service action, and every Pet Owner object action.
 It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, undisclosed menus, incorrect member-associated action placement, or incorrect semantic results.
 
 == Stable fixture routes

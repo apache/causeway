@@ -21,6 +21,7 @@ import {
   ACTION_RESULT_EVENT,
   COMPONENT_STATE_EVENT,
   MENU_BARS_STATE_EVENT,
+  configureCausewayReferenceWidgets,
   NAVIGATION_REQUEST_EVENT,
   OBJECT_CONTEXT_STATE_EVENT,
   defineCausewayWebComponents,
@@ -37,6 +38,12 @@ const routeRegion = document.querySelector('#causeway-route');
 const announcement = document.querySelector('#causeway-route-announcement');
 const resultRegion = document.querySelector('#causeway-result');
 const basePath = document.documentElement.dataset.causewayHtmxBase;
+const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
+configureCausewayReferenceWidgets({
+  enabled: referenceWidgetMode === 'vaadin',
+  minimumSearchLength: Number(document.documentElement.dataset.causewayReferenceMinimumSearchLength),
+  maximumResults: Number(document.documentElement.dataset.causewayReferenceMaximumResults)
+});
 let activeRequest = null;
 let navigationGeneration = 0;
 

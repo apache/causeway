@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-08-21T18:15:35.148Z",
+  "browserVersion": "151.0.7922.172",
+  "policyStrategy": "Current policy plus four pinned style-src-elem SHA-256 sources and style-src-attr none",
+  "hashes": [
+    "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=",
+    "sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=",
+    "sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=",
+    "sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g="
+  ],
+  "before": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "panelPresent": false,
+    "controlsDefined": false,
+    "flowRuntime": false,
+    "horizontalOverflow": 0,
+    "overlayCount": 0
+  },
+  "during": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "panelPresent": true,
+    "controlsDefined": true,
+    "flowRuntime": false,
+    "horizontalOverflow": 0,
+    "overlayCount": 0
+  },
+  "after": {
+    "routeState": "ready",
+    "menuState": "ready",
+    "panelPresent": false,
+    "controlsDefined": true,
+    "flowRuntime": false,
+    "horizontalOverflow": 0,
+    "overlayCount": 0
+  },
+  "violations": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "externalRequests": [],
+  "assertions": {
+    "routeRemainedReady": true,
+    "menuRemainedReady": true,
+    "controlsDefined": true,
+    "noFlowRuntime": true,
+    "noHorizontalOverflow": true,
+    "zeroCspViolations": true,
+    "zeroConsoleErrors": true,
+    "zeroPageErrors": true,
+    "zeroExternalRequests": true,
+    "panelRemoved": true
+  }
+}
