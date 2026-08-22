@@ -22,19 +22,17 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -56,8 +54,8 @@ public final class Vega implements Serializable {
     @RequiredArgsConstructor
     public static enum Schema {
         NONE(null),
-        VEGA("https://vega.github.io/schema/vega/v5.json"),
-        VEGA_LITE("https://vega.github.io/schema/vega-lite/v5.json");
+        VEGA("https://vega.github.io/schema/vega/v6.json"),
+        VEGA_LITE("https://vega.github.io/schema/vega-lite/v6.json");
 
         public boolean isNone() {return this==NONE;}
         public boolean isVega() {return this==VEGA;}
@@ -78,9 +76,8 @@ public final class Vega implements Serializable {
             .map(map->map.get(key()))
             .map(schemaValue->{
                 for(var schema:Schema.values()) {
-                    if(schemaValue.equals(schema.value())) {
-                        return schema;
-                    }
+                    if(schemaValue.equals(schema.value()))
+						return schema;
                 }
                 return null;
             })

@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.model.webjar;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-
-import org.webjars.WebJarAssetLocator;
-import org.webjars.WebJarAssetLocator.WebJarInfo;
 
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.springframework.util.StringUtils;
 
 /**
  * Utility to scan webjar version strings dynamically from class-path under {@code META-INF/resources/webjars}.
@@ -54,21 +51,39 @@ public record WebjarEnumerator() {
     // npm/inputmask/5.0.9
     // jquery-ui/1.14.1
     public record WebjarResource(
+    	/**
+    	 * default: META-INF/resources/webjars
+    	 */
+		String location,
+		/**
+		 * path part after location and before version
+		 */
         String path,
         String version) {
 
-        static WebjarResource from(final WebJarInfo webJarInfo) {
-            return new WebjarResource(webJarInfo.getArtifactId(), webJarInfo.getVersion());
-        }
+		boolean isValid() {
+			return StringUtils.hasText(path)
+					&& StringUtils.hasText(version);
+		}
     }
 
     // -- HELPER
 
     private static Map<String, WebjarResource> scanClassPath() {
-        var locator = new WebJarAssetLocator();
-        return locator.getAllWebJars().values().stream()
-            .map(WebjarResource::from)
-            .collect(Collectors.toMap(WebjarResource::path, UnaryOperator.identity()));
+    	var acceptedPaths = List.of(
+    			"META-INF/resources/webjars"
+    			// adds additional lookup path, for non standard conforming Vega webjars, could be removed in the future
+    			,"META-INF/resources/_static"
+    			);
+
+    	var map = new ResourceProcessor(acceptedPaths)
+    			.processAll();
+//debug
+//		map.forEach((k, v)->{
+//        	System.out.println(k + ": " + v);
+//        });
+
+        return map;
     }
 
 }

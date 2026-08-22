@@ -33,4 +33,5 @@ module org.apache.causeway.valuetypes.vega.ui.wkt {
     requires org.apache.wicket.core;
     requires org.apache.wicket.util;
     requires spring.context;
+	requires de.agilecoders.wicket.webjars;
 }

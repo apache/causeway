@@ -36,9 +36,11 @@ public enum WebJar {
 	PDFJS_CMAPS("pdfjs-dist", "${id}/${version}/cmaps/_.bcmap"),
 	PDFJS_JS("pdfjs-dist", "${id}/${version}/build/pdf.min.mjs"),
 	PDFJS_WORKER_JS("pdfjs-dist", "${id}/${version}/build/pdf.worker.min.mjs"),
-	VEGA(null, null),
-	VEGA_LITE(null, null),
-	VEGA_EMBED(null, null);
+	VEGA_JS("vega", "${root}/_static/${id}/${version}/build/vega.min.js"),
+	VEGA_LITE_JS("vega-lite", "${root}/_static/${id}/${version}/build/vega-lite.min.js"),
+	VEGA_EMBED_JS("vega-embed", "${root}/_static/${id}/${version}/build/vega-embed.min.js");
+
+	public final static String ROOT = "_ROOT_"; // rewrites URL's path to an absolute path
 
 	/**
 	 * corresponds to the webjars path as provided by the maven artifact
@@ -52,7 +54,8 @@ public enum WebJar {
 				.version();
 		return new _StringInterpolation(Map.of(
 				"id", id,
-				"version", version))
+				"version", version,
+				"root", ROOT))
 			.applyTo(resourceFormat);
 	}
 

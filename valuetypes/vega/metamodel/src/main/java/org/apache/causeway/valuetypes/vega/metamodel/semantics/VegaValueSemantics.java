@@ -155,7 +155,7 @@ implements
         return Can.of(
                 Vega.valueOf("""
 					{
-					  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+					  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
 					  "data": {
 					    "values": [
 					      {"a": "C", "b": 2},
@@ -177,7 +177,7 @@ implements
 					}"""),
                 Vega.valueOf("""
 					{
-					  "$schema": "https://vega.github.io/schema/vega/v5.json",
+					  "$schema": "https://vega.github.io/schema/vega/v6.json",
 					  "description": "A basic bar chart example, with value labels shown upon mouse hover.",
 					  "width": 400,
 					  "height": 200,
