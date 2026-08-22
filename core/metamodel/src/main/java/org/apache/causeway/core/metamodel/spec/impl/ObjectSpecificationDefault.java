@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -254,7 +255,10 @@ implements
 
         // fully introspect up the type hierarchy including interfaces
         // because members creation depends on presence of inherited members
-        streamTypeHierarchyAndInterfaces()
+        // (don't include self)
+        Stream.concat(
+        		hierarchical().streamSuperTypeHierarchy(),
+        		hierarchical().interfaceSpecs().stream())
     		.map(ObjectSpecificationDefault.class::cast)
     		.forEach(spec->spec.introspectionStateHandler.introspectFully());
 
