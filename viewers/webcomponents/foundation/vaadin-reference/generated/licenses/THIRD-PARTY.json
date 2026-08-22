@@ -1,0 +1,155 @@
+{
+  "bundle": {
+    "file": "vaadin-reference.js",
+    "rawBytes": 191342,
+    "gzipBytes": 48684,
+    "sha256": "40ef3cecd641b14b7212759d45035991d9eb12550c00be64d2d7a786bf8f8a81"
+  },
+  "entryPoints": [
+    "@vaadin/combo-box",
+    "@vaadin/multi-select-combo-box"
+  ],
+  "usageStatisticsAlias": "@vaadin/vaadin-usage-statistics/vaadin-usage-statistics-optout.js",
+  "cspStyleHashes": [
+    "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=",
+    "sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=",
+    "sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=",
+    "sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g="
+  ],
+  "packages": [
+    {
+      "name": "@lit-labs/ssr-dom-shim",
+      "version": "1.6.0",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-VHb0ALPMTlgKjM6yIxxoQNnpKyUKLD04VzeQdsiXkMqkvYlAHxq9glGLmgbb889/1GsohSOAjvQYoiBppXFqrQ==",
+      "repository": "git+https://github.com/lit/lit.git",
+      "licenseSource": "lit package from the same repository and BSD-3-Clause license"
+    },
+    {
+      "name": "@lit/reactive-element",
+      "version": "2.1.2",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "@open-wc/dedupe-mixin",
+      "version": "1.4.0",
+      "license": "MIT",
+      "integrity": "sha512-Sj7gKl1TLcDbF7B6KUhtvr+1UCxdhMbNY5KxdU5IfMFWqL8oy1ZeAcCANjoB1TL0AJTcPmcCFsCbHf8X2jGDUA==",
+      "repository": "https://github.com/open-wc/open-wc.git"
+    },
+    {
+      "name": "@types/trusted-types",
+      "version": "2.0.7",
+      "license": "MIT",
+      "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    {
+      "name": "@vaadin/a11y-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-0Qo/RjNykbv3RaIngI6acbj31JICNIaF1dRLxO+h1CBkkcEgV8d8/sg8AqoUN1LdtJj4fV4LlpLcAP0uxRs3Pg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/combo-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-8tiBo1Zq+70nr7OTzK4VPj92cerCdWdQXpTqiz+upUJOt/a5vzLoHaTqe1mmv7VTc+h2cK6qE7qJUQnapoI0wA==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/component-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-H/D8AfrObcp3i4tzfMkMlk3egq+e1PM0II7DlkR0aRb96mSThm2uhbN81XvVSM5Ji/69qVAvsphN5P7LQ6t7xw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/field-base",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-foFZRFlPlsAhm4kIC8qZ0VmLcTF0uX4Z8fap9aa+6uO/DUCroorwZYXWlZbH22j3Rqfu5dMGCpZ+BDMq6cJarw==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/input-container",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-JD/048m28NRnOM662EwbHRWl05ANNmVTdjktm5pu4rmo+SWRClrnMQmDKAp4xQvbWp6aC3Yssl0eXjPOXTcMeQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/item",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ixkGcIJZ9jLDSBitcfa9pJmcqUHXstVI3uSxlOagqmkoCs9n/Xpj0pPV0DM+mIBT2zCW6bdVGOdzeZCFbSAhxg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/lit-renderer",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-ILaSia9vTfBbsUr+xfH9toaV2IOwEIyve3oErz3aNJayrYfC9QnKDcPc9TFxXYo9D5BnqtmotQVBMLHZJ4lOFg==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/multi-select-combo-box",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-Ydm/M8WgT2UFXo8ld4pclN3vmW6vblPW+1NZ04VPCrcMKfQIKaR2wfn1J17uy4WFGjay6Oh5gsZGDQYQ0NL9VQ==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/overlay",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-kZWyohXF7uKSrMBMTJMy5+rpq5cdvNwOCnWwvb1z+mN5DJ85nt8oBVEA3OnMGLVPhEKMK3AsTfeJ5AGKAVEC0Q==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/vaadin-development-mode-detector",
+      "version": "2.0.7",
+      "license": "Apache-2.0",
+      "integrity": "sha512-9FhVhr0ynSR3X2ao+vaIEttcNU5XfzCbxtmYOV8uIRnUCtNgbvMOIcyGBvntsX9I5kvIP2dV3cFAOG9SILJzEA==",
+      "repository": "vaadin/vaadin-development-mode-detector"
+    },
+    {
+      "name": "@vaadin/vaadin-themable-mixin",
+      "version": "25.2.8",
+      "license": "Apache-2.0",
+      "integrity": "sha512-fFkAuPkL8f9KvIIVRAek2rEtovB2mxiCXyL5OUnCV1DJ/AZPPWjMzM0nGTWWOn6jYD53BU/6yqQX06/4k4ee9w==",
+      "repository": "https://github.com/vaadin/web-components.git"
+    },
+    {
+      "name": "@vaadin/vaadin-usage-statistics",
+      "version": "2.1.3",
+      "license": "Apache-2.0",
+      "integrity": "sha512-8r4TNknD7OJQADe3VygeofFR7UNAXZ2/jjBFP5dgI8+2uMfnuGYgbuHivasKr9WSQ64sPej6m8rDoM1uSllXjQ==",
+      "repository": "vaadin/vaadin-usage-statistics"
+    },
+    {
+      "name": "lit",
+      "version": "3.3.3",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-fycuvZg/hkpozL00lm1pEJH5nN/lr9ZXd6mJI2HSN4+Bzc+LDNdEApJ6HFbPkdFNHLvOplIIuJvxkS4XUxqirw==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "lit-element",
+      "version": "4.2.2",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-aFKhNToWxoyhkNDmWZwEva2SlQia+jfG0fjIWV//YeTaWrVnOxD89dPKfigCUspXFmjzOEUQpOkejH5Ly6sG0w==",
+      "repository": "git+https://github.com/lit/lit.git"
+    },
+    {
+      "name": "lit-html",
+      "version": "3.3.3",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-el8M6jK2o3RXBnrSHX3ZKrsN8zEV63pSExTO1wYJz7QndGYZ8353e2a5PPX+qHe2aGayfnchQmkAojaWAREOIA==",
+      "repository": "git+https://github.com/lit/lit.git"
+    }
+  ]
+}

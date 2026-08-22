@@ -20,6 +20,7 @@
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} from './editor-registry.mjs';
+import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {InteractionStatus} from './types.mjs';
 
@@ -36,6 +37,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.resultState = null;
     this.generation = 0;
     this.parameterTimer = null;
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration = 0;
     this.scope = null;
     this.onActionRequest = event => {
       const actionId = event.detail?.actionId;
@@ -59,6 +62,27 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     });
     this.addEventListener('input', event => this.#captureParameter(event));
     this.addEventListener('change', event => this.#captureParameter(event));
+    this.addEventListener('causeway-reference-search', event => {
+      const parameterId = event.detail?.name;
+      if (!parameterId || !this.promptState) {
+        return;
+      }
+      event.stopPropagation();
+      void this.loadParameterAutoComplete(parameterId, event.detail.search);
+    });
+    this.addEventListener('causeway-reference-escape', event => {
+      if (this.promptState) {
+        event.stopPropagation();
+        this.cancelPrompt();
+      }
+    });
+    this.addEventListener('causeway-reference-load-failed', event => {
+      if (this.promptState) {
+        event.stopPropagation();
+        this.render();
+        this.#focusFirstControl();
+      }
+    });
     this.addEventListener('keydown', event => {
       if (event.key === 'Escape' && this.promptState) {
         event.preventDefault();
@@ -86,6 +110,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
 
   disconnectedCallback() {
     clearTimeout(this.parameterTimer);
+    this.autoCompleteController?.abort();
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration += 1;
     this.scope?.removeEventListener(CausewaySemanticEvent.ACTION_REQUEST, this.onActionRequest);
     this.scope = null;
     this.generation += 1;
@@ -157,6 +184,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
     }
+    this.autoCompleteController?.abort();
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration += 1;
     const focusState = this.#captureControlFocus();
     const generation = ++this.generation;
     const values = Object.freeze({...this.promptState.values, [parameterId]: value});
@@ -209,6 +239,52 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return true;
   }
 
+  async loadParameterAutoComplete(parameterId, search) {
+    const parameter = this.promptState?.parameters.find(candidate => candidate.id === parameterId);
+    if (!parameter?.fields.has('autoComplete') || this.promptState.status === InteractionStatus.INVOKING) {
+      return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
+    }
+    this.autoCompleteController?.abort();
+    const controller = new AbortController();
+    this.autoCompleteController = controller;
+    const generation = ++this.autoCompleteGeneration;
+    const result = await this.promptState.context.autoCompleteActionParameter(
+      this.promptState.actionId,
+      parameterId,
+      search,
+      this.promptState.values,
+      {signal: controller.signal}
+    );
+    if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.promptState) {
+      return {...result, status: InteractionStatus.OBSOLETE};
+    }
+    if (result.status !== InteractionStatus.SUCCESS) {
+      if (result.status !== InteractionStatus.OBSOLETE) {
+        this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.FAILED, error: result.errors?.[0]?.message ?? 'Reference search failed.'});
+        this.#publishPromptState();
+        this.render();
+      }
+      return result;
+    }
+    const suggestions = [...(result.data ?? [])];
+    const {maximumResults} = causewayReferenceWidgetConfiguration();
+    if (suggestions.length > maximumResults) {
+      const message = `More than ${maximumResults} references matched. Refine the search.`;
+      this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.FAILED, error: message});
+      this.#publishPromptState();
+      this.render();
+      return {status: InteractionStatus.FAILED, data: null, errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]};
+    }
+    const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
+      ? Object.freeze({...candidate, state: Object.freeze({...candidate.state, suggestions: Object.freeze(suggestions)})})
+      : candidate));
+    this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.EDITING, parameters, error: null});
+    this.#publishPromptState();
+    this.render();
+    this.#focusFirstControl();
+    return result;
+  }
+
   async submitPrompt() {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
@@ -248,6 +324,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return false;
     }
     clearTimeout(this.parameterTimer);
+    this.autoCompleteController?.abort();
+    this.autoCompleteController = null;
+    this.autoCompleteGeneration += 1;
     const source = this.promptState.source;
     const actionId = this.promptState.actionId;
     const interactionContext = this.promptState.context;
@@ -417,6 +496,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const reason = parameter.state?.error || parameter.state?.validity || parameter.state?.disabled || '';
     return {
       name: parameter.id,
+      label: humanize(parameter.id),
       value: Object.prototype.hasOwnProperty.call(state.values, parameter.id)
         ? state.values[parameter.id]
         : parameter.state?.default ?? null,
@@ -425,6 +505,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       autoComplete: parameter.fields.has('autoComplete'),
       enumValues: parameter.enumValues,
       inputType: parameter.inputType,
+      required: parameter.inputType?.kind === 'NON_NULL',
       inputId: `causeway-action-parameter-${parameter.id}`,
       labelId: `causeway-action-parameter-${parameter.id}-label`,
       descriptionId: this.#parameterDescription(parameter) ? `causeway-action-parameter-${parameter.id}-description` : '',

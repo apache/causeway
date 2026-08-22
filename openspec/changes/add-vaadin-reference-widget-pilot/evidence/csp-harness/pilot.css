@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+}
+
+main {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 1rem;
+}
+
+section {
+  border: 1px solid var(--causeway-border, ButtonBorder);
+  border-radius: var(--causeway-radius-md, 0.45rem);
+  margin-block: 1rem;
+  min-inline-size: 0;
+  padding: 1rem;
+}
+
+#generic-editors,
+#custom-editors {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 40rem) {
+  #generic-editors,
+  #custom-editors {
+    grid-template-columns: 1fr;
+  }
+}

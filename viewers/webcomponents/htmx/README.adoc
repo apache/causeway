@@ -24,9 +24,15 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.language` defaults to `en`.
 `causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
+`causeway.viewer.webcomponents.htmx.vaadin-reference-widgets` defaults to `false` and explicitly enables the internal free-core reference-widget pilot.
+`causeway.viewer.webcomponents.htmx.reference-minimum-search-length` defaults to `2`.
+`causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and bounds one complete search-only GraphQL autocomplete response; it is not a server page size.
 
 The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
-Applications adding third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
+The default policy and asset requests remain unchanged while the pilot is disabled.
+When the pilot is enabled, the policy adds only the four reviewed byte-exact `style-src-elem` SHA-256 sources from the pinned bundle, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
+The candidate JavaScript remains route-lazy and is requested only when an eligible semantic editor is instantiated.
+Applications adding other third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
 
 == Canonical routes
 

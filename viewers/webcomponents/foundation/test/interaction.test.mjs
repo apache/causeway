@@ -30,6 +30,7 @@ const {
   buildMutationInteractionOperation,
   buildObjectInteractionOperation,
   commandSelection,
+  configureCausewayReferenceWidgets,
   defaultEditorRegistry,
   parseCausewayEditorValue,
   renderCausewayEditor
@@ -37,6 +38,7 @@ const {
 
 const scalar = name => ({kind: 'SCALAR', name, ofType: null});
 const named = name => ({kind: 'OBJECT', name, ofType: null});
+const list = typeRef => ({kind: 'LIST', name: null, ofType: typeRef});
 const argument = (name, type) => ({name, description: null, defaultValue: null, type});
 const field = (name, type, args = []) => ({name, description: null, args, type});
 const type = (name, fields) => ({name, kind: 'OBJECT', description: null, fields, inputFields: [], enumValues: []});
@@ -136,6 +138,47 @@ test('editor registry selects standard inputs and supports application overrides
   assert.equal(registry.select({name: 'name'}).id, 'custom-name');
 });
 
+test('opt-in reference widgets preserve identities, multi values, bounds and fallback', () => {
+  const references = [
+    {_meta: {id: 'owner-1', logicalTypeName: 'example.Owner', title: 'Owner One'}},
+    {_meta: {id: 'owner-2', logicalTypeName: 'example.Owner', title: 'Owner Two'}}
+  ];
+  configureCausewayReferenceWidgets({enabled: true, minimumSearchLength: 3, maximumResults: 2});
+  const single = renderCausewayEditor({
+    name: 'owner', label: 'Owner', value: references[0], choices: references, suggestions: [], autoComplete: false,
+    enumValues: [], inputType: named('example_Owner'), inputId: 'owner-input', labelId: 'owner-label',
+    descriptionId: '', errorId: '', testId: 'owner-editor', required: true, disabled: false
+  });
+  assert.equal(single.editorId, 'vaadin-reference');
+  assert.match(single.html, /<causeway-reference-editor/);
+  assert.match(single.html, /data-minimum-search-length="3"/);
+  assert.match(single.html, /required/);
+  assert.deepEqual(parseCausewayEditorValue(single.editor, {value: {id: 'owner-2'}}), {id: 'owner-2'});
+
+  const multiple = renderCausewayEditor({
+    name: 'owners', label: 'Owners', value: references, choices: references, suggestions: [], autoComplete: false,
+    enumValues: [], inputType: list(named('example_Owner')), inputId: 'owners-input', labelId: 'owners-label',
+    descriptionId: '', errorId: '', testId: 'owners-editor', required: false, disabled: false
+  });
+  assert.equal(multiple.editorId, 'vaadin-reference');
+  assert.match(multiple.html, / multiple/);
+  assert.deepEqual(parseCausewayEditorValue(multiple.editor, {value: [{id: 'owner-1'}]}), [{id: 'owner-1'}]);
+
+  const overBound = renderCausewayEditor({
+    name: 'owner', value: null, choices: [...references, {_meta: {id: 'owner-3', title: 'Owner Three'}}],
+    suggestions: [], autoComplete: false, enumValues: [], inputType: named('example_Owner'),
+    inputId: 'owner-input', labelId: 'owner-label', descriptionId: '', errorId: '', testId: ''
+  });
+  assert.equal(overBound.editorId, 'choice');
+  configureCausewayReferenceWidgets({enabled: false});
+  const disabledPilot = renderCausewayEditor({
+    name: 'owner', value: references[0], choices: references, suggestions: [], autoComplete: false,
+    enumValues: [], inputType: named('example_Owner'), inputId: 'owner-input', labelId: 'owner-label',
+    descriptionId: '', errorId: '', testId: ''
+  });
+  assert.equal(disabledPilot.editorId, 'choice');
+});
+
 test('editable properties support prepare, validation, cancel and authoritative save', async () => {
   let stateListener;
   let resolveDeferredValidation;
@@ -226,6 +269,59 @@ test('editable properties support prepare, validation, cancel and authoritative 
   property.setPendingValue('Cancelled');
   assert.equal(property.cancelEdit(), true);
   assert.equal(calls.includes('update:Cancelled'), false);
+});
+
+test('reference autocomplete cancels stale work and rejects over-bound results', async () => {
+  configureCausewayReferenceWidgets({enabled: true, minimumSearchLength: 2, maximumResults: 2});
+  let stateListener;
+  const pending = new Map();
+  const context = {
+    registerRequirement(requirement, listener) {
+      stateListener = listener;
+      return () => {};
+    },
+    async prepareProperty() {
+      return {status: 'success', data: {capabilities: {autoComplete: true, validate: false, inputType: named('example_Owner')}, choices: []}, errors: []};
+    },
+    autoCompleteProperty(member, search, {signal}) {
+      return new Promise(resolve => {
+        pending.set(search, resolve);
+        signal.addEventListener('abort', () => resolve({status: 'obsolete', data: null, errors: []}), {once: true});
+      });
+    }
+  };
+  const property = new CausewayPropertyElement();
+  property.member = 'owner';
+  property.editable = true;
+  property.context = context;
+  document.body.appendChild(property);
+  stateListener({
+    status: 'ready', descriptor: {id: 'owner', description: 'Owner'},
+    data: {hidden: false, disabled: null, get: {_meta: {id: 'owner-1', logicalTypeName: 'example.Owner', title: 'Owner One'}}},
+    errors: [], generation: 1
+  });
+  assert.equal(await property.beginEdit(), true);
+  assert.equal(property.interactionState.editor.id, 'vaadin-reference');
+  const first = property.loadAutoComplete('Ow');
+  const second = property.loadAutoComplete('Own');
+  pending.get('Own')({status: 'success', data: [
+    {_meta: {id: 'owner-1', title: 'Owner One'}},
+    {_meta: {id: 'owner-2', title: 'Owner Two'}}
+  ], errors: []});
+  assert.equal((await first).status, 'obsolete');
+  assert.equal((await second).status, 'success');
+  assert.equal(property.interactionState.suggestions.length, 2);
+
+  const overBound = property.loadAutoComplete('Owner');
+  pending.get('Owner')({status: 'success', data: [
+    {_meta: {id: 'owner-1'}}, {_meta: {id: 'owner-2'}}, {_meta: {id: 'owner-3'}}
+  ], errors: []});
+  assert.equal((await overBound).status, 'failed');
+  assert.match(property.interactionState.error, /More than 2 references/);
+  configureCausewayReferenceWidgets({enabled: false});
+  property.dispatchEvent(new CustomEvent('causeway-reference-load-failed', {bubbles: true, detail: {message: 'load failed'}}));
+  assert.equal(property.interactionState.editor.id, 'autocomplete');
+  property.cancelEdit();
 });
 
 test('standard action controller renders prompts, blocks invalid input, invokes and publishes results', async () => {

@@ -45,12 +45,36 @@
                 <targetPath>META-INF/resources/causeway-webcomponents</targetPath>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>vaadin-reference/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-reference</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-reference/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-reference</targetPath>
+                <filtering>false</filtering>
+            </resource>
         </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>verify-vaadin-reference-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>test-web-components</id>
                         <phase>test</phase>
@@ -70,5 +94,42 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>regenerate-vaadin-reference-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-reference-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
