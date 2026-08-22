@@ -47,6 +47,12 @@
     </bs:row>
     <bs:row>
         <bs:col span="12">
+            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true">
+            </cpt:fieldSet>
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="12">
             <bs:tabGroup unreferencedCollections="true"/>
         </bs:col>
     </bs:row>

@@ -37,6 +37,7 @@ import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -457,6 +458,12 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     public T[] toArray(final @NonNull Class<T> elementType) {
         var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
+    }
+
+    @Override
+	public T[] toArray(final IntFunction<T[]> generator) {
+    	var array = generator.apply(size());
+    	return elements.toArray(array);
     }
 
     @Override

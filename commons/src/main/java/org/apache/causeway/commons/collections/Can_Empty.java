@@ -33,6 +33,7 @@ import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -296,6 +297,11 @@ record Can_Empty<T>() implements Can<T> {
     public T[] toArray(final @NonNull Class<T> elementType) {
         var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
+    }
+
+    @Override
+	public T[] toArray(final IntFunction<T[]> generator) {
+    	return generator.apply(0);
     }
 
     @Override
