@@ -1,0 +1,42 @@
+= Reference Application copied-corpus license review
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+== Review result
+
+The retained source comes from the pinned Apache Causeway Reference Application repository, whose repository license is Apache License 2.0.
+Most Java and textual source carries the ASF header directly.
+Files without an inline header are retained only where they are generated member-support source, package metadata, sample content, structural resources, or binary demonstration values from the reviewed upstream corpus.
+
+The local checksum manifest protects those files from silent substitution.
+RAT exclusions are scoped to copied sample and generated families and do not apply to locally written launcher, verifier, inventory, test, or documentation source.
+
+== Retained resource families
+
+The copied corpus includes:
+
+- 1,213 Java files, including generated-style member-support classes.
+- 359 AsciiDoc descriptions.
+- 273 XML grid, menu, sample, and configuration resources.
+- 10 SVG, 14 PNG, one GIF, two PDF, one DOCX, and one RTF demonstration resources.
+- Markdown, text, properties, YAML, HTML, CSS, JavaScript, JDO metadata, INI, and manifest samples.
+
+Eighteen retained files are binary demonstration values.
+They remain non-executable data addressed through domain value semantics and are covered by `source-manifest.sha256`.
+
+== Credits
+
+The upstream `CREDITS.TXT` states that demonstration icons from Freepik and Smashicons are licensed under CC BY 3.0 and credits AsciidoctorJ.
+That file is retained verbatim in this directory.
+
+== Excluded content
+
+Repository deployment configuration, Docker files, CI configuration, IDE metadata, generated site output, code-generation modules, original launchers, and Wicket custom UI source are not copied.
+Exclusion does not imply a licensing defect; those files are outside the executable regression corpus.
+
+== Refresh obligation
+
+An upstream refresh MUST repeat header and binary inventory, credit and notice review, checksum generation, RAT execution, package inspection, and source-boundary review.
+No newly introduced binary or license family is accepted solely because it appeared upstream.

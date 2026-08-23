@@ -1,0 +1,31 @@
+= Asciidoctor Demo
+////
+Big ol' comment
+
+sittin' right 'tween this here title 'n header metadata
+////
+
+:description: A demo of Asciidoctor. This document \
+exercises numerous features of AsciiDoc \
+to test Asciidoctor compliance.
+:library: Asciidoctor
+:idprefix:
+:plus: &#43;
+
+[[purpose]]
+.Purpose
+****
+This document exercises many of the features of AsciiDoc to test the {library} implementation.
+****
+
+AsciiDoc supports five different types of admonitions.
+
+NOTE: This is a note.
+
+TIP: This is a tip.
+
+CAUTION: This is a caution.
+
+WARNING: This is a warning.
+
+IMPORTANT: This is important!

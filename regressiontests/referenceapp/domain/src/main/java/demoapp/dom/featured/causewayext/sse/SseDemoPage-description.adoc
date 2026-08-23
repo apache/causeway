@@ -1,0 +1,52 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The Server-Side Events (SSE) feature provides the capability for updating the page while a long-running background process is running.
+A typical use case is for a page displaying an external feed such as a stock market feeds, or log messages.
+
+== How this demo works
+
+On the left hand side are two actions, and below, a `Markup` property that displays HTML.
+Invoking either action will initiate a background task that then periodically indicates that the page should be updated.
+
+In terms of code:
+
+* action to start the task:
++
+[source,java,indent=0]
+.SseDemoPage.java
+----
+include::SseDemoPage.java[tags=startSimpleTask]
+----
+<.> setup to run in 10 steps
+<.> the other action is almost identical, but runs with an execution behaviour of `REQUIRES_NEW_SESSION`
+* property to observe the task:
++
+[source,java,indent=0]
+.SseDemoPage.java
+----
+include::SseDemoPage.java[tags=progressView]
+----
+<.> specifies the task class that is observed to a SSE channel.
++
+WARNING: if more than one instance of a task (of this class) runs at the same time, there is (currently) no way to distinguish their events.
+
+* the task itself implements `SseSource`:
++
+[source,java]
+.DemoTask.java
+----
+include::DemoTask.java[tags=class]
+----
+<.> the long running method
+<.> indicates that all properties annotated with `@ServerSentEvents` and observing this `DemoTask` class (ie the `progressView` property) should be re-rendered.
+This is expected to be a property of type `Markup`.
+<.> retrieve payload to update those properties with
+
+* the HTML payload that updates the `Markup` property:
++
+[source,java]
+.TaskProgress.java
+----
+include::TaskProgress.java[tags=toHtmlProgressBar]
+----
+

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "upstreamRepository": "https://github.com/apache/causeway-app-referenceapp",
+  "upstreamRevision": "29b43bfe4f77d525fb345394e5a52bd7d85a91ba",
+  "mappings": [
+    {
+      "upstream": "domain/src/main/java",
+      "destination": "domain/src/main/java",
+      "decision": "retained",
+      "reason": "Complete executable domain and embedded description corpus."
+    },
+    {
+      "upstream": "domain/src/main/resources",
+      "destination": "domain/src/main/resources",
+      "decision": "retained",
+      "reason": "Application configuration, static resources, grids, and value samples used by the domain."
+    },
+    {
+      "upstream": "web/src/main/java",
+      "destination": "support-jpa/src/main/java",
+      "decision": "retained",
+      "reason": "Common and JPA application manifests plus non-viewer notification and security support."
+    },
+    {
+      "upstream": "web/src/main/resources",
+      "destination": "support-jpa/src/main/resources",
+      "decision": "retained",
+      "reason": "GraphiQL configuration used by the regression runtime."
+    },
+    {
+      "upstream": "testing/jpa/src/main/java/demoapp/testing/jpa/ReferenceDomainJpa_forTesting.java",
+      "destination": "support-jpa/src/main/java/demoapp/testing/jpa/ReferenceDomainJpa_forTesting.java",
+      "decision": "retained",
+      "reason": "Viewer-neutral deterministic JPA test configuration."
+    }
+  ],
+  "omissions": [
+    {
+      "upstream": "domain/src/test",
+      "reason": "Two upstream repository tests are not part of the runtime corpus; equivalent copied-corpus and startup tests are local."
+    },
+    {
+      "upstream": "domain-tests",
+      "reason": "Separate JDO/JPA introspection test module is replaced by the richer local metamodel and inventory gates."
+    },
+    {
+      "upstream": "testing/jpa/src/test",
+      "reason": "Upstream approval and spin-up tests depend on its repository harness; local deterministic runtime tests replace them."
+    },
+    {
+      "upstream": "wicket/common",
+      "reason": "Wicket-specific custom panels and UI extensions are not viewer-neutral and remain classified as viewer-specific."
+    },
+    {
+      "upstream": "wicket/jpa",
+      "reason": "The original Wicket launcher is replaced by one local shared HTMX/Wicket runtime."
+    },
+    {
+      "upstream": "wicket/jpa-and-graphql",
+      "reason": "Excluded stale launcher references a 3.4.0-SNAPSHOT parent and obsolete main class."
+    },
+    {
+      "upstream": "codegen",
+      "reason": "Repository documentation code generation is not required at runtime."
+    },
+    {
+      "upstream": "_images",
+      "reason": "Repository-level documentation images are not part of the executable domain."
+    },
+    {
+      "upstream": "README.md",
+      "reason": "Repository build documentation is replaced by local regression documentation."
+    },
+    {
+      "upstream": "pom.xml",
+      "reason": "Repository parent, release, deployment, and RAT configuration is replaced by Causeway reactor-native POMs."
+    },
+    {
+      "upstream": "testing/pom.xml",
+      "reason": "Repository aggregator is replaced by local regression modules."
+    },
+    {
+      "upstream": "web/pom.xml",
+      "reason": "Repository-specific dependency and release configuration is replaced locally."
+    },
+    {
+      "upstream": "domain/pom.xml",
+      "reason": "Repository-specific parentage is replaced locally while its dependency intent is reviewed."
+    },
+    {
+      "upstream": "LICENSE",
+      "reason": "The upstream Apache-2.0 license is recorded in PROVENANCE and the containing Causeway repository license remains authoritative."
+    }
+  ]
+}

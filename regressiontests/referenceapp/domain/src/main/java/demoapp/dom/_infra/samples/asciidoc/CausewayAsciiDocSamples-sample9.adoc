@@ -1,0 +1,21 @@
+== Tables
+
+.This is a table
+[cols="1a,1a,1a", options="header"]
+|===
+
+| Header Cell 1
+| Header Cell 2
+|
+
+
+| Row 1 Cell 1
+| Row 1 Cell 2
+|
+
+| Row 2 Cell 1
+| Row 2 Cell 2
+|
+
+
+|===
