@@ -1,0 +1,118 @@
+# reference-application-viewer-regression-suite Specification
+
+## Purpose
+Provide a pinned, viewer-neutral Apache Causeway Reference Application corpus and deterministic GraphQL, HTMX, Wicket, inventory, and browser qualification baseline for broad semantic viewer regression testing.
+
+## Requirements
+### Requirement: Pinned Reference Application corpus
+The regression suite SHALL retain a repository-local copy of the approved Apache Causeway Reference Application source corpus at an exact upstream revision.
+The copy MUST preserve Apache licensing, package structure, source comparability, provenance, included-path and omitted-path records, and deterministic file checksums.
+
+#### Scenario: Maintainer verifies the copied corpus
+- **WHEN** the provenance verification runs without network access
+- **THEN** every retained file matches the reviewed manifest and checksum for the pinned revision
+- **AND** the report identifies the upstream repository, revision, copied paths, omissions, and local adaptation boundaries
+
+#### Scenario: Copied source drifts
+- **WHEN** a retained source or resource changes without an accompanying reviewed provenance update
+- **THEN** verification fails with the changed path identified
+- **AND** ordinary builds do not silently fetch or substitute upstream content
+
+#### Scenario: Upstream refresh is proposed
+- **WHEN** a maintainer intentionally refreshes the copied corpus
+- **THEN** the revision, manifests, checksums, licensing review, metamodel baseline, inventory, and affected browser journeys are reviewed together
+- **AND** unrelated upstream deployment or viewer-specific content is not imported implicitly
+
+### Requirement: Reusable viewer-neutral regression domain
+The copied domain, deterministic fixture support, target catalogue, and inventory schema SHALL remain independent of any one presentation viewer.
+Viewer-specific launchers and browser drivers MUST depend on the neutral regression modules rather than embedding private copies of the domain.
+
+#### Scenario: A viewer launcher uses the corpus
+- **WHEN** HTMX, Wicket, or a future viewer starts a Reference Application regression runtime
+- **THEN** it uses the same effective metamodel, JPA fixture identities, application entries, menus, grids, and semantic target catalogue
+- **AND** viewer-specific routing, rendering, and lifecycle code remains outside the neutral modules
+
+#### Scenario: Regression modules are packaged
+- **WHEN** the reactor builds the Reference Application modules
+- **THEN** they are marked as non-release regression fixtures
+- **AND** no production viewer module gains a runtime dependency on copied application code
+
+### Requirement: Deterministic metamodel and GraphQL runtime
+The suite SHALL compile and boot the retained corpus through JPA and the rich GraphQL viewer with deterministic fixtures and stable application entry points.
+Startup checks MUST validate the effective metamodel, public rich schema, structural menu and grid resources, representative identities, and absence of undisclosed terminal errors.
+
+#### Scenario: Ordinary regression build runs
+- **WHEN** the applicable reactor test phase runs without a browser profile
+- **THEN** the copied corpus compiles and its provenance, metamodel, GraphQL schema, structural resources, and fixture baseline are verified
+- **AND** no browser download or network retrieval of upstream source is required
+
+#### Scenario: Advertised schema cannot be built
+- **WHEN** a retained domain feature causes metamodel or GraphQL schema construction to fail
+- **THEN** the suite reports the responsible feature and failure boundary
+- **AND** the source is not deleted or excluded merely to make the baseline appear successful
+
+### Requirement: Complete capability inventory
+The suite SHALL generate a deterministic machine-readable inventory of in-scope Reference Application objects, members, input and output value shapes, operation capabilities, and structural resources.
+Every discovered item MUST receive exactly one reviewed support classification and no sensitive value or implementation exception detail may enter the report.
+
+#### Scenario: Inventory baseline matches
+- **WHEN** metamodel and GraphQL discovery run against the pinned fixture
+- **THEN** stable identifiers and counts match the checked-in reviewed baseline
+- **AND** each item is classified as `SUPPORTED`, `GRACEFUL_UNSUPPORTED`, `GRAPHQL_GAP`, `VIEWER_DEFECT`, `VIEWER_SPECIFIC`, or reasoned `NOT_EXERCISED`
+
+#### Scenario: Capability changes unexpectedly
+- **WHEN** a member, value shape, operation, menu entry, grid reference, classification, or stable fixture target is added, removed, or changed
+- **THEN** verification fails with a bounded semantic diff
+- **AND** acceptance requires an explicit baseline and journey review
+
+#### Scenario: Unsupported capability is encountered
+- **WHEN** the public schema cannot express a feature or a semantic viewer intentionally does not support it
+- **THEN** the inventory records the applicable non-success classification and safe user-visible behavior
+- **AND** does not count a hidden failure, malformed control, lossy value, or browser error as support
+
+### Requirement: Staged representative browser coverage
+The suite SHALL provide opt-in headless browser journeys across representative Reference Application feature families without requiring exhaustive invocation of every action.
+Journeys MUST cover ordinary, invalid, disabled, cancelled, superseded, and route-replaced states where the public capability exists.
+
+#### Scenario: Broad HTMX journey runs
+- **WHEN** the Reference Application browser profile executes
+- **THEN** it covers application and service menus, generic objects and grids, properties, actions, references, choices, autocomplete, defaults, validation, values, collections, navigation, and semantic results
+- **AND** it fails on unexpected GraphQL failures, console or page errors, CSP violations, external requests, lost focus, residual overlays, stale updates, or page overflow
+
+#### Scenario: Mutating behavior is exercised
+- **WHEN** a journey invokes a mutating or destructive member
+- **THEN** it uses disposable fixture data or restores deterministic state
+- **AND** later journeys do not depend on execution order
+
+#### Scenario: Heavy browser profile is inactive
+- **WHEN** an ordinary reactor build runs
+- **THEN** browser dependencies and browser binaries are not required
+- **AND** non-browser provenance, compilation, schema, fixture, and inventory checks remain active
+
+### Requirement: Cross-viewer semantic comparison
+The first regression runtime SHALL expose Wicket and generic HTMX routes over the same metamodel, security context, persistence state, and deterministic fixture.
+Comparison SHALL evaluate shared semantic outcomes and accessibility rather than requiring identical DOM, styling, or viewer-specific extensions.
+
+#### Scenario: Representative object is compared
+- **WHEN** automation opens the same authorized object and member family in Wicket and HTMX
+- **THEN** visible identity, member availability, disabled reasons, accepted values, validation, and interaction outcomes are semantically consistent
+- **AND** route, markup, theme, and lifecycle differences remain internal to each viewer
+
+#### Scenario: Feature is viewer-specific
+- **WHEN** the corpus contains a Wicket panel, extension UI, or another intentionally viewer-specific capability
+- **THEN** the inventory classifies it as `VIEWER_SPECIFIC` with a representative semantic fallback where applicable
+- **AND** the generic viewer is not failed for omitting unsupported private Wicket APIs
+
+### Requirement: Gap-preserving acceptance report
+The suite SHALL publish a bounded report of support, graceful limitations, GraphQL gaps, viewer defects, excluded viewer-specific features, build cost, and browser outcomes for the pinned corpus.
+The report MUST distinguish discovery from remediation and MUST identify focused follow-on work rather than expanding this change without review.
+
+#### Scenario: Initial baseline is accepted
+- **WHEN** the pinned corpus, inventory, and representative journeys complete
+- **THEN** the report records reproducible commands, reviewed classifications, measured reactor cost, and prioritized gaps
+- **AND** hard correctness or scalability gaps are assigned to separately scoped changes
+
+#### Scenario: Regression is introduced later
+- **WHEN** a framework, GraphQL, viewer, dependency, or corpus update changes a previously accepted outcome
+- **THEN** the suite identifies the semantic category and representative target that regressed
+- **AND** a maintainer can reproduce it without the external Reference Application repository
