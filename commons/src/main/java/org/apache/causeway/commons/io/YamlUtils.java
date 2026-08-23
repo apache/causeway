@@ -24,8 +24,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.snakeyaml.engine.v2.api.DumpSettings;
@@ -34,13 +38,8 @@ import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
 import org.yaml.snakeyaml.DumperOptions;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._NullSafe;
-
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-
 import tools.jackson.databind.MappingIterator;
 import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
@@ -56,7 +55,7 @@ import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 public class YamlUtils {
 
 	private static final String MULTI_DOC_DELIMITER = "---";
-	
+
     @FunctionalInterface
     public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
     @FunctionalInterface
@@ -90,7 +89,7 @@ public class YamlUtils {
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
      * with given {@code elementType}.
-     * 
+     *
      * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsList(
@@ -127,8 +126,8 @@ public class YamlUtils {
 
     /**
      * Tries to deserialize YAML content from given {@link DataSource} into a {@link List}
-     * with given {@code elementType}. 
-     * 
+     * with given {@code elementType}.
+     *
      * <p>Either parses (regular) YAML-list format or multi-doc YAML format.
      */
     public <T> Try<List<T>> tryReadAsListCustomized(
@@ -152,7 +151,7 @@ public class YamlUtils {
 //            return mapper.readValue(is, collectionType);
         }));
     }
-    
+
     /**
      * Returns a {@link Stream} of (arbitrary) YAML Document junks from provided {@link DataSource},
      * where each junk typically needs further parsing individually.
@@ -178,7 +177,7 @@ public class YamlUtils {
 				.map(StringBuilder::toString)
 				.filter(str->!str.isEmpty());
     }
-    
+
     // -- WRITING
 
     /**
@@ -188,9 +187,8 @@ public class YamlUtils {
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) {
+        if(pojo==null)
 			return;
-		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.empty(), customizers).writeValue(os, pojo)));
     }
@@ -217,9 +215,8 @@ public class YamlUtils {
             final @NonNull DataSink sink,
             final @NonNull YamlDumpCustomizer dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
-        if(pojo==null) {
+        if(pojo==null)
 			return;
-		}
         sink.writeAll(os->
             Try.run(()->createJacksonWriter(Optional.of(dumpCustomizer), customizers).writeValue(os, pojo)));
     }
@@ -242,14 +239,14 @@ public class YamlUtils {
     /**
      * Concatenates given {@link Iterable<String>} into a multi-doc YAML.
      */
-    public String writeMultiDoc(@Nullable Iterable<String> yamlDocuments) {
+    public String writeMultiDoc(@Nullable final Iterable<String> yamlDocuments) {
     	return _NullSafe.stream(yamlDocuments)
     		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
     /**
      * Concatenates given {@link Stream<String>} into a multi-doc YAML.
      */
-    public String writeMultiDoc(@Nullable Stream<String> yamlDocumentStream) {
+    public String writeMultiDoc(@Nullable final Stream<String> yamlDocumentStream) {
     	return _NullSafe.stream(yamlDocumentStream)
     		.collect(Collectors.joining(MULTI_DOC_DELIMITER + "\n"));
     }
@@ -331,5 +328,68 @@ public class YamlUtils {
         }
         return builder.build();
     }
+
+    // -- PROGRAMMATIC WRITER
+
+    /**
+     * Simple writer for programmatic YAML generation.
+     *
+     * @apiNote has no indentation tracking by design
+     */
+    public record YamlWriter(StringBuilder sb) {
+    	public YamlWriter() {
+    		this(new StringBuilder());
+    	}
+    	public YamlWriter {
+    		sb = sb != null
+    				? sb
+					: new StringBuilder();
+    	}
+    	/** write (multiple) strings */
+        public YamlWriter write(final String ...s) {
+            for(var str:s) {
+				sb.append(str);
+			}
+            return this;
+        }
+        /** multi indent */
+        public YamlWriter ind(final int indentCount) {
+            IntStream.range(0, indentCount).forEach(__->ind());
+            return this;
+        }
+        /** indent (2 spaces) */
+        public YamlWriter ind() {
+            sb.append("  ");
+            return this;
+        }
+        /** double quoted */
+        public YamlWriter dq(final String s) {
+        	write("\"", s, "\"");
+        	return this;
+        }
+        /** sequence */
+        public YamlWriter sq() {
+        	sb.append("- ");
+        	return this;
+        }
+        public YamlWriter multiline(
+        		final int indentCount, final String key, final List<String> multiline) {
+        	if(multiline==null)
+        		return this;
+        	ind(indentCount).write(key, ":").write(multiline.isEmpty() ? "" : " |").nl();
+        	multiline.forEach(line->
+        		ind(indentCount + 1).write(line).nl());
+        	return this;
+        }
+        /** new line */
+        public YamlWriter nl() {
+            sb.append('\n');
+            return this;
+        }
+        @Override public String toString() {
+        	return sb.toString();
+        }
+    }
+
 
 }
