@@ -1,0 +1,41 @@
+.Statement
+I swear I left it in 'Guy\'s' car. Let\'s go look for it.
+
+[[defs]]
+term::
+definition
+line two
+[[another_term]]another term::
+
+  another definition, which can be literal (indented) or regular paragraph
+
+This should be a standalone paragraph, not grabbed by the definition list.
+
+[[nested]]
+* first level
+written on two lines
+* first level
++
+....
+with this literal text
+....
++
+** second level
+*** third level
+- fourth level
+* back to +
+first level
+
+// this is just a comment
+
+Let's make a horizontal rule...
+
+'''
+
+then take a break.
+
+////
+We'll be right with you...
+
+after this brief interruption.
+////

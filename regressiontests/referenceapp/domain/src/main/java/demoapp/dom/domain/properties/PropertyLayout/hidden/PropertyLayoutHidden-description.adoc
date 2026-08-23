@@ -1,0 +1,42 @@
+:Notice: Licensed to the Apache 1Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This domain class is used in the demo of `@PropertyLayout#hidden`.
+
+== How this demo works
+
+This entity defines four properties, and depending upon context, they may be visible on an object form or when rendered in a collection.
+
+From this page, you can inspect the visibility of the actions from the context of an object form:
+
+* `hidden` not specified:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHidden.java[tags=none]
+----
+<.> property _should_ be visible for this entity on both object forms and collections.
+
+* `hidden` on object forms, but not hidden in collections:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHidden.java[tags=object-forms]
+----
+<.> property should _NOT_ be visible on this page
+
+* `hidden` on collections:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHidden.java[tags=all-tables]
+----
+<.> property _should_ be visible on this page.
+
+* `hidden` everywhere:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutHidden.java[tags=everywhere]
+----
+<.> property should never be visible for this entity
+

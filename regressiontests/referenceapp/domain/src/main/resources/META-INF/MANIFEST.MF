@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.apache.causeway.persistence.dn-plugins
+Bundle-SymbolicName: org.apache.causeway.persistence.dn-plugins
+Bundle-Version: 1.0.0
+Bundle-Vendor: Apache Causeway

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "06af455ab89",
+  "command": "mvn -f regressiontests/pom.xml clean -DskipTests package",
+  "baselineCleanMs": 19270,
+  "postCopyCleanMs": 27088,
+  "cleanDeltaMs": 7818,
+  "cleanIncreasePercent": 40.6,
+  "postCopyIncrementalMs": 17722,
+  "artifacts": [
+    {
+      "file": "regressiontests/referenceapp/domain/target/causeway-regressiontests-referenceapp-domain-4.0.0-SNAPSHOT.jar",
+      "sizeBytes": 4898739
+    },
+    {
+      "file": "regressiontests/referenceapp/support-jpa/target/causeway-regressiontests-referenceapp-support-jpa-4.0.0-SNAPSHOT.jar",
+      "sizeBytes": 37219
+    },
+    {
+      "file": "regressiontests/referenceapp/htmx/target/causeway-regressiontests-referenceapp-htmx-4.0.0-SNAPSHOT.jar",
+      "sizeBytes": 333617314
+    }
+  ],
+  "productionViewerSourceChanges": []
+}

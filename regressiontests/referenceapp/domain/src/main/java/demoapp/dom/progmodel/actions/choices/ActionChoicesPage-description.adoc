@@ -1,0 +1,95 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Before an action can be invoked, the end-user has to provide an argument for each of its parameters.
+If the parameter is a value (String, number, date etc.) then they can just enter the value in a field.
+But if the parameter is a reference type, then some other mechanism is required.
+
+A "choices" supporting method provides a set of candidate arguments for the parameter type, rendered in the UI as a drop-down list.
+The list of candidates is expected to be small; if there is a larger list then instead use an "autoComplete" supporting method instead.
+
+The method should also (if possible) only proffer candidates that would also pass any validation rules, to avoid an otherwise frustrating user experience.
+
+There are several variations:
+
+* the parameter for which candidates are being supplied can be either a scalar or a collection
+* the supporting "choices" method can be associated with the parameter by number, or by name
+* the list of candidates for a parameter can depend upon the value already selected for an earlier parameter.
+** The preceding N-1 parameters are supplied to the N^th^ "choices" supporting method.
+** Or a single record-like structure can be defined and this can be passed through to all supporting methods instead.
+
+As noted above, a supporting method to return a list of candidate arguments is _always_ required for reference types.
+It is also possible to specify choices for value types, though this is much less commonly done.
+
+== How this demo works
+
+On the left hand side is a list of objects representing TV characters, also indicating the TV show that they appeared in.
+Below is a list of selected characters, initially empty.
+
+In the middle are a set of actions, each of which can be used to select a TV character or characters.
+These demonstrate the variations listed in the introduction above.
+
+In terms of code:
+
+* this action allows a single TV character to be selected.
+It matches the supporting "choices" method with the parameter by number.
++
+[source,java]
+.ActionChoicesPage_selectTvCharacter.java
+----
+include::ActionChoicesPage_selectTvCharacter.java[tags=class]
+----
+<.> defines the 0^th^-param
+<.> provides the candidate arguments for the 0^th^ parameter.
+The collection's element type must match that of the parameter.
+
+* this action is similar, but allows multiple TV characters to be selected.
+This time, it matches the supporting "choices" method with the parameter by name.
++
+[source,java]
+.ActionChoicesPage_selectTvCharacters.java
+----
+include::ActionChoicesPage_selectTvCharacters.java[tags=class]
+----
+<.> provides the candidate arguments for the "tvCharacters" parameter
+
+* the next example demonstrates dependent arguments, so that the TV characters are first filtered by the show that they appeared in.
++
+[source,java]
+.ActionChoicesPage_selectTvCharacterByShow.java
+----
+include::ActionChoicesPage_selectTvCharacterByShow.java[tags=class]
+----
+<.> this parameter is used to filter the TV characters
+<.> the "choices" method is matched by number ...
+<.> \... and has a subset of the parameters of the action itself ("N-1" of them).
+
+* the next example is similar; dependent arguments but with a multiple selection, and using names to match the "choices" method:
++
+[source,java]
+.ActionChoicesPage_selectTvCharactersByShows.java
+----
+include::ActionChoicesPage_selectTvCharactersByShows.java[tags=class]
+----
+<.> the "choices" method matches a parameter of the action by name ...
+<.> \... and accepts all the parameters defined in the action _up to_ (but not including) the matched parameter.
+
+* the final example also demonstrates dependent arguments, but using a "Parameters" record.
++
+[source,java]
+.ActionChoicesPage_selectTvCharactersByShow.java
+----
+include::ActionChoicesPage_selectTvCharactersByShow.java[tags=class]
+----
+<.> the set of parameters of the action ...
+<.> \... are also defined as fields of a `Parameters` type
+<.>
+<.> the framework will set the fields of `Parameters` object as appropriate
+
++
+In a small action like this, there is little to be gained by introducing a "Parameters" record class.
+But if there were many parameters to the action and many supporting methods, then introducing such a record class can significantly reduce the boilerplate.
++
+[TIP]
+====
+In this example the `Parameters` class uses lombok 'fluent" accessor, but record classes can also be used for Java 14+.
+====

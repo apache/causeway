@@ -1,0 +1,81 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Mixins allow domain object behaviour to be encapsulated as a separate class.
+This behaviour is then contributed to a target object as an action, property or collection.
+
+Mixins contribute only behaviour, not state.
+In the case of a contributed property or collection (that seemingly show state), these are in effect _derived_.
+Behind the scenes a query is run against the contributee (or mixee) object.
+
+The framework instantiates the mixin by injecting the contributee/mixee object into the mixin through its (1-arg) constructor.
+All mixins that declare a constructor compatible with the mixee's type contribute to that mixee's metamodel; this includes interfaces.
+
+== How this demo works
+
+This page object shows examples of all three types of mixins: a mixin action, a mixin property and a mixin collection.
+
+=== Mixin action
+
+The page object itself has a single read-only property, `count`:
+
+[source,java]
+.MixinPage.java
+----
+include::MixinPage.java[tags=class]
+----
+<.> editing disabled; it will be modified through a mixin
+
+It also implements an interface, `CountHolder`.
+
+[source,java]
+.CountHolder.java
+----
+include::CountHolder.java[tags=class]
+----
+
+A mixin action allows this to be modified.
+The examples contribute to the following class, which holds a simple non-editable "count" integer property:
+
+The `CountHolder_updateCount` mixin action contributes by way of this `CountHolder` interface:
+
+[source,java]
+.CountHolder_updateCount.java
+----
+include::CountHolder_updateCount.java[tags=class]
+----
+<.> indicates this class is a mixin action
+<.> useful lombok annotation to generate the 1-arg constructor
+<.> the contributee
+
+The mixin class's name comes in two parts.
+The convention is for the first part (before the "_") to be the type name, while the action id is the second part (after the "_", in other words "updateCount").
+
+
+=== Contributed collection
+
+The `CountHolder_fibonacciSequence` mixin collection dynamically computes the first N number of fibonacci numbers:
+
+[source,java]
+.CountHolder_fibonacciSequence.java
+----
+include::CountHolder_fibonacciSequence.java[tags=class]
+----
+<.> indicates this class is a mixin collection
+<.> useful lombok annotation to generate the 1-arg constructor
+<.> the contributee
+
+
+=== Contributed property
+
+The `CountHolder_explanation` mixin property simply provides an explanat what's going on:
+
+[source,java]
+.CountHolder_explanation.java
+----
+include::CountHolder_explanation.java[tags=class]
+----
+<.> indicates this class is a mixin property
+<.> useful lombok annotation to generate the 1-arg constructor
+<.> the contributee
+

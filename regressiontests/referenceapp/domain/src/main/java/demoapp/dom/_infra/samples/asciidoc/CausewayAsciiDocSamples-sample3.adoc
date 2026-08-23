@@ -1,0 +1,19 @@
+=== Lists Upon Lists
+
+.Adjacent lists
+* this list
+* should join
+
+* to have
+* four items
+
+[[numbered]]
+.Numbered lists
+. These items
+. will be auto-numbered
+.. and can be nested
+. A numbered list can nest
+* unordered
+* list
+* items
+
