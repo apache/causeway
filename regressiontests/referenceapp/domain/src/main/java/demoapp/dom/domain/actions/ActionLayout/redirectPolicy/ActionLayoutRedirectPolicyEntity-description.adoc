@@ -1,0 +1,43 @@
+:Notice: Licensed to the Apache 1Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This domain class is used in the demo of `@ActionLayout#redirectPolicy` (in combination with `@PropertyLayout#repainting`.
+
+== How this demo works
+
+This entity has a property holding an immutable PDF blob, and which is annotated with `@PropertyLayout#repainting` to suppress unnecessary repainting.
+There are also two mixin actions that are used to increment its counter, both of which return the same entity.
+One of these actions uses `@ActionLayout#redirectPolicy` to only update the page and so not redraw the PDF.
+
+[WARNING]
+====
+This feature is currently *not* supported by the _Wicket Viewer_; tracked by link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659]
+====
+
+In terms of code:
+
+* PDF blob
++
+[source,java,indent=0]
+----
+include::ActionLayoutRedirectPolicyEntity.java[tags=class]
+----
+<.> render the blob as a PDF
+<.> don't repaint the PDF if possible
+
+* redirect even if the same
++
+[source,java,indent=0]
+----
+include::ActionLayoutRedirectPolicyEntity_incrementRedirectOnlyIfDiffers.java[tags=class]
+----
+<.> suppress redirect if returning the same object
+<.> return the same object
+
+* redirect even if the same
++
+[source,java,indent=0]
+----
+include::ActionLayoutRedirectPolicyEntity_incrementRedirectEvenIfSame.java[tags=class]
+----
+<.> redirect _even if_ returning the same object
+

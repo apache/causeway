@@ -1,0 +1,17 @@
+=== ``Quotes''
+
+____
+AsciiDoc is 'so' *powerful*!
+____
+
+This verse comes to mind.
+
+[verse]
+La la la
+
+Here's another quote:
+
+[quote, Sir Arthur Conan Doyle, The Adventures of Sherlock Holmes]
+____
+When you have eliminated all which is impossible, then whatever remains, however improbable, must be the truth.
+____

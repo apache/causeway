@@ -1,0 +1,61 @@
+= Apache Causeway Reference Application regression corpus provenance
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+== Reviewed upstream baseline
+
+Repository:: `https://github.com/apache/causeway-app-referenceapp`
+Revision:: `29b43bfe4f77d525fb345394e5a52bd7d85a91ba`
+Revision subject:: `compile fix (missing import)`
+Review date:: 2026-08-22
+Upstream license:: Apache License, Version 2.0
+Copied-file manifest:: `source-manifest.sha256`
+Boundary manifest:: `corpus-paths.json`
+Upstream inventory:: `source-inventory.json`
+
+The Maven build never downloads source from GitHub.
+The checked-in source is the complete approved runtime corpus for this pinned baseline.
+A refresh is an explicit maintenance operation that updates the revision, path decisions, checksums, licensing review, metamodel and GraphQL baselines, classifications, and browser evidence together.
+
+== Retained source
+
+The following upstream paths are retained without package renames or stylistic rewrites:
+
+- `domain/src/main/java` as `domain/src/main/java`.
+- `domain/src/main/resources` as `domain/src/main/resources`.
+- `web/src/main/java` as `support-jpa/src/main/java`.
+- `web/src/main/resources` as `support-jpa/src/main/resources`.
+- `testing/jpa/src/main/java/demoapp/testing/jpa/ReferenceDomainJpa_forTesting.java` at the equivalent package path in `support-jpa`.
+
+The exact machine-readable mappings and reasons are in `corpus-paths.json`.
+The retained corpus contains 1,900 files and 6,007,107 bytes before local POMs, tests, reports, and launchers.
+
+== Deliberate omissions
+
+The following source families are not copied:
+
+- Repository parent, release, deployment, Docker, CI, IDE, and root configuration.
+- Code generation and repository-level documentation images.
+- The separate upstream domain-test and spin-up-test harnesses, which are replaced by local metamodel, schema, inventory, and runtime gates.
+- Wicket custom panels and Wicket-specific UI extensions.
+- Original Wicket launchers.
+- `wicket/jpa-and-graphql`, which is excluded from the upstream reactor and references an obsolete `3.4.0-SNAPSHOT` parent and main class.
+
+No domain member, value family, grid, menu, executable description, or runtime sample is omitted merely because the generic viewer may not support it.
+Every omitted family and reason is recorded in `corpus-paths.json`.
+
+== Local adaptation boundary
+
+Only Maven parentage, artifact identifiers, reactor wiring, package assembly, provenance verification, deterministic fixture support, inventory, launchers, tests, and reports are local.
+Copied `demoapp` source and retained resources remain byte-identical to their manifest entries.
+Viewer-specific code uses local `org.apache.causeway.regressiontests.referenceapp` packages outside copied roots.
+
+== Licensing and credits
+
+The copied repository is an Apache Software Foundation work under Apache License 2.0.
+The containing Causeway repository `LICENSE` and `NOTICE` remain authoritative.
+The upstream `CREDITS.TXT` is retained beside this document because copied static demonstration icons credit Freepik and Smashicons under CC BY 3.0.
+Binary and generated demonstration resources remain checksum-pinned and are not redistributed as independent supported artifacts.
+See `LICENSE-REVIEW.adoc` for retained resource families and RAT handling.
