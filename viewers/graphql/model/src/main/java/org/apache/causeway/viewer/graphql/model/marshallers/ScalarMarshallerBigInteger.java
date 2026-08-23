@@ -45,6 +45,10 @@ public class ScalarMarshallerBigInteger extends ScalarMarshallerAbstract<BigInte
 
     @Override
     public BigInteger unmarshal(Object graphValue, Class<?> targetType) {
-        return new BigInteger((String) graphValue);
+        try {
+            return new BigInteger((String) graphValue);
+        } catch (RuntimeException ignored) {
+            throw new IllegalArgumentException("Invalid BigInteger value");
+        }
     }
 }

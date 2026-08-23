@@ -162,6 +162,8 @@ class ReferenceAppHtmxPlaywrightTest {
         editableDecimal.locator("[data-causeway-action='edit']").click();
         final Locator decimalEditor = editableDecimal.locator("input[data-causeway-editor='readWriteProperty']");
         decimalEditor.waitFor();
+        assertThat(decimalEditor.getAttribute("type")).isEqualTo("text");
+        assertThat(decimalEditor.getAttribute("inputmode")).isEqualTo("decimal");
         final String originalDecimal = decimalEditor.inputValue();
         editableDecimal.locator("[data-causeway-action='cancel']").click();
 
@@ -221,6 +223,8 @@ class ReferenceAppHtmxPlaywrightTest {
                 new ValueFamily("demo_JavaTimeTypesMenu", "localDates", "rich__demo_LocalDates", "demo_LocalDates", "rich__demo_LocalDateEntity", "demo.LocalDateEntity"),
                 new ValueFamily("demo_JavaTimeTypesMenu", "offsetDateTimes", "rich__demo_OffsetDateTimes", "demo_OffsetDateTimes", "rich__demo_OffsetDateTimeEntity", "demo.OffsetDateTimeEntity"),
                 new ValueFamily("demo_JavaTimeTypesMenu", "zonedDateTimes", "rich__demo_ZonedDateTimes", "demo_ZonedDateTimes", "rich__demo_ZonedDateTimeEntity", "demo.ZonedDateTimeEntity"),
+                new ValueFamily("demo_JavaNetTypesMenu", "urls", "rich__demo_Urls", "demo_Urls", "rich__demo_UrlEntity", "demo.UrlEntity"),
+                new ValueFamily("demo_CausewayTypesMenu", "passwords", "rich__demo_CausewayPasswords", "demo_CausewayPasswords", "rich__demo_CausewayPasswordEntity", "demo.CausewayPasswordEntity"),
                 new ValueFamily("demo_CausewayTypesMenu", "blobs", "rich__demo_CausewayBlobs", "demo_CausewayBlobs", "rich__demo_CausewayBlobEntity", "demo.CausewayBlobEntity"),
                 new ValueFamily("demo_CausewayTypesMenu", "clobs", "rich__demo_CausewayClobs", "demo_CausewayClobs", "rich__demo_CausewayClobEntity", "demo.CausewayClobEntity"));
 
@@ -231,6 +235,26 @@ class ReferenceAppHtmxPlaywrightTest {
             assertThat(page.locator(".causeway-object-header").count()).as(family.toString()).isEqualTo(1);
             assertThat(page.locator(ROUTE_PAGE).getAttribute("data-route-state")).isIn("ready", "partial-error");
         }
+
+        final String urlPageId = invokeViewModel("demo_JavaNetTypesMenu", "urls", "rich__demo_Urls");
+        openObject("demo.UrlEntity", firstCollectionEntityId(
+                "demo_Urls", urlPageId, "rich__demo_UrlEntity"));
+        final Locator urlProperty = page.locator("causeway-property[member='readWriteProperty']");
+        urlProperty.locator("[data-causeway-action='edit']").click();
+        assertThat(urlProperty.locator("input[data-causeway-editor='readWriteProperty']").getAttribute("type"))
+                .isEqualTo("url");
+        urlProperty.locator("[data-causeway-action='cancel']").click();
+
+        final String passwordPageId = invokeViewModel(
+                "demo_CausewayTypesMenu", "passwords", "rich__demo_CausewayPasswords");
+        openObject("demo.CausewayPasswordEntity", firstCollectionEntityId(
+                "demo_CausewayPasswords", passwordPageId, "rich__demo_CausewayPasswordEntity"));
+        final Locator passwordProperty = page.locator("causeway-property[member='readWriteProperty']");
+        passwordProperty.locator("[data-causeway-action='edit']").click();
+        final Locator passwordEditor = passwordProperty.locator("input[data-causeway-editor='readWriteProperty']");
+        assertThat(passwordEditor.getAttribute("type")).isEqualTo("password");
+        assertThat(passwordEditor.inputValue()).isEmpty();
+        passwordProperty.locator("[data-causeway-action='cancel']").click();
 
         final String compositeId = invokeViewModel(
                 "demo_CompositeValueTypeMenu", "compositeValueTypes", "rich__demo_CompositeValuesPage");

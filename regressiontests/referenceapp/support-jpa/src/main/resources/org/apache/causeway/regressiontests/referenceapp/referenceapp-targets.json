@@ -31,6 +31,8 @@
     {"family": "temporal-zoned-date-time", "rootField": "demo_ZonedDateTimes", "member": "entities"},
     {"family": "enum", "rootField": "demo_JavaLangEnums", "member": "entities"},
     {"family": "reference-autocomplete", "rootField": "demo_DomainObjectAutoCompleteEntity", "member": "name"},
+    {"family": "url", "rootField": "demo_Urls", "member": "entities"},
+    {"family": "protected-password", "rootField": "demo_CausewayPasswords", "member": "entities"},
     {"family": "blob", "rootField": "demo_CausewayBlobs", "member": "entities"},
     {"family": "clob", "rootField": "demo_CausewayClobs", "member": "entities"},
     {"family": "custom-value", "rootField": "demo_CompositeValuesPage", "member": "complexNumber"}

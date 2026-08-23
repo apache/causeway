@@ -123,7 +123,7 @@ test('editor registry selects standard inputs and supports application overrides
   });
   assert.equal(dateTime.editorId, 'temporal');
   assert.match(dateTime.html, /type="datetime-local"/);
-  assert.match(dateTime.html, /step="1"/);
+  assert.match(dateTime.html, /step="any"/);
   assert.equal(parseCausewayEditorValue(dateTime.editor, {value: '2026-08-21T10:15:00'}), '2026-08-21T10:15:00');
 
   const choices = renderCausewayEditor({
@@ -136,6 +136,68 @@ test('editor registry selects standard inputs and supports application overrides
   const registry = new CausewayEditorRegistry(defaultEditorRegistry.registrations);
   registry.register({id: 'custom-name', priority: 1000, supports: context => context.name === 'name', render: () => '<textarea></textarea>'});
   assert.equal(registry.select({name: 'name'}).id, 'custom-name');
+});
+
+test('property interactions preserve exact decimal lexical state and map codec errors locally', async () => {
+  let stateListener;
+  const calls = [];
+  const context = {
+    registerRequirement(requirement, listener) {
+      stateListener = listener;
+      return () => {};
+    },
+    async prepareProperty() {
+      return {
+        status: 'success', errors: [], data: {
+          capabilities: {validate: true, inputType: scalar('String'), enumValues: []},
+          choices: []
+        }
+      };
+    },
+    async validateProperty(member, value) {
+      calls.push(`validate:${value}`);
+      return {status: 'success', data: null, errors: []};
+    },
+    async updateProperty(member, value) {
+      calls.push(`update:${value}`);
+      return {status: 'success', data: {_meta: {id: '42'}}, errors: []};
+    }
+  };
+  const property = new CausewayPropertyElement();
+  property.member = 'amount';
+  property.editable = true;
+  property.context = context;
+  document.body.appendChild(property);
+  stateListener({
+    status: 'ready',
+    descriptor: {id: 'amount', value: {typeRef: scalar('String')}},
+    data: {hidden: false, disabled: null, datatype: 'rich__java_math_BigDecimal', get: '1.2300'},
+    errors: [], generation: 1
+  });
+  assert.equal(await property.beginEdit(), true);
+  assert.equal(property.getAttribute('data-editor'), 'exact-number');
+  assert.match(property.innerHTML, /value="1.2300"/);
+
+  const invalid = new Event('input');
+  invalid.target = {
+    getAttribute: name => name === 'data-causeway-editor' ? 'amount' : null,
+    value: '1.2.3',
+    checked: false
+  };
+  property.dispatchEvent(invalid);
+  assert.equal(property.interactionState.status, 'failed');
+  assert.match(property.interactionState.error, /exact decimal/);
+  assert.equal(property.interactionState.pendingValue, '1.2.3');
+  assert.deepEqual(calls, []);
+
+  const corrected = new Event('input');
+  corrected.target = {...invalid.target, value: '9007199254740993.1200'};
+  property.dispatchEvent(corrected);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(property.interactionState.pendingValue, '9007199254740993.1200');
+  assert.ok(calls.includes('validate:9007199254740993.1200'));
+  property.cancelEdit();
+  assert.equal(calls.some(call => call.startsWith('update:')), false);
 });
 
 test('opt-in reference widgets preserve identities, multi values, bounds and fallback', () => {
@@ -365,6 +427,106 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   assert.deepEqual(semanticResult.result, {kind: 'scalar', value: 'Updated'});
   assert.match(controller.innerHTML, /Action result/);
   assert.ok(calls.includes('invoke:Updated'));
+});
+
+test('action parameters preserve exact integer defaults and reject malformed values before preparation', async () => {
+  const calls = [];
+  const parameter = value => ({
+    id: 'amount', description: 'Amount', inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {
+      hidden: false,
+      disabled: null,
+      datatype: 'rich__java_math_BigInteger',
+      default: value,
+      validity: null
+    }
+  });
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction(actionId, values) {
+      calls.push(`prepare:${JSON.stringify(values)}`);
+      return {status: 'success', errors: [], data: {parameters: [parameter(values.amount ?? '9007199254740993')]}};
+    },
+    async validateAction(actionId, values) {
+      calls.push(`validate:${values.amount}`);
+      return {status: 'success', data: null, errors: []};
+    },
+    async invokeAction(actionId, values) {
+      calls.push(`invoke:${values.amount}`);
+      return {status: 'success', data: {kind: 'scalar', value: values.amount}, errors: []};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('changeAmount', context), true);
+  assert.match(controller.innerHTML, /value="9007199254740993"/);
+  const preparationCount = calls.filter(call => call.startsWith('prepare:')).length;
+
+  const invalid = new Event('input');
+  invalid.target = {
+    getAttribute: name => name === 'data-causeway-editor' ? 'amount' : null,
+    value: '12.5',
+    checked: false
+  };
+  controller.dispatchEvent(invalid);
+  assert.equal(controller.promptState.status, 'failed');
+  assert.match(controller.promptState.error, /whole number/);
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, preparationCount);
+
+  const corrected = new Event('input');
+  corrected.target = {...invalid.target, value: '123456789012345678901234567890'};
+  controller.dispatchEvent(corrected);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(controller.promptState.values.amount, '123456789012345678901234567890');
+  assert.equal(await controller.submitPrompt(), true);
+  assert.ok(calls.includes('validate:123456789012345678901234567890'));
+  assert.ok(calls.includes('invoke:123456789012345678901234567890'));
+});
+
+test('protected action values remain write-only in markup and semantic prompt events', async () => {
+  const published = [];
+  const parameter = validity => ({
+    id: 'password', description: 'Password', inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {
+      hidden: false,
+      disabled: null,
+      datatype: 'rich__causeway_applib_value_Password',
+      default: null,
+      validity
+    }
+  });
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction(actionId, values) {
+      const secret = values.password;
+      return {status: 'success', errors: [], data: {parameters: [parameter(secret ? `Rejected ${secret}` : null)]}};
+    },
+    async validateAction() {
+      return {status: 'success', data: null, errors: []};
+    },
+    async invokeAction() {
+      return {status: 'success', data: {kind: 'void'}, errors: []};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  controller.addEventListener('causeway-action-prompt-state-change', event => published.push(event.detail));
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('changePassword', context), true);
+  assert.match(controller.innerHTML, /type="password"/);
+
+  const input = new Event('input');
+  input.target = {
+    getAttribute: name => name === 'data-causeway-editor' ? 'password' : null,
+    value: 'top secret',
+    checked: false
+  };
+  controller.dispatchEvent(input);
+  await new Promise(resolve => setTimeout(resolve, 300));
+  assert.doesNotMatch(controller.innerHTML, /top secret/);
+  assert.match(controller.innerHTML, /Rejected \[protected\]/);
+  assert.equal(published.at(-1).values.password, null);
+  assert.doesNotMatch(JSON.stringify(published), /top secret/);
+  controller.cancelPrompt();
 });
 
 test('action prompts recompute autocomplete suggestions and cancel without invoking', async () => {

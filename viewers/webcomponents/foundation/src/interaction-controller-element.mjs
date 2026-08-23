@@ -23,6 +23,7 @@ import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} f
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {InteractionStatus} from './types.mjs';
+import {CausewayValueCodecError, semanticTypeName} from './value-codecs.mjs';
 
 let controllerSequence = 0;
 
@@ -422,26 +423,44 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     const choices = parameter.state?.choices ?? parameter.enumValues ?? [];
     const rendered = renderCausewayEditor(this.#parameterEditorContext(parameter, choices), this._editorRegistry);
-    const value = parseCausewayEditorValue(rendered.editor, {
-      value: event.target.value,
-      checked: event.target.checked,
-      choices,
-      suggestions: parameter.state?.suggestions ?? [],
-      inputType: parameter.inputType
-    });
-    const textEditor = rendered.editor.id === 'text';
-    if (textEditor) {
+    try {
+      const value = parseCausewayEditorValue(rendered.editor, {
+        value: event.target.value,
+        checked: event.target.checked,
+        choices,
+        suggestions: parameter.state?.suggestions ?? [],
+        inputType: parameter.inputType
+      });
+      const textEditor = rendered.editor.id === 'text';
+      if (textEditor) {
+        this.promptState = Object.freeze({
+          ...this.promptState,
+          values: Object.freeze({...this.promptState.values, [parameterId]: value}),
+          error: null,
+          status: InteractionStatus.EDITING
+        });
+        clearTimeout(this.parameterTimer);
+        this.parameterTimer = setTimeout(() => void this.setParameterValue(parameterId, value), 250);
+        return;
+      }
+      void this.setParameterValue(parameterId, value);
+    } catch (error) {
+      if (!(error instanceof CausewayValueCodecError)) {
+        throw error;
+      }
+      const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
+        ? Object.freeze({...candidate, state: Object.freeze({...candidate.state, error: error.message})})
+        : candidate));
       this.promptState = Object.freeze({
         ...this.promptState,
-        values: Object.freeze({...this.promptState.values, [parameterId]: value}),
-        error: null,
-        status: InteractionStatus.EDITING
+        values: Object.freeze({...this.promptState.values, [parameterId]: event.target.value}),
+        parameters,
+        status: InteractionStatus.FAILED,
+        error: error.message
       });
-      clearTimeout(this.parameterTimer);
-      this.parameterTimer = setTimeout(() => void this.setParameterValue(parameterId, value), 250);
-      return;
+      this.#publishPromptState();
+      this.render();
     }
-    void this.setParameterValue(parameterId, value);
   }
 
   #promptMarkup() {
@@ -454,8 +473,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     const parameterMarkup = state.parameters.map(parameter => this.#parameterMarkup(parameter)).join('');
     const busy = [InteractionStatus.VALIDATING, InteractionStatus.INVOKING].includes(state.status);
-    const errorMarkup = state.error
-      ? `<div id="${this.errorId}" class="causeway-action-prompt-error" role="alert">${escapeHtml(state.error)}</div>`
+    const publicError = protectedPromptText(state, state.error);
+    const errorMarkup = publicError
+      ? `<div id="${this.errorId}" class="causeway-action-prompt-error" role="alert">${escapeHtml(publicError)}</div>`
       : '';
     return `<dialog open class="causeway-action-prompt" role="dialog" aria-modal="true" aria-labelledby="${this.titleId}"${state.error ? ` aria-describedby="${this.errorId}"` : ''} data-testid="action-prompt">
   <form method="dialog" novalidate>
@@ -482,7 +502,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const description = this.#parameterDescription(parameter, label);
     const disabledReason = typeof parameter.state?.disabled === 'string' ? parameter.state.disabled : '';
     const validityReason = typeof parameter.state?.validity === 'string' ? parameter.state.validity : '';
-    const reason = parameter.state?.error || validityReason || disabledReason;
+    const reason = protectedPromptText(this.promptState,
+      parameter.state?.error || validityReason || disabledReason);
     return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}">
   <label id="${editorContext.labelId}" for="${editorContext.inputId}">${escapeHtml(label)}</label>
   ${description ? `<span id="${editorContext.descriptionId}" class="causeway-action-parameter-description">${escapeHtml(description)}</span>` : ''}
@@ -505,6 +526,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       autoComplete: parameter.fields.has('autoComplete'),
       enumValues: parameter.enumValues,
       inputType: parameter.inputType,
+      semanticType: parameter.state?.datatype ?? null,
       required: parameter.inputType?.kind === 'NON_NULL',
       inputId: `causeway-action-parameter-${parameter.id}`,
       labelId: `causeway-action-parameter-${parameter.id}-label`,
@@ -534,8 +556,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_PROMPT_STATE, Object.freeze({
       actionId: this.promptState.actionId,
       status: this.promptState.status,
-      values: this.promptState.values,
-      error: this.promptState.error,
+      values: publicPromptValues(this.promptState),
+      error: protectedPromptText(this.promptState, this.promptState.error),
       ...interactionTargetDetail(this.promptState.context)
     })));
   }
@@ -631,6 +653,29 @@ function interactionTargetDetail(context) {
     target: context?.identity ? Object.freeze({kind: 'object', ...context.identity}) : null,
     serviceLogicalTypeName: null
   });
+}
+
+function publicPromptValues(state) {
+  const sensitiveIds = new Set((state.parameters ?? [])
+    .filter(parameter => ['Password', 'ProtectedValue'].includes(semanticTypeName({semanticType: parameter.state?.datatype})))
+    .map(parameter => parameter.id));
+  return Object.freeze(Object.fromEntries(Object.entries(state.values ?? {})
+    .map(([name, value]) => [name, sensitiveIds.has(name) ? null : value])));
+}
+
+function protectedPromptText(state, text) {
+  let result = String(text ?? '');
+  if (!result) {
+    return result;
+  }
+  const publicValues = publicPromptValues(state);
+  for (const [name, value] of Object.entries(state.values ?? {})) {
+    if (publicValues[name] !== null || typeof value !== 'string' || value.length === 0) {
+      continue;
+    }
+    result = result.split(value).join('[protected]');
+  }
+  return result;
 }
 
 function promptStatusLabel(status) {
