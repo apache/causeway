@@ -32,7 +32,7 @@ public final class ReferenceAppCapabilityInventory {
     private static final Set<String> SUPPORTED_SCALARS = Set.of(
             "Boolean", "Byte", "Char", "Float", "ID", "Int", "Locale", "Short", "String",
             "LocalDate", "LocalDateTime", "LocalTime", "UUID", "Url");
-    private static final Set<String> UNSUPPORTED_TEMPORAL_TYPES = Set.of(
+    private static final Set<String> TEMPORAL_TYPES = Set.of(
             "DateTime", "LegacyDateTime", "OffsetDateTime", "OffsetTime", "ZonedDateTime");
     private static final Set<String> RESOURCE_TYPES = Set.of(
             "BlobValue", "ClobValue", "LocalResourcePathInput", "LocalResourcePathValue");
@@ -141,12 +141,12 @@ public final class ReferenceAppCapabilityInventory {
                     "GraphQL explicitly advertises an unsupported value and the viewer renders a bounded unsupported state.");
         }
         if (EXACT_NUMERIC_TYPES.contains(valueType)) {
-            return new Item(name, "PROPERTY", valueType, Classification.VIEWER_DEFECT,
-                    "The current standard editor coerces this exact numeric type through JavaScript Number.");
+            return new Item(name, "PROPERTY", valueType, Classification.SUPPORTED,
+                    "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion.");
         }
-        if (UNSUPPORTED_TEMPORAL_TYPES.contains(valueType)) {
-            return new Item(name, "PROPERTY", valueType, Classification.VIEWER_DEFECT,
-                    "The public scalar is advertised but the standard editor does not preserve its temporal semantics.");
+        if (TEMPORAL_TYPES.contains(valueType)) {
+            return new Item(name, "PROPERTY", valueType, Classification.SUPPORTED,
+                    "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics.");
         }
         if (valueType.startsWith("LocalResourcePath")) {
             return new Item(name, "PROPERTY", valueType, Classification.GRACEFUL_UNSUPPORTED,
@@ -216,9 +216,9 @@ public final class ReferenceAppCapabilityInventory {
             if (SUPPORTED_SCALARS.contains(name)) {
                 items.add(new Item("value-shape:" + name, "VALUE_SHAPE", name, Classification.SUPPORTED,
                         "The scalar has an established semantic value contract."));
-            } else if (EXACT_NUMERIC_TYPES.contains(name) || UNSUPPORTED_TEMPORAL_TYPES.contains(name)) {
-                items.add(new Item("value-shape:" + name, "VALUE_SHAPE", name, Classification.VIEWER_DEFECT,
-                        "The scalar is public but the current standard editor is not reversibly correct."));
+            } else if (EXACT_NUMERIC_TYPES.contains(name) || TEMPORAL_TYPES.contains(name)) {
+                items.add(new Item("value-shape:" + name, "VALUE_SHAPE", name, Classification.SUPPORTED,
+                        "The scalar has a tested reversible exact or temporal codec and GraphQL marshaller."));
             } else if (RESOURCE_TYPES.contains(name)) {
                 items.add(new Item("value-shape:" + name, "VALUE_SHAPE", name, Classification.GRACEFUL_UNSUPPORTED,
                         "Resource output is bounded while resource input remains explicitly unsupported."));

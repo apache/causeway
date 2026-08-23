@@ -25,6 +25,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
@@ -55,6 +57,20 @@ public class GraphQLValueScalars {
             LocalDateTime.class,
             value -> LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
             value -> DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(value));
+
+    public static final GraphQLScalarType OFFSET_DATE_TIME = stringScalar(
+            "DateTime",
+            "An ISO-8601 date-time with an explicit offset; fractional seconds are preserved.",
+            OffsetDateTime.class,
+            value -> OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+            value -> DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(value));
+
+    public static final GraphQLScalarType OFFSET_TIME = stringScalar(
+            "Time",
+            "An ISO-8601 time with an explicit offset; fractional seconds are preserved.",
+            OffsetTime.class,
+            value -> OffsetTime.parse(value, DateTimeFormatter.ISO_OFFSET_TIME),
+            value -> DateTimeFormatter.ISO_OFFSET_TIME.format(value));
 
     public static final GraphQLScalarType URL_VALUE = stringScalar(
             "Url",

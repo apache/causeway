@@ -355,7 +355,12 @@ class PetClinicHtmxPlaywrightTest {
         objectAction("bookVisit").click();
         waitForPrompt("bookVisit");
         final var petReference = page.locator(parameter("pet"));
-        petReference.waitFor();
+        try {
+            petReference.waitFor();
+        } catch (com.microsoft.playwright.TimeoutError cause) {
+            throw new AssertionError(String.valueOf(
+                    page.locator(PROMPT).evaluate("element => element.outerHTML")), cause);
+        }
         page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
         assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
         assertThat(page.locator(parameter("visitAt")).count())

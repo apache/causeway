@@ -28,6 +28,7 @@ import {
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {InteractionStatus} from './types.mjs';
+import {CausewayValueCodecError} from './value-codecs.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
 
 let propertySequence = 0;
@@ -229,12 +230,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.autoCompleteController = null;
     this.autoCompleteGeneration += 1;
     this.interactionGeneration += 1;
+    const editor = this.interactionState.editor;
     this.interactionState = null;
     this.restoreEditFocusAfterGeneration = null;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
       member: this.member,
       status: InteractionStatus.CANCELLED,
-      value: this.componentState?.data?.get
+      value: publicInteractionValue(editor, this.componentState?.data?.get)
     })));
     this.renderComponentState(this.componentState);
     queueMicrotask(() => this.querySelector?.('[data-causeway-action="edit"]')?.focus?.());
@@ -252,7 +254,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
       member: this.member,
       status: InteractionStatus.EDITING,
-      value,
+      value: publicInteractionValue(this.interactionState.editor, value),
       error: null
     })));
     if (validate) {
@@ -358,10 +360,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return false;
     }
     this.restoreEditFocusAfterGeneration = focusGeneration;
+    const editor = this.interactionState.editor;
     this.interactionState = null;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
       member: this.member,
-      value: pendingValue,
+      value: publicInteractionValue(editor, pendingValue),
       identity: this._resolvedContext?.identity ?? null,
       result
     })));
@@ -426,17 +429,29 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return;
     }
     const editor = this.interactionState.editor;
-    const value = parseCausewayEditorValue(editor, {
-      value: event.target.value,
-      checked: event.target.checked,
-      choices: this.interactionState.choices ?? [],
-      suggestions: this.interactionState.suggestions ?? [],
-      inputType: this.interactionState.capabilities?.inputType
-    });
-    const textEditor = ['text', 'multiline'].includes(editor.id);
-    this.setPendingValue(value, {validate: textEditor});
-    if (!textEditor) {
-      void this.validatePending();
+    try {
+      const value = parseCausewayEditorValue(editor, {
+        value: event.target.value,
+        checked: event.target.checked,
+        choices: this.interactionState.choices ?? [],
+        suggestions: this.interactionState.suggestions ?? [],
+        inputType: this.interactionState.capabilities?.inputType
+      });
+      const textEditor = ['text', 'multiline'].includes(editor.id);
+      this.setPendingValue(value, {validate: textEditor});
+      if (!textEditor) {
+        void this.validatePending();
+      }
+    } catch (error) {
+      if (!(error instanceof CausewayValueCodecError)) {
+        throw error;
+      }
+      this.#setInteraction({
+        ...this.interactionState,
+        status: InteractionStatus.FAILED,
+        pendingValue: event.target.value,
+        error: error.message
+      });
     }
   }
 
@@ -489,6 +504,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       autoComplete: interaction.capabilities?.autoComplete === true,
       enumValues: interaction.capabilities?.enumValues ?? [],
       inputType: interaction.capabilities?.inputType,
+      semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
       required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
       multiLine: this.multiLine,
       inputId: this.inputId,
@@ -552,7 +568,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
       member: this.member,
       status: next.status,
-      value: next.pendingValue,
+      value: publicInteractionValue(next.editor, next.pendingValue),
       error: next.error ?? null
     })));
     this.renderComponentState(this.componentState);
@@ -567,6 +583,10 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const host = this.getAttribute('data-testid');
     return host ? `${host}-${suffix}` : '';
   }
+}
+
+function publicInteractionValue(editor, value) {
+  return editor?.codec?.sensitive === true ? null : value;
 }
 
 function boundedTooltip(value, maximum = 240) {

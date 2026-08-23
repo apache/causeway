@@ -17,9 +17,9 @@
  * under the License.
  */
 
-import {namedType} from './introspection.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {renderCausewayReferenceWidget, supportsCausewayReferenceWidget} from './reference-widget.mjs';
+import {defaultValueCodecRegistry, parseCausewayValue, semanticTypeName} from './value-codecs.mjs';
 
 export class CausewayEditorRegistry {
   constructor(registrations = []) {
@@ -98,44 +98,54 @@ const autoCompleteEditor = Object.freeze({
   }
 });
 
-const booleanEditor = Object.freeze({ 
+const booleanEditor = Object.freeze({
   id: 'boolean',
   priority: 200,
-  supports: context => namedType(context.inputType) === 'Boolean',
-  render: context => `<input type="checkbox" ${inputAttributes(context)}${context.value === true ? ' checked' : ''}>`,
-  parse: ({checked}) => Boolean(checked)
+  supports: context => semanticTypeName(context) === 'Boolean',
+  render: context => context.required
+    ? `<input type="checkbox" ${inputAttributes(context)}${context.controlValue === 'true' ? ' checked' : ''}>`
+    : `<select ${inputAttributes(context)}><option value=""${context.controlValue === '' ? ' selected' : ''}>No value</option><option value="true"${context.controlValue === 'true' ? ' selected' : ''}>True</option><option value="false"${context.controlValue === 'false' ? ' selected' : ''}>False</option></select>`,
+  parse: context => context.required ? Boolean(context.checked) : context.value
 });
 
 const temporalEditor = Object.freeze({
   id: 'temporal',
   priority: 195,
-  supports: context => ['LocalDate', 'LocalDateTime', 'LocalTime'].includes(namedType(context.inputType)),
+  supports: context => [
+    'LocalDate', 'LocalDateTime', 'LocalTime',
+    'OffsetDateTime', 'OffsetTime', 'DateTime', 'LegacyDateTime', 'ZonedDateTime'
+  ].includes(semanticTypeName(context)),
   render: context => {
-    const typeName = namedType(context.inputType);
-    const inputType = typeName === 'LocalDate' ? 'date' : typeName === 'LocalTime' ? 'time' : 'datetime-local';
-    const step = typeName === 'LocalDate' ? '' : ' step="1"';
-    return `<input type="${inputType}" ${inputAttributes(context)} value="${escapeHtml(context.value ?? '')}"${step}>`;
+    const typeName = semanticTypeName(context);
+    const inputType = typeName === 'LocalDate'
+      ? 'date'
+      : typeName === 'LocalTime' ? 'time' : typeName === 'LocalDateTime' ? 'datetime-local' : 'text';
+    const step = ['LocalTime', 'LocalDateTime'].includes(typeName) ? ' step="any"' : '';
+    return `<input type="${inputType}" ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}"${step}>`;
   },
-  parse: ({value}) => value || null
+  parse: ({value}) => value
+});
+
+const exactNumberEditor = Object.freeze({
+  id: 'exact-number',
+  priority: 192,
+  supports: context => ['BigDecimal', 'BigInteger', 'Long'].includes(semanticTypeName(context)),
+  render: context => `<input type="text" inputmode="${semanticTypeName(context) === 'BigDecimal' ? 'decimal' : 'numeric'}" ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}">`,
+  parse: ({value}) => value
 });
 
 const numberEditor = Object.freeze({
   id: 'number',
   priority: 190,
-  supports: context => ['Int', 'Float', 'BigDecimal', 'BigInteger', 'Long'].includes(namedType(context.inputType)),
-  render: context => `<input type="number" ${inputAttributes(context)} value="${escapeHtml(context.value ?? '')}">`,
-  parse: ({value, inputType}) => {
-    if (value === '') {
-      return null;
-    }
-    return namedType(inputType) === 'Int' ? Number.parseInt(value, 10) : Number(value);
-  }
+  supports: context => ['Int', 'Short', 'Byte', 'Float', 'Double'].includes(semanticTypeName(context)),
+  render: context => `<input type="number" ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}">`,
+  parse: ({value}) => value
 });
 
 const multilineEditor = Object.freeze({
   id: 'multiline',
   priority: 110,
-  supports: context => namedType(context.inputType) === 'String' && Number.isSafeInteger(context.multiLine) && context.multiLine > 1,
+  supports: context => semanticTypeName(context) === 'String' && Number.isSafeInteger(context.multiLine) && context.multiLine > 1,
   render: context => `<textarea ${inputAttributes(context)} rows="${Math.min(context.multiLine, 50)}">${escapeHtml(context.value ?? '')}</textarea>`,
   parse: ({value}) => value
 });
@@ -143,8 +153,15 @@ const multilineEditor = Object.freeze({
 const textEditor = Object.freeze({
   id: 'text',
   priority: 100,
-  supports: context => ['String', 'ID'].includes(namedType(context.inputType)),
-  render: context => `<input type="text" ${inputAttributes(context)} value="${escapeHtml(context.value ?? '')}">`,
+  supports: context => ['String', 'ID', 'UUID', 'Locale', 'Char', 'URL', 'Url', 'Password', 'ProtectedValue'].includes(semanticTypeName(context)),
+  render: context => {
+    const typeName = semanticTypeName(context);
+    const inputType = ['Password', 'ProtectedValue'].includes(typeName)
+      ? 'password'
+      : ['URL', 'Url'].includes(typeName) ? 'url' : 'text';
+    const autocomplete = inputType === 'password' ? ' autocomplete="new-password"' : '';
+    return `<input type="${inputType}"${autocomplete} ${inputAttributes(context)} value="${escapeHtml(context.controlValue)}">`;
+  },
   parse: ({value}) => value
 });
 
@@ -163,7 +180,7 @@ const unsupportedEditor = Object.freeze({
   id: 'unsupported',
   priority: -1000,
   supports: () => true,
-  render: context => `<span class="causeway-unsupported" role="alert">Unsupported editor for ${escapeHtml(namedType(context.inputType) ?? 'unknown input type')}</span>`,
+  render: context => `<span class="causeway-unsupported" role="alert">Unsupported editor for ${escapeHtml(semanticTypeName(context) ?? 'unknown input type')}</span>`,
   parse: ({value}) => value
 });
 
@@ -173,17 +190,37 @@ export const defaultEditorRegistry = new CausewayEditorRegistry([
   autoCompleteEditor,
   booleanEditor,
   temporalEditor,
+  exactNumberEditor,
   numberEditor,
   enumEditor,
   multilineEditor,
   textEditor
 ]);
 
-export function renderCausewayEditor(context, registry = defaultEditorRegistry) {
-  const editor = registry.select(context);
+export function renderCausewayEditor(context, registry = defaultEditorRegistry, codecRegistry = defaultValueCodecRegistry) {
+  const codec = codecRegistry.select(context);
+  const selectedEditor = codec.id === 'unsupported' ? unsupportedEditor : registry.select(context);
+  const editor = Object.freeze({
+    ...selectedEditor,
+    codec,
+    render: currentContext => {
+      const effectiveContext = {...context, ...currentContext};
+      return selectedEditor.render({
+        ...effectiveContext,
+        controlValue: codec.toControlValue(effectiveContext.value, effectiveContext)
+      });
+    },
+    parse: currentContext => {
+      const effectiveContext = {...context, ...currentContext};
+      const rawValue = selectedEditor.parse(effectiveContext);
+      return parseCausewayValue(codec, {...effectiveContext, value: rawValue});
+    }
+  });
   return Object.freeze({
     editor,
     editorId: editor.id,
+    codec,
+    codecId: codec.id,
     html: editor.render(context)
   });
 }

@@ -8,11 +8,11 @@
 
 import {createServer} from 'node:http';
 import {existsSync, readFileSync} from 'node:fs';
-import {extname, resolve, sep} from 'node:path';
+import {dirname, extname, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const directory = fileURLToPath(new URL('.', import.meta.url));
-const project = resolve(directory, '../../../../..');
+const project = findProject(directory);
 const foundation = resolve(project, 'viewers/webcomponents/foundation/src');
 const production = resolve(project, 'viewers/webcomponents/foundation/vaadin-reference/generated/assets');
 const matrix = JSON.parse(readFileSync(resolve(directory, '../results/csp-matrix.json'), 'utf8'));
@@ -39,6 +39,17 @@ export async function startPilotServer() {
   });
   await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
   return {server, origin: `http://127.0.0.1:${server.address().port}`};
+}
+
+function findProject(start) {
+  let current = resolve(start);
+  while (dirname(current) !== current) {
+    if (existsSync(resolve(current, 'viewers/webcomponents/foundation/src'))) {
+      return current;
+    }
+    current = dirname(current);
+  }
+  throw new Error('Cannot locate the project root');
 }
 
 function resolveFile(pathname) {

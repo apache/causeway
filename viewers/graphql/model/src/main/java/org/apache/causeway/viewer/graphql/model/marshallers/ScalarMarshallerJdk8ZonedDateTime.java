@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.model.marshallers;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -46,7 +47,14 @@ public class ScalarMarshallerJdk8ZonedDateTime extends ScalarMarshallerAbstract<
 
     @Override
     public ZonedDateTime unmarshal(Object graphValue, Class<?> targetType) {
-        String argumentStr = (String) graphValue;
-        return ZonedDateTime.parse(argumentStr, DateTimeFormatter.ofPattern(scalarMarshallerConfig.zonedDateTimeFormat()));
+        return parse((String) graphValue, scalarMarshallerConfig.zonedDateTimeFormat());
+    }
+
+    static ZonedDateTime parse(final String value, final String configuredFormat) {
+        try {
+            return ZonedDateTime.parse(value, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        } catch (DateTimeParseException ignored) {
+            return ZonedDateTime.parse(value, DateTimeFormatter.ofPattern(configuredFormat));
+        }
     }
 }

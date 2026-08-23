@@ -4,14 +4,14 @@
   "scope" : "rich demo base objects, semantic member wrappers, action parameters, enums, and advertised standard value shapes",
   "itemCount" : 4286,
   "classificationCounts" : {
-    "SUPPORTED" : 3354,
+    "SUPPORTED" : 3421,
     "GRACEFUL_UNSUPPORTED" : 210,
     "GRAPHQL_GAP" : 0,
-    "VIEWER_DEFECT" : 67,
+    "VIEWER_DEFECT" : 0,
     "VIEWER_SPECIFIC" : 1,
     "NOT_EXERCISED" : 654
   },
-  "itemsSha256" : "63be6e5616233982219fdd248b8e9fd7bc8936a293647da27e640eab2eca5cc2",
+  "itemsSha256" : "39f88fa795bbeea6e4f1eaf277ecd49ad38e9445e20a2bdef8e6d148c2ca927f",
   "items" : [ {
     "id" : "not-exercised:destructive-action-exhaustion",
     "kind" : "EXECUTION_POLICY",
@@ -12823,50 +12823,50 @@
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateEntity__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -12906,8 +12906,8 @@
     "id" : "rich__demo_JavaUtilDateHolder__mixinProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateHolder__updateReadOnlyOptionalPropertyWithChoices__gqlv_action",
     "kind" : "ACTION",
@@ -12974,50 +12974,50 @@
     "id" : "rich__demo_JavaUtilDateVm__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_JavaUtilDateVm__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -14550,50 +14550,50 @@
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeEntity__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -14633,8 +14633,8 @@
     "id" : "rich__demo_OffsetDateTimeHolder__mixinProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeHolder__updateReadOnlyOptionalPropertyWithChoices__gqlv_action",
     "kind" : "ACTION",
@@ -14701,50 +14701,50 @@
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The public scalar is advertised but the standard editor does not preserve its temporal semantics."
+    "classification" : "SUPPORTED",
+    "reason" : "The type-specific temporal codec preserves the advertised local, offset, zone, and precision semantics."
   }, {
     "id" : "rich__demo_OffsetDateTimeVm__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -16726,38 +16726,38 @@
     "id" : "rich__demo_PrimitiveLongEntity__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongEntity__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -16797,8 +16797,8 @@
     "id" : "rich__demo_PrimitiveLongHolder__mixinProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongHolder__updateReadOnlyPropertyWithChoices__gqlv_action",
     "kind" : "ACTION",
@@ -16845,38 +16845,38 @@
     "id" : "rich__demo_PrimitiveLongVm__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_PrimitiveLongVm__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -21981,50 +21981,50 @@
     "id" : "rich__demo_WrapperLongEntity__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongEntity__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -22064,8 +22064,8 @@
     "id" : "rich__demo_WrapperLongHolder__mixinProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongHolder__updateReadOnlyOptionalPropertyWithChoices__gqlv_action",
     "kind" : "ACTION",
@@ -22132,50 +22132,50 @@
     "id" : "rich__demo_WrapperLongVm__readOnlyOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readOnlyPropertyDerivedLabelPositionLeft__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readOnlyPropertyDerivedLabelPositionNone__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readOnlyPropertyDerivedLabelPositionRight__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readOnlyPropertyDerivedLabelPositionTop__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readOnlyProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readWriteOptionalProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__readWriteProperty__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The current standard editor coerces this exact numeric type through JavaScript Number."
+    "classification" : "SUPPORTED",
+    "reason" : "The toolkit-neutral exact codec preserves lexical precision without JavaScript Number coercion."
   }, {
     "id" : "rich__demo_WrapperLongVm__recentAuditTrailEntries__gqlv_action",
     "kind" : "ACTION",
@@ -22934,8 +22934,8 @@
     "id" : "value-shape:DateTime",
     "kind" : "VALUE_SHAPE",
     "valueType" : "DateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The scalar is public but the current standard editor is not reversibly correct."
+    "classification" : "SUPPORTED",
+    "reason" : "The scalar has a tested reversible exact or temporal codec and GraphQL marshaller."
   }, {
     "id" : "value-shape:Float",
     "kind" : "VALUE_SHAPE",
@@ -22958,8 +22958,8 @@
     "id" : "value-shape:LegacyDateTime",
     "kind" : "VALUE_SHAPE",
     "valueType" : "LegacyDateTime",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The scalar is public but the current standard editor is not reversibly correct."
+    "classification" : "SUPPORTED",
+    "reason" : "The scalar has a tested reversible exact or temporal codec and GraphQL marshaller."
   }, {
     "id" : "value-shape:LocalDateTime",
     "kind" : "VALUE_SHAPE",
@@ -22976,8 +22976,8 @@
     "id" : "value-shape:Long",
     "kind" : "VALUE_SHAPE",
     "valueType" : "Long",
-    "classification" : "VIEWER_DEFECT",
-    "reason" : "The scalar is public but the current standard editor is not reversibly correct."
+    "classification" : "SUPPORTED",
+    "reason" : "The scalar has a tested reversible exact or temporal codec and GraphQL marshaller."
   }, {
     "id" : "value-shape:Short",
     "kind" : "VALUE_SHAPE",

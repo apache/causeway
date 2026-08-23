@@ -43,7 +43,7 @@ class ReferenceAppCapabilityInventoryTest {
         assertThat(first).isEqualTo(second);
         assertThat(first.path("itemCount").asInt()).isEqualTo(12);
         assertThat(classification(first, "rich__demo_Sample__name__gqlv_property")).isEqualTo("SUPPORTED");
-        assertThat(classification(first, "rich__demo_Sample__amount__gqlv_property")).isEqualTo("VIEWER_DEFECT");
+        assertThat(classification(first, "rich__demo_Sample__amount__gqlv_property")).isEqualTo("SUPPORTED");
         assertThat(classification(first, "rich__demo_Sample__custom__gqlv_property")).isEqualTo("GRACEFUL_UNSUPPORTED");
         assertThat(classification(first, "rich__demo_Sample__change__value__gqlv_action_parameter")).isEqualTo("NOT_EXERCISED");
         assertThat(first.toString()).doesNotContain("secret", "stack trace");
