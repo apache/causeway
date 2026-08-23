@@ -102,6 +102,11 @@ public class RichMutationForProperty extends Element {
                 environment,
                 context);
         ResourceValueTypes.validateFileAccept(oneToOneAssociation, argumentPojo);
+        if (argumentPojo != null
+                && !oneToOneAssociation.getElementType().getCorrespondingClass().isInstance(argumentPojo)) {
+            throw new IllegalArgumentException(
+                    "GraphQL input cannot be converted to the declared property type.");
+        }
         var argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentPojo);
 
         var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);

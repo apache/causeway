@@ -63,7 +63,7 @@ class ReferenceAppCapabilityInventory_IntegTest {
         assertJourneyTargetsExist(introspection);
         assertThat(introspection.at("/data/__schema/types").size()).isGreaterThan(9_000);
         assertThat(actual.path("itemCount").asInt()).isGreaterThan(4_000);
-        assertThat(actual.at("/classificationCounts/VIEWER_DEFECT").asInt()).isGreaterThan(0);
+        assertThat(actual.at("/classificationCounts/VIEWER_DEFECT").asInt()).isZero();
         assertThat(actual.at("/classificationCounts/GRACEFUL_UNSUPPORTED").asInt()).isGreaterThan(0);
         assertThat(actual.at("/classificationCounts/VIEWER_SPECIFIC").asInt()).isGreaterThan(0);
         assertThat(actual.at("/classificationCounts/NOT_EXERCISED").asInt()).isGreaterThan(0);
@@ -116,7 +116,7 @@ class ReferenceAppCapabilityInventory_IntegTest {
                 "collection-polymorphism", "collection-associated-actions", "collection-stale-partial",
                 "boolean-nullable", "numeric-decimal", "numeric-integer", "temporal-local-date",
                 "temporal-offset-date-time", "temporal-zoned-date-time", "enum",
-                "reference-autocomplete", "blob", "clob", "custom-value");
+                "reference-autocomplete", "url", "protected-password", "blob", "clob", "custom-value");
     }
 
     private JsonNode graphQL(final String query) throws Exception {

@@ -283,9 +283,16 @@ A successful save invalidates the complete active object projection so supportin
 Hidden, disabled, query-only, and unsupported properties expose no enabled save path.
 
 The default editor registry covers single-line and effective-grid-directed multiline text, numeric, temporal, boolean, enum, fixed-choice, and advertised autocomplete inputs.
+A toolkit-neutral value codec is selected before the internal editor so native and optional toolkit controls submit identical semantic values.
+`Long`, `BigInteger`, and `BigDecimal` remain validated lexical strings and never pass through JavaScript `Number`.
+Nullable Boolean uses explicit no-value, true, and false states, while a required Boolean remains two-state.
+Local temporal values preserve local meaning, offset values preserve their offsets, and zoned values preserve named-zone information when the advertised representation supplies it.
+Password and protected inputs are write-only and their prior or pending values are redacted from markup and semantic state events.
+Blob, Clob, local-resource, presentation-only, and unknown custom inputs fail closed unless complete public metadata and a reversible codec are registered.
 A valid `multiLine` value greater than one selects a textarea and is capped at 50 rows; malformed and non-positive values retain the single-line editor.
 Applications can register a more-specific editor through `defaultEditorRegistry.register(...)`, or assign another `CausewayEditorRegistry` to a property's `editorRegistry` JavaScript property.
-Editors render and parse pending semantic values but never execute GraphQL independently.
+Editors render pending semantic values but never execute GraphQL independently.
+Codecs own authoritative normalization, control conversion, parsing, local validation, and GraphQL-variable conversion.
 
 === Optional Vaadin reference widgets
 
@@ -382,8 +389,23 @@ const release = defaultEditorRegistry.register({
 });
 ----
 
+Custom value input requires an explicit reversible codec registration:
+
+[source,javascript]
+----
+const releaseMoneyCodec = defaultValueCodecRegistry.register({
+  id: 'application-money',
+  priority: 1000,
+  supports: state => state.semanticType === 'rich__example_Money',
+  toControlValue: value => value?.amount ?? '',
+  parse: input => ({amount: input.value, currency: 'GBP'}),
+  toGraphQLValue: value => value
+});
+----
+
+A display renderer or editor alone never opts a custom value into GraphQL input.
 Custom prompts must preserve labels, validation associations, pending announcements, cancellation, focus restoration, and semantic result events.
-Call `release()` when the editor override is no longer required.
+Call `release()` and `releaseMoneyCodec()` when the overrides are no longer required.
 The object context exposes `prepareAction`, `autoCompleteActionParameter`, `validateAction`, and `invokeAction` for those integrations.
 
 Safe actions use the advertised rich query invocation field.

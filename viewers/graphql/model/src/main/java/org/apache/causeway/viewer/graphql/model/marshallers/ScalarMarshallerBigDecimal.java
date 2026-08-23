@@ -45,6 +45,10 @@ public class ScalarMarshallerBigDecimal extends ScalarMarshallerAbstract<BigDeci
 
     @Override
     public BigDecimal unmarshal(Object graphValue, Class<?> targetType) {
-        return new BigDecimal((String) graphValue);
+        try {
+            return new BigDecimal((String) graphValue);
+        } catch (RuntimeException ignored) {
+            throw new IllegalArgumentException("Invalid BigDecimal value");
+        }
     }
 }

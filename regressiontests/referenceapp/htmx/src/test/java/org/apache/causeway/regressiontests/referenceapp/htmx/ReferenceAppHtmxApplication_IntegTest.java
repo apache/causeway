@@ -15,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -159,6 +160,170 @@ class ReferenceAppHtmxApplication_IntegTest {
                 .contains("<bs:grid")
                 .contains("<cpt:property")
                 .doesNotContain("<bs:metadataError>");
+    }
+
+    @Test
+    void exactDecimalPropertyMutationUsesAdvertisedStringAndRestoresFixture() throws Exception {
+        final JsonNode open = graphQL("""
+                { rich { demo_JavaMathTypesMenu {
+                    bigDecimals { invoke { results { _meta { id } } } }
+                } } }
+                """);
+        assertNoGraphQLErrors(open);
+        final String pageId = open.at("/data/rich/demo_JavaMathTypesMenu/bigDecimals/invoke/results/_meta/id").asText();
+        final JsonNode decimals = graphQL("""
+                { rich { demo_BigDecimals(object: {id: %s}) {
+                    entities { get { ... on rich__demo_BigDecimalEntity {
+                        _meta { id }
+                        readWriteProperty { get }
+                    } } }
+                } } }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(pageId)));
+        assertNoGraphQLErrors(decimals);
+
+        final JsonNode action = graphQL("""
+                { rich { demo_BigDecimals(object: {id: %s}) {
+                    openViewModel { invoke(initialValue: "9007199254740993.1200") {
+                        results { ... on rich__demo_BigDecimalVm { readWriteProperty { get } } }
+                    } }
+                } } }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(pageId)));
+        assertNoGraphQLErrors(action);
+        assertThat(action.at("/data/rich/demo_BigDecimals/openViewModel/invoke/results/readWriteProperty/get").asText())
+                .isEqualTo("9007199254740993.1200");
+
+        final JsonNode entity = decimals.at("/data/rich/demo_BigDecimals/entities/get/0");
+        final String entityId = entity.at("/_meta/id").asText();
+        final String original = entity.at("/readWriteProperty/get").asText();
+        assertThat(entityId).isNotBlank();
+        assertThat(original).isNotBlank();
+
+        final String mutation = "mutation { demo_BigDecimalEntity__readWriteProperty(_target: {id: "
+                + OBJECT_MAPPER.writeValueAsString(entityId) + "}, readWriteProperty: %s) "
+                + "{ readWriteProperty { get } } }";
+        final String malformedValue = "PRIVATE_INVALID_DECIMAL_1.2.3";
+        final JsonNode malformed = graphQL(mutation.formatted(OBJECT_MAPPER.writeValueAsString(malformedValue)));
+        assertThat(malformed.at("/errors/0/message").asText())
+                .contains("Invalid BigDecimal value")
+                .doesNotContain(malformedValue, "NumberFormatException", "java.math");
+        final JsonNode unchanged = graphQL("{ rich { demo_BigDecimalEntity(object: {id: "
+                + OBJECT_MAPPER.writeValueAsString(entityId) + "}) { readWriteProperty { get } } } }");
+        assertNoGraphQLErrors(unchanged);
+        assertThat(unchanged.at("/data/rich/demo_BigDecimalEntity/readWriteProperty/get").asText())
+                .isEqualTo(original);
+        try {
+            final JsonNode changed = graphQL(mutation.formatted("\"9007199254740993.1200\""));
+            assertNoGraphQLErrors(changed);
+            assertThat(changed.at("/data/demo_BigDecimalEntity__readWriteProperty/readWriteProperty/get").asText())
+                    .isEqualTo("9007199254740993.1200");
+        } finally {
+            final JsonNode restored = graphQL(mutation.formatted(OBJECT_MAPPER.writeValueAsString(original)));
+            assertNoGraphQLErrors(restored);
+            assertThat(restored.at("/data/demo_BigDecimalEntity__readWriteProperty/readWriteProperty/get").asText())
+                    .isEqualTo(original);
+        }
+    }
+
+    @Test
+    void nullableBooleanAndOffsetAndZonedTemporalActionsRoundTrip() throws Exception {
+        final JsonNode booleans = graphQL("""
+                {
+                  rich {
+                    demo_JavaLangWrapperTypesMenu {
+                      booleans {
+                        invoke {
+                          results {
+                            ... on rich__demo_WrapperBooleans {
+                              entities { get { ... on rich__demo_WrapperBooleanEntity {
+                                _meta { id }
+                                readWriteOptionalProperty { get }
+                              } } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(booleans);
+        final JsonNode booleanEntity = booleans.at(
+                "/data/rich/demo_JavaLangWrapperTypesMenu/booleans/invoke/results/entities/get/0");
+        final String booleanId = booleanEntity.at("/_meta/id").asText();
+        final JsonNode originalBoolean = booleanEntity.at("/readWriteOptionalProperty/get");
+        final String booleanMutation = "mutation { demo_WrapperBooleanEntity__readWriteOptionalProperty(_target: {id: "
+                + OBJECT_MAPPER.writeValueAsString(booleanId) + "}, readWriteOptionalProperty: %s) "
+                + "{ readWriteOptionalProperty { get } } }";
+        try {
+            final JsonNode falseValue = graphQL(booleanMutation.formatted("false"));
+            assertNoGraphQLErrors(falseValue);
+            assertThat(falseValue.at("/data/demo_WrapperBooleanEntity__readWriteOptionalProperty/readWriteOptionalProperty/get").asBoolean())
+                    .isFalse();
+            final JsonNode nullValue = graphQL(booleanMutation.formatted("null"));
+            assertNoGraphQLErrors(nullValue);
+            assertThat(nullValue.at("/data/demo_WrapperBooleanEntity__readWriteOptionalProperty/readWriteOptionalProperty/get").isNull())
+                    .isTrue();
+        } finally {
+            final JsonNode restored = graphQL(booleanMutation.formatted(
+                    originalBoolean.isNull() ? "null" : Boolean.toString(originalBoolean.asBoolean())));
+            assertNoGraphQLErrors(restored);
+        }
+
+        final JsonNode offset = graphQL("""
+                {
+                  rich {
+                    demo_JavaTimeTypesMenu {
+                      offsetDateTimes {
+                        invoke {
+                          results {
+                            ... on rich__demo_OffsetDateTimes {
+                              openViewModel {
+                                invoke(initialValue: "2026-08-23T10:15:30.123456789-04:00") {
+                                  results {
+                                    ... on rich__demo_OffsetDateTimeVm { readWriteProperty { get } }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(offset);
+        assertThat(offset.at("/data/rich/demo_JavaTimeTypesMenu/offsetDateTimes/invoke/results/openViewModel/invoke/results/readWriteProperty/get").asText())
+                .contains("2026-08-23T10:15:30.123456789-04:00");
+
+        final String zonedValue = "2026-11-01T01:30:00-04:00[America/New_York]";
+        final JsonNode zoned = graphQL("""
+                {
+                  rich {
+                    demo_JavaTimeTypesMenu {
+                      zonedDateTimes {
+                        invoke {
+                          results {
+                            ... on rich__demo_ZonedDateTimes {
+                              openViewModel {
+                                invoke(initialValue: %s) {
+                                  results {
+                                    ... on rich__demo_ZonedDateTimeVm { readWriteProperty { get } }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(zonedValue)));
+        assertNoGraphQLErrors(zoned);
+        assertThat(ZonedDateTime.parse(zoned.at(
+                "/data/rich/demo_JavaTimeTypesMenu/zonedDateTimes/invoke/results/openViewModel/invoke/results/readWriteProperty/get").asText()))
+                .isEqualTo(ZonedDateTime.parse(zonedValue));
     }
 
     @Test
