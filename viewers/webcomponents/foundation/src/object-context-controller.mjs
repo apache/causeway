@@ -27,7 +27,11 @@ import {
 } from './action-dispatch.mjs';
 import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
-import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
+import {
+  argumentsFromValues,
+  commandSelection,
+  resultSelectionForType
+} from './interaction-operations.mjs';
 import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
 import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
@@ -519,11 +523,14 @@ export class ObjectContextController extends EventTarget {
     if (!descriptor || descriptor.kind !== 'collection' || (!usesWindow && !descriptor.fields.has('get'))) {
       throw new Error(`Collection '${member}' is not readable on '${description.logicalTypeName}'.`);
     }
+    if (['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind)) {
+      throw new Error(`Collection '${member}' uses an abstract row type that requires concrete fragment projection.`);
+    }
     const requestedOffset = usesWindow ? integerAtLeast(offset, 0, 'Collection window offset') : 0;
     const requestedSize = usesWindow
       ? integerAtLeast(size ?? descriptor.window.sizeDefault, 1, 'Collection window size')
       : null;
-    const rowSelection = collectionRowSelection(columns);
+    const rowSelection = collectionRowSelection(descriptor, columns, description.types);
     const selection = usesWindow
       ? null
       : {[member]: {get: rowSelection}};
@@ -1084,7 +1091,7 @@ function translateRequirement(requirement, description) {
         .filter(field => member.fields.has(field))
         .map(field => [field, true])
     );
-    memberSelection.get = propertyValueSelection(member);
+    memberSelection.get = propertyValueSelection(member, description.types);
     return {descriptor: member, selection: {[member.id]: memberSelection}};
   }
   if (requirement.kind === 'collection'
@@ -1099,31 +1106,12 @@ function translateRequirement(requirement, description) {
   };
 }
 
-function propertyValueSelection(member) {
+function propertyValueSelection(member, types) {
   const value = member.value;
   if (!value || value.typeKind === 'SCALAR' || value.typeKind === 'ENUM') {
     return true;
   }
-  const typeFields = value.typeDescription?.fields ?? [];
-  if (typeFields.some(field => field.name === '_meta')) {
-    return {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
-  }
-  const lobFields = typeFields
-    .filter(field => ['name', 'mimeType', 'bytes', 'chars'].includes(field.name))
-    .map(field => field.name);
-  if (lobFields.length > 0) {
-    return Object.fromEntries(lobFields.map(field => [field, true]));
-  }
-  const scalarFields = typeFields
-    .filter(field => ['SCALAR', 'ENUM'].includes(innermostType(field.type)?.kind))
-    .map(field => field.name);
-  if (scalarFields.length > 0) {
-    return Object.fromEntries(scalarFields.map(field => [field, true]));
-  }
-  if (value.typeDescription) {
-    return {__typename: true};
-  }
-  return {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+  return resultSelectionForType(value.typeRef, types) ?? true;
 }
 
 function integerAtLeast(value, minimum, label) {
@@ -1165,8 +1153,14 @@ function obsoleteRequestError() {
   return error;
 }
 
-function collectionRowSelection(columns) {
-  const selection = {_meta: {id: true, logicalTypeName: true, title: true, version: true}};
+function collectionRowSelection(descriptor, columns, types) {
+  const value = descriptor.value;
+  const elementTypeRef = value?.elementTypeRef ?? value?.typeRef ?? null;
+  const selection = {...(resultSelectionForType(elementTypeRef, types) ?? {__typename: true})};
+  const concreteObject = value?.typeKind === 'OBJECT' && value.typeDescription;
+  if (!concreteObject) {
+    return selection;
+  }
   for (const column of columns) {
     const member = typeof column === 'string' ? column : column?.member;
     if (!member) {

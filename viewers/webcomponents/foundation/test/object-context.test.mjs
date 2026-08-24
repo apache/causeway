@@ -23,7 +23,9 @@ import {CausewayGraphQLClient} from '../src/graphql-client.mjs';
 import {ObjectContextController, StructuralResourceError} from '../src/object-context-controller.mjs';
 import {
   createRichSchemaFixtureExecutor,
+  createVersionlessRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
+  DEPARTMENT_OBJECT_FIELD,
   graphQLObjectResponse,
   partialPropertyErrorResponse,
   waitFor
@@ -89,6 +91,29 @@ test('coordinates enum, object-reference, LOB and unsupported property projectio
   assert.equal(blobState.data.get.name, 'prospectus.pdf');
   assert.equal(clobState.data.get.chars, '/graphql/object/history/clobChars');
   assert.deepEqual(unsupportedState.data.get, {nested: {value: 'unknown'}});
+});
+
+test('object-valued property projection omits an absent metadata version', async () => {
+  const response = graphQLObjectResponse();
+  delete response.data.rich[DEPARTMENT_OBJECT_FIELD].chair.get._meta.version;
+  const executor = createRichSchemaFixtureExecutor({
+    types: createVersionlessRichSchemaTypes(),
+    readResponses: [response]
+  });
+  const context = createContext(executor);
+  let chairState;
+  context.registerRequirement({kind: 'property', member: 'chair'}, state => { chairState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  const document = executor.readCalls[0].document;
+  const chairSelection = document.slice(document.indexOf('chair {'), document.indexOf('prospectus {'));
+  assert.match(chairSelection, /_meta\s*\{[\s\S]*?id/);
+  assert.match(chairSelection, /logicalTypeName/);
+  assert.match(chairSelection, /title/);
+  assert.doesNotMatch(chairSelection, /version/);
+  assert.deepEqual(chairState.data.get._meta, {
+    id: 'staff-1', logicalTypeName: 'university.staff.StaffMember', title: 'Dr Ada'
+  });
 });
 
 test('loads a later requirement as a delta and refreshes only active requirements', async () => {
