@@ -42,6 +42,31 @@ class HtmxRouteCodecTest {
     }
 
     @Test
+    void roundTripsLongOpaqueIdentifierWithinCanonicalEncodedBound() {
+        final var identifier = "memento-" + "a".repeat(3000);
+        final var route = new HtmxObjectRoute("demo.CompositeValuesPage", identifier);
+
+        final var path = codec.objectPath(route);
+
+        assertThat(path).endsWith(identifier);
+        assertThat(codec.parseObjectPath(path)).isEqualTo(route);
+    }
+
+    @Test
+    void acceptsExactEncodedBoundaryAndRejectsOverflowOrExpansion() {
+        assertThat(HtmxRouteCodec.encodeSegment("a".repeat(HtmxRouteCodec.MAX_ENCODED_LENGTH)))
+                .hasSize(HtmxRouteCodec.MAX_ENCODED_LENGTH);
+        assertThatThrownBy(() -> HtmxRouteCodec.encodeSegment("a".repeat(HtmxRouteCodec.MAX_ENCODED_LENGTH + 1)))
+                .isInstanceOf(InvalidHtmxRouteException.class);
+        assertThatThrownBy(() -> HtmxRouteCodec.encodeSegment("é".repeat(2049)))
+                .isInstanceOf(InvalidHtmxRouteException.class);
+        assertThatThrownBy(() -> HtmxRouteCodec.encodeSegment(" ".repeat(1366)))
+                .isInstanceOf(InvalidHtmxRouteException.class);
+        assertThat(HtmxRouteCodec.encodeSegment("!'()*~"))
+                .isEqualTo("%21%27%28%29%2A~");
+    }
+
+    @Test
     void supportsConfiguredDeploymentBasePath() {
         assertThat(codec.basePath()).isEqualTo("/apps/petclinic");
         assertThat(codec.isRootPath("/apps/petclinic/")).isTrue();
@@ -68,14 +93,18 @@ class HtmxRouteCodecTest {
                 "/apps/petclinic/object/type/%2F",
                 "/apps/petclinic/object/type/%5C",
                 "/apps/petclinic/object/type/%00",
+                "/apps/petclinic/object/type/%C2%80",
+                "/apps/petclinic/object/type/%ED%A0%80",
                 "/apps/petclinic/object/type/%2E%2E",
                 "/apps/petclinic/object/type/%41",
                 "/other/object/type/id");
     }
 
     @Test
-    void rejectsOverlongValuesAndInvalidBasePaths() {
-        assertThatThrownBy(() -> codec.objectPath(new HtmxObjectRoute("type", "x".repeat(1025))))
+    void rejectsOverlongValuesMalformedUnicodeAndInvalidBasePaths() {
+        assertThatThrownBy(() -> codec.objectPath(new HtmxObjectRoute("type", "x".repeat(4097))))
+                .isInstanceOf(InvalidHtmxRouteException.class);
+        assertThatThrownBy(() -> codec.objectPath(new HtmxObjectRoute("type", "\ud800")))
                 .isInstanceOf(InvalidHtmxRouteException.class);
         assertThatThrownBy(() -> new HtmxRouteCodec("/"))
                 .isInstanceOf(IllegalArgumentException.class);

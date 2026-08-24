@@ -40,6 +40,7 @@
     {"family": "protected-password", "rootField": "demo_CausewayPasswords", "member": "entities"},
     {"family": "blob", "rootField": "demo_CausewayBlobs", "member": "entities"},
     {"family": "clob", "rootField": "demo_CausewayClobs", "member": "entities"},
-    {"family": "custom-value", "rootField": "demo_CompositeValuesPage", "member": "complexNumber"}
+    {"family": "custom-value", "rootField": "demo_CompositeValuesPage", "member": "complexNumber"},
+    {"family": "opaque-route", "rootField": "demo_CompositeValuesPage", "member": "objectIdentifier"}
   ]
 }

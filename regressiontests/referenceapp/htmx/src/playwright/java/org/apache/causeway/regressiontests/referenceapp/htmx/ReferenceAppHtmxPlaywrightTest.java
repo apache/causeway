@@ -257,11 +257,32 @@ class ReferenceAppHtmxPlaywrightTest {
 
         final String compositeId = invokeViewModel(
                 "demo_CompositeValueTypeMenu", "compositeValueTypes", "rich__demo_CompositeValuesPage");
-        page.navigate(url("/htmx/object/demo.CompositeValuesPage/"
-                        + URLEncoder.encode(compositeId, StandardCharsets.UTF_8).replace("+", "%20")),
+        assertThat(compositeId.length()).isGreaterThan(1024).isLessThanOrEqualTo(4096);
+        page.evaluate("target => document.dispatchEvent(new CustomEvent('causeway-navigation-request', "
+                        + "{bubbles: true, composed: true, cancelable: true, detail: {target}}))",
+                Map.of("logicalTypeName", "demo.CompositeValuesPage", "id", compositeId));
+        waitForLogicalType("demo.CompositeValuesPage");
+        final Locator compositeContext = page.locator("#causeway-route causeway-object-context");
+        assertThat(compositeContext.getAttribute("object-id")).isEqualTo(compositeId);
+        assertThat(page.evaluate("() => decodeURIComponent(location.pathname.substring(location.pathname.lastIndexOf('/') + 1))"))
+                .isEqualTo(compositeId);
+        final Locator complexNumber = page.locator("causeway-property[member='complexNumber']");
+        complexNumber.waitFor();
+        assertThat(complexNumber.count()).isEqualTo(1);
+        assertThat(complexNumber.innerText()).isNotBlank();
+
+        page.goBack();
+        waitForLogicalType("demo.CausewayPasswordEntity");
+        page.goForward();
+        waitForLogicalType("demo.CompositeValuesPage");
+        assertThat(page.locator("#causeway-route causeway-object-context").getAttribute("object-id"))
+                .isEqualTo(compositeId);
+
+        page.navigate(url("/htmx/object/type/id/extra"),
                 new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         page.waitForFunction("() => document.querySelector(\"[data-testid='causeway-route-page']\")?.dataset.routeState === 'invalid-route'");
-        assertThat(page.locator(ROUTE_PAGE).innerText()).containsIgnoringCase("invalid");
+        assertThat(page.locator(ROUTE_PAGE).innerText()).containsIgnoringCase("invalid")
+                .doesNotContain("id/extra");
     }
 
     @Test

@@ -28,6 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.causeway.viewer.webcomponents.htmx.HtmxObjectRoute;
+import org.apache.causeway.viewer.webcomponents.htmx.HtmxRouteCodec;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(
@@ -313,6 +316,49 @@ class ReferenceAppHtmxApplication_IntegTest {
         assertThat(first.at("/_meta/logicalTypeName").asText()).isEqualTo("demo.ActionChoicesFromEntity");
         assertThat(first.at("/_meta/id").asText()).isNotBlank();
         assertThat(first.at("/name/get").asText()).isNotBlank();
+    }
+
+    @Test
+    void compositeViewModelIdentityRoundTripsThroughTheBoundedCanonicalRoute() throws Exception {
+        final JsonNode opened = graphQL("""
+                mutation {
+                    demo_CompositeValueTypeMenu__compositeValueTypes {
+                        _meta { id logicalTypeName title }
+                    }
+                }
+                """);
+        assertNoGraphQLErrors(opened);
+        final JsonNode metadata = opened.at(
+                "/data/demo_CompositeValueTypeMenu__compositeValueTypes/_meta");
+        final String identifier = metadata.path("id").asText();
+        assertThat(metadata.path("logicalTypeName").asText()).isEqualTo("demo.CompositeValuesPage");
+        assertThat(identifier.length()).isGreaterThan(1024).isLessThanOrEqualTo(4096);
+
+        final HtmxRouteCodec codec = new HtmxRouteCodec("/htmx");
+        final HtmxObjectRoute route = new HtmxObjectRoute("demo.CompositeValuesPage", identifier);
+        final String canonicalPath = codec.objectPath(route);
+        assertThat(canonicalPath.substring(canonicalPath.lastIndexOf('/') + 1).length())
+                .isLessThanOrEqualTo(4096);
+        assertThat(codec.parseObjectPath(canonicalPath)).isEqualTo(route);
+
+        final HttpResponse<String> page = get(canonicalPath);
+        assertThat(page.statusCode()).isEqualTo(200);
+        assertThat(page.body())
+                .contains("data-route-state=\"loading\"")
+                .contains("logical-type=\"demo.CompositeValuesPage\"")
+                .doesNotContain("data-route-state=\"invalid-route\"");
+
+        final JsonNode reconstructed = graphQL("""
+                { rich { demo_CompositeValuesPage(object: {id: %s}) {
+                    _meta { id logicalTypeName title }
+                    complexNumber { get }
+                } } }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(identifier)));
+        assertNoGraphQLErrors(reconstructed);
+        assertThat(reconstructed.at("/data/rich/demo_CompositeValuesPage/_meta/id").asText())
+                .isEqualTo(identifier);
+        assertThat(reconstructed.at("/data/rich/demo_CompositeValuesPage/complexNumber/get").isMissingNode())
+                .isFalse();
     }
 
     @Test
