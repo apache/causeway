@@ -184,6 +184,21 @@ export function renderGraphQLType(typeRef) {
   return assertGraphQLName(typeRef.name, 'GraphQL type');
 }
 
+export function metadataSelectionForType(typeRef, types) {
+  if (innermostType(typeRef)?.kind !== 'OBJECT') {
+    return null;
+  }
+  const typeDescription = types.get(namedType(typeRef));
+  const metadataField = fieldsByName(typeDescription).get('_meta');
+  const metadataType = metadataField ? types.get(namedType(metadataField.type)) ?? null : null;
+  const metadataFields = fieldsByName(metadataType);
+  const selection = Object.fromEntries(
+    ['id', 'logicalTypeName', 'title', 'version']
+      .filter(fieldName => metadataFields.has(fieldName))
+      .map(fieldName => [fieldName, true]));
+  return Object.keys(selection).length > 0 ? {_meta: selection} : null;
+}
+
 export function resultSelectionForType(typeRef, types) {
   const kind = innermostType(typeRef)?.kind;
   if (kind === 'SCALAR' || kind === 'ENUM') {
@@ -193,18 +208,9 @@ export function resultSelectionForType(typeRef, types) {
   if (!typeDescription) {
     return {__typename: true};
   }
-  const fields = fieldsByName(typeDescription);
-  const metadataField = fields.get('_meta');
-  const metadataType = metadataField ? types.get(namedType(metadataField.type)) ?? null : null;
-  if (metadataType) {
-    const metadataFields = fieldsByName(metadataType);
-    const metadataSelection = Object.fromEntries(
-      ['id', 'logicalTypeName', 'title', 'version']
-        .filter(fieldName => metadataFields.has(fieldName))
-        .map(fieldName => [fieldName, true]));
-    if (Object.keys(metadataSelection).length > 0) {
-      return {_meta: metadataSelection};
-    }
+  const metadataSelection = metadataSelectionForType(typeRef, types);
+  if (metadataSelection) {
+    return metadataSelection;
   }
   const scalarFields = typeDescription.fields
     .filter(field => ['SCALAR', 'ENUM'].includes(innermostType(field.type)?.kind))

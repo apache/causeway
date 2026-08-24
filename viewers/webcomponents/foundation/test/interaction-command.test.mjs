@@ -24,6 +24,7 @@ import {ObjectContextController} from '../src/object-context-controller.mjs';
 
 const scalar = name => ({kind: 'SCALAR', name, ofType: null});
 const named = name => ({kind: 'OBJECT', name, ofType: null});
+const list = ofType => ({kind: 'LIST', name: null, ofType});
 const argument = (name, type) => ({name, description: null, defaultValue: null, type});
 const field = (name, type, args = []) => ({name, description: null, args, type});
 const graphType = (name, fields) => ({name, kind: 'OBJECT', description: null, fields, inputFields: [], enumValues: []});
@@ -57,6 +58,46 @@ function fixtureDescription() {
     types: new Map([
       [generatedTypeName, graphType(generatedTypeName, [])],
       [safeInvokeType, graphType(safeInvokeType, [field('results', scalar('String'))])]
+    ])
+  };
+}
+
+function versionlessPreparationDescription() {
+  const description = fixtureDescription();
+  const choiceTypeName = 'rich__example_VersionlessChoice';
+  const metadataTypeName = `${choiceTypeName}__gqlv_meta`;
+  const paramsTypeName = `${description.generatedTypeName}__choose__gqlv_action_params`;
+  const parameterTypeName = `${description.generatedTypeName}__choose__choice__gqlv_action_parameter`;
+  const invokeTypeName = `${description.generatedTypeName}__choose__gqlv_action_invoke`;
+  const choiceInputType = named(`${choiceTypeName}__gqlv_input`);
+  const action = {
+    id: 'choose', kind: 'action', description: 'Choose', generatedTypeName: `${description.generatedTypeName}__choose__gqlv_action`,
+    fields: new Map([
+      ['params', field('params', named(paramsTypeName))],
+      ['validate', field('validate', scalar('String'), [argument('choice', choiceInputType)])],
+      ['invoke', field('invoke', named(invokeTypeName), [argument('choice', choiceInputType)])]
+    ]), value: null
+  };
+  return {
+    ...description,
+    members: new Map(description.members).set('choose', action),
+    types: new Map([
+      ...description.types,
+      [paramsTypeName, graphType(paramsTypeName, [field('choice', named(parameterTypeName))])],
+      [parameterTypeName, graphType(parameterTypeName, [
+        field('hidden', scalar('Boolean')),
+        field('default', named(choiceTypeName)),
+        field('choices', list(named(choiceTypeName))),
+        field('autoComplete', list(named(choiceTypeName)), [argument('search', scalar('String'))]),
+        field('datatype', scalar('String'))
+      ])],
+      [choiceTypeName, graphType(choiceTypeName, [field('_meta', named(metadataTypeName))])],
+      [metadataTypeName, graphType(metadataTypeName, [
+        field('id', scalar('ID')),
+        field('logicalTypeName', scalar('String')),
+        field('title', scalar('String'))
+      ])],
+      [invokeTypeName, graphType(invokeTypeName, [field('results', scalar('String'))])]
     ])
   };
 }
@@ -147,6 +188,38 @@ test('query-only and non-compliant variants report or execute discovered capabil
   assert.equal((await nonCompliant.updateProperty('name', 'Updated')).status, 'success');
   assert.equal(selection.name.set.__args.name, 'Updated');
   nonCompliant.disconnect();
+});
+
+test('versionless preparation and autocomplete select only advertised identity metadata', async () => {
+  const description = versionlessPreparationDescription();
+  const calls = [];
+  const choice = {_meta: {id: 'choice-1', logicalTypeName: 'example.VersionlessChoice', title: 'Choice one'}};
+  const client = {
+    describeObject: async () => description,
+    describeMutation: async () => null,
+    executeObjectInteraction: async request => {
+      calls.push(request);
+      if (request.operationName === 'CausewayPrepareAction') {
+        return {data: {choose: {params: {choice: {hidden: false, default: choice, choices: [choice], datatype: 'example.VersionlessChoice'}}}}, errors: [], operation: {}};
+      }
+      return {data: {choose: {params: {choice: {autoComplete: [choice]}}}}, errors: [], operation: {}};
+    }
+  };
+  const context = new ObjectContextController({client, logicalTypeName: 'example.Object', objectId: '42'});
+
+  const prepared = await context.prepareAction('choose');
+  const completed = await context.autoCompleteActionParameter('choose', 'choice', 'Cho');
+
+  assert.equal(prepared.status, 'success');
+  assert.equal(prepared.data.parameters[0].state.default._meta.id, 'choice-1');
+  assert.equal(completed.status, 'success');
+  for (const call of calls) {
+    const serializedSelection = JSON.stringify(call.selection);
+    assert.match(serializedSelection, /logicalTypeName/);
+    assert.doesNotMatch(serializedSelection, /version/);
+  }
+  assert.deepEqual(normalizeInteractionInput(choice), {id: 'choice-1'});
+  context.disconnect();
 });
 
 test('transient validation aborts obsolete generations', async () => {

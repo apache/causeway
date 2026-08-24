@@ -23,6 +23,8 @@ import {installDomShim} from './dom-shim.mjs';
 import {
   collectionWindowResponse,
   createRichSchemaFixtureExecutor,
+  createRichSchemaTypes,
+  createVersionlessRichSchemaTypes,
   createWindowedRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
   DEPARTMENT_OBJECT_FIELD,
@@ -41,9 +43,9 @@ const {
   ObjectContextController
 } = await import('../src/index.mjs');
 
-function row({id = 'staff-1', name = 'Dr Ada', code = 'ADA'} = {}) {
+function row({id = 'staff-1', name = 'Dr Ada', code = 'ADA', version = '3'} = {}) {
   return {
-    _meta: {id, logicalTypeName: STAFF_LOGICAL_TYPE, version: '3', title: name},
+    _meta: {id, logicalTypeName: STAFF_LOGICAL_TYPE, ...(version == null ? {} : {version}), title: name},
     name: {hidden: false, disabled: null, datatype: 'String', get: name},
     code: {hidden: false, disabled: null, datatype: 'String', get: code}
   };
@@ -142,6 +144,33 @@ test('collection secondary reads are lazy, cached and hydrate row contexts', asy
   assert.equal(codeState.data.get, 'ADA');
 });
 
+test('versionless concrete collection rows retain identity, columns and hydration', async () => {
+  const staff = row({version: null});
+  const executor = createRichSchemaFixtureExecutor({
+    types: createVersionlessRichSchemaTypes(),
+    readResponses: [graphQLObjectResponse(), collectionResponse([staff])]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({member: 'staffMembers', columns: ['name']});
+  const document = executor.readCalls[1].document;
+  assert.match(document, /_meta\s*\{[\s\S]*?id/);
+  assert.match(document, /logicalTypeName/);
+  assert.match(document, /title/);
+  assert.doesNotMatch(document, /version/);
+  assert.match(document, /name\s*\{/);
+  assert.equal(loaded.rows[0]._meta.version, undefined);
+  const rowContext = context.createHydratedRowContext(loaded.rows[0], loaded.rowSelection);
+  assert.equal(rowContext.identity.id, 'staff-1');
+  rowContext.disconnect();
+});
+
 test('collection secondary reads prefer bounded windows and expose semantic range state', async () => {
   const rows = [row({id: 'staff-6', name: 'Dr Six'}), row({id: 'staff-7', name: 'Dr Seven'})];
   const executor = createRichSchemaFixtureExecutor({
@@ -186,6 +215,30 @@ test('collection secondary reads prefer bounded windows and expose semantic rang
 
   await context.loadCollection({member: 'staffMembers', columns: ['name'], offset: 5, size: 2});
   assert.equal(executor.windowCalls.length, 1, 'an identical window should use the secondary cache');
+});
+
+test('abstract collection rows fail locally before a speculative metadata operation', async () => {
+  const types = createRichSchemaTypes();
+  const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
+  collectionType.fields.find(candidate => candidate.name === 'get').type = {
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: 'rich__university_staff_StaffUnion', ofType: null}
+  };
+  types.set('rich__university_staff_StaffUnion', {
+    kind: 'UNION', name: 'rich__university_staff_StaffUnion', description: null, fields: []
+  });
+  const executor = createRichSchemaFixtureExecutor({types, readResponses: [graphQLObjectResponse()]});
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  await assert.rejects(
+    context.loadCollection({member: 'staffMembers'}),
+    /abstract row type that requires concrete fragment projection/);
+  assert.equal(executor.readCalls.length, 1);
 });
 
 test('collection secondary reads discard responses superseded for the same consumer', async () => {
