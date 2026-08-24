@@ -20,12 +20,14 @@ package org.apache.causeway.viewer.graphql.model.registry;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
 import graphql.schema.GraphQLTypeReference;
 import graphql.schema.GraphQLUnionType;
 
+import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphQLUnionType.newUnionType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -44,6 +46,16 @@ class GraphQLTypeRegistryUnionTest {
         assertEquals(Set.of("FirstType", "SecondType"), names(merged));
         assertSame(merged, registry.lookup("ValueHolder", GraphQLUnionType.class).orElseThrow());
         assertEquals(1, registry.getGraphQLTypes().size());
+    }
+
+    @Test
+    void concurrentRegistrationRetainsEveryDistinctType() {
+        var registry = new GraphQLTypeRegistry(null);
+
+        IntStream.range(0, 1_000).parallel().forEach(index ->
+                registry.addTypeIfNotAlreadyPresent(newObject().name("Type" + index).build()));
+
+        assertEquals(1_000, registry.getGraphQLTypes().size());
     }
 
     private static GraphQLUnionType union(final String name, final String... possibleTypes) {

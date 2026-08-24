@@ -22,6 +22,8 @@ import {CAUSEWAY_MENU_BARS_NAMESPACE} from '../../src/menu-layout.mjs';
 export const SAMPLE_SERVICE_LOGICAL_TYPE = 'causeway.webcomponents.sample.SampleMenu';
 export const SAMPLE_SERVICE_FIELD = 'causeway_webcomponents_sample_SampleMenu';
 export const SAMPLE_SERVICE_TYPE = 'rich__causeway_webcomponents_sample_SampleMenu';
+const GREET_PARAMETER_TYPE = `${SAMPLE_SERVICE_TYPE}__greet__name__gqlv_action_parameter`;
+const GREET_AUTOCOMPLETE_WINDOW_TYPE = `${GREET_PARAMETER_TYPE}_autocomplete_window`;
 
 export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
   const applicationFields = [
@@ -92,13 +94,26 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
     [`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_params`, objectType(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_params`, [
       field('name', named(`${SAMPLE_SERVICE_TYPE}__greet__name__gqlv_action_parameter`))
     ])],
-    [`${SAMPLE_SERVICE_TYPE}__greet__name__gqlv_action_parameter`, objectType(`${SAMPLE_SERVICE_TYPE}__greet__name__gqlv_action_parameter`, [
+    [GREET_PARAMETER_TYPE, objectType(GREET_PARAMETER_TYPE, [
       field('hidden', scalar('Boolean'), [argument('name', scalar('String'))]),
       field('disabled', scalar('String'), [argument('name', scalar('String'))]),
       field('default', scalar('String'), [argument('name', scalar('String'))]),
       field('choices', list(scalar('String')), [argument('name', scalar('String'))]),
+      field('autoComplete', list(scalar('String')), [argument('search', scalar('String'))]),
+      field('autoCompleteWindow', named(GREET_AUTOCOMPLETE_WINDOW_TYPE), [
+        argument('search', scalar('String')),
+        {...argument('offset', scalar('Int')), defaultValue: '0'},
+        {...argument('size', scalar('Int')), defaultValue: '2'}
+      ]),
       field('validity', scalar('String'), [argument('name', scalar('String'))]),
       field('datatype', scalar('String'))
+    ])],
+    [GREET_AUTOCOMPLETE_WINDOW_TYPE, objectType(GREET_AUTOCOMPLETE_WINDOW_TYPE, [
+      field('items', list(scalar('String'))), field('offset', scalar('Int')),
+      field('requestedSize', scalar('Int')), field('returnedCount', scalar('Int')),
+      field('totalCount', scalar('Int')), field('maximumSize', scalar('Int')),
+      field('hasPrevious', scalar('Boolean')), field('hasNext', scalar('Boolean')),
+      field('ordering', scalar('String'))
     ])],
     [`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_invoke`, invokeType(
       `${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_invoke`, scalar('String')
@@ -187,6 +202,16 @@ export function createMenuGraphQLExecutor({
         choices: ['Ada', 'Grace'],
         validity: null,
         datatype: 'String'
+      }}}}}}};
+    }
+    if (request.operationName === 'CausewayServiceActionParameterAutoCompleteWindow') {
+      serviceCalls.push(request);
+      return {data: {rich: {[SAMPLE_SERVICE_FIELD]: {greet: {params: {name: {
+        autoCompleteWindow: {
+          items: ['Grace'], offset: 2, requestedSize: 2, returnedCount: 1,
+          totalCount: 3, maximumSize: 2, hasPrevious: true, hasNext: false,
+          ordering: 'APPLICATION'
+        }
       }}}}}}};
     }
     if (request.operationName === 'CausewayValidateServiceAction') {

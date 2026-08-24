@@ -567,9 +567,9 @@ function referencedInteractionTypeNames(typeDescription, generatedTypeName, sche
   const consider = (typeRef, fieldName = '') => {
     const typeName = namedType(typeRef);
     const kind = innermostType(typeRef)?.kind;
-    const choiceValue = ['choices', 'default', 'autoComplete'].includes(fieldName)
+    const choiceValue = ['choices', 'default', 'autoComplete', 'autoCompleteWindow'].includes(fieldName)
       && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
-    const objectValue = ['get', 'rows'].includes(fieldName)
+    const objectValue = ['get', 'rows', 'items'].includes(fieldName)
       && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
     const objectMetadata = fieldName === '_meta' && kind === 'OBJECT';
     if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)

@@ -107,6 +107,18 @@ It defaults to "`_target`".
 
 
 
+=== Bounded autocomplete response windows
+
+Every rich property or action parameter that advertises `autoComplete(search)` also advertises the additive `autoCompleteWindow(search, offset, size)` field.
+The window returns `items`, offset and requested size, returned and total counts, configured maximum, previous and next availability, and `APPLICATION` ordering.
+One request invokes the authoritative application autocomplete semantic once, preserves that execution's encounter order, and returns only the requested response slice.
+This bounds GraphQL response transfer but does not claim persistence query pushdown, cursor stability, or a cross-request snapshot.
+
+`autocomplete.default-window-size` defaults to `20` and supplies an omitted size.
+`autocomplete.max-window-size` defaults to `100` and rejects larger requests before invoking autocomplete.
+The default must not exceed the maximum.
+Existing `autoComplete(search)` documents remain compatible.
+
 The remaining configuration properties are explained in more detail elsewhere:
 
 * xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[resources.response-type]

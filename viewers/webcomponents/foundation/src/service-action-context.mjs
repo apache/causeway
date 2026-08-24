@@ -26,7 +26,13 @@ import {
   secureActionInvocationResult
 } from './action-dispatch.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
-import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
+import {
+  argumentsFromValues,
+  autoCompleteWindowPlan,
+  commandSelection,
+  normalizeAutoCompleteWindow,
+  resultSelectionForType
+} from './interaction-operations.mjs';
 import {InteractionResultKind, InteractionStatus} from './types.mjs';
 
 export class ServiceActionContextController {
@@ -206,6 +212,50 @@ export class ServiceActionContextController {
     });
   }
 
+  async autoCompleteActionParameterWindow(
+    actionId,
+    parameterId,
+    search,
+    values = {},
+    {offset = 0, size = null, signal} = {}
+  ) {
+    const description = await this.describeService();
+    const capabilities = await this.describeActionInteraction(actionId);
+    const parameter = capabilities.parameters.find(candidate => candidate.id === parameterId);
+    const field = parameter?.fields.get('autoCompleteWindow');
+    if (!field) {
+      const legacy = await this.autoCompleteActionParameter(actionId, parameterId, search, values, {signal});
+      return legacy.status === InteractionStatus.SUCCESS
+        ? interactionResult(legacy.status, normalizeAutoCompleteWindow(legacy.data, {
+            legacy: true, offset, requestedSize: size
+          }), legacy.errors, legacy.operation)
+        : legacy;
+    }
+    return this.#runTransient(`action:${actionId}:${parameterId}:autocomplete`, signal, async commandSignal => {
+      const plan = autoCompleteWindowPlan(field, description.types);
+      if (!plan) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(
+          `Service-action parameter '${actionId}.${parameterId}' exposes an incomplete autocomplete window.`)]);
+      }
+      const args = {
+        ...argumentsFromValues(field, values),
+        ...windowArguments(field, search, offset, size)
+      };
+      const result = await this.client.executeServiceInteraction({
+        description,
+        selection: {
+          [actionId]: {params: {[parameterId]: {autoCompleteWindow: commandSelection(args, plan.selection)}}}
+        },
+        operationName: 'CausewayServiceActionParameterAutoCompleteWindow',
+        signal: commandSignal
+      });
+      return commandResponse(result, normalizeAutoCompleteWindow(
+        result.data?.[actionId]?.params?.[parameterId]?.autoCompleteWindow ?? null,
+        {offset, requestedSize: size ?? plan.sizeDefault}
+      ));
+    });
+  }
+
   async validateAction(actionId, values = {}, {signal} = {}) {
     return this.#runTransient(`action:${actionId}:validate`, signal, async commandSignal => {
       const description = await this.describeService();
@@ -306,11 +356,13 @@ export class ServiceActionContextController {
       const actionArgument = validateField?.args.find(argument => argument.name === field.name) ?? null;
       const inputType = actionArgument?.type ?? parameterInputType(wrapper);
       const enumType = inputType ? description.types.get(namedType(inputType)) ?? null : null;
+      const fields = fieldsByName(wrapper);
       return Object.freeze({
         id: field.name,
         description: field.description ?? null,
         generatedTypeName: wrapper?.name ?? namedType(field.type),
-        fields: fieldsByName(wrapper),
+        fields,
+        autoCompleteWindow: autoCompleteWindowPlan(fields.get('autoCompleteWindow'), description.types),
         inputType,
         enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
       });
@@ -397,6 +449,12 @@ async function ensureResultTypes(client, description, typeRef, signal) {
       description.types.set(metadataTypeName, metadataType);
     }
   }
+}
+
+function windowArguments(field, search, offset, size) {
+  const values = {search, offset};
+  if (size != null) values.size = size;
+  return argumentsFromValues(field, values);
 }
 
 function parameterInputType(wrapper) {

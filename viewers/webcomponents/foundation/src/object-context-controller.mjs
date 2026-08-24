@@ -29,9 +29,11 @@ import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.
 import {fieldsByName, namedType} from './introspection.mjs';
 import {
   argumentsFromValues,
+  autoCompleteWindowPlan,
   commandSelection,
   MAX_DIRECT_FRAGMENT_TYPES,
   metadataSelectionForType,
+  normalizeAutoCompleteWindow,
   resultSelectionForType
 } from './interaction-operations.mjs';
 import {
@@ -159,12 +161,16 @@ export class ObjectContextController extends EventTarget {
     const mutationFieldName = mutationFieldNameFor(description, member);
     const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
     const enumValues = descriptor.value?.typeDescription?.enumValues?.map(value => value.name) ?? [];
+    const autoCompleteWindow = autoCompleteWindowPlan(
+      descriptor.fields.get('autoCompleteWindow'), description.types);
     return Object.freeze({
       descriptor,
       editable: descriptor.fields.has('set') || Boolean(mutationField),
       validate: descriptor.fields.has('validate'),
       choices: descriptor.fields.has('choices'),
       autoComplete: descriptor.fields.has('autoComplete'),
+      autoCompleteWindow: Boolean(autoCompleteWindow),
+      autoCompleteWindowSize: autoCompleteWindow?.sizeDefault ?? null,
       mutationFieldName: mutationField ? mutationFieldName : null,
       inputType: propertyInputType(descriptor, mutationField, member),
       enumValues: Object.freeze(enumValues)
@@ -227,6 +233,38 @@ export class ObjectContextController extends EventTarget {
         signal: commandSignal
       });
       return commandResponse(result, result.data?.[member]?.autoComplete ?? null);
+    });
+  }
+
+  async autoCompletePropertyWindow(member, search, {offset = 0, size = null, signal} = {}) {
+    const {description, descriptor} = await this.#memberDescriptor(member, 'property');
+    const field = descriptor.fields.get('autoCompleteWindow');
+    if (!field) {
+      const legacy = await this.autoCompleteProperty(member, search, {signal});
+      return legacy.status === InteractionStatus.SUCCESS
+        ? interactionResult(legacy.status, normalizeAutoCompleteWindow(legacy.data, {
+            legacy: true, offset, requestedSize: size
+          }), legacy.errors, legacy.operation)
+        : legacy;
+    }
+    return this.#runTransient(`property:${member}:autocomplete`, signal, async commandSignal => {
+      const plan = autoCompleteWindowPlan(field, description.types);
+      if (!plan) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(
+          `Property '${member}' exposes an incomplete autocomplete window.`)]);
+      }
+      const args = windowArguments(field, search, offset, size);
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {[member]: {autoCompleteWindow: commandSelection(args, plan.selection)}},
+        operationName: 'CausewayPropertyAutoCompleteWindow',
+        signal: commandSignal
+      });
+      return commandResponse(result, normalizeAutoCompleteWindow(
+        result.data?.[member]?.autoCompleteWindow ?? null,
+        {offset, requestedSize: size ?? plan.sizeDefault}
+      ));
     });
   }
 
@@ -302,11 +340,13 @@ export class ObjectContextController extends EventTarget {
       const actionArgument = validateField?.args.find(argument => argument.name === field.name) ?? null;
       const inputType = actionArgument?.type ?? parameterInputType(wrapper);
       const enumType = inputType ? description.types.get(namedType(inputType)) ?? null : null;
+      const fields = fieldsByName(wrapper);
       return Object.freeze({
         id: field.name,
         description: field.description ?? null,
         generatedTypeName: wrapper?.name ?? namedType(field.type),
-        fields: fieldsByName(wrapper),
+        fields,
+        autoCompleteWindow: autoCompleteWindowPlan(fields.get('autoCompleteWindow'), description.types),
         inputType,
         enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
       });
@@ -431,6 +471,48 @@ export class ObjectContextController extends EventTarget {
         signal: commandSignal
       });
       return commandResponse(result, result.data?.[member]?.params?.[parameterId]?.autoComplete ?? null);
+    });
+  }
+
+  async autoCompleteActionParameterWindow(
+    member,
+    parameterId,
+    search,
+    values = {},
+    {offset = 0, size = null, signal} = {}
+  ) {
+    const {description} = await this.#memberDescriptor(member, 'action');
+    const capabilities = await this.describeActionInteraction(member);
+    const parameter = capabilities.parameters.find(candidate => candidate.id === parameterId);
+    const field = parameter?.fields.get('autoCompleteWindow');
+    if (!field) {
+      const legacy = await this.autoCompleteActionParameter(member, parameterId, search, values, {signal});
+      return legacy.status === InteractionStatus.SUCCESS
+        ? interactionResult(legacy.status, normalizeAutoCompleteWindow(legacy.data, {
+            legacy: true, offset, requestedSize: size
+          }), legacy.errors, legacy.operation)
+        : legacy;
+    }
+    return this.#runTransient(`action:${member}:${parameterId}:autocomplete`, signal, async commandSignal => {
+      const plan = autoCompleteWindowPlan(field, description.types);
+      if (!plan) {
+        return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(
+          `Action parameter '${member}.${parameterId}' exposes an incomplete autocomplete window.`)]);
+      }
+      const args = {...argumentsFromValues(field, values), ...windowArguments(field, search, offset, size)};
+      const result = await this.client.executeObjectInteraction({
+        description,
+        identity: this.identity,
+        selection: {
+          [member]: {params: {[parameterId]: {autoCompleteWindow: commandSelection(args, plan.selection)}}}
+        },
+        operationName: 'CausewayActionParameterAutoCompleteWindow',
+        signal: commandSignal
+      });
+      return commandResponse(result, normalizeAutoCompleteWindow(
+        result.data?.[member]?.params?.[parameterId]?.autoCompleteWindow ?? null,
+        {offset, requestedSize: size ?? plan.sizeDefault}
+      ));
     });
   }
 
@@ -1007,6 +1089,12 @@ async function ensureResultTypes(client, description, typeRef, signal) {
       description.types.set(metadataTypeName, metadataType);
     }
   }
+}
+
+function windowArguments(field, search, offset, size) {
+  const values = {search, offset};
+  if (size != null) values.size = size;
+  return argumentsFromValues(field, values);
 }
 
 function mutationFieldNameFor(description, member) {

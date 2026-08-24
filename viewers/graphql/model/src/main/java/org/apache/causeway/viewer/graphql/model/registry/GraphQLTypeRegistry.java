@@ -57,11 +57,11 @@ public class GraphQLTypeRegistry {
 
     Set<GraphQLType> graphQLTypes = new HashSet<>();
 
-    public Set<GraphQLType> getGraphQLTypes() {
-        return Collections.unmodifiableSet(graphQLTypes);
+    public synchronized Set<GraphQLType> getGraphQLTypes() {
+        return Collections.unmodifiableSet(new HashSet<>(graphQLTypes));
     }
 
-    void addTypeIfNotAlreadyPresent(
+    synchronized void addTypeIfNotAlreadyPresent(
             final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
 
@@ -73,7 +73,7 @@ public class GraphQLTypeRegistry {
         graphQLTypes.add(typeToAdd);
     }
 
-    public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
+    public synchronized GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
             final Class<?> typeToAdd,
             final SchemaType schemaType) {
         var objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
@@ -98,7 +98,7 @@ public class GraphQLTypeRegistry {
         return enumType;
     }
 
-    public void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
+    public synchronized void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
 
         if (typeToAdd instanceof GraphQLEnumType) {
             addTypeIfNotAlreadyPresent((GraphQLEnumType) typeToAdd);
@@ -131,7 +131,7 @@ public class GraphQLTypeRegistry {
         log.warn("GraphQLType {} not yet implemented", typeToAdd.getClass().getName());
     }
 
-    void addTypeIfNotAlreadyPresent(final GraphQLEnumType typeToAdd){
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLEnumType typeToAdd){
         if (isPresent(typeToAdd, GraphQLEnumType.class)){
             // For now we just log and skip
             log.debug("GraphQLEnumType for {} already present", typeToAdd.getName());
@@ -140,7 +140,7 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-    void addTypeIfNotAlreadyPresent(final GraphQLObjectType typeToAdd){
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLObjectType typeToAdd){
         if (isPresent(typeToAdd, GraphQLObjectType.class)){
             // For now we just log and skip
             log.debug("GraphQLObjectType for {} already present", typeToAdd.getName());
@@ -149,7 +149,7 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-    void addTypeIfNotAlreadyPresent(final GraphQLInputObjectType typeToAdd) {
+    synchronized void addTypeIfNotAlreadyPresent(final GraphQLInputObjectType typeToAdd) {
         if (isPresent(typeToAdd, GraphQLInputObjectType.class)){
             // For now we just log and skip
             log.debug("GraphQLInputObjectType for {} already present", typeToAdd.getName());
@@ -158,7 +158,7 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-    public GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
+    public synchronized GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
         var existing = lookup(typeToAdd.getName(), GraphQLUnionType.class);
         if (existing.isPresent()) {
             var existingType = existing.get();
@@ -190,7 +190,7 @@ public class GraphQLTypeRegistry {
                 .anyMatch(ot -> ot.getName().equals(typeToAdd.getName()));
     }
 
-    public <T extends GraphQLNamedType> Optional<T> lookup(
+    public synchronized <T extends GraphQLNamedType> Optional<T> lookup(
             final String typeName,
             final Class<T> cls) {
         return graphQLTypes.stream()
