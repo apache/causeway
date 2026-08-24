@@ -8,7 +8,7 @@ The action-dispatch correctness change is archived, completing the remaining Pri
 The versionless-identity and preparation correction is archived.
 The union-projection correction is archived.
 The opaque-route correction is archived.
-The next change should add paged GraphQL reference autocomplete before the Vaadin expansion and default sequence in `vaadin-default-roadmap.md`.
+The active `add-paged-graphql-reference-autocomplete` change adds honest bounded server response windows before the Vaadin expansion and default sequence in `vaadin-default-roadmap.md`.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
