@@ -9,9 +9,9 @@ It ports the Pet Owner, Pet, Visit, home, fixture, menu, and grid concepts from 
 
 The application runs the GraphQL, generic HTMX, and current Wicket viewers over one Causeway metamodel, H2 database, security policy, effective menu definition, effective grid definitions, and deterministic fixture.
 The Wicket viewer is a side-by-side presentation reference rather than a dependency of the generic HTMX module.
-The sample explicitly enables the route-lazy Vaadin free-core reference-widget pilot for eligible object-reference action parameters.
-Its strict CSP adds only the four pinned style hashes, preserves `style-src-attr 'none'`, and makes no candidate request until an eligible prompt opens.
-The current editor remains the configuration fallback.
+The sample explicitly enables the route-lazy Vaadin free-core reference adapter and qualified basic, numeric, and local-temporal field families.
+Its strict CSP adds only the pinned deduplicated hashes for enabled closures, preserves `style-src-attr 'none'`, and makes no candidate request until an eligible editor opens.
+Causeway elements, codecs, GraphQL interactions, and semantic events remain authoritative, and empty field-family plus disabled reference configuration provides the native rollback.
 
 == Run
 
@@ -57,6 +57,7 @@ mvn -f viewers/webcomponents/pom.xml \
     test
 ----
 
+Add `-Dcauseway.viewer.webcomponents.htmx.vaadin-reference-widgets=false -Dcauseway.viewer.webcomponents.htmx.vaadin-field-families=` to run the same suite through explicit native editors.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
 

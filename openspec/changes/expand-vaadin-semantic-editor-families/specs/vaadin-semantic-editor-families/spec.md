@@ -15,12 +15,12 @@ Application markup and events MUST remain Causeway-owned and MUST NOT require ra
 - **AND** GraphQL receives the value produced by the existing codec without additional JavaScript number coercion
 
 #### Scenario: Local temporal family is eligible
-- **WHEN** explicit configuration enables the local-temporal family and the value is `LocalDate`, `LocalTime`, or `LocalDateTime`
+- **WHEN** explicit configuration enables the local-temporal family and the value is `LocalDate`, or a `LocalTime` or `LocalDateTime` representable at millisecond precision
 - **THEN** the registry selects the corresponding internal picker
 - **AND** local value and supported fractional precision survive the semantic pending-value and GraphQL path
 
 #### Scenario: Shape is not qualified
-- **WHEN** the value is offset-bearing, zoned, legacy temporal, resource, custom, reference, collection, or lacks a reversible codec
+- **WHEN** the value has local temporal precision beyond milliseconds, is offset-bearing, zoned, legacy temporal, resource, custom, reference, collection, or lacks a reversible codec
 - **THEN** the field-family adapter is ineligible
 - **AND** the existing native or explicit unsupported presentation remains authoritative
 

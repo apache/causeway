@@ -84,11 +84,15 @@ export function installDomShim() {
       this.isConnected = false;
       this.innerHTML = '';
       this.hidden = false;
+      this.dataset = {};
     }
     setAttribute(name, value) {
       const oldValue = this.getAttribute(name);
       const newValue = String(value);
       this.attributes.set(name, newValue);
+      if (name.startsWith('data-')) {
+        this.dataset[name.slice(5).replace(/-([a-z])/g, (_, character) => character.toUpperCase())] = newValue;
+      }
       if (this.constructor.observedAttributes?.includes(name)) {
         this.attributeChangedCallback?.(name, oldValue, newValue);
       }
@@ -114,6 +118,17 @@ export function installDomShim() {
       }
       return child;
     }
+    replaceChildren(...children) {
+      for (const child of [...this.childNodes]) this.removeChild(child);
+      for (const child of children) this.appendChild(child);
+      this.innerHTML = '';
+    }
+    focus() {
+      document.activeElement = this;
+    }
+    blur() {
+      if (document.activeElement === this) document.activeElement = null;
+    }
     removeChild(child) {
       const index = this.childNodes.indexOf(child);
       if (index >= 0) {
@@ -132,6 +147,9 @@ export function installDomShim() {
     },
     get(name) {
       return registry.get(name);
+    },
+    whenDefined(name) {
+      return registry.has(name) ? Promise.resolve(registry.get(name)) : Promise.reject(new Error(`Custom element ${name} is not defined.`));
     }
   };
   const body = new ShimHTMLElement();

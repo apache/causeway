@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HtmxViewerControllerTest {
 
@@ -87,6 +88,42 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-reference-minimum-search-length=\"3\"")
                 .contains("data-causeway-reference-maximum-results=\"40\"");
+    }
+
+    @Test
+    void addsOnlyEnabledFieldFamilyHashesAndCanonicalShellPolicy() {
+        properties.setVaadinFieldFamilies("numeric, basic");
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+        final var policy = response.getHeaders().getFirst("Content-Security-Policy");
+
+        assertThat(response.getBody()).contains("data-causeway-field-families=\"basic,numeric\"");
+        assertThat(policy)
+                .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
+                .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
+                .doesNotContain("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
+        assertThat(occurrences(policy, "'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='"))
+                .isEqualTo(2);
+    }
+
+    @Test
+    void deduplicatesReferenceAndFieldHashesAndRejectsInvalidFamilies() {
+        properties.setVaadinReferenceWidgets(true);
+        properties.setVaadinFieldFamilies("local-temporal");
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+        final var policy = response.getHeaders().getFirst("Content-Security-Policy");
+
+        assertThat(policy).contains("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=");
+        assertThat(occurrences(policy, "'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='"))
+                .isEqualTo(2);
+        assertThatThrownBy(() -> properties.setVaadinFieldFamilies("basic,unknown"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("basic, numeric, and local-temporal");
+        assertThatThrownBy(() -> properties.setVaadinFieldFamilies("basic,basic"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -165,6 +202,10 @@ class HtmxViewerControllerTest {
             request.addHeader("HX-Request", "true");
         }
         return request;
+    }
+
+    private static int occurrences(final String value, final String candidate) {
+        return value.split(java.util.regex.Pattern.quote(candidate), -1).length - 1;
     }
 
     private static HtmxViewerProperties properties() {

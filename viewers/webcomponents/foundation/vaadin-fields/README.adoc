@@ -1,0 +1,42 @@
+= Vaadin semantic field closure
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This directory builds the pinned free-core Vaadin field assets used behind Causeway semantic editors.
+Applications continue to use `<causeway-*>` elements and must not depend on the internal Vaadin tags.
+
+== Reproducible build
+
+[source,shell]
+----
+npm ci --ignore-scripts --no-audit --no-fund
+npm run build
+npm run verify
+npm run audit
+node audit.mjs
+----
+
+The ordinary Maven build verifies checked-in generated assets without invoking npm.
+The `regenerate-vaadin-field-assets` Maven profile performs the pinned npm build explicitly.
+
+Three independent same-origin assets are generated:
+
+* `vaadin-basic.js` for text, text area, protected text, Boolean, enum, and bounded scalar choices.
+* `vaadin-numeric.js` for machine numeric fields and lexical exact numeric text fields.
+* `vaadin-local-temporal.js` for local date, time, and date-time pickers.
+
+`policy.json` pins each checksum, gzip ceiling, entry-point set, and exact CSP style hashes.
+`generated/licenses/THIRD-PARTY.json` records the production closure and legal metadata.
+The browser audit enforces those hashes with `style-src-attr 'none'` and checks accessibility, external requests, console errors, page errors, and narrow overflow.
+
+== Retained limits
+
+Offset-bearing, zoned, and legacy temporal values use native lexical editors.
+Local time and local date-time values with more than millisecond fractional precision use native lexical editors because Vaadin pickers represent at most milliseconds.
+Blob, Clob, and local resource paths remain explicitly unsupported inputs until a reversible authoritative GraphQL upload contract exists.
+References retain their separately packaged closure.
+
+Disable all field families by leaving `causeway.viewer.webcomponents.htmx.vaadin-field-families` empty.
+A failing closure disables only its family for the current document and rerenders the existing native semantic editor.

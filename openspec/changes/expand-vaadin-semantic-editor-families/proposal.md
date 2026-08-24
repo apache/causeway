@@ -5,7 +5,7 @@ Those families now need qualified internal adapters, independently lazy and reve
 
 ## What Changes
 
-- Add approved free-core internal adapters for single-line text, multiline text, protected text, boolean, enum and bounded choices, exact and machine numeric values, local date, local time, and local date-time inputs.
+- Add approved free-core internal adapters for single-line text, multiline text, protected text, boolean, enum and bounded choices, exact and machine numeric values, local date, and millisecond-representable local time and local date-time inputs.
 - Select adapters from introspected semantic capability and the existing reversible Causeway value codec; unsupported, offset-bearing, zoned, resource, custom, or otherwise unqualified values remain on native or explicit unsupported paths.
 - Package a deterministic route-lazy Vaadin field-family closure independently from the existing reference closure, with pinned inputs, checksums, licenses, vulnerability review, compressed budget, and exact CSP style hashes.
 - Preserve Causeway ownership of labels, descriptions, required and disabled state, validation, pending values, protected-value redaction, focus, cancellation, themes, semantic events, and GraphQL submission.

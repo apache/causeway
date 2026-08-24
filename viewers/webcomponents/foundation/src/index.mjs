@@ -25,6 +25,7 @@ export * from './component-styles.mjs';
 export * from './context-consumer-element.mjs';
 export * from './context-events.mjs';
 export * from './editor-registry.mjs';
+export * from './field-widget.mjs';
 export * from './graphql-client.mjs';
 export * from './graphql-client-element.mjs';
 export * from './graphql-executor.mjs';

@@ -25,14 +25,17 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
 `causeway.viewer.webcomponents.htmx.vaadin-reference-widgets` defaults to `false` and explicitly enables the internal free-core reference-widget pilot.
+`causeway.viewer.webcomponents.htmx.vaadin-field-families` defaults to empty and accepts a unique comma-separated subset of `basic`, `numeric`, and `local-temporal`.
+Unknown, blank, or repeated family entries fail bounded configuration rather than broadening policy.
 `causeway.viewer.webcomponents.htmx.reference-minimum-search-length` defaults to `2`.
 `causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and is the requested page-size fallback for advertised GraphQL autocomplete windows as well as the accepted complete-response bound for legacy non-windowed autocomplete.
 An advertised field's smaller introspected default window size takes precedence.
 
 The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
 The default policy and asset requests remain unchanged while the pilot is disabled.
-When the pilot is enabled, the policy adds only the four reviewed byte-exact `style-src-elem` SHA-256 sources from the pinned bundle, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
-The candidate JavaScript remains route-lazy and is requested only when an eligible semantic editor is instantiated.
+When a Vaadin reference or field family is enabled, the policy adds the deterministic deduplicated union of only its reviewed byte-exact `style-src` and `style-src-elem` SHA-256 sources, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
+The reference, basic, numeric, and local-temporal JavaScript closures remain independently route-lazy and are requested only when an eligible semantic editor is instantiated.
+Disabling every policy restores the native strict policy without changing routes or GraphQL.
 Applications adding other third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
 
 == Canonical routes
