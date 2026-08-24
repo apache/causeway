@@ -170,7 +170,7 @@ identified
         <osgi.version>8.0.0</osgi.version>
 
         <pdfbox.version>3.0.8</pdfbox.version>
-        <picocontainer.version>2.15.2</picocontainer.version>
+        <picocontainer.version>2.16</picocontainer.version>
         <poi.version>5.5.1</poi.version>
 
         <prismjs.version>1.29.0</prismjs.version>
