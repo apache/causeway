@@ -355,6 +355,9 @@
               <causeway-property member="featured" editable data-testid="property-featured"></causeway-property>
               <causeway-property member="status" editable data-testid="property-status"></causeway-property>
               <causeway-property member="notes" editable data-testid="property-notes"></causeway-property>
+              <causeway-property member="scheduledDate" editable data-testid="property-scheduled-date"></causeway-property>
+              <causeway-property member="startsAt" editable data-testid="property-starts-at"></causeway-property>
+              <causeway-property member="lastReviewedAt" editable data-testid="property-last-reviewed-at"></causeway-property>
               <causeway-property member="relatedObject" data-testid="property-related-object"></causeway-property>
               <causeway-property member="secret" data-testid="property-secret"></causeway-property>
             </div>
@@ -521,7 +524,9 @@
     });
 
     const {configureCausewayReferenceWidgets} = await import('/causeway-webcomponents/reference-widget.mjs');
+    const {configureCausewayFieldWidgets} = await import('/causeway-webcomponents/field-widget.mjs');
     configureCausewayReferenceWidgets({enabled: true, minimumSearchLength: 2, maximumResults: 50});
+    configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
     await import('/causeway-webcomponents/index.mjs');
   </script>
 </body>

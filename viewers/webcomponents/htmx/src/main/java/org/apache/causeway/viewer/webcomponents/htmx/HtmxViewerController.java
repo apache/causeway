@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.webcomponents.htmx;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.CacheControl;
@@ -35,10 +38,30 @@ public class HtmxViewerController {
     private static final MediaType HTML_UTF8 = MediaType.parseMediaType("text/html;charset=UTF-8");
     private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; script-src 'self'; style-src 'self'; "
             + "img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
-    private static final String VAADIN_REFERENCE_STYLE_SOURCES = "'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=' "
-            + "'sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=' "
-            + "'sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=' "
-            + "'sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g='";
+    private static final List<String> VAADIN_REFERENCE_STYLE_HASHES = List.of(
+            "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=",
+            "sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=",
+            "sha256-ziQO1YDNfjUz1uv42IGxQ5sgC85OPgAo+omSWhbRRdE=",
+            "sha256-/SVoMIwewnXJnEBdXJkzrloVkCW9YHHQ40uLtX2rU0g=");
+    private static final List<String> VAADIN_BASIC_STYLE_HASHES = List.of(
+            "sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=",
+            "sha256-O1QX2gxOlzGqL6KzAmcekP8ficJnQCCVqetcFYUb5ss=",
+            "sha256-bpNhRhOAoAX1rQ5VBdLwe5ATkB9Cp6xAt67TmIjsL8c=",
+            "sha256-peTsiXSLpuSs7cD42trfTzmd120BSxFbCN5N2acsJGw=",
+            "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+            "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
+    private static final List<String> VAADIN_NUMERIC_STYLE_HASHES = List.of(
+            "sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=",
+            "sha256-YNq3C4skMjxorxPrwhiBBUB3WVp43O5zI8oMR56ES64=",
+            "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+            "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
+    private static final List<String> VAADIN_LOCAL_TEMPORAL_STYLE_HASHES = List.of(
+            "sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=",
+            "sha256-EJ7xFeV2ubzFN71/RQAb1cN8ak1I1ZC/6W+5JllfWto=",
+            "sha256-Mi+i7Phh1UOjZ0x/qGAS342TU+vn7xG5xDIzcKxXhiU=",
+            "sha256-WVYjqCndm5Rg7tULwhGngT2GtzCD2oFrfyb9r6y+dZQ=",
+            "sha256-liOe7KQsCbiDStYZNHBXpf+AEetcU+X9G3OcPZBW0Ho=",
+            "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
 
     private final HtmxRouteCodec routeCodec;
     private final HtmxPageRenderer renderer;
@@ -97,11 +120,26 @@ public class HtmxViewerController {
     }
 
     private String contentSecurityPolicy() {
-        if (!properties.isVaadinReferenceWidgets()) {
+        final var hashes = new LinkedHashSet<String>();
+        if (properties.isVaadinReferenceWidgets()) {
+            hashes.addAll(VAADIN_REFERENCE_STYLE_HASHES);
+        }
+        for (final var family : properties.getVaadinFieldFamilies().split(",")) {
+            hashes.addAll(switch (family) {
+                case "basic" -> VAADIN_BASIC_STYLE_HASHES;
+                case "numeric" -> VAADIN_NUMERIC_STYLE_HASHES;
+                case "local-temporal" -> VAADIN_LOCAL_TEMPORAL_STYLE_HASHES;
+                default -> List.of();
+            });
+        }
+        if (hashes.isEmpty()) {
             return CONTENT_SECURITY_POLICY;
         }
-        final var vaadinStylePolicy = "style-src 'self' " + VAADIN_REFERENCE_STYLE_SOURCES
-                + "; style-src-elem 'self' " + VAADIN_REFERENCE_STYLE_SOURCES
+        final var sources = hashes.stream()
+                .map(hash -> "'" + hash + "'")
+                .collect(java.util.stream.Collectors.joining(" "));
+        final var vaadinStylePolicy = "style-src 'self' " + sources
+                + "; style-src-elem 'self' " + sources
                 + "; style-src-attr 'none';";
         return CONTENT_SECURITY_POLICY.replace("style-src 'self';", vaadinStylePolicy);
     }

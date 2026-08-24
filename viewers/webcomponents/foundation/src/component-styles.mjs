@@ -161,7 +161,8 @@ causeway-object {
   min-block-size: 5rem;
   resize: vertical;
 }
-causeway-reference-editor {
+causeway-reference-editor,
+causeway-field-editor {
   display: block;
   inline-size: 100%;
   max-inline-size: 32rem;
@@ -183,13 +184,16 @@ causeway-reference-editor {
   --lumo-error-color: var(--causeway-danger, Mark);
   --lumo-border-radius-m: var(--causeway-radius-md, 0.45rem);
 }
-causeway-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select) {
+causeway-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select),
+causeway-field-editor > * {
+  box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 32rem;
 }
-causeway-reference-editor[data-widget-state="fallback"]::after {
+causeway-reference-editor[data-widget-state="fallback"]::after,
+causeway-field-editor[data-widget-state="fallback"]::after {
   color: var(--causeway-muted, GrayText);
-  content: "Using the standard reference editor";
+  content: "Using the standard semantic editor";
   display: block;
   font-size: 0.8rem;
   margin-block-start: 0.25rem;

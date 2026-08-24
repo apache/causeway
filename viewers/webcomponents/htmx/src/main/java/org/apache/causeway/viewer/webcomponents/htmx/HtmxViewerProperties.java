@@ -30,6 +30,7 @@ public class HtmxViewerProperties {
     private String wicketComparisonPath;
     private String applicationStylesheet;
     private boolean vaadinReferenceWidgets;
+    private String vaadinFieldFamilies = "";
     private int referenceMinimumSearchLength = 2;
     private int referenceMaximumResults = 50;
 
@@ -89,6 +90,14 @@ public class HtmxViewerProperties {
         this.vaadinReferenceWidgets = vaadinReferenceWidgets;
     }
 
+    public String getVaadinFieldFamilies() {
+        return vaadinFieldFamilies;
+    }
+
+    public void setVaadinFieldFamilies(final String vaadinFieldFamilies) {
+        this.vaadinFieldFamilies = normalizeFieldFamilies(vaadinFieldFamilies);
+    }
+
     public int getReferenceMinimumSearchLength() {
         return referenceMinimumSearchLength;
     }
@@ -103,5 +112,22 @@ public class HtmxViewerProperties {
 
     public void setReferenceMaximumResults(final int referenceMaximumResults) {
         this.referenceMaximumResults = referenceMaximumResults;
+    }
+
+    private static String normalizeFieldFamilies(final String configured) {
+        if (configured == null || configured.isBlank()) {
+            return "";
+        }
+        final var requested = java.util.Arrays.stream(configured.split(",", -1))
+                .map(String::trim)
+                .toList();
+        if (requested.stream().anyMatch(String::isBlank)
+                || requested.stream().distinct().count() != requested.size()
+                || requested.stream().anyMatch(value -> !java.util.Set.of("basic", "numeric", "local-temporal").contains(value))) {
+            throw new IllegalArgumentException("Vaadin field families must be a unique comma-separated subset of basic, numeric, and local-temporal.");
+        }
+        return java.util.stream.Stream.of("basic", "numeric", "local-temporal")
+                .filter(requested::contains)
+                .collect(java.util.stream.Collectors.joining(","));
     }
 }

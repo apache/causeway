@@ -159,14 +159,40 @@ class ReferenceAppHtmxPlaywrightTest {
         final Locator editableDecimal = page.locator("causeway-property[member='readWriteProperty']");
         assertThat(editableDecimal.count()).isEqualTo(1);
         editableDecimal.locator("[data-causeway-action='edit']").click();
-        final Locator decimalEditor = editableDecimal.locator("input[data-causeway-editor='readWriteProperty']");
-        decimalEditor.waitFor();
-        assertThat(decimalEditor.getAttribute("type")).isEqualTo("text");
-        assertThat(decimalEditor.getAttribute("inputmode")).isEqualTo("decimal");
-        final String originalDecimal = decimalEditor.inputValue();
-        editableDecimal.locator("[data-causeway-action='cancel']").click();
-
+        final Locator decimalEditor = resolveEditor("causeway-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        final String decimalLocalName = (String) decimalEditor.evaluate("element => element.localName");
+        assertThat(decimalLocalName).isEqualTo(fieldFamiliesEnabled() ? "vaadin-text-field" : "input");
+        assertThat(decimalEditor.evaluate("element => element.localName === 'input' ? element.inputMode : element.inputElement?.inputMode"))
+                .isEqualTo("decimal");
+        final String originalDecimal = String.valueOf(decimalEditor.evaluate("element => element.value"));
+        if (fieldFamiliesEnabled()) {
+            assertThat(fieldAssetRequests("numeric")).isEqualTo(1);
+            assertThat(fieldAssetRequests("basic")).isZero();
+            assertThat(fieldAssetRequests("local-temporal")).isZero();
+        }
         assertThat(originalDecimal).isNotBlank();
+        final String candidateDecimal = "98765432109876543210.123456789";
+        try {
+            final String encodedId = OBJECT_MAPPER.writeValueAsString(decimalEntityId);
+            try {
+                fillEditor(decimalEditor, candidateDecimal);
+                page.waitForFunction("() => document.querySelector(\"causeway-property[member='readWriteProperty'] [data-causeway-action='save']\")?.disabled === false");
+                editableDecimal.locator("[data-causeway-action='save']").click();
+                page.waitForFunction("() => !document.querySelector(\"causeway-property[member='readWriteProperty'] [data-causeway-editor]\")");
+                final JsonNode changed = executeGraphQL("{ rich { demo_BigDecimalEntity(object: {id: "
+                        + encodedId + "}) { readWriteProperty { get } } } }");
+                assertThat(changed.at("/data/rich/demo_BigDecimalEntity/readWriteProperty/get").asText())
+                        .isEqualTo(candidateDecimal);
+            } finally {
+                final JsonNode restored = executeGraphQL("mutation { demo_BigDecimalEntity__readWriteProperty(_target: {id: "
+                        + encodedId + "}, readWriteProperty: " + OBJECT_MAPPER.writeValueAsString(originalDecimal)
+                        + ") { readWriteProperty { get } } }");
+                assertThat(restored.path("errors").isMissingNode() || restored.path("errors").isEmpty())
+                        .as(restored.toPrettyString()).isTrue();
+            }
+        } catch (Exception ex) {
+            throw new AssertionError("Exact decimal candidate interaction failed", ex);
+        }
 
         page.goBack();
         waitForLogicalType("demo.BigDecimals");
@@ -220,6 +246,8 @@ class ReferenceAppHtmxPlaywrightTest {
                 new ValueFamily("demo_JavaLangWrapperTypesMenu", "booleans", "rich__demo_WrapperBooleans", "demo_WrapperBooleans", "rich__demo_WrapperBooleanEntity", "demo.WrapperBooleanEntity"),
                 new ValueFamily("demo_JavaLangTypesMenu", "enums", "rich__demo_JavaLangEnums", "demo_JavaLangEnums", "rich__demo_JavaLangEnumEntity", "demo.JavaLangEnumEntity"),
                 new ValueFamily("demo_JavaTimeTypesMenu", "localDates", "rich__demo_LocalDates", "demo_LocalDates", "rich__demo_LocalDateEntity", "demo.LocalDateEntity"),
+                new ValueFamily("demo_JavaTimeTypesMenu", "localTimes", "rich__demo_LocalTimes", "demo_LocalTimes", "rich__demo_LocalTimeEntity", "demo.LocalTimeEntity"),
+                new ValueFamily("demo_JavaTimeTypesMenu", "localDateTimes", "rich__demo_LocalDateTimes", "demo_LocalDateTimes", "rich__demo_LocalDateTimeEntity", "demo.LocalDateTimeEntity"),
                 new ValueFamily("demo_JavaTimeTypesMenu", "offsetDateTimes", "rich__demo_OffsetDateTimes", "demo_OffsetDateTimes", "rich__demo_OffsetDateTimeEntity", "demo.OffsetDateTimeEntity"),
                 new ValueFamily("demo_JavaTimeTypesMenu", "zonedDateTimes", "rich__demo_ZonedDateTimes", "demo_ZonedDateTimes", "rich__demo_ZonedDateTimeEntity", "demo.ZonedDateTimeEntity"),
                 new ValueFamily("demo_JavaNetTypesMenu", "urls", "rich__demo_Urls", "demo_Urls", "rich__demo_UrlEntity", "demo.UrlEntity"),
@@ -235,13 +263,41 @@ class ReferenceAppHtmxPlaywrightTest {
             assertThat(page.locator(ROUTE_PAGE).getAttribute("data-route-state")).isIn("ready", "partial-error");
         }
 
+        assertTemporalEditor(
+                "demo_JavaTimeTypesMenu", "localDates", "rich__demo_LocalDates",
+                "demo_LocalDates", "rich__demo_LocalDateEntity", "demo.LocalDateEntity", "vaadin-date-picker", "date");
+        assertTemporalEditor(
+                "demo_JavaTimeTypesMenu", "localTimes", "rich__demo_LocalTimes",
+                "demo_LocalTimes", "rich__demo_LocalTimeEntity", "demo.LocalTimeEntity", "vaadin-time-picker", "time");
+        assertTemporalEditor(
+                "demo_JavaTimeTypesMenu", "localDateTimes", "rich__demo_LocalDateTimes",
+                "demo_LocalDateTimes", "rich__demo_LocalDateTimeEntity", "demo.LocalDateTimeEntity", "vaadin-date-time-picker", "datetime-local");
+        assertTemporalEditor(
+                "demo_JavaTimeTypesMenu", "offsetDateTimes", "rich__demo_OffsetDateTimes",
+                "demo_OffsetDateTimes", "rich__demo_OffsetDateTimeEntity", "demo.OffsetDateTimeEntity", null, "text");
+        assertFieldEditor(
+                "demo_JavaLangWrapperTypesMenu", "booleans", "rich__demo_WrapperBooleans",
+                "demo_WrapperBooleans", "rich__demo_WrapperBooleanEntity", "demo.WrapperBooleanEntity",
+                "readWriteProperty", "vaadin-select", "select");
+        assertFieldEditor(
+                "demo_JavaLangWrapperTypesMenu", "booleans", "rich__demo_WrapperBooleans",
+                "demo_WrapperBooleans", "rich__demo_WrapperBooleanEntity", "demo.WrapperBooleanEntity",
+                "readWriteOptionalProperty", "vaadin-select", "select");
+        assertFieldEditor(
+                "demo_JavaLangTypesMenu", "enums", "rich__demo_JavaLangEnums",
+                "demo_JavaLangEnums", "rich__demo_JavaLangEnumEntity", "demo.JavaLangEnumEntity",
+                "readWriteProperty", "vaadin-select", "select");
+
         final String urlPageId = invokeViewModel("demo_JavaNetTypesMenu", "urls", "rich__demo_Urls");
         openObject("demo.UrlEntity", firstCollectionEntityId(
                 "demo_Urls", urlPageId, "rich__demo_UrlEntity"));
         final Locator urlProperty = page.locator("causeway-property[member='readWriteProperty']");
         urlProperty.locator("[data-causeway-action='edit']").click();
-        assertThat(urlProperty.locator("input[data-causeway-editor='readWriteProperty']").getAttribute("type"))
+        final Locator urlEditor = resolveEditor("causeway-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        assertThat(urlEditor.evaluate("element => element.localName === 'input' ? element.type : element.inputElement?.inputMode"))
                 .isEqualTo("url");
+        assertThat(urlEditor.evaluate("element => element.localName"))
+                .isEqualTo(fieldFamiliesEnabled() ? "vaadin-text-field" : "input");
         urlProperty.locator("[data-causeway-action='cancel']").click();
 
         final String passwordPageId = invokeViewModel(
@@ -250,9 +306,10 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_CausewayPasswords", passwordPageId, "rich__demo_CausewayPasswordEntity"));
         final Locator passwordProperty = page.locator("causeway-property[member='readWriteProperty']");
         passwordProperty.locator("[data-causeway-action='edit']").click();
-        final Locator passwordEditor = passwordProperty.locator("input[data-causeway-editor='readWriteProperty']");
-        assertThat(passwordEditor.getAttribute("type")).isEqualTo("password");
-        assertThat(passwordEditor.inputValue()).isEmpty();
+        final Locator passwordEditor = resolveEditor("causeway-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        assertThat(passwordEditor.evaluate("element => element.localName === 'input' ? element.type : element.localName"))
+                .isEqualTo(fieldFamiliesEnabled() ? "vaadin-password-field" : "password");
+        assertThat(passwordEditor.evaluate("element => element.value")).isEqualTo("");
         passwordProperty.locator("[data-causeway-action='cancel']").click();
 
         final String compositeId = invokeViewModel(
@@ -292,9 +349,9 @@ class ReferenceAppHtmxPlaywrightTest {
         final Locator multiline = page.locator("causeway-property[member='propertyUsingAnnotation']");
         assertThat(multiline.count()).isEqualTo(1);
         multiline.locator("[data-causeway-action='edit']").click();
-        final Locator multilineEditor = multiline.locator("[data-causeway-editor='propertyUsingAnnotation']");
-        multilineEditor.waitFor();
-        assertThat(multilineEditor.evaluate("element => element.tagName")).isIn("INPUT", "TEXTAREA");
+        final Locator multilineEditor = resolveEditor("causeway-property[member='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
+        assertThat(multilineEditor.evaluate("element => element.localName"))
+                .isEqualTo(fieldFamiliesEnabled() ? "vaadin-text-field" : "input");
         multiline.locator("[data-causeway-action='cancel']").click();
         assertThat(page.locator("causeway-property[member='propertyUsingAnnotationReadOnly'] "
                 + ".causeway-property-disabled-indicator").count()).isEqualTo(1);
@@ -309,7 +366,7 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_PropertyMenu", "mustSatisfy", "rich__demo_PropertyMustSatisfyPage"));
         objectAction("updateCustomerAge").click();
         waitForPrompt("updateCustomerAge");
-        page.locator(parameter("customerAge")).fill("10");
+        fillEditor(resolveEditor(parameter("customerAge")), "10");
         submitPrompt();
         page.waitForFunction("() => document.querySelector(\"dialog[data-testid='action-prompt'] .causeway-action-prompt-error\")?.textContent?.trim().length > 0");
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent()).containsIgnoringCase("age");
@@ -321,6 +378,34 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_PropertyLayoutMenu", "hidden", "rich__demo_PropertyLayoutHiddenPage"));
         assertThat(page.locator("causeway-property").count()).isEqualTo(2);
         assertThat(page.locator("causeway-property[member^='name']").count()).isZero();
+
+        if (fieldFamiliesEnabled()) {
+            openObject("demo.PropertyLayoutMultiLinePage", invokeViewModel(
+                    "demo_PropertyLayoutMenu", "multiLine", "rich__demo_PropertyLayoutMultiLinePage"));
+            page.evaluate("""
+                    async () => {
+                      const fields = await import('/causeway-webcomponents/field-widget.mjs');
+                      fields.configureCausewayFieldWidgets({
+                        families: ['basic'],
+                        moduleUrls: {basic: '/causeway-webcomponents/vaadin-fields/missing-basic.js'}
+                      });
+                    }
+                    """);
+            final Locator fallbackProperty = page.locator("causeway-property[member='propertyUsingAnnotation']");
+            fallbackProperty.locator("[data-causeway-action='edit']").click();
+            final Locator fallback;
+            try {
+                fallback = resolveEditor("causeway-property[member='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
+            } catch (com.microsoft.playwright.TimeoutError cause) {
+                throw new AssertionError(String.valueOf(fallbackProperty.evaluate("element => element.outerHTML")), cause);
+            }
+            assertThat(fallback.evaluate("element => element.localName")).isEqualTo("input");
+            assertThat(fallback.inputValue()).isNotBlank();
+            assertThat(fallbackProperty.locator("causeway-field-editor").count()).isZero();
+            fallbackProperty.locator("[data-causeway-action='cancel']").click();
+            browserFailures.removeIf(failure -> failure.contains("missing-basic.js")
+                    || failure.contains("status of 500"));
+        }
     }
 
     @Test
@@ -336,9 +421,9 @@ class ReferenceAppHtmxPlaywrightTest {
         final Locator update = objectAction("updatePropertyForIdempotent");
         update.click();
         waitForPrompt("updatePropertyForIdempotent");
-        final Locator value = page.locator(parameter("value"));
-        assertThat(value.inputValue()).isNotBlank();
-        value.fill("");
+        final Locator value = resolveEditor(parameter("value"));
+        assertThat(String.valueOf(value.evaluate("element => element.value"))).isNotBlank();
+        fillEditor(value, "");
         submitPrompt();
         page.waitForFunction("() => document.querySelector(\"dialog[data-testid='action-prompt'] .causeway-action-prompt-error\")?.textContent?.trim().length > 0");
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent()).isNotBlank();
@@ -349,7 +434,7 @@ class ReferenceAppHtmxPlaywrightTest {
 
         update.click();
         waitForPrompt("updatePropertyForIdempotent");
-        page.locator(parameter("value")).fill("37");
+        fillEditor(resolveEditor(parameter("value")), "37");
         submitPrompt();
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
@@ -697,6 +782,109 @@ class ReferenceAppHtmxPlaywrightTest {
         }
     }
 
+    private void assertFieldEditor(
+            final String serviceField,
+            final String actionField,
+            final String pageResultType,
+            final String objectField,
+            final String entityResultType,
+            final String entityLogicalType,
+            final String member,
+            final String candidateTag,
+            final String nativeTag) {
+        final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
+        openObject(entityLogicalType, firstCollectionEntityId(objectField, pageId, entityResultType));
+        final Locator property = page.locator("causeway-property[member='" + member + "']");
+        property.locator("[data-causeway-action='edit']").click();
+        final Locator editor = resolveEditor("causeway-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
+        assertThat(editor.evaluate("element => element.localName"))
+                .isEqualTo(fieldFamiliesEnabled() ? candidateTag : nativeTag);
+        if (fieldFamiliesEnabled()) {
+            assertThat(fieldAssetRequests("basic")).isEqualTo(1);
+            assertThat(fieldAssetRequests("numeric")).isZero();
+            assertThat(fieldAssetRequests("local-temporal")).isZero();
+        }
+        property.locator("[data-causeway-action='cancel']").click();
+    }
+
+    private void assertTemporalEditor(
+            final String serviceField,
+            final String actionField,
+            final String pageResultType,
+            final String objectField,
+            final String entityResultType,
+            final String entityLogicalType,
+            final String candidateTag,
+            final String nativeType) {
+        final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
+        final String member = "demo_LocalDateTimes".equals(objectField)
+                ? "readWriteOptionalProperty"
+                : "readWriteProperty";
+        final String entityId = candidateTag == null
+                ? firstCollectionEntityId(objectField, pageId, entityResultType)
+                : pickerCompatibleCollectionEntityId(objectField, pageId, entityResultType, member);
+        openObject(entityLogicalType, entityId);
+        final Locator property = page.locator("causeway-property[member='" + member + "']");
+        property.locator("[data-causeway-action='edit']").click();
+        final Locator editor = resolveEditor("causeway-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
+        final String localName = String.valueOf(editor.evaluate("element => element.localName"));
+        if (candidateTag != null && fieldFamiliesEnabled()) {
+            assertThat(localName).isEqualTo(candidateTag);
+            assertThat(fieldAssetRequests("local-temporal")).isEqualTo(1);
+            assertThat(fieldAssetRequests("basic")).isZero();
+            assertThat(fieldAssetRequests("numeric")).isZero();
+        } else {
+            assertThat(localName).isEqualTo("input");
+            assertThat(editor.getAttribute("type")).isEqualTo(nativeType);
+            if (fieldFamiliesEnabled()) {
+                assertThat(fieldAssetRequests("local-temporal")).isZero();
+            }
+        }
+        final String current = String.valueOf(editor.evaluate("element => element.value"));
+        if (current.isBlank()) {
+            final String representative = switch (nativeType) {
+                case "date" -> "2026-08-24";
+                case "time" -> "13:14:15.123";
+                case "datetime-local" -> "2026-08-24T13:14:15.123";
+                default -> "2026-08-24T13:14:15.123Z";
+            };
+            fillEditor(editor, representative);
+            assertThat(editor.evaluate("element => element.value")).isEqualTo(representative);
+        }
+        property.locator("[data-causeway-action='cancel']").click();
+    }
+
+    private String pickerCompatibleCollectionEntityId(
+            final String objectField,
+            final String objectId,
+            final String resultType,
+            final String member) {
+        try {
+            final String query = "{ rich { " + objectField + "(object: {id: "
+                    + OBJECT_MAPPER.writeValueAsString(objectId) + "}) { entities { get { ... on "
+                    + resultType + " { _meta { id } " + member + " { get } } } } } } }";
+            final JsonNode payload = executeGraphQL(query);
+            assertThat(payload.path("errors").isMissingNode() || payload.path("errors").isEmpty())
+                    .as(payload.toPrettyString()).isTrue();
+            final JsonNode results = payload.at("/data/rich/" + objectField + "/entities/get");
+            for (final JsonNode result : results) {
+                final String value = result.at("/" + member + "/get").asText("");
+                final int fraction = value.indexOf('.');
+                if (fraction < 0 || value.length() - fraction - 1 <= 3) {
+                    return result.at("/_meta/id").asText();
+                }
+            }
+            throw new AssertionError("No picker-compatible value in " + objectField);
+        } catch (Exception ex) {
+            throw new AssertionError("Cannot find picker-compatible value in " + objectField, ex);
+        }
+    }
+
+    private boolean fieldFamiliesEnabled() {
+        return !String.valueOf(page.locator("html").getAttribute("data-causeway-field-families")).isBlank()
+                && !"null".equals(String.valueOf(page.locator("html").getAttribute("data-causeway-field-families")));
+    }
+
     private void assertSemanticAccessibility() {
         final Map<?, ?> result = (Map<?, ?>) page.evaluate("""
                 () => {
@@ -711,6 +899,10 @@ class ReferenceAppHtmxPlaywrightTest {
                 """);
         assertThat((List<?>) result.get("duplicates")).isEmpty();
         assertThat(((Number) result.get("unlabeled")).intValue()).isZero();
+    }
+
+    private int fieldAssetRequests(final String family) {
+        return ((Number) page.evaluate("family => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-fields/vaadin-' + family + '.js')).length", family)).intValue();
     }
 
     private int candidateRequests() {
@@ -739,6 +931,20 @@ class ReferenceAppHtmxPlaywrightTest {
             browserContext.close();
             browserContext = null;
             page = null;
+        }
+    }
+
+    private Locator resolveEditor(final String selector) {
+        page.locator(selector).first().waitFor();
+        page.waitForFunction("selector => { const element = document.querySelector(selector); return element && element.localName !== 'causeway-field-editor'; }", selector);
+        return page.locator(selector);
+    }
+
+    private void fillEditor(final Locator editor, final String value) {
+        if (((String) editor.evaluate("element => element.localName")).startsWith("vaadin-")) {
+            editor.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('input', {bubbles: true, composed: true})); element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }", value);
+        } else {
+            editor.fill(value);
         }
     }
 

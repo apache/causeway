@@ -33,6 +33,8 @@
     {"family": "numeric-decimal", "rootField": "demo_BigDecimals", "member": "entities"},
     {"family": "numeric-integer", "rootField": "demo_BigIntegers", "member": "entities"},
     {"family": "temporal-local-date", "rootField": "demo_LocalDates", "member": "entities"},
+    {"family": "temporal-local-time", "rootField": "demo_LocalTimes", "member": "entities"},
+    {"family": "temporal-local-date-time", "rootField": "demo_LocalDateTimes", "member": "entities"},
     {"family": "temporal-offset-date-time", "rootField": "demo_OffsetDateTimes", "member": "entities"},
     {"family": "temporal-zoned-date-time", "rootField": "demo_ZonedDateTimes", "member": "entities"},
     {"family": "enum", "rootField": "demo_JavaLangEnums", "member": "entities"},
@@ -42,6 +44,10 @@
     {"family": "blob", "rootField": "demo_CausewayBlobs", "member": "entities"},
     {"family": "clob", "rootField": "demo_CausewayClobs", "member": "entities"},
     {"family": "custom-value", "rootField": "demo_CompositeValuesPage", "member": "complexNumber"},
+    {"family": "vaadin-basic-fields", "rootField": "demo_PropertyEditingEntity", "member": "name"},
+    {"family": "vaadin-numeric-fields", "rootField": "demo_BigDecimals", "member": "entities"},
+    {"family": "vaadin-local-temporal-fields", "rootField": "demo_LocalDates", "member": "entities"},
+    {"family": "vaadin-unqualified-resource", "rootField": "demo_CausewayBlobs", "member": "entities"},
     {"family": "opaque-route", "rootField": "demo_CompositeValuesPage", "member": "objectIdentifier"}
   ]
 }

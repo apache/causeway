@@ -136,7 +136,7 @@ final class HtmxPageRenderer {
                         language,
                         escape(basePath),
                         escape(context + canonicalPath),
-                        referenceWidgetAttributes(),
+                        widgetAttributes(),
                         escape(properties.getBrand()),
                         escape(context),
                         escape(context),
@@ -153,15 +153,20 @@ final class HtmxPageRenderer {
                         comparisonLink);
     }
 
-    private String referenceWidgetAttributes() {
-        if (!properties.isVaadinReferenceWidgets()) {
-            return "";
+    private String widgetAttributes() {
+        var attributes = "";
+        if (properties.isVaadinReferenceWidgets()) {
+            final var minimumSearchLength = Math.max(0, properties.getReferenceMinimumSearchLength());
+            final var maximumResults = Math.max(1, properties.getReferenceMaximumResults());
+            attributes += " data-causeway-reference-widgets=\"vaadin\""
+                    + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
+                    + " data-causeway-reference-maximum-results=\"" + maximumResults + "\"";
         }
-        final var minimumSearchLength = Math.max(0, properties.getReferenceMinimumSearchLength());
-        final var maximumResults = Math.max(1, properties.getReferenceMaximumResults());
-        return " data-causeway-reference-widgets=\"vaadin\""
-                + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
-                + " data-causeway-reference-maximum-results=\"" + maximumResults + "\"";
+        if (!properties.getVaadinFieldFamilies().isBlank()) {
+            attributes += " data-causeway-field-families=\""
+                    + escape(properties.getVaadinFieldFamilies()) + "\"";
+        }
+        return attributes;
     }
 
     private String applicationStylesheet(final String contextPath) {

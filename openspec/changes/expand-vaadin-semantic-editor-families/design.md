@@ -31,7 +31,7 @@ Vaadin controls remain implementation details and do not own interaction, valida
 The adapter registration will first require an existing non-unsupported Causeway value codec and then map only an explicit semantic family allow-list.
 Exact `Long`, `BigInteger`, and `BigDecimal` values use a Vaadin text field with numeric input hints rather than a number field, because JavaScript numeric coercion would lose lexical precision.
 Machine numeric values use integer or number fields while still passing through the existing codec before GraphQL submission.
-Only `LocalDate`, `LocalTime`, and `LocalDateTime` use pickers; offset-bearing, zoned, and legacy temporal values retain the native lexical editor.
+Only `LocalDate`, `LocalTime`, and `LocalDateTime` values representable at millisecond precision use pickers; higher fractional precision plus offset-bearing, zoned, and legacy temporal values retain the native lexical editor.
 
 Alternative considered: map every GraphQL scalar to the visually closest Vaadin control.
 This was rejected because visual similarity is not proof of reversible Causeway semantics.

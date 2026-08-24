@@ -83,13 +83,15 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         void this.loadAutoComplete(request.search);
       }
     });
-    this.addEventListener('causeway-reference-escape', event => {
+    const cancelToolkitEditor = event => {
       if (this.interactionState) {
         event.stopPropagation();
         this.cancelEdit();
       }
-    });
-    this.addEventListener('causeway-reference-load-failed', event => {
+    };
+    this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
+    this.addEventListener('causeway-field-escape', cancelToolkitEditor);
+    const rerenderFailedToolkitEditor = event => {
       if (!this.interactionState) {
         return;
       }
@@ -97,7 +99,10 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
       this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
       this.renderComponentState(this.componentState);
-    });
+      queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+    };
+    this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
+    this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
   }
 
   get member() {
@@ -466,9 +471,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         suggestions: this.interactionState.suggestions ?? [],
         inputType: this.interactionState.capabilities?.inputType
       });
-      const textEditor = ['text', 'multiline'].includes(editor.id);
-      this.setPendingValue(value, {validate: textEditor});
-      if (!textEditor) {
+      const debouncedEditor = editor.debounced === true || ['text', 'multiline'].includes(editor.id);
+      this.setPendingValue(value, {validate: debouncedEditor});
+      if (!debouncedEditor) {
         void this.validatePending();
       }
     } catch (error) {

@@ -80,19 +80,23 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         void this.loadParameterAutoComplete(parameterId, request.search);
       }
     });
-    this.addEventListener('causeway-reference-escape', event => {
+    const cancelToolkitEditor = event => {
       if (this.promptState) {
         event.stopPropagation();
         this.cancelPrompt();
       }
-    });
-    this.addEventListener('causeway-reference-load-failed', event => {
+    };
+    this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
+    this.addEventListener('causeway-field-escape', cancelToolkitEditor);
+    const rerenderFailedToolkitEditor = event => {
       if (this.promptState) {
         event.stopPropagation();
         this.render();
         this.#focusFirstControl();
       }
-    });
+    };
+    this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
+    this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
     this.addEventListener('keydown', event => {
       if (event.key === 'Escape' && this.promptState) {
         event.preventDefault();
@@ -463,8 +467,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         suggestions: parameter.state?.suggestions ?? [],
         inputType: parameter.inputType
       });
-      const textEditor = rendered.editor.id === 'text';
-      if (textEditor) {
+      const debouncedEditor = rendered.editor.debounced === true || rendered.editor.id === 'text';
+      if (debouncedEditor) {
         this.promptState = Object.freeze({
           ...this.promptState,
           values: Object.freeze({...this.promptState.values, [parameterId]: value}),

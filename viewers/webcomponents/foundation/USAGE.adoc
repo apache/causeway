@@ -489,6 +489,32 @@ causeway-object {
 }
 ----
 
+== Optional Vaadin semantic field families
+
+The foundation can qualify internal Vaadin free-core controls for existing semantic editors without changing application markup or events.
+The empty configuration keeps every scalar editor native.
+An HTMX shell can enable `basic`, `numeric`, and `local-temporal` independently, or ordinary JavaScript can configure them before importing `index.mjs`:
+
+[source,javascript]
+----
+import {configureCausewayFieldWidgets} from './field-widget.mjs';
+
+configureCausewayFieldWidgets({
+  families: ['basic', 'numeric', 'local-temporal']
+});
+----
+
+`basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
+`numeric` keeps `Long`, `BigInteger`, and `BigDecimal` lexical in text fields while using integer or number controls only for machine numeric codecs.
+`local-temporal` covers `LocalDate`, `LocalTime`, and `LocalDateTime`; values beyond millisecond fractional precision remain native because the picker cannot preserve them.
+Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become field candidates.
+References retain their separate adapter.
+
+Each family loads its own same-origin generated ESM asset on first eligible connection.
+A module failure disables only that family for the current document and rerenders through the existing native editor with Causeway-owned pending state.
+Protected values initialize empty and are absent from adapter markup, semantic events, diagnostics, errors, and operation evidence.
+See `vaadin-fields/README.adoc` for pinned checksums, budgets, CSP hashes, legal metadata, verification, and audit commands.
+
 == Deliberate exclusions
 
 This slice does not provide collection editing, filtering, bulk actions, automatic action-result navigation, routing, HTMX history, framework-specific custom-page selection, or persistent schema caching.

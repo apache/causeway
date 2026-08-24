@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.webcomponents.sample.html.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +67,9 @@ public class SampleObject implements HasVersion<Long> {
     public static final int SAMPLE_CAPACITY = 24;
     public static final boolean SAMPLE_FEATURED = true;
     public static final SampleStatus SAMPLE_STATUS = SampleStatus.ACTIVE;
+    public static final LocalDate SAMPLE_DATE = LocalDate.of(2026, 8, 24);
+    public static final LocalTime SAMPLE_TIME = LocalTime.of(13, 14, 15, 123_000_000);
+    public static final LocalDateTime SAMPLE_DATE_TIME = LocalDateTime.of(SAMPLE_DATE, SAMPLE_TIME);
     public static final String CODE_DISABLED_REASON = "The sample code is fixed.";
     public static final String ARCHIVE_DISABLED_REASON = "Archiving is disabled in the read-only sample.";
     public static final String SUMMARY_VALIDATION_REASON = "Summary must contain at least 12 characters.";
@@ -103,6 +109,15 @@ public class SampleObject implements HasVersion<Long> {
     @Column(name = "notes", length = 200)
     private String notes;
 
+    @Column(name = "scheduledDate")
+    private LocalDate scheduledDate;
+
+    @Column(name = "startsAt")
+    private LocalTime startsAt;
+
+    @Column(name = "lastReviewedAt")
+    private LocalDateTime lastReviewedAt;
+
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SampleRelatedObject> relatedObjects = new ArrayList<>();
 
@@ -119,6 +134,9 @@ public class SampleObject implements HasVersion<Long> {
         this.featured = SAMPLE_FEATURED;
         this.status = SAMPLE_STATUS;
         this.notes = null;
+        this.scheduledDate = SAMPLE_DATE;
+        this.startsAt = SAMPLE_TIME;
+        this.lastReviewedAt = SAMPLE_DATE_TIME;
     }
 
     @ObjectSupport
@@ -210,6 +228,30 @@ public class SampleObject implements HasVersion<Long> {
 
     public void setNotes(final String notes) {
         this.notes = notes;
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(final LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public LocalTime getStartsAt() {
+        return startsAt;
+    }
+
+    public void setStartsAt(final LocalTime startsAt) {
+        this.startsAt = startsAt;
+    }
+
+    public LocalDateTime getLastReviewedAt() {
+        return lastReviewedAt;
+    }
+
+    public void setLastReviewedAt(final LocalDateTime lastReviewedAt) {
+        this.lastReviewedAt = lastReviewedAt;
     }
 
     public SampleRelatedObject getRelatedObject() {
