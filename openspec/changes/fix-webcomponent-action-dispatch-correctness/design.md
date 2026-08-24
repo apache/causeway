@@ -9,8 +9,9 @@ The object context treats any nested invocation field, including `invokeNonIdemp
 Both contexts assume that nested invocation returns an envelope with `results`, and otherwise request a `target` field even when the effective return type does not advertise one.
 Those assumptions can make operation rendering throw before execution, after which the standard controller can report only `Action invocation failed`.
 
-The pinned Reference Application preserves an executable parameterless service action that demonstrates the nested safe-dispatch defect.
-Its object actions also provide parameter, validation, mutation, outcome, cancellation, and stale-response fixtures for closing the operation-shape matrix.
+The pinned Reference Application preserves an executable parameterless service action whose wrapper has no nested invocation field and whose generated mutation returns a versionless view model directly.
+The current direct-result projection requests the absent `_meta.version` field and collapses the operation-rendering failure into `Action invocation failed`.
+Its object actions also provide nested safe envelopes, direct mutations, parameters, validation, outcomes, cancellation, and stale-response fixtures for closing the operation-shape matrix.
 Public GraphQL remains authoritative, and this change must preserve Causeway elements, semantic events, typed value codecs, route policy, mutation serialization, strict CSP, and native or Vaadin editor independence.
 
 ## Goals / Non-Goals
@@ -114,4 +115,5 @@ Rollback consists of reverting the shared planner integration; no schema, persis
 ## Open Questions
 
 No architectural question blocks implementation.
-Implementation evidence must identify the exact direct or enveloped result shape used by each Reference Application target before its known-gap assertion is converted.
+Implementation evidence confirms that `demo.ActionChoicesMenu.choices` uses the parameterless mutation `demo_ActionChoicesMenu__choices` and returns `rich__demo_ActionChoices` directly with versionless metadata.
+The remaining implementation evidence must record each selected object-action shape before its known-gap assertion is converted.
