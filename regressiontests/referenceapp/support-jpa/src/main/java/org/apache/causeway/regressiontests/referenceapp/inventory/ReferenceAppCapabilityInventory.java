@@ -174,6 +174,7 @@ public final class ReferenceAppCapabilityInventory {
         }
 
         final Set<String> conditionalIds = Set.of(
+                "rich__demo_ValueHolder__name__gqlv_property",
                 "rich__demo_ValueHolder__blob__gqlv_property",
                 "rich__demo_ValueHolder__count__gqlv_property",
                 "rich__demo_ValueHolder__incrementRedirectEvenIfSame__gqlv_action",
@@ -181,6 +182,12 @@ public final class ReferenceAppCapabilityInventory {
         items.removeIf(item -> conditionalIds.contains(item.id()));
         final String reason = "The effective metamodel conditionally advertises this abstract ValueHolder member; "
                 + "the reviewed inventory retains it explicitly without claiming deterministic runtime support.";
+        items.add(new Item(
+                "rich__demo_ValueHolder__name__gqlv_property",
+                "PROPERTY",
+                "String",
+                Classification.SUPPORTED,
+                "The value shape has an existing scalar, enum, reference, collection, or resource presentation contract."));
         items.add(new Item(
                 "rich__demo_ValueHolder__blob__gqlv_property",
                 "PROPERTY",

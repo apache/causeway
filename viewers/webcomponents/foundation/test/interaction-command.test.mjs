@@ -155,6 +155,65 @@ test('object context executes property validation and update through semantic co
   context.disconnect();
 });
 
+test('object context prefers property autocomplete windows and normalizes metadata', async () => {
+  const description = fixtureDescription();
+  const choiceTypeName = 'rich__example_Choice';
+  const metadataTypeName = `${choiceTypeName}__gqlv_meta`;
+  const windowTypeName = `${description.generatedTypeName}__name__gqlv_property_autocomplete_window`;
+  const originalProperty = description.members.get('name');
+  const windowField = field('autoCompleteWindow', named(windowTypeName), [
+    {...argument('search', scalar('String')), defaultValue: null},
+    {...argument('offset', scalar('Int')), defaultValue: '0'},
+    {...argument('size', scalar('Int')), defaultValue: '5'}
+  ]);
+  const windowedDescription = {
+    ...description,
+    members: new Map(description.members).set('name', {
+      ...originalProperty,
+      fields: new Map(originalProperty.fields)
+        .set('autoComplete', field('autoComplete', list(named(choiceTypeName)), [argument('search', scalar('String'))]))
+        .set('autoCompleteWindow', windowField)
+    }),
+    types: new Map([
+      ...description.types,
+      [windowTypeName, graphType(windowTypeName, [
+        field('items', list(named(choiceTypeName))), field('offset', scalar('Int')),
+        field('requestedSize', scalar('Int')), field('returnedCount', scalar('Int')),
+        field('totalCount', scalar('Int')), field('maximumSize', scalar('Int')),
+        field('hasPrevious', scalar('Boolean')), field('hasNext', scalar('Boolean')),
+        field('ordering', scalar('String'))
+      ])],
+      [choiceTypeName, graphType(choiceTypeName, [field('_meta', named(metadataTypeName))])],
+      [metadataTypeName, graphType(metadataTypeName, [
+        field('id', scalar('ID')), field('logicalTypeName', scalar('String')), field('title', scalar('String'))
+      ])]
+    ])
+  };
+  const choice = {_meta: {id: 'choice-6', logicalTypeName: 'example.Choice', title: 'Choice 6'}};
+  let request;
+  const client = {
+    describeObject: async () => windowedDescription,
+    executeObjectInteraction: async candidate => {
+      request = candidate;
+      return {data: {name: {autoCompleteWindow: {
+        items: [choice], offset: 5, requestedSize: 5, returnedCount: 1, totalCount: 6,
+        maximumSize: 5, hasPrevious: true, hasNext: false, ordering: 'APPLICATION'
+      }}}, errors: [], operation: {operationName: candidate.operationName}};
+    }
+  };
+  const context = new ObjectContextController({client, logicalTypeName: 'example.Object', objectId: '42'});
+
+  const result = await context.autoCompletePropertyWindow('name', 'Choice', {offset: 5, size: 5});
+
+  assert.equal(result.status, 'success');
+  assert.equal(result.data.windowed, true);
+  assert.deepEqual(result.data.items, [choice]);
+  assert.equal(result.data.totalCount, 6);
+  assert.match(JSON.stringify(request.selection), /autoCompleteWindow/);
+  assert.deepEqual(request.selection.name.autoCompleteWindow.__args, {search: 'Choice', offset: 5, size: 5});
+  context.disconnect();
+});
+
 test('query-only and non-compliant variants report or execute discovered capabilities', async () => {
   const description = fixtureDescription();
   const queryOnlyClient = {
@@ -219,6 +278,56 @@ test('versionless preparation and autocomplete select only advertised identity m
     assert.doesNotMatch(serializedSelection, /version/);
   }
   assert.deepEqual(normalizeInteractionInput(choice), {id: 'choice-1'});
+  context.disconnect();
+});
+
+test('action parameter autocomplete windows preserve declared dependent arguments', async () => {
+  const description = versionlessPreparationDescription();
+  const parameterTypeName = `${description.generatedTypeName}__choose__choice__gqlv_action_parameter`;
+  const windowTypeName = `${parameterTypeName}_autocomplete_window`;
+  const parameterType = description.types.get(parameterTypeName);
+  const windowField = field('autoCompleteWindow', named(windowTypeName), [
+    argument('preceding', scalar('String')), argument('search', scalar('String')),
+    {...argument('offset', scalar('Int')), defaultValue: '0'},
+    {...argument('size', scalar('Int')), defaultValue: '5'}
+  ]);
+  description.types.set(parameterTypeName, graphType(parameterTypeName, [
+    ...parameterType.fields, windowField
+  ]));
+  const action = description.members.get('choose');
+  const paramsTypeName = `${description.generatedTypeName}__choose__gqlv_action_params`;
+  description.types.set(paramsTypeName, graphType(paramsTypeName, [field('choice', named(parameterTypeName))]));
+  description.types.set(windowTypeName, graphType(windowTypeName, [
+    field('items', list(named('rich__example_VersionlessChoice'))),
+    field('offset', scalar('Int')), field('requestedSize', scalar('Int')),
+    field('returnedCount', scalar('Int')), field('totalCount', scalar('Int')),
+    field('maximumSize', scalar('Int')), field('hasPrevious', scalar('Boolean')),
+    field('hasNext', scalar('Boolean')), field('ordering', scalar('String'))
+  ]));
+  description.members.set('choose', {...action});
+  const choice = {_meta: {id: 'choice-6', logicalTypeName: 'example.VersionlessChoice', title: 'Choice six'}};
+  let request;
+  const client = {
+    describeObject: async () => description,
+    describeMutation: async () => null,
+    executeObjectInteraction: async candidate => {
+      request = candidate;
+      return {data: {choose: {params: {choice: {autoCompleteWindow: {
+        items: [choice], offset: 5, requestedSize: 5, returnedCount: 1, totalCount: 6,
+        maximumSize: 5, hasPrevious: true, hasNext: false, ordering: 'APPLICATION'
+      }}}}}, errors: [], operation: {}};
+    }
+  };
+  const context = new ObjectContextController({client, logicalTypeName: 'example.Object', objectId: '42'});
+
+  const result = await context.autoCompleteActionParameterWindow(
+    'choose', 'choice', 'Cho', {preceding: 'current', ignored: 'omit'}, {offset: 5, size: 5});
+
+  assert.equal(result.status, 'success');
+  assert.equal(result.data.items[0]._meta.id, 'choice-6');
+  assert.deepEqual(request.selection.choose.params.choice.autoCompleteWindow.__args, {
+    preceding: 'current', search: 'Cho', offset: 5, size: 5
+  });
   context.disconnect();
 });
 

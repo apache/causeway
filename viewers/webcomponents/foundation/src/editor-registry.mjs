@@ -90,7 +90,10 @@ const autoCompleteEditor = Object.freeze({
     const current = context.value && typeof context.value === 'object'
       ? normalizeChoice(context.value).encoded
       : context.value ?? '';
-    return `<input type="text" ${inputAttributes(context)} value="${escapeHtml(current)}" list="${escapeHtml(listId)}"><datalist id="${escapeHtml(listId)}">${options}</datalist>`;
+    const continuation = context.hasMoreSuggestions === true
+      ? '<span class="causeway-autocomplete-continuation" role="status">More matches are available; refine the search.</span>'
+      : '';
+    return `<input type="text" ${inputAttributes(context)} value="${escapeHtml(current)}" list="${escapeHtml(listId)}"><datalist id="${escapeHtml(listId)}">${options}</datalist>${continuation}`;
   },
   parse: ({value, suggestions = []}) => {
     const match = suggestions.map(normalizeChoice).find(choice => choice.encoded === String(value));

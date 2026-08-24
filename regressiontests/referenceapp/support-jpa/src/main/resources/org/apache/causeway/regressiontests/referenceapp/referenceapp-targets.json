@@ -4,6 +4,7 @@
   "targets": [
     {"family": "action-choices", "rootField": "demo_ActionChoices", "member": "selectTvCharacter"},
     {"family": "action-autocomplete", "rootField": "demo_ActionAutoCompletePage", "member": "selectTvCharacter"},
+    {"family": "reference-autocomplete-window", "rootField": "demo_ActionAutoCompletePage", "member": "selectTvCharacter"},
     {"family": "action-defaults", "rootField": "demo_ActionDefaults", "member": "selectTvCharacterByShow"},
     {"family": "action-validation", "rootField": "demo_ActionValidatePage", "member": "selectTvCharactersByShowAndSexUsingName"},
     {"family": "action-parameterless", "rootField": "demo_ActionSemanticsVm", "member": "reportPropertyForSafe"},

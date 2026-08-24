@@ -69,7 +69,16 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         return;
       }
       event.stopPropagation();
-      void this.loadParameterAutoComplete(parameterId, event.detail.search);
+      const request = event.detail;
+      if (typeof request.respond === 'function') {
+        void this.loadParameterAutoComplete(parameterId, request.search, {
+          offset: request.offset,
+          size: request.size,
+          publish: false
+        }).then(result => request.respond(result));
+      } else {
+        void this.loadParameterAutoComplete(parameterId, request.search);
+      }
     });
     this.addEventListener('causeway-reference-escape', event => {
       if (this.promptState) {
@@ -240,7 +249,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return true;
   }
 
-  async loadParameterAutoComplete(parameterId, search) {
+  async loadParameterAutoComplete(parameterId, search, {offset = 0, size = null, publish = true} = {}) {
     const parameter = this.promptState?.parameters.find(candidate => candidate.id === parameterId);
     if (!parameter?.fields.has('autoComplete') || this.promptState.status === InteractionStatus.INVOKING) {
       return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
@@ -249,13 +258,24 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const controller = new AbortController();
     this.autoCompleteController = controller;
     const generation = ++this.autoCompleteGeneration;
-    const result = await this.promptState.context.autoCompleteActionParameter(
-      this.promptState.actionId,
-      parameterId,
-      search,
-      this.promptState.values,
-      {signal: controller.signal}
-    );
+    const {maximumResults} = causewayReferenceWidgetConfiguration();
+    const requestedSize = size ?? parameter.autoCompleteWindow?.sizeDefault ?? maximumResults;
+    const context = this.promptState.context;
+    const result = typeof context.autoCompleteActionParameterWindow === 'function'
+      ? await context.autoCompleteActionParameterWindow(
+          this.promptState.actionId,
+          parameterId,
+          search,
+          this.promptState.values,
+          {offset, size: requestedSize, signal: controller.signal}
+        )
+      : legacyWindowResult(await context.autoCompleteActionParameter(
+          this.promptState.actionId,
+          parameterId,
+          search,
+          this.promptState.values,
+          {signal: controller.signal}
+        ), offset, requestedSize);
     if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.promptState) {
       return {...result, status: InteractionStatus.OBSOLETE};
     }
@@ -267,22 +287,28 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       }
       return result;
     }
-    const suggestions = [...(result.data ?? [])];
-    const {maximumResults} = causewayReferenceWidgetConfiguration();
-    if (suggestions.length > maximumResults) {
+    const window = result.data;
+    const suggestions = [...(window?.items ?? [])];
+    if (window?.windowed !== true && suggestions.length > maximumResults) {
       const message = `More than ${maximumResults} references matched. Refine the search.`;
       this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.FAILED, error: message});
       this.#publishPromptState();
       this.render();
       return {status: InteractionStatus.FAILED, data: null, errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]};
     }
-    const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
-      ? Object.freeze({...candidate, state: Object.freeze({...candidate.state, suggestions: Object.freeze(suggestions)})})
-      : candidate));
-    this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.EDITING, parameters, error: null});
-    this.#publishPromptState();
-    this.render();
-    this.#focusFirstControl();
+    if (publish) {
+      const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
+        ? Object.freeze({...candidate, state: Object.freeze({
+            ...candidate.state,
+            suggestions: Object.freeze(suggestions),
+            autoCompleteWindow: window
+          })})
+        : candidate));
+      this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.EDITING, parameters, error: null});
+      this.#publishPromptState();
+      this.render();
+      this.#focusFirstControl();
+    }
     return result;
   }
 
@@ -423,6 +449,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     const choices = parameter.state?.choices ?? parameter.enumValues ?? [];
     const rendered = renderCausewayEditor(this.#parameterEditorContext(parameter, choices), this._editorRegistry);
+    if (rendered.editor.id === 'autocomplete' && event.type === 'input') {
+      clearTimeout(this.parameterTimer);
+      const search = String(event.target.value ?? '');
+      this.parameterTimer = setTimeout(() => void this.loadParameterAutoComplete(parameterId, search), 250);
+      return;
+    }
     try {
       const value = parseCausewayEditorValue(rendered.editor, {
         value: event.target.value,
@@ -524,6 +556,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       choices,
       suggestions: parameter.state?.suggestions ?? [],
       autoComplete: parameter.fields.has('autoComplete'),
+      autoCompleteWindow: Boolean(parameter.autoCompleteWindow),
+      autoCompletePageSize: parameter.autoCompleteWindow?.sizeDefault ?? null,
+      hasMoreSuggestions: parameter.state?.autoCompleteWindow?.hasNext === true,
       enumValues: parameter.enumValues,
       inputType: parameter.inputType,
       semanticType: parameter.state?.datatype ?? null,
@@ -628,6 +663,25 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       focusTarget?.focus?.();
     });
   }
+}
+
+function legacyWindowResult(result, offset, requestedSize) {
+  if (result?.status !== InteractionStatus.SUCCESS || !Array.isArray(result.data)) return result;
+  return {
+    ...result,
+    data: Object.freeze({
+      items: Object.freeze([...result.data]),
+      offset,
+      requestedSize,
+      returnedCount: result.data.length,
+      totalCount: result.data.length,
+      maximumSize: null,
+      hasPrevious: false,
+      hasNext: false,
+      ordering: 'LEGACY',
+      windowed: false
+    })
+  };
 }
 
 function focusRestoreTarget(source) {

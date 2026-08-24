@@ -112,6 +112,20 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + otoa.asciiId() + "__gqlv_property";
     }
 
+    public String propertyAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final OneToOneAssociation otoa,
+            final SchemaType schemaType) {
+        return propertyTypeNameFor(owningType, otoa, schemaType) + "_autocomplete_window";
+    }
+
+    public String actionParamAutocompleteWindowTypeNameFor(
+            final ObjectSpecification owningType,
+            final ObjectActionParameter oap,
+            final SchemaType schemaType) {
+        return actionParamTypeNameFor(owningType, oap, schemaType) + "_autocomplete_window";
+    }
+
     public String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation otoa,

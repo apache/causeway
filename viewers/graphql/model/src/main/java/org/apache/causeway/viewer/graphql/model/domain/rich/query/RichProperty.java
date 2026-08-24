@@ -55,6 +55,7 @@ public class RichProperty
      * Populated iff there is an autoComplete
      */
     private final RichPropertyAutoComplete autoComplete;
+    private final RichPropertyAutoCompleteWindow autoCompleteWindow;
     private final RichPropertyValidate validate;
     /**
      * Populated iff the API variant allows for it.
@@ -74,6 +75,7 @@ public class RichProperty
             this.disabled = null;
             this.choices = null;
             this.autoComplete = null;
+            this.autoCompleteWindow = null;
             this.validate = null;
             this.set = null;
             this.datatype = null;
@@ -94,6 +96,9 @@ public class RichProperty
         addChildFieldFor(this.validate = new RichPropertyValidate(this, context));
         addChildFieldFor(this.choices = new RichPropertyChoices(this, context));
         addChildFieldFor(this.autoComplete = new RichPropertyAutoComplete(this, context));
+        addChildFieldFor(this.autoCompleteWindow = otoa.hasAutoComplete()
+                ? new RichPropertyAutoCompleteWindow(this, context)
+                : null);
         addChildFieldFor(this.set = isSetterAllowed() ? new RichPropertySet(this, context) : null);
         addChildFieldFor(this.datatype = new RichPropertyDatatype(this, context));
 
@@ -161,6 +166,9 @@ public class RichProperty
 
         if(autoComplete != null) {
             autoComplete.addDataFetcher(this);
+        }
+        if (autoCompleteWindow != null) {
+            autoCompleteWindow.addDataFetcher(this);
         }
         validate.addDataFetcher(this);
 

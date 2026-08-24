@@ -72,7 +72,16 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         return;
       }
       event.stopPropagation();
-      void this.loadAutoComplete(event.detail.search);
+      const request = event.detail;
+      if (typeof request.respond === 'function') {
+        void this.loadAutoComplete(request.search, {
+          offset: request.offset,
+          size: request.size,
+          publish: false
+        }).then(result => request.respond(result));
+      } else {
+        void this.loadAutoComplete(request.search);
+      }
     });
     this.addEventListener('causeway-reference-escape', event => {
       if (this.interactionState) {
@@ -269,7 +278,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     return true;
   }
 
-  async loadAutoComplete(search) {
+  async loadAutoComplete(search, {offset = 0, size = null, publish = true} = {}) {
     if (!this.interactionState?.capabilities?.autoComplete) {
       return {status: InteractionStatus.UNSUPPORTED, data: null, errors: []};
     }
@@ -277,7 +286,18 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const controller = new AbortController();
     this.autoCompleteController = controller;
     const generation = ++this.autoCompleteGeneration;
-    const result = await this._resolvedContext.autoCompleteProperty(this.member, search, {signal: controller.signal});
+    const {maximumResults} = causewayReferenceWidgetConfiguration();
+    const requestedSize = size
+      ?? this.interactionState.capabilities?.autoCompleteWindowSize
+      ?? maximumResults;
+    const result = typeof this._resolvedContext.autoCompletePropertyWindow === 'function'
+      ? await this._resolvedContext.autoCompletePropertyWindow(this.member, search, {
+          offset,
+          size: requestedSize,
+          signal: controller.signal
+        })
+      : legacyWindowResult(await this._resolvedContext.autoCompleteProperty(
+          this.member, search, {signal: controller.signal}), offset, requestedSize);
     if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.interactionState) {
       return {...result, status: InteractionStatus.OBSOLETE};
     }
@@ -291,20 +311,23 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       }
       return result;
     }
-    const suggestions = [...(result.data ?? [])];
-    const {maximumResults} = causewayReferenceWidgetConfiguration();
-    if (suggestions.length > maximumResults) {
+    const window = result.data;
+    const suggestions = [...(window?.items ?? [])];
+    if (window?.windowed !== true && suggestions.length > maximumResults) {
       const message = `More than ${maximumResults} references matched. Refine the search.`;
       this.#setInteraction({...this.interactionState, status: InteractionStatus.FAILED, suggestions: Object.freeze([]), error: message});
       return {status: InteractionStatus.FAILED, data: null, errors: [{message, code: 'AUTOCOMPLETE_RESULT_LIMIT'}]};
     }
-    this.interactionState = Object.freeze({
-      ...this.interactionState,
-      status: InteractionStatus.EDITING,
-      suggestions: Object.freeze(suggestions),
-      error: null
-    });
-    this.renderComponentState(this.componentState);
+    if (publish) {
+      this.interactionState = Object.freeze({
+        ...this.interactionState,
+        status: InteractionStatus.EDITING,
+        suggestions: Object.freeze(suggestions),
+        autoCompleteWindow: window,
+        error: null
+      });
+      this.renderComponentState(this.componentState);
+    }
     return result;
   }
 
@@ -429,6 +452,12 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return;
     }
     const editor = this.interactionState.editor;
+    if (editor.id === 'autocomplete' && debounce) {
+      clearTimeout(this.validationTimer);
+      const search = String(event.target.value ?? '');
+      this.validationTimer = setTimeout(() => void this.loadAutoComplete(search), 250);
+      return;
+    }
     try {
       const value = parseCausewayEditorValue(editor, {
         value: event.target.value,
@@ -502,6 +531,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       choices: interaction.choices ?? [],
       suggestions: interaction.suggestions ?? [],
       autoComplete: interaction.capabilities?.autoComplete === true,
+      autoCompleteWindow: interaction.capabilities?.autoCompleteWindow === true,
+      autoCompletePageSize: interaction.capabilities?.autoCompleteWindowSize ?? null,
+      hasMoreSuggestions: interaction.autoCompleteWindow?.hasNext === true,
       enumValues: interaction.capabilities?.enumValues ?? [],
       inputType: interaction.capabilities?.inputType,
       semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
@@ -583,6 +615,25 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const host = this.getAttribute('data-testid');
     return host ? `${host}-${suffix}` : '';
   }
+}
+
+function legacyWindowResult(result, offset, requestedSize) {
+  if (result?.status !== InteractionStatus.SUCCESS || !Array.isArray(result.data)) return result;
+  return {
+    ...result,
+    data: Object.freeze({
+      items: Object.freeze([...result.data]),
+      offset,
+      requestedSize,
+      returnedCount: result.data.length,
+      totalCount: result.data.length,
+      maximumSize: null,
+      hasPrevious: false,
+      hasNext: false,
+      ordering: 'LEGACY',
+      windowed: false
+    })
+  };
 }
 
 function publicInteractionValue(editor, value) {

@@ -131,7 +131,7 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_ActionAutoCompleteMenu", "autoComplete", "rich__demo_ActionAutoCompletePage"));
         objectAction("selectTvCharacter").click();
         waitForPrompt("selectTvCharacter");
-        selectFirstAutocompleteChoice("tvCharacter", "Tom");
+        selectLaterAutocompleteChoice("tvCharacter", "o");
         submitPrompt();
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
@@ -552,6 +552,11 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private void selectFirstAvailableChoice(final String parameterId) {
         final Locator control = page.locator(parameter(parameterId));
+        if (Boolean.TRUE.equals(control.evaluate("element => element.localName === 'select'"))) {
+            control.evaluate("element => { element.selectedIndex = 0; "
+                    + "element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }");
+            return;
+        }
         try {
             page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter(parameterId));
         } catch (com.microsoft.playwright.TimeoutError cause) {
@@ -567,16 +572,49 @@ class ReferenceAppHtmxPlaywrightTest {
         page.waitForFunction("selector => document.querySelector(selector)?.value?.id", parameter(parameterId));
     }
 
-    private void selectFirstAutocompleteChoice(final String parameterId, final String search) {
+    private void selectLaterAutocompleteChoice(final String parameterId, final String search) {
         final Locator control = page.locator(parameter(parameterId));
-        final Locator input = control.locator("vaadin-combo-box input");
-        input.fill(search);
-        page.waitForFunction("selector => { const element = document.querySelector(selector); return element?.dataset.widgetState === 'ready' && element.querySelector('vaadin-combo-box')?.items?.length > 0; }", parameter(parameterId));
-        final String label = (String) control.evaluate("element => element.querySelector('vaadin-combo-box').items[0].title");
-        input.fill(label);
-        input.focus();
-        page.keyboard().press("ArrowDown");
-        page.keyboard().press("Enter");
+        final Locator parameterContainer = page.locator("[data-parameter='" + parameterId + "']");
+        try {
+            page.waitForFunction("selector => { const editor = document.querySelector(selector); "
+                    + "return editor?.matches('causeway-reference-editor, input[list]') "
+                    + "|| editor?.querySelector('causeway-reference-editor, input[list]'); }", parameter(parameterId));
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            throw new AssertionError("Autocomplete editor was unavailable: " + page.locator(PROMPT).innerHTML(), cause);
+        }
+        if (!Boolean.TRUE.equals(control.evaluate("element => element.localName === 'causeway-reference-editor'"))) {
+            final Locator input = control;
+            input.fill(search);
+            try {
+                page.waitForFunction("selector => document.querySelector(selector)?.querySelectorAll('datalist option').length > 0",
+                        "[data-parameter='" + parameterId + "']");
+            } catch (final com.microsoft.playwright.TimeoutError cause) {
+                throw new AssertionError("Native autocomplete did not receive its first window: "
+                        + page.locator(PROMPT).innerHTML(), cause);
+            }
+            assertThat(parameterContainer.locator(".causeway-autocomplete-continuation").innerText())
+                    .containsIgnoringCase("more matches");
+            final String encoded = parameterContainer.locator("datalist option").first().getAttribute("value");
+            input.evaluate("(element, value) => { element.value = value; "
+                    + "element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }", encoded);
+            page.waitForFunction("() => document.querySelector('[data-testid=action-prompt-submit]')?.disabled === false");
+            return;
+        }
+        control.locator("vaadin-combo-box").waitFor();
+        final JsonNode pageResult = OBJECT_MAPPER.valueToTree(control.evaluate("async (element, search) => {\n"
+                + "  const combo = element.querySelector('vaadin-combo-box');\n"
+                + "  if (typeof combo?.dataProvider !== 'function') throw new Error('Windowed data provider is unavailable');\n"
+                + "  return await new Promise(resolve => combo.dataProvider(\n"
+                + "    {filter: search, page: 1, pageSize: 5},\n"
+                + "    (items, total) => {\n"
+                + "      const selected = items[0];\n"
+                + "      combo.dispatchEvent(new CustomEvent('selected-item-changed', {detail: {value: selected}}));\n"
+                + "      resolve({count: items.length, total, selected, error: element.dataset.widgetError || null});\n"
+                + "    }));\n"
+                + "}", search));
+        assertThat(pageResult.path("count").asInt()).as(pageResult.toPrettyString()).isGreaterThan(0);
+        assertThat(pageResult.path("total").asInt()).isGreaterThan(5);
+        assertThat(pageResult.at("/selected/id").asText()).isNotBlank();
         page.waitForFunction("selector => document.querySelector(selector)?.value?.id", parameter(parameterId));
     }
 
