@@ -317,7 +317,9 @@ public class SimpleAction
 			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return resultManagedObject.getPojo();
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
 }
