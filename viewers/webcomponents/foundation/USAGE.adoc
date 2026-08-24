@@ -408,8 +408,11 @@ Custom prompts must preserve labels, validation associations, pending announceme
 Call `release()` and `releaseMoneyCodec()` when the overrides are no longer required.
 The object context exposes `prepareAction`, `autoCompleteActionParameter`, `validateAction`, and `invokeAction` for those integrations.
 
-Safe actions use the advertised rich query invocation field.
-Mutating actions use the discovered top-level mutation when available, while a non-compliant query mutation is used only when that is the capability exposed by the configured API variant.
+Safe and idempotent actions use an advertised nested `invoke` or `invokeIdempotent` query field.
+Mutating object and service actions use the discovered top-level mutation when available, while nested `invokeNonIdempotent` remains an explicit compatibility fallback only when no corresponding mutation is advertised.
+The shared dispatch planner emits only declared arguments, resolves an object target through its advertised generated input argument, and never manufactures a service target.
+Nested result envelopes are selected through an advertised `results` field, while direct mutation and invocation results are projected from their effective scalar, enum, object, collection, or void type.
+Object metadata selection includes only fields advertised by the effective metadata type, so a versionless view model does not receive a speculative `_meta.version` selection.
 Object, collection, scalar, and void outcomes are normalized and published through `causeway-action-result` without automatic navigation.
 The standard controller may render a local result summary; host routing remains responsible for object-result navigation.
 
