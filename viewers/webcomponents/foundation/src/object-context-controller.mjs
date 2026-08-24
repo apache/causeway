@@ -30,9 +30,18 @@ import {fieldsByName, namedType} from './introspection.mjs';
 import {
   argumentsFromValues,
   commandSelection,
+  MAX_DIRECT_FRAGMENT_TYPES,
+  metadataSelectionForType,
   resultSelectionForType
 } from './interaction-operations.mjs';
-import {deepMerge, differenceSelection, isSelectionEmpty, mergeSelections} from './selection.mjs';
+import {
+  deepMerge,
+  differenceSelection,
+  INLINE_FRAGMENTS,
+  isSelectionEmpty,
+  mergeSelections,
+  selectionForRuntimeType
+} from './selection.mjs';
 import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
@@ -523,18 +532,15 @@ export class ObjectContextController extends EventTarget {
     if (!descriptor || descriptor.kind !== 'collection' || (!usesWindow && !descriptor.fields.has('get'))) {
       throw new Error(`Collection '${member}' is not readable on '${description.logicalTypeName}'.`);
     }
-    if (['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind)) {
-      throw new Error(`Collection '${member}' uses an abstract row type that requires concrete fragment projection.`);
-    }
+    const abstractRows = ['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind);
     const requestedOffset = usesWindow ? integerAtLeast(offset, 0, 'Collection window offset') : 0;
     const requestedSize = usesWindow
       ? integerAtLeast(size ?? descriptor.window.sizeDefault, 1, 'Collection window size')
       : null;
-    const rowSelection = collectionRowSelection(descriptor, columns, description.types);
-    const selection = usesWindow
-      ? null
-      : {[member]: {get: rowSelection}};
-    const cacheKey = JSON.stringify({member, rowSelection, offset: requestedOffset, size: requestedSize, usesWindow});
+    let rowSelection = abstractRows
+      ? {__typename: true}
+      : collectionRowSelection(descriptor, columns, description.types);
+    const cacheKey = JSON.stringify({member, columns, offset: requestedOffset, size: requestedSize, usesWindow});
     if (!force && this.secondaryCache.has(cacheKey)) {
       const cached = this.secondaryCache.get(cacheKey);
       if (!cached.abortController.signal.aborted) {
@@ -559,12 +565,12 @@ export class ObjectContextController extends EventTarget {
       this.secondaryRequests.set(requestKey, {abortController, generation: requestGeneration});
     }
 
-    const readPromise = usesWindow
+    const readCollection = selection => usesWindow
       ? this.client.readCollectionWindow({
           description,
           identity: this.identity,
           member,
-          rowSelection,
+          rowSelection: selection,
           offset: requestedOffset,
           size: requestedSize,
           signal: abortController.signal
@@ -572,10 +578,57 @@ export class ObjectContextController extends EventTarget {
       : this.client.readObject({
           description,
           identity: this.identity,
-          selection,
+          selection: {[member]: {get: selection}},
           signal: abortController.signal
         });
-    const promise = readPromise.then(async result => {
+    const readPromise = (async () => {
+      const advertisedTypeNames = [...(descriptor.value?.typeDescription?.possibleTypes ?? [])]
+        .map(candidate => candidate.name)
+        .sort();
+      const directTypeNames = abstractRows
+          && advertisedTypeNames.length > 0
+          && advertisedTypeNames.length <= MAX_DIRECT_FRAGMENT_TYPES
+        ? advertisedTypeNames
+        : null;
+      if (directTypeNames) {
+        rowSelection = await polymorphicCollectionRowSelection({
+          client: this.client,
+          description,
+          descriptor,
+          columns,
+          observedTypeNames: directTypeNames,
+          signal: abortController.signal
+        });
+      }
+      let result = await readCollection(rowSelection);
+      let probeOperation = null;
+      let projectedTypeNames = directTypeNames ? new Set(directTypeNames) : null;
+      if (abstractRows && !directTypeNames) {
+        const probeData = result.data?.[member] ?? null;
+        const probeRows = usesWindow ? probeData?.window?.rows : probeData?.get;
+        const observedTypeNames = [...new Set((probeRows ?? [])
+          .map(row => row?.__typename)
+          .filter(Boolean))].sort();
+        if (observedTypeNames.length > 0) {
+          if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
+            throw obsoleteRequestError();
+          }
+          rowSelection = await polymorphicCollectionRowSelection({
+            client: this.client,
+            description,
+            descriptor,
+            columns,
+            observedTypeNames,
+            signal: abortController.signal
+          });
+          probeOperation = result.operation;
+          projectedTypeNames = new Set(observedTypeNames);
+          result = await readCollection(rowSelection);
+        }
+      }
+      return {result, probeOperation, projectedTypeNames};
+    })();
+    const promise = readPromise.then(async ({result, probeOperation, projectedTypeNames}) => {
       if (requestKey != null && requestGeneration !== this.secondaryRequests.get(requestKey)?.generation) {
         throw obsoleteRequestError();
       }
@@ -587,6 +640,13 @@ export class ObjectContextController extends EventTarget {
       const firstObjectRow = rows.find?.(row => row?._meta?.logicalTypeName);
       let rowDescription = null;
       let errors = result.errors;
+      if (projectedTypeNames) {
+        const unprojected = rows.filter(row => row?.__typename && !projectedTypeNames.has(row.__typename));
+        if (unprojected.length > 0) {
+          errors = Object.freeze([...errors, asGraphQLError(new Error(
+            'The collection changed to an unprojected concrete type after its bounded typename probe.'))]);
+        }
+      }
       if (firstObjectRow) {
         try {
           rowDescription = await this.client.describeObject(firstObjectRow._meta.logicalTypeName);
@@ -605,7 +665,8 @@ export class ObjectContextController extends EventTarget {
         errors,
         rowDescription,
         rowSelection,
-        selection,
+        selection: usesWindow ? null : {[member]: {get: rowSelection}},
+        probeOperation,
         operation: result.operation
       });
     }).finally(() => {
@@ -634,7 +695,7 @@ export class ObjectContextController extends EventTarget {
       client: this.client,
       logicalTypeName: metadata.logicalTypeName,
       objectId: metadata.id,
-      hydration: {data: row, selection: rowSelection},
+      hydration: {data: row, selection: selectionForRuntimeType(rowSelection, row.__typename)},
       fetchImpl: this.fetchImpl
     });
   }
@@ -1151,6 +1212,102 @@ function obsoleteRequestError() {
   const error = new Error('Collection window response was superseded by a newer request.');
   error.name = 'AbortError';
   return error;
+}
+
+const MAX_OBSERVED_POLYMORPHIC_TYPES = 16;
+
+async function polymorphicCollectionRowSelection({
+  client,
+  description,
+  descriptor,
+  columns,
+  observedTypeNames,
+  signal
+}) {
+  if (observedTypeNames.length > MAX_OBSERVED_POLYMORPHIC_TYPES) {
+    throw new Error(`Collection row projection exceeds the ${MAX_OBSERVED_POLYMORPHIC_TYPES}-type bound.`);
+  }
+  const abstractType = descriptor.value?.typeDescription ?? null;
+  const advertised = new Set(abstractType?.possibleTypes?.map(candidate => candidate.name) ?? []);
+  for (const typeName of observedTypeNames) {
+    if (!advertised.has(typeName)) {
+      throw new Error(`Type '${typeName}' is not advertised by abstract row type '${abstractType?.name ?? 'unknown'}'.`);
+    }
+  }
+
+  await describeInto(client, description.types, observedTypeNames, signal);
+  const supportTypeNames = new Set();
+  for (const typeName of observedTypeNames) {
+    const concreteType = description.types.get(typeName);
+    const concreteFields = fieldsByName(concreteType);
+    for (const fieldName of ['_meta', ...columns.map(column => typeof column === 'string' ? column : column?.member)]) {
+      const field = fieldName ? concreteFields.get(fieldName) : null;
+      if (field) {
+        supportTypeNames.add(namedType(field.type));
+      }
+    }
+  }
+  await describeInto(client, description.types, [...supportTypeNames].filter(Boolean), signal);
+
+  const nestedTypeNames = new Set();
+  for (const supportTypeName of supportTypeNames) {
+    const supportType = description.types.get(supportTypeName);
+    for (const field of supportType?.fields ?? []) {
+      if (field.name === 'get' && ['OBJECT', 'INTERFACE', 'UNION'].includes(innermostType(field.type)?.kind)) {
+        nestedTypeNames.add(namedType(field.type));
+      }
+    }
+  }
+  await describeInto(client, description.types, [...nestedTypeNames].filter(Boolean), signal);
+  const nestedMetadataTypeNames = [...nestedTypeNames]
+    .map(typeName => fieldsByName(description.types.get(typeName)).get('_meta'))
+    .filter(Boolean)
+    .map(field => namedType(field.type));
+  await describeInto(client, description.types, nestedMetadataTypeNames, signal);
+
+  const fragments = Object.fromEntries(observedTypeNames.map(typeName => {
+    const concreteType = description.types.get(typeName);
+    const concreteFields = fieldsByName(concreteType);
+    const concreteRef = {kind: 'OBJECT', name: typeName, ofType: null};
+    const fragment = {...(metadataSelectionForType(concreteRef, description.types) ?? {__typename: true})};
+    for (const column of columns) {
+      const member = typeof column === 'string' ? column : column?.member;
+      const memberField = member ? concreteFields.get(member) : null;
+      const wrapper = memberField ? description.types.get(namedType(memberField.type)) ?? null : null;
+      if (!member || !wrapper) {
+        continue;
+      }
+      const wrapperFields = fieldsByName(wrapper);
+      const memberSelection = Object.fromEntries(
+        ['hidden', 'disabled', 'datatype']
+          .filter(fieldName => wrapperFields.has(fieldName))
+          .map(fieldName => [fieldName, true]));
+      const getField = wrapperFields.get('get');
+      if (getField) {
+        memberSelection.get = resultSelectionForType(getField.type, description.types) ?? true;
+      }
+      if (Object.keys(memberSelection).length > 0) {
+        fragment[member] = memberSelection;
+      }
+    }
+    return [typeName, fragment];
+  }));
+  return {__typename: true, [INLINE_FRAGMENTS]: fragments};
+}
+
+async function describeInto(client, types, typeNames, signal) {
+  const missing = [...new Set(typeNames)].filter(typeName => typeName && !types.has(typeName));
+  if (missing.length === 0) {
+    return;
+  }
+  const described = await client.describeTypes(missing, {signal});
+  for (const typeName of missing) {
+    const typeDescription = described.get(typeName) ?? null;
+    if (!typeDescription) {
+      throw new Error(`GraphQL type '${typeName}' required by a polymorphic projection is unavailable.`);
+    }
+    types.set(typeName, typeDescription);
+  }
 }
 
 function collectionRowSelection(descriptor, columns, types) {

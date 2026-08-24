@@ -19,6 +19,9 @@
 
 import {assertGraphQLName} from './schema-names.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
+import {INLINE_FRAGMENTS} from './selection.mjs';
+
+export const MAX_DIRECT_FRAGMENT_TYPES = 8;
 
 export function buildDescribeOperationRootsOperation() {
   return Object.freeze({
@@ -208,6 +211,23 @@ export function resultSelectionForType(typeRef, types) {
   if (!typeDescription) {
     return {__typename: true};
   }
+  if (['INTERFACE', 'UNION'].includes(kind)) {
+    const possibleTypes = [...(typeDescription.possibleTypes ?? [])]
+      .map(candidate => candidate.name)
+      .sort();
+    if (possibleTypes.length === 0
+        || possibleTypes.length > MAX_DIRECT_FRAGMENT_TYPES
+        || possibleTypes.some(typeName => !types.has(typeName))) {
+      return {__typename: true};
+    }
+    return {
+      __typename: true,
+      [INLINE_FRAGMENTS]: Object.fromEntries(possibleTypes.map(typeName => {
+        const concreteRef = {kind: 'OBJECT', name: typeName, ofType: null};
+        return [typeName, metadataSelectionForType(concreteRef, types) ?? {__typename: true}];
+      }))
+    };
+  }
   const metadataSelection = metadataSelectionForType(typeRef, types);
   if (metadataSelection) {
     return metadataSelection;
@@ -235,6 +255,18 @@ function renderExecutableSelection({
   const fields = fieldsByName(typeDescription);
   const lines = [];
   for (const fieldName of Object.keys(selection).sort()) {
+    if (fieldName === INLINE_FRAGMENTS) {
+      lines.push(renderExecutableFragments({
+        fragments: selection[fieldName],
+        typeDescription,
+        types,
+        variables,
+        declarations,
+        variablePrefix,
+        indentation
+      }));
+      continue;
+    }
     assertGraphQLName(fieldName, 'selection field');
     if (fieldName === '__typename' && selection[fieldName] === true) {
       lines.push(`${indentation}__typename`);
@@ -264,6 +296,44 @@ function renderExecutableSelection({
     lines.push(renderExecutableSelection({
       selection: node.select,
       typeDescription: childType,
+      types,
+      variables,
+      declarations,
+      variablePrefix: `${variablePrefix}${declarations.length}`,
+      indentation: `${indentation}  `
+    }));
+    lines.push(`${indentation}}`);
+  }
+  return lines.join('\n');
+}
+
+function renderExecutableFragments({
+  fragments,
+  typeDescription,
+  types,
+  variables,
+  declarations,
+  variablePrefix,
+  indentation
+}) {
+  if (!['INTERFACE', 'UNION'].includes(typeDescription.kind)) {
+    throw new Error(`Inline fragments are unavailable on GraphQL type '${typeDescription.name}'.`);
+  }
+  const advertised = new Set((typeDescription.possibleTypes ?? []).map(candidate => candidate.name));
+  const lines = [];
+  for (const typeName of Object.keys(fragments ?? {}).sort()) {
+    assertGraphQLName(typeName, 'inline fragment type');
+    if (!advertised.has(typeName)) {
+      throw new Error(`Type '${typeName}' is not advertised by GraphQL type '${typeDescription.name}'.`);
+    }
+    const concreteType = types.get(typeName) ?? null;
+    if (!concreteType || concreteType.kind !== 'OBJECT') {
+      throw new Error(`Inline fragment type '${typeName}' is not a described GraphQL object.`);
+    }
+    lines.push(`${indentation}... on ${typeName} {`);
+    lines.push(renderExecutableSelection({
+      selection: fragments[typeName],
+      typeDescription: concreteType,
       types,
       variables,
       declarations,
