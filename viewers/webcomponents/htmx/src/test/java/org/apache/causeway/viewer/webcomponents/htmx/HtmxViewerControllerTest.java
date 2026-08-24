@@ -53,6 +53,26 @@ class HtmxViewerControllerTest {
     }
 
     @Test
+    void preservesLongOpaqueIdentityAcrossFullFragmentAndHistoryResponses() {
+        final var controller = controller(List.of());
+        final var identifier = "memento-" + "a".repeat(3000);
+        final var route = new HtmxObjectRoute("demo.CompositeValuesPage", identifier);
+        final var canonicalPath = codec.objectPath(route);
+
+        final var full = controller.route(request("/app" + canonicalPath, "/app", false));
+        final var fragment = controller.route(request("/app" + canonicalPath, "/app", true));
+        final var historyRequest = request("/app" + canonicalPath, "/app", true);
+        historyRequest.addHeader("HX-History-Restore-Request", "true");
+        final var history = controller.route(historyRequest);
+
+        assertThat(full.getBody()).contains("object-id=\"" + identifier + "\"");
+        assertThat(fragment.getBody()).contains("object-id=\"" + identifier + "\"");
+        assertThat(fragment.getHeaders().getFirst("HX-Push-Url")).isEqualTo("/app" + canonicalPath);
+        assertThat(history.getBody()).contains("object-id=\"" + identifier + "\"");
+        assertThat(history.getHeaders().getFirst("HX-Push-Url")).isNull();
+    }
+
+    @Test
     void addsOnlyPinnedReferenceWidgetStyleHashesWhenPilotIsEnabled() {
         properties.setVaadinReferenceWidgets(true);
         properties.setReferenceMinimumSearchLength(3);
@@ -101,11 +121,15 @@ class HtmxViewerControllerTest {
         final var controller = controller(List.of());
 
         final var invalid = controller.route(request("/htmx/object/type/%2F", "", true));
+        final var overlong = controller.route(request("/htmx/object/type/" + "x".repeat(4097), "", true));
         final var landing = controller.route(request("/htmx", "", false));
 
         assertThat(invalid.getBody()).contains("data-route-state=\"invalid-route\"")
                 .doesNotContain("%2F");
         assertThat(invalid.getHeaders().getFirst("HX-Push-Url")).isEqualTo("/htmx");
+        assertThat(overlong.getBody()).contains("data-route-state=\"invalid-route\"")
+                .doesNotContain("x".repeat(256));
+        assertThat(overlong.getHeaders().getFirst("HX-Push-Url")).isEqualTo("/htmx");
         assertThat(landing.getBody()).contains("data-route-state=\"landing\"")
                 .contains("data-causeway-home-message");
     }

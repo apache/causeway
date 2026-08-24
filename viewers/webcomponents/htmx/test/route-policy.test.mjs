@@ -32,6 +32,17 @@ test('canonical route independently encodes public identity', () => {
     canonicalObjectPath('/app/htmx/', {logicalTypeName: 'petclinic.Pet Owner∕β', id: 'owner ?#42 café'}),
     '/app/htmx/object/petclinic.Pet%20Owner%E2%88%95%CE%B2/owner%20%3F%2342%20caf%C3%A9'
   );
+  assert.equal(encodeRouteSegment("!'()*~"), '%21%27%28%29%2A~');
+});
+
+test('long opaque routes honor UTF-8 and canonical encoded bounds', () => {
+  const longIdentifier = `memento-${'a'.repeat(3000)}`;
+  assert.equal(encodeRouteSegment(longIdentifier), longIdentifier);
+  assert.equal(encodeRouteSegment('a'.repeat(4096)).length, 4096);
+  assert.throws(() => encodeRouteSegment('a'.repeat(4097)), /invalid/);
+  assert.throws(() => encodeRouteSegment('é'.repeat(2049)), /invalid/);
+  assert.throws(() => encodeRouteSegment(' '.repeat(1366)), /invalid/);
+  assert.equal(encodeRouteSegment('é'.repeat(455)).length, 2730);
 });
 
 test('shared cross-viewer route fixtures retain canonical HTMX meaning', async () => {
@@ -45,8 +56,8 @@ test('shared cross-viewer route fixtures retain canonical HTMX meaning', async (
   assert.match(fixture, /fallbackElement: causeway-object/);
 });
 
-test('route encoding rejects separators controls empties and dot segments', () => {
-  for (const value of ['', '.', '..', 'one/two', 'one\\two', 'one\u0000two']) {
+test('route encoding rejects separators controls malformed Unicode empties and dot segments', () => {
+  for (const value of ['', '.', '..', 'one/two', 'one\\two', 'one\u0000two', 'one\u0080two', '\ud800', '\udc00']) {
     assert.throws(() => encodeRouteSegment(value), /invalid/);
   }
 });

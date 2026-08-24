@@ -118,7 +118,8 @@ class ReferenceAppCapabilityInventory_IntegTest {
                 "collection-associated-actions", "collection-stale-partial",
                 "boolean-nullable", "numeric-decimal", "numeric-integer", "temporal-local-date",
                 "temporal-offset-date-time", "temporal-zoned-date-time", "enum",
-                "reference-autocomplete", "url", "protected-password", "blob", "clob", "custom-value");
+                "reference-autocomplete", "url", "protected-password", "blob", "clob", "custom-value",
+                "opaque-route");
     }
 
     private JsonNode graphQL(final String query) throws Exception {
