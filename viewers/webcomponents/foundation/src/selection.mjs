@@ -17,7 +17,10 @@
  * under the License.
  */
 
+import {fieldsByName, namedType} from './introspection.mjs';
 import {assertGraphQLName} from './schema-names.mjs';
+
+export const INLINE_FRAGMENTS = '__fragments';
 
 export function mergeSelections(...selections) {
   const result = {};
@@ -66,20 +69,70 @@ export function isSelectionEmpty(selection) {
   return Object.keys(selection ?? {}).length === 0;
 }
 
-export function renderSelectionSet(selection, indentation = '      ') {
+export function renderSelectionSet(selection, indentation = '      ', {
+  typeDescription = null,
+  types = null,
+  strict = false
+} = {}) {
   const lines = [];
+  const fields = fieldsByName(typeDescription);
   for (const field of Object.keys(selection).sort()) {
+    if (field === INLINE_FRAGMENTS) {
+      lines.push(...renderInlineFragments(selection[field], indentation, typeDescription, types));
+      continue;
+    }
     assertGraphQLName(field, 'selection field');
     const value = selection[field];
+    const fieldDescription = typeDescription ? fields.get(field) : null;
+    if (strict && typeDescription && field !== '__typename' && !fieldDescription) {
+      throw new Error(`Field '${field}' is unavailable on GraphQL type '${typeDescription.name}'.`);
+    }
     if (value === true) {
       lines.push(`${indentation}${field}`);
     } else {
+      const childType = fieldDescription && types ? types.get(namedType(fieldDescription.type)) ?? null : null;
+      if (strict && fieldDescription && !childType) {
+        throw new Error(`Selection for '${typeDescription.name}.${field}' requires an undescribed GraphQL type '${namedType(fieldDescription.type)}'.`);
+      }
       lines.push(`${indentation}${field} {`);
-      lines.push(renderSelectionSet(value, `${indentation}  `));
+      lines.push(renderSelectionSet(value, `${indentation}  `, {typeDescription: childType, types, strict}));
       lines.push(`${indentation}}`);
     }
   }
   return lines.join('\n');
+}
+
+function renderInlineFragments(fragments, indentation, typeDescription, types) {
+  if (!typeDescription || !['INTERFACE', 'UNION'].includes(typeDescription.kind) || !types) {
+    throw new Error('Inline fragments require a described GraphQL interface or union.');
+  }
+  const advertised = new Set((typeDescription.possibleTypes ?? []).map(candidate => candidate.name));
+  const lines = [];
+  for (const typeName of Object.keys(fragments ?? {}).sort()) {
+    assertGraphQLName(typeName, 'inline fragment type');
+    if (!advertised.has(typeName)) {
+      throw new Error(`Type '${typeName}' is not advertised by GraphQL type '${typeDescription.name}'.`);
+    }
+    const concreteType = types.get(typeName) ?? null;
+    if (!concreteType || concreteType.kind !== 'OBJECT') {
+      throw new Error(`Inline fragment type '${typeName}' is not a described GraphQL object.`);
+    }
+    lines.push(`${indentation}... on ${typeName} {`);
+    lines.push(renderSelectionSet(fragments[typeName], `${indentation}  `, {
+      typeDescription: concreteType,
+      types,
+      strict: true
+    }));
+    lines.push(`${indentation}}`);
+  }
+  return lines;
+}
+
+export function selectionForRuntimeType(selection, typeName) {
+  const fragments = selection?.[INLINE_FRAGMENTS] ?? {};
+  const common = Object.fromEntries(
+    Object.entries(selection ?? {}).filter(([field]) => field !== INLINE_FRAGMENTS));
+  return mergeSelections(common, typeName ? fragments[typeName] ?? {} : {});
 }
 
 export function buildObjectReadOperation({description, identity, selection, schemaNames}) {
@@ -88,7 +141,13 @@ export function buildObjectReadOperation({description, identity, selection, sche
   }
   const objectField = assertGraphQLName(description.generatedFieldName, 'object field');
   const lookupArgument = assertGraphQLName(schemaNames.lookupArgumentName, 'lookup argument');
-  const nestedSelection = renderSelectionSet(selection, schemaNames.richRootField ? '      ' : '    ');
+  const nestedSelection = renderSelectionSet(
+    selection,
+    schemaNames.richRootField ? '      ' : '    ',
+    {
+      typeDescription: description.types?.get(description.generatedTypeName) ?? null,
+      types: description.types ?? null
+    });
   const objectRead = schemaNames.richRootField
     ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${objectField}(${lookupArgument}: $object) {\n${nestedSelection}\n    }\n  }`
     : `  ${objectField}(${lookupArgument}: $object) {\n${nestedSelection}\n  }`;
@@ -115,7 +174,12 @@ export function buildCollectionWindowReadOperation({
   const collectionField = assertGraphQLName(member, 'collection field');
   const lookupArgument = assertGraphQLName(schemaNames.lookupArgumentName, 'lookup argument');
   const rowIndentation = schemaNames.richRootField ? '              ' : '            ';
-  const renderedRows = renderSelectionSet(rowSelection, rowIndentation);
+  const collection = description.members?.get(member) ?? null;
+  const rowType = collection?.value?.typeDescription ?? null;
+  const renderedRows = renderSelectionSet(
+    rowSelection,
+    rowIndentation,
+    {typeDescription: rowType, types: description.types ?? null});
   const windowSelection = `offset\n${rowIndentation.slice(2)}requestedSize\n${rowIndentation.slice(2)}returnedCount\n${rowIndentation.slice(2)}totalCount\n${rowIndentation.slice(2)}maximumSize\n${rowIndentation.slice(2)}hasPrevious\n${rowIndentation.slice(2)}hasNext\n${rowIndentation.slice(2)}ordering\n${rowIndentation.slice(2)}rows {\n${renderedRows}\n${rowIndentation.slice(2)}}`;
   const objectRead = schemaNames.richRootField
     ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${objectField}(${lookupArgument}: $object) {\n      ${collectionField} {\n        window(offset: $offset, size: $size) {\n          ${windowSelection}\n        }\n      }\n    }\n  }`

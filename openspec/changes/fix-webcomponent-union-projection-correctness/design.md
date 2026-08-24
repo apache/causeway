@@ -5,7 +5,9 @@ GraphQL permits `__typename` directly on a union, but concrete metadata and memb
 The foundation selection tree and executable renderer currently represent fields and arguments only, so `resultSelectionForType(...)` falls back to `__typename` and abstract collections are rejected locally.
 
 The pinned Reference Application exposes raw-list collection fixtures through `rich__demo_ValueHolder__gqlv_union`.
-The runtime rows are concrete `demo.CollectionTypeOfChildVm` objects with valid metadata, but the viewer cannot select that metadata without fragments.
+Incremental metamodel construction registers that generated union name more than once, while the current registry retains only the first possible-type set.
+The raw-list runtime rows are concrete `demo.CollectionTypeOfChildVm` objects, which do not implement `demo.ValueHolder`; introspection therefore correctly omits that type after union membership is completed.
+The viewer must distinguish this schema/runtime mismatch from its own inability to render valid fragments.
 A broad union can advertise many possible domain types, so blindly expanding every possible type would create large operations and excessive introspection.
 Mutating actions must never be executed once to discover a result type and again to obtain its value.
 
@@ -13,23 +15,32 @@ Mutating actions must never be executed once to discover a result type and again
 
 **Goals:**
 
+- Merge repeated generated union registration so introspection advertises every discovered concrete type.
 - Render schema-validated inline fragments through the internal selection model.
 - Describe advertised concrete possible types and their metadata without application-specific type lists.
 - Project bounded small unions directly.
 - Probe broad abstract collection rows with `__typename` and replay the same side-effect-free window or list read once using fragments for observed concrete types.
 - Merge concrete row metadata and supported requested columns and preserve hydration coverage.
 - Retain cancellation, stale-response, lazy activation, windowing, partial errors, and bounded operation policy.
-- Prove the Reference Application polymorphic collection without changing public GraphQL or component contracts.
+- Prove valid fragment planning in foundation fixtures and classify the Reference Application raw-list schema/runtime mismatch without changing public GraphQL names or component contracts.
 
 **Non-Goals:**
 
 - Repeating mutating actions or property mutations to discover result types.
-- Adding GraphQL schema fields, changing union membership, or changing Causeway metamodel type inference.
+- Adding GraphQL schema fields or generated names, or changing Causeway metamodel type inference beyond merging discovered union membership.
 - Providing sorting, filtering, paging beyond existing windows, or unbounded fragment expansion.
 - Correcting opaque route encoding or long composite bookmark handling.
 - Changing action dispatch, value codecs, Vaadin adapters, dependencies, CSP, or public events.
 
 ## Decisions
+
+### Merge repeated generated union membership
+
+The GraphQL type registry will transform an existing immutable union by adding possible types from a later registration, deduplicated by GraphQL type name, and replace the stored union before schema construction completes.
+The existing resolver registration remains keyed to the same generated union name and later registrations receive the merged union.
+
+The rejected alternative is retaining the first union unchanged, because a runtime resolver can then return a valid metamodel type that GraphQL rejects as absent from the schema union.
+The other rejected alternative is generating context-specific union names, because that changes public generated-name grammar and multiplies structurally equivalent types.
 
 ### Add a reserved inline-fragment selection node
 
@@ -46,6 +57,12 @@ The fragment for each concrete object uses the existing advertised metadata-sele
 A larger or incomplete union remains typename-only unless a side-effect-free collection planner can narrow it from observed rows.
 
 The rejected alternative is expanding every possible type, because broad domain unions can make request and introspection cost proportional to the complete metamodel.
+
+### Preserve schema/runtime mismatch as a bounded error
+
+If a typename probe cannot resolve because the runtime object is not a member of the advertised union, the collection retains the GraphQL error locally and does not manufacture a fragment.
+The pinned raw-list Reference Application fixture intentionally remains such a mismatch because `CollectionTypeOfChildVm` does not implement the declared `ValueHolder` interface.
+The declared `typeOf` companion collection remains a concrete supported collection.
 
 ### Probe and replay broad collection reads once
 
@@ -81,6 +98,7 @@ This change publishes the existing semantic navigation event with the exact retu
 - [A broad union creates excessive introspection] → Introspect only distinct observed types and enforce fixed type and fragment limits.
 - [Fragment selections break selection merging or hydration coverage] → Extend merge, difference, and coverage helpers with focused nested-fragment tests.
 - [One concrete type lacks a requested column] → Omit that column from its fragment and preserve rows from other concrete types.
+- [Concurrent or repeated union registration loses membership] → Transform and replace the registry entry by name and cover deduplication with a focused model test.
 - [A malicious or stale typename is returned] → Require exact membership in the introspected possible-type set before constructing a fragment.
 - [Action semantics are accidentally repeated] → Restrict probe/replay to side-effect-free object and collection reads and test that mutation execution remains single-shot.
 

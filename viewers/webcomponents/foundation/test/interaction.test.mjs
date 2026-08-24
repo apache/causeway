@@ -93,6 +93,39 @@ test('interaction operations derive typed variables from introspected fields', (
   assert.ok(Object.values(mutation.variables).includes('Updated'));
 });
 
+test('interaction operations render and validate inline fragments', () => {
+  const union = {...type('ActionResultUnion', []), kind: 'UNION', possibleTypes: [{kind: 'OBJECT', name: 'ResultType'}]};
+  const resultType = type('ResultType', [field('_meta', named('ResultMeta'))]);
+  const resultMeta = type('ResultMeta', [field('id', scalar('ID'))]);
+  const mutationType = type('Mutation', [field('run', {kind: 'UNION', name: union.name, ofType: null})]);
+  const types = new Map([
+    ['Mutation', mutationType], [union.name, union], [resultType.name, resultType], [resultMeta.name, resultMeta]
+  ]);
+
+  const operation = buildMutationInteractionOperation({
+    mutationType,
+    fieldName: 'run',
+    args: {},
+    resultSelection: {
+      __typename: true,
+      __fragments: {ResultType: {_meta: {id: true}}}
+    },
+    types,
+    operationName: 'CausewayRun'
+  });
+
+  assert.match(operation.document, /__typename/);
+  assert.match(operation.document, /\.\.\. on ResultType/);
+  assert.throws(() => buildMutationInteractionOperation({
+    mutationType,
+    fieldName: 'run',
+    args: {},
+    resultSelection: {__fragments: {OtherType: {__typename: true}}},
+    types,
+    operationName: 'CausewayInvalidRun'
+  }), /not advertised/);
+});
+
 test('editor registry selects standard inputs and supports application overrides', () => {
   const text = renderCausewayEditor({
     name: 'name', value: 'Classics', choices: [], enumValues: [], inputType: scalar('String'),

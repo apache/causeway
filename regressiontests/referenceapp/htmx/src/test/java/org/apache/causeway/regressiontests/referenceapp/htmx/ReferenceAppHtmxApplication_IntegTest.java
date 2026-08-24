@@ -261,6 +261,61 @@ class ReferenceAppHtmxApplication_IntegTest {
     }
 
     @Test
+    void polymorphicCollectionsCompleteUnionMembershipAndAcceptFragments() throws Exception {
+        final JsonNode unionType = graphQL("""
+                { __type(name: "rich__demo_ValueHolder__gqlv_union") {
+                    kind
+                    possibleTypes { kind name }
+                } }
+                """);
+        assertNoGraphQLErrors(unionType);
+        final JsonNode possibleTypes = unionType.at("/data/__type/possibleTypes");
+        assertThat(possibleTypes.isArray()).isTrue();
+        assertThat(possibleTypes.size()).isEqualTo(28);
+        assertThat(possibleTypes.findValuesAsText("name"))
+                .contains("rich__demo_ActionChoicesFromEntity")
+                .doesNotContain("rich__demo_CollectionTypeOfChildVm");
+        final JsonNode opened = graphQL("""
+                { rich { demo_ActionMenu {
+                    choicesFrom { invoke { results { _meta { id logicalTypeName title } } } }
+                } } }
+                """);
+        assertNoGraphQLErrors(opened);
+        final String pageId = opened.at("/data/rich/demo_ActionMenu/choicesFrom/invoke/results/_meta/id").asText();
+        assertThat(pageId).isNotBlank();
+
+        final String target = "demo_ActionChoicesFromPage(object: {id: "
+                + OBJECT_MAPPER.writeValueAsString(pageId) + "})";
+        final JsonNode probe = graphQL("{ rich { " + target
+                + " { objects { get { __typename } } } } }");
+        assertNoGraphQLErrors(probe);
+        assertThat(probe.at("/data/rich/demo_ActionChoicesFromPage/objects/get").findValuesAsText("__typename"))
+                .containsOnly("rich__demo_ActionChoicesFromEntity");
+
+        final JsonNode invalid = graphQL("{ rich { " + target
+                + " { objects { get { _meta { id } } } } } }");
+        assertThat(invalid.at("/errors/0/message").asText()).contains("_meta", "ValueHolder");
+
+        final JsonNode projected = graphQL("""
+                { rich { %s {
+                    objects { get {
+                        __typename
+                        ... on rich__demo_ActionChoicesFromEntity {
+                            _meta { id logicalTypeName title }
+                            name { get }
+                        }
+                    } }
+                } } }
+                """.formatted(target));
+        assertNoGraphQLErrors(projected);
+        final JsonNode first = projected.at("/data/rich/demo_ActionChoicesFromPage/objects/get/0");
+        assertThat(first.path("__typename").asText()).isEqualTo("rich__demo_ActionChoicesFromEntity");
+        assertThat(first.at("/_meta/logicalTypeName").asText()).isEqualTo("demo.ActionChoicesFromEntity");
+        assertThat(first.at("/_meta/id").asText()).isNotBlank();
+        assertThat(first.at("/name/get").asText()).isNotBlank();
+    }
+
+    @Test
     void exactDecimalPropertyMutationUsesAdvertisedStringAndRestoresFixture() throws Exception {
         final JsonNode open = graphQL("""
                 { rich { demo_JavaMathTypesMenu {

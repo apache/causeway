@@ -222,6 +222,39 @@ test('versionless preparation and autocomplete select only advertised identity m
   context.disconnect();
 });
 
+test('broad abstract mutation outcomes execute once and remain typename-only', async () => {
+  const description = fixtureDescription();
+  const unionTypeName = 'rich__example_BroadResultUnion';
+  const unionRef = {kind: 'UNION', name: unionTypeName, ofType: null};
+  description.types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: Array.from({length: 9}, (_, index) => ({kind: 'OBJECT', name: `Result${index}`}))
+  });
+  const mutationType = graphType('Mutation', [
+    field('example_Object__rename', unionRef, [
+      argument('_target', named(description.generatedInputTypeName)), argument('newName', scalar('String'))
+    ])
+  ]);
+  let executions = 0;
+  const client = {
+    describeObject: async () => description,
+    describeMutation: async () => mutationType,
+    executeMutationInteraction: async request => {
+      executions += 1;
+      assert.deepEqual(request.resultSelection, {__typename: true});
+      return {data: {__typename: 'Result8'}, errors: [], operation: {}};
+    }
+  };
+  const context = new ObjectContextController({client, logicalTypeName: 'example.Object', objectId: '42'});
+
+  const result = await context.invokeAction('rename', {newName: 'Updated'});
+
+  assert.equal(executions, 1);
+  assert.equal(result.status, 'success');
+  assert.deepEqual(result.data.value, {__typename: 'Result8'});
+  context.disconnect();
+});
+
 test('transient validation aborts obsolete generations', async () => {
   const description = fixtureDescription();
   let call = 0;

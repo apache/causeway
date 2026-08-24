@@ -28,6 +28,7 @@ import {
   createWindowedRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
   DEPARTMENT_OBJECT_FIELD,
+  departmentObjectData,
   graphQLObjectResponse,
   STAFF_LOGICAL_TYPE,
   STAFF_OBJECT_FIELD,
@@ -217,16 +218,22 @@ test('collection secondary reads prefer bounded windows and expose semantic rang
   assert.equal(executor.windowCalls.length, 1, 'an identical window should use the secondary cache');
 });
 
-test('abstract collection rows fail locally before a speculative metadata operation', async () => {
+test('small abstract collection selects advertised fragments without a probe', async () => {
   const types = createRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_SmallUnion';
   const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
   collectionType.fields.find(candidate => candidate.name === 'get').type = {
-    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: 'rich__university_staff_StaffUnion', ofType: null}
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: unionTypeName, ofType: null}
   };
-  types.set('rich__university_staff_StaffUnion', {
-    kind: 'UNION', name: 'rich__university_staff_StaffUnion', description: null, fields: []
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [{kind: 'OBJECT', name: 'rich__university_staff_StaffMember'}]
   });
-  const executor = createRichSchemaFixtureExecutor({types, readResponses: [graphQLObjectResponse()]});
+  const staff = {...row(), __typename: 'rich__university_staff_StaffMember'};
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [graphQLObjectResponse(), collectionResponse([staff])]
+  });
   const context = new ObjectContextController({
     client: new CausewayGraphQLClient({executor}),
     logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
@@ -235,10 +242,216 @@ test('abstract collection rows fail locally before a speculative metadata operat
   context.registerRequirement({kind: 'collection', member: 'staffMembers'});
   await waitFor(() => context.state.status === 'ready');
 
-  await assert.rejects(
-    context.loadCollection({member: 'staffMembers'}),
-    /abstract row type that requires concrete fragment projection/);
-  assert.equal(executor.readCalls.length, 1);
+  const loaded = await context.loadCollection({member: 'staffMembers'});
+
+  assert.equal(executor.readCalls.length, 2);
+  assert.equal(loaded.probeOperation, null);
+  assert.match(loaded.operation.document, /\.\.\. on rich__university_staff_StaffMember/);
+  assert.equal(loaded.rows[0]._meta.id, 'staff-1');
+});
+
+test('abstract collection rows probe typenames then replay concrete fragments', async () => {
+  const types = createRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_StaffUnion';
+  const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
+  collectionType.fields.find(candidate => candidate.name === 'get').type = {
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: unionTypeName, ofType: null}
+  };
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [
+      {kind: 'OBJECT', name: 'rich__university_dept_Department'},
+      {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'},
+      ...Array.from({length: 7}, (_, index) => ({kind: 'OBJECT', name: `rich__university_staff_Unobserved${index}`}))
+    ]
+  });
+  const staff = {...row(), __typename: 'rich__university_staff_StaffMember'};
+  const department = {...departmentObjectData(), __typename: 'rich__university_dept_Department'};
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [
+      graphQLObjectResponse(),
+      collectionResponse([{__typename: staff.__typename}, {__typename: department.__typename}]),
+      collectionResponse([staff, department])
+    ]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({member: 'staffMembers', columns: ['name', 'status']});
+
+  assert.equal(executor.readCalls.length, 3);
+  assert.match(loaded.probeOperation.document, /__typename/);
+  assert.doesNotMatch(loaded.probeOperation.document, /\.\.\. on/);
+  assert.match(loaded.operation.document, /\.\.\. on rich__university_dept_Department/);
+  assert.match(loaded.operation.document, /\.\.\. on rich__university_staff_StaffMember/);
+  assert.match(loaded.operation.document, /_meta/);
+  assert.match(loaded.operation.document, /name\s*\{/);
+  const staffFragment = loaded.operation.document.slice(
+    loaded.operation.document.indexOf('... on rich__university_staff_StaffMember'));
+  assert.doesNotMatch(staffFragment, /status\s*\{/);
+  assert.equal(loaded.rows[0]._meta.id, 'staff-1');
+  assert.equal(loaded.rows[1]._meta.id, '42');
+  const rowContext = context.createHydratedRowContext(loaded.rows[0], loaded.rowSelection);
+  assert.equal(rowContext.identity.id, 'staff-1');
+  rowContext.disconnect();
+});
+
+test('abstract bounded windows probe and replay identical arguments once', async () => {
+  const types = createWindowedRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_StaffWindowUnion';
+  const unionRef = {kind: 'UNION', name: unionTypeName, ofType: null};
+  types.get('rich__university_dept_Department__staffMembers__gqlv_collection')
+    .fields.find(candidate => candidate.name === 'get').type = {kind: 'LIST', name: null, ofType: unionRef};
+  types.get('rich__university_dept_Department__staffMembers__gqlv_collection_window')
+    .fields.find(candidate => candidate.name === 'rows').type = {kind: 'LIST', name: null, ofType: unionRef};
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [
+      {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'},
+      ...Array.from({length: 8}, (_, index) => ({kind: 'OBJECT', name: `rich__university_staff_WindowUnobserved${index}`}))
+    ]
+  });
+  const staff = {...row(), __typename: 'rich__university_staff_StaffMember'};
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [graphQLObjectResponse()],
+    windowResponses: [
+      collectionWindowResponse({rows: [{__typename: staff.__typename}], offset: 4, requestedSize: 2, totalCount: 5}),
+      collectionWindowResponse({rows: [staff], offset: 4, requestedSize: 2, totalCount: 5})
+    ]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({member: 'staffMembers', columns: ['name'], offset: 4, size: 2});
+
+  assert.equal(executor.windowCalls.length, 2);
+  assert.deepEqual(executor.windowCalls[0].variables, executor.windowCalls[1].variables);
+  assert.match(executor.windowCalls[0].document, /__typename/);
+  assert.match(executor.windowCalls[1].document, /\.\.\. on rich__university_staff_StaffMember/);
+  assert.equal(loaded.window.offset, 4);
+  assert.equal(loaded.rows[0]._meta.id, 'staff-1');
+});
+
+test('abstract collection reports a replay type not observed by its bounded probe', async () => {
+  const types = createRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_ChangingUnion';
+  const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
+  collectionType.fields.find(candidate => candidate.name === 'get').type = {
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: unionTypeName, ofType: null}
+  };
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [
+      {kind: 'OBJECT', name: 'rich__university_dept_Department'},
+      {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'},
+      ...Array.from({length: 7}, (_, index) => ({kind: 'OBJECT', name: `rich__university_staff_Changing${index}`}))
+    ]
+  });
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [
+      graphQLObjectResponse(),
+      collectionResponse([{__typename: 'rich__university_staff_StaffMember'}]),
+      collectionResponse([{...departmentObjectData(), __typename: 'rich__university_dept_Department'}])
+    ]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({member: 'staffMembers'});
+
+  assert.equal(executor.readCalls.length, 3);
+  assert.equal(loaded.errors.length, 1);
+  assert.match(loaded.errors[0].message, /unprojected concrete type/);
+});
+
+test('abstract collection rejects a probe typename not advertised by its union', async () => {
+  const types = createRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_AdvertisedUnion';
+  const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
+  collectionType.fields.find(candidate => candidate.name === 'get').type = {
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: unionTypeName, ofType: null}
+  };
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [
+      {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'},
+      ...Array.from({length: 8}, (_, index) => ({kind: 'OBJECT', name: `rich__university_staff_Advertised${index}`}))
+    ]
+  });
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [graphQLObjectResponse(), collectionResponse([{__typename: 'rich__university_staff_Other'}])]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  await assert.rejects(context.loadCollection({member: 'staffMembers'}), /not advertised/);
+  assert.equal(executor.readCalls.length, 2);
+});
+
+test('abstract collection aborts an in-flight fragment replay', async () => {
+  const types = createRichSchemaTypes();
+  const unionTypeName = 'rich__university_staff_CancellableUnion';
+  const collectionType = types.get('rich__university_dept_Department__staffMembers__gqlv_collection');
+  collectionType.fields.find(candidate => candidate.name === 'get').type = {
+    kind: 'LIST', name: null, ofType: {kind: 'UNION', name: unionTypeName, ofType: null}
+  };
+  types.set(unionTypeName, {
+    kind: 'UNION', name: unionTypeName, description: null, fields: [],
+    possibleTypes: [
+      {kind: 'OBJECT', name: 'rich__university_staff_StaffMember'},
+      ...Array.from({length: 8}, (_, index) => ({kind: 'OBJECT', name: `rich__university_staff_Cancellable${index}`}))
+    ]
+  });
+  const executor = createRichSchemaFixtureExecutor({
+    types,
+    readResponses: [
+      graphQLObjectResponse(),
+      collectionResponse([{__typename: 'rich__university_staff_StaffMember'}]),
+      request => new Promise((resolve, reject) => request.signal.addEventListener('abort', () => {
+        const error = new Error('Aborted');
+        error.name = 'AbortError';
+        reject(error);
+      }, {once: true}))
+    ]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+  const abortController = new AbortController();
+
+  const loading = context.loadCollection({member: 'staffMembers', signal: abortController.signal});
+  await waitFor(() => executor.readCalls.length === 3);
+  abortController.abort();
+
+  await assert.rejects(loading, error => error?.name === 'AbortError');
 });
 
 test('collection secondary reads discard responses superseded for the same consumer', async () => {

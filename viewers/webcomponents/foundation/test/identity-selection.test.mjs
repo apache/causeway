@@ -64,6 +64,39 @@ test('partial metadata remains bounded without inventing identity minimums', () 
   assert.equal(JSON.stringify(resultSelectionForType(named('Example'), types)).includes('logicalTypeName'), false);
 });
 
+test('bounded described unions select concrete metadata through inline fragments', () => {
+  const union = type('ExampleUnion', [], 'UNION');
+  union.possibleTypes = [{kind: 'OBJECT', name: 'Versioned'}, {kind: 'OBJECT', name: 'Versionless'}];
+  const types = new Map([
+    ['ExampleUnion', union],
+    ['Versioned', type('Versioned', [field('_meta', named('VersionedMeta'))])],
+    ['VersionedMeta', type('VersionedMeta', ['id', 'logicalTypeName', 'version'].map(name => field(name, scalar('String'))))],
+    ['Versionless', type('Versionless', [field('_meta', named('VersionlessMeta'))])],
+    ['VersionlessMeta', type('VersionlessMeta', ['id', 'logicalTypeName', 'title'].map(name => field(name, scalar('String'))))]
+  ]);
+
+  assert.deepEqual(resultSelectionForType(named('ExampleUnion', 'UNION'), types), {
+    __typename: true,
+    __fragments: {
+      Versioned: {_meta: {id: true, logicalTypeName: true, version: true}},
+      Versionless: {_meta: {id: true, logicalTypeName: true, title: true}}
+    }
+  });
+});
+
+test('broad or incompletely described abstract types use typename-only projections', () => {
+  const possibleTypes = Array.from({length: 9}, (_, index) => ({kind: 'OBJECT', name: `Type${index}`}));
+  const broadType = type('BroadUnion', [], 'UNION');
+  broadType.possibleTypes = possibleTypes;
+  const broad = new Map([['BroadUnion', broadType]]);
+  const incompleteType = type('IncompleteUnion', [], 'UNION');
+  incompleteType.possibleTypes = [{kind: 'OBJECT', name: 'Missing'}];
+  const incomplete = new Map([['IncompleteUnion', incompleteType]]);
+
+  assert.deepEqual(resultSelectionForType(named('BroadUnion', 'UNION'), broad), {__typename: true});
+  assert.deepEqual(resultSelectionForType(named('IncompleteUnion', 'UNION'), incomplete), {__typename: true});
+});
+
 test('missing descriptions and abstract types use typename-only projections', () => {
   const missing = new Map();
   const union = new Map([['ExampleUnion', type('ExampleUnion', [], 'UNION')]]);
