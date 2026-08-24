@@ -24,6 +24,8 @@
     {"family": "collection-empty-populated", "rootField": "demo_CollectionLayoutPagedPage", "member": "moreChildren"},
     {"family": "collection-paging-columns", "rootField": "demo_CollectionLayoutPagedPage", "member": "children"},
     {"family": "collection-polymorphism", "rootField": "demo_CollectionTypeOfPage", "member": "children"},
+    {"family": "polymorphic-union-valid", "rootField": "demo_ActionChoicesFromPage", "member": "objects"},
+    {"family": "polymorphic-union-unreadable", "rootField": "demo_CollectionTypeOfPage", "member": "otherChildren"},
     {"family": "collection-associated-actions", "rootField": "demo_CollectionTypeOfPage", "member": "otherChildren"},
     {"family": "collection-stale-partial", "rootField": "demo_CollectionLayoutPagedPage", "member": "children"},
     {"family": "boolean-nullable", "rootField": "demo_WrapperBooleans", "member": "entities"},

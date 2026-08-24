@@ -114,7 +114,8 @@ class ReferenceAppCapabilityInventory_IntegTest {
                 "property-text", "property-multiline", "property-hidden", "property-disabled",
                 "property-editing", "property-validation", "property-cancel-stale",
                 "collection-empty-populated", "collection-paging-columns",
-                "collection-polymorphism", "collection-associated-actions", "collection-stale-partial",
+                "collection-polymorphism", "polymorphic-union-valid", "polymorphic-union-unreadable",
+                "collection-associated-actions", "collection-stale-partial",
                 "boolean-nullable", "numeric-decimal", "numeric-integer", "temporal-local-date",
                 "temporal-offset-date-time", "temporal-zoned-date-time", "enum",
                 "reference-autocomplete", "url", "protected-password", "blob", "clob", "custom-value");

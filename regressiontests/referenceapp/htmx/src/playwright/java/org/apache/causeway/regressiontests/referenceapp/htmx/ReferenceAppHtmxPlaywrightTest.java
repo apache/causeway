@@ -347,16 +347,21 @@ class ReferenceAppHtmxPlaywrightTest {
                 .isEqualTo(pageRows);
         assertThat(waitForCollectionOutcome("moreChildren")).isEqualTo("ready");
 
+        openObject("demo.ActionChoicesFromPage", invokeViewModel(
+                "demo_ActionMenu", "choicesFrom", "rich__demo_ActionChoicesFromPage"));
+        assertThat(waitForCollectionOutcome("objects")).isEqualTo("ready");
+        final Locator polymorphicObjects = page.locator("causeway-collection[member='objects']");
+        assertThat(polymorphicObjects.locator("causeway-object-link").count()).isGreaterThan(0);
+        final String polymorphicSelection = (String) polymorphicObjects
+                .evaluate("element => JSON.stringify(element.collectionState.rowSelection)");
+        assertThat(polymorphicSelection).contains("rich__demo_ActionChoicesFromEntity", "_meta");
+
         openObject("demo.CollectionTypeOfPage", invokeViewModel(
                 "demo_CollectionMenu", "typeOf", "rich__demo_CollectionTypeOfPage"));
         final String typeOfChildrenState = waitForCollectionOutcome("children");
-        assertThat(typeOfChildrenState).isIn("ready", "partial-error", "error");
-        if ("ready".equals(typeOfChildrenState)) {
-            assertThat(page.locator("causeway-collection[member='children'] causeway-object-link").count())
-                    .isGreaterThan(0);
-        } else {
-            assertThat(page.locator("causeway-collection[member='children']").innerText()).isNotBlank();
-        }
+        assertThat(typeOfChildrenState).isEqualTo("ready");
+        assertThat(page.locator("causeway-collection[member='children'] causeway-object-link").count())
+                .isGreaterThan(0);
         final Locator otherChildren = page.locator("causeway-collection[member='otherChildren']");
         assertThat(otherChildren.count()).isEqualTo(1);
         assertThat(otherChildren.evaluate("element => element.collectionState.status")).isEqualTo("idle");
@@ -364,12 +369,8 @@ class ReferenceAppHtmxPlaywrightTest {
         if (panelId != null) {
             page.locator("[role=tab][aria-controls='" + panelId + "']").click();
             final String otherChildrenState = waitForCollectionOutcome("otherChildren");
-            assertThat(otherChildrenState).isIn("ready", "partial-error", "error");
-            if ("ready".equals(otherChildrenState)) {
-                assertThat(otherChildren.locator("causeway-object-link").count()).isGreaterThan(0);
-            } else {
-                assertThat(otherChildren.innerText()).isNotBlank();
-            }
+            assertThat(otherChildrenState).isEqualTo("error");
+            assertThat(otherChildren.innerText()).containsIgnoringCase("not readable");
         }
 
         openShell();

@@ -25,8 +25,11 @@ import {
   buildObjectReadOperation,
   deepMerge,
   differenceSelection,
+  INLINE_FRAGMENTS,
   isSelectionEmpty,
-  mergeSelections
+  mergeSelections,
+  renderSelectionSet,
+  selectionForRuntimeType
 } from '../src/selection.mjs';
 
 const description = {
@@ -49,6 +52,50 @@ test('merges, deduplicates and differences structural selections', () => {
     name: {get: true}
   });
   assert.equal(isSelectionEmpty(differenceSelection(merged, merged)), true);
+});
+
+test('merges, differences and resolves deterministic inline fragment selections', () => {
+  const first = {__typename: true, [INLINE_FRAGMENTS]: {TypeB: {_meta: {id: true}}}};
+  const second = {[INLINE_FRAGMENTS]: {TypeA: {_meta: {title: true}}, TypeB: {name: {get: true}}}};
+  const merged = mergeSelections(first, second);
+
+  assert.deepEqual(merged, {
+    __typename: true,
+    [INLINE_FRAGMENTS]: {
+      TypeB: {_meta: {id: true}, name: {get: true}},
+      TypeA: {_meta: {title: true}}
+    }
+  });
+  assert.deepEqual(differenceSelection(merged, first), {
+    [INLINE_FRAGMENTS]: {TypeB: {name: {get: true}}, TypeA: {_meta: {title: true}}}
+  });
+  assert.deepEqual(selectionForRuntimeType(merged, 'TypeB'), {
+    __typename: true, _meta: {id: true}, name: {get: true}
+  });
+});
+
+test('renders sorted validated inline fragments and rejects unadvertised types or fields', () => {
+  const union = {kind: 'UNION', name: 'ResultUnion', fields: [], possibleTypes: [
+    {kind: 'OBJECT', name: 'TypeB'}, {kind: 'OBJECT', name: 'TypeA'}
+  ]};
+  const types = new Map([
+    ['ResultUnion', union],
+    ['TypeA', {kind: 'OBJECT', name: 'TypeA', fields: [{name: 'name', args: [], type: {kind: 'SCALAR', name: 'String'}}]}],
+    ['TypeB', {kind: 'OBJECT', name: 'TypeB', fields: [{name: 'code', args: [], type: {kind: 'SCALAR', name: 'String'}}]}]
+  ]);
+  const rendered = renderSelectionSet({
+    __typename: true,
+    [INLINE_FRAGMENTS]: {TypeB: {code: true}, TypeA: {name: true}}
+  }, '  ', {typeDescription: union, types});
+
+  assert.ok(rendered.indexOf('... on TypeA') < rendered.indexOf('... on TypeB'));
+  assert.match(rendered, /\.\.\. on TypeA \{\n\s+name/);
+  assert.throws(() => renderSelectionSet({
+    [INLINE_FRAGMENTS]: {Other: {name: true}}
+  }, '  ', {typeDescription: union, types}), /not advertised/);
+  assert.throws(() => renderSelectionSet({
+    [INLINE_FRAGMENTS]: {TypeA: {missing: true}}
+  }, '  ', {typeDescription: union, types}), /unavailable/);
 });
 
 test('builds a combined-rich object lookup operation', () => {

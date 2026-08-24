@@ -41,7 +41,6 @@ import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLTypeReference;
-import graphql.schema.GraphQLUnionType;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import lombok.RequiredArgsConstructor;
@@ -176,11 +175,6 @@ public class TypeMapperDefault implements TypeMapper {
         }
 
         var unionTypeName = TypeNames.polymorphicTypeNameFor(declaredType, schemaType);
-        var existing = context.graphQLTypeRegistry.lookup(unionTypeName, GraphQLUnionType.class);
-        if (existing.isPresent()) {
-            return existing.get();
-        }
-
         var unionBuilder = newUnionType()
                 .name(unionTypeName)
                 .description("Concrete rich object types assignable to " + declaredType.logicalTypeName());
@@ -198,17 +192,21 @@ public class TypeMapperDefault implements TypeMapper {
             if (pojo instanceof ManagedObject managedObject) {
                 pojo = managedObject.getPojo();
             }
-            if (pojo == null || !declaredType.isAssignableFrom(pojo.getClass())) {
+            if (pojo == null) {
                 return null;
             }
             var runtimeSpecification = context.specificationLoader.loadSpecification(pojo.getClass());
             if (runtimeSpecification == null) {
                 return null;
             }
-            return environment.getSchema().getObjectType(
-                    TypeNames.objectTypeNameFor(runtimeSpecification, schemaType));
+            var runtimeTypeName = TypeNames.objectTypeNameFor(runtimeSpecification, schemaType);
+            var isAdvertised = unionType.getTypes().stream()
+                    .anyMatch(possibleType -> possibleType.getName().equals(runtimeTypeName));
+            return isAdvertised
+                    ? environment.getSchema().getObjectType(runtimeTypeName)
+                    : null;
         });
-        return unionType;
+        return typeRef(unionTypeName);
     }
 
     @Override

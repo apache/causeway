@@ -33,6 +33,7 @@ import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
 import graphql.schema.GraphQLUnionType;
 
 import static graphql.schema.GraphQLEnumType.newEnum;
@@ -160,8 +161,21 @@ public class GraphQLTypeRegistry {
     public GraphQLUnionType addUnionTypeIfNotAlreadyPresent(final GraphQLUnionType typeToAdd) {
         var existing = lookup(typeToAdd.getName(), GraphQLUnionType.class);
         if (existing.isPresent()) {
-            log.debug("GraphQLUnionType for {} already present", typeToAdd.getName());
-            return existing.get();
+            var existingType = existing.get();
+            var mergedType = existingType.transform(builder -> typeToAdd.getTypes().forEach(type -> {
+                if (type instanceof GraphQLObjectType objectType) {
+                    builder.possibleType(objectType);
+                } else if (type instanceof GraphQLTypeReference typeReference) {
+                    builder.possibleType(typeReference);
+                }
+            }));
+            if (mergedType.getTypes().size() != existingType.getTypes().size()) {
+                graphQLTypes.remove(existingType);
+                graphQLTypes.add(mergedType);
+                log.debug("Merged GraphQLUnionType {} from {} to {} possible types",
+                        typeToAdd.getName(), existingType.getTypes().size(), mergedType.getTypes().size());
+            }
+            return mergedType;
         }
         add(typeToAdd);
         return typeToAdd;
