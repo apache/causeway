@@ -3,8 +3,9 @@
 This directory contains complete follow-on changes and evidence-gated proposal-only drafts for the Causeway web-component viewer programme.
 They are held outside `openspec/changes/` because the repository permits only one active OpenSpec change at a time.
 The foundation, domain-component, rich GraphQL correctness, value-semantics, collection-windowing, application-entry, composite-object, menubar, generic HTMX, theming, Vaadin evaluation, and Vaadin reference-widget pilot changes are archived.
-The current active change is `add-referenceapp-webcomponent-regression-suite`.
-Its broad capability inventory precedes the proposal-only Vaadin-default sequence in `vaadin-default-roadmap.md`.
+The Reference Application regression suite and input-value hardening changes are archived.
+The current active change is `fix-webcomponent-action-dispatch-correctness`, the remaining Priority 0 correction identified by that broad capability inventory.
+Focused versionless-identity, union-projection, and opaque-route corrections precede the proposal-only paged-autocomplete and Vaadin-default sequence in `vaadin-default-roadmap.md`.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
