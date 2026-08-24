@@ -99,7 +99,8 @@ Application-entry discovery separately introspects the operation roots, configur
 The read selects only menu metadata, bounded issues, and `_meta` identity for the supported object home; it does not project home members or invent a home action.
 One browser client serializes these initial targeted discovery requests so object and menu contexts do not race a cold GraphQL schema, while the viewer initializes its lazy execution source once without changing data-fetcher or mutation execution policy.
 
-Descriptions include member kind, advertised wrapper fields, output type reference, named type, innermost type kind, collection element type, and reachable value-shape fields.
+Descriptions include member kind, advertised wrapper fields, output type reference, named type, innermost type kind, collection element type, concrete object metadata, and reachable value-shape fields.
+Concrete property values, preparation values, action results, and rows use one metadata-selection policy that requests the advertised subset of `id`, `logicalTypeName`, `title`, and `version`.
 Descriptions are cached by generated type name within one `<causeway-graphql-client>` instance.
 Several object contexts under the same provider therefore share schema descriptions while retaining independent object snapshots.
 The cache is memory-only and is not shared across browser sessions or users.
@@ -422,8 +423,10 @@ A collection's primary object requirement contains only advertised `hidden` and 
 The `get` field is loaded through a context-owned secondary operation after activation.
 Secondary operations are cached by member and structural row selection, support forced refresh, and are canceled when their component or object context is disconnected.
 
-Without columns, object-valued rows request `_meta` identity, logical type, title, and version and render object links.
+Without columns, concrete object-valued rows request the advertised `_meta` subset and render object links when `id` and `logicalTypeName` are both present.
+`title` and `version` remain optional, so versionless view-model rows stay hydratable without an invented concurrency token.
 Declared columns merge their property wrappers into the secondary operation and use the configured value renderer for returned values.
+Abstract rows that require concrete GraphQL fragments fail locally before a speculative operation and remain assigned to the separate union-projection correction.
 Hidden cells emit no content, disabled cells expose their reasons, and row or member errors remain local while successful cells continue to render.
 An empty result renders the live `No items` status.
 

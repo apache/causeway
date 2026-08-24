@@ -216,6 +216,51 @@ class ReferenceAppHtmxApplication_IntegTest {
     }
 
     @Test
+    void versionlessViewModelsAdvertiseIdentityAndSupportConcreteCollectionRows() throws Exception {
+        final JsonNode versionedMetadata = graphQL("""
+                { __type(name: "rich__demo_BigDecimalEntity__gqlv_meta") { fields { name } } }
+                """);
+        final JsonNode actionMetadata = graphQL("""
+                { __type(name: "rich__demo_ActionSemanticsVm__gqlv_meta") { fields { name } } }
+                """);
+        final JsonNode rowMetadata = graphQL("""
+                { __type(name: "rich__demo_CollectionLayoutPagedChildVm__gqlv_meta") { fields { name } } }
+                """);
+        assertNoGraphQLErrors(versionedMetadata);
+        assertNoGraphQLErrors(actionMetadata);
+        assertNoGraphQLErrors(rowMetadata);
+        assertThat(versionedMetadata.at("/data/__type/fields").findValuesAsText("name"))
+                .contains("id", "logicalTypeName", "title", "version");
+        assertThat(actionMetadata.at("/data/__type/fields").findValuesAsText("name"))
+                .contains("id", "logicalTypeName", "title")
+                .doesNotContain("version");
+        assertThat(rowMetadata.at("/data/__type/fields").findValuesAsText("name"))
+                .contains("id", "logicalTypeName", "title")
+                .doesNotContain("version");
+
+        final JsonNode opened = graphQL("""
+                { rich { demo_CollectionLayoutMenu {
+                    paged { invoke { results { _meta { id logicalTypeName title } } } }
+                } } }
+                """);
+        assertNoGraphQLErrors(opened);
+        final String pageId = opened.at("/data/rich/demo_CollectionLayoutMenu/paged/invoke/results/_meta/id").asText();
+        assertThat(pageId).isNotBlank();
+
+        final JsonNode rows = graphQL("""
+                { rich { demo_CollectionLayoutPagedPage(object: {id: %s}) {
+                    children { get { _meta { id logicalTypeName title } value { get } } }
+                } } }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(pageId)));
+        assertNoGraphQLErrors(rows);
+        final JsonNode firstRow = rows.at("/data/rich/demo_CollectionLayoutPagedPage/children/get/0");
+        assertThat(firstRow.at("/_meta/id").asText()).isNotBlank();
+        assertThat(firstRow.at("/_meta/logicalTypeName").asText())
+                .isEqualTo("demo.CollectionLayoutPagedChildVm");
+        assertThat(firstRow.at("/value/get").asText()).isNotBlank();
+    }
+
+    @Test
     void exactDecimalPropertyMutationUsesAdvertisedStringAndRestoresFixture() throws Exception {
         final JsonNode open = graphQL("""
                 { rich { demo_JavaMathTypesMenu {

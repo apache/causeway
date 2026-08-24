@@ -569,10 +569,12 @@ function referencedInteractionTypeNames(typeDescription, generatedTypeName, sche
     const kind = innermostType(typeRef)?.kind;
     const choiceValue = ['choices', 'default', 'autoComplete'].includes(fieldName)
       && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
+    const concreteObjectValue = ['get', 'rows'].includes(fieldName) && kind === 'OBJECT';
     const objectMetadata = fieldName === '_meta' && kind === 'OBJECT';
     if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)
         || kind === 'ENUM' && typeName.startsWith('rich__')
         || choiceValue
+        || concreteObjectValue
         || objectMetadata)) {
       result.add(typeName);
     }

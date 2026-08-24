@@ -110,6 +110,7 @@ class ReferenceAppCapabilityInventory_IntegTest {
                 "action-choices", "action-autocomplete", "action-defaults", "action-validation",
                 "action-parameterless", "action-parameterized", "action-scalar-outcome",
                 "action-object-outcome", "action-cancel-stale-concurrency",
+                "versionless-preparation", "versionless-action-result", "versionless-collection-row",
                 "property-text", "property-multiline", "property-hidden", "property-disabled",
                 "property-editing", "property-validation", "property-cancel-stale",
                 "collection-empty-populated", "collection-paging-columns",

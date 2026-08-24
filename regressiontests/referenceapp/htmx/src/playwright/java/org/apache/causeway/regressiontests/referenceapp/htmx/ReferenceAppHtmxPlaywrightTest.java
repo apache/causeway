@@ -129,8 +129,13 @@ class ReferenceAppHtmxPlaywrightTest {
 
         openObject("demo.ActionAutoCompletePage", invokeViewModel(
                 "demo_ActionAutoCompleteMenu", "autoComplete", "rich__demo_ActionAutoCompletePage"));
-        page.waitForFunction("() => (globalThis.__referenceAppKnownGaps?.length || 0) > 0");
-        assertThat(knownGapCount()).isGreaterThan(0);
+        objectAction("selectTvCharacter").click();
+        waitForPrompt("selectTvCharacter");
+        selectFirstAutocompleteChoice("tvCharacter", "Tom");
+        submitPrompt();
+        page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
+                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        waitForLogicalType("demo.ActionAutoCompletePage");
 
         openShell();
         assertThat(openCandidateOverlays()).isZero();
@@ -335,32 +340,36 @@ class ReferenceAppHtmxPlaywrightTest {
         openObject("demo.CollectionLayoutPagedPage", invokeViewModel(
                 "demo_CollectionLayoutMenu", "paged", "rich__demo_CollectionLayoutPagedPage"));
         final String childrenState = waitForCollectionOutcome("children");
-        if ("ready".equals(childrenState)) {
-            final int pageRows = page.locator("causeway-collection[member='children'] tbody tr").count();
-            assertThat(pageRows).isBetween(1, 10);
-            assertThat(page.locator("causeway-collection[member='children'] thead th").count()).isGreaterThan(0);
-        } else {
-            assertThat(childrenState).isIn("partial-error", "error");
-            assertThat(knownGapCount()).isGreaterThan(0);
-        }
-        assertThat(waitForCollectionOutcome("moreChildren")).isIn("ready", "partial-error", "error");
+        assertThat(childrenState).isEqualTo("ready");
+        final int pageRows = page.locator("causeway-collection[member='children'] .causeway-collection-rows li").count();
+        assertThat(pageRows).isBetween(1, 20);
+        assertThat(page.locator("causeway-collection[member='children'] causeway-object-link").count())
+                .isEqualTo(pageRows);
+        assertThat(waitForCollectionOutcome("moreChildren")).isEqualTo("ready");
 
         openObject("demo.CollectionTypeOfPage", invokeViewModel(
                 "demo_CollectionMenu", "typeOf", "rich__demo_CollectionTypeOfPage"));
         final String typeOfChildrenState = waitForCollectionOutcome("children");
         assertThat(typeOfChildrenState).isIn("ready", "partial-error", "error");
+        if ("ready".equals(typeOfChildrenState)) {
+            assertThat(page.locator("causeway-collection[member='children'] causeway-object-link").count())
+                    .isGreaterThan(0);
+        } else {
+            assertThat(page.locator("causeway-collection[member='children']").innerText()).isNotBlank();
+        }
         final Locator otherChildren = page.locator("causeway-collection[member='otherChildren']");
         assertThat(otherChildren.count()).isEqualTo(1);
         assertThat(otherChildren.evaluate("element => element.collectionState.status")).isEqualTo("idle");
         final String panelId = (String) otherChildren.evaluate("element => element.closest('[role=tabpanel]')?.id || null");
         if (panelId != null) {
             page.locator("[role=tab][aria-controls='" + panelId + "']").click();
-            assertThat(waitForCollectionOutcome("otherChildren")).isIn("ready", "partial-error", "error");
-        }
-        if ("ready".equals(typeOfChildrenState)) {
-            assertThat(page.locator("causeway-collection tbody tr a[href*='/htmx/object/']").count()).isGreaterThan(0);
-        } else {
-            assertThat(knownGapCount()).isGreaterThan(0);
+            final String otherChildrenState = waitForCollectionOutcome("otherChildren");
+            assertThat(otherChildrenState).isIn("ready", "partial-error", "error");
+            if ("ready".equals(otherChildrenState)) {
+                assertThat(otherChildren.locator("causeway-object-link").count()).isGreaterThan(0);
+            } else {
+                assertThat(otherChildren.innerText()).isNotBlank();
+            }
         }
 
         openShell();
@@ -529,6 +538,19 @@ class ReferenceAppHtmxPlaywrightTest {
         }
         final String label = (String) control.evaluate("element => element.querySelector('vaadin-combo-box').items[0].title");
         final Locator input = control.locator("vaadin-combo-box input");
+        input.fill(label);
+        input.focus();
+        page.keyboard().press("ArrowDown");
+        page.keyboard().press("Enter");
+        page.waitForFunction("selector => document.querySelector(selector)?.value?.id", parameter(parameterId));
+    }
+
+    private void selectFirstAutocompleteChoice(final String parameterId, final String search) {
+        final Locator control = page.locator(parameter(parameterId));
+        final Locator input = control.locator("vaadin-combo-box input");
+        input.fill(search);
+        page.waitForFunction("selector => { const element = document.querySelector(selector); return element?.dataset.widgetState === 'ready' && element.querySelector('vaadin-combo-box')?.items?.length > 0; }", parameter(parameterId));
+        final String label = (String) control.evaluate("element => element.querySelector('vaadin-combo-box').items[0].title");
         input.fill(label);
         input.focus();
         page.keyboard().press("ArrowDown");

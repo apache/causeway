@@ -136,6 +136,14 @@ export function createRichSchemaTypes() {
   ]);
 }
 
+export function createVersionlessRichSchemaTypes({windowed = false} = {}) {
+  const types = windowed ? createWindowedRichSchemaTypes() : createRichSchemaTypes();
+  const metadataType = types.get(STAFF_META_TYPE);
+  types.set(STAFF_META_TYPE, objectType(STAFF_META_TYPE, metadataType.description,
+    metadataType.fields.filter(candidate => candidate.name !== 'version')));
+  return types;
+}
+
 export function createWindowedRichSchemaTypes() {
   const types = createRichSchemaTypes();
   const collectionType = types.get(COLLECTION_TYPE);
