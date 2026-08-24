@@ -8,7 +8,8 @@ The action-dispatch correctness change is archived, completing the remaining Pri
 The versionless-identity and preparation correction is archived.
 The union-projection correction is archived.
 The opaque-route correction is archived.
-The archived `add-paged-graphql-reference-autocomplete` change adds honest bounded server response windows, and the active `expand-vaadin-semantic-editor-families` change now qualifies the broader editor families before the default-policy sequence in `vaadin-default-roadmap.md`.
+The archived `add-paged-graphql-reference-autocomplete` change adds honest bounded server response windows, and the archived `expand-vaadin-semantic-editor-families` change qualifies the broader editor families before the default-policy flip in `vaadin-default-roadmap.md`.
+The next planned change is `make-vaadin-default-for-webcomponent-viewer`.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
