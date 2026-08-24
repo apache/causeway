@@ -163,6 +163,59 @@ class ReferenceAppHtmxApplication_IntegTest {
     }
 
     @Test
+    void directServiceAndParameterizedObjectActionMutationsUseAdvertisedShapes() throws Exception {
+        final JsonNode opened = graphQL("""
+                mutation {
+                  demo_ActionChoicesMenu__choices {
+                    _meta { id logicalTypeName title }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(opened);
+        final JsonNode metadata = opened.at("/data/demo_ActionChoicesMenu__choices/_meta");
+        assertThat(metadata.path("logicalTypeName").asText()).isEqualTo("demo.ActionChoices");
+        final String targetId = metadata.path("id").asText();
+        assertThat(targetId).isNotBlank();
+
+        final JsonNode prepared = graphQL("""
+                query {
+                  rich {
+                    demo_ActionChoices(object: {id: %s}) {
+                      selectTvCharacter {
+                        params {
+                          tvCharacter {
+                            choices { _meta { id logicalTypeName title } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """.formatted(OBJECT_MAPPER.writeValueAsString(targetId)));
+        assertNoGraphQLErrors(prepared);
+        final String choiceId = prepared.at(
+                "/data/rich/demo_ActionChoices/selectTvCharacter/params/tvCharacter/choices/0/_meta/id").asText();
+        assertThat(choiceId).isNotBlank();
+
+        final JsonNode invoked = graphQL("""
+                mutation {
+                  demo_ActionChoices__selectTvCharacter(
+                    _target: {id: %s},
+                    tvCharacter: {id: %s}) {
+                    _meta { id logicalTypeName title }
+                  }
+                }
+                """.formatted(
+                        OBJECT_MAPPER.writeValueAsString(targetId),
+                        OBJECT_MAPPER.writeValueAsString(choiceId)));
+        assertNoGraphQLErrors(invoked);
+        assertThat(invoked.at("/data/demo_ActionChoices__selectTvCharacter/_meta/id").asText())
+                .isNotBlank();
+        assertThat(invoked.at("/data/demo_ActionChoices__selectTvCharacter/_meta/logicalTypeName").asText())
+                .isEqualTo("demo.ActionChoices");
+    }
+
+    @Test
     void exactDecimalPropertyMutationUsesAdvertisedStringAndRestoresFixture() throws Exception {
         final JsonNode open = graphQL("""
                 { rich { demo_JavaMathTypesMenu {

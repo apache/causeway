@@ -58,7 +58,8 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
       field('greet', named(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action`)),
       field('disabledAction', named(`${SAMPLE_SERVICE_TYPE}__disabledAction__gqlv_action`)),
       field('hiddenAction', named(`${SAMPLE_SERVICE_TYPE}__hiddenAction__gqlv_action`)),
-      field('clearNotes', named(`${SAMPLE_SERVICE_TYPE}__clearNotes__gqlv_action`))
+      field('clearNotes', named(`${SAMPLE_SERVICE_TYPE}__clearNotes__gqlv_action`)),
+      field('openView', named(`${SAMPLE_SERVICE_TYPE}__openView__gqlv_action`))
     ])],
     [`${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`, actionType(
       `${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`,
@@ -109,8 +110,24 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
     [`${SAMPLE_SERVICE_TYPE}__clearNotes__gqlv_action_invoke`, invokeType(
       `${SAMPLE_SERVICE_TYPE}__clearNotes__gqlv_action_invoke`, scalar('String')
     )],
+    [`${SAMPLE_SERVICE_TYPE}__openView__gqlv_action`, objectType(
+      `${SAMPLE_SERVICE_TYPE}__openView__gqlv_action`, [
+        field('hidden', scalar('Boolean')),
+        field('disabled', scalar('String')),
+        field('validate', scalar('String'))
+      ]
+    )],
+    ['rich__sample_VersionlessViewModel', objectType('rich__sample_VersionlessViewModel', [
+      field('_meta', named('rich__sample_VersionlessViewModel__gqlv_meta'))
+    ])],
+    ['rich__sample_VersionlessViewModel__gqlv_meta', objectType('rich__sample_VersionlessViewModel__gqlv_meta', [
+      field('id', scalar('ID')),
+      field('logicalTypeName', scalar('String')),
+      field('title', scalar('String'))
+    ])],
     ['Mutation', objectType('Mutation', [
-      field(`${SAMPLE_SERVICE_FIELD}__clearNotes`, scalar('String'))
+      field(`${SAMPLE_SERVICE_FIELD}__clearNotes`, scalar('String')),
+      field(`${SAMPLE_SERVICE_FIELD}__openView`, named('rich__sample_VersionlessViewModel'))
     ])]
   ]);
 }
@@ -180,6 +197,11 @@ export function createMenuGraphQLExecutor({
     if (request.operationName === 'CausewayInvokeServiceAction') {
       if (request.document.startsWith('mutation')) {
         mutationCalls.push(request);
+        if (request.document.includes(`${SAMPLE_SERVICE_FIELD}__openView`)) {
+          return {data: {[`${SAMPLE_SERVICE_FIELD}__openView`]: {_meta: {
+            id: 'view-1', logicalTypeName: 'sample.VersionlessViewModel', title: 'View one'
+          }}}};
+        }
         return {data: {[`${SAMPLE_SERVICE_FIELD}__clearNotes`]: 'Cleared'}};
       }
       serviceCalls.push(request);

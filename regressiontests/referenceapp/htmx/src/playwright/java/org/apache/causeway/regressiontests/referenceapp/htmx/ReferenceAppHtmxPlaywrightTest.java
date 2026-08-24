@@ -113,25 +113,19 @@ class ReferenceAppHtmxPlaywrightTest {
 
         openMenu("Prog Model");
         serviceAction("demo.ActionChoicesMenu", "choices").click();
-        page.locator(PROMPT).waitFor();
-        assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent())
-                .contains("Action invocation failed");
-        page.locator("[data-testid='action-prompt-cancel']").click();
-        page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
-                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-
-        openObject("demo.ActionChoices", invokeViewModel("demo_ActionChoicesMenu", "choices", "rich__demo_ActionChoices"));
+        waitForLogicalType("demo.ActionChoices");
+        page.waitForFunction("() => ['ready', 'fallback', 'partial-error'].includes(document.querySelector('#causeway-route causeway-object')?.dataset.layoutState)");
+        assertThat(page.locator(PROMPT).count()).isZero();
 
         final Locator invokingControl = objectAction("selectTvCharacter");
         invokingControl.click();
         waitForPrompt("selectTvCharacter");
-        assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent())
-                .contains("Field 'version' is unavailable");
-        assertThat(candidateRequests()).isZero();
-        page.locator("[data-testid='action-prompt-cancel']").click();
+        selectFirstAvailableChoice("tvCharacter");
+        submitPrompt();
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertThat((Boolean) invokingControl.evaluate("element => element === document.activeElement")).isTrue();
+        waitForLogicalType("demo.ActionChoices");
+        assertThat(candidateRequests()).isZero();
 
         openObject("demo.ActionAutoCompletePage", invokeViewModel(
                 "demo_ActionAutoCompleteMenu", "autoComplete", "rich__demo_ActionAutoCompletePage"));
@@ -304,16 +298,14 @@ class ReferenceAppHtmxPlaywrightTest {
     }
 
     @Test
-    void parameterlessParameterizedDefaultValidationOutcomeAndVersionGapActionStatesRemainVisible() {
+    void parameterlessParameterizedDefaultValidationAndSuccessfulActionStatesRemainVisible() {
         openObject("demo.ActionSemanticsVm", invokeViewModel(
                 "demo_ActionMenu", "semantics", "rich__demo_ActionSemanticsVm"));
+        page.evaluate("() => globalThis.__referenceAppActionContextBeforeInvoke = document.querySelector('#causeway-route causeway-object-context')");
         objectAction("reportPropertyForSafe").click();
-        page.locator(PROMPT).waitFor();
-        assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent())
-                .contains("Field 'version' is unavailable");
-        page.locator("[data-testid='action-prompt-cancel']").click();
-        page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
-                .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        page.waitForFunction("() => document.querySelector('#causeway-route causeway-object-context') !== globalThis.__referenceAppActionContextBeforeInvoke");
+        waitForLogicalType("demo.ActionSemanticsVm");
+        assertThat(page.locator(PROMPT).count()).isZero();
 
         final Locator update = objectAction("updatePropertyForIdempotent");
         update.click();
@@ -333,12 +325,9 @@ class ReferenceAppHtmxPlaywrightTest {
         waitForPrompt("updatePropertyForIdempotent");
         page.locator(parameter("value")).fill("37");
         submitPrompt();
-        page.waitForFunction("() => document.querySelector(\"dialog[data-testid='action-prompt'] .causeway-action-prompt-error\")?.textContent?.trim().length > 0");
-        assertThat(page.locator(PROMPT + " .causeway-action-prompt-error").textContent())
-                .contains("Field 'version' is unavailable");
-        page.locator("[data-testid='action-prompt-cancel']").click();
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
+        waitForLogicalType("demo.ActionSemanticsVm");
     }
 
     @Test

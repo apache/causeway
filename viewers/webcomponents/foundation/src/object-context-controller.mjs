@@ -17,6 +17,14 @@
  * under the License.
  */
 
+import {
+  actionInvocationArguments,
+  actionInvocationResultPlan,
+  createActionInvocationPlan,
+  ensureActionInvocationResultTypes,
+  extractActionInvocationResult,
+  secureActionInvocationResult
+} from './action-dispatch.mjs';
 import {createSemanticEvent, OBJECT_CONTEXT_STATE_EVENT} from './context-events.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
 import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
@@ -290,24 +298,45 @@ export class ObjectContextController extends EventTarget {
         enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
       });
     });
-    const invocationField = actionInvocationField(descriptor);
-    const mutationType = invocationField ? null : await this.client.describeMutation();
+    const mutationType = await this.client.describeMutation();
     const mutationFieldName = mutationFieldNameFor(description, member);
-    const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
+    let invocationPlan;
+    let planningError = null;
+    try {
+      invocationPlan = createActionInvocationPlan({
+        targetKind: 'object',
+        description,
+        descriptor,
+        mutationType,
+        mutationFieldName
+      });
+    } catch (error) {
+      invocationPlan = Object.freeze({supported: false});
+      planningError = commandError({
+        message: 'The advertised object action cannot be dispatched safely.',
+        extensions: {code: error?.code ?? 'ACTION_DISPATCH_PLAN_FAILED'}
+      });
+    }
     return Object.freeze({
       descriptor,
       parameters: Object.freeze(parameters),
       validate: Boolean(validateField),
-      invocationField: invocationField?.name ?? null,
-      mutationFieldName: mutationField ? mutationFieldName : null,
-      invokable: Boolean(invocationField || mutationField)
+      invocationPlan,
+      invocationField: invocationPlan.placement === 'root-mutation' ? null : invocationPlan.fieldName ?? null,
+      mutationFieldName: invocationPlan.mutationFieldName ?? null,
+      mutating: invocationPlan.mutating ?? false,
+      planningError,
+      invokable: invocationPlan.supported === true
     });
   }
 
   async prepareAction(member, values = {}, {signal} = {}) {
     const capabilities = await this.describeActionInteraction(member);
     if (!capabilities.invokable) {
-      return interactionResult(InteractionStatus.UNSUPPORTED, {capabilities}, [commandError(`Action '${member}' does not expose an invocation capability.`)]);
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        {capabilities},
+        [capabilities.planningError ?? commandError(`Action '${member}' does not expose an invocation capability.`)]);
     }
     if (capabilities.parameters.length === 0) {
       return interactionResult(InteractionStatus.SUCCESS, {capabilities, parameters: []});
@@ -410,63 +439,65 @@ export class ObjectContextController extends EventTarget {
     });
   }
 
-  invokeAction(member, values = {}, {signal} = {}) {
-    return this.#serializeMutation(async () => {
-      const {description, descriptor} = await this.#memberDescriptor(member, 'action');
-      const invocationField = actionInvocationField(descriptor);
-      let result;
-      let resultType;
-      if (invocationField) {
-        const invokeType = description.types.get(namedType(invocationField.type));
-        const resultsField = invokeType ? fieldsByName(invokeType).get('results') : null;
-        if (resultsField) {
-          await ensureResultTypes(this.client, description, resultsField.type, signal);
+  async invokeAction(member, values = {}, {signal} = {}) {
+    const capabilities = await this.describeActionInteraction(member);
+    if (!capabilities.invokable) {
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        null,
+        [capabilities.planningError ?? commandError(`Action '${member}' does not expose an invocation capability.`)]);
+    }
+    const execute = async () => {
+      try {
+        const {description} = await this.#memberDescriptor(member, 'action');
+        const plan = capabilities.invocationPlan;
+        await ensureActionInvocationResultTypes(this.client, description, plan, signal);
+        const resultPlan = actionInvocationResultPlan(plan, description.types);
+        const args = actionInvocationArguments(plan, values, this.identity);
+        let result;
+        if (plan.placement === 'root-mutation') {
+          const mutationType = await this.client.describeMutation({signal});
+          result = await this.client.executeMutationInteraction({
+            description,
+            mutationType,
+            fieldName: plan.mutationFieldName,
+            args,
+            resultSelection: resultPlan.selection === true ? null : resultPlan.selection,
+            operationName: 'CausewayInvokeAction',
+            signal
+          });
+        } else {
+          result = await this.client.executeObjectInteraction({
+            description,
+            identity: this.identity,
+            selection: {
+              [member]: {
+                [plan.fieldName]: commandSelection(args, resultPlan.selection)
+              }
+            },
+            operationName: 'CausewayInvokeAction',
+            signal
+          });
+          const invocationValue = result.data?.[member]?.[plan.fieldName] ?? null;
+          result = {...result, data: extractActionInvocationResult(invocationValue, resultPlan)};
         }
-        const resultsSelection = resultsField ? resultSelectionForType(resultsField.type, description.types) : null;
-        result = await this.client.executeObjectInteraction({
-          description,
-          identity: this.identity,
-          selection: {
-            [member]: {
-              [invocationField.name]: commandSelection(
-                argumentsFromValues(invocationField, values),
-                resultsField ? {results: resultsSelection ?? true} : {target: true}
-              )
-            }
-          },
-          operationName: 'CausewayInvokeAction',
-          signal
-        });
-        resultType = resultsField?.type ?? null;
-        result = {...result, data: result.data?.[member]?.[invocationField.name]?.results ?? null};
-      } else {
-        const mutationType = await this.client.describeMutation({signal});
-        const fieldName = mutationFieldNameFor(description, member);
-        const mutationField = mutationType ? fieldsByName(mutationType).get(fieldName) : null;
-        if (!mutationField) {
-          return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Action '${member}' does not expose an invocation mutation.`)]);
+        result = secureActionInvocationResult(result, capabilities.parameters);
+        const response = commandResponse(result, normalizeActionResult(result.data, resultPlan.resultType));
+        if (response.status === InteractionStatus.SUCCESS && plan.mutating) {
+          this.refresh();
         }
-        const targetArgument = targetArgumentName(mutationField, description.generatedInputTypeName);
-        const args = argumentsFromValues(mutationField, values);
-        args[targetArgument] = {id: this.identity.id};
-        resultType = mutationField.type;
-        await ensureResultTypes(this.client, description, resultType, signal);
-        result = await this.client.executeMutationInteraction({
-          description,
-          mutationType,
-          fieldName,
-          args,
-          resultSelection: resultSelectionForType(resultType, description.types),
-          operationName: 'CausewayInvokeAction',
-          signal
-        });
+        return response;
+      } catch (error) {
+        if (signal?.aborted) {
+          return interactionResult(InteractionStatus.OBSOLETE);
+        }
+        return interactionResult(InteractionStatus.FAILED, null, [commandError({
+          message: 'The object action could not be dispatched safely.',
+          extensions: {code: error?.code ?? 'ACTION_DISPATCH_FAILED'}
+        })]);
       }
-      const response = commandResponse(result, normalizeActionResult(result.data, resultType));
-      if (response.status === InteractionStatus.SUCCESS) {
-        this.refresh();
-      }
-      return response;
-    });
+    };
+    return capabilities.mutating ? this.#serializeMutation(execute) : execute();
   }
 
   async loadCollection({
@@ -940,12 +971,6 @@ function parameterInputType(wrapper) {
     }
   }
   return null;
-}
-
-function actionInvocationField(descriptor) {
-  return ['invoke', 'invokeIdempotent', 'invokeNonIdempotent']
-    .map(name => descriptor.fields.get(name))
-    .find(Boolean) ?? null;
 }
 
 function commandResponse(result, data) {

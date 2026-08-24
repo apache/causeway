@@ -17,6 +17,14 @@
  * under the License.
  */
 
+import {
+  actionInvocationArguments,
+  actionInvocationResultPlan,
+  createActionInvocationPlan,
+  ensureActionInvocationResultTypes,
+  extractActionInvocationResult,
+  secureActionInvocationResult
+} from './action-dispatch.mjs';
 import {fieldsByName, namedType} from './introspection.mjs';
 import {argumentsFromValues, commandSelection, resultSelectionForType} from './interaction-operations.mjs';
 import {InteractionResultKind, InteractionStatus} from './types.mjs';
@@ -112,7 +120,10 @@ export class ServiceActionContextController {
   async prepareAction(actionId, values = {}, {signal} = {}) {
     const capabilities = await this.describeActionInteraction(actionId);
     if (!capabilities.invokable) {
-      return interactionResult(InteractionStatus.UNSUPPORTED, {capabilities}, [commandError(`Service action '${actionId}' does not expose an invocation capability.`)]);
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        {capabilities},
+        [capabilities.planningError ?? commandError(`Service action '${actionId}' does not expose an invocation capability.`)]);
     }
     if (capabilities.parameters.length === 0) {
       return interactionResult(InteractionStatus.SUCCESS, {capabilities, parameters: []});
@@ -215,56 +226,60 @@ export class ServiceActionContextController {
 
   async invokeAction(actionId, values = {}, {signal} = {}) {
     const capabilities = await this.describeActionInteraction(actionId);
+    if (!capabilities.invokable) {
+      return interactionResult(
+        capabilities.planningError ? InteractionStatus.FAILED : InteractionStatus.UNSUPPORTED,
+        null,
+        [capabilities.planningError ?? commandError(`Service action '${actionId}' does not expose an invocation capability.`)]);
+    }
     const execute = async () => {
-      const description = await this.describeService();
-      let result;
-      let resultType;
-      if (capabilities.invocationField) {
-        const invocationField = capabilities.invocationField;
-        const invokeType = description.types.get(namedType(invocationField.type));
-        const resultsField = invokeType ? fieldsByName(invokeType).get('results') : null;
-        if (resultsField) {
-          await ensureResultTypes(this.client, description, resultsField.type, signal);
+      try {
+        const description = await this.describeService();
+        const plan = capabilities.invocationPlan;
+        await ensureActionInvocationResultTypes(this.client, description, plan, signal);
+        const resultPlan = actionInvocationResultPlan(plan, description.types);
+        const args = actionInvocationArguments(plan, values);
+        let result;
+        if (plan.placement === 'root-mutation') {
+          const mutationType = await this.client.describeMutation({signal});
+          result = await this.client.executeMutationInteraction({
+            description,
+            mutationType,
+            fieldName: plan.mutationFieldName,
+            args,
+            resultSelection: resultPlan.selection === true ? null : resultPlan.selection,
+            operationName: 'CausewayInvokeServiceAction',
+            signal
+          });
+        } else {
+          result = await this.client.executeServiceInteraction({
+            description,
+            selection: {
+              [actionId]: {
+                [plan.fieldName]: commandSelection(args, resultPlan.selection)
+              }
+            },
+            operationName: 'CausewayInvokeServiceAction',
+            signal
+          });
+          const invocationValue = result.data?.[actionId]?.[plan.fieldName] ?? null;
+          result = {...result, data: extractActionInvocationResult(invocationValue, resultPlan)};
         }
-        const resultsSelection = resultsField ? resultSelectionForType(resultsField.type, description.types) : null;
-        result = await this.client.executeServiceInteraction({
-          description,
-          selection: {
-            [actionId]: {
-              [invocationField.name]: commandSelection(
-                argumentsFromValues(invocationField, values),
-                resultsField ? {results: resultsSelection ?? true} : {target: true}
-              )
-            }
-          },
-          operationName: 'CausewayInvokeServiceAction',
-          signal
-        });
-        resultType = resultsField?.type ?? null;
-        result = {...result, data: result.data?.[actionId]?.[invocationField.name]?.results ?? null};
-      } else {
-        const mutationType = await this.client.describeMutation({signal});
-        const mutationField = mutationType ? fieldsByName(mutationType).get(capabilities.mutationFieldName) : null;
-        if (!mutationField) {
-          return interactionResult(InteractionStatus.UNSUPPORTED, null, [commandError(`Service action '${actionId}' does not expose an invocation mutation.`)]);
+        result = secureActionInvocationResult(result, capabilities.parameters);
+        const response = commandResponse(result, normalizeActionResult(result.data, resultPlan.resultType));
+        if (response.status === InteractionStatus.SUCCESS && plan.mutating) {
+          this.onChanged();
         }
-        resultType = mutationField.type;
-        await ensureResultTypes(this.client, description, resultType, signal);
-        result = await this.client.executeMutationInteraction({
-          description,
-          mutationType,
-          fieldName: capabilities.mutationFieldName,
-          args: argumentsFromValues(mutationField, values),
-          resultSelection: resultSelectionForType(resultType, description.types),
-          operationName: 'CausewayInvokeServiceAction',
-          signal
-        });
+        return response;
+      } catch (error) {
+        if (signal?.aborted) {
+          return interactionResult(InteractionStatus.OBSOLETE);
+        }
+        return interactionResult(InteractionStatus.FAILED, null, [commandError({
+          message: 'The service action could not be dispatched safely.',
+          extensions: {code: error?.code ?? 'ACTION_DISPATCH_FAILED'}
+        })]);
       }
-      const response = commandResponse(result, normalizeActionResult(result.data, resultType));
-      if (response.status === InteractionStatus.SUCCESS && capabilities.mutating) {
-        this.onChanged();
-      }
-      return response;
     };
     return capabilities.mutating ? this.serializeMutation(execute) : execute();
   }
@@ -300,22 +315,35 @@ export class ServiceActionContextController {
         enumValues: Object.freeze(enumType?.enumValues?.map(value => value.name) ?? [])
       });
     });
-    const invocationField = ['invoke', 'invokeIdempotent']
-      .map(name => descriptor.fields.get(name))
-      .find(Boolean) ?? null;
-    const legacyMutatingField = descriptor.fields.get('invokeNonIdempotent') ?? null;
-    const mutationType = invocationField ? null : await this.client.describeMutation();
+    const mutationType = await this.client.describeMutation();
     const mutationFieldName = `${description.generatedFieldName}__${actionId}`;
-    const mutationField = mutationType ? fieldsByName(mutationType).get(mutationFieldName) ?? null : null;
-    const effectiveInvocationField = invocationField ?? (!mutationField ? legacyMutatingField : null);
+    let invocationPlan;
+    let planningError = null;
+    try {
+      invocationPlan = createActionInvocationPlan({
+        targetKind: 'service',
+        description,
+        descriptor,
+        mutationType,
+        mutationFieldName
+      });
+    } catch (error) {
+      invocationPlan = Object.freeze({supported: false});
+      planningError = commandError({
+        message: 'The advertised service action cannot be dispatched safely.',
+        extensions: {code: error?.code ?? 'ACTION_DISPATCH_PLAN_FAILED'}
+      });
+    }
     return Object.freeze({
       descriptor,
       parameters: Object.freeze(parameters),
       validate: Boolean(validateField),
-      invocationField: effectiveInvocationField,
-      mutationFieldName: mutationField ? mutationFieldName : null,
-      mutating: Boolean(mutationField || legacyMutatingField && !invocationField),
-      invokable: Boolean(effectiveInvocationField || mutationField)
+      invocationPlan,
+      invocationField: invocationPlan.placement === 'root-mutation' ? null : invocationPlan.field ?? null,
+      mutationFieldName: invocationPlan.mutationFieldName ?? null,
+      mutating: invocationPlan.mutating ?? false,
+      planningError,
+      invokable: invocationPlan.supported === true
     });
   }
 

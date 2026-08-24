@@ -170,6 +170,24 @@ test('mutating service actions use the existing top-level mutation without a man
   assert.equal(changed, 1);
 });
 
+test('parameterless service mutation returns versionless object metadata without requesting version or target', async () => {
+  const executor = createMenuGraphQLExecutor();
+  const client = new CausewayGraphQLClient({executor});
+  const context = new ServiceActionContextController({client, logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
+
+  const invoked = await context.invokeAction('openView', {});
+
+  assert.equal(invoked.status, InteractionStatus.SUCCESS);
+  assert.deepEqual(invoked.data, {kind: 'object', value: {_meta: {
+    id: 'view-1', logicalTypeName: 'sample.VersionlessViewModel', title: 'View one'
+  }}});
+  const operation = executor.mutationCalls.at(-1);
+  assert.match(operation.document, /^mutation CausewayInvokeServiceAction \{/);
+  assert.match(operation.document, /_meta \{\s+id\s+logicalTypeName\s+title\s+\}/);
+  assert.doesNotMatch(operation.document, /version|target|_target|\$object/);
+  assert.deepEqual(operation.variables, {});
+});
+
 test('mutating service actions delegate to application-scope serialization', async () => {
   const executor = createMenuGraphQLExecutor();
   let tail = Promise.resolve();
