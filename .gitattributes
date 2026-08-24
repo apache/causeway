@@ -52,3 +52,6 @@
 
 # Git will always convert line endings to `LF` on checkout. You should use this for files that must keep LF endings, even on Windows.
 *.sh text eol=lf
+
+# Deterministic minified bundles may retain significant whitespace in template literals.
+viewers/webcomponents/foundation/vaadin-fields/generated/assets/*.js -whitespace

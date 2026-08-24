@@ -21,6 +21,7 @@ import {CausewayActionElement} from './action-element.mjs';
 import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
 import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './collection-element.mjs';
 import {CausewayElementName} from './component-contracts.mjs';
+import {CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement} from './field-widget.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
 import {CausewayInteractionControllerElement} from './interaction-controller-element.mjs';
 import {
@@ -47,6 +48,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],
+  [CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement],
   [CausewayElementName.REFERENCE_EDITOR, CausewayReferenceEditorElement],
   [CausewayElementName.MENUBARS, CausewayMenubarsElement],
   [CausewayElementName.MENUBAR_PRIMARY, CausewayMenubarPrimaryElement],

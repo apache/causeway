@@ -55,8 +55,28 @@
                 <targetPath>META-INF/licenses/vaadin-reference</targetPath>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>vaadin-fields/generated/assets</directory>
+                <targetPath>META-INF/resources/causeway-webcomponents/vaadin-fields</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>vaadin-fields/generated/licenses</directory>
+                <targetPath>META-INF/licenses/vaadin-fields</targetPath>
+                <filtering>false</filtering>
+            </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <exclude>vaadin-reference/generated/assets/vaadin-reference.js</exclude>
+                        <exclude>vaadin-fields/generated/assets/vaadin-*.js</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -70,6 +90,20 @@
                         <configuration>
                             <target>
                                 <exec executable="node" dir="${project.basedir}/vaadin-reference" failonerror="true">
+                                    <arg value="verify.mjs"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-vaadin-field-assets</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="node" dir="${project.basedir}/vaadin-fields" failonerror="true">
                                     <arg value="verify.mjs"/>
                                 </exec>
                             </target>
@@ -96,6 +130,40 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>regenerate-vaadin-field-assets</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>regenerate-vaadin-field-assets</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-fields" failonerror="true">
+                                            <arg value="ci"/>
+                                            <arg value="--ignore-scripts"/>
+                                            <arg value="--no-audit"/>
+                                            <arg value="--no-fund"/>
+                                        </exec>
+                                        <exec executable="npm" dir="${project.basedir}/vaadin-fields" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="build"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>regenerate-vaadin-reference-assets</id>
             <build>

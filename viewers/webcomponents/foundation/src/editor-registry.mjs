@@ -17,6 +17,7 @@
  * under the License.
  */
 
+import {vaadinFieldEditorRegistration} from './field-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 import {renderCausewayReferenceWidget, supportsCausewayReferenceWidget} from './reference-widget.mjs';
 import {defaultValueCodecRegistry, parseCausewayValue, semanticTypeName} from './value-codecs.mjs';
@@ -189,6 +190,7 @@ const unsupportedEditor = Object.freeze({
 
 export const defaultEditorRegistry = new CausewayEditorRegistry([
   referenceWidgetEditor,
+  vaadinFieldEditorRegistration,
   choiceEditor,
   autoCompleteEditor,
   booleanEditor,
@@ -202,19 +204,23 @@ export const defaultEditorRegistry = new CausewayEditorRegistry([
 
 export function renderCausewayEditor(context, registry = defaultEditorRegistry, codecRegistry = defaultValueCodecRegistry) {
   const codec = codecRegistry.select(context);
-  const selectedEditor = codec.id === 'unsupported' ? unsupportedEditor : registry.select(context);
+  const codecContext = {...context, codec};
+  const selectedEditor = codec.id === 'unsupported' ? unsupportedEditor : registry.select(codecContext);
   const editor = Object.freeze({
     ...selectedEditor,
     codec,
+    debounced: typeof selectedEditor.debounced === 'function'
+      ? selectedEditor.debounced(codecContext)
+      : selectedEditor.debounced === true,
     render: currentContext => {
-      const effectiveContext = {...context, ...currentContext};
+      const effectiveContext = {...context, ...currentContext, codec};
       return selectedEditor.render({
         ...effectiveContext,
         controlValue: codec.toControlValue(effectiveContext.value, effectiveContext)
       });
     },
     parse: currentContext => {
-      const effectiveContext = {...context, ...currentContext};
+      const effectiveContext = {...context, ...currentContext, codec};
       const rawValue = selectedEditor.parse(effectiveContext);
       return parseCausewayValue(codec, {...effectiveContext, value: rawValue});
     }

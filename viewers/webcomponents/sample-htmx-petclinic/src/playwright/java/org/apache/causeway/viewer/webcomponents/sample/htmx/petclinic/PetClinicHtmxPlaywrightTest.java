@@ -279,10 +279,10 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(notes.locator(".causeway-property-label").getAttribute("title"))
                 .isEqualTo("Additional notes about this pet owner.");
         notesEdit.click();
-        final var notesEditor = notes.locator("textarea[data-causeway-editor='notes']");
-        notesEditor.waitFor();
-        assertThat(notesEditor.getAttribute("rows")).isEqualTo("5");
-        notesEditor.fill("First line\nSecond line");
+        final var notesEditor = resolveEditor("causeway-property[member='notes'] [data-causeway-editor='notes']");
+        assertThat(notesEditor.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
+                .isEqualTo(5);
+        fillEditor(notesEditor, "First line\nSecond line");
         notes.locator("[data-causeway-action='cancel']").click();
 
         editProperty("telephoneNumber", "020 7000 1234");
@@ -304,7 +304,7 @@ class PetClinicHtmxPlaywrightTest {
 
         updateName.click();
         waitForPrompt("updateName");
-        page.locator(parameter("name")).press("Escape");
+        resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
         assertFocused("causeway-action[member='updateName'] button");
     }
@@ -369,11 +369,13 @@ class PetClinicHtmxPlaywrightTest {
             page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
             assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
         }
-        assertThat(page.locator(parameter("visitAt")).count())
+        final var visitAt = resolveEditor(parameter("visitAt"));
+        final var reason = resolveEditor(parameter("reason"));
+        assertThat(visitAt.count())
                 .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
                 .isEqualTo(1);
-        assertThat(page.locator(parameter("visitAt")).inputValue()).isNotBlank();
-        assertThat(page.locator(parameter("reason")).inputValue()).isEqualTo("Routine check-up");
+        assertThat(String.valueOf(visitAt.evaluate("element => element.value"))).isNotBlank();
+        assertThat(reason.evaluate("element => element.value")).isEqualTo("Routine check-up");
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
         waitForCollectionRows("visits", 1);
@@ -508,16 +510,22 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void fillParameter(final String parameterId, final String value) {
-        final var control = page.locator(parameter(parameterId));
-        control.fill(value);
+        final var selector = parameter(parameterId);
+        fillEditor(resolveEditor(selector), value);
         page.waitForFunction("args => document.querySelector(args.selector)?.value === args.value",
-                java.util.Map.of("selector", parameter(parameterId), "value", value));
+                java.util.Map.of("selector", selector, "value", value));
     }
 
     private void selectParameter(final String parameterId, final String value) {
-        page.locator(parameter(parameterId)).selectOption(value);
+        final var selector = parameter(parameterId);
+        final var control = resolveEditor(selector);
+        if (((String) control.evaluate("element => element.localName")).startsWith("vaadin-")) {
+            control.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }", value);
+        } else {
+            control.selectOption(value);
+        }
         page.waitForFunction("args => document.querySelector(args.selector)?.value === args.value",
-                java.util.Map.of("selector", parameter(parameterId), "value", value));
+                java.util.Map.of("selector", selector, "value", value));
     }
 
     private void selectFirstAvailableChoice(final String parameterId) {
@@ -568,7 +576,8 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForPromptError(final String messagePart) {
-        final var alert = page.locator(PROMPT + " [role='alert']").filter(new Locator.FilterOptions().setHasText(messagePart));
+        final var alert = page.locator(PROMPT + " [role='alert']")
+                .filter(new Locator.FilterOptions().setHasText(messagePart)).first();
         alert.waitFor();
     }
 
@@ -587,10 +596,10 @@ class PetClinicHtmxPlaywrightTest {
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
         revealContainingTab(propertyLocator, edit);
         edit.click();
-        final var editor = page.locator(property + " [data-causeway-editor]");
-        editor.waitFor();
-        assertFocused(property + " [data-causeway-editor]");
-        editor.fill(value);
+        final var editorSelector = property + " [data-causeway-editor]";
+        final var editor = resolveEditor(editorSelector);
+        assertFocused(editorSelector);
+        fillEditor(editor, value);
         page.locator(property + " [data-causeway-action='save']").click();
     }
 
@@ -650,8 +659,22 @@ class PetClinicHtmxPlaywrightTest {
         }
     }
 
+    private Locator resolveEditor(final String selector) {
+        page.locator(selector).first().waitFor();
+        page.waitForFunction("selector => { const element = document.querySelector(selector); return element && element.localName !== 'causeway-field-editor'; }", selector);
+        return page.locator(selector);
+    }
+
+    private void fillEditor(final Locator editor, final String value) {
+        if (((String) editor.evaluate("element => element.localName")).startsWith("vaadin-")) {
+            editor.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('input', {bubbles: true, composed: true})); element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }", value);
+        } else {
+            editor.fill(value);
+        }
+    }
+
     private void assertFocused(final String selector) {
-        page.waitForFunction("selector => document.activeElement?.matches(selector)", selector);
+        page.waitForFunction("selector => [...document.querySelectorAll(selector)].some(element => element === document.activeElement || element.contains(document.activeElement) || element.shadowRoot?.activeElement)", selector);
         assertThat(page.locator(selector).count()).isGreaterThan(0);
     }
 

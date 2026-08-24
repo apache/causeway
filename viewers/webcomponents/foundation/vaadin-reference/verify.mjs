@@ -27,8 +27,10 @@ if (sha256 !== policy.bundleSha256 || sha256 !== metadata.bundle.sha256) throw n
 if (gzipBytes > policy.maximumGzipBytes) throw new Error(`Bundle is ${gzipBytes} gzip bytes, exceeding ${policy.maximumGzipBytes}.`);
 if (JSON.stringify(metadata.cspStyleHashes) !== JSON.stringify(policy.cspStyleHashes)) throw new Error('Packaged CSP style hashes differ from policy.');
 if (!existsSync(htmxControllerPath)) throw new Error('The HTMX CSP source is missing.');
-const controllerHashes = [...readFileSync(htmxControllerPath, 'utf8').matchAll(/sha256-[A-Za-z0-9+/]+=*/g)].map(match => match[0]);
-if (JSON.stringify(controllerHashes) !== JSON.stringify(policy.cspStyleHashes)) throw new Error(`HTMX CSP hashes differ from the package policy: ${JSON.stringify(controllerHashes)}.`);
+const controllerSource = readFileSync(htmxControllerPath, 'utf8');
+for (const hash of policy.cspStyleHashes) {
+  if (!controllerSource.includes(`\"${hash}\"`)) throw new Error(`HTMX CSP source omits the reference policy hash ${hash}.`);
+}
 for (const [name, version] of Object.entries(policy.directPackages)) {
   const entry = lock.packages?.[`node_modules/${name}`];
   if (entry?.version !== version || !entry.integrity) throw new Error(`Pinned package mismatch for ${name}: ${entry?.version ?? 'missing'}.`);
