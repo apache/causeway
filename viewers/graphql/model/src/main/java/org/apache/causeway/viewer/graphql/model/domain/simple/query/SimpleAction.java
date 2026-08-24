@@ -324,7 +324,9 @@ public class SimpleAction
         }
 
         var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        return resultManagedObject.getPojo();
+        return resultManagedObject != null
+                ? resultManagedObject.getPojo()
+                : null;
     }
 
 }

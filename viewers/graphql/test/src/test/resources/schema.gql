@@ -95,7 +95,6 @@ type RICHSchema {
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
-  java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
@@ -137,7 +136,6 @@ type SIMPLESchema {
   causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: simple__java_lang_Record__gqlv_input): simple__java_lang_Record
-  java_lang_Runnable(object: simple__java_lang_Runnable__gqlv_input): simple__java_lang_Runnable
   java_util_concurrent_Callable(object: simple__java_util_concurrent_Callable__gqlv_input): simple__java_util_concurrent_Callable
   java_util_function_Consumer(object: simple__java_util_function_Consumer__gqlv_input): simple__java_util_function_Consumer
   java_util_function_Function(object: simple__java_util_function_Function__gqlv_input): simple__java_util_function_Function
@@ -189,7 +187,6 @@ type ScenarioStep {
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
-  java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
@@ -1261,22 +1258,6 @@ type rich__java_lang_Record {
 }
 
 type rich__java_lang_Record__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__java_lang_Runnable {
-  "Object metadata"
-  _meta: rich__java_lang_Runnable__gqlv_meta
-}
-
-type rich__java_lang_Runnable__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -5207,22 +5188,6 @@ type simple__java_lang_Record__gqlv_meta {
   title: String!
 }
 
-type simple__java_lang_Runnable {
-  "Object metadata"
-  _meta: simple__java_lang_Runnable__gqlv_meta
-}
-
-type simple__java_lang_Runnable__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type simple__java_util_concurrent_Callable {
   "Object metadata"
   _meta: simple__java_util_concurrent_Callable__gqlv_meta
@@ -5850,15 +5815,6 @@ input rich__java_lang_Record__gqlv_input {
   ref: String
 }
 
-input rich__java_lang_Runnable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__java_util_concurrent_Callable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6094,15 +6050,6 @@ input simple__causeway_testing_fixtures_FixtureResult__gqlv_input {
 }
 
 input simple__java_lang_Record__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__java_lang_Runnable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

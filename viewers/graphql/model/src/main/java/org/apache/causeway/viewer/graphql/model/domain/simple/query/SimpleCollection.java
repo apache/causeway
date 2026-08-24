@@ -18,16 +18,19 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
-import graphql.schema.DataFetchingEnvironment;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
+import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
+
+import graphql.schema.DataFetchingEnvironment;
 
 public class SimpleCollection
         extends Element {
@@ -64,19 +67,22 @@ public class SimpleCollection
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
 
+    	var coll = objectMember;
         var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
+        if (objectSpecification == null)
+			// not expected
             return null;
-        }
 
-        var otma = objectMember;
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        var resultManagedObject = otma.get(managedObject);
 
+        var visibleConsent = coll.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(coll.getFeatureIdentifier());
+
+        var resultManagedObject = coll.get(managedObject);
         return resultManagedObject != null
                 ? resultManagedObject.getPojo()
                 : null;
