@@ -5,7 +5,8 @@ They are held outside `openspec/changes/` because the repository permits only on
 The foundation, domain-component, rich GraphQL correctness, value-semantics, collection-windowing, application-entry, composite-object, menubar, generic HTMX, theming, Vaadin evaluation, and Vaadin reference-widget pilot changes are archived.
 The Reference Application regression suite and input-value hardening changes are archived.
 The action-dispatch correctness change is archived, completing the remaining Priority 0 correction identified by that broad capability inventory.
-The current active change is `fix-webcomponent-versionless-identity-preparation`, followed by separate union-projection and opaque-route corrections before the proposal-only paged-autocomplete and Vaadin-default sequence in `vaadin-default-roadmap.md`.
+The versionless-identity and preparation correction is archived.
+The next change should be a focused union-projection correction, followed by opaque-route handling before the proposal-only paged-autocomplete and Vaadin-default sequence in `vaadin-default-roadmap.md`.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
