@@ -107,7 +107,8 @@ class ReferenceAppCapabilityInventory_IntegTest {
                     .contains(target.path("member").asText());
         }
         assertThat(families).contains(
-                "action-choices", "action-autocomplete", "action-defaults", "action-validation",
+                "action-choices", "action-autocomplete", "reference-autocomplete-window",
+                "action-defaults", "action-validation",
                 "action-parameterless", "action-parameterized", "action-scalar-outcome",
                 "action-object-outcome", "action-cancel-stale-concurrency",
                 "versionless-preparation", "versionless-action-result", "versionless-collection-row",

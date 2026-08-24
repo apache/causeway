@@ -23,6 +23,58 @@ import {INLINE_FRAGMENTS} from './selection.mjs';
 
 export const MAX_DIRECT_FRAGMENT_TYPES = 8;
 
+const AUTO_COMPLETE_WINDOW_FIELDS = Object.freeze([
+  'offset',
+  'requestedSize',
+  'returnedCount',
+  'totalCount',
+  'maximumSize',
+  'hasPrevious',
+  'hasNext',
+  'ordering'
+]);
+
+export function autoCompleteWindowPlan(field, types) {
+  const typeName = namedType(field?.type);
+  const typeDescription = types.get(typeName) ?? null;
+  const fields = fieldsByName(typeDescription);
+  const itemsField = fields.get('items');
+  if (!field || !typeDescription || !itemsField) {
+    return null;
+  }
+  const args = fieldsByName({fields: field.args ?? []});
+  const selection = Object.fromEntries(AUTO_COMPLETE_WINDOW_FIELDS
+    .filter(name => fields.has(name))
+    .map(name => [name, true]));
+  selection.items = resultSelectionForType(itemsField.type, types) ?? true;
+  return Object.freeze({
+    typeName,
+    typeDescription,
+    itemsField,
+    selection: Object.freeze(selection),
+    offsetDefault: integerDefault(args.get('offset')?.defaultValue, 0),
+    sizeDefault: integerDefault(args.get('size')?.defaultValue, null)
+  });
+}
+
+export function normalizeAutoCompleteWindow(value, {legacy = false, offset = 0, requestedSize = null} = {}) {
+  const items = Array.isArray(legacy ? value : value?.items) ? [...(legacy ? value : value.items)] : [];
+  const totalCount = legacy ? items.length : nonNegativeInteger(value?.totalCount, items.length);
+  const effectiveOffset = legacy ? offset : nonNegativeInteger(value?.offset, offset);
+  return Object.freeze({
+    items: Object.freeze(items),
+    offset: effectiveOffset,
+    requestedSize: legacy ? requestedSize : positiveInteger(value?.requestedSize, requestedSize ?? items.length),
+    returnedCount: legacy ? items.length : nonNegativeInteger(value?.returnedCount, items.length),
+    totalCount,
+    maximumSize: legacy ? null : positiveInteger(value?.maximumSize, null),
+    hasPrevious: legacy ? effectiveOffset > 0 : value?.hasPrevious === true,
+    hasNext: legacy ? false : value?.hasNext === true,
+    ordering: legacy ? 'LEGACY' : String(value?.ordering ?? 'APPLICATION'),
+    windowed: !legacy
+  });
+}
+
 export function buildDescribeOperationRootsOperation() {
   return Object.freeze({
     document: 'query CausewayDescribeOperationRoots { __schema { queryType { name } mutationType { name } } }',
@@ -238,6 +290,22 @@ export function resultSelectionForType(typeRef, types) {
   return scalarFields.length > 0
     ? Object.fromEntries(scalarFields.map(field => [field.name, true]))
     : {__typename: true};
+}
+
+function integerDefault(value, fallback) {
+  if (value == null) return fallback;
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : fallback;
+}
+
+function nonNegativeInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+function positiveInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 function renderExecutableSelection({

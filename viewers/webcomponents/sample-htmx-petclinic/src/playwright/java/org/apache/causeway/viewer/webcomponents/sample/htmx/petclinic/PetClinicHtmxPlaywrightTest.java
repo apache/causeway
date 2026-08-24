@@ -361,8 +361,14 @@ class PetClinicHtmxPlaywrightTest {
             throw new AssertionError(String.valueOf(
                     page.locator(PROMPT).evaluate("element => element.outerHTML")), cause);
         }
-        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
-        assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
+        if (Boolean.TRUE.equals(petReference.evaluate("element => element.localName === 'select'"))) {
+            petReference.evaluate("element => { element.selectedIndex = 0; "
+                    + "element.dispatchEvent(new Event('change', {bubbles: true, composed: true})); }");
+            assertThat(petReference.inputValue()).isNotBlank();
+        } else {
+            page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter("pet"));
+            assertThat(petReference.evaluate("element => element.value?.id")).isNotNull();
+        }
         assertThat(page.locator(parameter("visitAt")).count())
                 .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
                 .isEqualTo(1);

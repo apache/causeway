@@ -127,6 +127,23 @@ test('service action adapter reuses parameter preparation, validation, safe invo
   assert.deepEqual(context.interactionTarget, {kind: 'service', logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
 });
 
+test('service action context executes advertised autocomplete windows', async () => {
+  const executor = createMenuGraphQLExecutor();
+  const client = new CausewayGraphQLClient({executor});
+  const context = new ServiceActionContextController({client, logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
+
+  const result = await context.autoCompleteActionParameterWindow(
+    'greet', 'name', 'Gr', {}, {offset: 2, size: 2});
+
+  assert.equal(result.status, InteractionStatus.SUCCESS);
+  assert.deepEqual(result.data.items, ['Grace']);
+  assert.equal(result.data.totalCount, 3);
+  const call = executor.serviceCalls.find(candidate =>
+    candidate.operationName === 'CausewayServiceActionParameterAutoCompleteWindow');
+  assert.deepEqual(Object.values(call.variables), ['Gr', 2, 2]);
+  assert.match(call.document, /autoCompleteWindow/);
+});
+
 test('superseded service parameter preparation cannot replace the latest response', async () => {
   const base = createMenuGraphQLExecutor();
   let releaseFirst;

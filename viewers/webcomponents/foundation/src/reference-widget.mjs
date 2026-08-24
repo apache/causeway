@@ -70,6 +70,11 @@ export function renderCausewayReferenceWidget(context) {
   if (context.disabled) attributes.push('disabled');
   if (context.required) attributes.push('required');
   if (context.autoComplete === true) attributes.push('data-autocomplete="true"');
+  if (context.autoCompleteWindow === true) {
+    attributes.push('data-autocomplete-window="true"');
+    attributes.push(`data-autocomplete-page-size="${positiveInteger(context.autoCompletePageSize, configuration.maximumResults)}"`);
+  }
+  if (context.hasMoreSuggestions === true) attributes.push('data-has-more-suggestions="true"');
   if (multiple) attributes.push('multiple');
   return `<causeway-reference-editor ${attributes.join(' ')}><span role="status">Loading reference editor…</span></causeway-reference-editor>`;
 }
@@ -82,6 +87,8 @@ export class CausewayReferenceEditorElement extends HTMLElement {
     this._searchTimer = null;
     this._syncing = false;
     this._value = null;
+    this._filterGeneration = 0;
+    this._activeFilter = null;
     this.addEventListener('keydown', event => {
       if (event.key === 'Escape' && this._control?.opened !== true) {
         this.dispatchEvent(new CustomEvent('causeway-reference-escape', {bubbles: true, composed: true}));
@@ -130,7 +137,14 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       control.label = this.dataset.label || this.getAttribute('data-causeway-editor') || 'Reference';
       control.itemLabelPath = 'title';
       control.itemValuePath = 'id';
-      control.items = this.#items();
+      control.itemIdPath = 'id';
+      if (this.dataset.autocompleteWindow === 'true') {
+        control.pageSize = positiveInteger(
+          Number(this.dataset.autocompletePageSize), configuration.maximumResults);
+        control.dataProvider = (params, callback) => this.#providePage(params, callback, generation);
+      } else {
+        control.items = this.#items();
+      }
       if (this.hasAttribute('multiple')) control.autoExpandVertically = true;
       control.clearButtonVisible = !this.hasAttribute('required');
       control.required = this.hasAttribute('required');
@@ -138,7 +152,9 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       const describedBy = this.dataset.describedby;
       if (describedBy) control.setAttribute('aria-describedby', describedBy);
       if (this.dataset.invalid === 'true') control.setAttribute('invalid', '');
-      control.addEventListener('filter-changed', event => this.#filterChanged(event));
+      if (this.dataset.autocompleteWindow !== 'true') {
+        control.addEventListener('filter-changed', event => this.#filterChanged(event));
+      }
       const selectionEvent = this.hasAttribute('multiple') ? 'selected-items-changed' : 'selected-item-changed';
       control.addEventListener(selectionEvent, event => this.#selectionChanged(event));
       this.replaceChildren(control);
@@ -204,6 +220,48 @@ export class CausewayReferenceEditorElement extends HTMLElement {
         detail: Object.freeze({name: this.getAttribute('data-causeway-editor'), search})
       }));
     }, 250);
+  }
+
+  #providePage(params, callback, connectionGeneration) {
+    const filter = String(params?.filter ?? '').trim();
+    if (filter.length < configuration.minimumSearchLength) {
+      callback([], 0);
+      return;
+    }
+    if (filter !== this._activeFilter) {
+      this._activeFilter = filter;
+      this._filterGeneration += 1;
+    }
+    const filterGeneration = this._filterGeneration;
+    const pageSize = positiveInteger(params?.pageSize, configuration.maximumResults);
+    const page = nonNegativeInteger(params?.page, 0);
+    let responded = false;
+    const respond = result => {
+      if (responded || !this.isConnected || connectionGeneration !== this._generation
+          || filterGeneration !== this._filterGeneration || filter !== this._activeFilter) {
+        return;
+      }
+      responded = true;
+      const window = result?.status === 'success' ? result.data : null;
+      if (!window) {
+        this.dataset.widgetError = result?.errors?.[0]?.message ?? 'Reference page request failed.';
+      } else {
+        delete this.dataset.widgetError;
+      }
+      const items = (window?.items ?? []).map(normalizeReference).filter(Boolean);
+      callback(items, Number(window?.totalCount ?? 0));
+    };
+    this.dispatchEvent(new CustomEvent('causeway-reference-search', {
+      bubbles: true,
+      composed: true,
+      detail: Object.freeze({
+        name: this.getAttribute('data-causeway-editor'),
+        search: filter,
+        offset: page * pageSize,
+        size: pageSize,
+        respond
+      })
+    }));
   }
 
   #selectionChanged(event) {

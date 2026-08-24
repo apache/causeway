@@ -26,7 +26,8 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
 `causeway.viewer.webcomponents.htmx.vaadin-reference-widgets` defaults to `false` and explicitly enables the internal free-core reference-widget pilot.
 `causeway.viewer.webcomponents.htmx.reference-minimum-search-length` defaults to `2`.
-`causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and bounds one complete search-only GraphQL autocomplete response; it is not a server page size.
+`causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and is the requested page-size fallback for advertised GraphQL autocomplete windows as well as the accepted complete-response bound for legacy non-windowed autocomplete.
+An advertised field's smaller introspected default window size takes precedence.
 
 The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
 The default policy and asset requests remain unchanged while the pilot is disabled.

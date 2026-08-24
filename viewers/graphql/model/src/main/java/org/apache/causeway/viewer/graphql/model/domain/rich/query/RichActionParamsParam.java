@@ -63,6 +63,7 @@ public class RichActionParamsParam
      * Populated iff there is an autocomplete for this param
      */
     private final RichActionParamsParamAutoComplete autoComplete;
+    private final RichActionParamsParamAutoCompleteWindow autoCompleteWindow;
     /**
      * Populated iff there is a default for this param
      */
@@ -88,6 +89,7 @@ public class RichActionParamsParam
             this.disabled = null;
             this.choices = null;
             this.autoComplete = null;
+            this.autoCompleteWindow = null;
             this.default_ = null;
             this.validate = null;
             this.datatype = null;
@@ -103,6 +105,9 @@ public class RichActionParamsParam
         addChildFieldFor(this.disabled = new RichActionParamsParamDisabled(this, context));
         addChildFieldFor(this.choices = new RichActionParamsParamChoices(this, context));
         addChildFieldFor(this.autoComplete = new RichActionParamsParamAutoComplete(this, context));
+        addChildFieldFor(this.autoCompleteWindow = oap.hasAutoComplete()
+                ? new RichActionParamsParamAutoCompleteWindow(this, context)
+                : null);
         addChildFieldFor(this.default_ = new RichActionParamsParamDefault(this, context));
         addChildFieldFor(this.validate = new RichActionParamsParamValidate(this, context));
         addChildFieldFor(this.datatype = new RichActionParamsParamDatatype(this, context));
@@ -159,6 +164,9 @@ public class RichActionParamsParam
 
         if (autoComplete != null) {
             autoComplete.addDataFetcher(this);
+        }
+        if (autoCompleteWindow != null) {
+            autoCompleteWindow.addDataFetcher(this);
         }
 
         if (default_ != null) {

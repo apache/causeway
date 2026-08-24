@@ -37,6 +37,9 @@ const EMPTY_COLLECTION_TYPE = `${OBJECT_TYPE}__formerStaff__gqlv_collection`;
 const ACTION_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action`;
 const ACTION_PARAMS_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action_params`;
 const ACTION_PARAM_TYPE = `${OBJECT_TYPE}__changeName__newName__gqlv_action_parameter`;
+const AUTOCOMPLETE_WINDOW_ORDERING_TYPE = 'rich__gqlv_autocomplete_window_ordering';
+const CHAIR_AUTOCOMPLETE_WINDOW_TYPE = `${CHAIR_TYPE}_autocomplete_window`;
+const ACTION_PARAM_AUTOCOMPLETE_WINDOW_TYPE = `${ACTION_PARAM_TYPE}_autocomplete_window`;
 const STAFF_OBJECT_TYPE = 'rich__university_staff_StaffMember';
 const STAFF_META_TYPE = `${STAFF_OBJECT_TYPE}__gqlv_meta`;
 const STAFF_NAME_TYPE = `${STAFF_OBJECT_TYPE}__name__gqlv_property`;
@@ -134,6 +137,50 @@ export function createRichSchemaTypes() {
     [STAFF_NAME_TYPE, propertyType(STAFF_NAME_TYPE)],
     [STAFF_CODE_TYPE, propertyType(STAFF_CODE_TYPE)]
   ]);
+}
+
+export function createAutoCompleteWindowRichSchemaTypes() {
+  const types = createRichSchemaTypes();
+  const windowFields = () => [
+    field('items', null, list(named(STAFF_OBJECT_TYPE))),
+    field('offset', null, nonNull(scalar('Int'))),
+    field('requestedSize', null, nonNull(scalar('Int'))),
+    field('returnedCount', null, nonNull(scalar('Int'))),
+    field('totalCount', null, nonNull(scalar('Int'))),
+    field('maximumSize', null, nonNull(scalar('Int'))),
+    field('hasPrevious', null, nonNull(scalar('Boolean'))),
+    field('hasNext', null, nonNull(scalar('Boolean'))),
+    field('ordering', null, nonNull(enumeration(AUTOCOMPLETE_WINDOW_ORDERING_TYPE)))
+  ];
+  const windowArguments = [
+    argument('search', nonNull(scalar('String'))),
+    argument('offset', nonNull(scalar('Int')), {defaultValue: '0'}),
+    argument('size', nonNull(scalar('Int')), {defaultValue: '5'})
+  ];
+  const chairType = types.get(CHAIR_TYPE);
+  types.set(CHAIR_TYPE, objectType(CHAIR_TYPE, null, [
+    ...chairType.fields,
+    field('autoComplete', null, list(named(STAFF_OBJECT_TYPE)), [argument('search', nonNull(scalar('String')))]),
+    field('autoCompleteWindow', null, named(CHAIR_AUTOCOMPLETE_WINDOW_TYPE), windowArguments)
+  ]));
+  const parameterType = types.get(ACTION_PARAM_TYPE);
+  types.set(ACTION_PARAM_TYPE, objectType(ACTION_PARAM_TYPE, null, [
+    ...parameterType.fields,
+    field('autoComplete', null, list(named(STAFF_OBJECT_TYPE)), [argument('search', nonNull(scalar('String')))]),
+    field('autoCompleteWindow', null, named(ACTION_PARAM_AUTOCOMPLETE_WINDOW_TYPE), [
+      argument('preceding', scalar('String')),
+      ...windowArguments
+    ])
+  ]));
+  types.set(CHAIR_AUTOCOMPLETE_WINDOW_TYPE, objectType(
+    CHAIR_AUTOCOMPLETE_WINDOW_TYPE, null, windowFields()));
+  types.set(ACTION_PARAM_AUTOCOMPLETE_WINDOW_TYPE, objectType(
+    ACTION_PARAM_AUTOCOMPLETE_WINDOW_TYPE, null, windowFields()));
+  types.set(AUTOCOMPLETE_WINDOW_ORDERING_TYPE, {
+    kind: 'ENUM', name: AUTOCOMPLETE_WINDOW_ORDERING_TYPE, description: null,
+    fields: [], enumValues: [{name: 'APPLICATION', description: null}], possibleTypes: []
+  });
+  return types;
 }
 
 export function createVersionlessRichSchemaTypes({windowed = false} = {}) {

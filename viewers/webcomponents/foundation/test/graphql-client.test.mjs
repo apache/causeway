@@ -23,6 +23,7 @@ import {CausewayGraphQLClient, CausewaySchemaError} from '../src/graphql-client.
 import {RichSchemaNames} from '../src/schema-names.mjs';
 import {
   collectionWindowResponse,
+  createAutoCompleteWindowRichSchemaTypes,
   createRichSchemaFixtureExecutor,
   createRichSchemaTypes,
   createWindowedRichSchemaTypes,
@@ -74,6 +75,25 @@ test('targeted introspection discovers object-valued action choices and their me
   assert.equal(description.types.has('rich__university_staff_StaffMember'), true);
   assert.equal(description.types.has('rich__university_staff_StaffMember__gqlv_meta'), true);
   assert.equal(executor.introspectionCalls.every(call => Object.keys(call.variables).length === 1), true);
+});
+
+test('autocomplete window discovery follows result item and metadata types', async () => {
+  const types = createAutoCompleteWindowRichSchemaTypes();
+  const executor = createRichSchemaFixtureExecutor({types});
+  const client = new CausewayGraphQLClient({executor});
+
+  const description = await client.describeObject(DEPARTMENT_LOGICAL_TYPE);
+
+  const propertyField = description.members.get('chair').fields.get('autoCompleteWindow');
+  const resultTypeName = propertyField.type.name;
+  assert.equal(description.types.has(resultTypeName), true);
+  const resultType = description.types.get(resultTypeName);
+  assert.equal(resultType.fields.some(field => field.name === 'items'), true);
+  assert.equal(description.types.has('rich__university_staff_StaffMember'), true);
+  assert.equal(description.types.has('rich__university_staff_StaffMember__gqlv_meta'), true);
+  const parameterType = description.types.get(
+    'rich__university_dept_Department__changeName__newName__gqlv_action_parameter');
+  assert.equal(parameterType.fields.some(field => field.name === 'autoCompleteWindow'), true);
 });
 
 test('targeted introspection discovers and executes bounded collection windows', async () => {

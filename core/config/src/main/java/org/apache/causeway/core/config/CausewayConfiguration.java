@@ -2388,6 +2388,8 @@ public record CausewayConfiguration(
             @DefaultValue
             Collections collections,
             @DefaultValue
+            Autocomplete autocomplete,
+            @DefaultValue
             Resources resources,
             @DefaultValue
             Authentication authentication
@@ -2641,6 +2643,31 @@ public record CausewayConfiguration(
                     if (defaultWindowSize > maxWindowSize) {
                         throw new IllegalArgumentException(
                                 "causeway.viewer.graphql.collections.default-window-size must not exceed max-window-size");
+                    }
+                }
+            }
+
+            /**
+             * Controls bounded rich GraphQL autocomplete response windows.
+             */
+            public record Autocomplete(
+                    /**
+                     * Default item count used when an autocomplete window omits its size.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("20")
+                    int defaultWindowSize,
+                    /**
+                     * Hard maximum item count accepted for one autocomplete window.
+                     */
+                    @Min(value = 1)
+                    @DefaultValue("100")
+                    int maxWindowSize) {
+
+                public Autocomplete {
+                    if (defaultWindowSize > maxWindowSize) {
+                        throw new IllegalArgumentException(
+                                "causeway.viewer.graphql.autocomplete.default-window-size must not exceed max-window-size");
                     }
                 }
             }

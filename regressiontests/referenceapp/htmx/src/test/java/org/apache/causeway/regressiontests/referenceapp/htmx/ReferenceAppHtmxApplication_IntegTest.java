@@ -17,8 +17,10 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -316,6 +318,128 @@ class ReferenceAppHtmxApplication_IntegTest {
         assertThat(first.at("/_meta/logicalTypeName").asText()).isEqualTo("demo.ActionChoicesFromEntity");
         assertThat(first.at("/_meta/id").asText()).isNotBlank();
         assertThat(first.at("/name/get").asText()).isNotBlank();
+    }
+
+    @Test
+    void actionReferenceAutocompleteExposesBoundedServerWindowsAndLegacyCompatibility() throws Exception {
+        final JsonNode opened = graphQL("""
+                mutation {
+                    demo_ActionAutoCompleteMenu__autoComplete {
+                        _meta { id logicalTypeName title }
+                    }
+                }
+                """);
+        assertNoGraphQLErrors(opened);
+        final String pageId = opened.at("/data/demo_ActionAutoCompleteMenu__autoComplete/_meta/id").asText();
+        assertThat(pageId).isNotBlank();
+
+        final String target = "demo_ActionAutoCompletePage(object: {id: "
+                + OBJECT_MAPPER.writeValueAsString(pageId) + "})";
+        final JsonNode described = graphQL("""
+                { __type(name: "rich__demo_ActionAutoCompletePage__selectTvCharacter__tvCharacter__gqlv_action_parameter") {
+                    fields { name args { name defaultValue } type { kind name ofType { kind name } } }
+                } }
+                """);
+        assertNoGraphQLErrors(described);
+        assertThat(described.at("/data/__type/fields").findValuesAsText("name"))
+                .contains("autoComplete", "autoCompleteWindow");
+        final JsonNode retainedLegacyType = graphQL("""
+                { __type(name: "rich__demo_ValueHolder__name__gqlv_property") { name } }
+                """);
+        assertNoGraphQLErrors(retainedLegacyType);
+        assertThat(retainedLegacyType.at("/data/__type/name").asText()).isNotBlank();
+
+        final JsonNode first = graphQL("""
+                { rich { %s { selectTvCharacter { params { tvCharacter {
+                    autoCompleteWindow(search: "o", offset: 0, size: 5) {
+                        items { _meta { id logicalTypeName title } }
+                        offset requestedSize returnedCount totalCount maximumSize
+                        hasPrevious hasNext ordering
+                    }
+                } } } } } }
+                """.formatted(target));
+        assertNoGraphQLErrors(first);
+        final JsonNode firstWindow = first.at(
+                "/data/rich/demo_ActionAutoCompletePage/selectTvCharacter/params/tvCharacter/autoCompleteWindow");
+        assertThat(firstWindow.path("offset").asInt()).isZero();
+        assertThat(firstWindow.path("requestedSize").asInt()).isEqualTo(5);
+        assertThat(firstWindow.path("returnedCount").asInt()).isEqualTo(5);
+        assertThat(firstWindow.path("totalCount").asInt()).isEqualTo(7);
+        assertThat(firstWindow.path("maximumSize").asInt()).isEqualTo(5);
+        assertThat(firstWindow.path("hasPrevious").asBoolean()).isFalse();
+        assertThat(firstWindow.path("hasNext").asBoolean()).isTrue();
+        assertThat(firstWindow.path("ordering").asText()).isEqualTo("APPLICATION");
+
+        final JsonNode later = graphQL("""
+                { rich { %s { selectTvCharacter { params { tvCharacter {
+                    autoCompleteWindow(search: "o", offset: 5, size: 5) {
+                        items { _meta { id logicalTypeName title } }
+                        offset returnedCount totalCount hasPrevious hasNext
+                    }
+                } } } } } }
+                """.formatted(target));
+        assertNoGraphQLErrors(later);
+        final JsonNode laterWindow = later.at(
+                "/data/rich/demo_ActionAutoCompletePage/selectTvCharacter/params/tvCharacter/autoCompleteWindow");
+        assertThat(laterWindow.path("offset").asInt()).isEqualTo(5);
+        assertThat(laterWindow.path("returnedCount").asInt()).isGreaterThan(0);
+        assertThat(laterWindow.path("totalCount").asInt()).isEqualTo(firstWindow.path("totalCount").asInt());
+        assertThat(laterWindow.path("hasPrevious").asBoolean()).isTrue();
+        assertThat(firstWindow.at("/items").findValuesAsText("id"))
+                .doesNotContainAnyElementsOf(laterWindow.at("/items").findValuesAsText("id"));
+
+        final JsonNode boundaries = graphQL("""
+                { rich { %s { selectTvCharacter { params { tvCharacter {
+                    defaulted: autoCompleteWindow(search: "o") {
+                        offset requestedSize returnedCount totalCount
+                    }
+                    empty: autoCompleteWindow(search: "o", offset: 100, size: 5) {
+                        items { _meta { id } } offset returnedCount totalCount hasPrevious hasNext
+                    }
+                } } } } } }
+                """.formatted(target));
+        assertNoGraphQLErrors(boundaries);
+        final JsonNode defaulted = boundaries.at(
+                "/data/rich/demo_ActionAutoCompletePage/selectTvCharacter/params/tvCharacter/defaulted");
+        assertThat(defaulted.path("offset").asInt()).isZero();
+        assertThat(defaulted.path("requestedSize").asInt()).isEqualTo(5);
+        assertThat(defaulted.path("returnedCount").asInt()).isEqualTo(5);
+        final JsonNode empty = boundaries.at(
+                "/data/rich/demo_ActionAutoCompletePage/selectTvCharacter/params/tvCharacter/empty");
+        assertThat(empty.path("items").size()).isZero();
+        assertThat(empty.path("offset").asInt()).isEqualTo(100);
+        assertThat(empty.path("returnedCount").asInt()).isZero();
+        assertThat(empty.path("totalCount").asInt()).isEqualTo(firstWindow.path("totalCount").asInt());
+        assertThat(empty.path("hasPrevious").asBoolean()).isTrue();
+        assertThat(empty.path("hasNext").asBoolean()).isFalse();
+
+        final JsonNode legacy = graphQL("""
+                { rich { %s { selectTvCharacter { params { tvCharacter {
+                    autoComplete(search: "o") { _meta { id logicalTypeName title } }
+                } } } } } }
+                """.formatted(target));
+        assertNoGraphQLErrors(legacy);
+        final JsonNode legacyItems = legacy.at(
+                "/data/rich/demo_ActionAutoCompletePage/selectTvCharacter/params/tvCharacter/autoComplete");
+        assertThat(legacyItems.size()).isEqualTo(firstWindow.path("totalCount").asInt());
+        assertThat(Stream.concat(
+                firstWindow.at("/items").findValuesAsText("id").stream(),
+                laterWindow.at("/items").findValuesAsText("id").stream()).toList())
+                .containsExactlyElementsOf(legacyItems.findValuesAsText("id"));
+
+        for (String arguments : List.of(
+                "offset: 0, size: 6",
+                "offset: -1, size: 5",
+                "offset: 0, size: 0")) {
+            final JsonNode invalid = graphQL("""
+                    { rich { %s { selectTvCharacter { params { tvCharacter {
+                        autoCompleteWindow(search: "protected-search", %s) { totalCount }
+                    } } } } } }
+                    """.formatted(target, arguments));
+            assertThat(invalid.at("/errors/0/message").asText())
+                    .containsIgnoringCase("autocomplete window")
+                    .doesNotContain("protected-search");
+        }
     }
 
     @Test

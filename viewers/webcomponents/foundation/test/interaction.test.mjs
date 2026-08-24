@@ -26,12 +26,15 @@ const {
   CausewayEditorRegistry,
   CausewayInteractionControllerElement,
   CausewayPropertyElement,
+  CausewayReferenceEditorElement,
   InteractionStatus,
+  autoCompleteWindowPlan,
   buildMutationInteractionOperation,
   buildObjectInteractionOperation,
   commandSelection,
   configureCausewayReferenceWidgets,
   defaultEditorRegistry,
+  normalizeAutoCompleteWindow,
   parseCausewayEditorValue,
   renderCausewayEditor
 } = await import('../src/index.mjs');
@@ -124,6 +127,37 @@ test('interaction operations render and validate inline fragments', () => {
     types,
     operationName: 'CausewayInvalidRun'
   }), /not advertised/);
+});
+
+test('autocomplete windows derive advertised selections and normalize paging metadata', () => {
+  const itemType = type('Choice', [field('_meta', named('ChoiceMeta'))]);
+  const metadataType = type('ChoiceMeta', [field('id', scalar('ID')), field('logicalTypeName', scalar('String'))]);
+  const windowType = type('ChoiceWindow', [
+    field('items', list(named('Choice'))), field('offset', scalar('Int')),
+    field('requestedSize', scalar('Int')), field('returnedCount', scalar('Int')),
+    field('totalCount', scalar('Int')), field('maximumSize', scalar('Int')),
+    field('hasPrevious', scalar('Boolean')), field('hasNext', scalar('Boolean')),
+    field('ordering', scalar('String'))
+  ]);
+  const windowField = field('autoCompleteWindow', named('ChoiceWindow'), [
+    {...argument('offset', scalar('Int')), defaultValue: '0'},
+    {...argument('size', scalar('Int')), defaultValue: '5'}
+  ]);
+  const plan = autoCompleteWindowPlan(windowField, new Map([
+    ['ChoiceWindow', windowType], ['Choice', itemType], ['ChoiceMeta', metadataType]
+  ]));
+
+  assert.equal(plan.offsetDefault, 0);
+  assert.equal(plan.sizeDefault, 5);
+  assert.deepEqual(plan.selection.items, {_meta: {id: true, logicalTypeName: true}});
+  const normalized = normalizeAutoCompleteWindow({
+    items: [{_meta: {id: '6', logicalTypeName: 'example.Choice'}}], offset: 5,
+    requestedSize: 5, returnedCount: 1, totalCount: 6, maximumSize: 5,
+    hasPrevious: true, hasNext: false, ordering: 'APPLICATION'
+  });
+  assert.equal(normalized.windowed, true);
+  assert.equal(normalized.totalCount, 6);
+  assert.equal(normalized.items.length, 1);
 });
 
 test('editor registry selects standard inputs and supports application overrides', () => {
@@ -364,6 +398,100 @@ test('editable properties support prepare, validation, cancel and authoritative 
   property.setPendingValue('Cancelled');
   assert.equal(property.cancelEdit(), true);
   assert.equal(calls.includes('update:Cancelled'), false);
+});
+
+test('windowed Vaadin reference adapter requests authoritative later pages', async () => {
+  const moduleSource = `
+    if (!globalThis.customElements.get('vaadin-combo-box')) globalThis.customElements.define('vaadin-combo-box', class extends HTMLElement {});
+    if (!globalThis.customElements.get('vaadin-multi-select-combo-box')) globalThis.customElements.define('vaadin-multi-select-combo-box', class extends HTMLElement {});
+  `;
+  globalThis.customElements.whenDefined ??= async () => {};
+  configureCausewayReferenceWidgets({
+    enabled: true,
+    minimumSearchLength: 1,
+    maximumResults: 50,
+    moduleUrl: `data:text/javascript,${encodeURIComponent(moduleSource)}`
+  });
+  const editor = new CausewayReferenceEditorElement();
+  editor.dataset ??= {};
+  editor.childNodes ??= [];
+  editor.replaceChildren = (...children) => {
+    editor.childNodes = children;
+    for (const child of children) child.parentNode = editor;
+  };
+  editor.id = 'owner-editor';
+  editor.setAttribute('data-causeway-editor', 'owner');
+  editor.setAttribute('data-label', 'Owner');
+  editor.setAttribute('data-items', '[]');
+  editor.setAttribute('data-value', 'null');
+  editor.setAttribute('data-autocomplete', 'true');
+  editor.setAttribute('data-autocomplete-window', 'true');
+  editor.setAttribute('data-autocomplete-page-size', '2');
+  Object.assign(editor.dataset, {
+    autocomplete: 'true',
+    autocompleteWindow: 'true',
+    autocompletePageSize: '2',
+    items: '[]',
+    value: 'null',
+    label: 'Owner'
+  });
+  let requested;
+  const pendingRequests = new Map();
+  editor.addEventListener('causeway-reference-search', event => {
+    requested = event.detail;
+    pendingRequests.set(event.detail.search, event.detail);
+    if (event.detail.search === 'Ow') {
+      event.detail.respond({
+        status: 'success',
+        data: {
+          items: [{_meta: {id: 'owner-3', logicalTypeName: 'example.Owner', title: 'Owner 3'}}],
+          offset: 2,
+          requestedSize: 2,
+          returnedCount: 1,
+          totalCount: 3,
+          maximumSize: 2,
+          hasPrevious: true,
+          hasNext: false,
+          ordering: 'APPLICATION',
+          windowed: true
+        }
+      });
+    }
+  });
+  document.body.appendChild(editor);
+  for (let index = 0; index < 20 && editor.dataset.widgetState !== 'ready'; index += 1) {
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+  assert.equal(editor.dataset.widgetState, 'ready', editor.dataset.widgetError);
+  const control = editor.childNodes[0];
+  assert.equal(control.pageSize, 2);
+  let callbackResult;
+
+  control.dataProvider({filter: 'Ow', page: 1, pageSize: 2}, (items, total) => {
+    callbackResult = {items, total};
+  });
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assert.equal(requested.offset, 2);
+  assert.equal(requested.size, 2);
+  assert.deepEqual(callbackResult, {
+    items: [{id: 'owner-3', logicalTypeName: 'example.Owner', title: 'Owner 3'}],
+    total: 3
+  });
+
+  let staleCallback;
+  let currentCallback;
+  control.dataProvider({filter: 'Old', page: 0, pageSize: 2}, (items, total) => staleCallback = {items, total});
+  control.dataProvider({filter: 'New', page: 0, pageSize: 2}, (items, total) => currentCallback = {items, total});
+  pendingRequests.get('Old').respond({status: 'success', data: {
+    items: [{_meta: {id: 'old', title: 'Old'}}], totalCount: 1, windowed: true
+  }});
+  pendingRequests.get('New').respond({status: 'success', data: {
+    items: [{_meta: {id: 'new', title: 'New'}}], totalCount: 1, windowed: true
+  }});
+  assert.equal(staleCallback, undefined);
+  assert.deepEqual(currentCallback, {items: [{id: 'new', title: 'New'}], total: 1});
+  document.body.removeChild(editor);
 });
 
 test('reference autocomplete cancels stale work and rejects over-bound results', async () => {

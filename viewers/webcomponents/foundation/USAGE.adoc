@@ -318,8 +318,12 @@ await import('/causeway-webcomponents/index.mjs');
 ----
 
 Eligible fixed choices must contain stable object identities and remain within `maximumResults`.
-Eligible autocomplete inputs use the existing public GraphQL search operation, debounce for 250 milliseconds, cancel superseded work, and reject stale route generations.
-The current GraphQL operation is not server-paged; the maximum is an honest accepted-response bound rather than a page size, and an over-bound result produces a refinement error instead of silent truncation.
+Eligible autocomplete inputs prefer the advertised public `autoCompleteWindow` field, debounce filter changes, request the introspected default page size, cancel superseded work, and reject stale route generations.
+The window is an honest bounded server response slice over one authoritative application autocomplete execution.
+It reports total and continuation metadata but does not claim persistence query pushdown or a cross-request snapshot.
+The internal Vaadin data provider maps its filter, page, and page-size callback to semantic context requests and receives authoritative items and total count without exposing Vaadin APIs to applications.
+When only legacy `autoComplete` exists, `maximumResults` remains an accepted complete-response bound and an over-bound result produces a refinement error instead of silent truncation.
+Native autocomplete renders the bounded first window and states when more matches require refinement.
 
 A list-valued input selects Multi-Select Combo Box only when the introspected input and GraphQL interaction already provide authoritative list pending-value semantics.
 Unsupported shapes, disabled configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
