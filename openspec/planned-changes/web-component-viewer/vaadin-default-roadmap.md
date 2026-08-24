@@ -8,7 +8,7 @@ The repository permits one active OpenSpec change at a time.
 The Reference Application suite and input-value hardening are archived.
 The archived `fix-webcomponent-action-dispatch-correctness` change completed the remaining Priority 0 correctness tranche identified by the pinned regression corpus.
 The archived `fix-webcomponent-versionless-identity-preparation` change isolates concrete versionless identity.
-The archived `fix-webcomponent-union-projection-correctness` change precedes the active `fix-webcomponent-opaque-route-correctness` correction.
+The versionless identity, union projection, and opaque-route correctness prerequisites are archived.
 Proposal-only drafts must be refined against checked-in capability evidence before promotion.
 
 | Order | Proposal | Purpose | Promotion gate |
@@ -16,7 +16,7 @@ Proposal-only drafts must be refined against checked-in capability evidence befo
 | 1 | `add-referenceapp-webcomponent-regression-suite` *(archived)* | Copy the pinned broad corpus, establish deterministic inventory, and expose real gaps. | Completed with reviewed classifications. |
 | 2 | `harden-webcomponent-input-value-semantics` *(archived)* | Correct precision, temporal, nullable, protected, resource, and custom-value behavior independently of toolkit choice. | Completed against stable Reference Application fixtures. |
 | 3 | `fix-webcomponent-action-dispatch-correctness` *(archived)* | Correct nested safe-query and flat mutation dispatch for object and service actions. | Completed with successful typed Reference Application interactions and unchanged public operations. |
-| 4 | `fix-webcomponent-versionless-identity-preparation` *(archived)*, `fix-webcomponent-union-projection-correctness` *(archived)*, `fix-webcomponent-opaque-route-correctness` *(active)* | Correct versionless preparation, valid polymorphic metadata selection, and long composite bookmark handling in separate changes. | Each retained gap has an executable focused contract and passing regression target. |
+| 4 | `fix-webcomponent-versionless-identity-preparation` *(archived)*, `fix-webcomponent-union-projection-correctness` *(archived)*, `fix-webcomponent-opaque-route-correctness` *(archived)* | Correct versionless preparation, valid polymorphic metadata selection, and long composite bookmark handling in separate changes. | Each retained gap has an executable focused contract and passing regression target. |
 | 5 | `add-paged-graphql-reference-autocomplete` | Add honest server-side reference windows for large datasets. | Public GraphQL operation, identity, preparation, and ordering contracts are accepted. |
 | 6 | `expand-vaadin-semantic-editor-families` | Qualify free-core adapters beyond reference controls with independent lazy closures and CSP gates. | Corrected codecs and Reference Application family journeys pass. |
 | 7 | `make-vaadin-default-for-webcomponent-viewer` | Flip the supported selection policy to Vaadin-first and remove pilot status. | All prerequisite suites pass in default and explicit native modes. |
