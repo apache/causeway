@@ -17,13 +17,50 @@
  * under the License.
  */
 
+const MAX_UTF8_BYTES = 4096;
+const MAX_ENCODED_LENGTH = 4096;
+const INVALID_ROUTE_MESSAGE = 'The requested application route is invalid.';
+
 export function encodeRouteSegment(value) {
   const text = String(value ?? '');
-  if (!text || text.length > 1024 || text === '.' || text === '..' || /[\\/\u0000-\u001f\u007f]/u.test(text)) {
-    throw new Error('The requested application route is invalid.');
+  if (!text || text.length > MAX_UTF8_BYTES || text === '.' || text === '..'
+      || /[\\/\u0000-\u001f\u007f-\u009f]/u.test(text) || hasUnpairedSurrogate(text)) {
+    throw invalidRoute();
   }
-  return encodeURIComponent(text).replace(/[!'()*]/g, character =>
-    `%${character.charCodeAt(0).toString(16).toUpperCase()}`);
+  if (new TextEncoder().encode(text).length > MAX_UTF8_BYTES) {
+    throw invalidRoute();
+  }
+  let encoded;
+  try {
+    encoded = encodeURIComponent(text).replace(/[!'()*]/g, character =>
+      `%${character.charCodeAt(0).toString(16).toUpperCase()}`);
+  } catch {
+    throw invalidRoute();
+  }
+  if (encoded.length > MAX_ENCODED_LENGTH) {
+    throw invalidRoute();
+  }
+  return encoded;
+}
+
+function hasUnpairedSurrogate(text) {
+  for (let index = 0; index < text.length; index += 1) {
+    const current = text.charCodeAt(index);
+    if (current >= 0xd800 && current <= 0xdbff) {
+      const next = text.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) {
+        return true;
+      }
+      index += 1;
+    } else if (current >= 0xdc00 && current <= 0xdfff) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function invalidRoute() {
+  return new Error(INVALID_ROUTE_MESSAGE);
 }
 
 export function canonicalObjectPath(basePath, target) {

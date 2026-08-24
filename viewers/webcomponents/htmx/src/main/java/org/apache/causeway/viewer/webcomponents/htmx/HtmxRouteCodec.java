@@ -23,9 +23,10 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+
 public final class HtmxRouteCodec {
 
-    static final int MAX_DECODED_LENGTH = 1024;
+    static final int MAX_UTF8_BYTES = 4096;
     static final int MAX_ENCODED_LENGTH = 4096;
 
     private final String basePath;
@@ -164,7 +165,7 @@ public final class HtmxRouteCodec {
     }
 
     private static void validateDecoded(final String value) {
-        if (value == null || value.isEmpty() || value.length() > MAX_DECODED_LENGTH
+        if (value == null || value.isEmpty() || value.length() > MAX_UTF8_BYTES
                 || ".".equals(value) || "..".equals(value)) {
             throw invalid();
         }
@@ -175,6 +176,9 @@ public final class HtmxRouteCodec {
                 throw invalid();
             }
             offset += Character.charCount(codePoint);
+        }
+        if (value.getBytes(StandardCharsets.UTF_8).length > MAX_UTF8_BYTES) {
+            throw invalid();
         }
     }
 

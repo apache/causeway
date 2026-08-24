@@ -37,8 +37,11 @@ Applications adding other third-party resources must deliberately supply an equi
 == Canonical routes
 
 The canonical object route is `<base-path>/object/<logical-type>/<identifier>`.
-The public logical type and opaque identifier are independently UTF-8 percent-encoded as path segments.
-Parsing rejects empty values, malformed escapes, encoded separators, backslashes, controls, dot segments, overlong values, and non-canonical spellings.
+The public logical type and opaque identifier are independently UTF-8 percent-encoded as path segments without interpreting or normalizing identity.
+Each source segment is bounded to 4,096 UTF-8 bytes and each final canonical encoded segment is bounded to 4,096 ASCII characters.
+The encoded bound is normally decisive and permits long ASCII-oriented view-model mementos while bounding browser history, request, decoding, and rendering cost.
+Browser generation and server parsing reject empty values, malformed Unicode or escapes, encoded separators, backslashes, controls, dot segments, overlong UTF-8 or encoded values, and non-canonical spellings.
+Deployments with a proxy or container in front of the viewer must permit the documented canonical route size without decoding path separators.
 
 An ordinary browser request receives a complete document containing one GraphQL client, stable menu bars, announcements, result presentation, and the requested route page.
 A request carrying `HX-Request: true` receives only the route fragment and an `HX-Push-Url` response header.
