@@ -1,0 +1,36 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<article class="petclinic-page petclinic-pet-page" data-testid="petclinic-pet-page">
+  <causeway-object-header></causeway-object-header>
+
+  <div class="petclinic-object-grid">
+    <section class="petclinic-card" aria-labelledby="petclinic-pet-identity-heading">
+      <h2 id="petclinic-pet-identity-heading">Identity</h2>
+      <div class="petclinic-field-list">
+        <causeway-property member="petOwner"></causeway-property>
+        <causeway-property member="name"></causeway-property>
+      </div>
+    </section>
+
+    <section class="petclinic-card" aria-labelledby="petclinic-pet-details-heading">
+      <h2 id="petclinic-pet-details-heading">Details</h2>
+      <div class="petclinic-field-list">
+        <causeway-property member="species"></causeway-property>
+        <causeway-property member="notes" editable multiline="5"></causeway-property>
+      </div>
+    </section>
+  </div>
+</article>

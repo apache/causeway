@@ -36,6 +36,7 @@ import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.Pet
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.VisitRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(
         classes = PetClinicHtmxApplication.class,
@@ -95,15 +96,26 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("data-causeway-field-families=\"" + (nativeToolkit ? "" : "basic,numeric,local-temporal") + "\"")
                 .contains("Compare Wicket viewer");
 
-        final var generic = get("/htmx/object/petclinic.PetOwner/s_owner-mary", "HX-Request", "true");
-        assertThat(generic.statusCode()).isEqualTo(200);
-        assertThat(generic.headers().firstValue("hx-push-url").orElse(""))
-                .isEqualTo("/htmx/object/petclinic.PetOwner/s_owner-mary");
-        assertThat(generic.body())
-                .doesNotContain("<!doctype html>")
-                .contains("data-page-kind=\"generic\"")
-                .contains("logical-type=\"petclinic.PetOwner\"")
-                .contains("object-id=\"s_owner-mary\"");
+        assertResourcePage(
+                "/htmx/object/petclinic.PetOwner/s_owner-mary",
+                "petclinic.PetOwner",
+                "s_owner-mary",
+                "petclinic-owner-page");
+        assertResourcePage(
+                "/htmx/object/petclinic.Pet/s_pet-basil",
+                "petclinic.Pet",
+                "s_pet-basil",
+                "petclinic-pet-page");
+        assertResourcePage(
+                "/htmx/object/petclinic.Visit/s_visit-basil-checkup",
+                "petclinic.Visit",
+                "s_visit-basil-checkup",
+                "petclinic-visit-page");
+        assertResourcePage(
+                "/htmx/object/petclinic.HomePage/home-fixture",
+                "petclinic.HomePage",
+                "home-fixture",
+                "petclinic-custom-home");
 
         final var historyRestore = get(
                 "/htmx/object/petclinic.PetOwner/s_owner-mary",
@@ -111,15 +123,10 @@ class PetClinicHtmxApplication_IntegTest {
                 "true");
         assertThat(historyRestore.body())
                 .doesNotContain("<!doctype html>")
-                .contains("data-page-kind=\"generic\"")
+                .contains("data-page-kind=\"custom\"")
+                .contains("data-page-source=\"resource\"")
                 .containsOnlyOnce("<causeway-object-context");
         assertThat(historyRestore.headers().firstValue("hx-push-url")).isEmpty();
-
-        final var custom = get("/htmx/object/petclinic.HomePage/home-fixture", "HX-Request", "true");
-        assertThat(custom.body())
-                .contains("data-page-kind=\"custom\"")
-                .contains("data-testid=\"petclinic-custom-home\"")
-                .containsOnlyOnce("<causeway-object-context");
 
         assertThat(get("/causeway-htmx/causeway-htmx.mjs").statusCode()).isEqualTo(200);
         assertThat(get("/causeway-webcomponents/component-styles.css").statusCode()).isEqualTo(200);
@@ -132,6 +139,41 @@ class PetClinicHtmxApplication_IntegTest {
             assertThat(wicket.headers().firstValue("location").orElse(""))
                     .contains("/wicket/signin");
         }
+    }
+
+    @Test
+    void packagesHtmlPagesAndRetainsLayoutFallbackResources() throws Exception {
+        final var loader = getClass().getClassLoader();
+        for (final var name : java.util.List.of(
+                "petclinic.HomePage.html",
+                "petclinic.PetOwner.html",
+                "petclinic.Pet.html",
+                "petclinic.Visit.html")) {
+            final var path = "META-INF/causeway/webcomponents/pages/" + name;
+            final var resource = loader.getResource(path);
+            assertThat(resource).as(path).isNotNull();
+            final String html;
+            try (var input = resource.openStream()) {
+                html = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+            }
+            assertThat(html)
+                    .contains("<causeway-object-header")
+                    .contains("<causeway-")
+                    .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
+        }
+        assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())
+                .isEqualTo(404);
+        assertThat(get("/petclinic.PetOwner.html").statusCode()).isEqualTo(404);
+        assertThat(loader.getResource(
+                "org/apache/causeway/viewer/webcomponents/sample/htmx/petclinic/domain/PetOwner.layout.xml"))
+                .isNotNull();
+        assertThat(loader.getResource(
+                "org/apache/causeway/viewer/webcomponents/sample/htmx/petclinic/domain/PetOwner#pets.columnOrder.txt"))
+                .isNotNull();
+        assertThat(loader.getResource("menubars.layout.xml")).isNotNull();
+        assertThatThrownBy(() -> Class.forName(
+                "org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.PetClinicHomeFragmentFactory"))
+                .isInstanceOf(ClassNotFoundException.class);
     }
 
     @Test
@@ -226,6 +268,26 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(owner.at("/data/rich/petclinic_PetOwner/name/get").asText()).isEqualTo("Mary Smith");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/get").size()).isEqualTo(2);
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/get").size()).isEqualTo(2);
+    }
+
+    private void assertResourcePage(
+            final String path,
+            final String logicalTypeName,
+            final String objectId,
+            final String testId) throws Exception {
+        final var response = get(path, "HX-Request", "true");
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.headers().firstValue("hx-push-url").orElse(""))
+                .isEqualTo(path);
+        assertThat(response.body())
+                .doesNotContain("<!doctype html>")
+                .contains("data-page-kind=\"custom\"")
+                .contains("data-page-source=\"resource\"")
+                .contains("logical-type=\"" + logicalTypeName + "\"")
+                .contains("object-id=\"" + objectId + "\"")
+                .contains("data-testid=\"" + testId + "\"")
+                .containsOnlyOnce("<causeway-object-context")
+                .containsOnlyOnce("<causeway-interaction-controller");
     }
 
     private JsonNode graphQL(final String query) throws Exception {

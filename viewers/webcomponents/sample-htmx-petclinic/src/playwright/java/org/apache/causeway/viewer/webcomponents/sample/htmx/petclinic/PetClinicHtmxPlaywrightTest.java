@@ -175,6 +175,7 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(toolkitRequests).isEmpty();
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
+        assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("petOwners", 4);
@@ -182,16 +183,18 @@ class PetClinicHtmxPlaywrightTest {
 
         clickObjectLink("Mary Smith");
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
-        assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("generic");
+        assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
+        assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
+        assertThat(page.locator("[data-testid='petclinic-owner-page']").isVisible()).isTrue();
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
-        assertThat(page.locator(".causeway-object-actions causeway-action[member='delete']").count()).isEqualTo(1);
+        assertThat(page.locator(".petclinic-page-toolbar causeway-action[member='delete']").count()).isEqualTo(1);
         assertThat(page.locator("[data-causeway-associated-member='name'] causeway-action[member='updateName']").count()).isEqualTo(1);
         assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='addPet']").count()).isEqualTo(1);
         assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='removePet']").count()).isEqualTo(1);
         assertThat(page.locator("[data-causeway-associated-member='visits'] causeway-action[member='bookVisit']").count()).isEqualTo(1);
-        assertThat(page.locator(".causeway-object-associated-actions").first()
+        assertThat(page.locator(".petclinic-associated-actions").first()
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         page.goBack();
@@ -206,11 +209,22 @@ class PetClinicHtmxPlaywrightTest {
         page.navigate(url("/htmx/object/petclinic.Pet/s_pet-basil"),
                 new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         waitForRoute("petclinic.Pet", "s_pet-basil");
+        assertThat(page.locator("[data-testid='petclinic-pet-page']").isVisible()).isTrue();
         waitForObjectTitle("Basil · dog");
         waitForMenus();
 
+        page.navigate(url("/htmx/object/petclinic.Visit/s_visit-basil-checkup"),
+                new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+        waitForRoute("petclinic.Visit", "s_visit-basil-checkup");
+        assertThat(page.locator("[data-testid='petclinic-visit-page']").isVisible()).isTrue();
+        waitForMenus();
+
         page.setViewportSize(390, 844);
-        assertThat((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth"))
+        final var horizontalOverflow = (Number) page.evaluate(
+                "() => document.documentElement.scrollWidth - document.documentElement.clientWidth");
+        final var overflowingElements = page.evaluate("() => [...document.querySelectorAll('body *')].map(element => { const rect = element.getBoundingClientRect(); return {tag: element.tagName, className: String(element.className || ''), member: element.getAttribute('member'), left: rect.left, right: rect.right, width: rect.width}; }).filter(value => value.right > document.documentElement.clientWidth + 0.5 || value.left < -0.5).slice(0, 20)");
+        assertThat(horizontalOverflow)
+                .as("overflowing elements: %s", overflowingElements)
                 .isEqualTo(0);
         assertThat(page.locator(".causeway-menubar-bar-disclosure").count()).isGreaterThan(0);
     }
@@ -445,7 +459,8 @@ class PetClinicHtmxPlaywrightTest {
 
     private void waitForRoute(final String logicalTypeName, final String id) {
         waitForRouteUrl("/htmx/object/" + logicalTypeName + "/" + id);
-        waitForPageKind("generic");
+        waitForPageKind("custom");
+        page.waitForFunction("() => document.querySelector('[data-testid=\"causeway-route-page\"]')?.dataset.pageSource === 'resource'");
     }
 
     private void waitForLogicalType(final String logicalTypeName) {

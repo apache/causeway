@@ -61,7 +61,7 @@ Add `-Dcauseway.viewer.webcomponents.htmx.editor-toolkit=native` to run the same
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
 
-The suite starts the application on a random port and exercises custom and generic routes, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, route-lazy reference selection, every Petclinic service action, and every Pet Owner object action.
+The suite starts the application on a random port and exercises all four resource-authored pages, direct loads, back and forward history, responsive layout, menus, object links, collection hydration, property editing, validation, cancellation, route-lazy reference selection, every Petclinic service action, and every Pet Owner object action.
 It creates and deletes disposable data for destructive coverage and fails on unexpected browser console errors, failed resources, unsuccessful GraphQL responses, lost focus, undisclosed menus, incorrect member-associated action placement, or incorrect semantic results.
 
 == Stable fixture routes
@@ -70,33 +70,48 @@ The HTMX root discovers the configured `petclinic.HomePage` object through targe
 The home memento identifier is execution-generated, so tests discover it rather than treating it as durable.
 
 Mary Smith is the stable representative entity.
-Her database identifier is `owner-mary`, her GraphQL object identifier is `s_owner-mary`, and her canonical generic route is `/htmx/object/petclinic.PetOwner/s_owner-mary`.
+Her database identifier is `owner-mary`, her GraphQL object identifier is `s_owner-mary`, and her canonical HTML-authored route is `/htmx/object/petclinic.PetOwner/s_owner-mary`.
 The corresponding Wicket route is `/wicket/object/petclinic.PetOwner:s_owner-mary` after authentication.
 
 The sample contains four pet owners, five pets, and three upcoming visits.
 Mary owns Basil and Samantha and has two scheduled visits.
 
-== Viewer coverage
+== HTML-authored pages and fallback
 
-The custom home fragment is registered only for exact logical type `petclinic.HomePage`.
-It composes a standard object header and declared collection tables beneath the viewer-provided route context.
-Pet Owner, Pet, and Visit routes exercise generic `<causeway-object>` fallback and their effective grids.
+Petclinic contains no application-specific HTMX page-rendering Java class.
+Its complete page customization is visible beneath `src/main/resources/META-INF/causeway/webcomponents/pages/`:
+
+[source,text]
+----
+petclinic.HomePage.html
+petclinic.PetOwner.html
+petclinic.Pet.html
+petclinic.Visit.html
+----
+
+Each exact logical-type filename is discovered at startup and its literal UTF-8 content is placed beneath the viewer-provided route context.
+The files compose object headers, ordinary application regions, properties, actions, collections, and declared columns while GraphQL remains authoritative for identity, values, visibility, usability, validation, invocation, and results.
+They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
+
+The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.
+If an exact HTML page is removed from packaging, the route immediately falls back to `<causeway-object editable>` and the retained effective grid and column order.
+An unreadable, malformed, duplicate, invalidly named, empty, or oversized discovered page fails startup instead of disguising the error as successful generic fallback.
 
 The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.
-Object pages cover editable properties, multiline notes, enum values, references, tabs, spaced top-level actions, property- and collection-associated actions, disabled-reason tooltips, choices, defaults, validation, related Pets, contributed Visits, and contributed booking.
-The sample's current integration tests cover fixture identities, application home, menu and grid resources, rich service and object operations, shell and fragment responses, custom precedence, generic fallback, browser assets, and Wicket availability.
+HTML object pages cover editable properties, multiline notes, enum values, references, responsive cards, adjacent action groups, related Pets, contributed Visits, and contributed booking.
+The sample's current integration tests cover fixture identities, all four packaged pages, private-resource isolation, retained menu and grid resources, rich service and object operations, shell and fragment responses, exact resource precedence, generic fallback contracts, browser assets, and Wicket availability.
 
 == Wicket-relative presentation
 
 The HTMX theme intentionally follows Wicket's recognizable hierarchy rather than copying its DOM.
-Both viewers present a primary-color application bar, ordered menus, contained page content, object title and actions, cards, tabs, labels and values, related-object links, compact collections, modal interactions, and responsive navigation.
+Both viewers present a primary-color application bar, ordered menus, contained page content, object title and actions, cards, labels and values, related-object links, compact collections, modal interactions, and responsive navigation.
 Framework-specific URLs, markup, table widgets, authentication chrome, and lifecycle behavior remain different.
 
 Browser acceptance records desktop and mobile screenshots of home and Mary Smith routes, checks responsive light and dark presentation, and verifies keyboard focus, prompts, navigation history, overflow, console output, and accessibility.
 
 On 2026-08-19 the current Wicket and HTMX home and Mary Smith pages were compared over the same running model.
 The HTMX shell matched Wicket's primary navigation, right-aligned system menu, contained content, object hierarchy, actions, tabs, labels, collection cards, related-object links, and responsive collapse while retaining independent semantic markup.
-Canonical direct loads, home replacement, custom-page precedence, generic fallback, menu-originated collection results, object-result routing, back, forward, invalid routes, absent objects, automatic first collection windows, prompt validation, Escape cancellation, and focus restoration were exercised in a real browser.
+Canonical direct loads, home replacement, custom-page precedence, retained generic fallback, menu-originated collection results, object-result routing, back, forward, invalid routes, absent objects, automatic first collection windows, prompt validation, Escape cancellation, and focus restoration were exercised in a real browser.
 Desktop light-mode and mobile dark-mode Lighthouse navigation audits each scored 100 for Accessibility, Best Practices, and SEO.
 No HTMX application console messages, failed GraphQL requests, page overflow, or overlapping controls were observed.
 

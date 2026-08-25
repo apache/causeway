@@ -1,0 +1,83 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<article class="petclinic-page petclinic-owner-page" data-testid="petclinic-owner-page">
+  <causeway-object-header></causeway-object-header>
+
+  <div class="petclinic-page-toolbar" aria-label="Owner actions">
+    <causeway-action member="delete"></causeway-action>
+  </div>
+
+  <div class="petclinic-object-grid">
+    <div class="petclinic-object-details">
+      <section class="petclinic-card" aria-labelledby="petclinic-owner-identity-heading">
+        <h2 id="petclinic-owner-identity-heading">Identity</h2>
+        <div class="petclinic-field-list">
+          <div class="petclinic-member-composition" data-causeway-associated-member="name">
+            <causeway-property member="name"></causeway-property>
+            <div class="petclinic-associated-actions" aria-label="Name actions">
+              <causeway-action member="updateName"></causeway-action>
+            </div>
+          </div>
+          <causeway-property member="knownAs" editable></causeway-property>
+        </div>
+      </section>
+
+      <section class="petclinic-card" aria-labelledby="petclinic-owner-contact-heading">
+        <h2 id="petclinic-owner-contact-heading">Contact</h2>
+        <div class="petclinic-field-list">
+          <causeway-property member="telephoneNumber" editable></causeway-property>
+          <causeway-property member="emailAddress" editable></causeway-property>
+        </div>
+      </section>
+
+      <section class="petclinic-card" aria-labelledby="petclinic-owner-details-heading">
+        <h2 id="petclinic-owner-details-heading">Details</h2>
+        <div class="petclinic-field-list">
+          <causeway-property member="notes" editable multiline="5"></causeway-property>
+          <causeway-property member="lastVisit" editable></causeway-property>
+          <causeway-property member="daysSinceLastVisit"></causeway-property>
+        </div>
+      </section>
+    </div>
+
+    <div class="petclinic-object-collections">
+      <section class="petclinic-card" data-causeway-associated-member="pets" aria-labelledby="petclinic-owner-pets-heading">
+        <h2 id="petclinic-owner-pets-heading">Pets</h2>
+        <div class="petclinic-associated-actions" aria-label="Pet actions">
+          <causeway-action member="addPet"></causeway-action>
+          <causeway-action member="removePet"></causeway-action>
+        </div>
+        <causeway-collection member="pets" label="Pets" active offset="0" size="10">
+          <causeway-collection-column member="name" label="Name"></causeway-collection-column>
+          <causeway-collection-column member="species" label="Species"></causeway-collection-column>
+          <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
+        </causeway-collection>
+      </section>
+
+      <section class="petclinic-card" data-causeway-associated-member="visits" aria-labelledby="petclinic-owner-visits-heading">
+        <h2 id="petclinic-owner-visits-heading">Visits</h2>
+        <div class="petclinic-associated-actions" aria-label="Visit actions">
+          <causeway-action member="bookVisit"></causeway-action>
+        </div>
+        <causeway-collection member="visits" label="Visits" active offset="0" size="10">
+          <causeway-collection-column member="visitAt" label="When"></causeway-collection-column>
+          <causeway-collection-column member="reason" label="Reason"></causeway-collection-column>
+          <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
+        </causeway-collection>
+      </section>
+    </div>
+  </div>
+</article>
