@@ -66,6 +66,7 @@ class PetClinicHtmxPlaywrightTest {
     private PetOwnerRepository ownerRepository;
 
     private final List<String> browserFailures = new ArrayList<>();
+    private final List<String> toolkitRequests = new ArrayList<>();
 
     private Playwright playwright;
     private Browser browser;
@@ -100,6 +101,7 @@ class PetClinicHtmxPlaywrightTest {
     @BeforeEach
     void openPage() {
         browserFailures.clear();
+        toolkitRequests.clear();
         browserContext = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(1440, 900)
                 .setColorScheme(ColorScheme.LIGHT));
@@ -139,6 +141,12 @@ class PetClinicHtmxPlaywrightTest {
             }
         });
         page.onPageError(error -> browserFailures.add("page: " + error));
+        page.onRequest(request -> {
+            if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")) {
+                toolkitRequests.add(request.url());
+            }
+        });
         page.onRequestFailed(request -> {
             final var failure = request.failure();
             if (!(request.url().contains("/graphql") && failure != null && failure.contains("ERR_ABORTED"))) {
@@ -149,6 +157,9 @@ class PetClinicHtmxPlaywrightTest {
 
     @AfterEach
     void closePage() {
+        if (nativeToolkit()) {
+            assertThat(toolkitRequests).isEmpty();
+        }
         assertNoBrowserFailures();
         if (browserContext != null) {
             browserContext.close();
@@ -160,6 +171,9 @@ class PetClinicHtmxPlaywrightTest {
     void routesHomeObjectsHistoryCollectionsAndResponsiveLayout() {
         openHome();
 
+        assertThat(page.locator("html").getAttribute("data-causeway-editor-toolkit"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(toolkitRequests).isEmpty();
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertFocused(ROUTE_PAGE);
@@ -679,6 +693,11 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     @SuppressWarnings("unchecked")
+    private static boolean nativeToolkit() {
+        return "native".equalsIgnoreCase(System.getProperty(
+                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
+    }
+
     private void assertNoBrowserFailures() {
         if (page != null && !page.isClosed()) {
             final var recorded = (List<Object>) page.evaluate("() => globalThis.__causewayPlaywrightFailures ?? []");

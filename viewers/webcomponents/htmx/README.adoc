@@ -24,19 +24,38 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.language` defaults to `en`.
 `causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
-`causeway.viewer.webcomponents.htmx.vaadin-reference-widgets` defaults to `false` and explicitly enables the internal free-core reference-widget pilot.
-`causeway.viewer.webcomponents.htmx.vaadin-field-families` defaults to empty and accepts a unique comma-separated subset of `basic`, `numeric`, and `local-temporal`.
-Unknown, blank, or repeated family entries fail bounded configuration rather than broadening policy.
+`causeway.viewer.webcomponents.htmx.editor-toolkit` accepts `vaadin` or `native` and defaults to `vaadin`.
+The Vaadin policy enables qualified reference, basic, numeric, and local-temporal internal adapters, while the native policy is the immediate complete rollback.
+`causeway.viewer.webcomponents.htmx.vaadin-reference-widgets` and `causeway.viewer.webcomponents.htmx.vaadin-field-families` remain readable for a bounded deprecation period.
+When the common property is explicit it wins over both deprecated properties.
+When the common property is absent but either deprecated property is explicit, the complete former policy is preserved: references default false and field families default empty unless their corresponding old value is supplied.
+Unknown, blank, or repeated deprecated family entries fail bounded configuration rather than broadening policy.
 `causeway.viewer.webcomponents.htmx.reference-minimum-search-length` defaults to `2`.
 `causeway.viewer.webcomponents.htmx.reference-maximum-results` defaults to `50` and is the requested page-size fallback for advertised GraphQL autocomplete windows as well as the accepted complete-response bound for legacy non-windowed autocomplete.
 An advertised field's smaller introspected default window size takes precedence.
 
+[source,properties]
+----
+# Supported default
+causeway.viewer.webcomponents.htmx.editor-toolkit=vaadin
+
+# Immediate rollback and diagnostic comparison
+causeway.viewer.webcomponents.htmx.editor-toolkit=native
+----
+
 The complete shell applies a restrictive same-origin content-security policy and returns `private, no-store`.
-The default policy and asset requests remain unchanged while the pilot is disabled.
-When a Vaadin reference or field family is enabled, the policy adds the deterministic deduplicated union of only its reviewed byte-exact `style-src` and `style-src-elem` SHA-256 sources, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
+The default Vaadin policy adds the deterministic deduplicated union of only the reviewed byte-exact `style-src` and `style-src-elem` SHA-256 sources, retains `style-src-attr 'none'`, and never adds `unsafe-inline`.
 The reference, basic, numeric, and local-temporal JavaScript closures remain independently route-lazy and are requested only when an eligible semantic editor is instantiated.
-Disabling every policy restores the native strict policy without changing routes or GraphQL.
+Landing, read-only, and otherwise unaffected routes therefore make zero Vaadin asset requests even though their policy permits reviewed hashes.
+The native policy removes every Vaadin hash and asset request without changing routes, GraphQL, persisted data, or application markup.
 Applications adding other third-party resources must deliberately supply an equivalent deployment policy rather than weakening this module silently.
+
+== Toolkit release obligations
+
+The default toolkit is supported only through the checked-in selective reference and field closures.
+A dependency update must regenerate and review npm integrity, package entry points, production licenses, telemetry opt-out, raw and gzip budgets, SHA-256 checksums, exact style hashes, and same-origin assets as one change.
+Release qualification runs deterministic build verification, zero-vulnerability production audit, enforcing CSP, axe, keyboard, focus, responsive, light, dark, reduced-motion, forced-colors, console, page-error, external-request, overflow, Petclinic, vanilla sample, Reference Application, and explicit-native rollback gates.
+A failed closure retains its existing Causeway-owned native fallback; a deployment can roll back all adapters with the common native property without changing routes, GraphQL, persisted values, or application markup.
 
 == Canonical routes
 
@@ -108,3 +127,4 @@ See `../sample-htmx-petclinic/PROVENANCE.adoc` for the pinned Apache Petclinic s
 The module does not add routing awareness to `<causeway-object>`.
 It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, or define Vue and Svelte lifecycle APIs.
 It does not require applications that use only the component library to adopt HTMX, Wicket, Petclinic, or the default theme.
+The default toolkit policy adds no Grid query contract, upload adapter, unsupported temporal adapter, Flow, Binder, Pro component, server-side Vaadin state, telemetry, CDN asset, or application-facing raw Vaadin API.

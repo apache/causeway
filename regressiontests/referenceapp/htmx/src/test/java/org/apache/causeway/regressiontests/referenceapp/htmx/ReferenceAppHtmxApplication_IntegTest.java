@@ -92,11 +92,15 @@ class ReferenceAppHtmxApplication_IntegTest {
         assertThat(shell.headers().firstValue("content-security-policy").orElse(""))
                 .contains("default-src 'self'")
                 .contains("style-src-attr 'none'")
+                .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
                 .doesNotContain("unsafe-inline");
         assertThat(shell.body())
                 .contains("<causeway-menubars>")
                 .contains("id=\"causeway-route\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
+                .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-reference-widgets=\"vaadin\"")
+                .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"")
                 .contains("Compare Wicket viewer");
 
         final JsonNode root = graphQL("{__typename}");

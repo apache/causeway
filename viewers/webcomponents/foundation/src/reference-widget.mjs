@@ -10,19 +10,20 @@ import {escapeHtml} from './rendering.mjs';
 
 const DEFAULT_MODULE_URL = new URL('./vaadin-reference/vaadin-reference.js', import.meta.url).href;
 const DEFAULT_CONFIGURATION = Object.freeze({
-  enabled: false,
+  enabled: true,
   maximumResults: 50,
   minimumSearchLength: 2,
   moduleUrl: DEFAULT_MODULE_URL
 });
 let configuration = DEFAULT_CONFIGURATION;
-let candidateModulePromise;
+let referenceModulePromise;
 
-if (globalThis.document?.documentElement?.dataset?.causewayReferenceWidgets === 'vaadin') {
+const documentPolicy = globalThis.document?.documentElement?.dataset;
+if (documentPolicy && Object.hasOwn(documentPolicy, 'causewayReferenceWidgets')) {
   configureCausewayReferenceWidgets({
-    enabled: true,
-    minimumSearchLength: Number(globalThis.document.documentElement.dataset.causewayReferenceMinimumSearchLength),
-    maximumResults: Number(globalThis.document.documentElement.dataset.causewayReferenceMaximumResults)
+    enabled: documentPolicy.causewayReferenceWidgets === 'vaadin',
+    minimumSearchLength: Number(documentPolicy.causewayReferenceMinimumSearchLength),
+    maximumResults: Number(documentPolicy.causewayReferenceMaximumResults)
   });
 }
 
@@ -33,7 +34,7 @@ export function configureCausewayReferenceWidgets(options = {}) {
     minimumSearchLength: nonNegativeInteger(options.minimumSearchLength, DEFAULT_CONFIGURATION.minimumSearchLength),
     moduleUrl: options.moduleUrl ? new URL(options.moduleUrl, globalThis.document?.baseURI ?? import.meta.url).href : DEFAULT_MODULE_URL
   });
-  candidateModulePromise = undefined;
+  referenceModulePromise = undefined;
   return configuration;
 }
 
@@ -124,8 +125,8 @@ export class CausewayReferenceEditorElement extends HTMLElement {
 
   async #upgrade(generation) {
     try {
-      candidateModulePromise ??= import(configuration.moduleUrl);
-      await candidateModulePromise;
+      referenceModulePromise ??= import(configuration.moduleUrl);
+      await referenceModulePromise;
       if (!this.isConnected || generation !== this._generation) return;
       const tagName = this.hasAttribute('multiple') ? 'vaadin-multi-select-combo-box' : 'vaadin-combo-box';
       await globalThis.customElements.whenDefined(tagName);
@@ -165,9 +166,9 @@ export class CausewayReferenceEditorElement extends HTMLElement {
     } catch (error) {
       if (!this.isConnected || generation !== this._generation) return;
       configuration = Object.freeze({...configuration, enabled: false});
-      candidateModulePromise = undefined;
+      referenceModulePromise = undefined;
       this.dataset.widgetState = 'fallback';
-      this.dataset.widgetError = error?.message ?? 'Candidate module failed to load.';
+      this.dataset.widgetError = 'The configured reference adapter could not be loaded.';
       this.dispatchEvent(new CustomEvent('causeway-reference-load-failed', {
         bubbles: true,
         composed: true,
@@ -286,7 +287,7 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       option.selected = multiple
         ? (Array.isArray(this._value) && this._value.some(value => sameReference(value, item)))
         : sameReference(this._value, item);
-      select.append(option);
+      select.appendChild(option);
     }
     select.addEventListener('change', () => {
       this._value = multiple

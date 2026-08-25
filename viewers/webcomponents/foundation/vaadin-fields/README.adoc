@@ -38,5 +38,7 @@ Local time and local date-time values with more than millisecond fractional prec
 Blob, Clob, and local resource paths remain explicitly unsupported inputs until a reversible authoritative GraphQL upload contract exists.
 References retain their separately packaged closure.
 
-Disable all field families by leaving `causeway.viewer.webcomponents.htmx.vaadin-field-families` empty.
+Qualified field families are enabled by default and remain independently route-lazy.
+Set `causeway.viewer.webcomponents.htmx.editor-toolkit=native` to disable all Vaadin adapters immediately.
+The old field-family allow-list remains readable only during the documented compatibility period.
 A failing closure disables only its family for the current document and rerenders the existing native semantic editor.
