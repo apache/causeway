@@ -103,17 +103,11 @@
   font-size: 1rem;
 }
 
-.petclinic-page-toolbar,
-.petclinic-associated-actions {
+.petclinic-page-toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--causeway-space-2);
   align-items: center;
-}
-
-.petclinic-member-composition {
-  display: grid;
-  gap: var(--causeway-space-2);
 }
 
 body > nav > div > a > img,

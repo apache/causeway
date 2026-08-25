@@ -28,3 +28,12 @@ test('external structural stylesheet remains synchronized with the installable s
   const withoutLicense = external.slice(external.indexOf('causeway-object {')).trim();
   assert.equal(withoutLicense, CAUSEWAY_COMPONENT_STYLES.trim());
 });
+
+test('direct member associations wrap in semantic source and keyboard order', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-property\[data-causeway-action-group\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-collection\[data-causeway-action-group\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /> \.causeway-member-primary/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /> causeway-action\[data-causeway-associated-action\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /flex-wrap: wrap/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
+});
