@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -78,9 +79,23 @@ public class Department implements Comparable<Department> {
     @Getter @Setter
     private String name;
     @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(
+            named = "Rename department",
+            describedAs = "Changes the department display name")
     public class changeName {
 
-        public Department act(final String newName){
+        public Department act(
+                @Parameter(
+                        maxLength = 50,
+                        regexPattern = "[A-Za-z !]+",
+                        regexPatternFlags = java.util.regex.Pattern.CASE_INSENSITIVE)
+                @ParameterLayout(
+                        named = "Replacement name",
+                        describedAs = "New name for the department",
+                        multiLine = 2,
+                        typicalLength = 30)
+                final String newName){
+
             setName(newName);
             return Department.this;
         }
@@ -136,7 +151,10 @@ public class Department implements Comparable<Department> {
 
     // Presentation paging remains independent from the bounded GraphQL transport window.
     @Collection
-    @CollectionLayout(paged = 5)
+    @CollectionLayout(
+            named = "Department staff",
+            describedAs = "Staff assigned to this department",
+            paged = 5)
     public List<StaffMember> getStaffMembers() {
         return staffMembers.stream().sorted().collect(Collectors.toList());
     }

@@ -161,6 +161,7 @@ public class RichAction
 
     @Override
     protected void addDataFetchersForChildren() {
+        addMemberMetadataDataFetchers();
         if(hidden == null)
 			return;
         hidden.addDataFetcher(this);

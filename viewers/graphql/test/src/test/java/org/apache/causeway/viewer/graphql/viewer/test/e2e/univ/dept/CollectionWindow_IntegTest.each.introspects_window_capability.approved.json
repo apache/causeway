@@ -2,6 +2,18 @@
   "data" : {
     "collection" : {
       "fields" : [ {
+        "name" : "metadata",
+        "description" : "Canonical local member metadata.",
+        "args" : [ ],
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "OBJECT",
+            "name" : "RichMemberMetadata"
+          }
+        }
+      }, {
         "name" : "hidden",
         "description" : null,
         "args" : [ ],

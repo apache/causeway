@@ -167,6 +167,24 @@ type RICHSchema {
   university_dept_StaffMember(object: rich__university_dept_StaffMember__gqlv_input): rich__university_dept_StaffMember
 }
 
+"Canonical local metadata shared by known rich member wrappers."
+type RichMemberMetadata {
+  "Canonical translated description, or null."
+  description: String
+  "Canonical translated friendly name."
+  friendlyName: String!
+  "Finite maximum input length, or null."
+  maxLength: Int
+  "Requested multiline row count, or null."
+  multiLine: Int
+  "Java regular-expression text, or null."
+  pattern: String
+  "Java Pattern flags, or null."
+  patternFlags: Int
+  "Positive typical input length, or null."
+  typicalLength: Int
+}
+
 type SIMPLESchema {
   causeway_applib_DomainObjectList(object: simple__causeway_applib_DomainObjectList__gqlv_input): simple__causeway_applib_DomainObjectList
   causeway_applib_RoleMemento(object: simple__causeway_applib_RoleMemento__gqlv_input): simple__causeway_applib_RoleMemento
@@ -284,6 +302,8 @@ type rich__causeway_applib_DomainObjectList__actionArguments__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(actionArguments: String): rich__causeway_applib_DomainObjectList
   validate(actionArguments: String): String
 }
@@ -293,6 +313,8 @@ type rich__causeway_applib_DomainObjectList__actionId__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(actionId: String): rich__causeway_applib_DomainObjectList
   validate(actionId: String): String
 }
@@ -302,6 +324,8 @@ type rich__causeway_applib_DomainObjectList__actionOwningFqcn__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(actionOwningFqcn: String): rich__causeway_applib_DomainObjectList
   validate(actionOwningFqcn: String): String
 }
@@ -311,6 +335,8 @@ type rich__causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(elementTypeFqcn: String!): rich__causeway_applib_DomainObjectList
   validate(elementTypeFqcn: String): String
 }
@@ -330,6 +356,8 @@ type rich__causeway_applib_DomainObjectList__objects__gqlv_collection {
   datatype: String
   disabled: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
 }
 
 type rich__causeway_applib_RoleMemento {
@@ -346,6 +374,8 @@ type rich__causeway_applib_RoleMemento__description__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(description: String!): rich__causeway_applib_RoleMemento
   validate(description: String): String
 }
@@ -366,6 +396,8 @@ type rich__causeway_applib_RoleMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String!): rich__causeway_applib_RoleMemento
   validate(name: String): String
 }
@@ -402,6 +434,8 @@ type rich__causeway_applib_UserMemento__authenticationCode__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(authenticationCode: String!): rich__causeway_applib_UserMemento
   validate(authenticationCode: String): String
 }
@@ -412,6 +446,8 @@ type rich__causeway_applib_UserMemento__authenticationSource__gqlv_property {
   disabled: String
   get: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!): rich__causeway_applib_UserMemento
   validate(authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum): String
 }
@@ -421,6 +457,8 @@ type rich__causeway_applib_UserMemento__avatarUrl__gqlv_property {
   disabled: String
   get: Url
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(avatarUrl: Url): rich__causeway_applib_UserMemento
   validate(avatarUrl: Url): String
 }
@@ -441,6 +479,8 @@ type rich__causeway_applib_UserMemento__isImpersonating__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(isImpersonating: Boolean!): rich__causeway_applib_UserMemento
   validate(isImpersonating: Boolean): String
 }
@@ -450,6 +490,8 @@ type rich__causeway_applib_UserMemento__languageLocale__gqlv_property {
   disabled: String
   get: Locale
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(languageLocale: Locale): rich__causeway_applib_UserMemento
   validate(languageLocale: Locale): String
 }
@@ -460,6 +502,8 @@ type rich__causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(multiTenancyToken: String): rich__causeway_applib_UserMemento
   validate(multiTenancyToken: String): String
 }
@@ -470,6 +514,8 @@ type rich__causeway_applib_UserMemento__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String!): rich__causeway_applib_UserMemento
   validate(name: String): String
 }
@@ -479,6 +525,8 @@ type rich__causeway_applib_UserMemento__numberFormatLocale__gqlv_property {
   disabled: String
   get: Locale
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(numberFormatLocale: Locale): rich__causeway_applib_UserMemento
   validate(numberFormatLocale: Locale): String
 }
@@ -488,6 +536,8 @@ type rich__causeway_applib_UserMemento__realName__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(realName: String): rich__causeway_applib_UserMemento
   validate(realName: String): String
 }
@@ -498,6 +548,8 @@ type rich__causeway_applib_UserMemento__roles__gqlv_collection {
   disabled: String
   get: [rich__causeway_applib_RoleMemento]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -525,6 +577,8 @@ type rich__causeway_applib_UserMemento__timeFormatLocale__gqlv_property {
   disabled: String
   get: Locale
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(timeFormatLocale: Locale): rich__causeway_applib_UserMemento
   validate(timeFormatLocale: Locale): String
 }
@@ -539,6 +593,8 @@ type rich__causeway_applib_UserMenu__me__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__causeway_applib_UserMenu__me__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -556,6 +612,8 @@ type rich__causeway_conf_ConfigurationMenu__configuration__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__causeway_conf_ConfigurationMenu__configuration__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -589,6 +647,8 @@ type rich__causeway_conf_ConfigurationProperty__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(key: String!): rich__causeway_conf_ConfigurationProperty
   validate(key: String): String
 }
@@ -598,6 +658,8 @@ type rich__causeway_conf_ConfigurationProperty__value__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(value: String!): rich__causeway_conf_ConfigurationProperty
   validate(value: String): String
 }
@@ -618,6 +680,8 @@ type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -656,6 +720,8 @@ type rich__causeway_conf_ConfigurationViewmodel__primary__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -683,6 +749,8 @@ type rich__causeway_conf_ConfigurationViewmodel__secondary__gqlv_collection {
   disabled: String
   get: [rich__causeway_conf_ConfigurationProperty]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -734,6 +802,8 @@ type rich__causeway_feat_ApplicationFeatureViewModel__memberName__gqlv_property 
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(memberName: String): String
 }
@@ -743,6 +813,8 @@ type rich__causeway_feat_ApplicationFeatureViewModel__namespaceName__gqlv_proper
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(namespaceName: String): String
 }
@@ -752,6 +824,8 @@ type rich__causeway_feat_ApplicationFeatureViewModel__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -761,6 +835,8 @@ type rich__causeway_feat_ApplicationFeatureViewModel__typeSimpleName__gqlv_prope
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union
   validate(typeSimpleName: String): String
 }
@@ -785,6 +861,8 @@ type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -823,6 +901,8 @@ type rich__causeway_feat_ApplicationNamespace__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationNamespace
   validate(memberName: String): String
 }
@@ -832,6 +912,8 @@ type rich__causeway_feat_ApplicationNamespace__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationNamespace
   validate(namespaceName: String): String
 }
@@ -841,6 +923,8 @@ type rich__causeway_feat_ApplicationNamespace__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationNamespace
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -850,6 +934,8 @@ type rich__causeway_feat_ApplicationNamespace__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationNamespace
   validate(typeSimpleName: String): String
 }
@@ -896,6 +982,8 @@ type rich__causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
   disabled: String
   get: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum!): rich__causeway_feat_ApplicationTypeAction
   validate(actionSemantics: rich__causeway_applib_annotation_SemanticsOf__gqlv_enum): String
 }
@@ -916,6 +1004,8 @@ type rich__causeway_feat_ApplicationTypeAction__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(memberName: String): String
 }
@@ -925,6 +1015,8 @@ type rich__causeway_feat_ApplicationTypeAction__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(namespaceName: String): String
 }
@@ -934,6 +1026,8 @@ type rich__causeway_feat_ApplicationTypeAction__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeAction
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -943,6 +1037,8 @@ type rich__causeway_feat_ApplicationTypeAction__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(returnType: String!): rich__causeway_feat_ApplicationTypeAction
   validate(returnType: String): String
 }
@@ -952,6 +1048,8 @@ type rich__causeway_feat_ApplicationTypeAction__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeAction
   validate(typeSimpleName: String): String
 }
@@ -978,6 +1076,8 @@ type rich__causeway_feat_ApplicationTypeCollection__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(derived: Boolean!): rich__causeway_feat_ApplicationTypeCollection
   validate(derived: Boolean): String
 }
@@ -987,6 +1087,8 @@ type rich__causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(elementType: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(elementType: String): String
 }
@@ -1007,6 +1109,8 @@ type rich__causeway_feat_ApplicationTypeCollection__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(memberName: String): String
 }
@@ -1016,6 +1120,8 @@ type rich__causeway_feat_ApplicationTypeCollection__namespaceName__gqlv_property
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(namespaceName: String): String
 }
@@ -1025,6 +1131,8 @@ type rich__causeway_feat_ApplicationTypeCollection__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeCollection
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -1034,6 +1142,8 @@ type rich__causeway_feat_ApplicationTypeCollection__typeSimpleName__gqlv_propert
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeCollection
   validate(typeSimpleName: String): String
 }
@@ -1067,6 +1177,8 @@ type rich__causeway_feat_ApplicationTypeMember__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(memberName: String): String
 }
@@ -1076,6 +1188,8 @@ type rich__causeway_feat_ApplicationTypeMember__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(namespaceName: String): String
 }
@@ -1085,6 +1199,8 @@ type rich__causeway_feat_ApplicationTypeMember__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -1094,6 +1210,8 @@ type rich__causeway_feat_ApplicationTypeMember__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeMember__gqlv_union
   validate(typeSimpleName: String): String
 }
@@ -1124,6 +1242,8 @@ type rich__causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
   disabled: String
   get: Boolean!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(derived: Boolean!): rich__causeway_feat_ApplicationTypeProperty
   validate(derived: Boolean): String
 }
@@ -1144,6 +1264,8 @@ type rich__causeway_feat_ApplicationTypeProperty__maxLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(maxLength: Int): rich__causeway_feat_ApplicationTypeProperty
   validate(maxLength: Int): String
 }
@@ -1153,6 +1275,8 @@ type rich__causeway_feat_ApplicationTypeProperty__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(memberName: String): String
 }
@@ -1162,6 +1286,8 @@ type rich__causeway_feat_ApplicationTypeProperty__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(namespaceName: String): String
 }
@@ -1171,6 +1297,8 @@ type rich__causeway_feat_ApplicationTypeProperty__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationTypeProperty
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -1180,6 +1308,8 @@ type rich__causeway_feat_ApplicationTypeProperty__returnType__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(returnType: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(returnType: String): String
 }
@@ -1189,6 +1319,8 @@ type rich__causeway_feat_ApplicationTypeProperty__typeSimpleName__gqlv_property 
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationTypeProperty
   validate(typeSimpleName: String): String
 }
@@ -1198,6 +1330,8 @@ type rich__causeway_feat_ApplicationTypeProperty__typicalLength__gqlv_property {
   disabled: String
   get: Int
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typicalLength: Int): rich__causeway_feat_ApplicationTypeProperty
   validate(typicalLength: Int): String
 }
@@ -1207,6 +1341,8 @@ type rich__causeway_feat_ApplicationType__actions__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeAction]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -1234,6 +1370,8 @@ type rich__causeway_feat_ApplicationType__collections__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeCollection]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -1272,6 +1410,8 @@ type rich__causeway_feat_ApplicationType__memberName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(memberName: String!): rich__causeway_feat_ApplicationType
   validate(memberName: String): String
 }
@@ -1281,6 +1421,8 @@ type rich__causeway_feat_ApplicationType__namespaceName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(namespaceName: String!): rich__causeway_feat_ApplicationType
   validate(namespaceName: String): String
 }
@@ -1290,6 +1432,8 @@ type rich__causeway_feat_ApplicationType__parent__gqlv_property {
   disabled: String
   get: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_union!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input!): rich__causeway_feat_ApplicationType
   validate(parent: rich__causeway_feat_ApplicationFeatureViewModel__gqlv_input): String
 }
@@ -1299,6 +1443,8 @@ type rich__causeway_feat_ApplicationType__properties__gqlv_collection {
   disabled: String
   get: [rich__causeway_feat_ApplicationTypeProperty]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -1326,6 +1472,8 @@ type rich__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationType
   validate(typeSimpleName: String): String
 }
@@ -1346,6 +1494,8 @@ type rich__causeway_metamodel_MetamodelInspectView__details__gqlv_property {
   disabled: String
   get: Markup!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(details: UnsupportedValue!): rich__causeway_metamodel_MetamodelInspectView
   validate(details: UnsupportedValue): String
 }
@@ -1365,6 +1515,8 @@ type rich__causeway_metamodel_MetamodelInspectView__inspect__fullyQualifiedClass
   datatype: String
   disabled(fullyQualifiedClassName: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(fullyQualifiedClassName: String): String
 }
 
@@ -1373,6 +1525,8 @@ type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(fullyQualifiedClassName: String!): rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_params
   validate(fullyQualifiedClassName: String): String
@@ -1399,6 +1553,8 @@ type rich__causeway_metamodel_MetamodelInspectView__tree__gqlv_property {
   disabled: String
   get: UnsupportedValue!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(tree: UnsupportedValue!): rich__causeway_metamodel_MetamodelInspectView
   validate(tree: UnsupportedValue): String
 }
@@ -1428,6 +1584,8 @@ type rich__causeway_security_LogoutMenu__logout__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__causeway_security_LogoutMenu__logout__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -1454,6 +1612,8 @@ type rich__causeway_testing_fixtures_FixtureResult__className__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(className: String!): rich__causeway_testing_fixtures_FixtureResult
   validate(className: String): String
 }
@@ -1463,6 +1623,8 @@ type rich__causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
   validate(fixtureScriptClassName: String): String
 }
@@ -1483,6 +1645,8 @@ type rich__causeway_testing_fixtures_FixtureResult__key__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(key: String!): rich__causeway_testing_fixtures_FixtureResult
   validate(key: String): String
 }
@@ -1491,6 +1655,8 @@ type rich__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   datatype: String
   disabled: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(object: UnsupportedValue!): rich__causeway_testing_fixtures_FixtureResult
   validate(object: UnsupportedValue): String
 }
@@ -1630,6 +1796,8 @@ type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__tree__gql
   disabled: String
   get: UnsupportedValue!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(tree: UnsupportedValue!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_union
   validate(tree: UnsupportedValue): String
 }
@@ -1648,6 +1816,8 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(friendlyName: String): String
 }
@@ -1668,6 +1838,8 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(qualifiedName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(qualifiedName: String): String
 }
@@ -1687,6 +1859,8 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__firstParam__gqlv
   datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(firstParam: String): String
 }
 
@@ -1694,6 +1868,8 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(firstParam: String!, secondParam: String!, thirdParameter: String!): rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_admin_AdminMenu__actionWithDisabledParam__gqlv_action_params
   validate(firstParam: String, secondParam: String, thirdParameter: String): String
@@ -1725,6 +1901,8 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__secondParam__gql
   datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(firstParam: String, secondParam: String): String
 }
 
@@ -1732,6 +1910,8 @@ type rich__university_admin_AdminMenu__actionWithDisabledParam__thirdParameter__
   datatype: String
   disabled(firstParam: String, secondParam: String, thirdParameter: String): String
   hidden(firstParam: String, secondParam: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(firstParam: String, secondParam: String, thirdParameter: String): String
 }
 
@@ -1739,6 +1919,8 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__firstParam__gqlv_a
   datatype: String
   disabled(firstParam: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(firstParam: String): String
 }
 
@@ -1746,6 +1928,8 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(firstParam: String!, secondParam: String!): rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_admin_AdminMenu__actionWithHiddenParam__gqlv_action_params
   validate(firstParam: String, secondParam: String): String
@@ -1774,6 +1958,8 @@ type rich__university_admin_AdminMenu__actionWithHiddenParam__secondParam__gqlv_
   datatype: String
   disabled(firstParam: String, secondParam: String): String
   hidden(firstParam: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(firstParam: String, secondParam: String): String
 }
 
@@ -1781,6 +1967,8 @@ type rich__university_admin_AdminMenu__adminAction__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent: rich__university_admin_AdminMenu__adminAction__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -1793,6 +1981,8 @@ type rich__university_admin_AdminMenu__otherAdminAction__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent: rich__university_admin_AdminMenu__otherAdminAction__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -1914,6 +2104,8 @@ type rich__university_calc_Calculator__addBigDecimals__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): rich__university_calc_Calculator__addBigDecimals__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addBigDecimals__gqlv_action_params
   validate(x: String, y: String): String
@@ -1942,6 +2134,8 @@ type rich__university_calc_Calculator__addBigDecimals__x__gqlv_action_parameter 
   datatype: String
   disabled(x: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String): String
 }
 
@@ -1949,6 +2143,8 @@ type rich__university_calc_Calculator__addBigDecimals__y__gqlv_action_parameter 
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String, y: String): String
 }
 
@@ -1956,6 +2152,8 @@ type rich__university_calc_Calculator__addBigIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): rich__university_calc_Calculator__addBigIntegers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addBigIntegers__gqlv_action_params
   validate(x: String, y: String): String
@@ -1984,6 +2182,8 @@ type rich__university_calc_Calculator__addBigIntegers__x__gqlv_action_parameter 
   datatype: String
   disabled(x: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String): String
 }
 
@@ -1991,6 +2191,8 @@ type rich__university_calc_Calculator__addBigIntegers__y__gqlv_action_parameter 
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String, y: String): String
 }
 
@@ -1998,6 +2200,8 @@ type rich__university_calc_Calculator__addByteWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte): rich__university_calc_Calculator__addByteWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addByteWrappers__gqlv_action_params
   validate(x: Byte, y: Byte): String
@@ -2026,6 +2230,8 @@ type rich__university_calc_Calculator__addByteWrappers__x__gqlv_action_parameter
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte): String
 }
 
@@ -2033,6 +2239,8 @@ type rich__university_calc_Calculator__addByteWrappers__y__gqlv_action_parameter
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte, y: Byte): String
 }
 
@@ -2040,6 +2248,8 @@ type rich__university_calc_Calculator__addBytes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte!): rich__university_calc_Calculator__addBytes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addBytes__gqlv_action_params
   validate(x: Byte, y: Byte): String
@@ -2068,6 +2278,8 @@ type rich__university_calc_Calculator__addBytes__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte): String
 }
 
@@ -2075,6 +2287,8 @@ type rich__university_calc_Calculator__addBytes__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte, y: Byte): String
 }
 
@@ -2082,6 +2296,8 @@ type rich__university_calc_Calculator__addDoubleWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): rich__university_calc_Calculator__addDoubleWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addDoubleWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -2110,6 +2326,8 @@ type rich__university_calc_Calculator__addDoubleWrappers__x__gqlv_action_paramet
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -2117,6 +2335,8 @@ type rich__university_calc_Calculator__addDoubleWrappers__y__gqlv_action_paramet
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -2124,6 +2344,8 @@ type rich__university_calc_Calculator__addDoubles__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): rich__university_calc_Calculator__addDoubles__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addDoubles__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -2152,6 +2374,8 @@ type rich__university_calc_Calculator__addDoubles__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -2159,6 +2383,8 @@ type rich__university_calc_Calculator__addDoubles__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -2166,6 +2392,8 @@ type rich__university_calc_Calculator__addFloatWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): rich__university_calc_Calculator__addFloatWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addFloatWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -2194,6 +2422,8 @@ type rich__university_calc_Calculator__addFloatWrappers__x__gqlv_action_paramete
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -2201,6 +2431,8 @@ type rich__university_calc_Calculator__addFloatWrappers__y__gqlv_action_paramete
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -2208,6 +2440,8 @@ type rich__university_calc_Calculator__addFloats__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): rich__university_calc_Calculator__addFloats__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addFloats__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -2236,6 +2470,8 @@ type rich__university_calc_Calculator__addFloats__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -2243,6 +2479,8 @@ type rich__university_calc_Calculator__addFloats__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -2250,6 +2488,8 @@ type rich__university_calc_Calculator__addIntegerWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int): rich__university_calc_Calculator__addIntegerWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addIntegerWrappers__gqlv_action_params
   validate(x: Int, y: Int): String
@@ -2278,6 +2518,8 @@ type rich__university_calc_Calculator__addIntegerWrappers__x__gqlv_action_parame
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int): String
 }
 
@@ -2285,6 +2527,8 @@ type rich__university_calc_Calculator__addIntegerWrappers__y__gqlv_action_parame
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int, y: Int): String
 }
 
@@ -2292,6 +2536,8 @@ type rich__university_calc_Calculator__addIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int!): rich__university_calc_Calculator__addIntegers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addIntegers__gqlv_action_params
   validate(x: Int, y: Int): String
@@ -2320,6 +2566,8 @@ type rich__university_calc_Calculator__addIntegers__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int): String
 }
 
@@ -2327,6 +2575,8 @@ type rich__university_calc_Calculator__addIntegers__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int, y: Int): String
 }
 
@@ -2334,6 +2584,8 @@ type rich__university_calc_Calculator__addShortWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short): rich__university_calc_Calculator__addShortWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addShortWrappers__gqlv_action_params
   validate(x: Short, y: Short): String
@@ -2362,6 +2614,8 @@ type rich__university_calc_Calculator__addShortWrappers__x__gqlv_action_paramete
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short): String
 }
 
@@ -2369,6 +2623,8 @@ type rich__university_calc_Calculator__addShortWrappers__y__gqlv_action_paramete
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short, y: Short): String
 }
 
@@ -2376,6 +2632,8 @@ type rich__university_calc_Calculator__addShorts__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short!): rich__university_calc_Calculator__addShorts__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__addShorts__gqlv_action_params
   validate(x: Short, y: Short): String
@@ -2404,6 +2662,8 @@ type rich__university_calc_Calculator__addShorts__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short): String
 }
 
@@ -2411,6 +2671,8 @@ type rich__university_calc_Calculator__addShorts__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short, y: Short): String
 }
 
@@ -2418,6 +2680,8 @@ type rich__university_calc_Calculator__and__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): rich__university_calc_Calculator__and__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__and__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
@@ -2446,6 +2710,8 @@ type rich__university_calc_Calculator__and__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -2453,6 +2719,8 @@ type rich__university_calc_Calculator__and__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean, y: Boolean): String
 }
 
@@ -2460,6 +2728,8 @@ type rich__university_calc_Calculator__concat__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(prefix: String!, suffix: String): rich__university_calc_Calculator__concat__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__concat__gqlv_action_params
   validate(prefix: String, suffix: String): String
@@ -2488,6 +2758,8 @@ type rich__university_calc_Calculator__concat__prefix__gqlv_action_parameter {
   datatype: String
   disabled(prefix: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(prefix: String): String
 }
 
@@ -2495,6 +2767,8 @@ type rich__university_calc_Calculator__concat__suffix__gqlv_action_parameter {
   datatype: String
   disabled(prefix: String, suffix: String): String
   hidden(prefix: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(prefix: String, suffix: String): String
 }
 
@@ -2502,6 +2776,8 @@ type rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_acti
   disabled: String
   hidden: Boolean
   invokeNonIdempotent: rich__university_calc_Calculator__createEditableMementoViewModel__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -2514,6 +2790,8 @@ type rich__university_calc_Calculator__createSharedViewModel__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent: rich__university_calc_Calculator__createSharedViewModel__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -2526,6 +2804,8 @@ type rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: ApplicationFeatureId!): rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoApplicationFeatureId__gqlv_action_params
   validate(value: ApplicationFeatureId): String
@@ -2551,6 +2831,8 @@ type rich__university_calc_Calculator__echoApplicationFeatureId__value__gqlv_act
   datatype: String
   disabled(value: ApplicationFeatureId): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: ApplicationFeatureId): String
 }
 
@@ -2558,6 +2840,8 @@ type rich__university_calc_Calculator__echoBlob__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: BlobInput!): rich__university_calc_Calculator__echoBlob__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoBlob__gqlv_action_params
   validate(value: BlobInput): String
@@ -2585,6 +2869,8 @@ type rich__university_calc_Calculator__echoBlob__value__gqlv_action_parameter {
   fileAccept: String
   hidden: Boolean
   inlineInputMaxBytes: Int
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   resourceInputMode: String
   validity(value: BlobInput): String
 }
@@ -2593,6 +2879,8 @@ type rich__university_calc_Calculator__echoBookmark__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: Bookmark!): rich__university_calc_Calculator__echoBookmark__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoBookmark__gqlv_action_params
   validate(value: Bookmark): String
@@ -2618,6 +2906,8 @@ type rich__university_calc_Calculator__echoBookmark__value__gqlv_action_paramete
   datatype: String
   disabled(value: Bookmark): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: Bookmark): String
 }
 
@@ -2625,6 +2915,8 @@ type rich__university_calc_Calculator__echoClob__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: ClobInput!): rich__university_calc_Calculator__echoClob__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoClob__gqlv_action_params
   validate(value: ClobInput): String
@@ -2652,6 +2944,8 @@ type rich__university_calc_Calculator__echoClob__value__gqlv_action_parameter {
   fileAccept: String
   hidden: Boolean
   inlineInputMaxBytes: Int
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   resourceInputMode: String
   validity(value: ClobInput): String
 }
@@ -2660,6 +2954,8 @@ type rich__university_calc_Calculator__echoComplexNumber__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: ComplexNumber!): rich__university_calc_Calculator__echoComplexNumber__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoComplexNumber__gqlv_action_params
   validate(value: ComplexNumber): String
@@ -2685,6 +2981,8 @@ type rich__university_calc_Calculator__echoComplexNumber__value__gqlv_action_par
   datatype: String
   disabled(value: ComplexNumber): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: ComplexNumber): String
 }
 
@@ -2692,6 +2990,8 @@ type rich__university_calc_Calculator__echoIdentifier__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoIdentifier__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoIdentifier__gqlv_action_params
   validate(value: UnsupportedValue): String
@@ -2717,6 +3017,8 @@ type rich__university_calc_Calculator__echoIdentifier__value__gqlv_action_parame
   datatype: String
   disabled(value: UnsupportedValue): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: UnsupportedValue): String
 }
 
@@ -2724,6 +3026,8 @@ type rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: SqlDate!): rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoJavaSqlDate__gqlv_action_params
   validate(value: SqlDate): String
@@ -2749,6 +3053,8 @@ type rich__university_calc_Calculator__echoJavaSqlDate__value__gqlv_action_param
   datatype: String
   disabled(value: SqlDate): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: SqlDate): String
 }
 
@@ -2756,6 +3062,8 @@ type rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: SqlTime!): rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoJavaSqlTime__gqlv_action_params
   validate(value: SqlTime): String
@@ -2781,6 +3089,8 @@ type rich__university_calc_Calculator__echoJavaSqlTime__value__gqlv_action_param
   datatype: String
   disabled(value: SqlTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: SqlTime): String
 }
 
@@ -2788,6 +3098,8 @@ type rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: SqlTimestamp!): rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoJavaSqlTimestamp__gqlv_action_params
   validate(value: SqlTimestamp): String
@@ -2813,6 +3125,8 @@ type rich__university_calc_Calculator__echoJavaSqlTimestamp__value__gqlv_action_
   datatype: String
   disabled(value: SqlTimestamp): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: SqlTimestamp): String
 }
 
@@ -2820,6 +3134,8 @@ type rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: LegacyDateTime!): rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoJavaUtilDate__gqlv_action_params
   validate(value: LegacyDateTime): String
@@ -2845,6 +3161,8 @@ type rich__university_calc_Calculator__echoJavaUtilDate__value__gqlv_action_para
   datatype: String
   disabled(value: LegacyDateTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: LegacyDateTime): String
 }
 
@@ -2852,6 +3170,8 @@ type rich__university_calc_Calculator__echoLocalDateTime__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: LocalDateTime!): rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoLocalDateTime__gqlv_action_params
   validate(value: LocalDateTime): String
@@ -2877,6 +3197,8 @@ type rich__university_calc_Calculator__echoLocalDateTime__value__gqlv_action_par
   datatype: String
   disabled(value: LocalDateTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: LocalDateTime): String
 }
 
@@ -2884,6 +3206,8 @@ type rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: LocalResourcePathInput!): rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoLocalResourcePath__gqlv_action_params
   validate(value: LocalResourcePathInput): String
@@ -2909,6 +3233,8 @@ type rich__university_calc_Calculator__echoLocalResourcePath__value__gqlv_action
   datatype: String
   disabled(value: LocalResourcePathInput): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: LocalResourcePathInput): String
 }
 
@@ -2916,6 +3242,8 @@ type rich__university_calc_Calculator__echoLocale__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: Locale!): rich__university_calc_Calculator__echoLocale__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoLocale__gqlv_action_params
   validate(value: Locale): String
@@ -2941,6 +3269,8 @@ type rich__university_calc_Calculator__echoLocale__value__gqlv_action_parameter 
   datatype: String
   disabled(value: Locale): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: Locale): String
 }
 
@@ -2948,6 +3278,8 @@ type rich__university_calc_Calculator__echoMarkup__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoMarkup__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoMarkup__gqlv_action_params
   validate(value: UnsupportedValue): String
@@ -2973,6 +3305,8 @@ type rich__university_calc_Calculator__echoMarkup__value__gqlv_action_parameter 
   datatype: String
   disabled(value: UnsupportedValue): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: UnsupportedValue): String
 }
 
@@ -2980,6 +3314,8 @@ type rich__university_calc_Calculator__echoPassword__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: Password!): rich__university_calc_Calculator__echoPassword__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoPassword__gqlv_action_params
   validate(value: Password): String
@@ -3005,6 +3341,8 @@ type rich__university_calc_Calculator__echoPassword__value__gqlv_action_paramete
   datatype: String
   disabled(value: Password): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: Password): String
 }
 
@@ -3012,6 +3350,8 @@ type rich__university_calc_Calculator__echoUnmappedValue__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: UnsupportedValue!): rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoUnmappedValue__gqlv_action_params
   validate(value: UnsupportedValue): String
@@ -3037,6 +3377,8 @@ type rich__university_calc_Calculator__echoUnmappedValue__value__gqlv_action_par
   datatype: String
   disabled(value: UnsupportedValue): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: UnsupportedValue): String
 }
 
@@ -3044,6 +3386,8 @@ type rich__university_calc_Calculator__echoUrl__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: Url!): rich__university_calc_Calculator__echoUrl__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__echoUrl__gqlv_action_params
   validate(value: Url): String
@@ -3069,6 +3413,8 @@ type rich__university_calc_Calculator__echoUrl__value__gqlv_action_parameter {
   datatype: String
   disabled(value: Url): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: Url): String
 }
 
@@ -3076,6 +3422,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusDays__date__gqlv_action_para
   datatype: String
   disabled(date: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(date: String): String
 }
 
@@ -3083,6 +3431,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(date: String!, numDays: Int!): rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__jdk8LocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
@@ -3111,6 +3461,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusDays__numDays__gqlv_action_p
   datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(date: String, numDays: Int): String
 }
 
@@ -3118,6 +3470,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
@@ -3149,6 +3503,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numHours__g
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, time: String): String
 }
 
@@ -3156,6 +3512,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__numMinutes_
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
@@ -3163,6 +3521,8 @@ type rich__university_calc_Calculator__jdk8LocalPlusHoursAndMinutes__time__gqlv_
   datatype: String
   disabled(time: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(time: String): String
 }
 
@@ -3170,6 +3530,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__dat
   datatype: String
   disabled(dateTime: DateTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime): String
 }
 
@@ -3177,6 +3539,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gql
   disabled: String
   hidden: Boolean
   invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
@@ -3211,6 +3575,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__num
   datatype: String
   disabled(dateTime: DateTime, numDays: Int): String
   hidden(dateTime: DateTime): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int): String
 }
 
@@ -3218,6 +3584,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__num
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
   hidden(dateTime: DateTime, numDays: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int, numHours: Int): String
 }
 
@@ -3225,6 +3593,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusDaysAndHoursAndMinutes__num
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
@@ -3232,6 +3602,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_actio
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: Time!): rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: Time): String
@@ -3263,6 +3635,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numHours__
   datatype: String
   disabled(numHours: Int, time: Time): String
   hidden(time: Time): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, time: Time): String
 }
 
@@ -3270,6 +3644,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__numMinutes
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: Time): String
   hidden(numHours: Int, time: Time): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, numMinutes: Int, time: Time): String
 }
 
@@ -3277,6 +3653,8 @@ type rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__time__gqlv
   datatype: String
   disabled(time: Time): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(time: Time): String
 }
 
@@ -3284,6 +3662,8 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__date
   datatype: String
   disabled(dateTime: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String): String
 }
 
@@ -3291,6 +3671,8 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv
   disabled: String
   hidden: Boolean
   invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
@@ -3325,6 +3707,8 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numD
   datatype: String
   disabled(dateTime: String, numDays: Int): String
   hidden(dateTime: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int): String
 }
 
@@ -3332,6 +3716,8 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numH
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int): String
   hidden(dateTime: String, numDays: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int, numHours: Int): String
 }
 
@@ -3339,6 +3725,8 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numM
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
@@ -3346,6 +3734,8 @@ type rich__university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__university_calc_Calculator__nextMonth__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__nextMonth__gqlv_action_params
   validate(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
@@ -3372,6 +3762,8 @@ type rich__university_calc_Calculator__nextMonth__month__gqlv_action_parameter {
   datatype: String
   disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
@@ -3379,6 +3771,8 @@ type rich__university_calc_Calculator__not__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!): rich__university_calc_Calculator__not__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__not__gqlv_action_params
   validate(x: Boolean): String
@@ -3404,6 +3798,8 @@ type rich__university_calc_Calculator__not__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -3411,6 +3807,8 @@ type rich__university_calc_Calculator__optionalBlob__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: BlobInput): rich__university_calc_Calculator__optionalBlob__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__optionalBlob__gqlv_action_params
   validate(value: BlobInput): String
@@ -3438,6 +3836,8 @@ type rich__university_calc_Calculator__optionalBlob__value__gqlv_action_paramete
   fileAccept: String
   hidden: Boolean
   inlineInputMaxBytes: Int
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   resourceInputMode: String
   validity(value: BlobInput): String
 }
@@ -3446,6 +3846,8 @@ type rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(value: LocalDateTime): rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__optionalLocalDateTime__gqlv_action_params
   validate(value: LocalDateTime): String
@@ -3471,6 +3873,8 @@ type rich__university_calc_Calculator__optionalLocalDateTime__value__gqlv_action
   datatype: String
   disabled(value: LocalDateTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(value: LocalDateTime): String
 }
 
@@ -3478,6 +3882,8 @@ type rich__university_calc_Calculator__or__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): rich__university_calc_Calculator__or__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__or__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
@@ -3506,6 +3912,8 @@ type rich__university_calc_Calculator__or__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -3513,6 +3921,8 @@ type rich__university_calc_Calculator__or__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean, y: Boolean): String
 }
 
@@ -3520,6 +3930,8 @@ type rich__university_calc_Calculator__readSharedViewModel__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input!): rich__university_calc_Calculator__readSharedViewModel__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_Calculator__readSharedViewModel__gqlv_action_params
   validate(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
@@ -3546,6 +3958,8 @@ type rich__university_calc_Calculator__readSharedViewModel__viewModel__gqlv_acti
   datatype: String
   disabled(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(viewModel: rich__university_calc_EditableMementoViewModel__gqlv_input): String
 }
 
@@ -3553,6 +3967,8 @@ type rich__university_calc_Calculator__sampleBlob__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__sampleBlob__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3565,6 +3981,8 @@ type rich__university_calc_Calculator__sampleClob__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__sampleClob__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3577,6 +3995,8 @@ type rich__university_calc_Calculator__sampleIdentifier__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__sampleIdentifier__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3589,6 +4009,8 @@ type rich__university_calc_Calculator__sampleMarkup__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__sampleMarkup__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3601,6 +4023,8 @@ type rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__sampleUnmappedValue__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3613,6 +4037,8 @@ type rich__university_calc_Calculator__secretPassword__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__secretPassword__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3625,6 +4051,8 @@ type rich__university_calc_Calculator__someLocale__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__someLocale__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3637,6 +4065,8 @@ type rich__university_calc_Calculator__someUrl__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__someUrl__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3649,6 +4079,8 @@ type rich__university_calc_Calculator__someUuid__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_Calculator__someUuid__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -3669,6 +4101,8 @@ type rich__university_calc_EditableMementoViewModel__age__gqlv_property {
   disabled: String
   get: Int!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(age: Int!): rich__university_calc_EditableMementoViewModel
   validate(age: Int): String
 }
@@ -3693,6 +4127,8 @@ type rich__university_calc_I18nCalculator__concat__a1__gqlv_action_parameter {
   datatype: String
   disabled(a1: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(a1: String): String
 }
 
@@ -3700,6 +4136,8 @@ type rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter {
   datatype: String
   disabled(a1: String, a2: String): String
   hidden(a1: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(a1: String, a2: String): String
 }
 
@@ -3707,6 +4145,8 @@ type rich__university_calc_I18nCalculator__concat__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(a1: String!, a2: String!): rich__university_calc_I18nCalculator__concat__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_I18nCalculator__concat__gqlv_action_params
   validate(a1: String, a2: String): String
@@ -3790,6 +4230,8 @@ type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_params
   validate(x: String, y: String): String
@@ -3818,6 +4260,8 @@ type rich__university_calc_calculatorHyphenated__addBigDecimals__x__gqlv_action_
   datatype: String
   disabled(x: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String): String
 }
 
@@ -3825,6 +4269,8 @@ type rich__university_calc_calculatorHyphenated__addBigDecimals__y__gqlv_action_
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String, y: String): String
 }
 
@@ -3832,6 +4278,8 @@ type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: String!, y: String): rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_params
   validate(x: String, y: String): String
@@ -3860,6 +4308,8 @@ type rich__university_calc_calculatorHyphenated__addBigIntegers__x__gqlv_action_
   datatype: String
   disabled(x: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String): String
 }
 
@@ -3867,6 +4317,8 @@ type rich__university_calc_calculatorHyphenated__addBigIntegers__y__gqlv_action_
   datatype: String
   disabled(x: String, y: String): String
   hidden(x: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: String, y: String): String
 }
 
@@ -3874,6 +4326,8 @@ type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte): rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_params
   validate(x: Byte, y: Byte): String
@@ -3902,6 +4356,8 @@ type rich__university_calc_calculatorHyphenated__addByteWrappers__x__gqlv_action
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte): String
 }
 
@@ -3909,6 +4365,8 @@ type rich__university_calc_calculatorHyphenated__addByteWrappers__y__gqlv_action
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte, y: Byte): String
 }
 
@@ -3916,6 +4374,8 @@ type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Byte!, y: Byte!): rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_params
   validate(x: Byte, y: Byte): String
@@ -3944,6 +4404,8 @@ type rich__university_calc_calculatorHyphenated__addBytes__x__gqlv_action_parame
   datatype: String
   disabled(x: Byte): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte): String
 }
 
@@ -3951,6 +4413,8 @@ type rich__university_calc_calculatorHyphenated__addBytes__y__gqlv_action_parame
   datatype: String
   disabled(x: Byte, y: Byte): String
   hidden(x: Byte): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Byte, y: Byte): String
 }
 
@@ -3958,6 +4422,8 @@ type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action 
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -3986,6 +4452,8 @@ type rich__university_calc_calculatorHyphenated__addDoubleWrappers__x__gqlv_acti
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -3993,6 +4461,8 @@ type rich__university_calc_calculatorHyphenated__addDoubleWrappers__y__gqlv_acti
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -4000,6 +4470,8 @@ type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -4028,6 +4500,8 @@ type rich__university_calc_calculatorHyphenated__addDoubles__x__gqlv_action_para
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -4035,6 +4509,8 @@ type rich__university_calc_calculatorHyphenated__addDoubles__y__gqlv_action_para
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -4042,6 +4518,8 @@ type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float): rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -4070,6 +4548,8 @@ type rich__university_calc_calculatorHyphenated__addFloatWrappers__x__gqlv_actio
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -4077,6 +4557,8 @@ type rich__university_calc_calculatorHyphenated__addFloatWrappers__y__gqlv_actio
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -4084,6 +4566,8 @@ type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Float!, y: Float!): rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_params
   validate(x: Float, y: Float): String
@@ -4112,6 +4596,8 @@ type rich__university_calc_calculatorHyphenated__addFloats__x__gqlv_action_param
   datatype: String
   disabled(x: Float): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float): String
 }
 
@@ -4119,6 +4605,8 @@ type rich__university_calc_calculatorHyphenated__addFloats__y__gqlv_action_param
   datatype: String
   disabled(x: Float, y: Float): String
   hidden(x: Float): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Float, y: Float): String
 }
 
@@ -4126,6 +4614,8 @@ type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int): rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_params
   validate(x: Int, y: Int): String
@@ -4154,6 +4644,8 @@ type rich__university_calc_calculatorHyphenated__addIntegerWrappers__x__gqlv_act
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int): String
 }
 
@@ -4161,6 +4653,8 @@ type rich__university_calc_calculatorHyphenated__addIntegerWrappers__y__gqlv_act
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int, y: Int): String
 }
 
@@ -4168,6 +4662,8 @@ type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Int!, y: Int!): rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_params
   validate(x: Int, y: Int): String
@@ -4196,6 +4692,8 @@ type rich__university_calc_calculatorHyphenated__addIntegers__x__gqlv_action_par
   datatype: String
   disabled(x: Int): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int): String
 }
 
@@ -4203,6 +4701,8 @@ type rich__university_calc_calculatorHyphenated__addIntegers__y__gqlv_action_par
   datatype: String
   disabled(x: Int, y: Int): String
   hidden(x: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Int, y: Int): String
 }
 
@@ -4210,6 +4710,8 @@ type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short): rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_params
   validate(x: Short, y: Short): String
@@ -4238,6 +4740,8 @@ type rich__university_calc_calculatorHyphenated__addShortWrappers__x__gqlv_actio
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short): String
 }
 
@@ -4245,6 +4749,8 @@ type rich__university_calc_calculatorHyphenated__addShortWrappers__y__gqlv_actio
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short, y: Short): String
 }
 
@@ -4252,6 +4758,8 @@ type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Short!, y: Short!): rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_params
   validate(x: Short, y: Short): String
@@ -4280,6 +4788,8 @@ type rich__university_calc_calculatorHyphenated__addShorts__x__gqlv_action_param
   datatype: String
   disabled(x: Short): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short): String
 }
 
@@ -4287,6 +4797,8 @@ type rich__university_calc_calculatorHyphenated__addShorts__y__gqlv_action_param
   datatype: String
   disabled(x: Short, y: Short): String
   hidden(x: Short): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Short, y: Short): String
 }
 
@@ -4294,6 +4806,8 @@ type rich__university_calc_calculatorHyphenated__and__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): rich__university_calc_calculatorHyphenated__and__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__and__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
@@ -4322,6 +4836,8 @@ type rich__university_calc_calculatorHyphenated__and__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -4329,6 +4845,8 @@ type rich__university_calc_calculatorHyphenated__and__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean, y: Boolean): String
 }
 
@@ -4336,6 +4854,8 @@ type rich__university_calc_calculatorHyphenated__concat__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(prefix: String!, suffix: String): rich__university_calc_calculatorHyphenated__concat__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__concat__gqlv_action_params
   validate(prefix: String, suffix: String): String
@@ -4364,6 +4884,8 @@ type rich__university_calc_calculatorHyphenated__concat__prefix__gqlv_action_par
   datatype: String
   disabled(prefix: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(prefix: String): String
 }
 
@@ -4371,6 +4893,8 @@ type rich__university_calc_calculatorHyphenated__concat__suffix__gqlv_action_par
   datatype: String
   disabled(prefix: String, suffix: String): String
   hidden(prefix: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(prefix: String, suffix: String): String
 }
 
@@ -4378,6 +4902,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_a
   datatype: String
   disabled(date: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(date: String): String
 }
 
@@ -4385,6 +4911,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action 
   disabled: String
   hidden: Boolean
   invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
@@ -4413,6 +4941,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gql
   datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(date: String, numDays: Int): String
 }
 
@@ -4420,6 +4950,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__g
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
@@ -4451,6 +4983,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, time: String): String
 }
 
@@ -4458,6 +4992,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
@@ -4465,6 +5001,8 @@ type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__t
   datatype: String
   disabled(time: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(time: String): String
 }
 
@@ -4472,6 +5010,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   datatype: String
   disabled(dateTime: DateTime): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime): String
 }
 
@@ -4479,6 +5019,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   disabled: String
   hidden: Boolean
   invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
@@ -4513,6 +5055,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   datatype: String
   disabled(dateTime: DateTime, numDays: Int): String
   hidden(dateTime: DateTime): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int): String
 }
 
@@ -4520,6 +5064,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
   hidden(dateTime: DateTime, numDays: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int, numHours: Int): String
 }
 
@@ -4527,6 +5073,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMi
   datatype: String
   disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
@@ -4534,6 +5082,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: Time!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: Time): String
@@ -4565,6 +5115,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__
   datatype: String
   disabled(numHours: Int, time: Time): String
   hidden(time: Time): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, time: Time): String
 }
 
@@ -4572,6 +5124,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: Time): String
   hidden(numHours: Int, time: Time): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, numMinutes: Int, time: Time): String
 }
 
@@ -4579,6 +5133,8 @@ type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__
   datatype: String
   disabled(time: Time): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(time: Time): String
 }
 
@@ -4586,6 +5142,8 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   datatype: String
   disabled(dateTime: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String): String
 }
 
@@ -4593,6 +5151,8 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   disabled: String
   hidden: Boolean
   invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
@@ -4627,6 +5187,8 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   datatype: String
   disabled(dateTime: String, numDays: Int): String
   hidden(dateTime: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int): String
 }
 
@@ -4634,6 +5196,8 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int): String
   hidden(dateTime: String, numDays: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int, numHours: Int): String
 }
 
@@ -4641,6 +5205,8 @@ type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMin
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
@@ -4648,6 +5214,8 @@ type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__g
   disabled: String
   hidden: Boolean
   invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
@@ -4679,6 +5247,8 @@ type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, time: String): String
 }
 
@@ -4686,6 +5256,8 @@ type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__n
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(numHours: Int, numMinutes: Int, time: String): String
 }
 
@@ -4693,6 +5265,8 @@ type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__t
   datatype: String
   disabled(time: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(time: String): String
 }
 
@@ -4700,6 +5274,8 @@ type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_params
   validate(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
@@ -4726,6 +5302,8 @@ type rich__university_calc_calculatorHyphenated__nextMonth__month__gqlv_action_p
   datatype: String
   disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
 }
 
@@ -4733,6 +5311,8 @@ type rich__university_calc_calculatorHyphenated__not__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!): rich__university_calc_calculatorHyphenated__not__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__not__gqlv_action_params
   validate(x: Boolean): String
@@ -4758,6 +5338,8 @@ type rich__university_calc_calculatorHyphenated__not__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -4765,6 +5347,8 @@ type rich__university_calc_calculatorHyphenated__or__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(x: Boolean!, y: Boolean!): rich__university_calc_calculatorHyphenated__or__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_calc_calculatorHyphenated__or__gqlv_action_params
   validate(x: Boolean, y: Boolean): String
@@ -4793,6 +5377,8 @@ type rich__university_calc_calculatorHyphenated__or__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean): String
 }
 
@@ -4800,6 +5386,8 @@ type rich__university_calc_calculatorHyphenated__or__y__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean, y: Boolean): String
   hidden(x: Boolean): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(x: Boolean, y: Boolean): String
 }
 
@@ -4807,6 +5395,8 @@ type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_calculatorHyphenated__someLocale__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -4819,6 +5409,8 @@ type rich__university_calc_calculatorHyphenated__someUrl__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_calculatorHyphenated__someUrl__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -4831,6 +5423,8 @@ type rich__university_calc_calculatorHyphenated__someUuid__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_calc_calculatorHyphenated__someUuid__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -4849,7 +5443,7 @@ type rich__university_dept_Department {
   addStaffMembers: rich__university_dept_Department__addStaffMembers__gqlv_action
   "University department specializing in a field of study"
   changeDeptHead: rich__university_dept_Department__changeDeptHead__gqlv_action
-  "University department specializing in a field of study"
+  "Changes the department display name"
   changeName: rich__university_dept_Department__changeName__gqlv_action
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   configuredStaffMembers: rich__university_dept_Department__configuredStaffMembers__gqlv_collection
@@ -4869,7 +5463,7 @@ type rich__university_dept_Department {
   people: rich__university_dept_Department__people__gqlv_collection
   "University department specializing in a field of study"
   removeStaffMember: rich__university_dept_Department__removeStaffMember__gqlv_action
-  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  "Staff assigned to this department"
   staffMembers: rich__university_dept_Department__staffMembers__gqlv_collection
 }
 
@@ -4878,6 +5472,8 @@ type rich__university_dept_Department__addStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMember: rich__university_dept_StaffMember__gqlv_input!): rich__university_dept_Department__addStaffMember__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__addStaffMember__gqlv_action_params
   validate(staffMember: rich__university_dept_StaffMember__gqlv_input): String
@@ -4901,10 +5497,27 @@ type rich__university_dept_Department__addStaffMember__gqlv_action_params {
 
 type rich__university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter {
   autoComplete(search: String!): [rich__university_dept_StaffMember]
+  "Returns a bounded response window over one authoritative autocomplete execution; the configured maximum size is 100."
+  autoCompleteWindow(offset: Int! = 0, search: String!, size: Int! = 20): rich__university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter_autocomplete_window
   datatype: String
   disabled(staffMember: rich__university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(staffMember: rich__university_dept_StaffMember__gqlv_input): String
+}
+
+"A bounded response window over one Causeway autocomplete execution."
+type rich__university_dept_Department__addStaffMember__staffMember__gqlv_action_parameter_autocomplete_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  items: [rich__university_dept_StaffMember]
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_autocomplete_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  totalCount: Int!
 }
 
 "University department specializing in a field of study"
@@ -4912,6 +5525,8 @@ type rich__university_dept_Department__addStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): rich__university_dept_Department__addStaffMembers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__addStaffMembers__gqlv_action_params
   validate(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
@@ -4938,6 +5553,8 @@ type rich__university_dept_Department__addStaffMembers__staffMembers__gqlv_actio
   datatype: String
   disabled(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(staffMembers: [rich__university_dept_StaffMember__gqlv_input]): String
 }
 
@@ -4946,6 +5563,8 @@ type rich__university_dept_Department__changeDeptHead__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newDeptHead: rich__university_dept_DeptHead__gqlv_input!): rich__university_dept_Department__changeDeptHead__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__changeDeptHead__gqlv_action_params
   validate(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
@@ -4969,18 +5588,37 @@ type rich__university_dept_Department__changeDeptHead__gqlv_action_params {
 
 type rich__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter {
   autoComplete(search: String!): [rich__university_dept_DeptHead]
+  "Returns a bounded response window over one authoritative autocomplete execution; the configured maximum size is 100."
+  autoCompleteWindow(offset: Int! = 0, search: String!, size: Int! = 20): rich__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter_autocomplete_window
   datatype: String
   default: rich__university_dept_DeptHead
   disabled(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(newDeptHead: rich__university_dept_DeptHead__gqlv_input): String
 }
 
-"University department specializing in a field of study"
+"A bounded response window over one Causeway autocomplete execution."
+type rich__university_dept_Department__changeDeptHead__newDeptHead__gqlv_action_parameter_autocomplete_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  items: [rich__university_dept_DeptHead]
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_autocomplete_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  totalCount: Int!
+}
+
+"Changes the department display name"
 type rich__university_dept_Department__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newName: String!): rich__university_dept_Department__changeName__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__changeName__gqlv_action_params
   validate(newName: String): String
@@ -4998,7 +5636,7 @@ type rich__university_dept_Department__changeName__gqlv_action_invoke {
 }
 
 type rich__university_dept_Department__changeName__gqlv_action_params {
-  "New Name"
+  "New name for the department"
   newName: rich__university_dept_Department__changeName__newName__gqlv_action_parameter
 }
 
@@ -5007,6 +5645,8 @@ type rich__university_dept_Department__changeName__newName__gqlv_action_paramete
   default: String
   disabled(newName: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(newName: String): String
 }
 
@@ -5016,6 +5656,8 @@ type rich__university_dept_Department__configuredStaffMembers__gqlv_collection {
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5041,12 +5683,29 @@ type rich__university_dept_Department__configuredStaffMembers__gqlv_collection_w
 "Departmental head, responsible for curriculum, research, funding and staff"
 type rich__university_dept_Department__deptHead__gqlv_property {
   autoComplete(search: String!): [rich__university_dept_DeptHead]
+  "Returns a bounded response window over one authoritative autocomplete execution; the configured maximum size is 100."
+  autoCompleteWindow(offset: Int! = 0, search: String!, size: Int! = 20): rich__university_dept_Department__deptHead__gqlv_property_autocomplete_window
   datatype: String
   disabled: String
   get: rich__university_dept_DeptHead
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(deptHead: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_Department
   validate(deptHead: rich__university_dept_DeptHead__gqlv_input): String
+}
+
+"A bounded response window over one Causeway autocomplete execution."
+type rich__university_dept_Department__deptHead__gqlv_property_autocomplete_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  items: [rich__university_dept_DeptHead]
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_autocomplete_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  totalCount: Int!
 }
 
 "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
@@ -5055,6 +5714,8 @@ type rich__university_dept_Department__disabledStaffMembers__gqlv_collection {
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5095,6 +5756,8 @@ type rich__university_dept_Department__hiddenStaffMembers__gqlv_collection {
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5121,6 +5784,8 @@ type rich__university_dept_Department__inspectPeople__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(people: [rich__university_dept_Person__gqlv_input]): rich__university_dept_Department__inspectPeople__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__inspectPeople__gqlv_action_params
   validate(people: [rich__university_dept_Person__gqlv_input]): String
@@ -5147,6 +5812,8 @@ type rich__university_dept_Department__inspectPeople__people__gqlv_action_parame
   datatype: String
   disabled(people: [rich__university_dept_Person__gqlv_input]): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(people: [rich__university_dept_Person__gqlv_input]): String
 }
 
@@ -5156,6 +5823,8 @@ type rich__university_dept_Department__instrumentedStaffMembers__gqlv_collection
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5183,6 +5852,8 @@ type rich__university_dept_Department__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String!): rich__university_dept_Department
   validate(name: String): String
 }
@@ -5192,6 +5863,8 @@ type rich__university_dept_Department__people__gqlv_collection {
   disabled: String
   get: [rich__university_dept_Person__gqlv_union]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5219,6 +5892,8 @@ type rich__university_dept_Department__removeStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(staffMember: rich__university_dept_StaffMember__gqlv_input!): rich__university_dept_Department__removeStaffMember__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Department__removeStaffMember__gqlv_action_params
   validate(staffMember: rich__university_dept_StaffMember__gqlv_input): String
@@ -5245,15 +5920,19 @@ type rich__university_dept_Department__removeStaffMember__staffMember__gqlv_acti
   datatype: String
   disabled(staffMember: rich__university_dept_StaffMember__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(staffMember: rich__university_dept_StaffMember__gqlv_input): String
 }
 
-"Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+"Staff assigned to this department"
 type rich__university_dept_Department__staffMembers__gqlv_collection {
   datatype: String
   disabled: String
   get: [rich__university_dept_StaffMember]
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Returns a bounded zero-based collection window; the configured maximum size is 100."
   window(
     "Zero-based row offset."
@@ -5287,10 +5966,27 @@ type rich__university_dept_Departments {
 
 type rich__university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter {
   autoComplete(name: String, search: String!): [rich__university_dept_DeptHead]
+  "Returns a bounded response window over one authoritative autocomplete execution; the configured maximum size is 100."
+  autoCompleteWindow(name: String, offset: Int! = 0, search: String!, size: Int! = 20): rich__university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter_autocomplete_window
   datatype: String
   disabled(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
   hidden(name: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
+}
+
+"A bounded response window over one Causeway autocomplete execution."
+type rich__university_dept_Departments__createDepartment__deptHead__gqlv_action_parameter_autocomplete_window {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  items: [rich__university_dept_DeptHead]
+  maximumSize: Int!
+  offset: Int!
+  ordering: rich__gqlv_autocomplete_window_ordering!
+  requestedSize: Int!
+  returnedCount: Int!
+  totalCount: Int!
 }
 
 "University department specializing in a field of study"
@@ -5298,6 +5994,8 @@ type rich__university_dept_Departments__createDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String!): rich__university_dept_Departments__createDepartment__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Departments__createDepartment__gqlv_action_params
   validate(deptHead: rich__university_dept_DeptHead__gqlv_input, name: String): String
@@ -5326,6 +6024,8 @@ type rich__university_dept_Departments__createDepartment__name__gqlv_action_para
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -5334,6 +6034,8 @@ type rich__university_dept_Departments__findAllDepartments__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_dept_Departments__findAllDepartments__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -5347,6 +6049,8 @@ type rich__university_dept_Departments__findDepartmentByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): rich__university_dept_Departments__findDepartmentByName__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Departments__findDepartmentByName__gqlv_action_params
   validate(name: String): String
@@ -5372,6 +6076,8 @@ type rich__university_dept_Departments__findDepartmentByName__name__gqlv_action_
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -5394,6 +6100,8 @@ type rich__university_dept_DeptHead__changeDepartment__department__gqlv_action_p
   datatype: String
   disabled(department: rich__university_dept_Department__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(department: rich__university_dept_Department__gqlv_input): String
 }
 
@@ -5402,6 +6110,8 @@ type rich__university_dept_DeptHead__changeDepartment__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(department: rich__university_dept_Department__gqlv_input!): rich__university_dept_DeptHead__changeDepartment__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_DeptHead__changeDepartment__gqlv_action_params
   validate(department: rich__university_dept_Department__gqlv_input): String
@@ -5428,6 +6138,8 @@ type rich__university_dept_DeptHead__changeName__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeIdempotent(newName: String!): rich__university_dept_DeptHead__changeName__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_DeptHead__changeName__gqlv_action_params
   validate(newName: String): String
@@ -5454,6 +6166,8 @@ type rich__university_dept_DeptHead__changeName__newName__gqlv_action_parameter 
   default: String
   disabled(newName: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(newName: String): String
 }
 
@@ -5464,6 +6178,8 @@ type rich__university_dept_DeptHead__department__gqlv_property {
   disabled: String
   get: rich__university_dept_Department
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_DeptHead
   validate(department: rich__university_dept_Department__gqlv_input): String
 }
@@ -5485,6 +6201,8 @@ type rich__university_dept_DeptHead__name__gqlv_property {
   disabled: String
   get: String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String): rich__university_dept_DeptHead
   validate(name: String): String
 }
@@ -5501,6 +6219,8 @@ type rich__university_dept_DeptHeads__findAllHeads__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_dept_DeptHeads__findAllHeads__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -5514,6 +6234,8 @@ type rich__university_dept_DeptHeads__findHeadByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): rich__university_dept_DeptHeads__findHeadByName__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_DeptHeads__findHeadByName__gqlv_action_params
   validate(name: String): String
@@ -5539,6 +6261,8 @@ type rich__university_dept_DeptHeads__findHeadByName__name__gqlv_action_paramete
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -5553,6 +6277,8 @@ type rich__university_dept_People__findNamed__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): rich__university_dept_People__findNamed__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_People__findNamed__gqlv_action_params
   validate(name: String): String
@@ -5578,6 +6304,8 @@ type rich__university_dept_People__findNamed__name__gqlv_action_parameter {
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -5585,6 +6313,8 @@ type rich__university_dept_People__nameOf__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(person: rich__university_dept_Person__gqlv_input!): rich__university_dept_People__nameOf__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_People__nameOf__gqlv_action_params
   validate(person: rich__university_dept_Person__gqlv_input): String
@@ -5610,6 +6340,8 @@ type rich__university_dept_People__nameOf__person__gqlv_action_parameter {
   datatype: String
   disabled(person: rich__university_dept_Person__gqlv_input): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(person: rich__university_dept_Person__gqlv_input): String
 }
 
@@ -5636,6 +6368,8 @@ type rich__university_dept_Person__name__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String!): rich__university_dept_Person__gqlv_union
   validate(name: String): String
 }
@@ -5659,7 +6393,7 @@ type rich__university_dept_StaffMember {
   grade: rich__university_dept_StaffMember__grade__gqlv_property
   "Hidden Photo"
   hiddenPhoto: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property
-  "Name"
+  "Name shown for the staff member"
   name: rich__university_dept_StaffMember__name__gqlv_property
   "Photo"
   photo: rich__university_dept_StaffMember__photo__gqlv_property
@@ -5676,6 +6410,8 @@ type rich__university_dept_StaffMember__department__gqlv_property {
   disabled: String
   get: rich__university_dept_Department
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(department: rich__university_dept_Department__gqlv_input): rich__university_dept_StaffMember
   validate(department: rich__university_dept_Department__gqlv_input): String
 }
@@ -5698,6 +6434,8 @@ type rich__university_dept_StaffMember__grade__gqlv_property {
   disabled: String
   get: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum!): rich__university_dept_StaffMember
   validate(grade: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_dept_Grade__gqlv_enum): String
 }
@@ -5707,6 +6445,8 @@ type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(hiddenPhoto: BlobInput!): rich__university_dept_StaffMember
   validate(hiddenPhoto: BlobInput): String
 }
@@ -5721,11 +6461,14 @@ type rich__university_dept_StaffMember__hiddenPhoto__gqlv_property_lob {
   transferMode: String
 }
 
+"Name shown for the staff member"
 type rich__university_dept_StaffMember__name__gqlv_property {
   datatype: String
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(name: String!): rich__university_dept_StaffMember
   validate(name: String): String
 }
@@ -5735,6 +6478,8 @@ type rich__university_dept_StaffMember__photo__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__photo__gqlv_property_lob
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(photo: BlobInput): rich__university_dept_StaffMember
   validate(photo: BlobInput): String
 }
@@ -5754,6 +6499,8 @@ type rich__university_dept_StaffMember__profile__gqlv_property {
   disabled: String
   get: rich__university_dept_StaffMember__profile__gqlv_property_lob
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(profile: ClobInput!): rich__university_dept_StaffMember
   validate(profile: ClobInput): String
 }
@@ -5774,6 +6521,8 @@ type rich__university_dept_StaffMember__windowProbe__gqlv_property {
   disabled: String
   get: String!
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   set(windowProbe: String!): rich__university_dept_StaffMember
   validate(windowProbe: String): String
 }
@@ -5783,6 +6532,8 @@ type rich__university_dept_Staff__createStaffMember__department__gqlv_action_par
   datatype: String
   disabled(department: rich__university_dept_Department__gqlv_input, name: String): String
   hidden(name: String): Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(department: rich__university_dept_Department__gqlv_input, name: String): String
 }
 
@@ -5791,6 +6542,8 @@ type rich__university_dept_Staff__createStaffMember__gqlv_action {
   disabled: String
   hidden: Boolean
   invokeNonIdempotent(department: rich__university_dept_Department__gqlv_input!, name: String!): rich__university_dept_Staff__createStaffMember__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Staff__createStaffMember__gqlv_action_params
   validate(department: rich__university_dept_Department__gqlv_input, name: String): String
@@ -5819,6 +6572,8 @@ type rich__university_dept_Staff__createStaffMember__name__gqlv_action_parameter
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -5827,6 +6582,8 @@ type rich__university_dept_Staff__findAllStaffMembers__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke: rich__university_dept_Staff__findAllStaffMembers__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validate: String
 }
 
@@ -5840,6 +6597,8 @@ type rich__university_dept_Staff__findStaffMemberByName__gqlv_action {
   disabled: String
   hidden: Boolean
   invoke(name: String!): rich__university_dept_Staff__findStaffMemberByName__gqlv_action_invoke
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   "Parameters of this action"
   params: rich__university_dept_Staff__findStaffMemberByName__gqlv_action_params
   validate(name: String): String
@@ -5865,6 +6624,8 @@ type rich__university_dept_Staff__findStaffMemberByName__name__gqlv_action_param
   datatype: String
   disabled(name: String): String
   hidden: Boolean
+  "Canonical local member metadata."
+  metadata: RichMemberMetadata!
   validity(name: String): String
 }
 
@@ -6522,7 +7283,7 @@ type simple__university_dept_Department {
   addStaffMembers(staffMembers: [simple__university_dept_StaffMember__gqlv_input]): simple__university_dept_Department
   "University department specializing in a field of study"
   changeDeptHead(newDeptHead: simple__university_dept_DeptHead__gqlv_input!): simple__university_dept_Department
-  "University department specializing in a field of study"
+  "Changes the department display name"
   changeName(newName: String!): simple__university_dept_Department
   "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
   configuredStaffMembers: [simple__university_dept_StaffMember]
@@ -6540,7 +7301,7 @@ type simple__university_dept_Department {
   people: [simple__university_dept_Person]
   "University department specializing in a field of study"
   removeStaffMember(staffMember: simple__university_dept_StaffMember__gqlv_input!): simple__university_dept_Department
-  "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews"
+  "Staff assigned to this department"
   staffMembers: [simple__university_dept_StaffMember]
 }
 
@@ -6739,6 +7500,12 @@ enum rich__gqlv_application_home_kind {
   OBJECT
 }
 
+"How autocomplete items were ordered before selecting a response window."
+enum rich__gqlv_autocomplete_window_ordering {
+  "The authoritative application autocomplete encounter order for this execution."
+  APPLICATION
+}
+
 "How rows were ordered before selecting a collection window."
 enum rich__gqlv_collection_window_ordering {
   "A Causeway configured comparator was applied."
@@ -6787,7 +7554,7 @@ scalar Byte
 "Application-defined reversible complex number in algebraic form, such as 3+4i or 3-4i."
 scalar ComplexNumber
 
-"A slightly refined version of RFC-3339 compliant DateTime Scalar"
+"An ISO-8601 date-time with an explicit offset; fractional seconds are preserved."
 scalar DateTime
 
 "An ISO-8601 UTC instant used for java.util.Date."
@@ -6817,7 +7584,7 @@ scalar SqlTime
 "An ISO-8601 local date-time used for java.sql.Timestamp; fractional seconds are preserved."
 scalar SqlTimestamp
 
-"An RFC-3339 compliant Full Time Scalar"
+"An ISO-8601 time with an explicit offset; fractional seconds are preserved."
 scalar Time
 
 "A universally unique identifier compliant UUID Scalar"

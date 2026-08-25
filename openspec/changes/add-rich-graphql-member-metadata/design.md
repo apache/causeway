@@ -31,16 +31,18 @@ Resource `fileAccept` metadata is already exposed for Blob and Clob property rea
 
 ### Extend only existing known wrappers
 
-`friendlyName` and `description` are direct scalar children of rich property, collection, action, and action-parameter wrapper types.
-`maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength` are direct scalar children only of rich property and action-parameter wrappers.
+One non-null `metadata` field is added to rich property, collection, action, and action-parameter wrapper types.
+The shared metadata object contains `friendlyName`, `description`, `maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength`.
+Constraint fields are populated only for property and action-parameter wrappers and are null for collection and action wrappers.
 Clients discover semantic wrapper and member IDs through standard targeted introspection and request only metadata they need.
 No aggregate metadata catalogue or member-list field is added.
 
-### Prefer direct scalar fields over a descriptor object
+### Use exactly one shared descriptor type
 
-A shared Java helper constructs direct metadata fields while each generated wrapper keeps its existing type.
-This introduces no new GraphQL object type and avoids a descriptor source object, additional resolver layer, or metadata type-version contract.
-The trade-off is several additional scalar field definitions on property and parameter wrapper types, which schema-size and startup evidence must measure.
+An initial direct-scalar prototype added no GraphQL object type but increased the representative generated SDL by 114,954 bytes, or 40.4 percent.
+The accepted design instead adds exactly one `RichMemberMetadata` object type and one metadata field per known wrapper.
+The accepted prototype increases the representative SDL by 23,784 bytes, or 8.4 percent, while keeping all seven scalar definitions in one reusable type.
+Metadata resolvers return request-local maps so the shared fields use GraphQL's default property fetcher and do not add a resolver layer per scalar.
 
 ### Separate names and descriptions
 
@@ -78,7 +80,7 @@ Dynamic `hidden`, `disabled`, validation, and invocation results remain authorit
 
 ## Risks / Trade-offs
 
-- [Scalar fields enlarge generated SDL] → Measure type count, SDL bytes, schema startup, and enforce that no GraphQL object type is added by metadata itself.
+- [Wrapper metadata fields enlarge generated SDL] → Measure type count, SDL bytes, schema startup, and enforce that exactly one shared GraphQL object type is added.
 - [Java regular expressions are not JavaScript patterns] → Label `patternFlags` explicitly as Java flags and keep server validation authoritative.
 - [Runtime localization can affect caching] → Resolve suppliers during field execution and test two request locales without caching one locale globally.
 - [Static metadata can conflict with dynamic state] → Keep hidden, disabled, validation, and invocation outcomes authoritative.

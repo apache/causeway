@@ -70,9 +70,10 @@ public class RichActionParamsParam
     private final RichActionParamsParamDefault default_;
     private final RichActionParamsParamValidate validate;
     private final RichActionParamsParamDatatype datatype;
-    private final RichResourceMetadataField resourceFileAccept;
-    private final RichResourceMetadataField resourceInputMaxBytes;
-    private final RichResourceMetadataField resourceInputMode;
+    private final RichMemberMetadata metadata;
+    private final RichScalarMetadataField resourceFileAccept;
+    private final RichScalarMetadataField resourceInputMaxBytes;
+    private final RichScalarMetadataField resourceInputMode;
 
     public RichActionParamsParam(
             final ActionInteractor holder,
@@ -93,6 +94,7 @@ public class RichActionParamsParam
             this.default_ = null;
             this.validate = null;
             this.datatype = null;
+            this.metadata = null;
             this.resourceFileAccept = null;
             this.resourceInputMaxBytes = null;
             this.resourceInputMode = null;
@@ -103,6 +105,7 @@ public class RichActionParamsParam
 
         addChildFieldFor(this.hidden = new RichActionParamsParamHidden(this, context));
         addChildFieldFor(this.disabled = new RichActionParamsParamDisabled(this, context));
+        addChildFieldFor(this.metadata = new RichMemberMetadata(context, oap, true));
         addChildFieldFor(this.choices = new RichActionParamsParamChoices(this, context));
         addChildFieldFor(this.autoComplete = new RichActionParamsParamAutoComplete(this, context));
         addChildFieldFor(this.autoCompleteWindow = oap.hasAutoComplete()
@@ -114,21 +117,21 @@ public class RichActionParamsParam
 
         var resourceParameter = ResourceValueTypes.isResourceType(oap.getElementType().getCorrespondingClass());
         addChildFieldFor(this.resourceFileAccept = resourceParameter
-                ? new RichResourceMetadataField(
+                ? new RichScalarMetadataField(
                         context,
                         "fileAccept",
                         Scalars.GraphQLString,
                         () -> ResourceValueTypes.fileAccept(oap).orElse(null))
                 : null);
         addChildFieldFor(this.resourceInputMaxBytes = resourceParameter
-                ? new RichResourceMetadataField(
+                ? new RichScalarMetadataField(
                         context,
                         "inlineInputMaxBytes",
                         Scalars.GraphQLInt,
                         () -> context.causewayConfiguration.viewer().graphql().resources().inlineInputMaxBytes())
                 : null);
         addChildFieldFor(this.resourceInputMode = resourceParameter
-                ? new RichResourceMetadataField(
+                ? new RichScalarMetadataField(
                         context,
                         "resourceInputMode",
                         Scalars.GraphQLString,
@@ -157,6 +160,7 @@ public class RichActionParamsParam
 
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
+        metadata.addDataFetcher(this);
 
         if (choices != null) {
             choices.addDataFetcher(this);

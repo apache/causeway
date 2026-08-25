@@ -67,6 +67,7 @@ public class RichCollection
 
     @Override
     protected void addDataFetchersForChildren() {
+        addMemberMetadataDataFetchers();
         if(hidden == null) {
             return;
         }
