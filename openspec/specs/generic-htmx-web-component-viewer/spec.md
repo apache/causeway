@@ -287,53 +287,6 @@ Canonical route meaning, custom-page precedence, and generic `<causeway-object>`
 - **THEN** logical route identity and custom-versus-generic resolution have the same semantic outcome
 - **AND** framework-specific lifecycle mechanics remain internal to that viewer
 
-### Requirement: Opt-in route-lazy reference widget delivery
-The generic HTMX viewer SHALL load the candidate reference-widget closure only when explicit configuration and an eligible semantic reference editor require it.
-Generic routes, custom object fragments, menus, and shell behavior that do not use the pilot MUST remain independent of candidate readiness and requests.
-
-#### Scenario: Route contains an enabled candidate reference editor
-- **WHEN** route rendering encounters the first eligible explicitly enabled reference editor
-- **THEN** the viewer resolves the same-origin packaged candidate entry lazily and upgrades the internal editor
-- **AND** the route retains one disposable Causeway context and existing canonical navigation
-
-#### Scenario: Route contains no candidate editor
-- **WHEN** a generic or custom route uses existing editors or no reference input
-- **THEN** the browser requests no Vaadin asset
-- **AND** viewer readiness, menu behavior, custom-fragment composition, and route replacement remain unchanged
-
-#### Scenario: Candidate loading fails
-- **WHEN** the route-lazy asset cannot load, initialize, satisfy CSP, or pass supported-browser checks
-- **THEN** the viewer uses the existing reference editor or presents a Causeway-owned recoverable failure according to configuration
-- **AND** does not leave an unupgraded raw toolkit tag as ordinary domain UI
-
-### Requirement: Production CSP compatibility for candidate widgets
-The generic HTMX viewer SHALL preserve a documented security-reviewed Content Security Policy when the candidate pilot is enabled.
-The viewer MUST test component connection, overlay operation, interaction, responsive layout, and route disposal with zero unexpected policy violations and MUST NOT require blanket inline-style permission.
-
-#### Scenario: Production-like CSP journey runs
-- **WHEN** Petclinic exercises single and multi-reference candidate states under the documented production-like policy
-- **THEN** browser violation events, console output, requests, overlays, focus, overflow, and viewer readiness satisfy the accepted baseline
-- **AND** the journey fails on any unclassified or newly introduced violation
-
-#### Scenario: Application does not enable the pilot
-- **WHEN** an application retains default viewer configuration
-- **THEN** its CSP, browser assets, routes, semantic markup, and custom fragment contract remain unchanged
-- **AND** no Vaadin dependency is required at browser runtime
-
-### Requirement: Sample-scoped pilot qualification
-Petclinic and the vanilla HTML sample SHALL exercise the candidate pilot as explicit qualification consumers before any wider default adoption.
-Their browser evidence MUST cover semantic correctness, keyboard operation, accessibility, narrow and themed presentation, cancellation, repeated route replacement, external-request isolation, and rollback.
-
-#### Scenario: Sample qualification passes
-- **WHEN** the complete pilot acceptance suite runs headlessly
-- **THEN** existing viewer tests and candidate-specific CSP, accessibility, lifecycle, package, bundle, and interaction assertions pass
-- **AND** results distinguish adapter defects, toolkit defects, content exceptions, and unsupported GraphQL behavior
-
-#### Scenario: Sample qualification fails
-- **WHEN** a hard gate, budget, existing viewer regression, or unsupported production behavior is detected
-- **THEN** the pilot remains disabled outside analysis or sample troubleshooting
-- **AND** the existing editor remains the supported viewer behavior
-
 ### Requirement: Executable Reference Application regression qualification
 The generic HTMX viewer SHALL be qualified against the pinned broad Reference Application regression corpus in addition to the focused Petclinic acceptance application.
 Qualification MUST preserve the public GraphQL data plane, semantic Causeway components, canonical routes, strict security boundaries, route disposal, and viewer-owned presentation policy.
@@ -353,40 +306,83 @@ Qualification MUST preserve the public GraphQL data plane, semantic Causeway com
 - **THEN** representative menus, layouts, values, properties, actions, references, collections, navigation, security, accessibility, and lifecycle journeys pass their accepted classifications
 - **AND** unexpected GraphQL failures, browser errors, CSP violations, external requests, stale state, focus loss, overlay leaks, or overflow fail the suite
 
-### Requirement: Explicit route-lazy field-family delivery
-The HTMX shell SHALL expose an explicit bounded allow-list for qualified Vaadin field families and SHALL leave that allow-list empty by default during qualification.
-It MUST serve each reviewed family closure from same-origin packaged resources only when an eligible internal adapter requests it.
+### Requirement: Common internal editor toolkit policy
+The HTMX viewer SHALL expose `causeway.viewer.webcomponents.htmx.editor-toolkit` with the bounded values `vaadin` and `native` and SHALL default effectively to `vaadin`.
+An explicitly configured common policy MUST take precedence over deprecated reference-widget and field-family properties.
 
-#### Scenario: No field family is enabled
-- **WHEN** the HTMX viewer uses default configuration
-- **THEN** the shell advertises no Vaadin field-family policy
-- **AND** scalar, numeric, and temporal interactions request zero field-family assets
+#### Scenario: No toolkit property is configured
+- **WHEN** an application starts without the common or deprecated toolkit properties
+- **THEN** the resolved policy enables qualified reference, basic, numeric, and local-temporal Vaadin adapters
+- **AND** unsupported shapes and failed closures retain native or explicit unsupported presentation
 
-#### Scenario: Selected families are enabled
-- **WHEN** configuration enables basic and local-temporal but not numeric fields
-- **THEN** the shell advertises only the normalized supported family names
-- **AND** numeric members retain native editors and make zero numeric-closure requests
+#### Scenario: Native policy is explicit
+- **WHEN** `editor-toolkit=native` is configured
+- **THEN** the shell explicitly disables reference and field Vaadin adapters and emits no Vaadin CSP hashes
+- **AND** routes request no reference or field-family closure
 
-#### Scenario: Configured value is invalid
-- **WHEN** the configured family list contains an unknown or malformed family name
-- **THEN** viewer startup or policy rendering rejects it with a bounded configuration error
-- **AND** the shell does not emit an ambiguous or broadened allow-list
+#### Scenario: Common policy overrides deprecated properties
+- **WHEN** the common property and one or both deprecated properties are configured with conflicting values
+- **THEN** the resolved common policy determines references, every qualified field family, and CSP hashes
+- **AND** the deprecated values cannot create a mixed or broadened policy
 
-### Requirement: Exact-hash field-family CSP
-The HTMX response CSP SHALL add only the reviewed style hashes needed by explicitly enabled Vaadin reference and field closures.
-It MUST retain `style-src-attr 'none'`, same-origin script and connection policy, and no `unsafe-inline` source.
+#### Scenario: Only deprecated properties are configured
+- **WHEN** the common property is absent and either deprecated property is explicitly configured
+- **THEN** the viewer preserves the former complete policy in which references default false and field families default empty unless their corresponding old value is supplied
+- **AND** shell diagnostics identify compatibility policy without changing application markup
 
-#### Scenario: One field family is enabled
-- **WHEN** an HTMX response enables one reviewed field family
-- **THEN** `style-src` and `style-src-elem` include that family's exact accepted hash set
-- **AND** omit hashes used only by disabled families where the generated policy distinguishes them
+#### Scenario: Toolkit value is invalid
+- **WHEN** configuration supplies a value other than `vaadin` or `native`
+- **THEN** configuration binding rejects it with a bounded error
+- **AND** the viewer does not silently select a broader policy
 
-#### Scenario: Multiple families are enabled
-- **WHEN** several reviewed families are enabled
-- **THEN** the response contains the deterministic deduplicated union of their accepted hashes
-- **AND** policy output remains stable across repeated renders
+### Requirement: Default route-lazy toolkit delivery
+The generic HTMX viewer SHALL enable every qualified packaged adapter by default without eagerly importing any reference or field-family closure.
+A closure MUST load only after an eligible connected Causeway editor selects its internal adapter.
 
-#### Scenario: Native rollback is configured
-- **WHEN** reference and field Vaadin policies are all disabled
-- **THEN** the response returns to the native strict policy without Vaadin hashes
-- **AND** no route, GraphQL endpoint, application stylesheet, or canonical identity changes
+#### Scenario: Route contains one eligible family
+- **WHEN** the first editor eligible for one default family connects
+- **THEN** only that family's same-origin closure is requested and upgraded
+- **AND** route readiness and other families do not wait for it
+
+#### Scenario: Route contains no eligible editor
+- **WHEN** a landing, menu-only, read-only, custom, or other unaffected route renders
+- **THEN** it requests zero reference, basic, numeric, and local-temporal Vaadin assets
+- **AND** default CSP hash permission does not cause a network request
+
+#### Scenario: One family fails
+- **WHEN** a default family closure fails to load or define its controls
+- **THEN** its existing Causeway failure boundary activates the matching native implementation
+- **AND** other family closures remain independently eligible and lazy
+
+### Requirement: Supported exact-hash toolkit CSP
+The HTMX response CSP SHALL include only the generated reviewed style-hash union for the resolved internal toolkit policy.
+It MUST retain `style-src-attr 'none'`, same-origin script and connection sources, and no `unsafe-inline` source.
+
+#### Scenario: Default policy renders CSP
+- **WHEN** the effective policy is the supported Vaadin default
+- **THEN** `style-src` and `style-src-elem` contain the deterministic deduplicated reference and field-family hash union
+- **AND** every hash corresponds to pinned generated policy metadata
+
+#### Scenario: Deprecated subset policy renders CSP
+- **WHEN** compatibility mode enables only a subset of old adapters
+- **THEN** CSP contains exactly the reviewed union required by that resolved subset
+- **AND** disabled-family-only hashes are absent where generated policy distinguishes them
+
+#### Scenario: Native policy renders CSP
+- **WHEN** the effective common policy is native
+- **THEN** CSP contains no Vaadin style hash
+- **AND** route, GraphQL, application stylesheet, and canonical identity policy remains unchanged
+
+### Requirement: Supported default and native release qualification
+The viewer SHALL treat default-Vaadin and explicit-native modes as supported release configurations rather than sample-scoped pilot modes.
+Petclinic, the vanilla sample, the pinned Reference Application, deterministic packaging, strict CSP, accessibility, browser isolation, bundle budgets, licenses, vulnerabilities, and ordinary Maven packaging MUST remain passing gates.
+
+#### Scenario: Default release matrix runs
+- **WHEN** release qualification runs with no toolkit override
+- **THEN** eligible reference and field journeys use internal Vaadin adapters and preserve authoritative outcomes
+- **AND** unexpected CSP, accessibility, console, page, external-request, stale-state, focus, overlay, or overflow failures fail the gate
+
+#### Scenario: Native release matrix runs
+- **WHEN** the same journeys run with `editor-toolkit=native`
+- **THEN** native controls preserve the same GraphQL values, routes, interactions, and classifications
+- **AND** all Vaadin closure requests and style hashes are absent

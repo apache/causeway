@@ -7,21 +7,21 @@ Define qualified internal Vaadin free-core adapters for reversible basic, numeri
 ## Requirements
 
 ### Requirement: Codec-qualified internal field adapters
-The viewer SHALL provide internal Vaadin free-core adapters only for semantic input families whose existing Causeway value codec is reversible and whose candidate control preserves the advertised value shape.
+The viewer SHALL use internal Vaadin free-core adapters by default only for semantic input families whose existing Causeway value codec is reversible and whose candidate control preserves the advertised value shape.
 Application markup and events MUST remain Causeway-owned and MUST NOT require raw Vaadin APIs.
 
 #### Scenario: Basic scalar family is eligible
-- **WHEN** explicit configuration enables the basic family and a semantic editor advertises text, multiline text, protected text, Boolean, enum, or bounded scalar choices with a reversible codec
+- **WHEN** the resolved Vaadin policy is active and a semantic editor advertises text, multiline text, protected text, Boolean, enum, or bounded scalar choices with a reversible codec
 - **THEN** the registry selects the internal basic adapter
 - **AND** the application continues to observe the existing Causeway element and semantic interaction contract
 
 #### Scenario: Numeric family is eligible
-- **WHEN** explicit configuration enables the numeric family and a semantic editor advertises an exact or machine numeric codec
+- **WHEN** the resolved Vaadin policy is active and a semantic editor advertises an exact or machine numeric codec
 - **THEN** exact numbers retain lexical text handling while machine numbers may use numeric controls
 - **AND** GraphQL receives the value produced by the existing codec without additional JavaScript number coercion
 
 #### Scenario: Local temporal family is eligible
-- **WHEN** explicit configuration enables the local-temporal family and the value is `LocalDate`, or a `LocalTime` or `LocalDateTime` representable at millisecond precision
+- **WHEN** the resolved Vaadin policy is active and the value is `LocalDate`, or a `LocalTime` or `LocalDateTime` representable at millisecond precision
 - **THEN** the registry selects the corresponding internal picker
 - **AND** local value and supported fractional precision survive the semantic pending-value and GraphQL path
 
@@ -29,6 +29,11 @@ Application markup and events MUST remain Causeway-owned and MUST NOT require ra
 - **WHEN** the value has local temporal precision beyond milliseconds, is offset-bearing, zoned, legacy temporal, resource, custom, reference, collection, or lacks a reversible codec
 - **THEN** the field-family adapter is ineligible
 - **AND** the existing native or explicit unsupported presentation remains authoritative
+
+#### Scenario: Native policy is selected
+- **WHEN** the resolved common toolkit policy is native
+- **THEN** every basic, numeric, and local-temporal descriptor is ineligible for the Vaadin adapter
+- **AND** no field closure is imported
 
 ### Requirement: Causeway-owned interaction semantics
 Each field adapter SHALL map Causeway labels, descriptions, required and disabled state, validation, pending values, focus, cancellation, and semantic events into its internal control.
@@ -74,13 +79,13 @@ An unaffected route MUST request none of those closures.
 - **AND** packaging cannot silently publish the drifted asset
 
 ### Requirement: Family-scoped fallback and rollback
-Each field family SHALL fail closed independently to the existing native semantic editor on unsupported shape, explicit disablement, module failure, definition failure, or policy rejection.
+Each field family SHALL fail closed independently to the existing native semantic editor on unsupported shape, common native policy, module failure, definition failure, or policy rejection.
 Fallback MUST preserve Causeway-owned pending values and MUST require no GraphQL, route, persisted-data, or application-markup migration.
 
-#### Scenario: Family is disabled
-- **WHEN** configuration omits a field family
-- **THEN** every member in that family uses its existing native editor
-- **AND** no asset for the omitted family is requested
+#### Scenario: Native policy is configured
+- **WHEN** the common toolkit policy resolves to native
+- **THEN** every qualified field family uses its established native editor
+- **AND** no field-family asset is requested
 
 #### Scenario: Family module fails to load
 - **WHEN** an enabled field closure cannot load or define its required control
@@ -88,9 +93,14 @@ Fallback MUST preserve Causeway-owned pending values and MUST require no GraphQL
 - **AND** current pending value, required state, validation, semantic events, and recoverable focus are retained
 
 #### Scenario: Reference family remains independent
-- **WHEN** a field family fails or is disabled while the separately configured reference adapter remains eligible
+- **WHEN** a field family fails while the default reference adapter remains eligible
 - **THEN** reference loading and behavior remain unchanged
 - **AND** the failure does not broaden or eagerly request another closure
+
+#### Scenario: Deprecated subset compatibility is active
+- **WHEN** the common property is absent and old family configuration enables only a subset
+- **THEN** only that normalized subset remains eligible
+- **AND** omitted families preserve the former native behavior during the compatibility period
 
 ### Requirement: Strict security accessibility and presentation qualification
 Every adopted family SHALL pass enforcing strict-CSP, accessibility, keyboard, responsive, theme, reduced-motion, forced-colors, lifecycle, console, page-error, external-request, and overflow qualification.
