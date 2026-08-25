@@ -420,6 +420,40 @@ Object metadata selection includes only fields advertised by the effective metad
 Object, collection, scalar, and void outcomes are normalized and published through `causeway-action-result` without automatic navigation.
 The standard controller may render a local result summary; host routing remains responsible for object-result navigation.
 
+== Declarative member-associated actions
+
+An authored property or collection can place object actions directly beneath the owning semantic member:
+
+[source,html]
+----
+<causeway-property member="name">
+  <causeway-action member="updateName"></causeway-action>
+</causeway-property>
+
+<causeway-collection member="pets" active>
+  <causeway-collection-column member="name" label="Name"></causeway-collection-column>
+  <causeway-collection-column member="species" label="Species"></causeway-collection-column>
+  <causeway-action member="addPet"></causeway-action>
+  <causeway-action member="removePet"></causeway-action>
+</causeway-collection>
+----
+
+Only direct `<causeway-action>` children declare association.
+An action inside an arbitrary descendant wrapper is not claimed by the property or collection, and association is never inferred from naming or proximity.
+Collection-column and action declarations are independent vocabularies, so they may be interleaved without adding action members to row projections.
+
+Association controls presentation only.
+Each nested action registers its own GraphQL requirement, retains its own visibility and usability, and publishes the standard action request to the nearest interaction controller.
+A hidden or disabled property or collection does not hide or disable an independently visible or enabled action.
+
+The owner renders its loading, value, editor, validation, collection, paging, and error states into a stable primary region without cloning, moving, or recreating direct action elements.
+Action focus, pending prompt state, context generation, cancellation, stale-result protection, and request counts therefore survive owner rerendering.
+Adjacent ordinary HTML action groups remain compatible when semantic nesting is not wanted.
+
+Direct compositions expose `data-causeway-associated-member`, `data-causeway-action-group`, `data-causeway-associated-action`, and `causeway-member-primary` hooks.
+Use `--causeway-associated-action-gap` and `--causeway-associated-action-margin-block-end` to adjust wrapping presentation without inline styles or toolkit-specific elements.
+Generated `<causeway-object>` layouts retain semantically equivalent associated-member and action-group hooks from effective grid XML.
+
 == Lazy collections and row hydration
 
 A collection's primary object requirement contains only advertised `hidden` and `disabled` state.
@@ -458,7 +492,7 @@ Properties emit interaction-state and updated events, while the action controlle
 These are standard bubbling and composed `CustomEvent` instances where they cross component boundaries.
 
 Generated light DOM uses native buttons, headings, tables, outputs, live statuses, labels, `aria-busy`, `aria-disabled`, `aria-describedby`, and alert roles as appropriate.
-Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-actions`, `causeway-object-associated-actions`, `causeway-object-header`, `causeway-property`, `causeway-property-editor`, `causeway-property-disabled-indicator`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
+Stable classes include `causeway-object`, `causeway-object-row`, `causeway-object-column`, `causeway-object-group`, `causeway-object-tabs`, `causeway-object-actions`, `causeway-object-associated-actions`, `causeway-object-header`, `causeway-member-primary`, `causeway-property`, `causeway-property-editor`, `causeway-property-disabled-indicator`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-action-prompt`, `causeway-action-result`, `causeway-collection`, `causeway-loading`, `causeway-disabled`, `causeway-empty`, `causeway-error`, and `causeway-unsupported`.
 
 `installCausewayComponentStyles()` installs the optional minimal structural stylesheet once.
 The packaged `/causeway-webcomponents/theme.css` adds a cohesive Wicket-inspired visual system for applications that want a ready default.
