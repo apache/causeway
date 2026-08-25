@@ -7,11 +7,13 @@ HTML-authored application pages therefore cannot express established Causeway me
 
 ## What Changes
 
-- Support declarative `<causeway-action>` children beneath `<causeway-property>` and `<causeway-collection>`.
+- Support direct declarative `<causeway-action>` children beneath `<causeway-property>` and `<causeway-collection>` without inferring association from arbitrary descendants or adjacent markup.
+- Recognize parser-late direct declarations deterministically while preserving each action as one connected semantic element rather than cloning or regenerating it.
 - Preserve declaration order and render one responsive associated-action region immediately after the owning member's primary presentation.
 - Keep every associated action independently governed by its own GraphQL visibility, usability, parameter, validation, invocation, and result semantics.
+- Keep an independently visible or enabled action available when its owning property or collection is hidden or disabled.
 - Treat association as presentation structure only and do not let the owning member fabricate, authorize, invoke, hide, disable, or otherwise control the action.
-- Preserve associated action declarations across property or collection loading, rerendering, editing, validation, collection activation, paging, and toolkit fallback.
+- Preserve associated action declarations, focus, pending interaction state, context generation, and stale-request protection across property or collection loading, rerendering, editing, validation, collection activation, paging, and toolkit fallback.
 - Allow declarative collection columns and associated actions to coexist beneath one collection without either child vocabulary consuming or duplicating the other.
 - Prevent lifecycle rerendering or declaration capture from creating duplicate live action elements or duplicate action requests.
 - Keep generated `<causeway-object>` composition semantically equivalent and reuse a common associated-action presentation contract where practical.
