@@ -25,6 +25,13 @@ import {
   parseCausewayEditorValue,
   renderCausewayEditor
 } from './editor-registry.mjs';
+import {
+  connectMemberComposition,
+  disconnectMemberComposition,
+  eventOriginatesFromAssociatedAction,
+  refreshMemberComposition,
+  renderMemberPrimary
+} from './member-composition.mjs';
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {InteractionStatus} from './types.mjs';
@@ -56,6 +63,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.renderingInteraction = false;
     this.restoreEditFocusAfterGeneration = null;
     this.addEventListener('click', event => {
+      if (eventOriginatesFromAssociatedAction(this, event.target)) {
+        return;
+      }
       const action = event.target?.getAttribute?.('data-causeway-action') ?? event.target?.dataset?.causewayAction;
       if (action === 'edit') {
         void this.beginEdit();
@@ -65,10 +75,20 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         void this.saveEdit();
       }
     });
-    this.addEventListener('input', event => this.#captureEditorEvent(event, true));
-    this.addEventListener('change', event => this.#captureEditorEvent(event, false));
+    this.addEventListener('input', event => {
+      if (!eventOriginatesFromAssociatedAction(this, event.target)) {
+        this.#captureEditorEvent(event, true);
+      }
+    });
+    this.addEventListener('change', event => {
+      if (!eventOriginatesFromAssociatedAction(this, event.target)) {
+        this.#captureEditorEvent(event, false);
+      }
+    });
     this.addEventListener('causeway-reference-search', event => {
-      if (event.detail?.name !== this.member || !this.interactionState?.capabilities?.autoComplete) {
+      if (eventOriginatesFromAssociatedAction(this, event.target)
+          || event.detail?.name !== this.member
+          || !this.interactionState?.capabilities?.autoComplete) {
         return;
       }
       event.stopPropagation();
@@ -84,7 +104,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       }
     });
     const cancelToolkitEditor = event => {
-      if (this.interactionState) {
+      if (this.interactionState && !eventOriginatesFromAssociatedAction(this, event.target)) {
         event.stopPropagation();
         this.cancelEdit();
       }
@@ -92,7 +112,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
     this.addEventListener('causeway-field-escape', cancelToolkitEditor);
     const rerenderFailedToolkitEditor = event => {
-      if (!this.interactionState) {
+      if (!this.interactionState || eventOriginatesFromAssociatedAction(this, event.target)) {
         return;
       }
       event.stopPropagation();
@@ -160,7 +180,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
   }
 
+  connectedCallback() {
+    connectMemberComposition(this);
+    super.connectedCallback();
+  }
+
   disconnectedCallback() {
+    disconnectMemberComposition(this);
     clearTimeout(this.validationTimer);
     this.autoCompleteController?.abort();
     this.autoCompleteController = null;
@@ -174,6 +200,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     if (name === 'member') {
       this.interactionState = null;
+      refreshMemberComposition(this);
       this.reconnectRequirement();
     } else {
       this.renderComponentState(this.componentState);
@@ -410,33 +437,31 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const presentation = this.#presentation(state);
     if (presentation.loading) {
-      this.innerHTML = `<div class="causeway-property" aria-busy="true"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span role="status">Loading value…</span></div>`;
+      renderMemberPrimary(this, `<div class="causeway-property" aria-busy="true"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span role="status">Loading value…</span></div>`);
       return;
     }
     if (presentation.error) {
-      this.innerHTML = `<div class="causeway-property causeway-error" role="alert"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`;
+      renderMemberPrimary(this, `<div class="causeway-property causeway-error" role="alert"><span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`);
       return;
     }
     const propertyState = state.data ?? {};
     if (propertyState.hidden === true) {
-      this.innerHTML = '';
-      this.hidden = true;
+      renderMemberPrimary(this, '', {hidden: true});
       this.removeAttribute('data-renderer');
       return;
     }
-    this.hidden = false;
     const rendered = renderCausewayValue({value: propertyState.get, descriptor: state.descriptor}, this._rendererRegistry);
     this.setAttribute('data-renderer', rendered.rendererId);
     const editMarkup = this.#canOfferEdit(state)
       ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit"${this.#testId('edit')}>Edit ${escapeHtml(presentation.label)}</button>`
       : '';
-    this.innerHTML = `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
+    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
   <span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
   <output class="causeway-property-value" aria-labelledby="${this.labelId}"${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${rendered.html}</output>
   ${editMarkup}
-</div>`;
+</div>`);
     this.#restoreSavedEditFocus(state);
   }
 
@@ -572,7 +597,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.setAttribute('data-editor', renderedEditor.editorId);
     this.renderingInteraction = true;
     try {
-      this.innerHTML = `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" aria-busy="${busy}">
+      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" aria-busy="${busy}">
   <span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>
   ${presentation.descriptionMarkup}
   <div class="causeway-property-editor">${renderedEditor.html}</div>
@@ -582,7 +607,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     <button type="button" data-causeway-action="cancel"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}>Cancel</button>
   </div>
   <span class="causeway-property-interaction-status" role="status">${escapeHtml(interactionStatusLabel(interaction.status))}</span>
-</div>`;
+</div>`);
     } finally {
       this.renderingInteraction = false;
     }

@@ -66,6 +66,7 @@ class PetClinicHtmxPlaywrightTest {
     private PetOwnerRepository ownerRepository;
 
     private final List<String> browserFailures = new ArrayList<>();
+    private final List<String> graphQLRequests = new ArrayList<>();
     private final List<String> toolkitRequests = new ArrayList<>();
 
     private Playwright playwright;
@@ -101,6 +102,7 @@ class PetClinicHtmxPlaywrightTest {
     @BeforeEach
     void openPage() {
         browserFailures.clear();
+        graphQLRequests.clear();
         toolkitRequests.clear();
         browserContext = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(1440, 900)
@@ -142,6 +144,9 @@ class PetClinicHtmxPlaywrightTest {
         });
         page.onPageError(error -> browserFailures.add("page: " + error));
         page.onRequest(request -> {
+            if (request.url().contains("/graphql") && "POST".equals(request.method())) {
+                graphQLRequests.add(request.postData());
+            }
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")) {
                 toolkitRequests.add(request.url());
@@ -190,11 +195,18 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
         assertThat(page.locator(".petclinic-page-toolbar causeway-action[member='delete']").count()).isEqualTo(1);
-        assertThat(page.locator("[data-causeway-associated-member='name'] causeway-action[member='updateName']").count()).isEqualTo(1);
-        assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='addPet']").count()).isEqualTo(1);
-        assertThat(page.locator("[data-causeway-associated-member='pets'] causeway-action[member='removePet']").count()).isEqualTo(1);
-        assertThat(page.locator("[data-causeway-associated-member='visits'] causeway-action[member='bookVisit']").count()).isEqualTo(1);
-        assertThat(page.locator(".petclinic-associated-actions").first()
+        assertThat(page.locator("causeway-property[member='name'] > causeway-action[member='updateName']").count())
+                .isEqualTo(1);
+        assertThat(page.locator("causeway-collection[member='pets'] > causeway-action[member='addPet']").count())
+                .isEqualTo(1);
+        assertThat(page.locator("causeway-collection[member='pets'] > causeway-action[member='removePet']").count())
+                .isEqualTo(1);
+        assertThat(page.locator("causeway-collection[member='visits'] > causeway-action[member='bookVisit']").count())
+                .isEqualTo(1);
+        assertThat(page.locator("causeway-collection[member='pets']")
+                .evaluate("element => [...element.children].filter(child => child.localName === 'causeway-action').map(child => child.getAttribute('member')).join(',')"))
+                .isEqualTo("addPet,removePet");
+        assertThat(page.locator("causeway-property[member='name']")
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         page.goBack();
@@ -357,14 +369,17 @@ class PetClinicHtmxPlaywrightTest {
         waitForPropertyValue("knownAs", "PW");
         assertFocused(ROUTE_PAGE);
 
+        final var updateNameMutations = graphQLMutationCount("updateName");
         objectAction("updateName").click();
         waitForPrompt("updateName");
         fillParameter("name", "Playwright Owner Updated");
         submitPromptExpectingNavigation();
         waitForObjectTitle("Playwright Owner Updated");
+        assertThat(graphQLMutationCount("updateName") - updateNameMutations).isEqualTo(1);
         assertThat(page.url()).isEqualTo(ownerPath);
         assertFocused(ROUTE_PAGE);
 
+        final var addPetMutations = graphQLMutationCount("addPet");
         objectAction("addPet").click();
         waitForPrompt("addPet");
         fillParameter("name", "Turing");
@@ -372,6 +387,7 @@ class PetClinicHtmxPlaywrightTest {
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
         waitForCollectionRows("pets", 1);
+        assertThat(graphQLMutationCount("addPet") - addPetMutations).isEqualTo(1);
 
         clickObjectLinkInCollection("pets", "Turing · dog");
         waitForLogicalType("petclinic.Pet");
@@ -380,6 +396,7 @@ class PetClinicHtmxPlaywrightTest {
         page.goBack();
         waitForRouteUrl(ownerPath);
 
+        final var bookVisitMutations = graphQLMutationCount("bookVisit");
         objectAction("bookVisit").click();
         waitForPrompt("bookVisit");
         final var petReference = page.locator(parameter("pet"));
@@ -407,6 +424,7 @@ class PetClinicHtmxPlaywrightTest {
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
         waitForCollectionRows("visits", 1);
+        assertThat(graphQLMutationCount("bookVisit") - bookVisitMutations).isEqualTo(1);
 
         clickObjectLinkInCollection("visits", "Turing ·");
         waitForLogicalType("petclinic.Visit");
@@ -415,6 +433,7 @@ class PetClinicHtmxPlaywrightTest {
         page.goBack();
         waitForRouteUrl(ownerPath);
 
+        final var removePetMutations = graphQLMutationCount("removePet");
         objectAction("removePet").click();
         waitForPrompt("removePet");
         selectFirstAvailableChoice("pet");
@@ -422,6 +441,7 @@ class PetClinicHtmxPlaywrightTest {
         waitForRouteUrl(ownerPath);
         waitForCollectionRows("pets", 0);
         waitForCollectionRows("visits", 0);
+        assertThat(graphQLMutationCount("removePet") - removePetMutations).isEqualTo(1);
 
         objectAction("delete").click();
         page.locator("[data-testid='causeway-shell-result']").waitFor();
@@ -615,6 +635,12 @@ class PetClinicHtmxPlaywrightTest {
         result.waitFor();
         page.waitForFunction("args => { const result = document.querySelector('[data-testid=\"causeway-shell-result\"]'); return !result?.hidden && result.textContent.includes(args.action) && result.textContent.includes(args.value); }",
                 java.util.Map.of("action", actionId, "value", value));
+    }
+
+    private long graphQLMutationCount(final String actionId) {
+        return graphQLRequests.stream()
+                .filter(body -> body != null && body.contains("mutation") && body.contains(actionId))
+                .count();
     }
 
     private void editProperty(final String member, final String value) {

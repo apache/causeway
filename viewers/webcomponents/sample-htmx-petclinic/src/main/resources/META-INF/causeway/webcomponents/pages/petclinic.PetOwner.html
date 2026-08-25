@@ -25,12 +25,9 @@
       <section class="petclinic-card" aria-labelledby="petclinic-owner-identity-heading">
         <h2 id="petclinic-owner-identity-heading">Identity</h2>
         <div class="petclinic-field-list">
-          <div class="petclinic-member-composition" data-causeway-associated-member="name">
-            <causeway-property member="name"></causeway-property>
-            <div class="petclinic-associated-actions" aria-label="Name actions">
-              <causeway-action member="updateName"></causeway-action>
-            </div>
-          </div>
+          <causeway-property member="name">
+            <causeway-action member="updateName"></causeway-action>
+          </causeway-property>
           <causeway-property member="knownAs" editable></causeway-property>
         </div>
       </section>
@@ -54,28 +51,24 @@
     </div>
 
     <div class="petclinic-object-collections">
-      <section class="petclinic-card" data-causeway-associated-member="pets" aria-labelledby="petclinic-owner-pets-heading">
+      <section class="petclinic-card" aria-labelledby="petclinic-owner-pets-heading">
         <h2 id="petclinic-owner-pets-heading">Pets</h2>
-        <div class="petclinic-associated-actions" aria-label="Pet actions">
-          <causeway-action member="addPet"></causeway-action>
-          <causeway-action member="removePet"></causeway-action>
-        </div>
         <causeway-collection member="pets" label="Pets" active offset="0" size="10">
           <causeway-collection-column member="name" label="Name"></causeway-collection-column>
           <causeway-collection-column member="species" label="Species"></causeway-collection-column>
           <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
+          <causeway-action member="addPet"></causeway-action>
+          <causeway-action member="removePet"></causeway-action>
         </causeway-collection>
       </section>
 
-      <section class="petclinic-card" data-causeway-associated-member="visits" aria-labelledby="petclinic-owner-visits-heading">
+      <section class="petclinic-card" aria-labelledby="petclinic-owner-visits-heading">
         <h2 id="petclinic-owner-visits-heading">Visits</h2>
-        <div class="petclinic-associated-actions" aria-label="Visit actions">
-          <causeway-action member="bookVisit"></causeway-action>
-        </div>
         <causeway-collection member="visits" label="Visits" active offset="0" size="10">
           <causeway-collection-column member="visitAt" label="When"></causeway-collection-column>
           <causeway-collection-column member="reason" label="Reason"></causeway-collection-column>
           <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
+          <causeway-action member="bookVisit"></causeway-action>
         </causeway-collection>
       </section>
     </div>

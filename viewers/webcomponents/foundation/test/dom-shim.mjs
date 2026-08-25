@@ -82,9 +82,10 @@ export function installDomShim() {
       this.parentNode = null;
       this.childNodes = [];
       this.isConnected = false;
-      this.innerHTML = '';
+      this._innerHTML = '';
       this.hidden = false;
       this.dataset = {};
+      this._mutationObservers = new Set();
     }
     setAttribute(name, value) {
       const oldValue = this.getAttribute(name);
@@ -110,13 +111,41 @@ export function installDomShim() {
         this.attributeChangedCallback?.(name, oldValue, null);
       }
     }
+    get children() {
+      return this.childNodes;
+    }
+    get firstChild() {
+      return this.childNodes[0] ?? null;
+    }
+    get innerHTML() {
+      if (this.childNodes.length === 0) {
+        return this._innerHTML;
+      }
+      return `${this._innerHTML}${this.childNodes.map(child => child.innerHTML ?? '').join('')}`;
+    }
+    set innerHTML(value) {
+      this._innerHTML = String(value ?? '');
+    }
     appendChild(child) {
+      return this.insertBefore(child, null);
+    }
+    insertBefore(child, reference) {
       child.parentNode = this;
-      this.childNodes.push(child);
+      const index = reference == null ? this.childNodes.length : this.childNodes.indexOf(reference);
+      this.childNodes.splice(index < 0 ? this.childNodes.length : index, 0, child);
       if (this.isConnected) {
         connectTree(child);
       }
+      notifyMutation(this, {type: 'childList', target: this, addedNodes: [child], removedNodes: []});
       return child;
+    }
+    contains(candidate) {
+      for (let current = candidate; current; current = current.parentNode) {
+        if (current === this) {
+          return true;
+        }
+      }
+      return false;
     }
     replaceChildren(...children) {
       for (const child of [...this.childNodes]) this.removeChild(child);
@@ -135,8 +164,26 @@ export function installDomShim() {
         this.childNodes.splice(index, 1);
         disconnectTree(child);
         child.parentNode = null;
+        notifyMutation(this, {type: 'childList', target: this, addedNodes: [], removedNodes: [child]});
       }
       return child;
+    }
+  }
+
+  class ShimMutationObserver {
+    constructor(callback) {
+      this.callback = callback;
+      this.targets = new Set();
+    }
+    observe(target) {
+      this.targets.add(target);
+      target._mutationObservers?.add(this);
+    }
+    disconnect() {
+      for (const target of this.targets) {
+        target._mutationObservers?.delete(this);
+      }
+      this.targets.clear();
     }
   }
 
@@ -168,9 +215,16 @@ export function installDomShim() {
     CustomEvent: ShimCustomEvent,
     EventTarget: ShimEventTarget,
     HTMLElement: ShimHTMLElement,
+    MutationObserver: ShimMutationObserver,
     customElements,
     document
   });
+
+  function notifyMutation(target, record) {
+    for (const observer of [...(target._mutationObservers ?? [])]) {
+      observer.callback([record], observer);
+    }
+  }
 
   function connectTree(element) {
     if (element.isConnected) {

@@ -20,6 +20,13 @@
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
+import {
+  connectMemberComposition,
+  disconnectMemberComposition,
+  eventOriginatesFromAssociatedAction,
+  refreshMemberComposition,
+  renderMemberPrimary
+} from './member-composition.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
 
@@ -82,7 +89,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.#acceptColumn(event.detail?.column);
     });
     this.addEventListener('click', event => {
-      if (event.target?.hasAttribute?.('data-causeway-activate')) {
+      if (!eventOriginatesFromAssociatedAction(this, event.target)
+          && event.target?.hasAttribute?.('data-causeway-activate')) {
         this.activate();
       }
     });
@@ -143,6 +151,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    connectMemberComposition(this);
+    this.columnObserver?.observe(this, {childList: true});
     globalThis.setTimeout(() => {
       if (!this.isConnected) {
         return;
@@ -155,6 +165,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   disconnectedCallback() {
+    disconnectMemberComposition(this);
+    this.columnObserver?.disconnect();
     this.connectionStarted = false;
     this.loadRevision += 1;
     this.loadAbortController?.abort();
@@ -171,6 +183,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       return;
     }
     if (name === 'member') {
+      refreshMemberComposition(this);
       this.loadAbortController?.abort();
       this.loadAbortController = null;
       this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
@@ -291,21 +304,17 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       attributes
     );
     if (['idle', 'schema-loading', 'object-loading'].includes(state.status)) {
-      this.hidden = false;
-      this.innerHTML = shell('<span role="status">Loading collection metadata…</span>', ' aria-busy="true"');
+      renderMemberPrimary(this, shell('<span role="status">Loading collection metadata…</span>', ' aria-busy="true"'));
       return;
     }
     if (['terminal-error', 'unsupported', 'partial-error'].includes(state.status)) {
-      this.hidden = false;
-      this.innerHTML = shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(state))}</span>`);
+      renderMemberPrimary(this, shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(state))}</span>`));
       return;
     }
     if (state.data?.hidden === true) {
-      this.hidden = true;
-      this.innerHTML = '';
+      renderMemberPrimary(this, '', {hidden: true});
       return;
     }
-    this.hidden = false;
     const disabledReason = typeof state.data?.disabled === 'string'
       ? state.data.disabled
       : state.data?.disabled === true ? 'Disabled' : '';
@@ -313,20 +322,20 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       ? `<p class="causeway-collection-disabled-reason">${escapeHtml(disabledReason)}</p>`
       : '';
     if (!this.active) {
-      this.innerHTML = shell(`${disabledMarkup}<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`);
+      renderMemberPrimary(this, shell(`${disabledMarkup}<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`));
       return;
     }
     if (this.collectionState.status === 'idle' || this.collectionState.status === 'loading') {
-      this.innerHTML = shell('<span role="status">Loading collection…</span>', ' aria-busy="true"');
+      renderMemberPrimary(this, shell('<span role="status">Loading collection…</span>', ' aria-busy="true"'));
       return;
     }
     if (this.collectionState.status === 'error') {
-      this.innerHTML = shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</span>`);
+      renderMemberPrimary(this, shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</span>`));
       return;
     }
     const rows = collectionRows(this.collectionState);
     if (rows.length === 0) {
-      this.innerHTML = shell('<span class="causeway-empty" role="status">No items</span>');
+      renderMemberPrimary(this, shell('<span class="causeway-empty" role="status">No items</span>'));
       return;
     }
     const content = this._columns.length > 0
@@ -335,7 +344,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const errors = this.collectionState.errors?.length
       ? `<p class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</p>`
       : '';
-    this.innerHTML = shell(`${disabledMarkup}${content}${errors}`);
+    renderMemberPrimary(this, shell(`${disabledMarkup}${content}${errors}`));
   }
 
   #renderDefaultRows(rows) {
@@ -380,6 +389,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
     const frozen = Object.freeze({...column});
     const existing = this._columns.findIndex(candidate => candidate.member === column.member);
+    if (existing >= 0 && sameColumnConfiguration(this._columns[existing], frozen)) {
+      return;
+    }
     if (existing >= 0) {
       this._columns.splice(existing, 1, frozen);
     } else {
@@ -398,6 +410,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
     initialColumnConfigurations.delete(this);
     for (const child of this.childNodes ?? []) {
+      if (child?.localName !== 'causeway-collection-column') {
+        continue;
+      }
       const member = child?.configuration?.member ?? child?.getAttribute?.('member');
       if (!member || this._columns.some(column => column.member === member)) {
         continue;
@@ -416,6 +431,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       {element: this, member: this.member, state: this.collectionState}
     ));
   }
+}
+
+function sameColumnConfiguration(left, right) {
+  return left.member === right.member
+    && left.label === right.label
+    && left.testId === right.testId;
 }
 
 function collectionRows(state) {

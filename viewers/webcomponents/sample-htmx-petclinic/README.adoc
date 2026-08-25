@@ -91,6 +91,8 @@ petclinic.Visit.html
 
 Each exact logical-type filename is discovered at startup and its literal UTF-8 content is placed beneath the viewer-provided route context.
 The files compose object headers, ordinary application regions, properties, actions, collections, and declared columns while GraphQL remains authoritative for identity, values, visibility, usability, validation, invocation, and results.
+`petclinic.PetOwner.html` demonstrates natural member association by nesting `updateName` beneath `name`, `addPet` and `removePet` beneath `pets`, and `bookVisit` beneath `visits`.
+The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations, while the direct HTML needs no adjacent Petclinic-only association wrapper.
 They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
 
 The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.

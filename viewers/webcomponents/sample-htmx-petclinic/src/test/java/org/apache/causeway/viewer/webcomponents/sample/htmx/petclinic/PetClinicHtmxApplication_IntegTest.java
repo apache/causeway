@@ -161,6 +161,21 @@ class PetClinicHtmxApplication_IntegTest {
                     .contains("<causeway-")
                     .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
         }
+        final String ownerHtml;
+        try (var input = loader.getResource(
+                "META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").openStream()) {
+            ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        assertThat(ownerHtml)
+                .contains("<causeway-property member=\"name\">\n            <causeway-action member=\"updateName\"")
+                .contains("<causeway-collection member=\"pets\"")
+                .contains("<causeway-action member=\"addPet\"")
+                .contains("<causeway-action member=\"removePet\"")
+                .contains("<causeway-collection member=\"visits\"")
+                .contains("<causeway-action member=\"bookVisit\"")
+                .doesNotContain("petclinic-associated-actions", "petclinic-member-composition");
+        assertThat(ownerHtml.indexOf("member=\"addPet\""))
+                .isLessThan(ownerHtml.indexOf("member=\"removePet\""));
         assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())
                 .isEqualTo(404);
         assertThat(get("/petclinic.PetOwner.html").statusCode()).isEqualTo(404);
