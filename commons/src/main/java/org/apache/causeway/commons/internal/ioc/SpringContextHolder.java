@@ -19,26 +19,24 @@
 package org.apache.causeway.commons.internal.ioc;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Primary;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.Cardinality;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * <h1>- internal use only -</h1>
@@ -121,32 +119,29 @@ public record SpringContextHolder(
      *
      * @param <T> - the generic type parameter (to save the caller from having to downcast)
      * @param requiredType - the required type
-     * @param qualifiersRequired - if contains annotations, that are not qualifiers, these are just ignored
+     * @param beanQualifier - optionally the qualifier, that is required to be present on the Bean to look up
      * @throws NoSuchElementException - if the singleton is not resolvable
      *
      * @see #select(Class)
      */
     public <T> Can<T> select(
-        final @NonNull Class<T> requiredType,
-        final @Nullable Annotation[] qualifiers) {
+            final @NonNull Class<T> requiredType,
+            final @Nullable Qualifier beanQualifier) {
 
-        var qualifiersRequired = filterQualifiers(qualifiers);
+    	if (beanQualifier == null
+    			|| !StringUtils.hasText(beanQualifier.value()))
+			return springContext.getBeanProvider(requiredType)
+    				.orderedStream()
+    				.collect(Can.toCan());
 
-        if(_NullSafe.isEmpty(qualifiersRequired)) {
-            var allMatchingBeans = springContext.getBeanProvider(requiredType)
-                .orderedStream()
-                .collect(Can.toCan());
-            return allMatchingBeans;
-        }
-
-        var allMatchingBeans = springContext.getBeanProvider(requiredType)
-            .orderedStream()
-            .filter(t->{
-                var qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
-                return qualifiersPresent.containsAll(qualifiersRequired);
-            })
-            .collect(Can.toCan());
-        return allMatchingBeans;
+        return springContext.getBeansOfType(requiredType).entrySet()
+        	.stream()
+        	.filter(entry->
+        		lookupQualifier(entry.getKey())
+        			.map(availableQualifier->availableQualifier.equals(beanQualifier.value()))
+        			.orElse(false))
+        	.map(Entry::getValue)
+        	.collect(Can.toCan()); // I believe Spring allows at most one qualified match
     }
 
     /**
@@ -171,32 +166,20 @@ public record SpringContextHolder(
 
     // -- HELPER - QUALIFIER PROCESSING
 
-    /**
-     * Filters the input array into a collection, such that only annotations are retained,
-     * that are valid qualifiers for CDI.
-     * @param annotations
-     * @return non-null
-     */
-    private static Set<Annotation> filterQualifiers(final @Nullable Annotation[] annotations) {
-        if(_NullSafe.isEmpty(annotations))
-            return Collections.emptySet();
-        return _NullSafe.stream(annotations)
-                .filter(SpringContextHolder::isGenericQualifier)
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * @param annotation
-     * @return whether or not the annotation is a valid qualifier for Spring
-     */
-    private static boolean isGenericQualifier(final Annotation annotation) {
-        if(annotation==null)
-            return false;
-        if(annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0)
-            return true;
-        if(annotation.annotationType().equals(Primary.class))
-            return true;
-        return false;
+    private Optional<String> lookupQualifier(final String beanName) {
+    	var beanFactory = ((ConfigurableApplicationContext) springContext).getBeanFactory();
+        var beanDefinition = beanFactory.getBeanDefinition(beanName);
+        if (beanDefinition instanceof AnnotatedBeanDefinition annotatedBeanDefinition) {
+            // the bean factory method or else the bean-type itself, we are inspecting for a Qualifier annotation
+            var annotatedTypeMetadata = Optional.<AnnotatedTypeMetadata>ofNullable(annotatedBeanDefinition.getFactoryMethodMetadata())
+                .orElseGet(annotatedBeanDefinition::getMetadata);
+            return Optional.ofNullable(
+                    annotatedTypeMetadata.getAnnotationAttributes(Qualifier.class.getName()))
+                .map(map->map.get("value"))
+                .map(String.class::cast)
+                .map(_Strings::emptyToNull);
+        }
+        return Optional.empty();
     }
 
 }

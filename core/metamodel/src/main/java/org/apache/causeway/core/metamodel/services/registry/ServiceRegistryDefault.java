@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.registry;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -30,6 +31,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -83,7 +85,12 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
         var springContextHolder = causewaySystemEnvironment.springContextHolder();
         return springContextHolder!=null
-                ? springContextHolder.select(type, qualifiers)
+                ? springContextHolder.select(type, _NullSafe.stream(qualifiers)
+                		.map(annot->annot instanceof Qualifier qualifier
+                				? qualifier : null)
+                		.filter(Objects::nonNull)
+                		.findFirst()
+                		.orElse(null))
                 : Can.empty();
     }
 

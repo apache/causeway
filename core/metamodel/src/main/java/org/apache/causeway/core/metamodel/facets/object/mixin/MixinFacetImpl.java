@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
@@ -201,7 +202,13 @@ implements MixinFacet {
                 args[i] = mixee;
                 return;
             }
-            args[i] = serviceRegistry.lookupServiceElseFail(paramType);
+            var paramAnnot = resolvedConstructor.paramAnnotations(i);
+            args[i] = serviceRegistry.select(paramType, paramAnnot)
+                	.getSingleton()
+                	.orElseThrow(()->_Exceptions.noSuchElement("unresolvable injection point for constructor parameter %s%s", paramType,
+                			_Strings.nonEmpty(Can.ofArray(paramAnnot).join(","))
+                			.map(" with annotations={%s}"::formatted)
+                			.orElse("")));
         }));
         return args;
 	}

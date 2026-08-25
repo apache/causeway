@@ -30,6 +30,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 class ServiceRegistryDefaultTest {
 
@@ -46,18 +47,19 @@ class ServiceRegistryDefaultTest {
     void selectDelegatesTypeAndQualifiersWhenSpringContextHolderIsAvailable() {
         var systemEnvironment = Mockito.mock(CausewaySystemEnvironment.class);
         var springContextHolder = Mockito.mock(SpringContextHolder.class);
-        var qualifiers = new Annotation[] { Mockito.mock(Annotation.class) };
+        var qualifier = Mockito.mock(Qualifier.class);
+        Mockito.when(qualifier.value()).thenReturn("aQualifier");
         var selectedServices = Can.of("selected");
 
         Mockito.when(systemEnvironment.springContextHolder()).thenReturn(springContextHolder);
-        Mockito.when(springContextHolder.select(String.class, qualifiers)).thenReturn(selectedServices);
+        Mockito.when(springContextHolder.select(String.class, qualifier)).thenReturn(selectedServices);
 
         var serviceRegistry = new ServiceRegistryDefault(
                 systemEnvironment,
                 Mockito.mock(CausewayBeanTypeRegistry.class));
 
-        assertSame(selectedServices, serviceRegistry.select(String.class, qualifiers));
-        Mockito.verify(springContextHolder).select(String.class, qualifiers);
+        assertSame(selectedServices, serviceRegistry.select(String.class, new Annotation[] {qualifier}));
+        Mockito.verify(springContextHolder).select(String.class, qualifier);
     }
 
 }
