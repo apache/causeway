@@ -137,7 +137,7 @@ The root identity and expected values are:
 |`findRelated(search)`, with autocomplete and a related-object collection result
 
 |Safe reference action
-|`selectRelated(related)`, with fixed object choices rendered through the explicitly enabled route-lazy reference-widget pilot
+|`selectRelated(related)`, with fixed object choices rendered through the default route-lazy reference adapter
 
 |Void mutating action
 |`clearNotes`, invoked through a top-level mutation and followed by context refresh
@@ -209,7 +209,8 @@ Ordinary values are enabled at the Causeway metamodel level, while the `code` pr
 The `secret` property and `hiddenAction` render no semantic content, and the coverage guide explains their absence without reproducing a hidden value.
 The `summary`, `capacity`, `featured`, `status`, and `notes` properties expose explicit edit affordances, while the page remains read-only for every property without `editable`.
 The standard interaction controller invokes `inspect` directly, opens accessible prompts for `updateDetails`, `findRelated`, and `selectRelated`, executes `clearNotes`, and publishes typed semantic results without automatic navigation.
-The page configures the optional reference pilot before importing the complete foundation index, but no Vaadin asset is requested until the `selectRelated` prompt creates its eligible semantic reference editor.
+The page uses the foundation's supported default adapters, but no Vaadin asset is requested until an eligible semantic editor such as the `selectRelated` prompt connects.
+A plain-HTML diagnostic host can select native controls by calling `configureCausewayReferenceWidgets({enabled: false})` and `configureCausewayFieldWidgets({families: []})` before importing `index.mjs`.
 
 Both collections are activated declaratively by the sample page.
 `relatedObjects` loads through a secondary context-owned operation and renders the declared `name` and `code` columns.
@@ -327,7 +328,7 @@ The following selectors are intended as public test hooks for browser automation
 |Parameterized safe autocomplete and collection-result action
 
 |`[data-testid="action-select-related"]`
-|Parameterized safe object-reference action and route-lazy candidate trigger
+|Parameterized safe object-reference action and route-lazy reference trigger
 
 |`[data-testid="action-clear-notes"]`
 |Mutating void-result action
@@ -454,7 +455,7 @@ Forced fallback produced canonical 12/4/8 spans without another grid request, an
 Lighthouse navigation audits again scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.
 Pointer and keyboard checks covered property cancellation, invalid and corrected validation, authoritative save, enum choices, action defaults, autocomplete, invalid blocking, Escape cancellation, focus restoration, and disabled and hidden actions.
 The `inspect`, `updateDetails`, `findRelated`, `selectRelated`, and `clearNotes` flows produced scalar, object, collection, and void semantic results without automatic navigation.
-The `selectRelated` prompt loaded the candidate closure once, preserved stable object identity, restored focus on Escape, and left all earlier routes free of candidate requests.
+The `selectRelated` prompt loaded the default reference closure once, preserved stable object identity, restored focus on Escape, and left all earlier routes free of Vaadin requests.
 Network inspection confirmed rich queries for safe behavior, top-level mutations for property updates and mutating actions, typed enum and target variables, successful responses, and complete context refresh after mutation.
 Wide light-mode and narrow dark-mode checks remained usable and readable, with no application console errors.
 Lighthouse navigation audits scored 100 for Accessibility, Best Practices, and SEO in both desktop light-mode and mobile dark-mode configurations.

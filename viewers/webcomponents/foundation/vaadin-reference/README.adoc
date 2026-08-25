@@ -4,7 +4,7 @@
 // See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 // The ASF licenses this file to you under the Apache License, Version 2.0.
 
-This directory owns the pinned, selective browser bundle used by the opt-in Causeway reference-widget pilot.
+This directory owns the pinned, selective browser bundle used by the supported default Causeway reference adapter.
 The bundle contains Vaadin Combo Box and Multi-Select Combo Box free-core components, aliases usage-statistics collection to Vaadin's no-op module, and packages no Flow or commercial component.
 
 Normal Maven builds verify the checked-in generated assets, package metadata, licenses, checksums, CSP hashes, and compressed budget without contacting npm.

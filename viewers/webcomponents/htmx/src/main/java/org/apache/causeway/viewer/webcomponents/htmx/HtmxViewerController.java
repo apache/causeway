@@ -37,7 +37,8 @@ public class HtmxViewerController {
 
     private static final MediaType HTML_UTF8 = MediaType.parseMediaType("text/html;charset=UTF-8");
     private static final String CONTENT_SECURITY_POLICY = "default-src 'self'; script-src 'self'; style-src 'self'; "
-            + "img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
+            + "style-src-elem 'self'; style-src-attr 'none'; img-src 'self' data:; connect-src 'self'; "
+            + "object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
     private static final List<String> VAADIN_REFERENCE_STYLE_HASHES = List.of(
             "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=",
             "sha256-LGebpGBP4rWWgHT+HLo2ODJGtFNV4EbTdFjEntFbBEQ=",
@@ -121,10 +122,10 @@ public class HtmxViewerController {
 
     private String contentSecurityPolicy() {
         final var hashes = new LinkedHashSet<String>();
-        if (properties.isVaadinReferenceWidgets()) {
+        if (properties.isEffectiveVaadinReferenceWidgets()) {
             hashes.addAll(VAADIN_REFERENCE_STYLE_HASHES);
         }
-        for (final var family : properties.getVaadinFieldFamilies().split(",")) {
+        for (final var family : properties.getEffectiveVaadinFieldFamilies().split(",")) {
             hashes.addAll(switch (family) {
                 case "basic" -> VAADIN_BASIC_STYLE_HASHES;
                 case "numeric" -> VAADIN_NUMERIC_STYLE_HASHES;
@@ -141,7 +142,9 @@ public class HtmxViewerController {
         final var vaadinStylePolicy = "style-src 'self' " + sources
                 + "; style-src-elem 'self' " + sources
                 + "; style-src-attr 'none';";
-        return CONTENT_SECURITY_POLICY.replace("style-src 'self';", vaadinStylePolicy);
+        return CONTENT_SECURITY_POLICY.replace(
+                "style-src 'self'; style-src-elem 'self'; style-src-attr 'none';",
+                vaadinStylePolicy);
     }
 
     private String applicationPath(final HttpServletRequest request) {

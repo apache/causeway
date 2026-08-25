@@ -22,15 +22,17 @@ const DEFAULT_MODULE_URLS = Object.freeze({
   numeric: new URL('./vaadin-fields/vaadin-numeric.js', import.meta.url).href,
   'local-temporal': new URL('./vaadin-fields/vaadin-local-temporal.js', import.meta.url).href
 });
-let configuration = Object.freeze({families: Object.freeze([]), moduleUrls: DEFAULT_MODULE_URLS});
+let configuration = Object.freeze({families: Object.freeze([...FAMILY_IDS]), moduleUrls: DEFAULT_MODULE_URLS});
 const familyModules = new Map();
 const failedFamilies = new Set();
 
-const documentFamilies = globalThis.document?.documentElement?.dataset?.causewayFieldFamilies;
-if (documentFamilies) configureCausewayFieldWidgets({families: documentFamilies});
+const documentPolicy = globalThis.document?.documentElement?.dataset;
+if (documentPolicy && Object.hasOwn(documentPolicy, 'causewayFieldFamilies')) {
+  configureCausewayFieldWidgets({families: documentPolicy.causewayFieldFamilies});
+}
 
 export function configureCausewayFieldWidgets(options = {}) {
-  const families = normalizeFamilies(options.families ?? []);
+  const families = normalizeFamilies(options.families ?? FAMILY_IDS);
   const moduleUrls = {...DEFAULT_MODULE_URLS};
   for (const family of FAMILY_IDS) {
     const configured = options.moduleUrls?.[family];

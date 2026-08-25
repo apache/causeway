@@ -46,7 +46,11 @@ function context(overrides = {}) {
   };
 }
 
-test('normalizes the explicit family allow-list and rejects unsafe policy', () => {
+test('defaults to every qualified field family', () => {
+  assert.deepEqual(causewayFieldWidgetConfiguration().families, ['basic', 'numeric', 'local-temporal']);
+});
+
+test('normalizes the deprecated-compatible family allow-list and rejects unsafe policy', () => {
   assert.deepEqual(configureCausewayFieldWidgets({families: 'numeric,basic'}).families, ['basic', 'numeric']);
   assert.throws(() => configureCausewayFieldWidgets({families: 'basic,basic'}), /must not be repeated/);
   assert.throws(() => configureCausewayFieldWidgets({families: 'unknown'}), /Unknown/);

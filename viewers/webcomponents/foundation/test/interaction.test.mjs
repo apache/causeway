@@ -32,6 +32,7 @@ const {
   buildMutationInteractionOperation,
   buildObjectInteractionOperation,
   commandSelection,
+  causewayReferenceWidgetConfiguration,
   configureCausewayReferenceWidgets,
   defaultEditorRegistry,
   normalizeAutoCompleteWindow,
@@ -165,40 +166,40 @@ test('editor registry selects standard inputs and supports application overrides
     name: 'name', value: 'Classics', choices: [], enumValues: [], inputType: scalar('String'),
     inputId: 'name-input', labelId: 'name-label', descriptionId: '', errorId: '', testId: 'name-editor'
   });
-  assert.equal(text.editorId, 'text');
-  assert.match(text.html, /type="text"/);
+  assert.equal(text.editorId, 'vaadin-field');
+  assert.match(text.html, /data-family="basic" data-control="text-field"/);
 
   const multiline = renderCausewayEditor({
     name: 'notes', value: 'First line\nSecond line', choices: [], enumValues: [], inputType: scalar('String'), multiLine: 5,
     inputId: 'notes-input', labelId: 'notes-label', descriptionId: 'notes-description', errorId: '', testId: 'notes-editor'
   });
-  assert.equal(multiline.editorId, 'multiline');
-  assert.match(multiline.html, /<textarea[^>]+rows="5"/);
-  assert.match(multiline.html, /First line\nSecond line<\/textarea>/);
+  assert.equal(multiline.editorId, 'vaadin-field');
+  assert.match(multiline.html, /data-family="basic" data-control="text-area"/);
+  assert.match(multiline.html, /data-rows="5"/);
+  assert.match(multiline.html, /data-value="First line\nSecond line"/);
   assert.equal(parseCausewayEditorValue(multiline.editor, {value: 'Updated\nnotes'}), 'Updated\nnotes');
 
   const number = renderCausewayEditor({
     name: 'capacity', value: 24, choices: [], enumValues: [], inputType: scalar('Int'),
     inputId: 'capacity-input', labelId: 'capacity-label', descriptionId: '', errorId: '', testId: ''
   });
-  assert.equal(number.editorId, 'number');
+  assert.equal(number.editorId, 'vaadin-field');
   assert.equal(parseCausewayEditorValue(number.editor, {value: '25', inputType: scalar('Int')}), 25);
 
   const dateTime = renderCausewayEditor({
     name: 'visitAt', value: '2026-08-20T09:00:00', choices: [], enumValues: [], inputType: scalar('LocalDateTime'),
     inputId: 'visit-at-input', labelId: 'visit-at-label', descriptionId: '', errorId: '', testId: ''
   });
-  assert.equal(dateTime.editorId, 'temporal');
-  assert.match(dateTime.html, /type="datetime-local"/);
-  assert.match(dateTime.html, /step="any"/);
+  assert.equal(dateTime.editorId, 'vaadin-field');
+  assert.match(dateTime.html, /data-family="local-temporal" data-control="date-time-picker"/);
   assert.equal(parseCausewayEditorValue(dateTime.editor, {value: '2026-08-21T10:15:00'}), '2026-08-21T10:15:00');
 
   const choices = renderCausewayEditor({
     name: 'status', value: 'ACTIVE', choices: ['ACTIVE', 'PAUSED'], enumValues: [], inputType: {kind: 'ENUM', name: 'Status'},
     inputId: 'status-input', labelId: 'status-label', descriptionId: '', errorId: '', testId: ''
   });
-  assert.equal(choices.editorId, 'choice');
-  assert.match(choices.html, /<select/);
+  assert.equal(choices.editorId, 'vaadin-field');
+  assert.match(choices.html, /data-family="basic" data-control="select"/);
 
   const registry = new CausewayEditorRegistry(defaultEditorRegistry.registrations);
   registry.register({id: 'custom-name', priority: 1000, supports: context => context.name === 'name', render: () => '<textarea></textarea>'});
@@ -242,7 +243,7 @@ test('property interactions preserve exact decimal lexical state and map codec e
     errors: [], generation: 1
   });
   assert.equal(await property.beginEdit(), true);
-  assert.equal(property.getAttribute('data-editor'), 'exact-number');
+  assert.equal(property.getAttribute('data-editor'), 'vaadin-field');
   assert.match(property.innerHTML, /value="1.2300"/);
 
   const invalid = new Event('input');
@@ -267,7 +268,8 @@ test('property interactions preserve exact decimal lexical state and map codec e
   assert.equal(calls.some(call => call.startsWith('update:')), false);
 });
 
-test('opt-in reference widgets preserve identities, multi values, bounds and fallback', () => {
+test('default reference widgets preserve identities, bounds and explicit native fallback', () => {
+  assert.equal(causewayReferenceWidgetConfiguration().enabled, true);
   const references = [
     {_meta: {id: 'owner-1', logicalTypeName: 'example.Owner', title: 'Owner One'}},
     {_meta: {id: 'owner-2', logicalTypeName: 'example.Owner', title: 'Owner Two'}}
@@ -300,12 +302,12 @@ test('opt-in reference widgets preserve identities, multi values, bounds and fal
   });
   assert.equal(overBound.editorId, 'choice');
   configureCausewayReferenceWidgets({enabled: false});
-  const disabledPilot = renderCausewayEditor({
+  const nativeFallback = renderCausewayEditor({
     name: 'owner', value: references[0], choices: references, suggestions: [], autoComplete: false,
     enumValues: [], inputType: named('example_Owner'), inputId: 'owner-input', labelId: 'owner-label',
     descriptionId: '', errorId: '', testId: ''
   });
-  assert.equal(disabledPilot.editorId, 'choice');
+  assert.equal(nativeFallback.editorId, 'choice');
 });
 
 test('editable properties support prepare, validation, cancel and authoritative save', async () => {
@@ -364,7 +366,7 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.match(property.innerHTML, /property-name-edit/);
   assert.equal(await property.beginEdit(), true);
   assert.match(property.innerHTML, /property-name-editor/);
-  assert.match(property.innerHTML, /<textarea[^>]+rows="5"/);
+  assert.match(property.innerHTML, /data-control="text-area"[^>]+data-rows="5"/);
   property.setPendingValue('Deferred');
   const pendingValidation = property.validatePending();
   const editorTarget = {
@@ -491,6 +493,30 @@ test('windowed Vaadin reference adapter requests authoritative later pages', asy
   }});
   assert.equal(staleCallback, undefined);
   assert.deepEqual(currentCallback, {items: [{id: 'new', title: 'New'}], total: 1});
+  document.body.removeChild(editor);
+});
+
+test('default reference module failure is bounded and falls back natively', async () => {
+  configureCausewayReferenceWidgets({
+    enabled: true,
+    moduleUrl: new URL('./fixtures/missing-reference-module.mjs', import.meta.url).href
+  });
+  const editor = new CausewayReferenceEditorElement();
+  editor.id = 'failed-reference';
+  editor.setAttribute('data-causeway-editor', 'owner');
+  editor.setAttribute('data-label', 'Owner');
+  editor.setAttribute('data-items', JSON.stringify([{id: 'owner-1', title: 'Owner One'}]));
+  editor.setAttribute('data-value', 'null');
+  let failure;
+  editor.addEventListener('causeway-reference-load-failed', event => { failure = event.detail; });
+
+  document.body.appendChild(editor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assert.equal(editor.dataset.widgetState, 'fallback');
+  assert.equal(editor.childNodes[0].localName, 'select');
+  assert.equal(failure.message, 'The configured reference adapter could not be loaded.');
+  assert.doesNotMatch(failure.message, /missing-reference-module/);
   document.body.removeChild(editor);
 });
 
@@ -673,7 +699,7 @@ test('protected action values remain write-only in markup and semantic prompt ev
   controller.addEventListener('causeway-action-prompt-state-change', event => published.push(event.detail));
   document.body.appendChild(controller);
   assert.equal(await controller.beginAction('changePassword', context), true);
-  assert.match(controller.innerHTML, /type="password"/);
+  assert.match(controller.innerHTML, /data-control="password-field"/);
 
   const input = new Event('input');
   input.target = {

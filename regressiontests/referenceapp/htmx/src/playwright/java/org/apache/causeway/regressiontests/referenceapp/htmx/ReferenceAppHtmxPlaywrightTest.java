@@ -61,6 +61,7 @@ class ReferenceAppHtmxPlaywrightTest {
     private int port;
 
     private final List<String> browserFailures = new ArrayList<>();
+    private final List<String> toolkitRequests = new ArrayList<>();
     private Playwright playwright;
     private Browser browser;
     private BrowserContext browserContext;
@@ -100,6 +101,9 @@ class ReferenceAppHtmxPlaywrightTest {
 
     @AfterEach
     void closeBrowserContext() {
+        if (nativeToolkit()) {
+            assertThat(toolkitRequests).isEmpty();
+        }
         assertNoBrowserFailures();
         if (browserContext != null) {
             browserContext.close();
@@ -109,7 +113,10 @@ class ReferenceAppHtmxPlaywrightTest {
     @Test
     void menusChoicesAutocompleteCancellationAndRouteDisposal() {
         openShell();
-        assertThat(candidateRequests()).isZero();
+        assertThat(page.locator("html").getAttribute("data-causeway-editor-toolkit"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(toolkitRequests).isEmpty();
+        assertThat(referenceAssetRequests()).isZero();
 
         openMenu("Prog Model");
         serviceAction("demo.ActionChoicesMenu", "choices").click();
@@ -125,7 +132,7 @@ class ReferenceAppHtmxPlaywrightTest {
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
         waitForLogicalType("demo.ActionChoices");
-        assertThat(candidateRequests()).isZero();
+        assertThat(referenceAssetRequests()).isZero();
 
         openObject("demo.ActionAutoCompletePage", invokeViewModel(
                 "demo_ActionAutoCompleteMenu", "autoComplete", "rich__demo_ActionAutoCompletePage"));
@@ -139,7 +146,7 @@ class ReferenceAppHtmxPlaywrightTest {
 
         openShell();
         assertThat(openCandidateOverlays()).isZero();
-        assertThat(candidateRequests()).isZero();
+        assertThat(referenceAssetRequests()).isZero();
         assertSemanticAccessibility();
     }
 
@@ -171,18 +178,18 @@ class ReferenceAppHtmxPlaywrightTest {
             assertThat(fieldAssetRequests("local-temporal")).isZero();
         }
         assertThat(originalDecimal).isNotBlank();
-        final String candidateDecimal = "98765432109876543210.123456789";
+        final String updatedDecimal = "98765432109876543210.123456789";
         try {
             final String encodedId = OBJECT_MAPPER.writeValueAsString(decimalEntityId);
             try {
-                fillEditor(decimalEditor, candidateDecimal);
+                fillEditor(decimalEditor, updatedDecimal);
                 page.waitForFunction("() => document.querySelector(\"causeway-property[member='readWriteProperty'] [data-causeway-action='save']\")?.disabled === false");
                 editableDecimal.locator("[data-causeway-action='save']").click();
                 page.waitForFunction("() => !document.querySelector(\"causeway-property[member='readWriteProperty'] [data-causeway-editor]\")");
                 final JsonNode changed = executeGraphQL("{ rich { demo_BigDecimalEntity(object: {id: "
                         + encodedId + "}) { readWriteProperty { get } } } }");
                 assertThat(changed.at("/data/rich/demo_BigDecimalEntity/readWriteProperty/get").asText())
-                        .isEqualTo(candidateDecimal);
+                        .isEqualTo(updatedDecimal);
             } finally {
                 final JsonNode restored = executeGraphQL("mutation { demo_BigDecimalEntity__readWriteProperty(_target: {id: "
                         + encodedId + "}, readWriteProperty: " + OBJECT_MAPPER.writeValueAsString(originalDecimal)
@@ -191,7 +198,7 @@ class ReferenceAppHtmxPlaywrightTest {
                         .as(restored.toPrettyString()).isTrue();
             }
         } catch (Exception ex) {
-            throw new AssertionError("Exact decimal candidate interaction failed", ex);
+            throw new AssertionError("Exact decimal default interaction failed", ex);
         }
 
         page.goBack();
@@ -481,7 +488,7 @@ class ReferenceAppHtmxPlaywrightTest {
 
         openShell();
         assertThat(page.locator("causeway-collection").count()).isZero();
-        assertThat(candidateRequests()).isZero();
+        assertThat(referenceAssetRequests()).isZero();
     }
 
     @Test
@@ -506,12 +513,13 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private void openBrowserContext(final Browser.NewContextOptions options) {
         browserFailures.clear();
+        toolkitRequests.clear();
         browserContext = browser.newContext(options);
         browserContext.addInitScript("""
                 (() => {
                   globalThis.__referenceAppFailures = [];
                   globalThis.__referenceAppKnownGaps = [];
-                  globalThis.__referenceAppCandidateRequests = 0;
+                  globalThis.__referenceAppReferenceAssetRequests = 0;
                   const record = value => globalThis.__referenceAppFailures.push(String(value));
                   globalThis.addEventListener('error', event => record(`page error: ${event.message}`));
                   globalThis.addEventListener('unhandledrejection', event => record(`unhandled rejection: ${event.reason}`));
@@ -521,7 +529,7 @@ class ReferenceAppHtmxPlaywrightTest {
                     const response = await originalFetch(...args);
                     const url = String(response.url || args[0]);
                     if (url.includes('/causeway-webcomponents/vaadin-reference/vaadin-reference.js')) {
-                      globalThis.__referenceAppCandidateRequests += 1;
+                      globalThis.__referenceAppReferenceAssetRequests += 1;
                     }
                     const isGraphQL = new URL(url, location.href).pathname === '/graphql';
                     if (!response.ok && !isGraphQL) record(`HTTP ${response.status}: ${url}`);
@@ -553,6 +561,10 @@ class ReferenceAppHtmxPlaywrightTest {
         });
         page.onPageError(error -> browserFailures.add("page: " + error));
         page.onRequest(request -> {
+            if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")) {
+                toolkitRequests.add(request.url());
+            }
             final URI uri = URI.create(request.url());
             if (uri.getHost() != null && !Set.of("localhost", "127.0.0.1").contains(uri.getHost())) {
                 browserFailures.add("external request: " + request.url());
@@ -790,7 +802,7 @@ class ReferenceAppHtmxPlaywrightTest {
             final String entityResultType,
             final String entityLogicalType,
             final String member,
-            final String candidateTag,
+            final String vaadinTag,
             final String nativeTag) {
         final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
         openObject(entityLogicalType, firstCollectionEntityId(objectField, pageId, entityResultType));
@@ -798,7 +810,7 @@ class ReferenceAppHtmxPlaywrightTest {
         property.locator("[data-causeway-action='edit']").click();
         final Locator editor = resolveEditor("causeway-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
         assertThat(editor.evaluate("element => element.localName"))
-                .isEqualTo(fieldFamiliesEnabled() ? candidateTag : nativeTag);
+                .isEqualTo(fieldFamiliesEnabled() ? vaadinTag : nativeTag);
         if (fieldFamiliesEnabled()) {
             assertThat(fieldAssetRequests("basic")).isEqualTo(1);
             assertThat(fieldAssetRequests("numeric")).isZero();
@@ -814,13 +826,13 @@ class ReferenceAppHtmxPlaywrightTest {
             final String objectField,
             final String entityResultType,
             final String entityLogicalType,
-            final String candidateTag,
+            final String vaadinTag,
             final String nativeType) {
         final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
         final String member = "demo_LocalDateTimes".equals(objectField)
                 ? "readWriteOptionalProperty"
                 : "readWriteProperty";
-        final String entityId = candidateTag == null
+        final String entityId = vaadinTag == null
                 ? firstCollectionEntityId(objectField, pageId, entityResultType)
                 : pickerCompatibleCollectionEntityId(objectField, pageId, entityResultType, member);
         openObject(entityLogicalType, entityId);
@@ -828,8 +840,8 @@ class ReferenceAppHtmxPlaywrightTest {
         property.locator("[data-causeway-action='edit']").click();
         final Locator editor = resolveEditor("causeway-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
         final String localName = String.valueOf(editor.evaluate("element => element.localName"));
-        if (candidateTag != null && fieldFamiliesEnabled()) {
-            assertThat(localName).isEqualTo(candidateTag);
+        if (vaadinTag != null && fieldFamiliesEnabled()) {
+            assertThat(localName).isEqualTo(vaadinTag);
             assertThat(fieldAssetRequests("local-temporal")).isEqualTo(1);
             assertThat(fieldAssetRequests("basic")).isZero();
             assertThat(fieldAssetRequests("numeric")).isZero();
@@ -880,6 +892,11 @@ class ReferenceAppHtmxPlaywrightTest {
         }
     }
 
+    private static boolean nativeToolkit() {
+        return "native".equalsIgnoreCase(System.getProperty(
+                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
+    }
+
     private boolean fieldFamiliesEnabled() {
         return !String.valueOf(page.locator("html").getAttribute("data-causeway-field-families")).isBlank()
                 && !"null".equals(String.valueOf(page.locator("html").getAttribute("data-causeway-field-families")));
@@ -905,8 +922,8 @@ class ReferenceAppHtmxPlaywrightTest {
         return ((Number) page.evaluate("family => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-fields/vaadin-' + family + '.js')).length", family)).intValue();
     }
 
-    private int candidateRequests() {
-        return ((Number) page.evaluate("() => globalThis.__referenceAppCandidateRequests || 0")).intValue();
+    private int referenceAssetRequests() {
+        return ((Number) page.evaluate("() => globalThis.__referenceAppReferenceAssetRequests || 0")).intValue();
     }
 
     private int knownGapCount() {

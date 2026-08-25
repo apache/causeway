@@ -297,23 +297,20 @@ Applications can register a more-specific editor through `defaultEditorRegistry.
 Editors render pending semantic values but never execute GraphQL independently.
 Codecs own authoritative normalization, control conversion, parsing, local validation, and GraphQL-variable conversion.
 
-=== Optional Vaadin reference widgets
+=== Default Vaadin reference widgets
 
-The foundation artifact packages a pinned free-core Vaadin Combo Box and Multi-Select Combo Box closure for explicitly enabled reference inputs.
-The closure is not requested until the semantic registry renders its first eligible reference editor.
-Routes and applications that leave the option disabled continue to use the existing native choice and autocomplete editors and make no Vaadin request.
+The foundation artifact packages a pinned free-core Vaadin Combo Box and Multi-Select Combo Box closure for qualified reference inputs.
+The internal adapter is enabled by default, but the closure is not requested until the semantic registry renders its first eligible reference editor.
+Routes without an eligible connected reference editor make no Vaadin reference request.
 
-A plain HTML application enables the pilot before importing `index.mjs`:
+A plain HTML application uses the supported default by importing `index.mjs` without a toolkit opt-in.
+It can select the native rollback before that import:
 
 [source,javascript]
 ----
 const {configureCausewayReferenceWidgets} =
   await import('/causeway-webcomponents/reference-widget.mjs');
-configureCausewayReferenceWidgets({
-  enabled: true,
-  minimumSearchLength: 2,
-  maximumResults: 50
-});
+configureCausewayReferenceWidgets({enabled: false});
 await import('/causeway-webcomponents/index.mjs');
 ----
 
@@ -326,13 +323,13 @@ When only legacy `autoComplete` exists, `maximumResults` remains an accepted com
 Native autocomplete renders the bounded first window and states when more matches require refinement.
 
 A list-valued input selects Multi-Select Combo Box only when the introspected input and GraphQL interaction already provide authoritative list pending-value semantics.
-Unsupported shapes, disabled configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
+Unsupported shapes, explicit native configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
 
 `<causeway-reference-editor>` is a semantic Causeway adapter.
 Applications observe existing property and prompt state events and do not consume Vaadin tags, data-provider callbacks, or value events.
 Vaadin package names, internal tags, theme details, and bundle chunks are not a supported application extension tier.
 
-The candidate bundle is 48,684 bytes gzip for the pinned pilot closure, contains no Flow client or usage-statistics collector, and is served only from the foundation JAR.
+The supported reference bundle is 48,684 bytes gzip for the pinned closure, contains no Flow client or usage-statistics collector, and is served only from the foundation JAR.
 Its four byte-exact style elements require the documented CSP SHA-256 sources while `style-src-attr 'none'` remains in effect.
 Dependency or bundle updates must regenerate and review package metadata, licenses, checksums, CSP hashes, browser evidence, and the compressed budget together.
 
@@ -489,25 +486,23 @@ causeway-object {
 }
 ----
 
-== Optional Vaadin semantic field families
+== Default Vaadin semantic field families
 
-The foundation can qualify internal Vaadin free-core controls for existing semantic editors without changing application markup or events.
-The empty configuration keeps every scalar editor native.
-An HTMX shell can enable `basic`, `numeric`, and `local-temporal` independently, or ordinary JavaScript can configure them before importing `index.mjs`:
+The foundation qualifies internal Vaadin free-core controls for existing semantic editors without changing application markup or events.
+`basic`, `numeric`, and `local-temporal` are enabled by default and each remains independently route-lazy.
+Ordinary JavaScript can select the complete native rollback before importing `index.mjs`:
 
 [source,javascript]
 ----
 import {configureCausewayFieldWidgets} from './field-widget.mjs';
 
-configureCausewayFieldWidgets({
-  families: ['basic', 'numeric', 'local-temporal']
-});
+configureCausewayFieldWidgets({families: []});
 ----
 
 `basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
 `numeric` keeps `Long`, `BigInteger`, and `BigDecimal` lexical in text fields while using integer or number controls only for machine numeric codecs.
 `local-temporal` covers `LocalDate`, `LocalTime`, and `LocalDateTime`; values beyond millisecond fractional precision remain native because the picker cannot preserve them.
-Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become field candidates.
+Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collection, and unsupported values never become eligible field adapters.
 References retain their separate adapter.
 
 Each family loads its own same-origin generated ESM asset on first eligible connection.

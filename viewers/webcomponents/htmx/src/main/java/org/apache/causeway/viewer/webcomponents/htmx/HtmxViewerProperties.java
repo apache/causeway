@@ -23,14 +23,35 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "causeway.viewer.webcomponents.htmx")
 public class HtmxViewerProperties {
 
+    public enum EditorToolkit {
+        VAADIN("vaadin"),
+        NATIVE("native");
+
+        private final String externalName;
+
+        EditorToolkit(final String externalName) {
+            this.externalName = externalName;
+        }
+
+        public String externalName() {
+            return externalName;
+        }
+    }
+
+    static final String ALL_VAADIN_FIELD_FAMILIES = "basic,numeric,local-temporal";
+
     private String basePath = "/htmx";
     private String graphQlEndpoint = "/graphql";
     private String brand = "Apache Causeway";
     private String language = "en";
     private String wicketComparisonPath;
     private String applicationStylesheet;
+    private EditorToolkit editorToolkit = EditorToolkit.VAADIN;
+    private boolean editorToolkitConfigured;
     private boolean vaadinReferenceWidgets;
+    private boolean vaadinReferenceWidgetsConfigured;
     private String vaadinFieldFamilies = "";
+    private boolean vaadinFieldFamiliesConfigured;
     private int referenceMinimumSearchLength = 2;
     private int referenceMaximumResults = 50;
 
@@ -82,20 +103,81 @@ public class HtmxViewerProperties {
         this.applicationStylesheet = applicationStylesheet;
     }
 
+    public EditorToolkit getEditorToolkit() {
+        return editorToolkit;
+    }
+
+    public void setEditorToolkit(final EditorToolkit editorToolkit) {
+        if (editorToolkit == null) {
+            throw new IllegalArgumentException("Editor toolkit must be vaadin or native.");
+        }
+        this.editorToolkit = editorToolkit;
+        this.editorToolkitConfigured = true;
+    }
+
+    /**
+     * @deprecated Use {@code editor-toolkit}.
+     */
+    @Deprecated(forRemoval = false)
     public boolean isVaadinReferenceWidgets() {
         return vaadinReferenceWidgets;
     }
 
+    /**
+     * @deprecated Use {@code editor-toolkit}.
+     */
+    @Deprecated(forRemoval = false)
     public void setVaadinReferenceWidgets(final boolean vaadinReferenceWidgets) {
         this.vaadinReferenceWidgets = vaadinReferenceWidgets;
+        this.vaadinReferenceWidgetsConfigured = true;
     }
 
+    /**
+     * @deprecated Use {@code editor-toolkit}.
+     */
+    @Deprecated(forRemoval = false)
     public String getVaadinFieldFamilies() {
         return vaadinFieldFamilies;
     }
 
+    /**
+     * @deprecated Use {@code editor-toolkit}.
+     */
+    @Deprecated(forRemoval = false)
     public void setVaadinFieldFamilies(final String vaadinFieldFamilies) {
         this.vaadinFieldFamilies = normalizeFieldFamilies(vaadinFieldFamilies);
+        this.vaadinFieldFamiliesConfigured = true;
+    }
+
+    public boolean isEffectiveVaadinReferenceWidgets() {
+        if (editorToolkitConfigured) {
+            return editorToolkit == EditorToolkit.VAADIN;
+        }
+        if (usesDeprecatedToolkitConfiguration()) {
+            return vaadinReferenceWidgetsConfigured && vaadinReferenceWidgets;
+        }
+        return true;
+    }
+
+    public String getEffectiveVaadinFieldFamilies() {
+        if (editorToolkitConfigured) {
+            return editorToolkit == EditorToolkit.VAADIN ? ALL_VAADIN_FIELD_FAMILIES : "";
+        }
+        if (usesDeprecatedToolkitConfiguration()) {
+            return vaadinFieldFamiliesConfigured ? vaadinFieldFamilies : "";
+        }
+        return ALL_VAADIN_FIELD_FAMILIES;
+    }
+
+    public boolean usesDeprecatedToolkitConfiguration() {
+        return !editorToolkitConfigured && (vaadinReferenceWidgetsConfigured || vaadinFieldFamiliesConfigured);
+    }
+
+    public String getResolvedEditorToolkit() {
+        if (usesDeprecatedToolkitConfiguration()) {
+            return "compatibility";
+        }
+        return editorToolkit.externalName();
     }
 
     public int getReferenceMinimumSearchLength() {
