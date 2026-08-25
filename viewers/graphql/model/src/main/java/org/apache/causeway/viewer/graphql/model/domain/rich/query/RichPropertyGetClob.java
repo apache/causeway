@@ -40,9 +40,9 @@ public class RichPropertyGetClob
     final RichPropertyGetClobMimeType clobMimeType;
     final RichPropertyGetClobByteLength clobByteLength;
     final RichPropertyGetClobCharacterLength clobCharacterLength;
-    final RichResourceMetadataField fileAccept;
-    final RichResourceMetadataField inputMaxBytes;
-    final RichResourceMetadataField transferMode;
+    final RichScalarMetadataField fileAccept;
+    final RichScalarMetadataField inputMaxBytes;
+    final RichScalarMetadataField transferMode;
     final RichPropertyGetClobChars clobChars;
 
     private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
@@ -72,17 +72,17 @@ public class RichPropertyGetClob
         addChildFieldFor(clobMimeType = new RichPropertyGetClobMimeType(memberInteractor, context));
         addChildFieldFor(clobByteLength = new RichPropertyGetClobByteLength(memberInteractor, context));
         addChildFieldFor(clobCharacterLength = new RichPropertyGetClobCharacterLength(memberInteractor, context));
-        addChildFieldFor(fileAccept = new RichResourceMetadataField(
+        addChildFieldFor(fileAccept = new RichScalarMetadataField(
                 context,
                 "fileAccept",
                 Scalars.GraphQLString,
                 () -> ResourceValueTypes.fileAccept(memberInteractor.getObjectMember()).orElse(null)));
-        addChildFieldFor(inputMaxBytes = new RichResourceMetadataField(
+        addChildFieldFor(inputMaxBytes = new RichScalarMetadataField(
                 context,
                 "inlineInputMaxBytes",
                 Scalars.GraphQLInt,
                 () -> graphqlConfiguration.resources().inlineInputMaxBytes()));
-        addChildFieldFor(transferMode = new RichResourceMetadataField(
+        addChildFieldFor(transferMode = new RichScalarMetadataField(
                 context,
                 "transferMode",
                 Scalars.GraphQLString,

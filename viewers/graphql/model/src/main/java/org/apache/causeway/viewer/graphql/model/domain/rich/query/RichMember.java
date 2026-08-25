@@ -35,6 +35,8 @@ public abstract class RichMember<T extends ObjectMember, H extends ObjectSpecifi
     @Getter final H interactor;
     @Getter private final T objectMember;
 
+    private final RichMemberMetadata metadata;
+
     public RichMember(
             final H interactor,
             final T objectMember,
@@ -45,7 +47,22 @@ public abstract class RichMember<T extends ObjectMember, H extends ObjectSpecifi
         this.interactor = interactor;
         this.objectMember = objectMember;
 
+        if (isBuilt()) {
+            this.metadata = null;
+            return;
+        }
+
         objectMember.getCanonicalDescription().ifPresent(gqlObjectTypeBuilder::description);
+        addChildFieldFor(this.metadata = new RichMemberMetadata(
+                context,
+                objectMember,
+                objectMember instanceof org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation));
+    }
+
+    protected final void addMemberMetadataDataFetchers() {
+        if (metadata != null) {
+            metadata.addDataFetcher(this);
+        }
     }
 
     public String getId() {

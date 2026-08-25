@@ -155,6 +155,7 @@ public class RichProperty
 
     @Override
     protected void addDataFetchersForChildren() {
+        addMemberMetadataDataFetchers();
         hidden.addDataFetcher(this);
         disabled.addDataFetcher(this);
 

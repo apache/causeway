@@ -74,7 +74,16 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     private Long id;
 
     @Getter @Setter
-    @Property(editing = Editing.ENABLED)
+    @Property(
+            editing = Editing.ENABLED,
+            maxLength = 40,
+            regexPattern = "[A-Za-z .!'-]+",
+            regexPatternFlags = java.util.regex.Pattern.CASE_INSENSITIVE)
+    @PropertyLayout(
+            named = "Staff display name",
+            describedAs = "Name shown for the staff member",
+            multiLine = 2,
+            typicalLength = 24)
     private String name;
     public String validateName(final String proposedName) {
         if(proposedName.contains("!")) {

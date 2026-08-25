@@ -1,0 +1,63 @@
+{
+  rich {
+    university_dept_Department(object: {id: "$departmentId"}) {
+      staffMembers {
+        metadata {
+          friendlyName
+          description
+          maxLength
+        }
+      }
+      changeName {
+        metadata {
+          friendlyName
+          description
+        }
+        params {
+          newName {
+            metadata {
+              friendlyName
+              description
+              maxLength
+              pattern
+              patternFlags
+              multiLine
+              typicalLength
+            }
+          }
+        }
+      }
+    }
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            name {
+              metadata {
+                friendlyName
+                description
+                maxLength
+                pattern
+                patternFlags
+                multiLine
+                typicalLength
+              }
+            }
+            photo {
+              get {
+                fileAccept
+              }
+            }
+            hiddenPhoto {
+              hidden
+              metadata {
+                friendlyName
+                description
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

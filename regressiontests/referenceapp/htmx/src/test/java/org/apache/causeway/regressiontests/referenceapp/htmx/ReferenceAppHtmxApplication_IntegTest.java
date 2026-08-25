@@ -140,6 +140,49 @@ class ReferenceAppHtmxApplication_IntegTest {
     }
 
     @Test
+    void exposesIndependentReferenceMemberMetadata() throws Exception {
+        final JsonNode metadata = graphQL("""
+                { rich {
+                    demo_CollectionLayoutMenu {
+                        named { invoke { results { children { metadata {
+                            friendlyName description maxLength pattern patternFlags multiLine typicalLength
+                        } } } } }
+                        describedAs { invoke { results { children { metadata {
+                            friendlyName description
+                        } } } } }
+                    }
+                    demo_PropertyMenu {
+                        fileAccept { invoke { results { pdfProperty {
+                            metadata { friendlyName description }
+                            get { fileAccept }
+                        } } } }
+                    }
+                } }
+                """);
+        assertNoGraphQLErrors(metadata);
+
+        final JsonNode named = metadata.at(
+                "/data/rich/demo_CollectionLayoutMenu/named/invoke/results/children/metadata");
+        assertThat(named.path("friendlyName").asText()).isEqualTo("Named using @CollectionLayout");
+        assertThat(named.path("description").isNull()).isTrue();
+        assertThat(named.path("maxLength").isNull()).isTrue();
+        assertThat(named.path("pattern").isNull()).isTrue();
+        assertThat(named.path("patternFlags").isNull()).isTrue();
+        assertThat(named.path("multiLine").isNull()).isTrue();
+        assertThat(named.path("typicalLength").isNull()).isTrue();
+
+        final JsonNode described = metadata.at(
+                "/data/rich/demo_CollectionLayoutMenu/describedAs/invoke/results/children/metadata");
+        assertThat(described.path("friendlyName").asText()).isEqualTo("Children");
+        assertThat(described.path("description").asText()).isEqualTo("This is a collection of children");
+
+        final JsonNode resource = metadata.at(
+                "/data/rich/demo_PropertyMenu/fileAccept/invoke/results/pdfProperty");
+        assertThat(resource.at("/metadata/friendlyName").asText()).isEqualTo("Pdf Property");
+        assertThat(resource.at("/get/fileAccept").asText()).isEqualTo(".pdf");
+    }
+
+    @Test
     void exposesRepresentativeFixtureIdentityAndEffectiveGrid() throws Exception {
         final JsonNode open = graphQL("""
                 { rich { demo_JavaMathTypesMenu {

@@ -13,7 +13,7 @@ Existing rich GraphQL property, collection, action, and action-parameter wrapper
 - **THEN** the known wrapper does not expose those concerns through this capability
 
 ### Requirement: Independent canonical friendly name and description
-Rich property, collection, action, and action-parameter wrappers SHALL expose a non-null `friendlyName` and nullable `description` independently.
+Rich property, collection, action, and action-parameter wrappers SHALL expose one non-null `metadata` object containing a non-null `friendlyName` and nullable `description` independently.
 
 #### Scenario: Member has both values
 - **WHEN** the canonical metamodel supplies a friendly name and a distinct description
@@ -30,7 +30,7 @@ Rich property, collection, action, and action-parameter wrappers SHALL expose a 
 - **AND** metadata resolution does not invoke domain-object methods or fetch member values
 
 ### Requirement: Bounded standalone editor constraints
-Rich property and action-parameter wrappers SHALL expose nullable `maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength` scalar fields from applicable metamodel facets.
+The shared metadata object SHALL expose nullable `maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength` scalar fields from applicable property and action-parameter metamodel facets.
 
 #### Scenario: Constrained value is inspected
 - **WHEN** a known property or parameter declares accepted positive local constraints
@@ -92,11 +92,12 @@ Local metadata SHALL NOT reveal sensitive values, disabled-reason internals, aut
 - **AND** static schema identity reveals no more than standard introspection already reveals
 
 ### Requirement: Bounded schema growth
-The local metadata implementation SHALL add no aggregate catalogue and no new GraphQL object type solely for metadata.
+The local metadata implementation SHALL add no aggregate catalogue and exactly one shared GraphQL object type for metadata.
 
 #### Scenario: Schema is compared before and after metadata
 - **WHEN** generated schema type count, SDL bytes, and startup measurements are compared
-- **THEN** metadata introduces only the documented scalar fields on existing wrappers
+- **THEN** metadata introduces one `RichMemberMetadata` type and one metadata field on each known wrapper
+- **AND** the representative SDL growth remains below ten percent
 - **AND** measured deltas are recorded
 
 ### Requirement: Backward-compatible metadata expansion

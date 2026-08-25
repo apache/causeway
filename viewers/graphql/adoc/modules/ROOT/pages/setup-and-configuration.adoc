@@ -119,6 +119,38 @@ This bounds GraphQL response transfer but does not claim persistence query pushd
 The default must not exceed the maximum.
 Existing `autoComplete(search)` documents remain compatible.
 
+=== Local rich member metadata
+
+Known rich property, collection, action, and action-parameter wrappers expose one additive non-null `metadata` object.
+Targeted introspection of `RichMemberMetadata` discovers its bounded shared shape without requesting an aggregate member list or metamodel document.
+
+[source,graphql]
+----
+metadata {
+  friendlyName
+  description
+  maxLength
+  pattern
+  patternFlags
+  multiLine
+  typicalLength
+}
+----
+
+`friendlyName` is the non-null canonical translated name.
+`description` is the independent canonical translated description and is null when absent rather than repeating the friendly name.
+The resolver uses static canonical facets at request time and does not invoke imperative domain-object naming or description methods.
+
+`maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength` are populated for property and action-parameter wrappers when applicable and otherwise return null.
+`pattern` is Java regular-expression text and `patternFlags` uses Java `Pattern` flag values, so clients must not assume direct JavaScript-regexp compatibility.
+GraphQL input nullability remains authoritative for requiredness, and validation operations remain authoritative for candidate acceptance.
+
+Resource `fileAccept` metadata remains in its established locations beneath Blob or Clob property `get` wrappers and directly on resource action parameters.
+Grid resources remain authoritative for rows, columns, tabs, field sets, placement, ordering, icons, CSS, and action positions.
+Menu resources remain authoritative for bars, menus, sections, entries, labels, and ordering.
+The metadata object does not expose values, disabled reasons, authorization rules, prompt style, redirects, paging, sorting, or viewer-specific behavior.
+Existing operation documents that do not select `metadata` retain their response shape unchanged.
+
 The remaining configuration properties are explained in more detail elsewhere:
 
 * xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.resources.response-type[resources.response-type]
