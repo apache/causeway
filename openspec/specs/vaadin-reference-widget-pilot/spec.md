@@ -96,16 +96,26 @@ It MUST retain an explicit maximum search policy for legacy non-paged autocomple
 - **THEN** the editor presents a Causeway-owned limitation state or activates the documented fallback
 - **AND** does not truncate the choices while claiming a complete match set
 
-### Requirement: Opt-in budgets and rollback
-The pilot SHALL remain explicitly opt-in and retain the current Causeway reference editor as the default or immediate fallback.
-The cold candidate reference closure MUST NOT exceed 65 KB gzip, unaffected routes MUST load no candidate asset, and rollback MUST require no GraphQL, route, persisted-data, or custom-page migration.
+### Requirement: Supported default reference adapter policy
+Qualified single-reference and multi-reference editors SHALL use the reviewed internal Vaadin free-core adapter by default while preserving Causeway-owned identity, choices, validation, pending values, cancellation, routes, and semantic events.
+The native reference editor MUST remain the explicit rollback, unsupported-descriptor fallback, load-failure fallback, and diagnostic comparison implementation.
 
-#### Scenario: Pilot is enabled for a supported member
-- **WHEN** explicit viewer configuration selects the candidate for a supported reference descriptor
-- **THEN** the semantic editor registry loads the route-lazy internal adapter and preserves the public Causeway contract
-- **AND** records bundle, readiness, accessibility, CSP, and external-request evidence for that route
+#### Scenario: Qualified reference editor uses default policy
+- **WHEN** no toolkit override or deprecated compatibility property is configured and an eligible reference editor connects
+- **THEN** the registry selects the route-lazy internal Vaadin adapter
+- **AND** application markup and listeners continue to depend only on Causeway elements and semantic events
 
-#### Scenario: Pilot is disabled or fails qualification
-- **WHEN** configuration disables the pilot, the descriptor is unsupported, a hard gate fails, or rollback is requested
-- **THEN** the registry uses the existing reference editor without loading Vaadin
-- **AND** domain state, canonical navigation, semantic events, and application markup remain compatible
+#### Scenario: Native rollback is selected
+- **WHEN** the common toolkit policy is explicitly `native`
+- **THEN** every reference editor selects the established native implementation and requests no Vaadin reference asset
+- **AND** GraphQL operations, identities, routes, validation, and persisted data require no migration
+
+#### Scenario: Default adapter fails to load
+- **WHEN** the packaged reference closure cannot load or define its controls
+- **THEN** the current document fails closed to the native reference editor
+- **AND** no raw toolkit element, protected value, stale result, or false successful state remains visible
+
+#### Scenario: Reference closure exceeds release policy
+- **WHEN** checksum, compressed size, entry point, dependency integrity, license, vulnerability result, telemetry behavior, style hash, accessibility, or browser evidence differs from reviewed policy
+- **THEN** verification fails before release
+- **AND** the default policy is not broadened to accept the drift

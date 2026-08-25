@@ -19,7 +19,7 @@ Proposal-only drafts must be refined against checked-in capability evidence befo
 | 4 | `fix-webcomponent-versionless-identity-preparation` *(archived)*, `fix-webcomponent-union-projection-correctness` *(archived)*, `fix-webcomponent-opaque-route-correctness` *(archived)* | Correct versionless preparation, valid polymorphic metadata selection, and long composite bookmark handling in separate changes. | Each retained gap has an executable focused contract and passing regression target. |
 | 5 | `add-paged-graphql-reference-autocomplete` *(archived 2026-08-24)* | Add honest bounded server response windows for reference autocomplete without claiming persistence query pushdown. | Public GraphQL operation, identity, preparation, ordering, continuation, and consistency contracts are accepted. |
 | 6 | `expand-vaadin-semantic-editor-families` *(archived 2026-08-25)* | Qualify free-core adapters beyond reference controls with independent lazy closures and CSP gates. | Corrected codecs and Reference Application family journeys pass. |
-| 7 | `make-vaadin-default-for-webcomponent-viewer` *(active)* | Flip the supported selection policy to Vaadin-first and remove pilot status. | All prerequisite suites pass in default and explicit native modes. |
+| 7 | `make-vaadin-default-for-webcomponent-viewer` *(archived 2026-08-25)* | Flip the supported selection policy to Vaadin-first and remove pilot status. | All prerequisite suites pass in default and explicit native modes. |
 
 The final default change is intentionally small and policy-focused.
 Correctness, GraphQL capability, and component-family expansion remain separate so failures do not become entangled with the default flip.
