@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -147,7 +148,8 @@ public record MethodFinder(
             return (isEncapsulationSupported
                     ? classCache.streamResolvedMethods(type)
                     : classCache.streamPublicMethods(type))
-                        .filter(method->paramTypes.equals(method.paramTypes()))
+                        .filter(method->
+                    		Arrays.equals(paramTypes, method.paramTypes()))
                         .filter(mustSatisfy);
 
         return methodNameCandidates.stream()
