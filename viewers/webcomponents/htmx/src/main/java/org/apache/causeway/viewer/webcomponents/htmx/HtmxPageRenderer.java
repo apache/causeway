@@ -40,11 +40,14 @@ final class HtmxPageRenderer {
     String renderObjectFragment(final HtmxObjectRoute route) {
         final var custom = fragmentRegistry.find(route.logicalTypeName());
         final var content = custom
-                .map(factory -> factory.render(route))
+                .map(page -> page.render(route))
                 .orElse("<causeway-object editable></causeway-object>");
         final var pageKind = custom.isPresent() ? "custom" : "generic";
+        final var pageSource = custom
+                .map(page -> page.source().attributeValue())
+                .orElse("generic");
         return """
-                <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
+                <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" data-page-source="%s" data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
                   <causeway-object-context logical-type="%s" object-id="%s">
                     %s
                     <causeway-interaction-controller data-causeway-route-interactions></causeway-interaction-controller>
@@ -52,6 +55,7 @@ final class HtmxPageRenderer {
                 </section>
                 """.formatted(
                         pageKind,
+                        pageSource,
                         escape(route.logicalTypeName()),
                         escape(route.objectId()),
                         content);
