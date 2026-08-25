@@ -1,0 +1,107 @@
+## ADDED Requirements
+
+### Requirement: Narrow local metadata on known wrappers
+Existing rich GraphQL property, collection, action, and action-parameter wrappers SHALL expose only the additive local metadata assigned to them by this capability.
+
+#### Scenario: Client addresses a known wrapper
+- **WHEN** a client requests accepted local metadata beneath a known semantic wrapper
+- **THEN** applicable names, descriptions, or editor-neutral constraints are available
+- **AND** absent nullable semantics return null
+
+#### Scenario: Client requests an unknown metadata expansion
+- **WHEN** a client needs grid structure, menu structure, viewer policy, or metamodel internals
+- **THEN** the known wrapper does not expose those concerns through this capability
+
+### Requirement: Independent canonical friendly name and description
+Rich property, collection, action, and action-parameter wrappers SHALL expose a non-null `friendlyName` and nullable `description` independently.
+
+#### Scenario: Member has both values
+- **WHEN** the canonical metamodel supplies a friendly name and a distinct description
+- **THEN** the wrapper returns each translated value independently
+
+#### Scenario: Only a friendly name exists
+- **WHEN** the canonical metamodel supplies no description
+- **THEN** `friendlyName` remains available
+- **AND** `description` is null rather than a copy of the friendly name
+
+#### Scenario: Domain object defines imperative text
+- **WHEN** a member can compute a name or description from a domain-object instance
+- **THEN** local metadata uses only canonical static facets
+- **AND** metadata resolution does not invoke domain-object methods or fetch member values
+
+### Requirement: Bounded standalone editor constraints
+Rich property and action-parameter wrappers SHALL expose nullable `maxLength`, `pattern`, `patternFlags`, `multiLine`, and `typicalLength` scalar fields from applicable metamodel facets.
+
+#### Scenario: Constrained value is inspected
+- **WHEN** a known property or parameter declares accepted positive local constraints
+- **THEN** the applicable scalar values are returned without local reinterpretation
+- **AND** `patternFlags` represents Java regular-expression flags
+- **AND** server validation remains authoritative
+
+#### Scenario: Constraint is absent or fallback-only
+- **WHEN** a constraint is absent, unlimited, non-positive, malformed, or supplied only by the single-line or unlimited fallback
+- **THEN** the corresponding metadata field is null
+- **AND** no client-facing default is fabricated
+
+#### Scenario: Requiredness is inspected
+- **WHEN** a client needs structural nullability or requiredness
+- **THEN** it uses the generated GraphQL input type
+- **AND** no conflicting required flag is introduced
+
+### Requirement: Established resource file acceptance remains compatible
+Resource `fileAccept` metadata SHALL remain in its established property-get and resource action-parameter locations.
+
+#### Scenario: Resource metadata is inspected
+- **WHEN** a client requests accepted-file metadata for a Blob or Clob property or resource parameter
+- **THEN** the established field and value remain available
+- **AND** this capability does not add a duplicate `fileAccept` field
+
+### Requirement: Structural metadata remains in resources
+Rich local metadata SHALL NOT duplicate complete grid or menu structure or resource-owned presentation hints.
+
+#### Scenario: Client needs complete page structure
+- **WHEN** effective grid structure is available
+- **THEN** the client uses the grid resource for rows, columns, tabs, field sets, placement, ordering, icons, CSS, and action positions
+
+#### Scenario: Client needs complete application-menu structure
+- **WHEN** effective menu structure is available
+- **THEN** the client uses the menu resource for bars, menus, sections, entries, labels, hints, and ordering
+
+### Requirement: Standard member discovery
+Member metadata SHALL complement standard introspection rather than introduce a duplicate member list or metamodel API.
+
+#### Scenario: Client discovers type members
+- **WHEN** a client needs property, action, and collection identifiers
+- **THEN** it uses standard targeted GraphQL introspection
+- **AND** no aggregate member-list field is required
+
+### Requirement: Locale-correct request resolution
+Canonical friendly names and descriptions SHALL retain Causeway translation behavior for the active request locale without globally caching one locale's result.
+
+#### Scenario: Equivalent requests use different locales
+- **WHEN** two authorized requests resolve the same metadata under different supported locales
+- **THEN** each response uses the canonical translation for its own locale
+- **AND** one response does not contaminate the other
+
+### Requirement: Metadata authorization safety
+Local metadata SHALL NOT reveal sensitive values, disabled-reason internals, authorization policy rules, or imperative domain-object results.
+
+#### Scenario: Member is hidden for the current user
+- **WHEN** runtime authorization hides a known member wrapper
+- **THEN** metadata reveals no sensitive runtime state beyond the established hidden contract
+- **AND** static schema identity reveals no more than standard introspection already reveals
+
+### Requirement: Bounded schema growth
+The local metadata implementation SHALL add no aggregate catalogue and no new GraphQL object type solely for metadata.
+
+#### Scenario: Schema is compared before and after metadata
+- **WHEN** generated schema type count, SDL bytes, and startup measurements are compared
+- **THEN** metadata introduces only the documented scalar fields on existing wrappers
+- **AND** measured deltas are recorded
+
+### Requirement: Backward-compatible metadata expansion
+Metadata additions SHALL preserve established generated names, field descriptions, resource fields, operations, and runtime behavioral fields.
+
+#### Scenario: Existing GraphQL client executes
+- **WHEN** a client uses an established document without new metadata fields
+- **THEN** its operation and response shape remain valid
