@@ -44,7 +44,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 11 | `add-generic-htmx-web-component-viewer` *(archived)* | Complete | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
 | 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
 | 13 | `add-generic-svelte-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-svelte-web-component-viewer` |
-| 14 | `add-rich-graphql-member-metadata` | P2 | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
+| 14 | `add-rich-graphql-member-metadata` *(archived)* | Complete | Completed analysis and proven standalone-component requirements | NEW narrow `rich-graphql-member-metadata` |
 | 15 | `add-graphql-web-component-diagnostics` *(pending refinement)* | P2 | Archived foundation and component interactions; accepted redaction boundaries | NEW `graphql-web-component-diagnostics` |
 | 16 | `analyze-rich-graphql-collection-query-pushdown` *(analysis only)* | P2 performance | Archived collection windowing | NEW `rich-graphql-collection-query-pushdown-analysis` |
 | 17 | `analyze-rich-graphql-parallel-execution` *(analysis only)* | P2 performance | Correct interactions and representative rich operations | NEW `rich-graphql-parallel-execution-analysis` |
