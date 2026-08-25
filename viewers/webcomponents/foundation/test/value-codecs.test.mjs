@@ -26,10 +26,13 @@ const {
   CausewayValueCodecError,
   CausewayValueCodecRegistry,
   defaultValueCodecRegistry,
+  configureCausewayFieldWidgets,
   parseCausewayValue,
   renderCausewayEditor,
   selectCausewayValueCodec
 } = await import('../src/index.mjs');
+
+configureCausewayFieldWidgets({families: []});
 
 const scalar = name => ({kind: 'SCALAR', name, ofType: null});
 const required = type => ({kind: 'NON_NULL', name: null, ofType: type});

@@ -523,10 +523,6 @@
       report(interactionOutput, `result:${event.detail.actionId}:${result?.kind ?? 'unknown'}${value}${target}`);
     });
 
-    const {configureCausewayReferenceWidgets} = await import('/causeway-webcomponents/reference-widget.mjs');
-    const {configureCausewayFieldWidgets} = await import('/causeway-webcomponents/field-widget.mjs');
-    configureCausewayReferenceWidgets({enabled: true, minimumSearchLength: 2, maximumResults: 50});
-    configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal']});
     await import('/causeway-webcomponents/index.mjs');
   </script>
 </body>

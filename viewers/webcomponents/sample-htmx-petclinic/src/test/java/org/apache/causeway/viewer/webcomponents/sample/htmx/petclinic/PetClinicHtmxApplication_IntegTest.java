@@ -69,8 +69,20 @@ class PetClinicHtmxApplication_IntegTest {
     void servesStableShellCanonicalFragmentsAssetsAndWicketComparison() throws Exception {
         final var shell = get("/htmx");
         assertThat(shell.statusCode()).isEqualTo(200);
-        assertThat(shell.headers().firstValue("content-security-policy").orElse(""))
-                .contains("default-src 'self'");
+        final boolean nativeToolkit = nativeToolkit();
+        final String csp = shell.headers().firstValue("content-security-policy").orElse("");
+        assertThat(csp)
+                .contains("default-src 'self'")
+                .doesNotContain("'unsafe-inline'");
+        if (nativeToolkit) {
+            assertThat(csp)
+                    .doesNotContain("sha256-")
+                    .contains("style-src-attr 'none'");
+        } else {
+            assertThat(csp)
+                    .contains("style-src-attr 'none'")
+                    .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=");
+        }
         assertThat(shell.body())
                 .contains("<causeway-menubars>")
                 .contains("id=\"causeway-route\"")
@@ -78,6 +90,9 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("data-navigation-generation=\"0\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
                 .contains("/webjars/htmx.org/2.0.6/dist/htmx.min.js")
+                .contains("data-causeway-editor-toolkit=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
+                .contains("data-causeway-reference-widgets=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
+                .contains("data-causeway-field-families=\"" + (nativeToolkit ? "" : "basic,numeric,local-temporal") + "\"")
                 .contains("Compare Wicket viewer");
 
         final var generic = get("/htmx/object/petclinic.PetOwner/s_owner-mary", "HX-Request", "true");
@@ -227,6 +242,11 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(response.path("errors").isMissingNode() || response.path("errors").isEmpty())
                 .as(response.toPrettyString())
                 .isTrue();
+    }
+
+    private static boolean nativeToolkit() {
+        return "native".equalsIgnoreCase(System.getProperty(
+                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
     }
 
     private HttpResponse<String> get(final String path, final String... header) throws Exception {

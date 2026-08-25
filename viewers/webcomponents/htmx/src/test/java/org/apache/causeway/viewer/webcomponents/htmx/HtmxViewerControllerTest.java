@@ -47,9 +47,15 @@ class HtmxViewerControllerTest {
                 .contains("<causeway-interaction-controller data-causeway-route-interactions>");
         assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
                 .contains("default-src 'self'")
-                .doesNotContain("sha256-")
-                .doesNotContain("style-src-attr");
-        assertThat(response.getBody()).doesNotContain("data-causeway-reference-widgets");
+                .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
+                .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
+                .contains("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
+        assertThat(response.getBody())
+                .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-reference-widgets=\"vaadin\"")
+                .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
     }
 
@@ -74,7 +80,24 @@ class HtmxViewerControllerTest {
     }
 
     @Test
-    void addsOnlyPinnedReferenceWidgetStyleHashesWhenPilotIsEnabled() {
+    void explicitNativePolicyRemovesVaadinAdaptersAndHashes() {
+        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.NATIVE);
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+
+        assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
+                .doesNotContain("sha256-")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
+        assertThat(response.getBody())
+                .contains("data-causeway-editor-toolkit=\"native\"")
+                .contains("data-causeway-reference-widgets=\"native\"")
+                .contains("data-causeway-field-families=\"\"");
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void addsOnlyPinnedReferenceWidgetStyleHashesInDeprecatedCompatibilityMode() {
         properties.setVaadinReferenceWidgets(true);
         properties.setReferenceMinimumSearchLength(3);
         properties.setReferenceMaximumResults(40);
@@ -85,19 +108,25 @@ class HtmxViewerControllerTest {
                 .contains("style-src-attr 'none'")
                 .doesNotContain("'unsafe-inline'");
         assertThat(response.getBody())
+                .contains("data-causeway-editor-toolkit=\"compatibility\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-reference-minimum-search-length=\"3\"")
-                .contains("data-causeway-reference-maximum-results=\"40\"");
+                .contains("data-causeway-reference-maximum-results=\"40\"")
+                .contains("data-causeway-field-families=\"\"");
     }
 
     @Test
-    void addsOnlyEnabledFieldFamilyHashesAndCanonicalShellPolicy() {
+    @SuppressWarnings("deprecation")
+    void addsOnlyEnabledFieldFamilyHashesInDeprecatedCompatibilityMode() {
         properties.setVaadinFieldFamilies("numeric, basic");
 
         final var response = controller(List.of()).route(request("/htmx", "", false));
         final var policy = response.getHeaders().getFirst("Content-Security-Policy");
 
-        assertThat(response.getBody()).contains("data-causeway-field-families=\"basic,numeric\"");
+        assertThat(response.getBody())
+                .contains("data-causeway-editor-toolkit=\"compatibility\"")
+                .contains("data-causeway-reference-widgets=\"native\"")
+                .contains("data-causeway-field-families=\"basic,numeric\"");
         assertThat(policy)
                 .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
                 .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
@@ -109,7 +138,8 @@ class HtmxViewerControllerTest {
     }
 
     @Test
-    void deduplicatesReferenceAndFieldHashesAndRejectsInvalidFamilies() {
+    @SuppressWarnings("deprecation")
+    void deduplicatesDeprecatedReferenceAndFieldHashesAndRejectsInvalidFamilies() {
         properties.setVaadinReferenceWidgets(true);
         properties.setVaadinFieldFamilies("local-temporal");
 
@@ -124,6 +154,26 @@ class HtmxViewerControllerTest {
                 .hasMessageContaining("basic, numeric, and local-temporal");
         assertThatThrownBy(() -> properties.setVaadinFieldFamilies("basic,basic"))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void explicitCommonPolicyPreventsDeprecatedValuesFromMixingShellPolicy() {
+        properties.setVaadinReferenceWidgets(false);
+        properties.setVaadinFieldFamilies("");
+        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.VAADIN);
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+        final var policy = response.getHeaders().getFirst("Content-Security-Policy");
+
+        assertThat(response.getBody())
+                .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-reference-widgets=\"vaadin\"")
+                .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
+        assertThat(policy)
+                .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
+                .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
+                .contains("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=");
     }
 
     @Test
