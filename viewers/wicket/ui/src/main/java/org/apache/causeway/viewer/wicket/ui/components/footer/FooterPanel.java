@@ -53,6 +53,7 @@ extends PanelAbstract<String, Model<String>> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_BREADCRUMBS = "breadcrumbs";
+    private static final String ID_MESSAGE_OF_THE_DAY = "messageOfTheDay";
     private static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
     private static final String ID_THEME_PICKER = "themePicker";
@@ -72,6 +73,7 @@ extends PanelAbstract<String, Model<String>> {
         super.onInitialize();
 
         addBreadcrumbs();
+        addMessageOfTheDay();
         addCredits();
         addAboutLink();
         addThemePicker();
@@ -139,6 +141,10 @@ extends PanelAbstract<String, Model<String>> {
                 ? new BreadcrumbPanel(ID_BREADCRUMBS)
                         : new EmptyPanel(ID_BREADCRUMBS).setVisible(false);
                 addOrReplace(breadcrumbPanel);
+    }
+
+    private void addMessageOfTheDay() {
+        add(new MessageOfTheDayPanel(ID_MESSAGE_OF_THE_DAY));
     }
 
     @Override

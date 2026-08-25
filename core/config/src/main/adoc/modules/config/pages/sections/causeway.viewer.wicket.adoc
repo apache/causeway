@@ -66,8 +66,10 @@ causeway.viewer.wicket. +
 bookmarked-pages. +
 show-drop-down-on-footer
 
-|  true
+|  false
 | Whether the drop-down list of previously visited objects should be shown in the footer.
+
+The drop-down is hidden by default and can be explicitly enabled alongside the message-of-the-day banner.
 
 
 |

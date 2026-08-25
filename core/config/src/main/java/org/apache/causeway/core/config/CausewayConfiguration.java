@@ -3346,7 +3346,7 @@ public class CausewayConfiguration {
                 /**
                  * Whether the drop-down list of previously visited objects should be shown in the footer.
                  */
-                private boolean showDropDownOnFooter = true;
+                private boolean showDropDownOnFooter = false;
 
             }
 
