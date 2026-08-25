@@ -25,27 +25,45 @@ import java.util.Optional;
 
 public final class HtmxPageFragmentRegistry {
 
-    private final Map<String, HtmxPageFragmentFactory> byLogicalType;
+    private final Map<String, HtmxPageDefinition> byLogicalType;
 
     public HtmxPageFragmentRegistry(final List<HtmxPageFragmentFactory> factories) {
-        final var collected = new LinkedHashMap<String, HtmxPageFragmentFactory>();
-        for (var factory : factories) {
-            final var logicalType = factory.logicalTypeName();
-            if (logicalType == null || logicalType.isBlank()) {
-                throw new IllegalStateException("An HTMX page fragment factory must declare a logical type.");
-            }
-            if (collected.putIfAbsent(logicalType, factory) != null) {
-                throw new IllegalStateException("More than one HTMX page fragment factory is registered for " + logicalType + ".");
-            }
-        }
+        this(factories, List.of());
+    }
+
+    HtmxPageFragmentRegistry(
+            final List<HtmxPageFragmentFactory> factories,
+            final List<HtmxPageDefinition> resourcePages) {
+        final var collected = new LinkedHashMap<String, HtmxPageDefinition>();
+        resourcePages.forEach(page -> register(collected, page));
+        factories.stream().map(HtmxPageDefinition::factory).forEach(page -> register(collected, page));
         this.byLogicalType = Map.copyOf(collected);
     }
 
-    public Optional<HtmxPageFragmentFactory> find(final String logicalTypeName) {
+    Optional<HtmxPageDefinition> find(final String logicalTypeName) {
         return Optional.ofNullable(byLogicalType.get(logicalTypeName));
     }
 
     public int size() {
         return byLogicalType.size();
+    }
+
+    private static void register(
+            final Map<String, HtmxPageDefinition> collected,
+            final HtmxPageDefinition page) {
+        final var logicalType = page.logicalTypeName();
+        if (logicalType == null || logicalType.isBlank()) {
+            throw new IllegalStateException("HTMX_PAGE_MISSING_LOGICAL_TYPE: An HTMX page must declare a logical type.");
+        }
+        final var previous = collected.putIfAbsent(logicalType, page);
+        if (previous != null) {
+            throw new IllegalStateException("HTMX_PAGE_DUPLICATE: More than one HTMX page is registered for "
+                    + bounded(logicalType) + " (" + previous.safeSourceIdentifier() + ", "
+                    + page.safeSourceIdentifier() + ").");
+        }
+    }
+
+    private static String bounded(final String value) {
+        return value.length() <= 200 ? value : value.substring(0, 197) + "...";
     }
 }

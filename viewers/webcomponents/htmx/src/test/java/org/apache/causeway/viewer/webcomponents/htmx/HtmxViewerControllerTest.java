@@ -42,6 +42,8 @@ class HtmxViewerControllerTest {
                 .contains("<!doctype html>")
                 .contains("<causeway-menubars>")
                 .contains("<main id=\"causeway-route\"")
+                .contains("data-page-kind=\"generic\"")
+                .contains("data-page-source=\"generic\"")
                 .contains("<causeway-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
                 .contains("<causeway-object editable>")
                 .contains("<causeway-interaction-controller data-causeway-route-interactions>");
@@ -197,10 +199,34 @@ class HtmxViewerControllerTest {
         assertThat(response.getBody())
                 .doesNotContain("<!doctype html>")
                 .contains("data-page-kind=\"custom\"")
+                .contains("data-page-source=\"factory\"")
                 .contains("data-custom-page")
                 .containsOnlyOnce("<causeway-object-context");
         assertThat(response.getHeaders().getFirst("HX-Push-Url"))
                 .isEqualTo("/app/htmx/object/petclinic.PetOwner/owner-1");
+    }
+
+    @Test
+    void rendersLiteralResourcePageInsideEscapedRouteContext() {
+        final var resource = HtmxPageDefinition.resource(
+                "petclinic.PetOwner",
+                "resource:petclinic.PetOwner.html",
+                "<article data-resource-page>{{objectId}}<causeway-property member=\"name\"></causeway-property></article>");
+        final var controller = controller(List.of(), List.of(resource));
+
+        final var response = controller.route(request(
+                "/htmx/object/petclinic.PetOwner/owner%26one",
+                "",
+                true));
+
+        assertThat(response.getBody())
+                .contains("data-page-kind=\"custom\"")
+                .contains("data-page-source=\"resource\"")
+                .contains("object-id=\"owner&amp;one\"")
+                .contains("{{objectId}}")
+                .contains("data-resource-page")
+                .containsOnlyOnce("<causeway-object-context")
+                .containsOnlyOnce("<causeway-interaction-controller");
     }
 
     @Test
@@ -237,7 +263,13 @@ class HtmxViewerControllerTest {
     }
 
     private HtmxViewerController controller(final List<HtmxPageFragmentFactory> factories) {
-        final var registry = new HtmxPageFragmentRegistry(factories);
+        return controller(factories, List.of());
+    }
+
+    private HtmxViewerController controller(
+            final List<HtmxPageFragmentFactory> factories,
+            final List<HtmxPageDefinition> resourcePages) {
+        final var registry = new HtmxPageFragmentRegistry(factories, resourcePages);
         return new HtmxViewerController(codec, new HtmxPageRenderer(codec, properties, registry), properties);
     }
 

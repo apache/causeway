@@ -54,13 +54,76 @@
   border-start-end-radius: 0;
 }
 
+.petclinic-page {
+  display: grid;
+  gap: var(--causeway-space-4);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.petclinic-page,
+.petclinic-page * {
+  box-sizing: border-box;
+}
+
+.petclinic-page causeway-property,
+.petclinic-page causeway-collection {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.petclinic-object-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--causeway-space-4);
+  align-items: start;
+}
+
+.petclinic-object-details,
+.petclinic-object-collections,
+.petclinic-field-list {
+  display: grid;
+  gap: var(--causeway-space-3);
+  min-width: 0;
+}
+
+.petclinic-card {
+  display: grid;
+  gap: var(--causeway-space-3);
+  min-width: 0;
+  padding: var(--causeway-space-4);
+  border: 1px solid var(--causeway-border);
+  border-radius: var(--causeway-radius-md);
+  background: var(--causeway-surface);
+}
+
+.petclinic-card > h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.petclinic-page-toolbar,
+.petclinic-associated-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-space-2);
+  align-items: center;
+}
+
+.petclinic-member-composition {
+  display: grid;
+  gap: var(--causeway-space-2);
+}
+
 body > nav > div > a > img,
 .navbar-brand-logo {
   max-height: 2rem;
 }
 
 @media (max-width: 60rem) {
-  .petclinic-dashboard-grid {
+  .petclinic-dashboard-grid,
+  .petclinic-object-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

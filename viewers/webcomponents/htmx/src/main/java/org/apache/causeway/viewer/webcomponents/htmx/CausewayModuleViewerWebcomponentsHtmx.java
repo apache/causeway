@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.webcomponents.htmx;
 import java.util.List;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,8 +37,11 @@ public class CausewayModuleViewerWebcomponentsHtmx {
     }
 
     @Bean
-    HtmxPageFragmentRegistry htmxPageFragmentRegistry(final List<HtmxPageFragmentFactory> factories) {
-        return new HtmxPageFragmentRegistry(factories);
+    HtmxPageFragmentRegistry htmxPageFragmentRegistry(
+            final List<HtmxPageFragmentFactory> factories,
+            final ApplicationContext applicationContext) {
+        final var resourcePages = new HtmxClasspathPageLoader(applicationContext).load();
+        return new HtmxPageFragmentRegistry(factories, resourcePages);
     }
 
     @Bean

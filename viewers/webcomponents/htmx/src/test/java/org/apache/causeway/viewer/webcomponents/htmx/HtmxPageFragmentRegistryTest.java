@@ -32,8 +32,43 @@ class HtmxPageFragmentRegistryTest {
         final var factory = factory("petclinic.PetOwner", "<p>owner</p>");
         final var registry = new HtmxPageFragmentRegistry(List.of(factory));
 
-        assertThat(registry.find("petclinic.PetOwner")).contains(factory);
+        assertThat(registry.find("petclinic.PetOwner"))
+                .get()
+                .extracting(HtmxPageDefinition::source)
+                .isEqualTo(HtmxPageDefinition.Source.FACTORY);
+        assertThat(registry.find("petclinic.PetOwner").orElseThrow()
+                .render(new HtmxObjectRoute("petclinic.PetOwner", "1")))
+                .isEqualTo("<p>owner</p>");
         assertThat(registry.find("petclinic.SpecialPetOwner")).isEmpty();
+    }
+
+    @Test
+    void selectsLiteralResourcePagesWithoutRouteInterpolation() {
+        final var page = HtmxPageDefinition.resource(
+                "petclinic.PetOwner",
+                "resource:petclinic.PetOwner.html",
+                "<p>{{objectId}}</p>");
+        final var registry = new HtmxPageFragmentRegistry(List.of(), List.of(page));
+
+        assertThat(registry.find("petclinic.PetOwner").orElseThrow()
+                .render(new HtmxObjectRoute("petclinic.PetOwner", "opaque-id")))
+                .isEqualTo("<p>{{objectId}}</p>");
+    }
+
+    @Test
+    void rejectsResourceAndFactoryDuplicate() {
+        final var page = HtmxPageDefinition.resource(
+                "petclinic.PetOwner",
+                "resource:petclinic.PetOwner.html",
+                "<p>resource</p>");
+
+        assertThatThrownBy(() -> new HtmxPageFragmentRegistry(
+                List.of(factory("petclinic.PetOwner", "factory")),
+                List.of(page)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("HTMX_PAGE_DUPLICATE")
+                .hasMessageContaining("resource:petclinic.PetOwner.html")
+                .hasMessageContaining("factory:");
     }
 
     @Test
@@ -42,9 +77,11 @@ class HtmxPageFragmentRegistryTest {
                 factory("petclinic.PetOwner", "first"),
                 factory("petclinic.PetOwner", "second"))))
                 .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("HTMX_PAGE_DUPLICATE")
                 .hasMessageContaining("More than one");
         assertThatThrownBy(() -> new HtmxPageFragmentRegistry(List.of(factory(" ", "blank"))))
                 .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("HTMX_PAGE_MISSING_LOGICAL_TYPE")
                 .hasMessageContaining("must declare");
     }
 
