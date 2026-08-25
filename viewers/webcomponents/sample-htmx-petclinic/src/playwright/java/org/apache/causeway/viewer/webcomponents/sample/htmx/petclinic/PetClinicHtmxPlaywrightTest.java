@@ -239,6 +239,19 @@ class PetClinicHtmxPlaywrightTest {
                 .as("overflowing elements: %s", overflowingElements)
                 .isEqualTo(0);
         assertThat(page.locator(".causeway-menubar-bar-disclosure").count()).isGreaterThan(0);
+
+        final var homeReadsBeforeBrandNavigation = graphQLRequests.stream()
+                .filter(payload -> payload.contains("CausewayReadApplicationEntry"))
+                .count();
+        page.locator(".causeway-shell-brand").click();
+        page.waitForFunction("() => location.pathname.includes('/object/petclinic.HomePage/')");
+        waitForPageKind("custom");
+        assertThat(graphQLRequests.stream()
+                .filter(payload -> payload.contains("CausewayReadApplicationEntry"))
+                .count() - homeReadsBeforeBrandNavigation).isBetween(0L, 1L);
+        assertThat(page.url()).contains("/object/petclinic.HomePage/");
+        assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
+        assertFocused(ROUTE_PAGE);
     }
 
     @Test

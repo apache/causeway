@@ -46,6 +46,7 @@ configureCausewayReferenceWidgets({
 });
 let activeRequest = null;
 let navigationGeneration = 0;
+const resolvingHomeLandings = new WeakSet();
 
 defineCausewayWebComponents();
 
@@ -200,24 +201,34 @@ function presentResult(detail) {
 
 async function resolveHome() {
   const landing = routeRegion?.querySelector('[data-route-state="landing"]');
-  if (!landing || !shell) {
+  if (!landing || !shell || resolvingHomeLandings.has(landing)) {
     return;
   }
   const client = requestGraphQLClient(shell);
   if (!client) {
     return;
   }
+  resolvingHomeLandings.add(landing);
   try {
     const description = await client.describeApplicationEntry();
+    if (!isCurrentLanding(landing)) {
+      return;
+    }
     if (!description.supported) {
       landing.dataset.routeState = 'unsupported';
       landing.querySelector('[data-causeway-home-message]').textContent = 'Choose an application action to begin.';
       return;
     }
     const response = await client.readApplicationEntry({description});
+    if (!isCurrentLanding(landing)) {
+      return;
+    }
     const identity = homeObjectIdentity(response.data);
     const policy = globalThis.causewayHtmxPolicy;
     if (identity && typeof policy?.handleHome === 'function' && await policy.handleHome(identity) === true) {
+      return;
+    }
+    if (!isCurrentLanding(landing)) {
       return;
     }
     if (identity) {
@@ -227,9 +238,17 @@ async function resolveHome() {
       landing.querySelector('[data-causeway-home-message]').textContent = 'Choose an application action to begin.';
     }
   } catch {
-    landing.dataset.routeState = 'partial-error';
-    landing.querySelector('[data-causeway-home-message]').textContent = 'The home page is unavailable; application menus remain available.';
+    if (isCurrentLanding(landing)) {
+      landing.dataset.routeState = 'partial-error';
+      landing.querySelector('[data-causeway-home-message]').textContent = 'The home page is unavailable; application menus remain available.';
+    }
+  } finally {
+    resolvingHomeLandings.delete(landing);
   }
+}
+
+function isCurrentLanding(landing) {
+  return landing.isConnected && routeRegion?.contains(landing) === true;
 }
 
 document.addEventListener('click', event => {
@@ -309,6 +328,7 @@ document.body.addEventListener('htmx:afterSwap', event => {
   activeRequest = null;
   setBusy(false);
   event.detail.target.querySelector('[tabindex="-1"]')?.focus();
+  void resolveHome();
 });
 
 document.body.addEventListener('htmx:afterRequest', event => {
