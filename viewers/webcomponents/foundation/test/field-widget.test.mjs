@@ -131,6 +131,81 @@ test('upgrades through a family-local module and ignores disconnected completion
   assert.notEqual(disconnected.dataset.widgetState, 'ready');
 });
 
+test('qualified optional fields expose a labelled keyboard clear suffix', async () => {
+  configureCausewayFieldWidgets({families: ['basic'], moduleUrls: {basic: fakeBasicModule}});
+  const editor = new CausewayFieldEditorElement();
+  editor.setAttribute('id', 'field-clear');
+  editor.setAttribute('data-family', 'basic');
+  editor.setAttribute('data-control', 'text-field');
+  editor.setAttribute('data-causeway-editor', 'knownAs');
+  editor.setAttribute('data-label', 'Known As');
+  editor.setAttribute('data-value', 'Mary');
+  editor.setAttribute('data-testid', 'known-as-editor');
+  let inputEvents = 0;
+  let commitEvents = 0;
+  editor.addEventListener('input', () => { inputEvents += 1; });
+  editor.addEventListener('causeway-editor-commit', () => { commitEvents += 1; });
+  document.body.appendChild(editor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  const control = editor.childNodes[0];
+  const clearButton = control.childNodes[0];
+  assert.equal(control.clearButtonVisible, false);
+  assert.equal(clearButton.localName, 'button');
+  assert.equal(clearButton.getAttribute('slot'), 'suffix');
+  assert.equal(clearButton.getAttribute('tabindex'), '0');
+  assert.equal(clearButton.getAttribute('aria-label'), 'Clear Known As');
+  assert.equal(clearButton.getAttribute('data-testid'), 'known-as-editor-clear');
+  assert.equal(clearButton.hidden, false);
+
+  const internalFocusout = new Event('focusout', {bubbles: true, composed: true});
+  internalFocusout.relatedTarget = clearButton;
+  control.dispatchEvent(internalFocusout);
+  assert.equal(commitEvents, 0);
+  const externalFocusout = new Event('focusout', {bubbles: true, composed: true});
+  externalFocusout.relatedTarget = document.createElement('button');
+  control.dispatchEvent(externalFocusout);
+  assert.equal(commitEvents, 1);
+
+  control.value = '';
+  control.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
+  assert.equal(clearButton.hidden, true);
+  editor.value = 'Ada';
+  assert.equal(clearButton.hidden, false);
+
+  clearButton.focus();
+  clearButton.dispatchEvent(new Event('click', {bubbles: true, cancelable: true}));
+  assert.equal(editor.value, '');
+  assert.equal(inputEvents, 1);
+  assert.equal(clearButton.hidden, true);
+  assert.equal(document.activeElement, control);
+  document.body.removeChild(editor);
+});
+
+test('required disabled and protected fields omit the clear suffix', async () => {
+  configureCausewayFieldWidgets({families: ['basic'], moduleUrls: {basic: fakeBasicModule}});
+  for (const attributes of [
+    {control: 'text-field', required: true},
+    {control: 'text-field', disabled: true},
+    {control: 'password-field', sensitive: true}
+  ]) {
+    const editor = new CausewayFieldEditorElement();
+    editor.setAttribute('data-family', 'basic');
+    editor.setAttribute('data-control', attributes.control);
+    editor.setAttribute('data-causeway-editor', 'value');
+    editor.setAttribute('data-label', 'Value');
+    editor.setAttribute('data-value', attributes.sensitive ? '' : 'current');
+    if (attributes.required) editor.setAttribute('required', '');
+    if (attributes.disabled) editor.setAttribute('disabled', '');
+    if (attributes.sensitive) editor.setAttribute('data-sensitive', 'true');
+    document.body.appendChild(editor);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    assert.equal(editor.childNodes[0].childNodes.length, 0);
+    assert.equal(editor.childNodes[0].clearButtonVisible, false);
+    document.body.removeChild(editor);
+  }
+});
+
 test('fails one family closed with a bounded event', async () => {
   configureCausewayFieldWidgets({families: ['basic'], moduleUrls: {
     basic: new URL('./fixtures/missing-field-module.mjs', import.meta.url).href
