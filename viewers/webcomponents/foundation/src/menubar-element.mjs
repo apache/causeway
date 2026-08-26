@@ -49,6 +49,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
     };
     this.addEventListener('click', event => this.#handleClick(event));
     this.addEventListener('keydown', event => this.#handleKeydown(event));
+    this.addEventListener('focusout', event => this.#handleFocusout(event));
   }
 
   get role() {
@@ -200,6 +201,13 @@ export class CausewayMenubarElement extends HTMLElementBase {
       identity: null,
       context
     }), {cancelable: true}));
+  }
+
+  #handleFocusout(event) {
+    if (event.relatedTarget && this.contains?.(event.relatedTarget)) {
+      return;
+    }
+    this.#closeExpandedMenus();
   }
 
   #handleKeydown(event) {

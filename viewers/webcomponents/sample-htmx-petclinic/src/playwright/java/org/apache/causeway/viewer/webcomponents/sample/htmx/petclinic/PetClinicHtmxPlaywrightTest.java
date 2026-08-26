@@ -311,6 +311,15 @@ class PetClinicHtmxPlaywrightTest {
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Visits");
+        final var listUpcoming = serviceAction("listUpcoming");
+        listUpcoming.focus();
+        listUpcoming.press("Tab");
+        page.waitForFunction("() => !document.activeElement?.closest('causeway-menubar-primary')");
+        assertMenuClosed("Visits");
+        assertThat((Boolean) page.evaluate(
+                "() => !document.activeElement?.closest('causeway-menubar-primary')")).isTrue();
+
+        openMenu("Visits");
         serviceAction("listUpcoming").click();
         waitForShellResult("listUpcoming", "3 results");
         assertMenuClosedAndFocused("Visits");
