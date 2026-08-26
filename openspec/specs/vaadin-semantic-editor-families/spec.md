@@ -55,6 +55,11 @@ It MUST NOT establish a second interaction or validation state machine.
 - **AND** its accessible name identifies the semantic field being cleared
 - **AND** keyboard or pointer activation clears through the existing Causeway pending-value path
 
+#### Scenario: Clear control survives owner rerendering
+- **WHEN** validation replaces a field adapter while its Causeway-owned clear suffix has focus
+- **THEN** the replacement adapter retains the clear-focus request until its visible suffix is ready
+- **AND** focus returns to that suffix without exposing toolkit lifecycle details to the application
+
 #### Scenario: Keyboard user clears a field
 - **WHEN** the keyboard user activates the Causeway-owned clear affordance
 - **THEN** the now-empty clear affordance is removed from the tab sequence
