@@ -404,7 +404,26 @@ class PetClinicHtmxPlaywrightTest {
         final var addPetMutations = graphQLMutationCount("addPet");
         objectAction("addPet").click();
         waitForPrompt("addPet");
-        fillParameter("name", "Turing");
+        assertThat(page.locator(PROMPT + " .causeway-action-parameter-reason").count()).isZero();
+        final var preparationsBeforeName = graphQLOperationCount("CausewayPrepareAction");
+        tabOutOfParameter("name");
+        waitForPromptError("mandatory");
+        page.waitForTimeout(100);
+        assertThat(graphQLOperationCount("CausewayPrepareAction")).isGreaterThanOrEqualTo(preparationsBeforeName + 1);
+
+        final var nameEditor = resolveEditor(parameter("name"));
+        nameEditor.focus();
+        page.waitForTimeout(100);
+        final var preparationsBeforeTyping = graphQLOperationCount("CausewayPrepareAction");
+        fillEditor(nameEditor, "Turing");
+        page.waitForTimeout(350);
+        assertThat(graphQLOperationCount("CausewayPrepareAction")).isEqualTo(preparationsBeforeTyping);
+        assertThat(page.locator(PROMPT + " .causeway-action-parameter-reason").count()).isZero();
+
+        tabOutOfParameter("name");
+        page.waitForTimeout(200);
+        assertFocused(parameter("species"));
+        assertThat(page.locator(PROMPT + " .causeway-action-parameter-reason").count()).isZero();
         selectParameter("species", "DOG");
         submitPromptExpectingNavigation();
         waitForRouteUrl(ownerPath);
@@ -618,6 +637,19 @@ class PetClinicHtmxPlaywrightTest {
         selectParameter(parameterId, value);
     }
 
+    private void tabOutOfParameter(final String parameterId) {
+        final var selector = parameter(parameterId);
+        for (var attempt = 0; attempt < 4; attempt++) {
+            page.keyboard().press("Tab");
+            final var focusLeft = (Boolean) page.locator(selector).evaluate(
+                    "element => element !== document.activeElement && !element.contains(document.activeElement) && !element.shadowRoot?.activeElement");
+            if (focusLeft) {
+                return;
+            }
+        }
+        throw new AssertionError("Focus remained in action parameter " + parameterId);
+    }
+
     private void submitPrompt() {
         final var submit = page.locator("[data-testid='action-prompt-submit']");
         submit.waitFor();
@@ -657,6 +689,12 @@ class PetClinicHtmxPlaywrightTest {
         result.waitFor();
         page.waitForFunction("args => { const result = document.querySelector('[data-testid=\"causeway-shell-result\"]'); return !result?.hidden && result.textContent.includes(args.action) && result.textContent.includes(args.value); }",
                 java.util.Map.of("action", actionId, "value", value));
+    }
+
+    private long graphQLOperationCount(final String operationName) {
+        return graphQLRequests.stream()
+                .filter(body -> body != null && body.contains(operationName))
+                .count();
     }
 
     private long graphQLMutationCount(final String actionId) {

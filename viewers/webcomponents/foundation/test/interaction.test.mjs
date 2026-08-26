@@ -616,7 +616,79 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   assert.ok(calls.includes('invoke:Updated'));
 });
 
-test('action parameters preserve exact integer defaults and reject malformed values before preparation', async () => {
+test('action prompt defers prepared validity and recomputation until focus completion', async () => {
+  const calls = [];
+  const target = (id, value) => ({
+    getAttribute: name => name === 'data-causeway-editor' ? id : null,
+    value,
+    checked: false
+  });
+  const parameter = (id, values) => ({
+    id, description: id, inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {
+      hidden: false,
+      disabled: null,
+      choices: id === 'species' ? ['DOG', 'CAT'] : [],
+      validity: values[id] ? null : `'${id}' is mandatory`
+    }
+  });
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction(actionId, values) {
+      calls.push(`prepare:${JSON.stringify(values)}`);
+      return {status: 'success', errors: [], data: {parameters: [
+        parameter('name', values),
+        parameter('species', values)
+      ]}};
+    },
+    async validateAction(actionId, values) {
+      calls.push(`validate:${JSON.stringify(values)}`);
+      return {status: 'success', data: values.name && values.species ? null : 'Complete mandatory parameters.', errors: []};
+    },
+    async invokeAction() {
+      throw new Error('Invalid prompt must not invoke.');
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('addPet', context), true);
+  assert.doesNotMatch(controller.innerHTML, /is mandatory/);
+  const initialPreparationCount = calls.filter(call => call.startsWith('prepare:')).length;
+
+  const nameTarget = target('name', 'Turing');
+  const nameInput = new Event('input');
+  nameInput.target = nameTarget;
+  controller.dispatchEvent(nameInput);
+  await new Promise(resolve => setTimeout(resolve, 300));
+  assert.equal(controller.promptState.values.name, 'Turing');
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, initialPreparationCount);
+  assert.doesNotMatch(controller.innerHTML, /is mandatory/);
+
+  const nameFocusout = new Event('focusout');
+  nameFocusout.target = nameTarget;
+  controller.dispatchEvent(nameFocusout);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, initialPreparationCount + 1);
+  assert.doesNotMatch(controller.innerHTML, /name&#39; is mandatory/);
+  assert.doesNotMatch(controller.innerHTML, /species&#39; is mandatory/);
+
+  const speciesFocusout = new Event('focusout');
+  speciesFocusout.target = target('species', '');
+  controller.dispatchEvent(speciesFocusout);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.match(controller.innerHTML, /species&#39; is mandatory/);
+  assert.doesNotMatch(controller.innerHTML, /name&#39; is mandatory/);
+
+  const unblurredName = new Event('input');
+  unblurredName.target = target('name', '');
+  controller.dispatchEvent(unblurredName);
+  assert.equal(await controller.submitPrompt(), false);
+  assert.match(calls.find(call => call.startsWith('validate:')), /"name":null/);
+  assert.match(controller.innerHTML, /name&#39; is mandatory/);
+  assert.match(controller.innerHTML, /Complete mandatory parameters/);
+});
+
+test('action parameters preserve exact integer defaults and defer malformed-value feedback until focus completion', async () => {
   const calls = [];
   const parameter = value => ({
     id: 'amount', description: 'Amount', inputType: scalar('String'), enumValues: [], fields: new Map(),
@@ -656,13 +728,25 @@ test('action parameters preserve exact integer defaults and reject malformed val
     checked: false
   };
   controller.dispatchEvent(invalid);
+  assert.equal(controller.promptState.status, 'editing');
+  assert.equal(controller.promptState.error, null);
+  assert.doesNotMatch(controller.innerHTML, /whole number/);
+  assert.equal(calls.filter(call => call.startsWith('prepare:')).length, preparationCount);
+
+  const invalidFocusout = new Event('focusout');
+  invalidFocusout.target = invalid.target;
+  controller.dispatchEvent(invalidFocusout);
   assert.equal(controller.promptState.status, 'failed');
   assert.match(controller.promptState.error, /whole number/);
+  assert.match(controller.innerHTML, /whole number/);
   assert.equal(calls.filter(call => call.startsWith('prepare:')).length, preparationCount);
 
   const corrected = new Event('input');
   corrected.target = {...invalid.target, value: '123456789012345678901234567890'};
   controller.dispatchEvent(corrected);
+  const correctedFocusout = new Event('focusout');
+  correctedFocusout.target = corrected.target;
+  controller.dispatchEvent(correctedFocusout);
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(controller.promptState.values.amount, '123456789012345678901234567890');
   assert.equal(await controller.submitPrompt(), true);
@@ -709,6 +793,11 @@ test('protected action values remain write-only in markup and semantic prompt ev
   };
   controller.dispatchEvent(input);
   await new Promise(resolve => setTimeout(resolve, 300));
+  assert.doesNotMatch(controller.innerHTML, /top secret|Rejected/);
+  const focusout = new Event('focusout');
+  focusout.target = input.target;
+  controller.dispatchEvent(focusout);
+  await new Promise(resolve => setTimeout(resolve, 0));
   assert.doesNotMatch(controller.innerHTML, /top secret/);
   assert.match(controller.innerHTML, /Rejected \[protected\]/);
   assert.equal(published.at(-1).values.password, null);

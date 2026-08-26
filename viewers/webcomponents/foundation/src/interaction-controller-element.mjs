@@ -38,6 +38,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.resultState = null;
     this.generation = 0;
     this.parameterTimer = null;
+    this.validatedParameterIds = new Set();
+    this.pendingParameterFocusState = null;
+    this.renderingPrompt = false;
     this.autoCompleteController = null;
     this.autoCompleteGeneration = 0;
     this.scope = null;
@@ -63,6 +66,31 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     });
     this.addEventListener('input', event => this.#captureParameter(event));
     this.addEventListener('change', event => this.#captureParameter(event));
+    this.addEventListener('focusout', event => this.#captureParameter(event, {commit: true}));
+    this.addEventListener('causeway-editor-commit', event => {
+      if (this.renderingPrompt) {
+        event.stopPropagation();
+        return;
+      }
+      const parameterId = event.detail?.name;
+      if (!parameterId) {
+        return;
+      }
+      event.stopPropagation();
+      this.#captureParameter({
+        type: 'focusout',
+        target: {
+          getAttribute: name => name === 'data-causeway-editor' ? parameterId : null,
+          value: event.target?.value,
+          checked: event.target?.checked
+        },
+        relatedTarget: {
+          getAttribute: name => name === 'data-causeway-editor'
+            ? event.detail?.nextEditor ?? null
+            : name === 'data-causeway-action' ? event.detail?.nextAction ?? null : null
+        }
+      }, {commit: true});
+    });
     this.addEventListener('causeway-reference-search', event => {
       const parameterId = event.detail?.name;
       if (!parameterId || !this.promptState) {
@@ -102,6 +130,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         event.preventDefault();
         this.cancelPrompt();
       } else if (event.key === 'Tab' && this.promptState) {
+        this.#recordPromptFocusDestination(event);
         this.#containPromptFocus(event);
       }
     });
@@ -137,6 +166,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return false;
     }
     const generation = ++this.generation;
+    this.validatedParameterIds.clear();
+    this.pendingParameterFocusState = null;
     this.promptState = Object.freeze({
       status: InteractionStatus.PREPARING,
       actionId,
@@ -194,21 +225,25 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return true;
   }
 
-  async setParameterValue(parameterId, value, {recompute = true} = {}) {
+  async setParameterValue(parameterId, value, {recompute = true, revealValidation = true, focusState} = {}) {
     if (!this.promptState || this.promptState.status === InteractionStatus.INVOKING) {
       return false;
     }
+    if (revealValidation) {
+      this.validatedParameterIds.add(parameterId);
+    }
+    clearTimeout(this.parameterTimer);
     this.autoCompleteController?.abort();
     this.autoCompleteController = null;
     this.autoCompleteGeneration += 1;
-    const focusState = this.#captureControlFocus();
+    const effectiveFocusState = focusState === undefined ? this.#captureControlFocus() : focusState;
     const generation = ++this.generation;
     const values = Object.freeze({...this.promptState.values, [parameterId]: value});
     this.promptState = Object.freeze({...this.promptState, values, error: null, status: InteractionStatus.EDITING});
     this.#publishPromptState();
     if (!recompute) {
       this.render();
-      this.#restoreControlFocus(focusState);
+      this.#restoreControlFocus(effectiveFocusState);
       return true;
     }
     const prepared = await this.promptState.context.prepareAction(this.promptState.actionId, values);
@@ -249,7 +284,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
     this.#publishPromptState();
     this.render();
-    this.#restoreControlFocus(focusState);
+    this.#restoreControlFocus(effectiveFocusState);
     return true;
   }
 
@@ -323,7 +358,29 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     clearTimeout(this.parameterTimer);
     const focusState = this.#captureControlFocus();
     const generation = ++this.generation;
+    for (const parameter of this.promptState.parameters) {
+      this.validatedParameterIds.add(parameter.id);
+    }
     this.promptState = Object.freeze({...this.promptState, status: InteractionStatus.VALIDATING, error: null});
+    this.#publishPromptState();
+    this.render();
+    this.#restoreControlFocus(focusState);
+    const prepared = await this.promptState.context.prepareAction(this.promptState.actionId, this.promptState.values);
+    if (generation !== this.generation || prepared.status === InteractionStatus.OBSOLETE) {
+      return false;
+    }
+    if (prepared.status !== InteractionStatus.SUCCESS) {
+      this.promptState = Object.freeze({
+        ...this.promptState,
+        status: InteractionStatus.FAILED,
+        error: prepared.errors?.[0]?.message ?? 'Unable to validate parameter state.'
+      });
+      this.#publishPromptState();
+      this.render();
+      this.#focusFirstInvalidControl();
+      return false;
+    }
+    this.promptState = Object.freeze({...this.promptState, parameters: prepared.data.parameters ?? this.promptState.parameters});
     this.#publishPromptState();
     this.render();
     this.#restoreControlFocus(focusState);
@@ -360,6 +417,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.autoCompleteGeneration += 1;
     const source = this.promptState.source;
     const actionId = this.promptState.actionId;
+    this.validatedParameterIds.clear();
+    this.pendingParameterFocusState = null;
     const interactionContext = this.promptState.context;
     this.generation += 1;
     this.promptState = null;
@@ -385,7 +444,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   render() {
     const promptMarkup = this.promptState ? this.#promptMarkup() : '';
     const resultMarkup = this.resultState ? this.#resultMarkup() : '';
-    this.innerHTML = `<div class="causeway-interaction-controller">${promptMarkup}${resultMarkup}</div>`;
+    this.renderingPrompt = true;
+    try {
+      this.innerHTML = `<div class="causeway-interaction-controller">${promptMarkup}${resultMarkup}</div>`;
+    } finally {
+      this.renderingPrompt = false;
+    }
   }
 
   async #invoke(actionId, context, values, source, generation) {
@@ -427,6 +491,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       this.#focusFirstInvalidControl();
       return false;
     }
+    this.validatedParameterIds.clear();
     this.promptState = null;
     this.resultState = Object.freeze({actionId, result: result.data, ...interactionTargetDetail(context)});
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_RESULT, Object.freeze({
@@ -442,9 +507,15 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return true;
   }
 
-  #captureParameter(event) {
+  #captureParameter(event, {commit = false} = {}) {
+    if (this.renderingPrompt) {
+      return;
+    }
     const parameterId = event.target?.getAttribute?.('data-causeway-editor');
     if (!parameterId || !this.promptState) {
+      if (commit) {
+        this.pendingParameterFocusState = null;
+      }
       return;
     }
     const parameter = this.promptState.parameters.find(candidate => candidate.id === parameterId);
@@ -452,6 +523,11 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return;
     }
     const choices = parameter.state?.choices ?? parameter.enumValues ?? [];
+    const clearPresentedValidation = !commit && (
+      this.validatedParameterIds.has(parameterId)
+      || this.promptState.status === InteractionStatus.FAILED
+      || Boolean(this.promptState.error));
+    const editingFocusState = clearPresentedValidation ? this.#captureControlFocus() : null;
     const rendered = renderCausewayEditor(this.#parameterEditorContext(parameter, choices), this._editorRegistry);
     if (rendered.editor.id === 'autocomplete' && event.type === 'input') {
       clearTimeout(this.parameterTimer);
@@ -467,29 +543,52 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         suggestions: parameter.state?.suggestions ?? [],
         inputType: parameter.inputType
       });
-      const debouncedEditor = rendered.editor.debounced === true || rendered.editor.id === 'text';
-      if (debouncedEditor) {
-        this.promptState = Object.freeze({
-          ...this.promptState,
-          values: Object.freeze({...this.promptState.values, [parameterId]: value}),
-          error: null,
-          status: InteractionStatus.EDITING
-        });
-        clearTimeout(this.parameterTimer);
-        this.parameterTimer = setTimeout(() => void this.setParameterValue(parameterId, value), 250);
+      if (commit) {
+        const focusState = this.#controlFocusState(event.relatedTarget) ?? this.pendingParameterFocusState;
+        this.pendingParameterFocusState = null;
+        void this.setParameterValue(parameterId, value, {focusState});
         return;
       }
-      void this.setParameterValue(parameterId, value);
+      this.validatedParameterIds.delete(parameterId);
+      const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
+        ? Object.freeze({...candidate, state: Object.freeze({...candidate.state, error: null})})
+        : candidate));
+      this.promptState = Object.freeze({
+        ...this.promptState,
+        values: Object.freeze({...this.promptState.values, [parameterId]: value}),
+        parameters,
+        error: null,
+        status: InteractionStatus.EDITING
+      });
+      clearTimeout(this.parameterTimer);
+      if (clearPresentedValidation) {
+        this.#publishPromptState();
+        this.render();
+        this.#restoreControlFocus(editingFocusState);
+      }
     } catch (error) {
       if (!(error instanceof CausewayValueCodecError)) {
         throw error;
       }
+      const values = Object.freeze({...this.promptState.values, [parameterId]: event.target.value});
+      if (!commit) {
+        this.validatedParameterIds.delete(parameterId);
+        this.promptState = Object.freeze({...this.promptState, values, status: InteractionStatus.EDITING, error: null});
+        clearTimeout(this.parameterTimer);
+        if (clearPresentedValidation) {
+          this.#publishPromptState();
+          this.render();
+          this.#restoreControlFocus(editingFocusState);
+        }
+        return;
+      }
+      this.validatedParameterIds.add(parameterId);
       const parameters = Object.freeze(this.promptState.parameters.map(candidate => candidate.id === parameterId
         ? Object.freeze({...candidate, state: Object.freeze({...candidate.state, error: error.message})})
         : candidate));
       this.promptState = Object.freeze({
         ...this.promptState,
-        values: Object.freeze({...this.promptState.values, [parameterId]: event.target.value}),
+        values,
         parameters,
         status: InteractionStatus.FAILED,
         error: error.message
@@ -536,10 +635,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     const rendered = renderCausewayEditor(editorContext, this._editorRegistry);
     const label = humanize(parameter.id);
     const description = this.#parameterDescription(parameter, label);
-    const disabledReason = typeof parameter.state?.disabled === 'string' ? parameter.state.disabled : '';
-    const validityReason = typeof parameter.state?.validity === 'string' ? parameter.state.validity : '';
-    const reason = protectedPromptText(this.promptState,
-      parameter.state?.error || validityReason || disabledReason);
+    const reason = protectedPromptText(this.promptState, this.#parameterReason(parameter));
     return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}">
   <label id="${editorContext.labelId}" for="${editorContext.inputId}">${escapeHtml(label)}</label>
   ${description ? `<span id="${editorContext.descriptionId}" class="causeway-action-parameter-description">${escapeHtml(description)}</span>` : ''}
@@ -548,9 +644,16 @@ export class CausewayInteractionControllerElement extends HTMLElement {
 </div>`;
   }
 
+  #parameterReason(parameter) {
+    const validationReason = this.validatedParameterIds.has(parameter.id)
+      ? parameter.state?.error || parameter.state?.validity || ''
+      : '';
+    return validationReason || parameter.state?.disabled || '';
+  }
+
   #parameterEditorContext(parameter, choices) {
     const state = this.promptState;
-    const reason = parameter.state?.error || parameter.state?.validity || parameter.state?.disabled || '';
+    const reason = this.#parameterReason(parameter);
     return {
       name: parameter.id,
       label: humanize(parameter.id),
@@ -615,14 +718,23 @@ export class CausewayInteractionControllerElement extends HTMLElement {
 
   #captureControlFocus() {
     const active = globalThis.document?.activeElement;
-    if (!active || !this.contains?.(active)) {
+    return active && this.contains?.(active) ? this.#controlFocusState(active) : null;
+  }
+
+  #controlFocusState(control) {
+    if (!control) {
+      return null;
+    }
+    const editor = control.getAttribute?.('data-causeway-editor') ?? null;
+    const action = control.getAttribute?.('data-causeway-action') ?? null;
+    if (!editor && !action) {
       return null;
     }
     return Object.freeze({
-      editor: active.getAttribute?.('data-causeway-editor') ?? null,
-      action: active.getAttribute?.('data-causeway-action') ?? null,
-      selectionStart: active.selectionStart ?? null,
-      selectionEnd: active.selectionEnd ?? null
+      editor,
+      action,
+      selectionStart: control.selectionStart ?? null,
+      selectionEnd: control.selectionEnd ?? null
     });
   }
 
@@ -640,6 +752,22 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         control.setSelectionRange(focusState.selectionStart, focusState.selectionEnd ?? focusState.selectionStart);
       }
     });
+  }
+
+  #recordPromptFocusDestination(event) {
+    const controls = [...(this.querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])]
+      .filter(control => !control.disabled);
+    const active = event.target?.closest?.('[data-causeway-editor], [data-causeway-action]')
+      ?? globalThis.document?.activeElement;
+    const index = controls.indexOf(active);
+    if (index < 0) {
+      this.pendingParameterFocusState = null;
+      return;
+    }
+    const nextIndex = event.shiftKey
+      ? (index - 1 + controls.length) % controls.length
+      : (index + 1) % controls.length;
+    this.pendingParameterFocusState = this.#controlFocusState(controls[nextIndex]);
   }
 
   #containPromptFocus(event) {
