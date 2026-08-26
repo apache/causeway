@@ -135,6 +135,36 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
 
   firstDisclosure.setAttribute('aria-expanded', 'true');
   firstPanel.hidden = false;
+  const internalFocusout = new Event('focusout');
+  internalFocusout.target = action;
+  internalFocusout.relatedTarget = secondDisclosure;
+  bar.dispatchEvent(internalFocusout);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'true');
+  assert.equal(firstPanel.hidden, false);
+
+  const disclosureFocusCount = firstDisclosure.focusCount;
+  const externalFocusout = new Event('focusout');
+  externalFocusout.target = action;
+  externalFocusout.relatedTarget = {};
+  bar.dispatchEvent(externalFocusout);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(firstPanel.hidden, true);
+  assert.equal(firstDisclosure.focusCount, disclosureFocusCount);
+  assert.equal(requestCount, 1);
+
+  firstDisclosure.setAttribute('aria-expanded', 'true');
+  firstPanel.hidden = false;
+  const absentTargetFocusout = new Event('focusout');
+  absentTargetFocusout.target = action;
+  absentTargetFocusout.relatedTarget = null;
+  bar.dispatchEvent(absentTargetFocusout);
+  assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');
+  assert.equal(firstPanel.hidden, true);
+  assert.equal(firstDisclosure.focusCount, disclosureFocusCount);
+  assert.equal(requestCount, 1);
+
+  firstDisclosure.setAttribute('aria-expanded', 'true');
+  firstPanel.hidden = false;
   const siblingClick = new Event('click');
   siblingClick.target = {closest: selector => selector === '[data-causeway-menu-disclosure]' ? secondDisclosure : null};
   bar.dispatchEvent(siblingClick);
