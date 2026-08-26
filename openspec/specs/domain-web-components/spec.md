@@ -504,6 +504,11 @@ Standard property editors and the standard action prompt SHALL expose labelled c
 - **THEN** the editor associates the reason with its input and announces it accessibly
 - **AND** retains the pending value for correction or cancellation
 
+#### Scenario: Property validation replaces focused actions
+- **WHEN** a user tabs from a changed property editor to Save or Cancel and validation-driven rendering replaces that focused action
+- **THEN** focus remains on the equivalent newly rendered action
+- **AND** subsequent Tab or Shift+Tab navigation continues from that action without restarting at the editor
+
 ### Requirement: Executable vanilla-HTML interaction acceptance composition
 The interaction slice SHALL extend the existing `sample-html` application as an executable acceptance fixture using the packaged web-component artifact and the real same-origin rich GraphQL endpoint.
 
