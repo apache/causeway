@@ -230,6 +230,11 @@ public class PetOwner implements Comparable<PetOwner> {
         return this;
     }
 
+    @MemberSupport
+    public Pet default0RemovePet() {
+        return getPets().size() == 1 ? getPets().iterator().next() : null;
+    }
+
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(describedAs = "Updates the owner's full name.")
     public PetOwner updateName(@Parameter(maxLength = 80) final String name) {
