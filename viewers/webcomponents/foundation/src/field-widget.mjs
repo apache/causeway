@@ -222,6 +222,21 @@ export class CausewayFieldEditorElement extends HTMLElement {
       control.required = this.hasAttribute('required');
       control.invalid = this.dataset.invalid === 'true';
       if ('clearButtonVisible' in control) control.clearButtonVisible = !control.required && this.dataset.control !== 'password-field';
+      control.addEventListener('focusout', event => {
+        if (!control.isConnected) {
+          return;
+        }
+        event.stopPropagation();
+        this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
+          bubbles: true,
+          composed: true,
+          detail: Object.freeze({
+            name: editorName,
+            nextEditor: focusAttribute(event.relatedTarget, 'data-causeway-editor'),
+            nextAction: focusAttribute(event.relatedTarget, 'data-causeway-action')
+          })
+        }));
+      });
       if (this.dataset.control === 'checkbox') {
         control.label = this.dataset.label;
         control.checked = this.dataset.value === 'true';
@@ -264,6 +279,17 @@ export class CausewayFieldEditorElement extends HTMLElement {
       return [];
     }
   }
+}
+
+function focusAttribute(target, name) {
+  for (let current = target; current;) {
+    const value = current.getAttribute?.(name);
+    if (value) {
+      return value;
+    }
+    current = current.parentNode ?? current.host ?? current.getRootNode?.()?.host ?? null;
+  }
+  return null;
 }
 
 function normalizeFamilies(value) {

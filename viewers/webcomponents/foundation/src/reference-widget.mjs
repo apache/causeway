@@ -158,6 +158,21 @@ export class CausewayReferenceEditorElement extends HTMLElement {
       }
       const selectionEvent = this.hasAttribute('multiple') ? 'selected-items-changed' : 'selected-item-changed';
       control.addEventListener(selectionEvent, event => this.#selectionChanged(event));
+      control.addEventListener('focusout', event => {
+        if (!control.isConnected) {
+          return;
+        }
+        event.stopPropagation();
+        this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
+          bubbles: true,
+          composed: true,
+          detail: Object.freeze({
+            name: this.getAttribute('data-causeway-editor'),
+            nextEditor: focusAttribute(event.relatedTarget, 'data-causeway-editor'),
+            nextAction: focusAttribute(event.relatedTarget, 'data-causeway-action')
+          })
+        }));
+      });
       this.replaceChildren(control);
       this._value = this.#initialValue();
       this.#synchronizeSelection();
@@ -362,6 +377,17 @@ function sameReference(left, right) {
 function referenceKey(value) {
   const metadata = value?._meta ?? value;
   return `${metadata?.logicalTypeName ?? ''}:${metadata?.id ?? ''}`;
+}
+
+function focusAttribute(target, name) {
+  for (let current = target; current;) {
+    const value = current.getAttribute?.(name);
+    if (value) {
+      return value;
+    }
+    current = current.parentNode ?? current.host ?? current.getRootNode?.()?.host ?? null;
+  }
+  return null;
 }
 
 function positiveInteger(value, fallback) {
