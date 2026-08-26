@@ -138,6 +138,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
   constructor() {
     super();
     this._control = null;
+    this._clearButton = null;
     this._generation = 0;
     this._focusRequested = false;
     this.addEventListener('keydown', event => {
@@ -156,6 +157,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
   disconnectedCallback() {
     this._generation += 1;
     this._control = null;
+    this._clearButton = null;
   }
 
   get value() {
@@ -166,6 +168,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
   set value(value) {
     this.dataset.value = this.dataset.sensitive === 'true' ? '' : String(value ?? '');
     if (this._control && this.dataset.control !== 'checkbox') this._control.value = this.dataset.value;
+    this.#refreshClearButton();
   }
 
   get checked() {
@@ -208,12 +211,13 @@ export class CausewayFieldEditorElement extends HTMLElement {
       if (!this.isConnected || generation !== this._generation) return;
       const control = document.createElement(tagName);
       const editorName = this.dataset.causewayEditor;
+      const testId = this.dataset.testid;
       this._control = control;
       control.id = `${this.id}-control`;
       control.setAttribute('data-causeway-editor', editorName);
       this.removeAttribute('data-causeway-editor');
-      if (this.dataset.testid) {
-        control.setAttribute('data-testid', this.dataset.testid);
+      if (testId) {
+        control.setAttribute('data-testid', testId);
         this.removeAttribute('data-testid');
       }
       if (this.dataset.labelledby) control.setAttribute('aria-labelledby', this.dataset.labelledby);
@@ -221,12 +225,16 @@ export class CausewayFieldEditorElement extends HTMLElement {
       control.disabled = this.hasAttribute('disabled');
       control.required = this.hasAttribute('required');
       control.invalid = this.dataset.invalid === 'true';
-      if ('clearButtonVisible' in control) control.clearButtonVisible = !control.required && this.dataset.control !== 'password-field';
+      const supportsClearButton = 'clearButtonVisible' in control;
+      if (supportsClearButton) control.clearButtonVisible = false;
       control.addEventListener('focusout', event => {
         if (!control.isConnected) {
           return;
         }
         event.stopPropagation();
+        if (control.contains(event.relatedTarget)) {
+          return;
+        }
         this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
           bubbles: true,
           composed: true,
@@ -250,12 +258,20 @@ export class CausewayFieldEditorElement extends HTMLElement {
         }
         if (this.dataset.control === 'password-field') control.setAttribute('autocomplete', 'new-password');
       }
+      if (supportsClearButton
+          && !control.required
+          && !control.disabled
+          && this.dataset.sensitive !== 'true'
+          && !['password-field', 'checkbox', 'select'].includes(this.dataset.control)) {
+        this.#installClearButton(control, testId);
+      }
       this.replaceChildren(control);
       await control.updateComplete;
       if (!this.isConnected || generation !== this._generation) return;
       if (this.dataset.inputMode && control.inputElement) {
         control.inputElement.inputMode = this.dataset.inputMode;
       }
+      this.#refreshClearButton();
       this.dataset.widgetState = 'ready';
       if (this._focusRequested) queueMicrotask(() => control.focus());
     } catch (error) {
@@ -271,6 +287,39 @@ export class CausewayFieldEditorElement extends HTMLElement {
     }
   }
 
+  #installClearButton(control, testId) {
+    const clearButton = document.createElement('button');
+    const label = boundedLabel(this.dataset.label || this.dataset.causewayEditor || 'field');
+    clearButton.setAttribute('type', 'button');
+    clearButton.setAttribute('tabindex', '0');
+    clearButton.setAttribute('slot', 'suffix');
+    clearButton.setAttribute('class', 'causeway-field-clear');
+    clearButton.setAttribute('aria-label', `Clear ${label}`);
+    clearButton.setAttribute('data-causeway-field-clear', '');
+    if (testId) clearButton.setAttribute('data-testid', `${testId}-clear`);
+    clearButton.textContent = '×';
+    clearButton.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      control.value = '';
+      this.dataset.value = '';
+      this.#refreshClearButton();
+      control.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
+      control.focus();
+    });
+    const refresh = () => this.#refreshClearButton();
+    control.addEventListener('input', refresh);
+    control.addEventListener('change', refresh);
+    control.appendChild(clearButton);
+    this._clearButton = clearButton;
+  }
+
+  #refreshClearButton() {
+    if (this._clearButton) {
+      this._clearButton.hidden = String(this._control?.value ?? '') === '';
+    }
+  }
+
   #items() {
     try {
       const items = JSON.parse(this.dataset.items || '[]');
@@ -279,6 +328,11 @@ export class CausewayFieldEditorElement extends HTMLElement {
       return [];
     }
   }
+}
+
+function boundedLabel(value, maximum = 120) {
+  const label = String(value ?? '').trim() || 'field';
+  return label.length > maximum ? `${label.slice(0, maximum - 1)}…` : label;
 }
 
 function focusAttribute(target, name) {

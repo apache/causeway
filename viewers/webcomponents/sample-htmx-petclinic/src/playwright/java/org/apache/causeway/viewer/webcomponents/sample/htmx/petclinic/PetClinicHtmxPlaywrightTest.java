@@ -335,6 +335,35 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(disabledName.getAttribute("data-tooltip")).isNotBlank();
         assertThat(disabledName.getAttribute("tabindex")).isEqualTo("0");
 
+        final var knownAs = page.locator("causeway-property[member='knownAs']");
+        final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
+        knownAsEdit.click();
+        final var knownAsEditorSelector = "causeway-property[member='knownAs'] [data-causeway-editor='knownAs']";
+        final var knownAsEditor = resolveEditor(knownAsEditorSelector);
+        assertFocused(knownAsEditorSelector);
+        final var knownAsSaveSelector = "causeway-property[member='knownAs'] [data-causeway-action='save']";
+        final var knownAsCancelSelector = "causeway-property[member='knownAs'] [data-causeway-action='cancel']";
+        if (!nativeToolkit()) {
+            final var knownAsClearSelector = "causeway-property[member='knownAs'] .causeway-field-clear";
+            knownAsEditor.press("Tab");
+            assertFocused(knownAsClearSelector);
+            page.locator(knownAsClearSelector).press("Enter");
+            assertFocused(knownAsEditorSelector);
+            fillEditor(knownAsEditor, "Keyboard focus");
+            knownAsEditor.press("Tab");
+            assertFocused(knownAsClearSelector);
+            page.locator(knownAsClearSelector).press("Tab");
+        } else {
+            fillEditor(knownAsEditor, "Keyboard focus");
+            knownAsEditor.press("Tab");
+        }
+        assertFocused(knownAsSaveSelector);
+        page.waitForTimeout(750);
+        assertFocused(knownAsSaveSelector);
+        page.locator(knownAsSaveSelector).press("Tab");
+        assertFocused(knownAsCancelSelector);
+        page.locator(knownAsCancelSelector).click();
+
         final var notes = page.locator("causeway-property[member='notes']");
         final var notesEdit = notes.locator("[data-causeway-action='edit']");
         revealContainingTab(notes, notesEdit);

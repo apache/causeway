@@ -42,6 +42,7 @@ Private-part mutation is toolkit-version fragile, while Escape conflicts with Ca
 ### Restore native action controls synchronously
 
 When property rerendering observes focus on Save or Cancel, it will focus the corresponding newly inserted native button immediately after replacement.
+A busy or invalid Save control will remain focusable with `aria-disabled="true"`, while the controller suppresses activation until saving is valid; native `disabled` would make focus restoration impossible.
 Editor restoration will remain deferred because lazy custom-element upgrade and selection restoration require its existing microtask path.
 
 This removes the transient body-focus window between validation renders without trapping focus or changing user-selected external focus.

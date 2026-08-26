@@ -71,7 +71,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
         void this.beginEdit();
       } else if (action === 'cancel') {
         this.cancelEdit();
-      } else if (action === 'save') {
+      } else if (action === 'save' && event.target?.getAttribute?.('aria-disabled') !== 'true') {
         void this.saveEdit();
       }
     });
@@ -603,7 +603,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   <div class="causeway-property-editor">${renderedEditor.html}</div>
   ${errorMarkup}
   <div class="causeway-property-editor-actions">
-    <button type="button" data-causeway-action="save"${this.#testId('save')} ${busy || interaction.error ? 'disabled' : ''}>Save</button>
+    <button type="button" data-causeway-action="save"${this.#testId('save')} aria-disabled="${busy || Boolean(interaction.error)}">Save</button>
     <button type="button" data-causeway-action="cancel"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}>Cancel</button>
   </div>
   <span class="causeway-property-interaction-status" role="status">${escapeHtml(interactionStatusLabel(interaction.status))}</span>
@@ -611,14 +611,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     } finally {
       this.renderingInteraction = false;
     }
-    const focusSelector = activeEditor
-      ? '[data-causeway-editor]'
-      : activeAction ? `[data-causeway-action="${activeAction}"]` : '';
-    if (focusSelector) {
+    if (activeAction) {
+      this.querySelector?.(`[data-causeway-action="${activeAction}"]`)?.focus?.();
+    } else if (activeEditor) {
       queueMicrotask(() => {
-        const focusTarget = this.querySelector?.(focusSelector);
+        const focusTarget = this.querySelector?.('[data-causeway-editor]');
         focusTarget?.focus?.();
-        if (activeEditor && selectionStart !== null && typeof focusTarget?.setSelectionRange === 'function') {
+        if (selectionStart !== null && typeof focusTarget?.setSelectionRange === 'function') {
           focusTarget.setSelectionRange(selectionStart, selectionEnd);
         }
       });

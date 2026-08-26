@@ -416,6 +416,24 @@ causeway-property:last-child .causeway-property {
   width: 100%;
 }
 
+.causeway-field-clear {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0.15rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--causeway-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.causeway-field-clear:hover:not(:disabled) {
+  background: var(--causeway-surface-subtle);
+  color: var(--causeway-text);
+}
+
 .causeway-property-editor-actions,
 .causeway-action-prompt-actions {
   display: flex;

@@ -402,6 +402,61 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.equal(calls.includes('update:Cancelled'), false);
 });
 
+test('property validation preserves Save and Cancel focus across consecutive renders', async () => {
+  for (const actionName of ['save', 'cancel']) {
+    let stateListener;
+    let resolveValidation;
+    const context = {
+      registerRequirement(requirement, listener) {
+        stateListener = listener;
+        return () => {};
+      },
+      async prepareProperty() {
+        return {status: 'success', data: {capabilities: {validate: true, inputType: scalar('String'), enumValues: []}, choices: []}, errors: []};
+      },
+      async validateProperty() {
+        return new Promise(resolve => { resolveValidation = resolve; });
+      }
+    };
+    const property = new CausewayPropertyElement();
+    property.member = 'name';
+    property.editable = true;
+    property.context = context;
+    document.body.appendChild(property);
+    stateListener({
+      status: 'ready',
+      descriptor: {id: 'name', description: '', value: {typeRef: scalar('String')}},
+      data: {hidden: false, disabled: null, get: 'Original'}, errors: [], generation: 1
+    });
+    assert.equal(await property.beginEdit(), true);
+    await Promise.resolve();
+
+    const oldAction = document.createElement('button');
+    oldAction.setAttribute('data-causeway-action', actionName);
+    property.appendChild(oldAction);
+    let replacementAction = document.createElement('button');
+    replacementAction.setAttribute('data-causeway-action', actionName);
+    property.appendChild(replacementAction);
+    property.querySelector = selector => selector === `[data-causeway-action="${actionName}"]` ? replacementAction : null;
+    oldAction.focus();
+    property.setPendingValue('Changed');
+
+    const validation = property.validatePending();
+    assert.equal(document.activeElement, replacementAction);
+    assert.match(property.innerHTML, /data-causeway-action="save"[^>]+aria-disabled="true"/);
+    assert.doesNotMatch(property.innerHTML, /data-causeway-action="save"[^>]+ disabled/);
+    const finalAction = document.createElement('button');
+    finalAction.setAttribute('data-causeway-action', actionName);
+    property.appendChild(finalAction);
+    replacementAction = finalAction;
+    resolveValidation({status: 'success', data: null, errors: []});
+    await validation;
+    assert.equal(document.activeElement, finalAction);
+    assert.match(property.innerHTML, /data-causeway-action="save"[^>]+aria-disabled="false"/);
+    document.body.removeChild(property);
+  }
+});
+
 test('windowed Vaadin reference adapter requests authoritative later pages', async () => {
   const moduleSource = `
     if (!globalThis.customElements.get('vaadin-combo-box')) globalThis.customElements.define('vaadin-combo-box', class extends HTMLElement {});
