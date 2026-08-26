@@ -25,6 +25,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -103,6 +104,14 @@ extends PanelAbstract<String, Model<String>> {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(CSS_RESOURCE));
+        response.render(OnDomReadyHeaderItem.forScript(
+                moveDialogToDocumentBodyScript(detailDialog.getMarkupId())));
+    }
+
+    static String moveDialogToDocumentBodyScript(final String markupId) {
+        return String.format(
+                "document.body.appendChild(document.getElementById('%s'));",
+                markupId);
     }
 
     static Optional<MessageOfTheDay> candidateFrom(

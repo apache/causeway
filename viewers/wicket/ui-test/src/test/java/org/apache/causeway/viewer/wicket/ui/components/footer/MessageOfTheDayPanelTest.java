@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,6 +88,13 @@ class MessageOfTheDayPanelTest {
     }
 
     @Test
+    void detailDialogIsMovedOutsideTheFixedFooterStackingContext() {
+        assertEquals(
+                "document.body.appendChild(document.getElementById('detail-dialog'));",
+                MessageOfTheDayPanel.moveDialogToDocumentBodyScript("detail-dialog"));
+    }
+
+    @Test
     void historyDropdownDefaultsToHiddenAndCanBeEnabled() {
         final CausewayConfiguration configuration = new CausewayConfiguration(null, Optional.empty());
 
@@ -104,7 +112,10 @@ class MessageOfTheDayPanelTest {
         }
 
         assertTrue(markup.contains("wicket:id=\"breadcrumbs\""));
-        assertTrue(markup.contains("wicket:id=\"messageOfTheDay\""));
+        assertTrue(markup.matches(
+                "(?s).*<div class=\"navbar-nav flex-grow-1 motd-footer-item\">"
+                + "\\s*<div class=\"flex-grow-1 motd-panel\""
+                + "\\s*wicket:id=\"messageOfTheDay\"></div>.*"));
     }
 
 }

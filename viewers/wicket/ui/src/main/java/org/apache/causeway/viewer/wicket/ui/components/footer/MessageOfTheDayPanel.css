@@ -17,6 +17,7 @@
  *  under the License.
  */
 .motd-footer-item,
+.motd-panel,
 .motd-container {
     min-width: 0;
 }
