@@ -141,6 +141,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
     this._clearButton = null;
     this._generation = 0;
     this._focusRequested = false;
+    this._clearFocusRequested = false;
     this.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
         this.dispatchEvent(new CustomEvent('causeway-field-escape', {bubbles: true, composed: true}));
@@ -158,6 +159,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
     this._generation += 1;
     this._control = null;
     this._clearButton = null;
+    this._clearFocusRequested = false;
   }
 
   get value() {
@@ -194,6 +196,11 @@ export class CausewayFieldEditorElement extends HTMLElement {
   focus(options) {
     this._focusRequested = true;
     this._control?.focus?.(options);
+  }
+
+  focusClear(options) {
+    this._clearFocusRequested = true;
+    this.#restoreClearFocus(options);
   }
 
   async #upgrade(generation) {
@@ -274,6 +281,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
       this.#refreshClearButton();
       this.dataset.widgetState = 'ready';
       if (this._focusRequested) queueMicrotask(() => control.focus());
+      this.#restoreClearFocus();
     } catch (error) {
       if (!this.isConnected || generation !== this._generation) return;
       failCausewayFieldFamily(family);
@@ -317,6 +325,19 @@ export class CausewayFieldEditorElement extends HTMLElement {
   #refreshClearButton() {
     if (this._clearButton) {
       this._clearButton.hidden = String(this._control?.value ?? '') === '';
+    }
+  }
+
+  #restoreClearFocus(options) {
+    if (!this._clearFocusRequested || !this._control) {
+      return;
+    }
+    const clearButton = this._clearButton;
+    this._clearFocusRequested = false;
+    if (clearButton?.isConnected && !clearButton.hidden) {
+      queueMicrotask(() => {
+        if (clearButton.isConnected && !clearButton.hidden) clearButton.focus(options);
+      });
     }
   }
 
