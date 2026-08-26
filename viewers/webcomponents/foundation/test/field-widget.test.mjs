@@ -145,6 +145,7 @@ test('qualified optional fields expose a labelled keyboard clear suffix', async 
   let commitEvents = 0;
   editor.addEventListener('input', () => { inputEvents += 1; });
   editor.addEventListener('causeway-editor-commit', () => { commitEvents += 1; });
+  editor.focusClear();
   document.body.appendChild(editor);
   await new Promise(resolve => setTimeout(resolve, 0));
 
@@ -157,6 +158,8 @@ test('qualified optional fields expose a labelled keyboard clear suffix', async 
   assert.equal(clearButton.getAttribute('aria-label'), 'Clear Known As');
   assert.equal(clearButton.getAttribute('data-testid'), 'known-as-editor-clear');
   assert.equal(clearButton.hidden, false);
+  await Promise.resolve();
+  assert.equal(document.activeElement, clearButton);
 
   const internalFocusout = new Event('focusout', {bubbles: true, composed: true});
   internalFocusout.relatedTarget = clearButton;
@@ -172,6 +175,10 @@ test('qualified optional fields expose a labelled keyboard clear suffix', async 
   assert.equal(clearButton.hidden, true);
   editor.value = 'Ada';
   assert.equal(clearButton.hidden, false);
+  document.body.focus();
+  editor.focusClear();
+  await Promise.resolve();
+  assert.equal(document.activeElement, clearButton);
 
   clearButton.focus();
   clearButton.dispatchEvent(new Event('click', {bubbles: true, cancelable: true}));
@@ -179,6 +186,27 @@ test('qualified optional fields expose a labelled keyboard clear suffix', async 
   assert.equal(inputEvents, 1);
   assert.equal(clearButton.hidden, true);
   assert.equal(document.activeElement, control);
+  document.body.removeChild(editor);
+});
+
+test('an inapplicable pre-upgrade clear focus request expires safely', async () => {
+  configureCausewayFieldWidgets({families: ['basic'], moduleUrls: {basic: fakeBasicModule}});
+  const editor = new CausewayFieldEditorElement();
+  editor.setAttribute('data-family', 'basic');
+  editor.setAttribute('data-control', 'text-field');
+  editor.setAttribute('data-causeway-editor', 'knownAs');
+  editor.setAttribute('data-label', 'Known As');
+  editor.setAttribute('data-value', '');
+  document.body.focus();
+  editor.focusClear();
+  document.body.appendChild(editor);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const clearButton = editor.childNodes[0].childNodes[0];
+  assert.equal(clearButton.hidden, true);
+  assert.equal(document.activeElement, document.body);
+  editor.value = 'Later';
+  await Promise.resolve();
+  assert.notEqual(document.activeElement, clearButton);
   document.body.removeChild(editor);
 });
 
