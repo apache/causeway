@@ -36,7 +36,7 @@ Application markup and events MUST remain Causeway-owned and MUST NOT require ra
 - **AND** no field closure is imported
 
 ### Requirement: Causeway-owned interaction semantics
-Each field adapter SHALL map Causeway labels, descriptions, required and disabled state, validation, pending values, focus, cancellation, and semantic events into its internal control.
+Each field adapter SHALL map Causeway labels, descriptions, required and disabled state, validation, pending values, focus, keyboard clearing, cancellation, and semantic events into its internal control.
 It MUST NOT establish a second interaction or validation state machine.
 
 #### Scenario: User changes an editable property
@@ -48,6 +48,17 @@ It MUST NOT establish a second interaction or validation state machine.
 - **WHEN** an internal control changes a prepared object or service action parameter
 - **THEN** the interaction controller updates that parameter through the existing argument negotiation path
 - **AND** dependent parameter preparation and submission emit only advertised arguments
+
+#### Scenario: Optional field exposes clearing
+- **WHEN** a qualified optional non-protected field has a non-empty value and presents a visible clear affordance
+- **THEN** keyboard users can reach that affordance through normal forward and reverse Tab navigation
+- **AND** its accessible name identifies the semantic field being cleared
+- **AND** keyboard or pointer activation clears through the existing Causeway pending-value path
+
+#### Scenario: Keyboard user clears a field
+- **WHEN** the keyboard user activates the Causeway-owned clear affordance
+- **THEN** the now-empty clear affordance is removed from the tab sequence
+- **AND** focus returns to the field without cancelling the interaction, submitting it, or exposing a second value state
 
 #### Scenario: Validation rejects a value
 - **WHEN** client codec or authoritative GraphQL validation rejects the pending value
