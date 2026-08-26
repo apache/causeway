@@ -62,6 +62,15 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.autoCompleteGeneration = 0;
     this.renderingInteraction = false;
     this.restoreEditFocusAfterGeneration = null;
+    this.restoreClearFocus = false;
+    this.addEventListener('focusin', event => {
+      this.restoreClearFocus = event.target?.hasAttribute?.('data-causeway-field-clear') === true;
+    });
+    this.addEventListener('focusout', event => {
+      if (!this.renderingInteraction && !this.contains(event.relatedTarget)) {
+        this.restoreClearFocus = false;
+      }
+    });
     this.addEventListener('click', event => {
       if (eventOriginatesFromAssociatedAction(this, event.target)) {
         return;
@@ -200,6 +209,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     if (name === 'member') {
       this.interactionState = null;
+      this.restoreClearFocus = false;
       refreshMemberComposition(this);
       this.reconnectRequirement();
     } else {
@@ -217,6 +227,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return false;
     }
     this.restoreEditFocusAfterGeneration = null;
+    this.restoreClearFocus = false;
     const generation = ++this.interactionGeneration;
     this.#setInteraction({status: InteractionStatus.PREPARING, pendingValue: state.data?.get, error: null});
     const result = await this._resolvedContext.prepareProperty(this.member);
@@ -274,6 +285,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const editor = this.interactionState.editor;
     this.interactionState = null;
     this.restoreEditFocusAfterGeneration = null;
+    this.restoreClearFocus = false;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
       member: this.member,
       status: InteractionStatus.CANCELLED,
@@ -417,6 +429,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.restoreEditFocusAfterGeneration = focusGeneration;
     const editor = this.interactionState.editor;
     this.interactionState = null;
+    this.restoreClearFocus = false;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
       member: this.member,
       value: publicInteractionValue(editor, pendingValue),
@@ -585,6 +598,12 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const ownsFocus = typeof this.contains === 'function' && this.contains(activeElement);
     const activeEditor = ownsFocus && activeElement?.getAttribute?.('data-causeway-editor');
     const activeAction = ownsFocus && activeElement?.getAttribute?.('data-causeway-action');
+    const activeClear = ownsFocus && activeElement?.hasAttribute?.('data-causeway-field-clear');
+    if (activeClear) {
+      this.restoreClearFocus = true;
+    } else if (ownsFocus && (activeEditor || activeAction)) {
+      this.restoreClearFocus = false;
+    }
     const selectionStart = activeEditor ? activeElement.selectionStart : null;
     const selectionEnd = activeEditor ? activeElement.selectionEnd : null;
     const busy = [InteractionStatus.PREPARING, InteractionStatus.VALIDATING, InteractionStatus.SAVING].includes(interaction.status);
@@ -611,7 +630,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     } finally {
       this.renderingInteraction = false;
     }
-    if (activeAction) {
+    if (this.restoreClearFocus) {
+      this.querySelector?.('causeway-field-editor')?.focusClear?.();
+    } else if (activeAction) {
       this.querySelector?.(`[data-causeway-action="${activeAction}"]`)?.focus?.();
     } else if (activeEditor) {
       queueMicrotask(() => {

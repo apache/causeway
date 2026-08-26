@@ -457,6 +457,68 @@ test('property validation preserves Save and Cancel focus across consecutive ren
   }
 });
 
+test('property preserves clear focus intent across validation renders but not external departure', async () => {
+  let stateListener;
+  const validationResolvers = [];
+  const context = {
+    registerRequirement(requirement, listener) {
+      stateListener = listener;
+      return () => {};
+    },
+    async prepareProperty() {
+      return {status: 'success', data: {capabilities: {validate: true, inputType: scalar('String'), enumValues: []}, choices: []}, errors: []};
+    },
+    async validateProperty() {
+      return new Promise(resolve => validationResolvers.push(resolve));
+    }
+  };
+  const property = new CausewayPropertyElement();
+  property.member = 'knownAs';
+  property.editable = true;
+  property.context = context;
+  document.body.appendChild(property);
+  stateListener({
+    status: 'ready',
+    descriptor: {id: 'knownAs', description: '', value: {typeRef: scalar('String')}},
+    data: {hidden: false, disabled: null, get: 'Original'}, errors: [], generation: 1
+  });
+  assert.equal(await property.beginEdit(), true);
+  await Promise.resolve();
+
+  const oldClear = document.createElement('button');
+  oldClear.setAttribute('data-causeway-field-clear', '');
+  property.appendChild(oldClear);
+  const firstAdapter = {requests: 0, focusClear() { this.requests += 1; }};
+  let replacementAdapter = firstAdapter;
+  property.querySelector = selector => selector === 'causeway-field-editor' ? replacementAdapter : null;
+  oldClear.focus();
+  property.setPendingValue('Changed');
+
+  const validation = property.validatePending();
+  assert.equal(firstAdapter.requests, 1);
+  document.body.focus();
+  const secondAdapter = {requests: 0, focusClear() { this.requests += 1; }};
+  replacementAdapter = secondAdapter;
+  validationResolvers.shift()({status: 'success', data: null, errors: []});
+  await validation;
+  assert.equal(secondAdapter.requests, 1);
+
+  const external = document.createElement('button');
+  external.focus();
+  const departure = new Event('focusout', {bubbles: true});
+  departure.relatedTarget = external;
+  property.dispatchEvent(departure);
+  const thirdAdapter = {requests: 0, focusClear() { this.requests += 1; }};
+  replacementAdapter = thirdAdapter;
+  property.setPendingValue('Again');
+  const laterValidation = property.validatePending();
+  assert.equal(thirdAdapter.requests, 0);
+  validationResolvers.shift()({status: 'success', data: null, errors: []});
+  await laterValidation;
+  assert.equal(thirdAdapter.requests, 0);
+  document.body.removeChild(property);
+});
+
 test('windowed Vaadin reference adapter requests authoritative later pages', async () => {
   const moduleSource = `
     if (!globalThis.customElements.get('vaadin-combo-box')) globalThis.customElements.define('vaadin-combo-box', class extends HTMLElement {});

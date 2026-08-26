@@ -352,6 +352,8 @@ class PetClinicHtmxPlaywrightTest {
             fillEditor(knownAsEditor, "Keyboard focus");
             knownAsEditor.press("Tab");
             assertFocused(knownAsClearSelector);
+            page.waitForTimeout(750);
+            assertFocused(knownAsClearSelector);
             page.locator(knownAsClearSelector).press("Tab");
         } else {
             fillEditor(knownAsEditor, "Keyboard focus");
