@@ -12,6 +12,7 @@ class FakeVaadinControl extends (globalThis.HTMLElement ?? class {}) {
     this.value = '';
     this.checked = false;
     this.items = [];
+    this.clearButtonVisible = false;
     this.inputElement = {inputMode: '', selectionStart: 0, selectionEnd: 0, setSelectionRange() {}};
   }
 }
