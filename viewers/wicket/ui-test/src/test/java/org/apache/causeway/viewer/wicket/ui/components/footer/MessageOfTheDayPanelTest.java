@@ -88,6 +88,19 @@ class MessageOfTheDayPanelTest {
     }
 
     @Test
+    void detailDialogProvidesContentMarkup() throws IOException {
+        final String markup;
+        try (var input = MessageOfTheDayModalDialog.class
+                .getResourceAsStream("MessageOfTheDayModalDialog.html")) {
+            assertNotNull(input);
+            markup = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
+
+        assertTrue(markup.contains("<wicket:extend>"));
+        assertTrue(markup.contains("wicket:id=\"content\""));
+    }
+
+    @Test
     void detailDialogIsMovedOutsideTheFixedFooterStackingContext() {
         assertEquals(
                 "document.body.appendChild(document.getElementById('detail-dialog'));",

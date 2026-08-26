@@ -79,7 +79,7 @@ extends PanelAbstract<String, Model<String>> {
         titleLink.add(titleLabel);
         add(titleLink);
 
-        detailDialog = new ModalDialog<>(ID_DETAIL_DIALOG);
+        detailDialog = new MessageOfTheDayModalDialog(ID_DETAIL_DIALOG);
         detailDialog.setVisible(false);
         add(detailDialog);
     }

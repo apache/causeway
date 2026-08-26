@@ -16,31 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.motd-footer-item,
-.motd-panel,
-.motd-container {
-    min-width: 0;
-}
+package org.apache.causeway.viewer.wicket.ui.components.footer;
 
-.motd-container {
-    margin: .25rem .5rem;
-    overflow: hidden;
-    background-color: #dc3545;
-    border-radius: .25rem;
-}
+import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
 
-.motd-title {
-    display: block;
-    padding: .25rem .75rem;
-    overflow: hidden;
-    color: #fff !important;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+final class MessageOfTheDayModalDialog
+extends ModalDialog<Void> {
 
-.motd-title:hover,
-.motd-title:focus {
-    background-color: rgba(0, 0, 0, .1);
-    color: #fff !important;
-    text-decoration: none;
+    private static final long serialVersionUID = 1L;
+
+    MessageOfTheDayModalDialog(final String id) {
+        super(id);
+    }
+
 }
