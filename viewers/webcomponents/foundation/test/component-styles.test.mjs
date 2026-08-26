@@ -37,3 +37,12 @@ test('direct member associations wrap in semantic source and keyboard order', ()
   assert.match(CAUSEWAY_COMPONENT_STYLES, /flex-wrap: wrap/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
+
+test('standard theme gives described multiline properties explicit responsive placement', async () => {
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-description \{\s+grid-column: 1;\s+grid-row: 2;/);
+  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-value \{\s+grid-column: 2;\s+grid-row: 1 \/ span 2;/);
+  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 3;\s+grid-row: 1;\s+justify-self: start;/);
+  assert.match(theme, /@container \(max-width: 32rem\)[\s\S]+:where\(causeway-property\[multiline\]\) \.causeway-property-value \{\s+grid-row: 3;/);
+  assert.match(theme, /@media \(max-width: 48rem\)[\s\S]+:where\(causeway-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 2;\s+grid-row: 3;/);
+});

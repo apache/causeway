@@ -340,12 +340,17 @@ class PetClinicHtmxPlaywrightTest {
         revealContainingTab(notes, notesEdit);
         assertThat(notes.locator(".causeway-property-label").getAttribute("title"))
                 .isEqualTo("Additional notes about this pet owner.");
+        assertWideMultilinePropertyLayout(notes);
         notesEdit.click();
         final var notesEditor = resolveEditor("causeway-property[member='notes'] [data-causeway-editor='notes']");
         assertThat(notesEditor.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
                 .isEqualTo(5);
         fillEditor(notesEditor, "First line\nSecond line");
         notes.locator("[data-causeway-action='cancel']").click();
+
+        page.setViewportSize(390, 844);
+        assertNarrowMultilinePropertyLayout(notes);
+        page.setViewportSize(1440, 900);
 
         editProperty("telephoneNumber", "020 7000 1234");
         waitForPropertyValue("telephoneNumber", "020 7000 1234");
@@ -682,6 +687,27 @@ class PetClinicHtmxPlaywrightTest {
         final var alert = page.locator(PROMPT + " [role='alert']")
                 .filter(new Locator.FilterOptions().setHasText(messagePart)).first();
         alert.waitFor();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertWideMultilinePropertyLayout(final Locator property) {
+        final var geometry = (List<Number>) property.evaluate("element => { const label = element.querySelector('.causeway-property-label').getBoundingClientRect(); const description = element.querySelector('.causeway-property-description').getBoundingClientRect(); const value = element.querySelector('.causeway-property-value').getBoundingClientRect(); const edit = element.querySelector('.causeway-property-edit').getBoundingClientRect(); return [label.left, label.right, label.bottom, description.left, description.top, value.left, value.top, edit.left, edit.width]; }");
+        assertThat(Math.abs(geometry.get(3).doubleValue() - geometry.get(0).doubleValue())).isLessThanOrEqualTo(1.0);
+        assertThat(geometry.get(4).doubleValue()).isGreaterThanOrEqualTo(geometry.get(2).doubleValue() - 1.0);
+        assertThat(geometry.get(5).doubleValue()).isGreaterThan(geometry.get(1).doubleValue());
+        assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(4).doubleValue());
+        assertThat(geometry.get(7).doubleValue()).isGreaterThan(geometry.get(5).doubleValue());
+        assertThat(geometry.get(8).doubleValue()).isLessThan(160.0);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertNarrowMultilinePropertyLayout(final Locator property) {
+        final var geometry = (List<Number>) property.evaluate("element => { const label = element.querySelector('.causeway-property-label').getBoundingClientRect(); const description = element.querySelector('.causeway-property-description').getBoundingClientRect(); const value = element.querySelector('.causeway-property-value').getBoundingClientRect(); const edit = element.querySelector('.causeway-property-edit').getBoundingClientRect(); return [label.bottom, description.top, description.bottom, value.top, edit.top, edit.width, document.documentElement.scrollWidth, document.documentElement.clientWidth]; }");
+        assertThat(geometry.get(1).doubleValue()).isGreaterThanOrEqualTo(geometry.get(0).doubleValue() - 1.0);
+        assertThat(geometry.get(3).doubleValue()).isGreaterThanOrEqualTo(geometry.get(2).doubleValue() - 1.0);
+        assertThat(Math.abs(geometry.get(4).doubleValue() - geometry.get(3).doubleValue())).isLessThanOrEqualTo(1.0);
+        assertThat(geometry.get(5).doubleValue()).isLessThan(160.0);
+        assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(7).doubleValue() + 1.0);
     }
 
     private void waitForShellResult(final String actionId, final String value) {
