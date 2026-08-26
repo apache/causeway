@@ -358,6 +358,30 @@ causeway-property:last-child .causeway-property {
   font-size: var(--causeway-font-size-sm);
 }
 
+:where(causeway-property[multiline]) .causeway-property-label {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+:where(causeway-property[multiline]) .causeway-property-description {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+:where(causeway-property[multiline]) .causeway-property-value {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+:where(causeway-property[multiline]) .causeway-property-edit {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: start;
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: var(--causeway-font-size-sm);
+}
+
 .causeway-action-description {
   position: absolute !important;
   width: 1px !important;
@@ -586,6 +610,23 @@ causeway-interaction-controller:has(.causeway-action-prompt)::before {
   .causeway-property-editor {
     grid-column: 1;
   }
+
+  :where(causeway-property[multiline]) .causeway-property-label {
+    grid-row: 1;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-description {
+    grid-row: 2;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-value {
+    grid-row: 3;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-edit {
+    grid-column: 2;
+    grid-row: 3;
+  }
 }
 
 @media (max-width: 48rem) {
@@ -621,6 +662,23 @@ causeway-interaction-controller:has(.causeway-action-prompt)::before {
   .causeway-property-value,
   .causeway-property-editor {
     grid-column: 1;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-label {
+    grid-row: 1;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-description {
+    grid-row: 2;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-value {
+    grid-row: 3;
+  }
+
+  :where(causeway-property[multiline]) .causeway-property-edit {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   .causeway-action-prompt {
