@@ -351,6 +351,10 @@ causeway-property:last-child .causeway-property {
   overflow-wrap: anywhere;
 }
 
+.causeway-property-value-string {
+  text-align: start;
+}
+
 .causeway-property-description,
 .causeway-collection-description {
   grid-column: 2 / -1;

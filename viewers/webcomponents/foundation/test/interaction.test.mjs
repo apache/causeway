@@ -352,18 +352,28 @@ test('editable properties support prepare, validation, cancel and authoritative 
     data: {hidden: false, disabled: 'Locked by policy', get: 'Classics'}, errors: [], generation: 1
   });
   assert.doesNotMatch(property.innerHTML, /property-name-edit/);
+  assert.match(property.innerHTML, /class="causeway-property-label causeway-property-disabled-tooltip"/);
   assert.match(property.innerHTML, /title="Owner&#39;s full name"/);
-  assert.match(property.innerHTML, /causeway-property-disabled-indicator/);
   assert.match(property.innerHTML, /tabindex="0"/);
   assert.match(property.innerHTML, /data-tooltip="Locked by policy"/);
+  assert.match(property.innerHTML, /aria-describedby="causeway-property-description-[^"]+ causeway-property-reason-[^"]+"/);
   assert.match(property.innerHTML, /causeway-visually-hidden">Locked by policy/);
-  assert.doesNotMatch(property.innerHTML, /<p[^>]*causeway-property-disabled-reason/);
+  assert.doesNotMatch(property.innerHTML, /causeway-property-disabled-indicator|&#9432;/);
+  assert.match(property.innerHTML, /class="causeway-property-value causeway-property-value-string"/);
+  stateListener({
+    status: 'ready',
+    descriptor: {id: 'name', description: "Owner's full name", value: {typeRef: scalar('Int')}},
+    data: {hidden: false, disabled: null, get: 18}, errors: [], generation: 2
+  });
+  assert.doesNotMatch(property.innerHTML, /causeway-property-value-string/);
   stateListener({
     status: 'ready',
     descriptor: {id: 'name', description: "Owner's full name", value: {typeRef: scalar('String')}},
-    data: {hidden: false, disabled: null, get: 'Classics'}, errors: [], generation: 2
+    data: {hidden: false, disabled: null, get: 'Classics'}, errors: [], generation: 3
   });
   assert.match(property.innerHTML, /property-name-edit/);
+  assert.match(property.innerHTML, /causeway-property-value-string/);
+  assert.doesNotMatch(property.innerHTML, /causeway-property-disabled-tooltip|data-tooltip="Locked by policy"|tabindex="0"/);
   assert.match(property.innerHTML, /class="causeway-property-edit"[^>]+data-causeway-action="edit"/);
   assert.match(property.innerHTML, /aria-label="Edit Name"/);
   assert.match(property.innerHTML, /title="Edit Name"/);
