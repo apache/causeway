@@ -15,7 +15,7 @@ Applications need an optional local sign-in experience that validates SecMan `Ap
 - Add authenticated-user chrome to the HTMX shell and perform logout through a CSRF-protected server endpoint that invalidates the Spring Security context and HTTP session before redirecting to the login page.
 - Suppress the legacy `LogoutMenu` action from HTMX menu presentation without changing its metamodel or Wicket behavior.
 - Require the existing `causeway.security.spring.allow-csrf-filters=true` setting when HTMX session authentication is enabled and fail startup with a bounded diagnostic when the prerequisite is absent.
-- Publish the server CSRF token to the authenticated shell through a documented safe mechanism and attach it to GraphQL mutations, HTMX state-changing requests, and logout.
+- Publish the server CSRF token to the authenticated shell through a documented safe mechanism and attach it to every same-origin GraphQL POST, HTMX state-changing request, login submission, and logout.
 - Distinguish expired or absent authentication from denied authorization: full-page and fragment navigation must reach login safely on `401`, while authenticated `403` responses remain bounded access-denied outcomes.
 - Keep OAuth/OIDC, external provider buttons, bearer-token API design, delegated-user auto-creation, and provider logout outside this first change.
 - Use a dedicated secured acceptance runtime or profile that does not require Wicket to operate with enabled Spring CSRF filters; Wicket and HTMX CSRF-safe coexistence remains a separate planned change.
