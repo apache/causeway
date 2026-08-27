@@ -367,6 +367,8 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.equal(await property.beginEdit(), true);
   assert.match(property.innerHTML, /property-name-editor/);
   assert.match(property.innerHTML, /data-control="text-area"[^>]+data-rows="5"/);
+  assert.doesNotMatch(property.innerHTML, /causeway-property-interaction-status/);
+  assert.doesNotMatch(property.innerHTML, />Editing</);
   property.setPendingValue('Deferred');
   const pendingValidation = property.validatePending();
   const editorTarget = {
