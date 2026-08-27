@@ -374,6 +374,10 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.match(property.innerHTML, /data-control="text-area"[^>]+data-rows="5"/);
   assert.doesNotMatch(property.innerHTML, /causeway-property-interaction-status/);
   assert.doesNotMatch(property.innerHTML, />Editing</);
+  assert.match(property.innerHTML, /data-causeway-action="save"[^>]+aria-label="Save Name"[^>]+title="Save Name"/);
+  assert.match(property.innerHTML, /data-causeway-action="cancel"[^>]+aria-label="Cancel editing Name"[^>]+title="Cancel editing Name"/);
+  assert.equal([...property.innerHTML.matchAll(/<svg class="causeway-property-editor-action-icon"[^>]+aria-hidden="true"[^>]+focusable="false"/g)].length, 2);
+  assert.doesNotMatch(property.innerHTML, />(Save|Cancel)</);
   property.setPendingValue('Deferred');
   const pendingValidation = property.validatePending();
   const editorTarget = {

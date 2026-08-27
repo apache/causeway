@@ -187,6 +187,25 @@ causeway-collection-column[hidden] {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+.causeway-property-editor-action {
+  align-items: center;
+  block-size: 2rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: 2rem;
+  justify-content: center;
+  padding: 0.35rem;
+}
+.causeway-property-editor-action-icon {
+  block-size: 1rem;
+  fill: none;
+  inline-size: 1rem;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
 .causeway-property-editor input:not([type="checkbox"]),
 .causeway-property-editor select,
 .causeway-property-editor textarea,
