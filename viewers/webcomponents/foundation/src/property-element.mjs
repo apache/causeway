@@ -618,6 +618,8 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const statusMarkup = statusLabel
       ? `<span class="causeway-property-interaction-status" role="status">${escapeHtml(statusLabel)}</span>`
       : '';
+    const saveLabel = `Save ${presentation.label}`;
+    const cancelLabel = `Cancel editing ${presentation.label}`;
     this.setAttribute('data-editor', renderedEditor.editorId);
     this.renderingInteraction = true;
     try {
@@ -627,8 +629,8 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   <div class="causeway-property-editor">${renderedEditor.html}</div>
   ${errorMarkup}
   <div class="causeway-property-editor-actions">
-    <button type="button" data-causeway-action="save"${this.#testId('save')} aria-disabled="${busy || Boolean(interaction.error)}">Save</button>
-    <button type="button" data-causeway-action="cancel"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}>Cancel</button>
+    <button type="button" class="causeway-property-editor-action causeway-property-editor-save" data-causeway-action="save" aria-label="${escapeHtml(saveLabel)}" title="${escapeHtml(saveLabel)}"${this.#testId('save')} aria-disabled="${busy || Boolean(interaction.error)}"><svg class="causeway-property-editor-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"></path></svg></button>
+    <button type="button" class="causeway-property-editor-action causeway-property-editor-cancel" data-causeway-action="cancel" aria-label="${escapeHtml(cancelLabel)}" title="${escapeHtml(cancelLabel)}"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}><svg class="causeway-property-editor-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg></button>
   </div>
   ${statusMarkup}
 </div>`);

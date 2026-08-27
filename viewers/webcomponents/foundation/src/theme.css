@@ -454,6 +454,28 @@ causeway-property:last-child .causeway-property {
   gap: var(--causeway-space-2);
 }
 
+.causeway-property-editor-action {
+  align-items: center;
+  block-size: 2rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: 2rem;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.35rem;
+}
+
+.causeway-property-editor-action-icon {
+  block-size: 1rem;
+  fill: none;
+  inline-size: 1rem;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
 .causeway-property-validation,
 .causeway-action-prompt-error,
 .causeway-error {
