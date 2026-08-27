@@ -29,6 +29,14 @@ test('external structural stylesheet remains synchronized with the installable s
   assert.equal(withoutLicense, CAUSEWAY_COMPONENT_STYLES.trim());
 });
 
+test('property edit affordance remains a compact deterministic icon control', async () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit \{[\s\S]*?block-size: 2rem;[\s\S]*?inline-size: 2rem;[\s\S]*?padding: 0\.35rem;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-edit-icon \{[\s\S]*?block-size: 1rem;[\s\S]*?inline-size: 1rem;[\s\S]*?stroke: currentColor;/);
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /\.causeway-property-edit \{[\s\S]*?block-size: 2rem;[\s\S]*?inline-size: 2rem;[\s\S]*?min-height: 0;/);
+  assert.match(theme, /\.causeway-property-edit-icon \{[\s\S]*?block-size: 1rem;[\s\S]*?inline-size: 1rem;[\s\S]*?stroke: currentColor;/);
+});
+
 test('direct member associations wrap in semantic source and keyboard order', () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-property\[data-causeway-action-group\]/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-collection\[data-causeway-action-group\]/);

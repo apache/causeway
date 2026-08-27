@@ -377,9 +377,6 @@ causeway-property:last-child .causeway-property {
   grid-column: 3;
   grid-row: 1;
   justify-self: start;
-  min-height: 2rem;
-  padding: 0.25rem 0.55rem;
-  font-size: var(--causeway-font-size-sm);
 }
 
 .causeway-action-description {
@@ -395,9 +392,25 @@ causeway-property:last-child .causeway-property {
 }
 
 .causeway-property-edit {
-  min-height: 2rem;
-  padding: 0.25rem 0.55rem;
-  font-size: var(--causeway-font-size-sm);
+  align-items: center;
+  block-size: 2rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: 2rem;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.35rem;
+}
+
+.causeway-property-edit-icon {
+  block-size: 1rem;
+  fill: none;
+  inline-size: 1rem;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .causeway-property-disabled-reason,
