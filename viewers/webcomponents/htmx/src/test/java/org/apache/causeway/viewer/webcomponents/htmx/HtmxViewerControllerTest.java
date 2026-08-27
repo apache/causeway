@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -245,6 +247,31 @@ class HtmxViewerControllerTest {
         assertThat(overlong.getHeaders().getFirst("HX-Push-Url")).isEqualTo("/htmx");
         assertThat(landing.getBody()).contains("data-route-state=\"landing\"")
                 .contains("data-causeway-home-message");
+    }
+
+    @Test
+    void authenticatedFullShellRendersBoundedCsrfIdentityLogoutAndExactPolicyMetadata() {
+        final var controller = controller(List.of());
+        controller.setAuthenticationShell(request -> Optional.of(new HtmxAuthenticationShell.State(
+                "Sven & Co",
+                "/htmx/login",
+                "/htmx/logout",
+                "X-CSRF-TOKEN",
+                "_csrf",
+                "token<bounded>",
+                Set.of(new HtmxAuthenticationShell.ActionIdentity(
+                        "causeway.security.LogoutMenu", "logout")))));
+
+        final var response = controller.route(request("/htmx", "", false));
+
+        assertThat(response.getBody())
+                .contains("<meta name=\"causeway-auth-login\" content=\"/htmx/login\">")
+                .contains("<meta name=\"causeway-auth-csrf-header\" content=\"X-CSRF-TOKEN\">")
+                .contains("<meta name=\"causeway-auth-csrf-token\" content=\"token&lt;bounded&gt;\">")
+                .contains("causeway.security.LogoutMenu#logout")
+                .contains("<span class=\"causeway-shell-username\">Sven &amp; Co</span>")
+                .contains("<form method=\"post\" action=\"/htmx/logout\" data-causeway-logout-form>")
+                .contains("<input type=\"hidden\" name=\"_csrf\" value=\"token&lt;bounded&gt;\">");
     }
 
     @Test

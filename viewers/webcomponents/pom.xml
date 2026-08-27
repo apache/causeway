@@ -45,6 +45,7 @@
     <modules>
         <module>foundation</module>
         <module>htmx</module>
+        <module>htmx-security-secman</module>
         <module>sample-html</module>
         <module>sample-htmx-petclinic</module>
     </modules>
@@ -63,6 +64,16 @@
             <id>run-sample-htmx-petclinic</id>
             <properties>
                 <sample-htmx-petclinic.run.skip>false</sample-htmx-petclinic.run.skip>
+            </properties>
+            <build>
+                <defaultGoal>spring-boot:run</defaultGoal>
+            </build>
+        </profile>
+        <profile>
+            <id>run-sample-htmx-petclinic-secured</id>
+            <properties>
+                <sample-htmx-petclinic.run.skip>false</sample-htmx-petclinic.run.skip>
+                <spring-boot.run.main-class>org.apache.causeway.viewer.webcomponents.sample.htmx.petclinicsecured.PetClinicHtmxSecuredApplication</spring-boot.run.main-class>
             </properties>
             <build>
                 <defaultGoal>spring-boot:run</defaultGoal>

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.Locale;
+import java.util.Optional;
 
 final class HtmxPageRenderer {
 
@@ -87,12 +88,22 @@ final class HtmxPageRenderer {
     }
 
     String renderShell(final String contextPath, final String fragment, final String canonicalPath) {
+        return renderShell(contextPath, fragment, canonicalPath, Optional.empty());
+    }
+
+    String renderShell(
+            final String contextPath,
+            final String fragment,
+            final String canonicalPath,
+            final Optional<HtmxAuthenticationShell.State> authenticationState) {
         final var context = normalizeContextPath(contextPath);
         final var basePath = context + routeCodec.basePath();
         final var graphQlEndpoint = context + normalizeOriginPath(properties.getGraphQlEndpoint(), "/graphql");
         final var language = safeLanguage(properties.getLanguage());
         final var comparisonLink = comparisonLink(context);
         final var applicationStylesheet = applicationStylesheet(context);
+        final var authenticationMetadata = authenticationMetadata(authenticationState);
+        final var authenticationChrome = authenticationChrome(authenticationState);
         return """
                 <!doctype html>
                 <html lang="%s" data-causeway-htmx-base="%s" data-causeway-canonical-path="%s"%s>
@@ -103,6 +114,7 @@ final class HtmxPageRenderer {
                   <meta name="color-scheme" content="light dark">
                   <link rel="icon" href="data:,">
                   <meta name="htmx-config" content='{"historyCacheSize":0,"historyRestoreAsHxRequest":false,"includeIndicatorStyles":false}'>
+                  %s
                   <title>%s</title>
                   <link rel="stylesheet" href="%s/causeway-webcomponents/component-styles.css">
                   <link rel="stylesheet" href="%s/causeway-webcomponents/theme.css">
@@ -121,6 +133,7 @@ final class HtmxPageRenderer {
                           <span>%s</span>
                         </a>
                         <causeway-menubars></causeway-menubars>
+                        %s
                       </div>
                     </header>
                     <div id="causeway-route-loading" class="causeway-route-loading htmx-indicator" role="status" aria-live="polite">Loading page…</div>
@@ -141,6 +154,7 @@ final class HtmxPageRenderer {
                         escape(basePath),
                         escape(context + canonicalPath),
                         widgetAttributes(),
+                        authenticationMetadata,
                         escape(properties.getBrand()),
                         escape(context),
                         escape(context),
@@ -153,8 +167,52 @@ final class HtmxPageRenderer {
                         escape(basePath),
                         escape(properties.getBrand()),
                         escape(properties.getBrand()),
+                        authenticationChrome,
                         fragment,
                         comparisonLink);
+    }
+
+    private static String authenticationMetadata(final Optional<HtmxAuthenticationShell.State> state) {
+        if (state.isEmpty()) {
+            return "";
+        }
+        final var value = state.orElseThrow();
+        final var exclusions = value.excludedActions().stream()
+                .map(HtmxAuthenticationShell.ActionIdentity::externalForm)
+                .sorted()
+                .collect(java.util.stream.Collectors.joining(","));
+        return """
+                <meta name="causeway-auth-login" content="%s">
+                <meta name="causeway-auth-csrf-header" content="%s">
+                <meta name="causeway-auth-csrf-parameter" content="%s">
+                <meta name="causeway-auth-csrf-token" content="%s">
+                <meta name="causeway-auth-excluded-actions" content="%s">
+                """.formatted(
+                        escape(value.loginPath()),
+                        escape(value.csrfHeaderName()),
+                        escape(value.csrfParameterName()),
+                        escape(value.csrfToken()),
+                        escape(exclusions));
+    }
+
+    private static String authenticationChrome(final Optional<HtmxAuthenticationShell.State> state) {
+        if (state.isEmpty()) {
+            return "";
+        }
+        final var value = state.orElseThrow();
+        return """
+                <div class="causeway-shell-user" data-testid="causeway-shell-user">
+                  <span class="causeway-shell-username">%s</span>
+                  <form method="post" action="%s" data-causeway-logout-form>
+                    <input type="hidden" name="%s" value="%s">
+                    <button type="submit" class="causeway-shell-logout">Sign out</button>
+                  </form>
+                </div>
+                """.formatted(
+                        escape(value.username()),
+                        escape(value.logoutPath()),
+                        escape(value.csrfParameterName()),
+                        escape(value.csrfToken()));
     }
 
     private String widgetAttributes() {

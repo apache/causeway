@@ -18,27 +18,58 @@
  */
 
 import {
+  ACTION_REQUEST_EVENT,
   ACTION_RESULT_EVENT,
   COMPONENT_STATE_EVENT,
   MENU_BARS_STATE_EVENT,
-  configureCausewayReferenceWidgets,
   NAVIGATION_REQUEST_EVENT,
   OBJECT_CONTEXT_STATE_EVENT,
-  defineCausewayWebComponents,
   requestGraphQLClient
-} from '../causeway-webcomponents/index.mjs';
+} from '../causeway-webcomponents/context-events.mjs';
+import {CausewayGraphQLClientElement} from '../causeway-webcomponents/graphql-client-element.mjs';
+import {createFetchGraphQLExecutor} from '../causeway-webcomponents/graphql-executor.mjs';
+import {configureCausewayReferenceWidgets} from '../causeway-webcomponents/reference-widget.mjs';
+import {defineCausewayWebComponents} from '../causeway-webcomponents/register.mjs';
+import {
+  applyAuthenticationMenuPolicy,
+  csrfHeaders,
+  isExcludedAction,
+  isUnsafeMethod,
+  loginDestination,
+  readAuthenticationMetadata
+} from './authentication-policy.mjs';
 import {
   canonicalObjectPath,
   homeObjectIdentity,
   resultObjectIdentity
 } from './route-policy.mjs';
 
+if (!globalThis.customElements?.get('causeway-graphql-client')) {
+  globalThis.customElements?.define('causeway-graphql-client', CausewayGraphQLClientElement);
+}
 const shell = document.querySelector('causeway-graphql-client');
 const routeRegion = document.querySelector('#causeway-route');
 const announcement = document.querySelector('#causeway-route-announcement');
 const resultRegion = document.querySelector('#causeway-result');
 const basePath = document.documentElement.dataset.causewayHtmxBase;
 const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
+const authentication = readAuthenticationMetadata(document);
+if (shell && authentication) {
+  const executor = createFetchGraphQLExecutor({
+    endpoint: shell.endpoint,
+    headers: () => csrfHeaders(authentication)
+  });
+  shell.executor = async request => {
+    try {
+      return await executor(request);
+    } catch (error) {
+      if (error?.status === 401) {
+        redirectToLogin();
+      }
+      throw error;
+    }
+  };
+}
 configureCausewayReferenceWidgets({
   enabled: referenceWidgetMode === 'vaadin',
   minimumSearchLength: Number(document.documentElement.dataset.causewayReferenceMinimumSearchLength),
@@ -50,6 +81,13 @@ let pendingVoidRefreshGeneration = null;
 const resolvingHomeLandings = new WeakSet();
 
 defineCausewayWebComponents();
+
+function redirectToLogin() {
+  if (authentication) {
+    activeRequest?.abort?.();
+    globalThis.location.assign(loginDestination(authentication, globalThis.location));
+  }
+}
 
 function announce(message) {
   if (announcement) {
@@ -273,7 +311,22 @@ document.addEventListener(NAVIGATION_REQUEST_EVENT, event => {
   navigate(canonicalObjectPath(basePath, target));
 });
 
-document.addEventListener(MENU_BARS_STATE_EVENT, () => globalThis.setTimeout(collapseNarrowBars, 0));
+document.addEventListener(ACTION_REQUEST_EVENT, event => {
+  if (!authentication) {
+    return;
+  }
+  if (!isExcludedAction(authentication, event.detail)) {
+    return;
+  }
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  document.querySelector('[data-causeway-logout-form]')?.requestSubmit?.();
+}, {capture: true});
+
+document.addEventListener(MENU_BARS_STATE_EVENT, () => globalThis.setTimeout(() => {
+  collapseNarrowBars();
+  applyAuthenticationMenuPolicy(authentication, document);
+}, 0));
 
 document.addEventListener(ACTION_RESULT_EVENT, event => {
   presentResult(event.detail);
@@ -329,6 +382,13 @@ document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
   }
 });
 
+document.body.addEventListener('htmx:configRequest', event => {
+  if (!authentication || !isUnsafeMethod(event.detail?.verb)) {
+    return;
+  }
+  Object.assign(event.detail.headers, csrfHeaders(authentication));
+});
+
 document.body.addEventListener('htmx:beforeRequest', event => {
   if (event.detail?.target?.id !== 'causeway-route') {
     return;
@@ -356,9 +416,14 @@ document.body.addEventListener('htmx:afterRequest', event => {
 });
 
 document.body.addEventListener('htmx:responseError', event => {
-  if (event.detail?.target?.id === 'causeway-route') {
-    renderRouteFailure('The requested page could not be loaded.');
+  if (event.detail?.target?.id !== 'causeway-route') {
+    return;
   }
+  if (authentication && event.detail?.xhr?.status === 401) {
+    redirectToLogin();
+    return;
+  }
+  renderRouteFailure('The requested page could not be loaded.');
 });
 
 document.body.addEventListener('htmx:historyCacheMiss', () => setBusy(true));
