@@ -330,10 +330,14 @@ class PetClinicHtmxPlaywrightTest {
     void propertyEditingAndPromptFocusRemainDeterministic() {
         openObject("petclinic.PetOwner", "s_owner-mary");
 
-        final var disabledName = page.locator("causeway-property[member='name'] .causeway-property-disabled-indicator");
-        disabledName.waitFor();
-        assertThat(disabledName.getAttribute("data-tooltip")).isNotBlank();
-        assertThat(disabledName.getAttribute("tabindex")).isEqualTo("0");
+        final var disabledNameLabel = page.locator("causeway-property[member='name'] .causeway-property-label.causeway-property-disabled-tooltip");
+        disabledNameLabel.waitFor();
+        assertThat(disabledNameLabel.getAttribute("data-tooltip")).isNotBlank();
+        assertThat(disabledNameLabel.getAttribute("tabindex")).isEqualTo("0");
+        assertThat(page.locator("causeway-property[member='name'] .causeway-property-disabled-indicator").count()).isZero();
+        assertThat((String) page.locator("causeway-property[member='name'] .causeway-property-value-string")
+                .evaluate("element => getComputedStyle(element).textAlign"))
+                .isIn("start", "left");
 
         final var knownAs = page.locator("causeway-property[member='knownAs']");
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
