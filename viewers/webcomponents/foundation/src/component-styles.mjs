@@ -157,6 +157,25 @@ causeway-collection-column[hidden] {
 .causeway-collection-table {
   inline-size: 100%;
 }
+.causeway-property-edit {
+  align-items: center;
+  block-size: 2rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: 2rem;
+  justify-content: center;
+  padding: 0.35rem;
+}
+.causeway-property-edit-icon {
+  block-size: 1rem;
+  fill: none;
+  inline-size: 1rem;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
 .causeway-property-editing,
 .causeway-action-prompt form {
   display: grid;

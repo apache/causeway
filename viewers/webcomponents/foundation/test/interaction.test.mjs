@@ -364,6 +364,11 @@ test('editable properties support prepare, validation, cancel and authoritative 
     data: {hidden: false, disabled: null, get: 'Classics'}, errors: [], generation: 2
   });
   assert.match(property.innerHTML, /property-name-edit/);
+  assert.match(property.innerHTML, /class="causeway-property-edit"[^>]+data-causeway-action="edit"/);
+  assert.match(property.innerHTML, /aria-label="Edit Name"/);
+  assert.match(property.innerHTML, /title="Edit Name"/);
+  assert.match(property.innerHTML, /<svg class="causeway-property-edit-icon"[^>]+aria-hidden="true"[^>]+focusable="false"/);
+  assert.doesNotMatch(property.innerHTML, />Edit Name</);
   assert.equal(await property.beginEdit(), true);
   assert.match(property.innerHTML, /property-name-editor/);
   assert.match(property.innerHTML, /data-control="text-area"[^>]+data-rows="5"/);
