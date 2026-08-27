@@ -16,53 +16,48 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic;
+package org.apache.causeway.viewer.webcomponents.sample.htmx.petclinicsecured;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
+import org.apache.causeway.extensions.secman.jpa.CausewayModuleExtSecmanPersistenceJpa;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleViewerGraphqlViewer;
-import org.apache.causeway.viewer.webcomponents.htmx.CausewayModuleViewerWebcomponentsHtmx;
+import org.apache.causeway.viewer.webcomponents.htmx.security.secman.CausewayModuleViewerWebcomponentsHtmxSecuritySecman;
+import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.PetClinicLandingController;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetClinicDomainModule;
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
-@SpringBootApplication
+@SpringBootConfiguration
+@EnableAutoConfiguration
 @Import({
         CausewayModuleCoreRuntimeServices.class,
-        CausewayModuleSecurityBypass.class,
         CausewayModulePersistenceJpaEclipselink.class,
+        CausewayModuleExtSecmanPersistenceJpa.class,
+        CausewayModuleExtSecmanEncryptionSpring.class,
         CausewayModuleViewerGraphqlViewer.class,
-        CausewayModuleViewerWebcomponentsHtmx.class,
-        CausewayModuleViewerWicketViewer.class,
-        PetClinicDomainModule.class
+        CausewayModuleViewerWebcomponentsHtmxSecuritySecman.class,
+        PetClinicDomainModule.class,
+        PetClinicLandingController.class,
+        PetClinicSecmanDataConfiguration.class
 })
 @PropertySources({
         @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
         @PropertySource(CausewayPresets.SilenceMetaModel),
-        @PropertySource(CausewayPresets.SilenceProgrammingModel)
+        @PropertySource(CausewayPresets.SilenceProgrammingModel),
+        @PropertySource("classpath:secured-application.properties")
 })
-public class PetClinicHtmxApplication extends SpringBootServletInitializer {
+public class PetClinicHtmxSecuredApplication extends SpringBootServletInitializer {
 
     public static void main(final String[] args) {
-        SpringApplication.run(PetClinicHtmxApplication.class, args);
-    }
-
-    @Bean
-    SecurityFilterChain petClinicPermissiveSecurityFilterChain(final HttpSecurity http) throws Exception {
-        return http
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-                .csrf(csrf -> csrf.disable())
-                .build();
+        SpringApplication.run(PetClinicHtmxSecuredApplication.class, args);
     }
 }

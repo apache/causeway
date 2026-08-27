@@ -12,6 +12,7 @@ The semantic components continue to own GraphQL projections, effective layouts, 
 
 Add `org.apache.causeway.viewer:causeway-viewer-webcomponents-htmx` and import `CausewayModuleViewerWebcomponentsHtmx` in the application bootstrap.
 Merely using the foundation component module does not install any HTMX route or asset.
+Applications requiring optional local SecMan-backed browser authentication can instead follow link:../htmx-security-secman/README.adoc[`htmx-security-secman/README.adoc`].
 
 The viewer packages `org.webjars.npm:htmx.org:2.0.6` and serves the module-owned browser bridge and shell stylesheet from `/causeway-htmx/`.
 The shell uses external same-origin scripts and styles and requires no inline script.

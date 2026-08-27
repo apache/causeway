@@ -23,6 +23,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -67,6 +68,7 @@ public class HtmxViewerController {
     private final HtmxRouteCodec routeCodec;
     private final HtmxPageRenderer renderer;
     private final HtmxViewerProperties properties;
+    private HtmxAuthenticationShell authenticationShell;
 
     public HtmxViewerController(
             final HtmxRouteCodec routeCodec,
@@ -75,6 +77,11 @@ public class HtmxViewerController {
         this.routeCodec = routeCodec;
         this.renderer = renderer;
         this.properties = properties;
+    }
+
+    @Autowired(required = false)
+    void setAuthenticationShell(final HtmxAuthenticationShell authenticationShell) {
+        this.authenticationShell = authenticationShell;
     }
 
     @GetMapping({"", "/", "/**"})
@@ -106,7 +113,13 @@ public class HtmxViewerController {
         final var contextPath = request.getContextPath() == null ? "" : request.getContextPath();
         final var body = fragmentRequest
                 ? fragment
-                : renderer.renderShell(contextPath, fragment, canonicalPath);
+                : renderer.renderShell(
+                        contextPath,
+                        fragment,
+                        canonicalPath,
+                        authenticationShell == null
+                                ? java.util.Optional.empty()
+                                : authenticationShell.state(request));
         final var response = ResponseEntity.ok()
                 .contentType(HTML_UTF8)
                 .cacheControl(CacheControl.noStore().cachePrivate())
