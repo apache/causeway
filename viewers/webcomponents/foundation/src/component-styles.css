@@ -276,19 +276,14 @@ causeway-field-editor[data-widget-state="fallback"]::after {
 .causeway-collection-label {
   font-weight: 600;
 }
-.causeway-property-disabled-indicator {
-  align-items: center;
-  border: 1px solid currentColor;
-  border-radius: 50%;
+.causeway-property-value-string {
+  text-align: start;
+}
+.causeway-property-disabled-tooltip {
   cursor: help;
-  display: inline-flex;
-  font-size: 0.75em;
-  inline-size: 1.25rem;
-  justify-content: center;
-  margin-inline-start: 0.35rem;
   position: relative;
 }
-.causeway-property-disabled-indicator::after {
+.causeway-property-disabled-tooltip::after {
   background: CanvasText;
   border-radius: 0.25rem;
   color: Canvas;
@@ -309,8 +304,8 @@ causeway-field-editor[data-widget-state="fallback"]::after {
   white-space: normal;
   z-index: 20;
 }
-.causeway-property-disabled-indicator:hover::after,
-.causeway-property-disabled-indicator:focus-visible::after {
+.causeway-property-disabled-tooltip:hover::after,
+.causeway-property-disabled-tooltip:focus-visible::after {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
