@@ -613,6 +613,10 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const errorMarkup = interaction.error
       ? `<p id="${this.errorId}" class="causeway-property-validation" role="alert">${escapeHtml(interaction.error)}</p>`
       : '';
+    const statusLabel = interactionStatusLabel(interaction.status);
+    const statusMarkup = statusLabel
+      ? `<span class="causeway-property-interaction-status" role="status">${escapeHtml(statusLabel)}</span>`
+      : '';
     this.setAttribute('data-editor', renderedEditor.editorId);
     this.renderingInteraction = true;
     try {
@@ -625,7 +629,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     <button type="button" data-causeway-action="save"${this.#testId('save')} aria-disabled="${busy || Boolean(interaction.error)}">Save</button>
     <button type="button" data-causeway-action="cancel"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}>Cancel</button>
   </div>
-  <span class="causeway-property-interaction-status" role="status">${escapeHtml(interactionStatusLabel(interaction.status))}</span>
+  ${statusMarkup}
 </div>`);
     } finally {
       this.renderingInteraction = false;
@@ -698,7 +702,7 @@ function boundedTooltip(value, maximum = 240) {
 function interactionStatusLabel(status) {
   return {
     [InteractionStatus.PREPARING]: 'Preparing editor',
-    [InteractionStatus.EDITING]: 'Editing',
+    [InteractionStatus.EDITING]: '',
     [InteractionStatus.VALIDATING]: 'Validating',
     [InteractionStatus.SAVING]: 'Saving',
     [InteractionStatus.FAILED]: 'Correction required',
