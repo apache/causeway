@@ -46,6 +46,7 @@ configureCausewayReferenceWidgets({
 });
 let activeRequest = null;
 let navigationGeneration = 0;
+let pendingVoidRefreshGeneration = null;
 const resolvingHomeLandings = new WeakSet();
 
 defineCausewayWebComponents();
@@ -79,7 +80,8 @@ function activateRouteCollections() {
   }
 }
 
-async function navigate(path, {replace = false, preserveResult = false} = {}) {
+async function navigate(path, {replace = false, preserveResult = false, recoverMissingAfterVoid = false} = {}) {
+  pendingVoidRefreshGeneration = null;
   const policy = globalThis.causewayHtmxPolicy;
   if (typeof policy?.navigate === 'function' && await policy.navigate({path, replace}) === true) {
     return;
@@ -89,6 +91,7 @@ async function navigate(path, {replace = false, preserveResult = false} = {}) {
     return;
   }
   const generation = ++navigationGeneration;
+  pendingVoidRefreshGeneration = recoverMissingAfterVoid ? generation : null;
   routeRegion.dataset.navigationGeneration = String(generation);
   for (const disclosure of document.querySelectorAll('[data-causeway-menu-disclosure][aria-expanded="true"]')) {
     disclosure.click();
@@ -191,7 +194,7 @@ function presentResult(detail) {
     if (context) {
       globalThis.setTimeout(() => navigate(
         globalThis.location.pathname + globalThis.location.search,
-        {replace: true, preserveResult: true}
+        {replace: true, preserveResult: true, recoverMissingAfterVoid: result?.kind === 'void'}
       ), 0);
     }
   }
@@ -297,7 +300,12 @@ document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
     return;
   }
   page.dataset.routeState = state.status;
+  const routeGeneration = Number(routeRegion?.dataset.navigationGeneration);
+  const awaitingVoidRefresh = pendingVoidRefreshGeneration === routeGeneration;
   if (state.status === 'ready' || state.status === 'partial-error') {
+    if (awaitingVoidRefresh) {
+      pendingVoidRefreshGeneration = null;
+    }
     const objectTitle = state.snapshot?.data?._meta?.title;
     const brand = document.querySelector('.causeway-shell-brand > span:last-child')?.textContent?.trim();
     if (objectTitle) {
@@ -306,7 +314,16 @@ document.addEventListener(OBJECT_CONTEXT_STATE_EVENT, event => {
     globalThis.setTimeout(activateRouteCollections, 0);
     announce(state.status === 'ready' ? 'Page ready' : 'Page ready with partial information');
   } else if (state.status === 'terminal-error') {
-    const code = state.errors?.[0]?.extensions?.classification ?? state.errors?.[0]?.extensions?.code;
+    const code = state.errors?.[0]?.extensions?.classification
+      ?? state.errors?.[0]?.extensions?.code
+      ?? state.error?.code;
+    if (awaitingVoidRefresh) {
+      pendingVoidRefreshGeneration = null;
+      if (code === 'NOT_FOUND') {
+        void navigate(basePath, {replace: true, preserveResult: true});
+        return;
+      }
+    }
     page.dataset.routeState = code === 'NOT_FOUND' ? 'not-found' : code === 'ACCESS_DENIED' ? 'access-denied' : 'terminal-error';
     announce(page.dataset.routeState === 'access-denied' ? 'Access denied' : 'Page unavailable');
   }
