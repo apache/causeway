@@ -465,8 +465,9 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const rendered = renderCausewayValue({value: propertyState.get, descriptor: state.descriptor}, this._rendererRegistry);
     this.setAttribute('data-renderer', rendered.rendererId);
+    const editLabel = `Edit ${presentation.label}`;
     const editMarkup = this.#canOfferEdit(state)
-      ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit"${this.#testId('edit')}>Edit ${escapeHtml(presentation.label)}</button>`
+      ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
       : '';
     renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
   <span id="${this.labelId}" class="causeway-property-label"${presentation.descriptionTitle}>${escapeHtml(presentation.label)}</span>
