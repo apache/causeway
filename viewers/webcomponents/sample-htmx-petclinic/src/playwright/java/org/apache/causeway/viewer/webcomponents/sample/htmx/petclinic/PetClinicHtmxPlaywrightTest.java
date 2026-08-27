@@ -521,17 +521,10 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(graphQLMutationCount("removePet") - removePetMutations).isEqualTo(1);
 
         objectAction("delete").click();
-        page.locator("[data-testid='causeway-shell-result']").waitFor();
-        assertThat(page.locator("[data-testid='causeway-shell-result']").textContent()).contains("Completed");
+        page.waitForFunction("() => location.pathname.includes('/object/petclinic.HomePage/')");
+        waitForLogicalType("petclinic.HomePage");
+        assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertThat(ownerRepository.findById("owner-5")).isNull();
-        try {
-            page.waitForFunction("() => ['not-found', 'terminal-error'].includes(document.querySelector('[data-testid=\"causeway-route-page\"]')?.dataset.routeState)");
-        } catch (final com.microsoft.playwright.TimeoutError cause) {
-            throw new AssertionError("Deleted object remained present; route="
-                    + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
-                    + "; context=" + page.locator("#causeway-route causeway-object-context")
-                            .evaluate("element => element.context?.currentState ?? element.context?.state ?? null"), cause);
-        }
     }
 
     private void openHome() {
