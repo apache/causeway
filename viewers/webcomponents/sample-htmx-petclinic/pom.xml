@@ -57,6 +57,19 @@
         </dependency>
         <dependency>
             <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-webcomponents-htmx-security-secman</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
             <artifactId>causeway-viewer-wicket-viewer</artifactId>
         </dependency>
         <dependency>

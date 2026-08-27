@@ -108,6 +108,34 @@
   flex: 0 1 auto;
 }
 
+.causeway-shell-user {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--causeway-space-2);
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-shell-user form {
+  margin: 0;
+}
+
+.causeway-shell-logout {
+  min-height: 2.25rem;
+  padding: var(--causeway-space-1) var(--causeway-space-3);
+  border: 1px solid currentColor;
+  border-radius: var(--causeway-radius-sm);
+  color: var(--causeway-nav-text);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.causeway-shell-logout:hover,
+.causeway-shell-logout:focus-visible {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
 .causeway-route-loading {
   position: fixed;
   z-index: 120;

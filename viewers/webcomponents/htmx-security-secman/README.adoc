@@ -1,0 +1,124 @@
+= Local SecMan authentication for the HTMX viewer
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+The `causeway-viewer-webcomponents-htmx-security-secman` module is an optional local username/password integration for the generic HTMX Web Components viewer.
+It validates SecMan users through Spring Security, establishes a browser session, protects the viewer's GraphQL traffic with CSRF evidence, renders local authentication chrome, and provides native session logout.
+Applications that do not add and import this module retain the generic viewer's existing security behavior.
+
+== Installation
+
+Add the integration artifact alongside the application-selected SecMan persistence and password-encryption implementations.
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-webcomponents-htmx-security-secman</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-secman-encryption-spring</artifactId>
+    <version>${causeway.version}</version>
+</dependency>
+----
+
+Import `CausewayModuleViewerWebcomponentsHtmxSecuritySecman` from the application bootstrap together with the selected SecMan persistence and encryption modules.
+The integration imports the generic HTMX viewer, Causeway Spring security, and SecMan integration modules itself.
+It requires a unique SecMan `PasswordEncoder` bean and a working `ApplicationUserRepository`; the encryption-spring module and SecMan JPA module satisfy those requirements for the common JPA deployment.
+Applications remain responsible for SecMan schema provisioning, users, encrypted passwords, account status, roles, tenancy, and locale profile data.
+
+[source,java]
+----
+@Import({
+    CausewayModuleExtSecmanPersistenceJpa.class,
+    CausewayModuleExtSecmanEncryptionSpring.class,
+    CausewayModuleViewerWebcomponentsHtmxSecuritySecman.class
+})
+----
+
+Spring CSRF filters are mandatory and the integration deliberately does not enable them implicitly.
+Startup fails with a bounded diagnostic unless the following setting is explicit.
+
+[source,properties]
+----
+causeway.security.spring.allow-csrf-filters=true
+----
+
+The login form, logout form, unsafe HTMX requests, and every same-origin GraphQL POST use Spring's current CSRF evidence.
+Do not exempt the GraphQL, login, or logout endpoints from CSRF protection when browser session cookies are accepted.
+
+== Paths and filter-chain ordering
+
+The integration reads the generic viewer's `causeway.viewer.webcomponents.htmx.base-path`, `graph-ql-endpoint`, and optional `application-stylesheet` settings.
+It protects the configured HTMX route hierarchy and the configured GraphQL endpoint hierarchy.
+It publicly handles only the local login endpoints and required `/causeway-htmx/**`, `/causeway-webcomponents/**`, `/webjars/htmx.org/**`, and configured application-stylesheet assets.
+It does not claim unrelated Wicket, actuator, console, application, or bearer-token API paths.
+
+The local properties and defaults are:
+
+[source,properties]
+----
+causeway.viewer.webcomponents.htmx.security.secman.login-path=/login
+causeway.viewer.webcomponents.htmx.security.secman.logout-path=/logout
+causeway.viewer.webcomponents.htmx.security.secman.filter-chain-order=20
+causeway.viewer.webcomponents.htmx.security.secman.cookies-to-delete=JSESSIONID
+----
+
+Choose a filter-chain order that runs this chain before any broader fallback chain but does not displace an application chain that intentionally owns the same paths.
+Path overlap, equal ordering, and custom login or logout paths must be reviewed with every other application `SecurityFilterChain`.
+Mixed browser-session and bearer-token use of one GraphQL path is not provided by this module and requires an application-owned security design.
+
+== HTTPS, proxies, and cookies
+
+Production credentials and session cookies must be transported only over HTTPS.
+Configure the deployment proxy to preserve the original scheme and host, and configure Spring Boot to consume only headers supplied by a trusted proxy.
+A representative trusted-proxy deployment uses the following settings.
+
+[source,properties]
+----
+server.forward-headers-strategy=framework
+server.servlet.session.cookie.secure=true
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.same-site=lax
+----
+
+The proxy must overwrite untrusted forwarded headers and forward `X-Forwarded-Proto: https` or the equivalent supported forwarding metadata.
+Keep the session cookie `HttpOnly`, use `Secure` in HTTPS environments, select a `SameSite` policy compatible with the deployment, and narrow cookie domain and path when the application topology permits it.
+Local plain-HTTP development cannot use a `Secure` cookie, so production cookie settings should normally be supplied by a deployment profile rather than weakened globally.
+
+== Authentication and logout behavior
+
+The login page is server rendered and makes no GraphQL request before authentication.
+Spring Security owns credential processing, request caching, session-identifier migration, security-context persistence, CSRF, and logout invalidation.
+Only canonical same-origin GET routes beneath the configured HTMX base path are restored after login.
+The HTMX host owns login presentation, current-user chrome, session-expiry navigation, exact suppression of `causeway.security.LogoutMenu#logout`, and the native POST logout control.
+Invalid passwords, absent users, locked users, passwordless users, and internal lookup failures all produce the same public credential failure.
+
+== Provisional bridge boundary
+
+`SecmanUserDetailsService`, `SecmanUserDetails`, and `AuthenticationConverterOfSecmanUserDetails` form an intentionally HTMX-local provisional SecMan-to-Spring bridge.
+They perform controlled anonymous lookup, preserve the effective SecMan roles and user profile needed for the Causeway `UserMemento`, erase credentials, and avoid an unscoped second repository lookup.
+They must not be treated as a stable shared-security SPI while they remain in this viewer integration.
+A separate planned change, `promote-htmx-secman-spring-security-bridge`, covers reconciliation and possible promotion into shared Causeway security.
+
+This module explicitly excludes OAuth 2.0, OIDC, external-provider buttons, bearer-token APIs, delegated-user auto-creation, provider logout, registration, password reset, remember-me, multi-factor authentication, and brute-force infrastructure.
+The planned `add-oauth-oidc-authentication-to-htmx-viewer` change covers provider authentication separately.
+Wicket and HTMX coexistence with active Spring CSRF filters is also deferred to `enable-csrf-safe-wicket-htmx-coexistence`.
+The secured Petclinic acceptance configuration therefore does not import Wicket or bypass security.
+
+== Rollback
+
+Remove `CausewayModuleViewerWebcomponentsHtmxSecuritySecman` from the application imports and remove the optional integration dependency.
+Remove integration-specific login, logout, chain-order, cookie-cleanup, and deployment settings that are no longer used.
+Retain or remove SecMan persistence and encryption according to the application's other consumers.
+Rollback requires no user, password, role, tenancy, locale, or database migration because the integration does not change the SecMan data model.
+After rollback, the application must restore its previous security owner for the HTMX and GraphQL paths before serving traffic.

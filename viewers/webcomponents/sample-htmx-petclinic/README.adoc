@@ -27,6 +27,16 @@ The Wicket comparison is available at `http://localhost:8080/wicket/`.
 Sign in to Wicket with username `sven` and password `pass`; the bypass authenticator accepts the demonstration credentials.
 GraphiQL remains available through the configured Spring GraphQL endpoint when enabled.
 
+Run the separate local SecMan-authenticated configuration with:
+
+[source,bash]
+----
+mvn -f viewers/webcomponents/pom.xml -Prun-sample-htmx-petclinic-secured
+----
+
+Open `http://localhost:8080/htmx` and sign in with username `sven` and password `pass`.
+This secured configuration enables Spring CSRF protection and intentionally omits Wicket and bypass security.
+
 == Headless Playwright acceptance
 
 The opt-in `playwright` profile adds Playwright for Java only to the dedicated browser-test source set, so ordinary reactor builds do not resolve a browser or compile the Playwright suite.
