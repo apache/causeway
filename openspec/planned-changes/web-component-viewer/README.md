@@ -12,6 +12,7 @@ The archived `add-paged-graphql-reference-autocomplete` change adds honest bound
 The archived `make-vaadin-default-for-webcomponent-viewer` change completes the policy-focused Vaadin-default sequence while retaining explicit native rollback.
 No Vaadin-default change remains active.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
+Proposal-only security drafts separate local SecMan authentication for the HTMX viewer, subsequent OAuth/OIDC support, eventual promotion of the proven bridge into shared Causeway security, future CSRF-safe Wicket and HTMX coexistence, and stable SecMan delegated-user identity mapping.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
 Proposal-only directories contain only `proposal.md`; they require current evidence, full artifact generation, and strict validation before promotion.
