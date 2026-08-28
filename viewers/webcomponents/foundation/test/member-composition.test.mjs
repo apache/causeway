@@ -39,7 +39,7 @@ test('property preserves direct actions across owner states and ignores descenda
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
-  property.member = 'name';
+  property.id = 'name';
   const direct = action('updateName');
   const wrapper = document.createElement('div');
   const descendant = action('ignoredPresentationAssociation');
@@ -86,7 +86,7 @@ test('property editing and cancellation preserve the associated action node', as
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
-  property.member = 'name';
+  property.id = 'name';
   property.editable = true;
   const nestedAction = action('updateName');
   property.appendChild(nestedAction);
@@ -110,7 +110,7 @@ test('parser-late direct actions are recognized once in declaration order', () =
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
-  property.member = 'name';
+  property.id = 'name';
   ownerContext.appendChild(property);
   document.body.appendChild(ownerContext);
 
@@ -142,7 +142,7 @@ test('nested action activation bypasses property owner controls and publishes on
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const property = new CausewayPropertyElement();
-  property.member = 'name';
+  property.id = 'name';
   const nestedAction = action('updateName');
   property.appendChild(nestedAction);
   ownerContext.appendChild(property);
@@ -165,7 +165,7 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const collection = new CausewayCollectionElement();
-  collection.member = 'pets';
+  collection.id = 'pets';
   const nameColumn = column('name', 'Name');
   const addPet = action('addPet');
   const speciesColumn = column('species', 'Species');
@@ -206,7 +206,7 @@ test('reconnecting a composition registers each existing semantic child once per
   const context = recordingContext();
   const ownerContext = objectContext(context);
   const collection = new CausewayCollectionElement();
-  collection.member = 'pets';
+  collection.id = 'pets';
   const nestedAction = action('addPet');
   collection.appendChild(nestedAction);
   ownerContext.appendChild(collection);
@@ -233,14 +233,14 @@ function objectContext(context) {
 function action(member) {
   const element = document.createElement('cw-action');
   assert.ok(element instanceof CausewayActionElement);
-  element.member = member;
+  element.id = member;
   return element;
 }
 
 function column(member, label) {
   const element = document.createElement('cw-collection-column');
   assert.ok(element instanceof CausewayCollectionColumnElement);
-  element.member = member;
+  element.id = member;
   element.label = label;
   return element;
 }

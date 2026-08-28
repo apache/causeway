@@ -167,15 +167,15 @@ class PetClinicHtmxApplication_IntegTest {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
-                .contains("<cw-property member=\"name\">\n            <cw-action member=\"updateName\"")
-                .contains("<cw-collection member=\"pets\"")
-                .contains("<cw-action member=\"addPet\"")
-                .contains("<cw-action member=\"removePet\"")
-                .contains("<cw-collection member=\"visits\"")
-                .contains("<cw-action member=\"bookVisit\"")
+                .contains("<cw-property id=\"name\">\n            <cw-action id=\"updateName\"")
+                .contains("<cw-collection id=\"pets\"")
+                .contains("<cw-action id=\"addPet\"")
+                .contains("<cw-action id=\"removePet\"")
+                .contains("<cw-collection id=\"visits\"")
+                .contains("<cw-action id=\"bookVisit\"")
                 .doesNotContain("petclinic-associated-actions", "petclinic-member-composition");
-        assertThat(ownerHtml.indexOf("member=\"addPet\""))
-                .isLessThan(ownerHtml.indexOf("member=\"removePet\""));
+        assertThat(ownerHtml.indexOf("id=\"addPet\""))
+                .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
         assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())
                 .isEqualTo(404);
         assertThat(get("/petclinic.PetOwner.html").statusCode()).isEqualTo(404);

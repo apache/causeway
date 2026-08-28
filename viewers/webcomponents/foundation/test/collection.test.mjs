@@ -79,7 +79,7 @@ function staffDeltaResponse() {
 test('captures declarative columns before browser upgrade reactions replace source children', async () => {
   const collection = new CausewayCollectionElement();
   const column = new CausewayCollectionColumnElement();
-  column.member = 'name';
+  column.id = 'name';
   column.label = 'Name';
   column.setAttribute('data-testid', 'column-name');
   collection.appendChild(column);
@@ -518,7 +518,7 @@ test('collection component does not read until activated and renders declared co
     }
   };
   const collection = new CausewayCollectionElement();
-  collection.member = 'staffMembers';
+  collection.id = 'staffMembers';
   collection.columns = [{member: 'name', label: 'Name'}, {member: 'code', label: 'Code'}];
   collection.context = context;
   document.body.appendChild(collection);
@@ -588,7 +588,7 @@ test('collection component forwards window requests and publishes semantic windo
     }
   };
   const collection = new CausewayCollectionElement();
-  collection.member = 'staffMembers';
+  collection.id = 'staffMembers';
   collection.active = true;
   collection.context = context;
   document.body.appendChild(collection);
@@ -628,7 +628,7 @@ test('collection component cancels an in-flight secondary read when disconnected
     }
   };
   const collection = new CausewayCollectionElement();
-  collection.member = 'staffMembers';
+  collection.id = 'staffMembers';
   collection.active = true;
   collection.context = context;
   document.body.appendChild(collection);
@@ -639,7 +639,7 @@ test('collection component cancels an in-flight secondary read when disconnected
 
 test('collection component renders default object links, empty and partial-error states', () => {
   const collection = new CausewayCollectionElement();
-  collection.member = 'staffMembers';
+  collection.id = 'staffMembers';
   collection.active = true;
   const baseState = {
     status: 'ready',

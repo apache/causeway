@@ -105,7 +105,7 @@ test('actions render semantic states and publish requests only while enabled', (
     }
   };
   const action = new CausewayActionElement();
-  action.member = 'changeName';
+  action.id = 'changeName';
   action.context = context;
   document.body.appendChild(action);
   let request;
@@ -161,7 +161,7 @@ test('actions render semantic states and publish requests only while enabled', (
 
 test('properties delegate null, enum and object values to semantic renderers', () => {
   const property = new CausewayPropertyElement();
-  property.member = 'chair';
+  property.id = 'chair';
   property.renderComponentState(readyState({
     descriptor: {
       id: 'chair',

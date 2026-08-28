@@ -190,7 +190,7 @@ class HtmxViewerControllerTest {
 
             @Override
             public String render(final HtmxObjectRoute route) {
-                return "<article data-custom-page><cw-property member=\"name\"></cw-property></article>";
+                return "<article data-custom-page><cw-property id=\"name\"></cw-property></article>";
             }
         };
         final var controller = controller(List.of(custom));
@@ -213,7 +213,7 @@ class HtmxViewerControllerTest {
         final var resource = HtmxPageDefinition.resource(
                 "petclinic.PetOwner",
                 "resource:petclinic.PetOwner.html",
-                "<article data-resource-page>{{objectId}}<cw-property member=\"name\"></cw-property></article>");
+                "<article data-resource-page>{{objectId}}<cw-property id=\"name\"></cw-property></article>");
         final var controller = controller(List.of(), List.of(resource));
 
         final var response = controller.route(request(

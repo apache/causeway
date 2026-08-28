@@ -43,7 +43,7 @@ let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['member', 'label', 'editable', 'multiline'];
+    return ['id', 'label', 'editable', 'multiline'];
   }
 
   constructor() {
@@ -97,7 +97,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     });
     this.addEventListener('causeway-reference-search', event => {
       if (eventOriginatesFromAssociatedAction(this, event.target)
-          || event.detail?.name !== this.member
+          || event.detail?.name !== this.id
           || !this.interactionState?.capabilities?.autoComplete) {
         return;
       }
@@ -133,14 +133,6 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     };
     this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
     this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
-  }
-
-  get member() {
-    return this.getAttribute('member') || '';
-  }
-
-  set member(value) {
-    this.setAttribute('member', value);
   }
 
   get editable() {
@@ -208,7 +200,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     if (oldValue === newValue || !this.isConnected) {
       return;
     }
-    if (name === 'member') {
+    if (name === 'id') {
       this.interactionState = null;
       this.restoreClearFocus = false;
       refreshMemberComposition(this);
@@ -219,7 +211,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   createRequirement() {
-    return {kind: 'property', member: this.member};
+    return {kind: 'property', member: this.id};
   }
 
   async beginEdit() {
@@ -231,7 +223,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.restoreClearFocus = false;
     const generation = ++this.interactionGeneration;
     this.#setInteraction({status: InteractionStatus.PREPARING, pendingValue: state.data?.get, error: null});
-    const result = await this._resolvedContext.prepareProperty(this.member);
+    const result = await this._resolvedContext.prepareProperty(this.id);
     if (generation !== this.interactionGeneration) {
       return false;
     }
@@ -288,7 +280,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.restoreEditFocusAfterGeneration = null;
     this.restoreClearFocus = false;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.member,
+      member: this.id,
       status: InteractionStatus.CANCELLED,
       value: publicInteractionValue(editor, this.componentState?.data?.get)
     })));
@@ -306,7 +298,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     this.interactionState = Object.freeze({...this.interactionState, status: InteractionStatus.EDITING, pendingValue: value, error: null});
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.member,
+      member: this.id,
       status: InteractionStatus.EDITING,
       value: publicInteractionValue(this.interactionState.editor, value),
       error: null
@@ -336,13 +328,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       ?? this.interactionState.capabilities?.autoCompleteWindowSize
       ?? maximumResults;
     const result = typeof this._resolvedContext.autoCompletePropertyWindow === 'function'
-      ? await this._resolvedContext.autoCompletePropertyWindow(this.member, search, {
+      ? await this._resolvedContext.autoCompletePropertyWindow(this.id, search, {
           offset,
           size: requestedSize,
           signal: controller.signal
         })
       : legacyWindowResult(await this._resolvedContext.autoCompleteProperty(
-          this.member, search, {signal: controller.signal}), offset, requestedSize);
+          this.id, search, {signal: controller.signal}), offset, requestedSize);
     if (generation !== this.autoCompleteGeneration || controller.signal.aborted || !this.interactionState) {
       return {...result, status: InteractionStatus.OBSOLETE};
     }
@@ -384,7 +376,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const generation = ++this.interactionGeneration;
     const pendingValue = this.interactionState.pendingValue;
     this.#setInteraction({...this.interactionState, status: InteractionStatus.VALIDATING, error: null});
-    const result = await this._resolvedContext.validateProperty(this.member, pendingValue);
+    const result = await this._resolvedContext.validateProperty(this.id, pendingValue);
     if (generation !== this.interactionGeneration || result.status === InteractionStatus.OBSOLETE) {
       return result;
     }
@@ -415,7 +407,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const pendingValue = this.interactionState.pendingValue;
     const focusGeneration = this.componentState?.generation ?? 0;
     this.#setInteraction({...this.interactionState, status: InteractionStatus.SAVING, error: null});
-    const result = await this._resolvedContext.updateProperty(this.member, pendingValue);
+    const result = await this._resolvedContext.updateProperty(this.id, pendingValue);
     if (generation !== this.interactionGeneration) {
       return false;
     }
@@ -432,7 +424,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.interactionState = null;
     this.restoreClearFocus = false;
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_UPDATED, Object.freeze({
-      member: this.member,
+      member: this.id,
       value: publicInteractionValue(editor, pendingValue),
       identity: this._resolvedContext?.identity ?? null,
       result
@@ -542,7 +534,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   #presentation(state) {
-    const label = this.getAttribute('label') || humanize(this.member);
+    const label = this.getAttribute('label') || humanize(this.id);
     const candidateDescription = state.descriptor?.description || '';
     const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
       ? ''
@@ -580,7 +572,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   #editorContext(interaction = this.interactionState) {
     const presentation = this.#presentation(this.componentState);
     return {
-      name: this.member,
+      name: this.id,
       label: presentation.label,
       value: interaction.pendingValue,
       choices: interaction.choices ?? [],
@@ -666,7 +658,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   #setInteraction(next) {
     this.interactionState = Object.freeze({...next});
     this.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.PROPERTY_INTERACTION_STATE, Object.freeze({
-      member: this.member,
+      member: this.id,
       status: next.status,
       value: publicInteractionValue(next.editor, next.pendingValue),
       error: next.error ?? null

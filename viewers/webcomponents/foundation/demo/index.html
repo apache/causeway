@@ -66,14 +66,14 @@
     <cw-graphql-client endpoint="/graphql">
       <cw-object-context logical-type="university.dept.Department" object-id="1">
         <cw-object-header></cw-object-header>
-        <cw-property member="name" editable></cw-property>
-        <cw-property member="status" editable></cw-property>
-        <cw-property member="chair"></cw-property>
-        <cw-action member="inspect"></cw-action>
+        <cw-property id="name" editable></cw-property>
+        <cw-property id="status" editable></cw-property>
+        <cw-property id="chair"></cw-property>
+        <cw-action id="inspect"></cw-action>
         <cw-interaction-controller></cw-interaction-controller>
-        <cw-collection member="staffMembers">
-          <cw-collection-column member="name" label="Name"></cw-collection-column>
-          <cw-collection-column member="code" label="Code"></cw-collection-column>
+        <cw-collection id="staffMembers">
+          <cw-collection-column id="name" label="Name"></cw-collection-column>
+          <cw-collection-column id="code" label="Code"></cw-collection-column>
         </cw-collection>
       </cw-object-context>
     </cw-graphql-client>
