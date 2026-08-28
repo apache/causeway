@@ -317,6 +317,14 @@ class PetClinicHtmxPlaywrightTest {
         page.locator(ROUTE_PAGE).dispatchEvent("click");
         assertMenuClosed("Pet Owners");
         openMenu("Pet Owners");
+        if (!nativeToolkit()) {
+            final var manageHeading = page.locator(".causeway-menubar-section-label")
+                    .filter(new Locator.FilterOptions().setHasText("Manage"));
+            manageHeading.waitFor();
+            assertThat(manageHeading.getAttribute("role")).isEqualTo("separator");
+            assertThat(page.locator("vaadin-menu-bar-overlay[opened]").count()).isEqualTo(1);
+            assertThat(page.locator("vaadin-menu-bar-item[aria-haspopup='true']").count()).isZero();
+        }
         assertThat(petclinicServiceActionIds()).containsExactlyInAnyOrder(
                 "create", "findByName", "findByNameLike", "listAll", "count", "listUpcoming");
 
@@ -354,6 +362,12 @@ class PetClinicHtmxPlaywrightTest {
         openMenu("Pet Owners");
         activateServiceAction("count");
         waitForShellResult("count", "4");
+        assertMenuClosedAndFocused("Pet Owners");
+
+        openMenu("Pet Owners");
+        activateServiceAction("create");
+        waitForPrompt("create");
+        cancelPrompt();
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Visits");
@@ -637,7 +651,11 @@ class PetClinicHtmxPlaywrightTest {
 
     private void openMenu(final String name) {
         if (!nativeToolkit()) {
-            page.waitForFunction("name => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].some(host => host._projection?.menus?.some(menu => menu.label === name))", name);
+            final var menuButton = page.locator("vaadin-menu-bar-button")
+                    .filter(new Locator.FilterOptions().setHasText(name)).first();
+            menuButton.waitFor();
+            menuButton.click();
+            page.locator("vaadin-menu-bar-overlay[opened]").waitFor();
             return;
         }
         final var disclosure = menuDisclosure(name);
@@ -656,6 +674,7 @@ class PetClinicHtmxPlaywrightTest {
         if (!nativeToolkit()) {
             assertThat(page.locator("cw-menubar-control").count()).isGreaterThan(0);
             assertThat(page.locator("[data-causeway-menu-disclosure]").count()).isZero();
+            assertThat(page.locator("vaadin-menu-bar-overlay[opened]").count()).isZero();
             return;
         }
         final var disclosure = menuDisclosure(name);
@@ -699,30 +718,19 @@ class PetClinicHtmxPlaywrightTest {
             serviceAction(actionId).click();
             return;
         }
-        final var activated = page.evaluate("""
+        final var key = (String) page.evaluate("""
                 actionId => {
                   for (const host of document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')) {
                     const descriptor = Object.values(host._projection?.actions ?? {}).find(action => action.actionId === actionId);
-                    const control = host.querySelector('vaadin-menu-bar');
-                    if (descriptor && control) {
-                      const find = items => {
-                        for (const item of items ?? []) {
-                          if (item.causewayKey === descriptor.key) return item;
-                          const nested = find(item.children);
-                          if (nested) return nested;
-                        }
-                        return null;
-                      };
-                      const item = find(control.items);
-                      if (!item || item.disabled) return false;
-                      control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: item}}));
-                      return true;
-                    }
+                    if (descriptor && !descriptor.disabled) return descriptor.key;
                   }
-                  return false;
+                  return null;
                 }
                 """, actionId);
-        assertThat(activated).isEqualTo(true);
+        assertThat(key).isNotBlank();
+        final var menuItem = page.locator("vaadin-menu-bar-item[data-causeway-key='" + key + "']");
+        menuItem.waitFor();
+        menuItem.click();
     }
 
     private void assertDefaultOrNativeMemberPresentation(final String propertyMember, final String actionMember) {

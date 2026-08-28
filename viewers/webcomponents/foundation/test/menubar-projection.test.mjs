@@ -52,15 +52,19 @@ test('projects immutable ordered menus sections actions and opaque identity', ()
   assert.equal(resolveCausewayMenuAction(projection, disabled.key), null);
 });
 
-test('creates nested Vaadin items without executable callbacks or values', () => {
+test('creates one-level Vaadin menus with non-action section headings and activatable leaves', () => {
   const projection = projectCausewayMenuBar(bar(), {generation: 3});
   const items = createVaadinMenuItems(projection);
   assert.equal(items.length, 1);
   assert.equal(items[0].text, 'Administration');
   assert.equal(items[0].children[0].text, 'People');
-  assert.equal(items[0].children[0].children[0].causewayKey, '3:primary:0:0:0');
-  assert.equal(items[0].children[0].children[1].disabled, true);
-  assert.equal(items[0].children[1].text, 'Daily report');
+  assert.equal(items[0].children[0].causewayKind, 'section');
+  assert.equal(items[0].children[0].disabled, true);
+  assert.equal(items[0].children[0].children, undefined);
+  assert.equal(items[0].children[1].causewayKey, '3:primary:0:0:0');
+  assert.equal(items[0].children[2].disabled, true);
+  assert.equal(items[0].children[3].text, 'Daily report');
+  assert.equal(items[0].children.every(item => item.children === undefined), true);
   assert.equal(JSON.stringify(items).includes('function'), false);
   assert.equal(JSON.stringify(items).includes('Not permitted'), true);
 });

@@ -68,10 +68,16 @@ test('qualified adapter loads once and selects only current enabled leaves', asy
   assert.equal(control.i18n.moreOptions, 'Weitere Optionen');
   assert.equal(globalThis.Vaadin.featureFlags.accessibleDisabledMenuItems, true);
   assert.equal(control.items[0].text, 'Administration');
-  const enabled = control.items[0].children[0].children[0];
-  const disabled = control.items[0].children[0].children[1];
-  assert.equal(disabled.component.getAttribute('aria-label'), 'Remove. Unavailable: Not permitted');
-  assert.equal(disabled.component.dataset.disabledReason, 'Not permitted');
+  const section = control.items[0].children[0];
+  const enabled = control.items[0].children[1];
+  const disabled = control.items[0].children[2];
+  assert.equal(section.children, undefined);
+  assert.equal(section.component.getAttribute('role'), 'separator');
+  assert.equal(section.component.getAttribute('aria-label'), 'People');
+  assert.equal(enabled.component.localName, 'vaadin-menu-bar-item');
+  assert.equal(disabled.component.localName, 'vaadin-menu-bar-item');
+  assert.equal(disabled.component.childNodes[0].getAttribute('aria-label'), 'Remove. Unavailable: Not permitted');
+  assert.equal(disabled.component.childNodes[0].dataset.disabledReason, 'Not permitted');
   control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: enabled}}));
   control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: disabled}}));
   control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: {causewayKey: 'stale'}}}));
@@ -110,7 +116,7 @@ test('event translation failure is bounded and family scoped', async () => {
   adapter.addEventListener('causeway-menubar-load-failed', event => { failure = event.detail; });
   await connect(adapter);
   const control = adapter.childNodes[0];
-  const enabled = control.items[0].children[0].children[0];
+  const enabled = control.items[0].children[1];
   control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: enabled}}));
   assert.equal(adapter.dataset.widgetState, 'fallback');
   assert.deepEqual(failure, {

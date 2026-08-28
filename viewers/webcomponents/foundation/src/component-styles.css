@@ -445,6 +445,17 @@ cw-menubar-control vaadin-menu-bar-button[focused] {
   outline: var(--causeway-menubar-focus, 0.2rem solid LinkText);
   outline-offset: 0.1rem;
 }
+.causeway-menubar-section-label {
+  border-block-start: var(--causeway-menubar-section-border, 1px solid color-mix(in srgb, currentColor 18%, transparent));
+  color: var(--causeway-menubar-section-color, currentColor);
+  font: inherit;
+  font-size: var(--causeway-menubar-section-font-size, 0.8em);
+  font-weight: var(--causeway-menubar-section-font-weight, 700);
+  margin-block-start: var(--causeway-menubar-section-margin, 0.25rem);
+  opacity: 0.8;
+  padding: var(--causeway-menubar-section-padding, 0.5rem 1rem 0.25rem);
+  pointer-events: none;
+}
 .causeway-menu {
   min-inline-size: 0;
   position: relative;

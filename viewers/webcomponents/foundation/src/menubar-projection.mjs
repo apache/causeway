@@ -121,9 +121,10 @@ export function createVaadinMenuItems(projection) {
       if (!section.label) return leaves;
       return [Object.freeze({
         text: section.label,
+        disabled: true,
         causewayKind: 'section',
-        children: Object.freeze(leaves)
-      })];
+        causewaySectionLabel: true
+      }), ...leaves];
     }))
   })));
 }
