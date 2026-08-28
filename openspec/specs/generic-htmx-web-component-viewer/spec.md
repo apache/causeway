@@ -84,11 +84,11 @@ The HTMX route resolver SHALL select one trusted custom page registered for the 
 
 #### Scenario: No custom page is registered
 - **WHEN** the route contains a logical type without an exact HTML resource or factory registration
-- **THEN** the viewer renders `<causeway-object editable>` beneath the same route object context
+- **THEN** the viewer renders `<cw-object editable>` beneath the same route object context
 - **AND** absence is treated as ordinary generic fallback rather than a configuration failure
 
 #### Scenario: Generic component renders
-- **WHEN** `<causeway-object>` connects
+- **WHEN** `<cw-object>` connects
 - **THEN** it renders the effective or fallback object layout
 - **AND** does not discover custom pages or inspect router state
 
@@ -125,7 +125,7 @@ HTML page resources SHALL remain trusted packaged application content inside the
 
 #### Scenario: Resource page renders semantic content
 - **WHEN** a route selects a qualifying HTML page
-- **THEN** its ordinary HTML and `<causeway-*>` elements render beneath the route's existing `<causeway-object-context>`
+- **THEN** its ordinary HTML and `<cw-*>` elements render beneath the route's existing `<cw-object-context>`
 - **AND** the viewer retains ownership of canonical identity, the GraphQL client, interaction controller, shell, history, announcements, and result policy
 
 #### Scenario: Page needs application styling
@@ -167,7 +167,7 @@ Petclinic SHALL demonstrate application-owned HTMX presentation through private 
 - **AND** no Vaadin hash or asset request is introduced
 
 ### Requirement: One disposable route object context
-Every custom or generic object fragment SHALL contain exactly one route-level `<causeway-object-context>` for the canonical logical route identity.
+Every custom or generic object fragment SHALL contain exactly one route-level `<cw-object-context>` for the canonical logical route identity.
 
 #### Scenario: Route fragment is replaced
 - **WHEN** HTMX installs a newer object fragment
@@ -175,7 +175,7 @@ Every custom or generic object fragment SHALL contain exactly one route-level `<
 - **AND** stale GraphQL or structural-resource responses cannot render into the new route
 
 #### Scenario: Custom page composes semantic members
-- **WHEN** a custom page uses properties, actions, collections, ordinary HTML, or `<causeway-object>`
+- **WHEN** a custom page uses properties, actions, collections, ordinary HTML, or `<cw-object>`
 - **THEN** those elements consume the same nearest route context
 - **AND** the custom page does not create a parallel domain-state channel
 
@@ -184,7 +184,7 @@ The viewer SHALL keep application branding, menu bars, announcements, loading st
 
 #### Scenario: Full page is requested
 - **WHEN** an ordinary browser request loads the viewer root or an object route
-- **THEN** the server returns one complete document containing the GraphQL client, `<causeway-menubars>`, and route region
+- **THEN** the server returns one complete document containing the GraphQL client, `<cw-menubars>`, and route region
 - **AND** the requested landing or object fragment appears inside that region
 
 #### Scenario: HTMX fragment is requested
@@ -194,7 +194,7 @@ The viewer SHALL keep application branding, menu bars, announcements, loading st
 
 #### Scenario: Object route changes
 - **WHEN** HTMX replaces the route-content fragment
-- **THEN** `<causeway-menubars>` remains coordinated in the stable shell
+- **THEN** `<cw-menubars>` remains coordinated in the stable shell
 - **AND** menu state is invalidated only by its documented application-entry context
 
 ### Requirement: Transient application menu dismissal
@@ -333,11 +333,11 @@ The project SHALL include a deterministic current-Causeway Petclinic application
 #### Scenario: Petclinic HTML page is present
 - **WHEN** a route addresses `petclinic.HomePage`, `petclinic.PetOwner`, `petclinic.Pet`, or `petclinic.Visit`
 - **THEN** the exact convention-registered HTML resource composes ordinary HTML and semantic components beneath one route context
-- **AND** no Petclinic Java page renderer or custom-page knowledge inside `<causeway-object>` is required
+- **AND** no Petclinic Java page renderer or custom-page knowledge inside `<cw-object>` is required
 
 #### Scenario: Petclinic HTML page is absent
 - **WHEN** a Petclinic logical type is run without its corresponding packaged HTML resource
-- **THEN** the HTMX router uses the generic `<causeway-object editable>` page
+- **THEN** the HTMX router uses the generic `<cw-object editable>` page
 - **AND** the retained effective grid and collection-column resources remain available for fallback composition
 
 #### Scenario: Petclinic page resources are packaged
@@ -403,7 +403,7 @@ The Petclinic sample SHALL provide opt-in Playwright browser tests that exercise
 - **AND** the documented profile remains available for explicit end-to-end verification
 
 ### Requirement: Cross-viewer route compatibility
-Canonical route meaning, custom-page precedence, and generic `<causeway-object>` fallback SHALL remain semantically compatible with the generic Vue and Svelte viewers.
+Canonical route meaning, custom-page precedence, and generic `<cw-object>` fallback SHALL remain semantically compatible with the generic Vue and Svelte viewers.
 
 #### Scenario: Viewer implementation changes
 - **WHEN** the same authorized bookmark is opened in another generic viewer
