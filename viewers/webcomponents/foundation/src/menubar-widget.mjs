@@ -221,7 +221,19 @@ function materializeMenuItems(items) {
   return items.map(item => {
     const children = item.children ? materializeMenuItems(item.children) : undefined;
     const materialized = {...item, ...(children ? {children} : {})};
-    if (globalThis.document?.createElement && (item.title || item.causewayIconHint || item.causewayDisabledReason)) {
+    if (!globalThis.document?.createElement) return materialized;
+    if (item.causewaySectionLabel) {
+      const sectionLabel = document.createElement('div');
+      sectionLabel.className = 'causeway-menubar-section-label';
+      sectionLabel.setAttribute('role', 'separator');
+      sectionLabel.setAttribute('aria-label', item.text);
+      sectionLabel.textContent = item.text;
+      materialized.component = sectionLabel;
+      return materialized;
+    }
+    if (item.causewayKind === 'action' || item.title || item.causewayIconHint || item.causewayDisabledReason) {
+      const menuItem = document.createElement('vaadin-menu-bar-item');
+      if (item.causewayKey) menuItem.dataset.causewayKey = item.causewayKey;
       const label = document.createElement('span');
       label.className = 'causeway-menubar-item-label';
       label.textContent = item.text;
@@ -231,7 +243,8 @@ function materializeMenuItems(items) {
         label.setAttribute('aria-label', `${item.text}. Unavailable: ${item.causewayDisabledReason}`);
         label.dataset.disabledReason = item.causewayDisabledReason;
       }
-      materialized.component = label;
+      menuItem.appendChild(label);
+      materialized.component = menuItem;
     }
     return materialized;
   });
