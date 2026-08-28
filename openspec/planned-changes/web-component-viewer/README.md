@@ -9,9 +9,11 @@ The versionless-identity and preparation correction is archived.
 The union-projection correction is archived.
 The opaque-route correction is archived.
 The archived `add-paged-graphql-reference-autocomplete` change adds honest bounded server response windows, and the archived `expand-vaadin-semantic-editor-families` change qualifies the broader editor families before the default-policy flip in `vaadin-default-roadmap.md`.
-The archived `make-vaadin-default-for-webcomponent-viewer` change completes the policy-focused Vaadin-default sequence while retaining explicit native rollback.
-No Vaadin-default change remains active.
-The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued behind that higher-priority qualification and default-adoption work.
+The archived `make-vaadin-default-for-webcomponent-viewer` change completes the policy-focused Vaadin-editor-default sequence while retaining explicit native rollback.
+The proposal-only `extend-vaadin-to-domain-member-presentation`, `use-vaadin-grid-for-collection-presentation`, and `use-vaadin-menu-bar-for-application-menus` drafts evaluate extending that internal toolkit to read-only fields and buttons, collections, and application navigation in independently reviewable tranches.
+Their order, shared boundaries, and promotion gates are recorded in `vaadin-presentation-roadmap.md`.
+No Vaadin presentation follow-on is active.
+The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued for separate review.
 Proposal-only security drafts separate local SecMan authentication for the HTMX viewer, subsequent OAuth/OIDC support, eventual promotion of the proven bridge into shared Causeway security, future CSRF-safe Wicket and HTMX coexistence, and stable SecMan delegated-user identity mapping.
 
 Complete child directories contain `.openspec.yaml`, `proposal.md`, `design.md`, `tasks.md`, and delta specifications and can be promoted verbatim after review.
