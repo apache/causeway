@@ -202,6 +202,13 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-owner-page']").isVisible()).isTrue();
+        assertThat(page.locator(".petclinic-object-grid").evaluate("""
+                element => {
+                  const details = element.querySelector('.petclinic-object-details').getBoundingClientRect();
+                  const collections = element.querySelector('.petclinic-object-collections').getBoundingClientRect();
+                  return collections.left >= details.right && Math.abs(collections.top - details.top) < 1;
+                }
+                """)).isEqualTo(true);
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
@@ -229,7 +236,7 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
         assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
-        page.setViewportSize(1280, 900);
+        page.setViewportSize(1800, 900);
         if (!nativeToolkit()) {
             page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.dataset.causewayGridPresentation.startsWith('grid-') && document.querySelector(\"cw-collection[id='visits']\")?.dataset.causewayGridFallback === 'ordering-not-deterministic'");
         }

@@ -77,6 +77,7 @@ The complete Web Components Maven reactor passes under Java 21, including founda
 Reference, field, action, and Grid deterministic verification passes, and every production npm audit reports zero vulnerabilities.
 The vanilla sample passes Maven integration and manual browser checks for virtual, bounded unavailable-total, empty, disabled, narrow, encounter-ordered, renderer-failure, explicit-native, zero-external-request, and zero-overflow states.
 The Petclinic Playwright suite passes 4 of 4 tests in default mode and 4 of 4 tests in explicit-native mode.
+A focused owner-layout regression verifies that collections remain in the wider right-hand column and qualify at the standard 1440-pixel viewport, switch wholly native at a narrow viewport, and upgrade in place again at a sufficiently wide viewport without another GraphQL read.
 The Reference Application Playwright suite passes 13 of 13 tests in default mode and 13 of 13 tests in explicit-native mode.
 The Reference Application clean package, integration, capability inventory, overlapping-range, unavailable-total, membership-refresh, route-replacement, and family-failure gates pass.
 Clean and incremental capability inventory resources are byte-identical with SHA-256 `2c2a629db29693f59531de5f2559e8fb756687b45448fc88bcdf9d88cb94112d`.
