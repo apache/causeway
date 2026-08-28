@@ -25,7 +25,7 @@ import {CAUSEWAY_COMPONENT_STYLES} from '../src/component-styles.mjs';
 
 test('external structural stylesheet remains synchronized with the installable styles', async () => {
   const external = await readFile(new URL('../src/component-styles.css', import.meta.url), 'utf8');
-  const withoutLicense = external.slice(external.indexOf('causeway-object {')).trim();
+  const withoutLicense = external.slice(external.indexOf('cw-object {')).trim();
   assert.equal(withoutLicense, CAUSEWAY_COMPONENT_STYLES.trim());
 });
 
@@ -57,19 +57,19 @@ test('disabled reasons use label-owned tooltips and string values align to logic
 });
 
 test('direct member associations wrap in semantic source and keyboard order', () => {
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-property\[data-causeway-action-group\]/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /causeway-collection\[data-causeway-action-group\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-action-group\]/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /> \.causeway-member-primary/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /> causeway-action\[data-causeway-associated-action\]/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /> cw-action\[data-causeway-associated-action\]/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /flex-wrap: wrap/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
 
 test('standard theme gives described multiline properties explicit responsive placement', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
-  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-description \{\s+grid-column: 1;\s+grid-row: 2;/);
-  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-value \{\s+grid-column: 2;\s+grid-row: 1 \/ span 2;/);
-  assert.match(theme, /:where\(causeway-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 3;\s+grid-row: 1;\s+justify-self: start;/);
-  assert.match(theme, /@container \(max-width: 32rem\)[\s\S]+:where\(causeway-property\[multiline\]\) \.causeway-property-value \{\s+grid-row: 3;/);
-  assert.match(theme, /@media \(max-width: 48rem\)[\s\S]+:where\(causeway-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 2;\s+grid-row: 3;/);
+  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-description \{\s+grid-column: 1;\s+grid-row: 2;/);
+  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-value \{\s+grid-column: 2;\s+grid-row: 1 \/ span 2;/);
+  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 3;\s+grid-row: 1;\s+justify-self: start;/);
+  assert.match(theme, /@container \(max-width: 32rem\)[\s\S]+:where\(cw-property\[multiline\]\) \.causeway-property-value \{\s+grid-row: 3;/);
+  assert.match(theme, /@media \(max-width: 48rem\)[\s\S]+:where\(cw-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 2;\s+grid-row: 3;/);
 });

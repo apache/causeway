@@ -75,8 +75,8 @@ Normal home and result links remain canonical anchors, while the browser bridge 
 
 == Generic and custom pages
 
-Every object route creates exactly one `<causeway-object-context>`.
-Without an exact custom registration, its child is `<causeway-object editable>` and the component uses its effective or fallback Causeway grid.
+Every object route creates exactly one `<cw-object-context>`.
+Without an exact custom registration, its child is `<cw-object editable>` and the component uses its effective or fallback Causeway grid.
 
 The preferred application customization is a UTF-8 HTML file beneath `META-INF/causeway/webcomponents/pages/`.
 The filename before `.html` is the exact public logical type, so `petclinic.PetOwner.html` registers `petclinic.PetOwner` without an application bean, annotation, manifest, template controller, or client-side fetch.
@@ -94,9 +94,9 @@ The compatible dynamic extension remains one Spring bean implementing `HtmxPageF
 The factory receives only `HtmxObjectRoute`, not a metamodel object, persistence session, authorization object, or GraphQL response.
 Two resources, two factories, or one of each claiming the same logical type fail during startup without using bean or classpath order.
 A discovered resource that is unreadable, empty, oversized, malformed, invalidly named, or duplicated also fails startup rather than silently selecting the generic page.
-Only complete absence of an exact registration selects `<causeway-object editable>`.
+Only complete absence of an exact registration selects `<cw-object editable>`.
 
-Custom pages can compose ordinary HTML, application custom elements, `<causeway-object>`, and semantic Causeway property, action, and collection elements.
+Custom pages can compose ordinary HTML, application custom elements, `<cw-object>`, and semantic Causeway property, action, and collection elements.
 Those elements consume the one nearest route context and therefore do not create a parallel data plane.
 Removing an HTML file from the packaged application is the immediate rollback to retained grid-driven generic composition.
 
@@ -139,7 +139,7 @@ See `../sample-htmx-petclinic/PROVENANCE.adoc` for the pinned Apache Petclinic s
 
 == Non-goals
 
-The module does not add routing awareness to `<causeway-object>`.
+The module does not add routing awareness to `<cw-object>`.
 It does not construct domain GraphQL operations, translate GraphQL values, parse effective grid or menu XML, expose metamodel internals, or define Vue and Svelte lifecycle APIs.
 It does not require applications that use only the component library to adopt HTMX, Wicket, Petclinic, or the default theme.
 The default toolkit policy adds no Grid query contract, upload adapter, unsupported temporal adapter, Flow, Binder, Pro component, server-side Vaadin state, telemetry, CDN asset, or application-facing raw Vaadin API.

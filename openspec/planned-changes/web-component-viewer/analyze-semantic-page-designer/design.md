@@ -1,7 +1,7 @@
 ## Context
 
 Causeway's effective grid supplies default object composition.
-`<causeway-object>` consumes that grid and generates semantic property, action, collection, and header components.
+`<cw-object>` consumes that grid and generates semantic property, action, collection, and header components.
 Applications can override the generic page at the host router using ordinary HTML and Causeway components.
 
 A designer could make that override path visual and model-aware.
@@ -25,7 +25,7 @@ The appropriate editing model and tooling need evidence.
 
 - Shipping a production page designer.
 - Replacing Causeway grid or menu XML.
-- Making `<causeway-object>` select custom pages.
+- Making `<cw-object>` select custom pages.
 - Supporting arbitrary JavaScript execution inside the designer.
 - Committing to GrapesJS before comparison.
 - Implementing multi-user collaboration, hosted storage, or deployment workflows.
@@ -35,9 +35,9 @@ The appropriate editing model and tooling need evidence.
 ### Keep routing outside the object component
 
 The designer creates custom page artifacts and registration metadata.
-The generic HTMX, Vue, or Svelte router chooses that custom page for an exact logical type and otherwise uses the generic `<causeway-object>` page.
+The generic HTMX, Vue, or Svelte router chooses that custom page for an exact logical type and otherwise uses the generic `<cw-object>` page.
 
-The analysis does not introduce a framework-neutral page provider inside `<causeway-object>`.
+The analysis does not introduce a framework-neutral page provider inside `<cw-object>`.
 Generated pages must work beneath the established route-level object context.
 
 ### Treat the catalogue and schema as distinct inputs

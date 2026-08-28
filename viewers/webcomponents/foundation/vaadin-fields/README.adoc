@@ -5,7 +5,7 @@
 // The ASF licenses this file to you under the Apache License, Version 2.0.
 
 This directory builds the pinned free-core Vaadin field assets used behind Causeway semantic editors.
-Applications continue to use `<causeway-*>` elements and must not depend on the internal Vaadin tags.
+Applications continue to use `<cw-*>` elements and must not depend on the internal Vaadin tags.
 
 == Reproducible build
 

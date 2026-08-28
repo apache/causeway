@@ -89,7 +89,7 @@ class HtmxSecmanHttpSecurityTest {
                 .andExpect(header().string("Cache-Control", containsString("no-store")))
                 .andExpect(content().string(containsString("Sign in to Petclinic")))
                 .andExpect(content().string(containsString("name=\"_csrf\"")))
-                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("causeway-graphql-client"))));
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("cw-graphql-client"))));
         mvc.perform(get("/htmx/login.css"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("text/css"));

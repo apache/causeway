@@ -4,7 +4,7 @@ Svelte is well suited to consuming custom elements directly, while SvelteKit pro
 Causeway's semantic components already own GraphQL contexts, object layout, menu layout, editors, validation, interactions, and results.
 A generic Svelte viewer should integrate those components with SvelteKit routing rather than reproduce them as Svelte domain components.
 
-The router resolves a canonical bookmark and chooses a registered logical-type Svelte page or a generic page containing `<causeway-object>`.
+The router resolves a canonical bookmark and chooses a registered logical-type Svelte page or a generic page containing `<cw-object>`.
 The component itself remains unaware that custom pages exist.
 
 ## Goals / Non-Goals
@@ -23,7 +23,7 @@ The component itself remains unaware that custom pages exist.
 - Selecting or bundling a router for standalone non-SvelteKit Svelte applications.
 - Wrapping every Causeway custom element as a Svelte component.
 - Constructing GraphQL documents or duplicating domain state in Svelte stores or load functions.
-- Making `<causeway-object>` inspect SvelteKit route state.
+- Making `<cw-object>` inspect SvelteKit route state.
 - Claiming complete server-rendered custom-element content in the first version.
 
 ## Decisions
@@ -40,20 +40,20 @@ Applications can wrap or relocate it while preserving canonical semantic route m
 ### Register framework-native Svelte pages
 
 Applications register a Svelte component or lazy component loader against an exact Causeway logical type.
-The chosen page renders beneath one route-level `<causeway-object-context>` created by the viewer route page.
+The chosen page renders beneath one route-level `<cw-object-context>` created by the viewer route page.
 
 Custom pages can compose Causeway custom elements, Svelte components, ordinary HTML, and application elements.
 They rely on the object context for domain state rather than duplicating the object in Svelte stores.
 
-### Use `<causeway-object>` as the generic fallback
+### Use `<cw-object>` as the generic fallback
 
-When no custom loader exists, the route page renders `<causeway-object>` beneath the same context contract.
+When no custom loader exists, the route page renders `<cw-object>` beneath the same context contract.
 Page selection completes before the generic component connects.
 The generic component never discovers custom pages or reads SvelteKit route state.
 
 ### Keep menus in the root viewer layout
 
-A viewer `+layout` component or equivalent shell renders `<causeway-menubars>` outside the route-page slot.
+A viewer `+layout` component or equivalent shell renders `<cw-menubars>` outside the route-page slot.
 Page navigation does not recreate menu coordination.
 Semantic menu outcomes flow to replaceable Svelte navigation and result policy.
 

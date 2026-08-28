@@ -87,7 +87,7 @@ The standard diagnostic store SHALL combine correlated lifecycle records, retain
 - **THEN** the export contains only the bounded redacted diagnostic representation
 
 ### Requirement: Framework-neutral diagnostic presentation
-The library SHALL provide an optional `<causeway-graphql-diagnostics>` light-DOM element that consumes a compatible diagnostic source without requiring HTMX or another frontend framework.
+The library SHALL provide an optional `<cw-graphql-diagnostics>` light-DOM element that consumes a compatible diagnostic source without requiring HTMX or another frontend framework.
 
 #### Scenario: Operations are observed
 - **WHEN** diagnostic records enter the configured source

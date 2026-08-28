@@ -7,22 +7,22 @@ The semantic composition is the inverse of member-associated actions.
 Instead of nesting actions beneath a property or collection, authored HTML would nest relevant read-only properties or collections beneath an action declaration:
 
 ```html
-<causeway-action member="bookVisit">
-  <causeway-property member="lastVisit"></causeway-property>
-  <causeway-collection member="visits" active size="5">
-    <causeway-collection-column member="visitAt"></causeway-collection-column>
-    <causeway-collection-column member="reason"></causeway-collection-column>
-  </causeway-collection>
-</causeway-action>
+<cw-action member="bookVisit">
+  <cw-property member="lastVisit"></cw-property>
+  <cw-collection member="visits" active size="5">
+    <cw-collection-column member="visitAt"></cw-collection-column>
+    <cw-collection-column member="reason"></cw-collection-column>
+  </cw-collection>
+</cw-action>
 ```
 
-The current `<causeway-action>` replaces its light DOM with the action affordance, while the shared interaction controller independently renders parameter prompts as modal `<dialog>` markup.
+The current `<cw-action>` replaces its light DOM with the action affordance, while the shared interaction controller independently renders parameter prompts as modal `<dialog>` markup.
 Direct contextual children would therefore be destroyed, and the controller has no supported contract for projecting authored semantic content into a prompt-owned region.
 A follow-on change must define that ownership and lifecycle deliberately rather than treating arbitrary nested markup as a visual trick.
 
 ## What Changes
 
-- Introduce a declarative action-prompt context concept in which selected direct `<causeway-property>` and `<causeway-collection>` children describe supporting object information for an action prompt.
+- Introduce a declarative action-prompt context concept in which selected direct `<cw-property>` and `<cw-collection>` children describe supporting object information for an action prompt.
 - Initially scope contextual members to object actions whose source action and contextual members share one authoritative object identity.
 - Keep service actions, parameter-selected targets, action results, and cross-object context outside the initial contract unless a later prototype proves an unambiguous identity model.
 - Treat contextual member selection as application-authored presentation only; it does not change action visibility, usability, parameter choices, defaults, validation, invocation, concurrency, or results.
@@ -69,7 +69,7 @@ A follow-on change must define that ownership and lifecycle deliberately rather 
 
 ## Impact
 
-- Follows `add-declarative-associated-action-composition`, which establishes the stable direct-child lifecycle techniques needed before extending `<causeway-action>` in the inverse direction.
+- Follows `add-declarative-associated-action-composition`, which establishes the stable direct-child lifecycle techniques needed before extending `<cw-action>` in the inverse direction.
 - Affects action light-DOM handling, interaction-controller prompt ownership, prompt presentation policy, accessibility, focus restoration, contextual collection lifecycle, and application documentation.
 - Requires a real object-action fixture where contextual properties and a bounded collection materially assist parameter entry or invocation review.
 - May require a narrow internal declaration model or semantic portal API, but must not expose GraphQL documents, route identities, protected values, metamodel objects, or persistence state to page authors.

@@ -649,7 +649,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       this.renderingInteraction = false;
     }
     if (this.restoreClearFocus) {
-      this.querySelector?.('causeway-field-editor')?.focusClear?.();
+      this.querySelector?.('cw-field-editor')?.focusClear?.();
     } else if (activeAction) {
       this.querySelector?.(`[data-causeway-action="${activeAction}"]`)?.focus?.();
     } else if (activeEditor) {

@@ -34,15 +34,15 @@ The Vue route resolver SHALL choose an exact-logical-type registered Vue page be
 
 #### Scenario: No Vue page is registered
 - **WHEN** no exact registration exists
-- **THEN** the route renders `<causeway-object>` beneath the same kind of route-level object context
+- **THEN** the route renders `<cw-object>` beneath the same kind of route-level object context
 
 #### Scenario: Generic component connects
-- **WHEN** `<causeway-object>` renders the route object
+- **WHEN** `<cw-object>` renders the route object
 - **THEN** it uses effective or fallback grid behavior
 - **AND** does not inspect Vue Router or custom-page registrations
 
 ### Requirement: Stable Vue application shell
-The Vue viewer SHALL keep `<causeway-menubars>` and global viewer state outside the changing route-page region.
+The Vue viewer SHALL keep `<cw-menubars>` and global viewer state outside the changing route-page region.
 
 #### Scenario: Vue route changes
 - **WHEN** `RouterView` or the equivalent page region changes object routes

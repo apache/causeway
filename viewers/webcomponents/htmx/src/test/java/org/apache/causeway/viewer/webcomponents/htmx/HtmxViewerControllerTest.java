@@ -42,13 +42,13 @@ class HtmxViewerControllerTest {
 
         assertThat(response.getBody())
                 .contains("<!doctype html>")
-                .contains("<causeway-menubars>")
+                .contains("<cw-menubars>")
                 .contains("<main id=\"causeway-route\"")
                 .contains("data-page-kind=\"generic\"")
                 .contains("data-page-source=\"generic\"")
-                .contains("<causeway-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
-                .contains("<causeway-object editable>")
-                .contains("<causeway-interaction-controller data-causeway-route-interactions>");
+                .contains("<cw-object-context logical-type=\"petclinic.PetOwner\" object-id=\"owner-1\">")
+                .contains("<cw-object editable>")
+                .contains("<cw-interaction-controller data-causeway-route-interactions>");
         assertThat(response.getHeaders().getFirst("Content-Security-Policy"))
                 .contains("default-src 'self'")
                 .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
@@ -190,7 +190,7 @@ class HtmxViewerControllerTest {
 
             @Override
             public String render(final HtmxObjectRoute route) {
-                return "<article data-custom-page><causeway-property member=\"name\"></causeway-property></article>";
+                return "<article data-custom-page><cw-property member=\"name\"></cw-property></article>";
             }
         };
         final var controller = controller(List.of(custom));
@@ -203,7 +203,7 @@ class HtmxViewerControllerTest {
                 .contains("data-page-kind=\"custom\"")
                 .contains("data-page-source=\"factory\"")
                 .contains("data-custom-page")
-                .containsOnlyOnce("<causeway-object-context");
+                .containsOnlyOnce("<cw-object-context");
         assertThat(response.getHeaders().getFirst("HX-Push-Url"))
                 .isEqualTo("/app/htmx/object/petclinic.PetOwner/owner-1");
     }
@@ -213,7 +213,7 @@ class HtmxViewerControllerTest {
         final var resource = HtmxPageDefinition.resource(
                 "petclinic.PetOwner",
                 "resource:petclinic.PetOwner.html",
-                "<article data-resource-page>{{objectId}}<causeway-property member=\"name\"></causeway-property></article>");
+                "<article data-resource-page>{{objectId}}<cw-property member=\"name\"></cw-property></article>");
         final var controller = controller(List.of(), List.of(resource));
 
         final var response = controller.route(request(
@@ -227,8 +227,8 @@ class HtmxViewerControllerTest {
                 .contains("object-id=\"owner&amp;one\"")
                 .contains("{{objectId}}")
                 .contains("data-resource-page")
-                .containsOnlyOnce("<causeway-object-context")
-                .containsOnlyOnce("<causeway-interaction-controller");
+                .containsOnlyOnce("<cw-object-context")
+                .containsOnlyOnce("<cw-interaction-controller");
     }
 
     @Test
@@ -285,7 +285,7 @@ class HtmxViewerControllerTest {
         assertThat(response.getBody())
                 .doesNotContain("<!doctype html>")
                 .contains("data-page-kind=\"generic\"")
-                .containsOnlyOnce("<causeway-object-context");
+                .containsOnlyOnce("<cw-object-context");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
     }
 

@@ -50,7 +50,7 @@ test('standard value renderers cover scalars, enums, nulls and object references
     descriptor: descriptor(object)
   });
   assert.equal(objectResult.rendererId, 'object-reference');
-  assert.match(objectResult.html, /causeway-object-link/);
+  assert.match(objectResult.html, /cw-object-link/);
   assert.match(objectResult.html, /staff-1/);
 });
 

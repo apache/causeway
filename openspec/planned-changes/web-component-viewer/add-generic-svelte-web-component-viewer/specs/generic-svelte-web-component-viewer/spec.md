@@ -34,15 +34,15 @@ The Svelte route resolver SHALL choose an exact-logical-type registered Svelte p
 
 #### Scenario: No Svelte page is registered
 - **WHEN** no exact registration exists
-- **THEN** the route renders `<causeway-object>` beneath the same kind of route-level object context
+- **THEN** the route renders `<cw-object>` beneath the same kind of route-level object context
 
 #### Scenario: Generic component connects
-- **WHEN** `<causeway-object>` renders the route object
+- **WHEN** `<cw-object>` renders the route object
 - **THEN** it uses effective or fallback grid behavior
 - **AND** does not inspect SvelteKit routing or custom-page registrations
 
 ### Requirement: Stable Svelte application layout
-The Svelte viewer SHALL keep `<causeway-menubars>` and global viewer state outside the changing route-page slot.
+The Svelte viewer SHALL keep `<cw-menubars>` and global viewer state outside the changing route-page slot.
 
 #### Scenario: SvelteKit route changes
 - **WHEN** the active page slot changes object routes

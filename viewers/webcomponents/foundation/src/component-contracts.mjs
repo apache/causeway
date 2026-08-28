@@ -21,22 +21,22 @@
  * Stable public custom-element names for the framework-neutral Causeway component vocabulary.
  */
 export const CausewayElementName = Object.freeze({
-  GRAPHQL_CLIENT: 'causeway-graphql-client',
-  OBJECT_CONTEXT: 'causeway-object-context',
-  OBJECT: 'causeway-object',
-  OBJECT_HEADER: 'causeway-object-header',
-  PROPERTY: 'causeway-property',
-  VALUE: 'causeway-value',
-  OBJECT_LINK: 'causeway-object-link',
-  ACTION: 'causeway-action',
-  INTERACTION_CONTROLLER: 'causeway-interaction-controller',
-  REFERENCE_EDITOR: 'causeway-reference-editor',
-  COLLECTION: 'causeway-collection',
-  COLLECTION_COLUMN: 'causeway-collection-column',
-  MENUBARS: 'causeway-menubars',
-  MENUBAR_PRIMARY: 'causeway-menubar-primary',
-  MENUBAR_SECONDARY: 'causeway-menubar-secondary',
-  MENUBAR_TERTIARY: 'causeway-menubar-tertiary'
+  GRAPHQL_CLIENT: 'cw-graphql-client',
+  OBJECT_CONTEXT: 'cw-object-context',
+  OBJECT: 'cw-object',
+  OBJECT_HEADER: 'cw-object-header',
+  PROPERTY: 'cw-property',
+  VALUE: 'cw-value',
+  OBJECT_LINK: 'cw-object-link',
+  ACTION: 'cw-action',
+  INTERACTION_CONTROLLER: 'cw-interaction-controller',
+  REFERENCE_EDITOR: 'cw-reference-editor',
+  COLLECTION: 'cw-collection',
+  COLLECTION_COLUMN: 'cw-collection-column',
+  MENUBARS: 'cw-menubars',
+  MENUBAR_PRIMARY: 'cw-menubar-primary',
+  MENUBAR_SECONDARY: 'cw-menubar-secondary',
+  MENUBAR_TERTIARY: 'cw-menubar-tertiary'
 });
 
 /**
