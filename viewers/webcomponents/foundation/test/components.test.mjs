@@ -29,6 +29,8 @@ const {
   CausewayCollectionElement,
   CausewayObjectContextElement,
   CausewayPropertyElement,
+  CausewayValueRendererRegistry,
+  configureCausewayFieldWidgets,
   defineCausewayWebComponents
 } = await import('../src/index.mjs');
 
@@ -54,6 +56,94 @@ test('property renders accessible ready, disabled, hidden and error states', () 
   property.renderComponentState(state({status: 'partial-error', errors: [{message: 'Unreadable'}]}));
   assert.match(property.innerHTML, /role="alert"/);
   assert.match(property.innerHTML, /Unreadable/);
+});
+
+test('qualified standard values use a read-only field while native policy preserves the standard renderer', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'name';
+  const ready = state({
+    descriptor: {
+      description: 'Department name',
+      value: {typeRef: {kind: 'SCALAR', name: 'String'}}
+    },
+    data: {hidden: false, disabled: null, datatype: 'String', get: 'Classics'}
+  });
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true});
+  property.renderComponentState(ready);
+  assert.equal(property.getAttribute('data-renderer'), 'vaadin-field-view');
+  assert.match(property.innerHTML, /<cw-field-editor[^>]+data-mode="view"/);
+  assert.match(property.innerHTML, /data-value="Classics"/);
+
+  configureCausewayFieldWidgets({families: ['basic'], presentation: false});
+  property.renderComponentState(ready);
+  assert.equal(property.getAttribute('data-renderer'), 'scalar');
+  assert.doesNotMatch(property.innerHTML, /data-mode="view"/);
+  assert.match(property.innerHTML, /Classics/);
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal'], presentation: true});
+});
+
+test('connected properties rerender immediately when field presentation policy changes', () => {
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true});
+  const ready = state({
+    descriptor: {description: 'Department name', value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {hidden: false, disabled: null, datatype: 'String', get: 'Classics'}
+  });
+  const property = new CausewayPropertyElement();
+  property.id = 'name';
+  property.context = {registerRequirement(requirement, listener) { listener(ready); return () => {}; }};
+  document.body.appendChild(property);
+  assert.match(property.innerHTML, /data-mode="view"/);
+  configureCausewayFieldWidgets({families: [], presentation: false});
+  assert.doesNotMatch(property.innerHTML, /data-mode="view"/);
+  assert.equal(property.getAttribute('data-renderer'), 'scalar');
+  document.body.removeChild(property);
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal'], presentation: true});
+});
+
+test('application value renderer precedence remains authoritative even when its id resembles a standard renderer', () => {
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true});
+  const registry = new CausewayValueRendererRegistry();
+  registry.register({
+    id: 'scalar',
+    test: () => true,
+    render: ({value}) => ({kind: 'application-code', html: `<strong data-application-renderer>${value}</strong>`})
+  });
+  const property = new CausewayPropertyElement();
+  property.id = 'code';
+  property.rendererRegistry = registry;
+  property.renderComponentState(state({
+    descriptor: {description: 'Department code', value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {hidden: false, disabled: null, datatype: 'String', get: 'SCI'}
+  }));
+  assert.equal(property.getAttribute('data-renderer'), 'scalar');
+  assert.match(property.innerHTML, /data-application-renderer/);
+  assert.doesNotMatch(property.innerHTML, /data-mode="view"/);
+});
+
+test('property presentation selects every qualified field family and preserves descriptions', () => {
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal'], presentation: true});
+  const cases = [
+    ['text', 'String', {kind: 'SCALAR', name: 'String'}, 'Ada', 'basic', 'text-field'],
+    ['boolean', 'Boolean', {kind: 'SCALAR', name: 'Boolean'}, true, 'basic', 'checkbox'],
+    ['enum', 'DepartmentStatus', {kind: 'ENUM', name: 'DepartmentStatus'}, 'ACTIVE', 'basic', 'select'],
+    ['decimal', 'rich__java_math_BigDecimal', {kind: 'SCALAR', name: 'rich__java_math_BigDecimal'}, '1.2300', 'numeric', 'text-field'],
+    ['integer', 'Int', {kind: 'SCALAR', name: 'Int'}, 42, 'numeric', 'integer-field'],
+    ['date', 'LocalDate', {kind: 'SCALAR', name: 'LocalDate'}, '2026-08-24', 'local-temporal', 'date-picker'],
+    ['time', 'LocalTime', {kind: 'SCALAR', name: 'LocalTime'}, '13:14:15.123', 'local-temporal', 'time-picker'],
+    ['dateTime', 'LocalDateTime', {kind: 'SCALAR', name: 'LocalDateTime'}, '2026-08-24T13:14:15.123', 'local-temporal', 'date-time-picker']
+  ];
+  for (const [id, datatype, typeRef, value, family, control] of cases) {
+    const property = new CausewayPropertyElement();
+    property.id = id;
+    property.renderComponentState(state({
+      descriptor: {description: `${id} description`, value: {typeRef}},
+      data: {hidden: false, disabled: 'Read only', datatype, get: value}
+    }));
+    assert.equal(property.getAttribute('data-renderer'), 'vaadin-field-view', id);
+    assert.match(property.innerHTML, new RegExp(`data-family="${family}"`), id);
+    assert.match(property.innerHTML, new RegExp(`data-control="${control}"`), id);
+    assert.match(property.innerHTML, /data-describedby=/, id);
+  }
 });
 
 test('member-bearing elements use native identifiers without a member compatibility API', () => {
@@ -133,11 +223,11 @@ test('components publish framework-neutral semantic state events', () => {
   document.body.removeChild(parent);
 });
 
-function state({status = 'ready', data = null, errors = []} = {}) {
+function state({status = 'ready', data = null, errors = [], descriptor = {description: 'Department name'}} = {}) {
   return Object.freeze({
     status,
     requirement: {kind: 'property', member: 'name'},
-    descriptor: {description: 'Department name'},
+    descriptor,
     data,
     errors,
     generation: 1

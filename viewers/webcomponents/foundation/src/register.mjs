@@ -18,6 +18,7 @@
  */
 
 import {CausewayActionElement} from './action-element.mjs';
+import {CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement} from './action-widget.mjs';
 import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
 import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './collection-element.mjs';
 import {CausewayElementName} from './component-contracts.mjs';
@@ -47,6 +48,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.VALUE, CausewayValueElement],
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
+  [CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],
   [CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement],
   [CausewayElementName.REFERENCE_EDITOR, CausewayReferenceEditorElement],

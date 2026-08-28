@@ -4,7 +4,7 @@
 // See the NOTICE file distributed with this work for additional information regarding copyright ownership.
 // The ASF licenses this file to you under the Apache License, Version 2.0.
 
-This directory builds the pinned free-core Vaadin field assets used behind Causeway semantic editors.
+This directory builds the pinned free-core Vaadin field assets used behind qualified Causeway semantic read-only values and editors.
 Applications continue to use `<cw-*>` elements and must not depend on the internal Vaadin tags.
 
 == Reproducible build
@@ -29,7 +29,7 @@ Three independent same-origin assets are generated:
 
 `policy.json` pins each checksum, gzip ceiling, entry-point set, and exact CSP style hashes.
 `generated/licenses/THIRD-PARTY.json` records the production closure and legal metadata.
-The browser audit enforces those hashes with `style-src-attr 'none'` and checks accessibility, external requests, console errors, page errors, and narrow overflow.
+The browser audit enforces those hashes with `style-src-attr 'none'` and checks genuine read-only behavior, accessible names and descriptions, keyboard and pointer immutability, closed overlays, external requests, console errors, page errors, responsive layouts, themes, reduced motion, forced colors, and overflow.
 
 == Retained limits
 
@@ -38,7 +38,8 @@ Local time and local date-time values with more than millisecond fractional prec
 Blob, Clob, and local resource paths remain explicitly unsupported inputs until a reversible authoritative GraphQL upload contract exists.
 References retain their separately packaged closure.
 
-Qualified field families are enabled by default and remain independently route-lazy.
-Set `causeway.viewer.webcomponents.htmx.editor-toolkit=native` to disable all Vaadin adapters immediately.
-The old field-family allow-list remains readable only during the documented compatibility period.
-A failing closure disables only its family for the current document and rerenders the existing native semantic editor.
+Qualified field families are enabled by default and remain independently route-lazy for read-only values and editors.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` to disable all Vaadin adapters immediately.
+The deprecated editor property maps to the complete component policy only when the component property is absent.
+The older field-family allow-list remains readable only during the documented editor-only compatibility period and never enables read-only presentation by itself.
+A failing closure disables only its family for the current document and rerenders the established native semantic value or editor.

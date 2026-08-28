@@ -38,6 +38,11 @@ const AUDIT_ROOTS = [
   `${PROJECT_ROOT}/viewers/graphql/adoc`
 ];
 const SOURCE_EXTENSIONS = new Set(['.adoc', '.css', '.html', '.java', '.js', '.md', '.mjs', '.yaml', '.yml']);
+const APPLICATION_MARKUP_ROOTS = [
+  `${WEB_COMPONENTS_ROOT}/sample-html/src/main/resources`,
+  `${WEB_COMPONENTS_ROOT}/sample-htmx-petclinic/src/main/resources`
+];
+const RAW_VAADIN_MARKUP = /<\/?vaadin-[a-z0-9-]+\b/i;
 const OLD_PREFIX = `causeway${'-'}`;
 const OLD_SUFFIXES = [
   'graphql-client',
@@ -129,6 +134,21 @@ test('member-bearing elements use native id without stale member DOM APIs', asyn
               || OLD_MEMBER_DOM_API.test(line)
               || OLD_MEMBER_ACCESSOR.test(line)
               || OLD_MEMBER_PROPERTY.test(line))) {
+          stale.push(`${path.slice(PROJECT_ROOT.length + 1)}:${index + 1}: ${line.trim()}`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(stale, []);
+});
+
+test('application markup does not expose raw Vaadin elements', async () => {
+  const stale = [];
+  for (const root of APPLICATION_MARKUP_ROOTS) {
+    for (const path of await sourceFiles(root)) {
+      const lines = (await readFile(path, 'utf8')).split('\n');
+      for (const [index, line] of lines.entries()) {
+        if (RAW_VAADIN_MARKUP.test(line)) {
           stale.push(`${path.slice(PROJECT_ROOT.length + 1)}:${index + 1}: ${line.trim()}`);
         }
       }

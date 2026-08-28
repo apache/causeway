@@ -1,0 +1,25 @@
+= Vaadin ordinary action closure
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This directory builds the pinned free-core Vaadin Button asset used internally by `<cw-action>` when the resolved component toolkit is `vaadin`.
+Applications continue to use Causeway elements and semantic events and must not depend on the internal `vaadin-button` tag, events, or Shadow DOM.
+
+The closure is independent from reference and field-family assets so action-only routes do not download unrelated controls.
+It excludes property editing controls, prompts, menus, shell controls, Flow, Binder, Pro components, telemetry, CDN resources, and server-side Vaadin state.
+
+Run the deterministic checks with:
+
+[source,shell]
+----
+npm ci --ignore-scripts
+npm run build
+npm run verify
+npm run audit
+----
+
+A reviewed dependency or generated-byte update uses `npm run update-policy`, followed by inspection of `policy.json`, generated legal metadata, CSP hashes, compressed size, browser audit output, and the HTMX CSP source.
+
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` to disable this and every other Vaadin adapter immediately.
