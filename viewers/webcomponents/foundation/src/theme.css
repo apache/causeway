@@ -223,17 +223,17 @@ textarea {
   border: 0 !important;
 }
 
-causeway-object,
-causeway-object-context,
-causeway-object-header,
-causeway-property,
-causeway-collection,
-causeway-interaction-controller {
+cw-object,
+cw-object-context,
+cw-object-header,
+cw-property,
+cw-collection,
+cw-interaction-controller {
   min-width: 0;
   display: block;
 }
 
-causeway-action {
+cw-action {
   min-width: 0;
   display: inline-block;
 }
@@ -333,7 +333,7 @@ causeway-action {
   border-block-end: 1px solid color-mix(in srgb, var(--causeway-border) 65%, transparent);
 }
 
-causeway-property:last-child .causeway-property {
+cw-property:last-child .causeway-property {
   border-block-end: 0;
 }
 
@@ -362,22 +362,22 @@ causeway-property:last-child .causeway-property {
   font-size: var(--causeway-font-size-sm);
 }
 
-:where(causeway-property[multiline]) .causeway-property-label {
+:where(cw-property[multiline]) .causeway-property-label {
   grid-column: 1;
   grid-row: 1;
 }
 
-:where(causeway-property[multiline]) .causeway-property-description {
+:where(cw-property[multiline]) .causeway-property-description {
   grid-column: 1;
   grid-row: 2;
 }
 
-:where(causeway-property[multiline]) .causeway-property-value {
+:where(cw-property[multiline]) .causeway-property-value {
   grid-column: 2;
   grid-row: 1 / span 2;
 }
 
-:where(causeway-property[multiline]) .causeway-property-edit {
+:where(cw-property[multiline]) .causeway-property-edit {
   grid-column: 3;
   grid-row: 1;
   justify-self: start;
@@ -590,7 +590,7 @@ causeway-property:last-child .causeway-property {
   display: none;
 }
 
-causeway-interaction-controller:has(.causeway-action-prompt)::before {
+cw-interaction-controller:has(.causeway-action-prompt)::before {
   content: "";
   position: fixed;
   z-index: 999;
@@ -668,19 +668,19 @@ causeway-interaction-controller:has(.causeway-action-prompt)::before {
     grid-column: 1;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-label {
+  :where(cw-property[multiline]) .causeway-property-label {
     grid-row: 1;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-description {
+  :where(cw-property[multiline]) .causeway-property-description {
     grid-row: 2;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-value {
+  :where(cw-property[multiline]) .causeway-property-value {
     grid-row: 3;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-edit {
+  :where(cw-property[multiline]) .causeway-property-edit {
     grid-column: 2;
     grid-row: 3;
   }
@@ -721,19 +721,19 @@ causeway-interaction-controller:has(.causeway-action-prompt)::before {
     grid-column: 1;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-label {
+  :where(cw-property[multiline]) .causeway-property-label {
     grid-row: 1;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-description {
+  :where(cw-property[multiline]) .causeway-property-description {
     grid-row: 2;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-value {
+  :where(cw-property[multiline]) .causeway-property-value {
     grid-row: 3;
   }
 
-  :where(causeway-property[multiline]) .causeway-property-edit {
+  :where(cw-property[multiline]) .causeway-property-edit {
     grid-column: 2;
     grid-row: 3;
   }

@@ -42,17 +42,17 @@ final class HtmxPageRenderer {
         final var custom = fragmentRegistry.find(route.logicalTypeName());
         final var content = custom
                 .map(page -> page.render(route))
-                .orElse("<causeway-object editable></causeway-object>");
+                .orElse("<cw-object editable></cw-object>");
         final var pageKind = custom.isPresent() ? "custom" : "generic";
         final var pageSource = custom
                 .map(page -> page.source().attributeValue())
                 .orElse("generic");
         return """
                 <section class="causeway-route-page causeway-route-object" data-route-state="loading" data-page-kind="%s" data-page-source="%s" data-testid="causeway-route-page" tabindex="-1" aria-label="Object page">
-                  <causeway-object-context logical-type="%s" object-id="%s">
+                  <cw-object-context logical-type="%s" object-id="%s">
                     %s
-                    <causeway-interaction-controller data-causeway-route-interactions></causeway-interaction-controller>
-                  </causeway-object-context>
+                    <cw-interaction-controller data-causeway-route-interactions></cw-interaction-controller>
+                  </cw-object-context>
                 </section>
                 """.formatted(
                         pageKind,
@@ -125,14 +125,14 @@ final class HtmxPageRenderer {
                 </head>
                 <body class="causeway-app-shell">
                   <a class="causeway-skip-link" href="#causeway-route">Skip to main content</a>
-                  <causeway-graphql-client endpoint="%s">
+                  <cw-graphql-client endpoint="%s">
                     <header class="causeway-shell-header">
                       <div class="causeway-shell-navbar">
                         <a class="causeway-shell-brand" href="%s" data-causeway-route-link aria-label="%s home">
                           <span class="causeway-shell-mark" aria-hidden="true">C</span>
                           <span>%s</span>
                         </a>
-                        <causeway-menubars></causeway-menubars>
+                        <cw-menubars></cw-menubars>
                         %s
                       </div>
                     </header>
@@ -146,7 +146,7 @@ final class HtmxPageRenderer {
                       <span>Powered by Apache Causeway</span>
                       %s
                     </footer>
-                  </causeway-graphql-client>
+                  </cw-graphql-client>
                 </body>
                 </html>
                 """.formatted(

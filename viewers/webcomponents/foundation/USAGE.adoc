@@ -22,21 +22,21 @@ The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-author
 
 [source,html]
 ----
-<causeway-graphql-client endpoint="/graphql">
-  <causeway-object-context
+<cw-graphql-client endpoint="/graphql">
+  <cw-object-context
       logical-type="university.dept.Department"
       object-id="42">
-    <causeway-object-header></causeway-object-header>
-    <causeway-property member="name"></causeway-property>
-    <causeway-property member="status"></causeway-property>
-    <causeway-property member="chair"></causeway-property>
-    <causeway-action member="inspect"></causeway-action>
-    <causeway-collection member="staffMembers">
-      <causeway-collection-column member="name" label="Name"></causeway-collection-column>
-      <causeway-collection-column member="code" label="Code"></causeway-collection-column>
-    </causeway-collection>
-  </causeway-object-context>
-</causeway-graphql-client>
+    <cw-object-header></cw-object-header>
+    <cw-property member="name"></cw-property>
+    <cw-property member="status"></cw-property>
+    <cw-property member="chair"></cw-property>
+    <cw-action member="inspect"></cw-action>
+    <cw-collection member="staffMembers">
+      <cw-collection-column member="name" label="Name"></cw-collection-column>
+      <cw-collection-column member="code" label="Code"></cw-collection-column>
+    </cw-collection>
+  </cw-object-context>
+</cw-graphql-client>
 
 <script type="module">
   const components = await import('/causeway-webcomponents/index.mjs');
@@ -49,8 +49,12 @@ The collection remains inactive until its load button is selected or its `active
 
 == Public component contract
 
-The public vocabulary consists of `causeway-graphql-client`, `causeway-menubars`, `causeway-menubar-primary`, `causeway-menubar-secondary`, `causeway-menubar-tertiary`, `causeway-object-context`, `causeway-object`, `causeway-object-header`, `causeway-property`, `causeway-value`, `causeway-object-link`, `causeway-action`, `causeway-interaction-controller`, `causeway-collection`, and `causeway-collection-column`.
+The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, and `cw-collection-column`.
 `CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
+
+The `cw-` element namespace replaces the former `causeway-` element namespace without compatibility aliases.
+Applications upgrading across this breaking change must replace each former opening and closing custom-element tag and each element-name selector with its one-to-one `cw-` equivalent.
+Semantic `causeway-*` events, CSS classes, `data-causeway-*` attributes, `--causeway-*` variables, and `/causeway-*` asset paths keep their existing spelling.
 
 Member components use the `member` attribute and accept an optional `label` override.
 A property exposes interaction only when its `editable` attribute or property is enabled.
@@ -69,14 +73,14 @@ Applications configure semantic content with attributes, structured properties, 
 
 == GraphQL execution
 
-Without an injected executor, `<causeway-graphql-client>` posts the standard GraphQL JSON request shape to its `endpoint` using the browser Fetch API.
+Without an injected executor, `<cw-graphql-client>` posts the standard GraphQL JSON request shape to its `endpoint` using the browser Fetch API.
 The request carries the operation document, variables, operation name, and cancellation signal.
 
 A host application can inject authentication, tracing, testing, or an existing networking stack through the `executor` JavaScript property:
 
 [source,javascript]
 ----
-const provider = document.querySelector('causeway-graphql-client');
+const provider = document.querySelector('cw-graphql-client');
 provider.executor = async ({document, variables, operationName, signal}) => {
   return myGraphQLStack.execute({document, variables, operationName, signal});
 };
@@ -103,13 +107,13 @@ Descriptions include member kind, advertised wrapper fields, output type referen
 Concrete property values, preparation values, action results, and rows use one metadata-selection policy that requests the advertised subset of `id`, `logicalTypeName`, `title`, and `version`.
 Interface and union descriptions retain their advertised possible types.
 The internal `__fragments` selection node renders only validated sorted inline fragments and is never exposed as a public component API.
-Descriptions are cached by generated type name within one `<causeway-graphql-client>` instance.
+Descriptions are cached by generated type name within one `<cw-graphql-client>` instance.
 Several object contexts under the same provider therefore share schema descriptions while retaining independent object snapshots.
 The cache is memory-only and is not shared across browser sessions or users.
 
 == Object contexts and coordinated reads
 
-`<causeway-object-context>` represents one object bookmark using `logical-type` and `object-id`.
+`<cw-object-context>` represents one object bookmark using `logical-type` and `object-id`.
 Descendant components synchronously request the nearest context using a bubbling and composed `causeway-object-context-request` event.
 A host adapter or test can instead inject a context through a component's `context` JavaScript property.
 
@@ -122,16 +126,16 @@ Nested object contexts answer descendant requests at the nearest provider bounda
 
 == Composite object and effective-grid layout
 
-`<causeway-object>` is a context-only high-level projection that generates the established header, property, action, and collection elements in light DOM.
+`<cw-object>` is a context-only high-level projection that generates the established header, property, action, and collection elements in light DOM.
 It does not accept object identity, create a context, construct GraphQL documents, choose routes, or discover custom pages.
 A complete generic fragment remains ordinary HTML:
 
 [source,html]
 ----
-<causeway-object-context logical-type="demo.Customer" object-id="customer-1">
-  <causeway-object editable></causeway-object>
-  <causeway-interaction-controller></causeway-interaction-controller>
-</causeway-object-context>
+<cw-object-context logical-type="demo.Customer" object-id="customer-1">
+  <cw-object editable></cw-object>
+  <cw-interaction-controller></cw-interaction-controller>
+</cw-object-context>
 ----
 
 The optional `editable` attribute enables editing on generated property children.
@@ -159,28 +163,28 @@ Applications that need different structure continue to author the established lo
 
 == Application menu bars and service actions
 
-`<causeway-menubars>` is the framework-neutral high-level coordinator for Causeway's effective primary, secondary, and tertiary application menu bars.
-It connects directly beneath a configured `<causeway-graphql-client>` and does not require an object context:
+`<cw-menubars>` is the framework-neutral high-level coordinator for Causeway's effective primary, secondary, and tertiary application menu bars.
+It connects directly beneath a configured `<cw-graphql-client>` and does not require an object context:
 
 [source,html]
 ----
-<causeway-graphql-client endpoint="/graphql">
-  <causeway-menubars></causeway-menubars>
-</causeway-graphql-client>
+<cw-graphql-client endpoint="/graphql">
+  <cw-menubars></cw-menubars>
+</cw-graphql-client>
 ----
 
 The composite uses targeted introspection to discover the rich root's optional `application.menuBars` capability.
 It reads the application descriptor once per generation, fetches the opaque origin-relative resource once with same-origin credentials and no-store semantics, and shares one immutable plan across generated or declarative bar children.
 It generates only effective non-empty roles in primary, secondary, tertiary order and preserves direct declarative bar children that existed before registration or custom-element upgrade.
-A direct authored `<causeway-interaction-controller>` is reused; otherwise the composite generates one standard controller for all service actions.
+A direct authored `<cw-interaction-controller>` is reused; otherwise the composite generates one standard controller for all service actions.
 
 Each semantic bar is independently usable and owns an equivalent private generation when no composite provides one:
 
 [source,html]
 ----
-<causeway-graphql-client endpoint="/graphql">
-  <causeway-menubar-secondary></causeway-menubar-secondary>
-</causeway-graphql-client>
+<cw-graphql-client endpoint="/graphql">
+  <cw-menubar-secondary></cw-menubar-secondary>
+</cw-graphql-client>
 ----
 
 A standalone bar fetches and parses the same effective application resource but renders only its own semantic role.
@@ -231,7 +235,7 @@ Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-
 == Values and renderer extension
 
 The standard renderer registry presents GraphQL scalars, enums, nulls, object references, and the rich-schema Blob and Clob resource shapes.
-Object references become semantic `<causeway-object-link>` elements.
+Object references become semantic `<cw-object-link>` elements.
 Null values use an explicit em-dash presentation labelled as no value.
 Unsupported output shapes produce a diagnostic containing the introspected type identifier.
 
@@ -260,13 +264,13 @@ Renderer input is normalized semantic state containing `value`, `descriptor`, `t
 
 == Properties and object links
 
-`<causeway-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
+`<cw-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
 It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer, and an accessible disabled reason.
 A non-redundant property description remains the label's default title, while a disabled property adds a separate focusable reason indicator whose tooltip and hidden description do not replace the stable domain description.
 A hidden property renders no label, value, or interactive content.
 Changing `member` releases the old requirement and registers the new one.
 
-`<causeway-object-link>` renders title and bookmark identity as a native button with link semantics.
+`<cw-object-link>` renders title and bookmark identity as a native button with link semantics.
 Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
 The event bubbles, crosses composed component boundaries, and is cancelable.
 The component does not invent a URL or select a router.
@@ -277,7 +281,7 @@ A property remains read-only unless the application adds `editable`:
 
 [source,html]
 ----
-<causeway-property member="summary" editable></causeway-property>
+<cw-property member="summary" editable></cw-property>
 ----
 
 When the rich schema advertises a setter or top-level property mutation, the component prepares an editor lazily, resolves enum or dynamic choices, validates pending input, and executes the update through its object context.
@@ -325,7 +329,7 @@ Native autocomplete renders the bounded first window and states when more matche
 A list-valued input selects Multi-Select Combo Box only when the introspected input and GraphQL interaction already provide authoritative list pending-value semantics.
 Unsupported shapes, explicit native configuration, over-bound fixed choices, module failure, and rollback retain or recover the existing editor.
 
-`<causeway-reference-editor>` is a semantic Causeway adapter.
+`<cw-reference-editor>` is a semantic Causeway adapter.
 Applications observe existing property and prompt state events and do not consume Vaadin tags, data-provider callbacks, or value events.
 Vaadin package names, internal tags, theme details, and bundle chunks are not a supported application extension tier.
 
@@ -339,7 +343,7 @@ Property state and successful updates publish `causeway-property-interaction-sta
 
 == Actions and the standard interaction controller
 
-`<causeway-action>` continues to render rich action `hidden` and `disabled` state without querying parameters or invoking independently.
+`<cw-action>` continues to render rich action `hidden` and `disabled` state without querying parameters or invoking independently.
 An enabled native button publishes cancelable `causeway-action-request` with `{actionId, identity, context}`.
 A disabled action exposes its reason through `aria-describedby` and cannot publish a request.
 A hidden action renders no actionable content.
@@ -349,11 +353,11 @@ Place one empty interaction controller as a sibling of action components beneath
 
 [source,html]
 ----
-<causeway-object-context logical-type="university.dept.Department" object-id="42">
-  <causeway-action member="inspect"></causeway-action>
-  <causeway-action member="changeName"></causeway-action>
-  <causeway-interaction-controller></causeway-interaction-controller>
-</causeway-object-context>
+<cw-object-context logical-type="university.dept.Department" object-id="42">
+  <cw-action member="inspect"></cw-action>
+  <cw-action member="changeName"></cw-action>
+  <cw-interaction-controller></cw-interaction-controller>
+</cw-object-context>
 ----
 
 The controller observes unclaimed action requests at the shared parent boundary.
@@ -426,19 +430,19 @@ An authored property or collection can place object actions directly beneath the
 
 [source,html]
 ----
-<causeway-property member="name">
-  <causeway-action member="updateName"></causeway-action>
-</causeway-property>
+<cw-property member="name">
+  <cw-action member="updateName"></cw-action>
+</cw-property>
 
-<causeway-collection member="pets" active>
-  <causeway-collection-column member="name" label="Name"></causeway-collection-column>
-  <causeway-collection-column member="species" label="Species"></causeway-collection-column>
-  <causeway-action member="addPet"></causeway-action>
-  <causeway-action member="removePet"></causeway-action>
-</causeway-collection>
+<cw-collection member="pets" active>
+  <cw-collection-column member="name" label="Name"></cw-collection-column>
+  <cw-collection-column member="species" label="Species"></cw-collection-column>
+  <cw-action member="addPet"></cw-action>
+  <cw-action member="removePet"></cw-action>
+</cw-collection>
 ----
 
-Only direct `<causeway-action>` children declare association.
+Only direct `<cw-action>` children declare association.
 An action inside an arbitrary descendant wrapper is not claimed by the property or collection, and association is never inferred from naming or proximity.
 Collection-column and action declarations are independent vocabularies, so they may be interleaved without adding action members to row projections.
 
@@ -452,7 +456,7 @@ Adjacent ordinary HTML action groups remain compatible when semantic nesting is 
 
 Direct compositions expose `data-causeway-associated-member`, `data-causeway-action-group`, `data-causeway-associated-action`, and `causeway-member-primary` hooks.
 Use `--causeway-associated-action-gap` and `--causeway-associated-action-margin-block-end` to adjust wrapping presentation without inline styles or toolkit-specific elements.
-Generated `<causeway-object>` layouts retain semantically equivalent associated-member and action-group hooks from effective grid XML.
+Generated `<cw-object>` layouts retain semantically equivalent associated-member and action-group hooks from effective grid XML.
 
 == Lazy collections and row hydration
 
@@ -502,19 +506,19 @@ Applications can omit it, replace it, or override those rules with ordinary desi
 
 [source,css]
 ----
-causeway-property .causeway-property-label {
+cw-property .causeway-property-label {
   color: var(--app-accent);
 }
 
-causeway-action button {
+cw-action button {
   border-radius: 0.4rem;
 }
 
-causeway-collection .causeway-collection-table {
+cw-collection .causeway-collection-table {
   border: 1px solid var(--app-border);
 }
 
-causeway-object {
+cw-object {
   --causeway-object-gap: 1.25rem;
   --causeway-object-tab-accent: var(--app-accent);
 }

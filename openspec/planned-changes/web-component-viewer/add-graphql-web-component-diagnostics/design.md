@@ -85,7 +85,7 @@ The first version will remain memory-only and page-local.
 
 ### Render diagnostics as an optional semantic light-DOM element
 
-`<causeway-graphql-diagnostics>` will render an accessible list of operation summaries with status, type, name, and duration.
+`<cw-graphql-diagnostics>` will render an accessible list of operation summaries with status, type, name, and duration.
 Users can filter by operation kind or outcome, expand request and response sections, copy one redacted operation, export the bounded set, and clear completed records.
 
 The element will use native controls, keyboard navigation, labelled details, live lifecycle announcements, and documented light-DOM classes.

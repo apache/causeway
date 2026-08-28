@@ -94,7 +94,7 @@ class PetClinicHtmxSecuredPlaywrightTest {
             final var deepLink = "/htmx/object/petclinic.PetOwner/s_owner-mary";
             page.navigate(origin() + deepLink, new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
             page.waitForURL("**/htmx/login**");
-            assertThat(page.locator("causeway-graphql-client").count()).isZero();
+            assertThat(page.locator("cw-graphql-client").count()).isZero();
             page.waitForFunction("() => document.activeElement?.id === 'username'");
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
@@ -109,26 +109,26 @@ class PetClinicHtmxSecuredPlaywrightTest {
             page.waitForURL("**" + deepLink);
             assertThat(page.locator("meta[name='causeway-auth-csrf-token']").getAttribute("content")).isNotBlank();
             try {
-                page.waitForFunction("() => typeof document.querySelector('causeway-graphql-client')?.executor === 'function'");
+                page.waitForFunction("() => typeof document.querySelector('cw-graphql-client')?.executor === 'function'");
             } catch (com.microsoft.playwright.TimeoutError cause) {
                 throw new AssertionError("Authenticated HTMX module did not initialize; failures=" + browserFailures
                         + "; resources=" + page.evaluate("() => performance.getEntriesByType('resource').map(entry => entry.name).filter(name => name.includes('causeway'))")
-                        + "; element=" + page.locator("causeway-graphql-client").evaluate("element => element.outerHTML"), cause);
+                        + "; element=" + page.locator("cw-graphql-client").evaluate("element => element.outerHTML"), cause);
             }
             waitForReadyObject(page);
             assertThat(page.locator("[data-testid='causeway-shell-user']").textContent()).contains("sven");
-            page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('causeway-menubars')?.dataset.menuState)");
+            page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
             assertThat(page.locator("[data-causeway-service-action][data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count())
                     .isZero();
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
 
-            final var property = page.locator("causeway-property[member='knownAs']");
+            final var property = page.locator("cw-property[member='knownAs']");
             property.locator("[data-causeway-action='edit']").click();
             final var editor = property.locator("[data-causeway-editor]");
             editor.waitFor();
             editor.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('input', {bubbles:true, composed:true})); element.dispatchEvent(new Event('change', {bubbles:true, composed:true})); }", "Mary Secured");
             property.locator("[data-causeway-action='save']").click();
-            page.waitForFunction("() => document.querySelector(\"causeway-property[member='knownAs'] .causeway-property-value\")?.textContent.includes('Mary Secured')");
+            page.waitForFunction("() => document.querySelector(\"cw-property[member='knownAs'] .causeway-property-value\")?.textContent.includes('Mary Secured')");
 
             final var rejectedStatus = (Number) page.evaluate("""
                     async () => (await fetch('/graphql', {

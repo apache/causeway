@@ -40,7 +40,7 @@ Matrix entry references point to `viewers/graphql/adoc/modules/ROOT/examples/ref
 | 6 | `add-rich-graphql-value-and-resource-semantics` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-value-semantics` |
 | 7 | `add-rich-graphql-collection-windowing` *(archived)* | Complete | Object-interaction correctness | NEW `rich-graphql-collection-windowing` |
 | 8 | `add-rich-graphql-application-entry-points` *(archived)* | Complete | Object-interaction correctness and resource-link safety | NEW `rich-graphql-application-entry-points` |
-| 9 | `add-composite-object-web-component` *(archived)* | Complete | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<causeway-object>` |
+| 9 | `add-composite-object-web-component` *(archived)* | Complete | Accepted value semantics, collection windows, object correctness, and structural resource safety | MODIFIED `domain-web-components` with `<cw-object>` |
 | 10 | `add-menubar-web-components` *(archived)* | Complete | Application entry points, service-action correctness, accepted value semantics, and structural resource safety | MODIFIED `domain-web-components` with menu bars |
 | 11 | `add-generic-htmx-web-component-viewer` *(archived)* | Complete | Accepted P0 and P1 GraphQL work, composite object, and menu bars | NEW `generic-htmx-web-component-viewer` |
 | 12 | `add-generic-vue-web-component-viewer` | P1 | Same semantic prerequisites and shared canonical routing contract | NEW `generic-vue-web-component-viewer` |
@@ -77,13 +77,13 @@ exact logical-type page   no registration
 framework custom page   generic route page
                              |
                              v
-                    <causeway-object>
+                    <cw-object>
 ```
 
 - Routing and exact-logical-type page selection belong to the host viewer.
-- `<causeway-object>` remains a pure effective-grid or fallback object renderer and never discovers custom pages.
+- `<cw-object>` remains a pure effective-grid or fallback object renderer and never discovers custom pages.
 - Custom and generic pages render beneath one route-level object context.
-- `<causeway-menubars>` remains in a stable shell outside changing object pages.
+- `<cw-menubars>` remains in a stable shell outside changing object pages.
 - Semantic object navigation, home entries, and interaction results flow into replaceable viewer policy.
 - HTMX uses server routes and HTML fragments.
 - Vue uses Vue Router and registered Vue components or async components.
@@ -102,7 +102,7 @@ Before any generic viewer can be promoted, the programme must have:
 - accepted reversible value semantics for the reference-derived input set used by default pages;
 - bounded collection windows for generic collection pages;
 - application entry points for the effective menu resource and configured home-page object;
-- completed `<causeway-object>` and `<causeway-menubars>` semantic components;
+- completed `<cw-object>` and `<cw-menubars>` semantic components;
 - stable semantic navigation and result events from the archived component interactions.
 
 The generic viewers do not require the later designer, catalogue workbench, or a page-provider abstraction.
@@ -127,7 +127,7 @@ generic HTMX, Vue, and Svelte viewers
 The catalogue publishes machine-readable element contracts and an interactive developer workbench.
 The designer analysis evaluates GrapesJS, a purpose-built semantic tree, and another viable approach before selecting direct HTML, an intermediate model, or a constrained hybrid.
 Any generated custom page uses ordinary HTML and public Causeway elements and registers at the host router.
-It does not replace Causeway grid XML or make `<causeway-object>` aware of custom pages.
+It does not replace Causeway grid XML or make `<cw-object>` aware of custom pages.
 
 ## Programme constraints
 

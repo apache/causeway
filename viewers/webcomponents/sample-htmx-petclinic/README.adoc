@@ -106,7 +106,7 @@ The retained `PetOwner.layout.xml` expresses the equivalent generated-grid assoc
 They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
 
 The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.
-If an exact HTML page is removed from packaging, the route immediately falls back to `<causeway-object editable>` and the retained effective grid and column order.
+If an exact HTML page is removed from packaging, the route immediately falls back to `<cw-object editable>` and the retained effective grid and column order.
 An unreadable, malformed, duplicate, invalidly named, empty, or oversized discovered page fails startup instead of disguising the error as successful generic fallback.
 
 The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.

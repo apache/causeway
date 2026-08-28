@@ -18,8 +18,8 @@
  */
 
 export const CAUSEWAY_COMPONENT_STYLES = `
-causeway-object {
-  container-name: causeway-object;
+cw-object {
+  container-name: cw-object;
   container-type: inline-size;
   display: block;
   --causeway-object-gap: 1rem;
@@ -55,26 +55,26 @@ causeway-object {
 .causeway-object-associated-actions {
   margin-block: -0.25rem 0.75rem;
 }
-causeway-property[data-causeway-action-group],
-causeway-collection[data-causeway-action-group] {
+cw-property[data-causeway-action-group],
+cw-collection[data-causeway-action-group] {
   align-items: flex-start;
   display: flex;
   flex-wrap: wrap;
   gap: var(--causeway-associated-action-gap, var(--causeway-object-action-gap, 0.5rem));
   min-inline-size: 0;
 }
-causeway-property[data-causeway-action-group] > .causeway-member-primary,
-causeway-collection[data-causeway-action-group] > .causeway-member-primary {
+cw-property[data-causeway-action-group] > .causeway-member-primary,
+cw-collection[data-causeway-action-group] > .causeway-member-primary {
   flex: 1 0 100%;
   min-inline-size: 0;
 }
-causeway-property[data-causeway-action-group] > causeway-action[data-causeway-associated-action],
-causeway-collection[data-causeway-action-group] > causeway-action[data-causeway-associated-action] {
+cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action],
+cw-collection[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
   flex: 0 1 auto;
   margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
   min-inline-size: 0;
 }
-causeway-collection-column[hidden] {
+cw-collection-column[hidden] {
   display: none;
 }
 
@@ -142,7 +142,7 @@ causeway-collection-column[hidden] {
   position: absolute;
   white-space: nowrap;
 }
-@container causeway-object (max-width: 48rem) {
+@container cw-object (max-width: 48rem) {
   .causeway-object-column {
     grid-column: 1 / -1;
   }
@@ -221,8 +221,8 @@ causeway-collection-column[hidden] {
   min-block-size: 5rem;
   resize: vertical;
 }
-causeway-reference-editor,
-causeway-field-editor {
+cw-reference-editor,
+cw-field-editor {
   display: block;
   inline-size: 100%;
   max-inline-size: 32rem;
@@ -244,14 +244,14 @@ causeway-field-editor {
   --lumo-error-color: var(--causeway-danger, Mark);
   --lumo-border-radius-m: var(--causeway-radius-md, 0.45rem);
 }
-causeway-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select),
-causeway-field-editor > * {
+cw-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select),
+cw-field-editor > * {
   box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 32rem;
 }
-causeway-reference-editor[data-widget-state="fallback"]::after,
-causeway-field-editor[data-widget-state="fallback"]::after {
+cw-reference-editor[data-widget-state="fallback"]::after,
+cw-field-editor[data-widget-state="fallback"]::after {
   color: var(--causeway-muted, GrayText);
   content: "Using the standard semantic editor";
   display: block;
@@ -341,30 +341,30 @@ causeway-field-editor[data-widget-state="fallback"]::after {
   padding: 0.35rem 0.5rem;
   text-align: start;
 }
-causeway-menubars {
+cw-menubars {
   display: flex;
   flex-direction: column;
   gap: var(--causeway-menubars-gap, 0.25rem);
   position: relative;
   z-index: var(--causeway-menubars-z-index, 10);
 }
-causeway-menubar-primary,
-causeway-menubar-secondary,
-causeway-menubar-tertiary {
+cw-menubar-primary,
+cw-menubar-secondary,
+cw-menubar-tertiary {
   display: block;
   min-inline-size: 0;
 }
-causeway-menubars > [data-causeway-bar-order="0"] {
+cw-menubars > [data-causeway-bar-order="0"] {
   order: 0;
 }
-causeway-menubars > [data-causeway-bar-order="1"] {
+cw-menubars > [data-causeway-bar-order="1"] {
   order: 1;
 }
-causeway-menubars > [data-causeway-bar-order="2"] {
+cw-menubars > [data-causeway-bar-order="2"] {
   order: 2;
 }
-causeway-menubars > [data-causeway-menubars-status],
-causeway-menubars > causeway-interaction-controller {
+cw-menubars > [data-causeway-menubars-status],
+cw-menubars > cw-interaction-controller {
   order: 3;
 }
 .causeway-menubar-shell {
@@ -484,13 +484,13 @@ causeway-menubars > causeway-interaction-controller {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  causeway-reference-editor {
+  cw-reference-editor {
     --lumo-animation-duration-s: 0ms;
     --lumo-animation-duration-m: 0ms;
   }
 }
 @media (forced-colors: active) {
-  causeway-reference-editor {
+  cw-reference-editor {
     --vaadin-background-color: Canvas;
     --vaadin-border-color: ButtonBorder;
     --vaadin-focus-ring-color: Highlight;

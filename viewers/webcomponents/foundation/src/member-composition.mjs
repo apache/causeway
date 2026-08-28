@@ -73,7 +73,7 @@ export function refreshMemberComposition(host) {
     return Object.freeze([]);
   }
   const actions = [...(host.children ?? host.childNodes ?? [])]
-    .filter(child => child !== composition.primary && child?.localName === 'causeway-action');
+    .filter(child => child !== composition.primary && child?.localName === 'cw-action');
   const actionSet = new Set(actions);
   for (const previous of composition.actions) {
     if (!actionSet.has(previous)) {
@@ -103,7 +103,7 @@ export function eventOriginatesFromAssociatedAction(host, target) {
   let candidate = target;
   while (candidate && candidate !== host) {
     if (candidate.parentNode === host) {
-      return candidate.localName === 'causeway-action';
+      return candidate.localName === 'cw-action';
     }
     candidate = candidate.parentNode;
   }

@@ -231,14 +231,14 @@ function objectContext(context) {
 }
 
 function action(member) {
-  const element = document.createElement('causeway-action');
+  const element = document.createElement('cw-action');
   assert.ok(element instanceof CausewayActionElement);
   element.member = member;
   return element;
 }
 
 function column(member, label) {
-  const element = document.createElement('causeway-collection-column');
+  const element = document.createElement('cw-collection-column');
   assert.ok(element instanceof CausewayCollectionColumnElement);
   element.member = member;
   element.label = label;

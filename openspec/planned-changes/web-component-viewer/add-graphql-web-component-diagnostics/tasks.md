@@ -21,7 +21,7 @@
 
 ## 4. Diagnostic Presentation
 
-- [ ] 4.1 Implement `<causeway-graphql-diagnostics>` as an optional light-DOM consumer of an injected or nearest diagnostic source.
+- [ ] 4.1 Implement `<cw-graphql-diagnostics>` as an optional light-DOM consumer of an injected or nearest diagnostic source.
 - [ ] 4.2 Implement accessible operation summaries, status and duration indicators, kind and outcome filters, expandable request and response details, copy, export, and clear controls.
 - [ ] 4.3 Keep query documents and JSON payloads readable at narrow and wide viewports with keyboard operation, focus management, and live lifecycle announcements.
 - [ ] 4.4 Add application styling hooks and examples for replacing the standard presentation while retaining the observer and store contracts.

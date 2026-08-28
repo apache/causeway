@@ -77,7 +77,7 @@ export function renderCausewayReferenceWidget(context) {
   }
   if (context.hasMoreSuggestions === true) attributes.push('data-has-more-suggestions="true"');
   if (multiple) attributes.push('multiple');
-  return `<causeway-reference-editor ${attributes.join(' ')}><span role="status">Loading reference editor…</span></causeway-reference-editor>`;
+  return `<cw-reference-editor ${attributes.join(' ')}><span role="status">Loading reference editor…</span></cw-reference-editor>`;
 }
 
 export class CausewayReferenceEditorElement extends HTMLElement {

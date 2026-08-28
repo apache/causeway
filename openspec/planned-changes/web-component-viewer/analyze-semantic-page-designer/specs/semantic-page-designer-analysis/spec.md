@@ -34,8 +34,8 @@ The analysis SHALL define and test a deterministic custom-page artifact composed
 
 #### Scenario: Page is registered with a viewer
 - **WHEN** generated output is associated with a public logical type
-- **THEN** generic HTMX, Vue, and Svelte router prototypes can select it before generic `<causeway-object>` fallback
-- **AND** `<causeway-object>` remains unaware of that registration
+- **THEN** generic HTMX, Vue, and Svelte router prototypes can select it before generic `<cw-object>` fallback
+- **AND** `<cw-object>` remains unaware of that registration
 
 ### Requirement: Designer security analysis
 The analysis and prototypes SHALL prevent hidden values, passwords, credentials, authorization rules, and sensitive resource content from entering models, history, storage, exports, logs, or diagnostics.

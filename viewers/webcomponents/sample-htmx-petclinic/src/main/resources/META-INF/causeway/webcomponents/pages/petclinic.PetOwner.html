@@ -14,10 +14,10 @@
   limitations under the License.
 -->
 <article class="petclinic-page petclinic-owner-page" data-testid="petclinic-owner-page">
-  <causeway-object-header></causeway-object-header>
+  <cw-object-header></cw-object-header>
 
   <div class="petclinic-page-toolbar" aria-label="Owner actions">
-    <causeway-action member="delete"></causeway-action>
+    <cw-action member="delete"></cw-action>
   </div>
 
   <div class="petclinic-object-grid">
@@ -25,27 +25,27 @@
       <section class="petclinic-card" aria-labelledby="petclinic-owner-identity-heading">
         <h2 id="petclinic-owner-identity-heading">Identity</h2>
         <div class="petclinic-field-list">
-          <causeway-property member="name">
-            <causeway-action member="updateName"></causeway-action>
-          </causeway-property>
-          <causeway-property member="knownAs" editable></causeway-property>
+          <cw-property member="name">
+            <cw-action member="updateName"></cw-action>
+          </cw-property>
+          <cw-property member="knownAs" editable></cw-property>
         </div>
       </section>
 
       <section class="petclinic-card" aria-labelledby="petclinic-owner-contact-heading">
         <h2 id="petclinic-owner-contact-heading">Contact</h2>
         <div class="petclinic-field-list">
-          <causeway-property member="telephoneNumber" editable></causeway-property>
-          <causeway-property member="emailAddress" editable></causeway-property>
+          <cw-property member="telephoneNumber" editable></cw-property>
+          <cw-property member="emailAddress" editable></cw-property>
         </div>
       </section>
 
       <section class="petclinic-card" aria-labelledby="petclinic-owner-details-heading">
         <h2 id="petclinic-owner-details-heading">Details</h2>
         <div class="petclinic-field-list">
-          <causeway-property member="notes" editable multiline="5"></causeway-property>
-          <causeway-property member="lastVisit" editable></causeway-property>
-          <causeway-property member="daysSinceLastVisit"></causeway-property>
+          <cw-property member="notes" editable multiline="5"></cw-property>
+          <cw-property member="lastVisit" editable></cw-property>
+          <cw-property member="daysSinceLastVisit"></cw-property>
         </div>
       </section>
     </div>
@@ -53,23 +53,23 @@
     <div class="petclinic-object-collections">
       <section class="petclinic-card" aria-labelledby="petclinic-owner-pets-heading">
         <h2 id="petclinic-owner-pets-heading">Pets</h2>
-        <causeway-collection member="pets" label="Pets" active offset="0" size="10">
-          <causeway-collection-column member="name" label="Name"></causeway-collection-column>
-          <causeway-collection-column member="species" label="Species"></causeway-collection-column>
-          <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
-          <causeway-action member="addPet"></causeway-action>
-          <causeway-action member="removePet"></causeway-action>
-        </causeway-collection>
+        <cw-collection member="pets" label="Pets" active offset="0" size="10">
+          <cw-collection-column member="name" label="Name"></cw-collection-column>
+          <cw-collection-column member="species" label="Species"></cw-collection-column>
+          <cw-collection-column member="notes" label="Notes"></cw-collection-column>
+          <cw-action member="addPet"></cw-action>
+          <cw-action member="removePet"></cw-action>
+        </cw-collection>
       </section>
 
       <section class="petclinic-card" aria-labelledby="petclinic-owner-visits-heading">
         <h2 id="petclinic-owner-visits-heading">Visits</h2>
-        <causeway-collection member="visits" label="Visits" active offset="0" size="10">
-          <causeway-collection-column member="visitAt" label="When"></causeway-collection-column>
-          <causeway-collection-column member="reason" label="Reason"></causeway-collection-column>
-          <causeway-collection-column member="notes" label="Notes"></causeway-collection-column>
-          <causeway-action member="bookVisit"></causeway-action>
-        </causeway-collection>
+        <cw-collection member="visits" label="Visits" active offset="0" size="10">
+          <cw-collection-column member="visitAt" label="When"></cw-collection-column>
+          <cw-collection-column member="reason" label="Reason"></cw-collection-column>
+          <cw-collection-column member="notes" label="Notes"></cw-collection-column>
+          <cw-action member="bookVisit"></cw-action>
+        </cw-collection>
       </section>
     </div>
   </div>

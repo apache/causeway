@@ -34,7 +34,7 @@ test('plain custom-element tree introspects once and coordinates one read per ob
   const executor = createRichSchemaFixtureExecutor({
     readResponses: [graphQLObjectResponse({codeHidden: true}), graphQLObjectResponse({name: 'History'})]
   });
-  const provider = document.createElement('causeway-graphql-client');
+  const provider = document.createElement('cw-graphql-client');
   provider.executor = executor;
 
   const first = objectTree('42', ['name', 'code']);
@@ -63,13 +63,13 @@ test('plain custom-element tree introspects once and coordinates one read per ob
 });
 
 function objectTree(id, members) {
-  const context = document.createElement('causeway-object-context');
+  const context = document.createElement('cw-object-context');
   context.setAttribute('logical-type', DEPARTMENT_LOGICAL_TYPE);
   context.setAttribute('object-id', id);
-  const header = document.createElement('causeway-object-header');
+  const header = document.createElement('cw-object-header');
   context.appendChild(header);
   const properties = members.map(member => {
-    const property = document.createElement('causeway-property');
+    const property = document.createElement('cw-property');
     property.setAttribute('member', member);
     context.appendChild(property);
     return property;
