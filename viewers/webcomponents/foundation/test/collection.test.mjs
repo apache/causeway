@@ -39,6 +39,7 @@ const {document} = installDomShim();
 const {
   captureDeclarativeCollectionColumns,
   CausewayCollectionColumnElement,
+  configureCausewayGridWidgets,
   CausewayCollectionElement,
   CausewayGraphQLClient,
   ObjectContextController
@@ -602,6 +603,127 @@ test('collection component forwards window requests and publishes semantic windo
   assert.equal(collection.collectionState.window.countAvailable, false);
   assert.equal(collection.collectionState.window.rangeStart, 21);
   assert.match(collection.innerHTML, /Dr Ada/);
+  document.body.removeChild(collection);
+});
+
+test('collection host owns immutable Grid qualification diagnostics policy recovery and bounded ranges', async () => {
+  configureCausewayGridWidgets({enabled: true});
+  const rangeRequests = [];
+  let additionalDisconnects = 0;
+  let reportedTotal = 40;
+  let reportedOrdering = 'CONFIGURED';
+  const context = {
+    registerRequirement(_requirement, listener) {
+      listener({
+        status: 'ready',
+        descriptor: {id: 'staffMembers', description: 'Staff members'},
+        data: {hidden: false, disabled: null},
+        errors: [],
+        generation: 1
+      });
+      return () => {};
+    },
+    async loadCollection(options) {
+      rangeRequests.push(options);
+      const offset = options.offset ?? 0;
+      const requestedSize = options.size ?? 20;
+      const currentRows = [row({id: `staff-${offset + 1}`, name: `Dr ${offset + 1}`})];
+      const memberDescriptor = {value: {typeRef: {kind: 'SCALAR', name: 'String', ofType: null}}};
+      return {
+        descriptor: {id: 'staffMembers'},
+        data: {window: {rows: currentRows}},
+        rows: currentRows,
+        window: {
+          offset,
+          requestedSize,
+          returnedCount: 1,
+          totalCount: reportedTotal,
+          countAvailable: Number.isSafeInteger(reportedTotal),
+          maximumSize: 100,
+          hasPrevious: offset > 0,
+          hasNext: offset + 1 < 40,
+          previousOffset: offset > 0 ? Math.max(0, offset - requestedSize) : null,
+          nextOffset: offset + 1 < 40 ? offset + 1 : null,
+          rangeStart: offset + 1,
+          rangeEnd: offset + 1,
+          ordering: reportedOrdering
+        },
+        errors: [],
+        rowDescription: {members: new Map([['name', memberDescriptor]])},
+        rowSelection: {_meta: {id: true}, name: {get: true}}
+      };
+    },
+    createHydratedRowContext(hydratedRow) {
+      const additional = hydratedRow._meta.id !== 'staff-1';
+      return {disconnect() {
+        if (additional) additionalDisconnects += 1;
+      }};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  const gridAdapter = {presentation: null};
+  collection.querySelector = selector => selector.includes('cw-collection-grid') ? gridAdapter : null;
+  collection.id = 'staffMembers';
+  collection.columns = [{member: 'name', label: 'Name'}];
+  collection.active = true;
+  collection.acceptGridResponsiveState(true);
+  collection.context = context;
+  document.body.appendChild(collection);
+  await waitFor(() => collection.collectionState.status === 'ready');
+
+  assert.equal(collection.gridQualification.qualified, true);
+  assert.equal(collection.gridQualification.presentation, 'grid-virtual');
+  assert.equal(Object.isFrozen(collection.gridQualification), true);
+  assert.equal(collection.dataset.causewayGridOrdering, 'CONFIGURED');
+  assert.equal(collection.dataset.causewayGridCount, 'available');
+  assert.equal(collection.dataset.causewayGridResponsive, 'wide');
+  assert.equal(gridAdapter.presentation.mode, 'virtual');
+  assert.deepEqual(gridAdapter.presentation.columns.map(column => column.member), ['_meta', 'name']);
+  assert.equal(gridAdapter.presentation.rows[0].identity.id, 'staff-1');
+  assert.equal(gridAdapter.presentation.totalCount, 40);
+  assert.equal(rangeRequests.length, 1);
+
+  const range = await collection.requestCollectionRange({offset: 20, size: 20});
+  const repeated = await collection.requestCollectionRange({offset: 20, size: 20});
+  assert.equal(range, repeated);
+  assert.equal(range.window.offset, 20);
+  assert.equal(rangeRequests.length, 2);
+  assert.equal(rangeRequests[1].cache, false);
+  assert.notEqual(rangeRequests[1].requestKey, collection);
+
+  reportedTotal = 41;
+  await assert.rejects(
+    gridAdapter.presentation.rangeProvider({offset: 30, size: 10}),
+    {name: 'AbortError'}
+  );
+  await waitFor(() => collection.collectionState.status === 'ready'
+    && collection.collectionState.window.totalCount === 41);
+  assert.equal(rangeRequests.length, 4, 'changed range metadata must trigger one authoritative first-window refresh');
+  assert.equal(rangeRequests[3].offset, 0);
+  assert.equal(rangeRequests[3].force, true);
+
+  collection.acceptGridResponsiveState(false);
+  assert.equal(additionalDisconnects, 2);
+  await assert.rejects(collection.requestCollectionRange({offset: 0, size: 20}), /no current bounded range broker/);
+  collection.acceptGridResponsiveState(true);
+  assert.equal(collection.gridQualification.presentation, 'grid-virtual');
+
+  reportedOrdering = 'ENCOUNTER';
+  await collection.load({force: true});
+  assert.equal(collection.gridQualification.reason, 'ordering-not-deterministic');
+  await assert.rejects(collection.requestCollectionRange({offset: 0, size: 20}), /no current bounded range broker/);
+  reportedOrdering = 'CONFIGURED';
+  reportedTotal = null;
+  await collection.load({force: true});
+  assert.equal(collection.gridQualification.presentation, 'grid-bounded');
+  assert.equal(gridAdapter.presentation.mode, 'bounded');
+  assert.match(collection.innerHTML, /data-causeway-grid-next/);
+  assert.doesNotMatch(collection.innerHTML, /Items 1–1 of/);
+
+  configureCausewayGridWidgets({enabled: false});
+  assert.equal(collection.gridQualification.reason, 'policy-native');
+  configureCausewayGridWidgets({enabled: true});
+  assert.equal(collection.gridQualification.presentation, 'grid-bounded');
   document.body.removeChild(collection);
 });
 

@@ -41,6 +41,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -105,6 +106,7 @@ public class PetOwner implements Comparable<PetOwner> {
     private LocalDate lastVisit;
 
     @Collection
+    @CollectionLayout(sortedBy = Pet.ByName.class)
     @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets = new TreeSet<>();
 

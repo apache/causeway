@@ -88,6 +88,10 @@
   min-width: 0;
 }
 
+.petclinic-object-collections {
+  grid-column: 1 / -1;
+}
+
 .petclinic-card {
   display: grid;
   gap: var(--causeway-space-3);

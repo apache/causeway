@@ -602,6 +602,7 @@ export class ObjectContextController extends EventTarget {
     size = null,
     requestKey = null,
     force = false,
+    cache = true,
     signal
   } = {}) {
     if (this.closed) {
@@ -623,7 +624,7 @@ export class ObjectContextController extends EventTarget {
       ? {__typename: true}
       : collectionRowSelection(descriptor, columns, description.types);
     const cacheKey = JSON.stringify({member, columns, offset: requestedOffset, size: requestedSize, usesWindow});
-    if (!force && this.secondaryCache.has(cacheKey)) {
+    if (!force && cache && this.secondaryCache.has(cacheKey)) {
       const cached = this.secondaryCache.get(cacheKey);
       if (!cached.abortController.signal.aborted) {
         return cached.promise;
@@ -758,13 +759,15 @@ export class ObjectContextController extends EventTarget {
         this.secondaryRequests.delete(requestKey);
       }
     });
-    const cacheEntry = {promise, abortController};
-    this.secondaryCache.set(cacheKey, cacheEntry);
-    promise.catch(() => {
-      if (this.secondaryCache.get(cacheKey) === cacheEntry) {
-        this.secondaryCache.delete(cacheKey);
-      }
-    });
+    if (cache) {
+      const cacheEntry = {promise, abortController};
+      this.secondaryCache.set(cacheKey, cacheEntry);
+      promise.catch(() => {
+        if (this.secondaryCache.get(cacheKey) === cacheEntry) {
+          this.secondaryCache.delete(cacheKey);
+        }
+      });
+    }
     return promise;
   }
 

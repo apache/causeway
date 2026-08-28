@@ -224,6 +224,10 @@ public class HtmxViewerProperties {
         return isEffectiveVaadinPresentation();
     }
 
+    public boolean isEffectiveVaadinCollectionGrid() {
+        return isEffectiveVaadinPresentation();
+    }
+
     public boolean usesEditorToolkitCompatibility() {
         return !componentToolkitConfigured && editorToolkitConfigured;
     }

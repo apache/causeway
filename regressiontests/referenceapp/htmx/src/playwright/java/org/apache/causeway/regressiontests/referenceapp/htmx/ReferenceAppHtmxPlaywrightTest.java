@@ -27,6 +27,7 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Route;
 import com.microsoft.playwright.options.ColorScheme;
 import com.microsoft.playwright.options.ForcedColors;
 import com.microsoft.playwright.options.ReducedMotion;
@@ -62,6 +63,7 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private final List<String> browserFailures = new ArrayList<>();
     private final List<String> toolkitRequests = new ArrayList<>();
+    private final List<String> graphQLRequests = new ArrayList<>();
     private Playwright playwright;
     private Browser browser;
     private BrowserContext browserContext;
@@ -123,7 +125,10 @@ class ReferenceAppHtmxPlaywrightTest {
             assertThat(toolkitRequests).isEmpty();
         } else {
             assertThat(fieldAssetRequests("basic")).isLessThanOrEqualTo(1);
-            assertThat(actionAssetRequests()).isEqualTo(1);
+            page.waitForFunction("() => document.querySelector('cw-action-control')?.dataset.widgetState === 'ready'");
+            assertThat(toolkitRequests.stream()
+                    .filter(request -> request.contains("/vaadin-actions/vaadin-actions.js"))
+                    .count()).as(toolkitRequests.toString()).isEqualTo(1);
         }
         assertThat(referenceAssetRequests()).isZero();
 
@@ -464,15 +469,33 @@ class ReferenceAppHtmxPlaywrightTest {
 
     @Test
     void populatedPagedConfiguredPolymorphicAndRouteReplacedCollectionsRemainVisible() {
+        page.setViewportSize(1600, 900);
         openObject("demo.CollectionLayoutPagedPage", invokeViewModel(
                 "demo_CollectionLayoutMenu", "paged", "rich__demo_CollectionLayoutPagedPage"));
         final String childrenState = waitForCollectionOutcome("children");
         assertThat(childrenState).isEqualTo("ready");
-        final int pageRows = page.locator("cw-collection[id='children'] .causeway-collection-rows li").count();
+        final int pageRows = ((Number) page.locator("cw-collection[id='children']")
+                .evaluate("element => element.collectionState.rows.length")).intValue();
         assertThat(pageRows).isBetween(1, 20);
+        assertCollectionPresentation("children", false);
+        if (!nativeToolkit()) {
+            assertThat(page.locator("cw-collection[id='children']")
+                    .getAttribute("data-causeway-grid-fallback"))
+                    .isEqualTo("ordering-not-deterministic");
+        }
         assertThat(page.locator("cw-collection[id='children'] cw-object-link").count())
                 .isEqualTo(pageRows);
         assertThat(waitForCollectionOutcome("moreChildren")).isEqualTo("ready");
+
+        openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
+                "demo_CollectionLayoutMenu", "sortedBy", "rich__demo_CollectionLayoutSortedByPage"));
+        assertThat(waitForCollectionOutcome("children")).isEqualTo("ready");
+        final int configuredRows = ((Number) page.locator("cw-collection[id='children']")
+                .evaluate("element => element.collectionState.rows.length")).intValue();
+        assertThat(configuredRows).isGreaterThan(0);
+        assertCollectionPresentation("children", true);
+        assertThat(page.locator("cw-collection[id='children'] cw-object-link").count())
+                .isEqualTo(configuredRows);
 
         openObject("demo.ActionChoicesFromPage", invokeViewModel(
                 "demo_ActionMenu", "choicesFrom", "rich__demo_ActionChoicesFromPage"));
@@ -506,6 +529,221 @@ class ReferenceAppHtmxPlaywrightTest {
     }
 
     @Test
+    void membershipRefreshRetiresStaleRangesContextsCellsTotalsAndFocus() {
+        page.setViewportSize(1600, 900);
+        openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
+                "demo_CollectionLayoutMenu", "sortedBy", "rich__demo_CollectionLayoutSortedByPage"));
+        assertThat(waitForCollectionOutcome("children")).isEqualTo("ready");
+        final Locator collection = page.locator("cw-collection[id='children']");
+        if (!nativeToolkit()) assertCollectionPresentation("children", true);
+        final Map<?, ?> outcome = (Map<?, ?>) collection.evaluate("""
+                async element => {
+                  const firstKey = element.gridProjection.rows[0].key;
+                  const context = element._resolvedContext;
+                  const delegate = context.loadCollection.bind(context);
+                  let release;
+                  context.loadCollection = options => {
+                    if (!options.force && options.offset === 5) {
+                      return new Promise((resolve, reject) => {
+                        release = () => delegate(options).then(resolve, reject);
+                        globalThis.__releaseStaleCollectionRange = release;
+                      });
+                    }
+                    return delegate(options).then(result => {
+                      if (!options.force || options.offset !== 0) return result;
+                      const rows = Object.freeze(result.rows.slice(1));
+                      const window = Object.freeze({
+                        ...result.window,
+                        returnedCount: rows.length,
+                        totalCount: result.window.totalCount - 1,
+                        hasNext: rows.length < result.window.totalCount - 1,
+                        nextOffset: rows.length
+                      });
+                      return Object.freeze({
+                        ...result,
+                        rows,
+                        window,
+                        data: Object.freeze({
+                          ...result.data,
+                          window: Object.freeze({...result.data.window, ...window, rows})
+                        })
+                      });
+                    });
+                  };
+                  element.gridFocusIntent = Object.freeze({
+                    rowKey: firstKey,
+                    member: '_meta',
+                    role: 'object-link',
+                    objectGeneration: element.componentState.generation,
+                    collectionMember: element.id
+                  });
+                  if (!element.querySelector('cw-collection-grid')) {
+                    await element.load({force: true, offset: 0, size: 5});
+                    return {firstKey, keys: element.gridProjection.rows.map(row => row.key), staleCallback: false};
+                  }
+                  element.querySelector('cw-collection-grid')._control.dataProvider(
+                    {page: 1, pageSize: 5},
+                    () => { globalThis.__staleCollectionCallback = true; }
+                  );
+                  while (!globalThis.__releaseStaleCollectionRange) await new Promise(resolve => setTimeout(resolve));
+                  await element.load({force: true, offset: 0, size: 5});
+                  await globalThis.__releaseStaleCollectionRange().catch(() => {});
+                  await new Promise(resolve => setTimeout(resolve, 25));
+                  return {
+                    firstKey,
+                    keys: element.gridProjection.rows.map(row => row.key),
+                    staleCallback: globalThis.__staleCollectionCallback === true
+                  };
+                }
+                """);
+        assertThat(((List<?>) outcome.get("keys")).contains(outcome.get("firstKey"))).isFalse();
+        assertThat(outcome.get("staleCallback")).isEqualTo(false);
+        assertThat(((Number) collection.evaluate("element => element.rangeBroker?.snapshot().entries ?? 0")).intValue())
+                .isLessThanOrEqualTo(6);
+    }
+
+    @Test
+    void gridFailuresBeforeAndAfterConnectionRecoverIndependentlyWithoutStaleControls() {
+        page.setViewportSize(1600, 900);
+        openShell();
+        if (nativeToolkit()) {
+            assertThat(toolkitRequests).isEmpty();
+            return;
+        }
+        final String gridRoute = "**/causeway-webcomponents/vaadin-grid/vaadin-grid.js";
+        page.route(gridRoute, route -> route.fulfill(new Route.FulfillOptions()
+                .setStatus(200)
+                .setContentType("application/javascript")
+                .setBody("throw new Error('Intentional value-free Grid family failure.');")));
+        openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
+                "demo_CollectionLayoutMenu", "sortedBy", "rich__demo_CollectionLayoutSortedByPage"));
+        final Locator collection = page.locator("cw-collection[id='children']");
+        assertThat(waitForCollectionOutcome("children")).isEqualTo("ready");
+        page.waitForFunction("() => document.documentElement.dataset.causewayGridFamily === 'failed' && document.querySelector(\"cw-collection[id='children']\")?.dataset.causewayGridFallback === 'family-failed'");
+        assertThat(collection.locator("cw-collection-grid").count()).isZero();
+        final int rowCount = ((Number) collection.evaluate("element => element.collectionState.rows.length")).intValue();
+        assertThat(rowCount).isGreaterThan(0);
+        assertThat(page.locator("html").getAttribute("data-causeway-grid-failure-classification"))
+                .isEqualTo("GRID_MODULE_UNAVAILABLE");
+
+        page.unroute(gridRoute);
+        page.evaluate("""
+                async () => {
+                  const components = await import('/causeway-webcomponents/index.mjs');
+                  components.configureCausewayGridWidgets({
+                    enabled: true,
+                    moduleUrl: document.documentElement.dataset.causewayGridModuleUrl + '?recovery=1'
+                  });
+                }
+                """);
+        assertCollectionPresentation("children", true);
+        assertThat(((Number) collection.evaluate("element => element.collectionState.rows.length")).intValue())
+                .isEqualTo(rowCount);
+
+        page.evaluate("""
+                async () => {
+                  const components = await import('/causeway-webcomponents/index.mjs');
+                  components.failCausewayGridWidget({
+                    phase: 'renderer',
+                    classification: 'GRID_RENDERER_UNAVAILABLE'
+                  });
+                }
+                """);
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='children']\")?.dataset.causewayGridFallback === 'family-failed'");
+        assertThat(collection.locator("cw-collection-grid").count()).isZero();
+        assertThat(((Number) collection.evaluate("element => element.collectionState.rows.length")).intValue())
+                .isEqualTo(rowCount);
+        assertThat(page.locator("html").getAttribute("data-causeway-grid-failure-phase")).isEqualTo("renderer");
+        assertThat(page.locator("html").getAttribute("data-causeway-grid-failure-classification"))
+                .isEqualTo("GRID_RENDERER_UNAVAILABLE");
+    }
+
+    @Test
+    void overlappingAndRepeatedVirtualRangesRemainBoundedAndDeduplicated() {
+        page.setViewportSize(1600, 900);
+        openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
+                "demo_CollectionLayoutMenu", "sortedBy", "rich__demo_CollectionLayoutSortedByPage"));
+        assertThat(waitForCollectionOutcome("children")).isEqualTo("ready");
+        if (nativeToolkit()) {
+            assertCollectionPresentation("children", false);
+            return;
+        }
+        assertCollectionPresentation("children", true);
+        final long before = graphQLRequests.stream()
+                .filter(request -> request.contains("CausewayReadCollectionWindow"))
+                .count();
+        final List<?> ranges = (List<?>) page.locator("cw-collection[id='children'] cw-collection-grid").evaluate("""
+                async adapter => {
+                  const provider = adapter._control.dataProvider;
+                  const request = page => new Promise(resolve => provider(
+                    {page, pageSize: 5},
+                    (items, total) => resolve({keys: items.map(item => item.key), total})
+                  ));
+                  return Promise.all([request(0), request(1), request(1)]);
+                }
+                """);
+        assertThat(graphQLRequests.stream()
+                .filter(request -> request.contains("CausewayReadCollectionWindow"))
+                .count() - before).isEqualTo(2);
+        assertThat(ranges).hasSize(3);
+        assertThat(((Map<?, ?>) ranges.get(0)).get("total")).isEqualTo(13);
+        assertThat(((List<?>) ((Map<?, ?>) ranges.get(0)).get("keys"))).hasSize(5);
+        assertThat(((Map<?, ?>) ranges.get(1)).get("keys"))
+                .isEqualTo(((Map<?, ?>) ranges.get(2)).get("keys"));
+        final long after = graphQLRequests.stream()
+                .filter(request -> request.contains("CausewayReadCollectionWindow"))
+                .count();
+        page.locator("cw-collection[id='children'] cw-collection-grid").evaluate("""
+                adapter => new Promise(resolve => adapter._control.dataProvider(
+                  {page: 1, pageSize: 5},
+                  (items, total) => resolve({items, total})
+                ))
+                """);
+        assertThat(graphQLRequests.stream()
+                .filter(request -> request.contains("CausewayReadCollectionWindow"))
+                .count()).isEqualTo(after);
+    }
+
+    @Test
+    void unavailableTotalUsesBoundedGridAndCausewayOwnedPagingWithoutInventedSize() {
+        page.setViewportSize(1600, 900);
+        openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
+                "demo_CollectionLayoutMenu", "sortedBy", "rich__demo_CollectionLayoutSortedByPage"));
+        assertThat(waitForCollectionOutcome("children")).isEqualTo("ready");
+        final Locator collection = page.locator("cw-collection[id='children']");
+        collection.evaluate("""
+                element => {
+                  const context = element._resolvedContext;
+                  const delegate = context.loadCollection.bind(context);
+                  context.loadCollection = async options => {
+                    const result = await delegate(options);
+                    const window = Object.freeze({...result.window, totalCount: null, countAvailable: false});
+                    return Object.freeze({...result, window});
+                  };
+                }
+                """);
+        collection.evaluate("element => element.load({force: true, offset: 0, size: 5})");
+        try {
+            page.waitForFunction("() => document.querySelector(\"cw-collection[id='children']\")?.collectionState?.window?.requestedSize === 5 && document.querySelector(\"cw-collection[id='children']\")?.collectionState?.window?.totalCount == null");
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = collection.evaluate("element => ({state: element.collectionState, dataset: {...element.dataset}})");
+            throw new AssertionError("Nullable-total response was not accepted: " + diagnostics, cause);
+        }
+        assertThat(collection.evaluate("element => element.collectionState.window.countAvailable")).isEqualTo(false);
+        if (nativeToolkit()) {
+            assertThat(collection.getAttribute("data-causeway-grid-presentation")).isEqualTo("native");
+            collection.evaluate("element => element.load({offset: 5, size: 5})");
+        } else {
+            page.waitForFunction("() => document.querySelector(\"cw-collection[id='children']\")?.dataset.causewayGridPresentation === 'grid-bounded'");
+            assertThat(collection.innerText()).doesNotContain(" of ");
+            collection.locator("[data-causeway-grid-next]").click();
+        }
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='children']\")?.collectionState?.window?.offset === 5");
+        assertThat(collection.evaluate("element => element.collectionState.window.totalCount")).isNull();
+        assertThat(collection.evaluate("element => element.collectionState.rows.length")).isEqualTo(5);
+    }
+
+    @Test
     void responsiveThemesForcedColorsCspAndExternalIsolation() {
         closeCurrentContextWithoutAssertions();
         openBrowserContext(new Browser.NewContextOptions()
@@ -528,6 +766,7 @@ class ReferenceAppHtmxPlaywrightTest {
     private void openBrowserContext(final Browser.NewContextOptions options) {
         browserFailures.clear();
         toolkitRequests.clear();
+        graphQLRequests.clear();
         browserContext = browser.newContext(options);
         browserContext.addInitScript("""
                 (() => {
@@ -575,9 +814,13 @@ class ReferenceAppHtmxPlaywrightTest {
         });
         page.onPageError(error -> browserFailures.add("page: " + error));
         page.onRequest(request -> {
+            if (request.url().contains("/graphql") && "POST".equals(request.method())) {
+                graphQLRequests.add(request.postData());
+            }
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")) {
                 toolkitRequests.add(request.url());
             }
             final URI uri = URI.create(request.url());
@@ -669,6 +912,23 @@ class ReferenceAppHtmxPlaywrightTest {
         page.waitForFunction("member => ['ready', 'partial-error', 'error'].includes(document.querySelector(`cw-collection[id='${member}']`)?.collectionState?.status)", member);
         return (String) page.locator("cw-collection[id='" + member + "']")
                 .evaluate("element => element.collectionState.status");
+    }
+
+    private void assertCollectionPresentation(final String member, final boolean expectedGrid) {
+        final Locator collection = page.locator("cw-collection[id='" + member + "']");
+        if (nativeToolkit() || !expectedGrid) {
+            assertThat(collection.getAttribute("data-causeway-grid-presentation")).isEqualTo("native");
+            assertThat(collection.locator("cw-collection-grid").count()).isZero();
+            return;
+        }
+        try {
+            page.waitForFunction("member => { const collection = document.querySelector(`cw-collection[id='${member}']`); return collection?.dataset?.causewayGridPresentation?.startsWith('grid-') && collection.querySelector('cw-collection-grid')?.dataset.widgetState === 'ready'; }", member);
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = collection.evaluate("element => ({dataset: {...element.dataset}, width: element.getBoundingClientRect().width, state: element.collectionState?.status, window: element.collectionState?.window, columns: element.columns})");
+            throw new AssertionError("Collection " + member + " did not qualify for Grid: " + diagnostics, cause);
+        }
+        assertThat(collection.locator("cw-collection-grid").count()).isEqualTo(1);
+        assertThat(toolkitRequests.stream().anyMatch(request -> request.contains("/vaadin-grid/vaadin-grid.js"))).isTrue();
     }
 
     private void waitForPrompt(final String actionId) {
@@ -977,10 +1237,6 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private int fieldAssetRequests(final String family) {
         return ((Number) page.evaluate("family => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-fields/vaadin-' + family + '.js')).length", family)).intValue();
-    }
-
-    private int actionAssetRequests() {
-        return ((Number) page.evaluate("() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-actions/vaadin-actions.js')).length")).intValue();
     }
 
     private int referenceAssetRequests() {
