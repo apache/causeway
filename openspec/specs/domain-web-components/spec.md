@@ -1162,7 +1162,7 @@ A toolkit-backed protected editor SHALL use the existing sensitive codec and SHA
 The domain components SHALL treat each direct `<cw-action>` child of `<cw-property>` or `<cw-collection>` as an ordered presentation association with that owner member.
 
 #### Scenario: Property declares an associated action
-- **WHEN** authored HTML places `<cw-action member="updateName">` directly beneath `<cw-property member="name">`
+- **WHEN** authored HTML places `<cw-action id="updateName">` directly beneath `<cw-property id="name">`
 - **THEN** the property renders its primary presentation followed by the `updateName` action in one member composition
 - **AND** no adjacent association attribute, wrapper, grid resource, or Java renderer is required
 
@@ -1284,3 +1284,33 @@ It MUST retain existing `causeway-*` semantic event names, CSS classes, data att
 #### Scenario: Non-element contracts are consumed
 - **WHEN** an application listens for a Causeway semantic event or uses a documented Causeway class, data attribute, CSS variable, or asset path
 - **THEN** that non-element contract retains its existing `causeway-*` spelling
+
+### Requirement: Native domain member identifier
+`<cw-property>`, `<cw-action>`, `<cw-collection>`, and `<cw-collection-column>` SHALL identify their represented domain member through the standard HTML `id` attribute and its native reflected `id` property.
+They MUST NOT read, observe, reflect, or alias a `member` attribute or custom `member` element property.
+Internal GraphQL descriptors, context requirements, layout plans, semantic payloads, and collection-column configuration MAY continue to use `member` as domain terminology.
+
+#### Scenario: Authored component identifies a domain member
+- **WHEN** authored HTML contains `<cw-property id="firstName">`
+- **THEN** the property resolves and renders the `firstName` domain property
+- **AND** its native `id` property equals `firstName`
+
+#### Scenario: Generated component identifies a domain member
+- **WHEN** a fallback or effective-grid layout generates a property, action, or collection component
+- **THEN** the generated host's `id` equals its represented Causeway member identifier
+- **AND** no `member` attribute is emitted
+
+#### Scenario: Declarative collection column identifies a projected member
+- **WHEN** a collection directly contains `<cw-collection-column id="name">`
+- **THEN** the collection projects the `name` field using its established internal column configuration
+- **AND** the column host exposes `name` through its native `id` property
+
+#### Scenario: Identifier changes while connected
+- **WHEN** application code changes the native `id` of a connected property, action, or collection
+- **THEN** the component reconnects its context requirement for the new domain member
+- **AND** stale state for the former identifier cannot become current
+
+#### Scenario: Former member attribute is present
+- **WHEN** a member-bearing component has `member="firstName"` but no `id`
+- **THEN** it does not resolve `firstName` through that obsolete attribute
+- **AND** no custom `member` element property supplies a compatibility alias
