@@ -1,0 +1,180 @@
+{
+  "basic": {
+    "styleHashes": [
+      "sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=",
+      "sha256-O1QX2gxOlzGqL6KzAmcekP8ficJnQCCVqetcFYUb5ss=",
+      "sha256-bpNhRhOAoAX1rQ5VBdLwe5ATkB9Cp6xAt67TmIjsL8c=",
+      "sha256-peTsiXSLpuSs7cD42trfTzmd120BSxFbCN5N2acsJGw=",
+      "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+      "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+    ],
+    "cspViolations": [],
+    "axeViolations": [],
+    "accessibilityState": {
+      "opened": [],
+      "hidden": []
+    },
+    "readOnlyState": [
+      {
+        "tag": "vaadin-text-field",
+        "changed": false,
+        "opened": false,
+        "value": "initial",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-text-area",
+        "changed": false,
+        "opened": false,
+        "value": "initial",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-password-field",
+        "changed": false,
+        "opened": false,
+        "value": "",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-checkbox",
+        "changed": false,
+        "opened": false,
+        "value": true,
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-select",
+        "changed": false,
+        "opened": false,
+        "value": "one",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      }
+    ],
+    "presentation": {
+      "narrowDarkReducedMotion": true,
+      "wideForcedColors": true
+    },
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "overflow": false
+  },
+  "numeric": {
+    "styleHashes": [
+      "sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=",
+      "sha256-YNq3C4skMjxorxPrwhiBBUB3WVp43O5zI8oMR56ES64=",
+      "sha256-rRcVg9KnRtadgAGRvS1IlkrlQsH3shuO3yHW7A2DZEk=",
+      "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+    ],
+    "cspViolations": [],
+    "axeViolations": [],
+    "accessibilityState": {
+      "opened": [],
+      "hidden": []
+    },
+    "readOnlyState": [
+      {
+        "tag": "vaadin-text-field",
+        "changed": false,
+        "opened": false,
+        "value": "12",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-integer-field",
+        "changed": false,
+        "opened": false,
+        "value": "12",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-number-field",
+        "changed": false,
+        "opened": false,
+        "value": "12",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      }
+    ],
+    "presentation": {
+      "narrowDarkReducedMotion": true,
+      "wideForcedColors": true
+    },
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "overflow": false
+  },
+  "local-temporal": {
+    "styleHashes": [
+      "sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=",
+      "sha256-EJ7xFeV2ubzFN71/RQAb1cN8ak1I1ZC/6W+5JllfWto=",
+      "sha256-Mi+i7Phh1UOjZ0x/qGAS342TU+vn7xG5xDIzcKxXhiU=",
+      "sha256-WVYjqCndm5Rg7tULwhGngT2GtzCD2oFrfyb9r6y+dZQ=",
+      "sha256-liOe7KQsCbiDStYZNHBXpf+AEetcU+X9G3OcPZBW0Ho=",
+      "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+    ],
+    "cspViolations": [],
+    "axeViolations": [],
+    "accessibilityState": {
+      "opened": [],
+      "hidden": [
+        "vaadin-date-picker-year-scroller",
+        "vaadin-date-picker-year-scroller"
+      ]
+    },
+    "readOnlyState": [
+      {
+        "tag": "vaadin-date-picker",
+        "changed": false,
+        "opened": false,
+        "value": "2026-08-24",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-time-picker",
+        "changed": false,
+        "opened": false,
+        "value": "13:14:15.123",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      },
+      {
+        "tag": "vaadin-date-time-picker",
+        "changed": false,
+        "opened": false,
+        "value": "2026-08-24T13:14:15.123",
+        "readOnly": true,
+        "named": true,
+        "described": true
+      }
+    ],
+    "presentation": {
+      "narrowDarkReducedMotion": true,
+      "wideForcedColors": true
+    },
+    "consoleErrors": [],
+    "pageErrors": [],
+    "externalRequests": [],
+    "overflow": false
+  }
+}

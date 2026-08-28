@@ -219,7 +219,11 @@ final class HtmxPageRenderer {
         final var minimumSearchLength = Math.max(0, properties.getReferenceMinimumSearchLength());
         final var maximumResults = Math.max(1, properties.getReferenceMaximumResults());
         final var referenceWidgets = properties.isEffectiveVaadinReferenceWidgets() ? "vaadin" : "native";
-        return " data-causeway-editor-toolkit=\"" + properties.getResolvedEditorToolkit() + "\""
+        return " data-causeway-component-toolkit=\"" + properties.getResolvedComponentToolkit() + "\""
+                + " data-causeway-toolkit-source=\"" + properties.getToolkitConfigurationSource() + "\""
+                + " data-causeway-editor-toolkit=\"" + properties.getResolvedEditorToolkit() + "\""
+                + " data-causeway-presentation=\"" + (properties.isEffectiveVaadinPresentation() ? "vaadin" : "native") + "\""
+                + " data-causeway-action-buttons=\"" + (properties.isEffectiveVaadinActionButtons() ? "vaadin" : "native") + "\""
                 + " data-causeway-reference-widgets=\"" + referenceWidgets + "\""
                 + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
                 + " data-causeway-reference-maximum-results=\"" + maximumResults + "\""

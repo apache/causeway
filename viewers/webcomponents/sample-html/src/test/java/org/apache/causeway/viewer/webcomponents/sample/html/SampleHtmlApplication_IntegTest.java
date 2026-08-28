@@ -125,6 +125,12 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"composite-object\"")
                 .contains("<cw-object editable")
                 .contains("Component interaction showcase")
+                .contains("Qualified presentation")
+                .contains("?component-toolkit=native")
+                .contains("?fail-field=basic")
+                .contains("?fail-action=true")
+                .contains("dataset.causewayPresentation = componentToolkit")
+                .contains("dataset.causewayActionButtons = componentToolkit")
                 .contains("/causeway-webcomponents/component-styles.css")
                 .contains("/causeway-webcomponents/theme.css")
                 .contains("await import('/causeway-webcomponents/index.mjs')")
@@ -158,6 +164,16 @@ class SampleHtmlApplication_IntegTest {
                 .contains("./object-element.mjs")
                 .contains("./object-layout.mjs")
                 .contains("./value-renderers.mjs");
+
+        final var actionAsset = get("/causeway-webcomponents/vaadin-actions/vaadin-actions.js");
+        assertThat(actionAsset.statusCode()).isEqualTo(200);
+        assertThat(actionAsset.body()).contains("vaadin-button");
+
+        final var actionPolicy = get("/causeway-webcomponents/vaadin-actions/csp-policy.json");
+        assertThat(actionPolicy.statusCode()).isEqualTo(200);
+        assertThat(actionPolicy.body())
+                .contains("styleHashes")
+                .contains("sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
     }
 
     @Test

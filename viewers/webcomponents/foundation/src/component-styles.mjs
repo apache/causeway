@@ -244,6 +244,11 @@ cw-field-editor {
   --lumo-error-color: var(--causeway-danger, Mark);
   --lumo-border-radius-m: var(--causeway-radius-md, 0.45rem);
 }
+cw-action-control {
+  display: inline-flex;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
 cw-reference-editor > :is(vaadin-combo-box, vaadin-multi-select-combo-box, select),
 cw-field-editor > * {
   box-sizing: border-box;

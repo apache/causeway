@@ -148,7 +148,8 @@ class PetClinicHtmxPlaywrightTest {
                 graphQLRequests.add(request.postData());
             }
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")) {
                 toolkitRequests.add(request.url());
             }
         });
@@ -176,7 +177,11 @@ class PetClinicHtmxPlaywrightTest {
     void routesHomeObjectsHistoryCollectionsAndResponsiveLayout() {
         openHome();
 
-        assertThat(page.locator("html").getAttribute("data-causeway-editor-toolkit"))
+        assertThat(page.locator("html").getAttribute("data-causeway-component-toolkit"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(page.locator("html").getAttribute("data-causeway-presentation"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(page.locator("html").getAttribute("data-causeway-action-buttons"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(toolkitRequests).isEmpty();
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
@@ -203,6 +208,7 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(1);
         assertThat(page.locator("cw-collection[id='visits'] > cw-action[id='bookVisit']").count())
                 .isEqualTo(1);
+        assertDefaultOrNativeMemberPresentation("name", "delete");
         assertThat(page.locator("cw-collection[id='pets']")
                 .evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.getAttribute('id')).join(',')"))
                 .isEqualTo("addPet,removePet");
@@ -402,13 +408,13 @@ class PetClinicHtmxPlaywrightTest {
         waitForPromptError("cannot contain");
         assertFocused(parameter("name"));
         cancelPrompt();
-        assertFocused("cw-action[id='updateName'] button");
+        assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
 
         updateName.click();
         waitForPrompt("updateName");
         resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertFocused("cw-action[id='updateName'] button");
+        assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
     }
 
     @Test
@@ -618,9 +624,31 @@ class PetClinicHtmxPlaywrightTest {
         return actionIds;
     }
 
+    private void assertDefaultOrNativeMemberPresentation(final String propertyMember, final String actionMember) {
+        final var propertySelector = "cw-property[id='" + propertyMember + "']";
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.renderer", propertySelector);
+        final var actionSelector = "cw-action[id='" + actionMember + "'] [data-causeway-action-control]";
+        page.locator(actionSelector).first().waitFor();
+        if (nativeToolkit()) {
+            assertThat(page.locator(propertySelector).getAttribute("data-renderer")).isNotEqualTo("vaadin-field-view");
+            assertThat(page.locator(propertySelector + " cw-field-editor[data-mode='view']").count()).isZero();
+            assertThat(page.locator(actionSelector).first().evaluate("element => element.localName")).isEqualTo("button");
+            return;
+        }
+        final var field = page.locator(propertySelector + " cw-field-editor[data-mode='view']");
+        field.waitFor();
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", propertySelector + " cw-field-editor[data-mode='view']");
+        final var fieldControl = field.locator("vaadin-text-field");
+        assertThat(fieldControl.getAttribute("readonly")).isNotNull();
+        assertThat(page.locator(actionSelector).first().evaluate("element => element.localName")).isEqualTo("cw-action-control");
+        page.locator(actionSelector + " vaadin-button").waitFor();
+        assertThat(toolkitRequests.stream().anyMatch(url -> url.contains("/vaadin-fields/vaadin-basic.js"))).isTrue();
+        assertThat(toolkitRequests.stream().anyMatch(url -> url.contains("/vaadin-actions/vaadin-actions.js"))).isTrue();
+    }
+
     private Locator objectAction(final String member) {
         final var host = page.locator("cw-action[id='" + member + "']").first();
-        final var action = host.locator("button");
+        final var action = host.locator("[data-causeway-action-control]");
         action.waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
         revealContainingTab(host, action);
@@ -815,7 +843,7 @@ class PetClinicHtmxPlaywrightTest {
     private void waitForPropertyValue(final String member, final String value) {
         final var selector = "cw-property[id='" + member + "'] .causeway-property-value";
         try {
-            page.waitForFunction("args => document.querySelector(args.selector)?.textContent.includes(args.value)",
+            page.waitForFunction("args => { const output = document.querySelector(args.selector); const control = output?.querySelector('cw-field-editor')?.firstElementChild; return output?.textContent.includes(args.value) || String(control?.value ?? '') === args.value; }",
                     java.util.Map.of("selector", selector, "value", value));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
             final var property = page.locator("cw-property[id='" + member + "']");
@@ -850,7 +878,8 @@ class PetClinicHtmxPlaywrightTest {
     @SuppressWarnings("unchecked")
     private static boolean nativeToolkit() {
         return "native".equalsIgnoreCase(System.getProperty(
-                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
+                "causeway.viewer.webcomponents.htmx.component-toolkit",
+                System.getProperty("causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin")));
     }
 
     private void assertNoBrowserFailures() {

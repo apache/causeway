@@ -15,10 +15,13 @@ installDomShim();
 const {
   CausewayFieldEditorElement,
   causewayFieldDescriptor,
+  causewayReadOnlyFieldDescriptor,
   causewayFieldWidgetConfiguration,
   configureCausewayFieldWidgets,
   renderCausewayFieldWidget,
-  supportsCausewayFieldWidget
+  renderCausewayReadOnlyField,
+  supportsCausewayFieldWidget,
+  supportsCausewayReadOnlyField
 } = await import('../src/field-widget.mjs');
 const {renderCausewayEditor} = await import('../src/editor-registry.mjs');
 
@@ -78,6 +81,39 @@ test('classifies only reversible qualified semantic families', () => {
   assert.equal(causewayFieldDescriptor(context({autoComplete: true})), null);
 });
 
+test('qualifies read-only families without exposing protected values', () => {
+  configureCausewayFieldWidgets({families: ['basic', 'numeric', 'local-temporal'], presentation: true});
+  assert.equal(causewayReadOnlyFieldDescriptor(context()).control, 'text-field');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({multiLine: 5})).control, 'text-area');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'boolean'}, semanticType: 'Boolean'})).control, 'checkbox');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({enumValues: ['NEW', 'DONE'], inputType: {kind: 'ENUM', name: 'State'}})).control, 'select');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({choices: ['one', 'two']})).control, 'select');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'exact-numeric'}, semanticType: 'BigDecimal'})).family, 'numeric');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'machine-numeric'}, semanticType: 'Int'})).control, 'integer-field');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'machine-numeric'}, semanticType: 'Double'})).control, 'number-field');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'temporal'}, semanticType: 'LocalDate'})).control, 'date-picker');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'temporal'}, semanticType: 'LocalTime', value: '13:14:15.123'})).control, 'time-picker');
+  assert.equal(causewayReadOnlyFieldDescriptor(context({codec: {id: 'temporal'}, semanticType: 'LocalDateTime', value: '2026-08-24T13:14:15.123'})).control, 'date-time-picker');
+  for (const excluded of [
+    context({codec: {id: 'protected'}, semanticType: 'Password'}),
+    context({codec: {id: 'reference'}, inputType: {kind: 'OBJECT', name: 'Thing'}}),
+    context({codec: {id: 'unsupported'}, semanticType: 'Blob'}),
+    context({codec: {id: 'temporal'}, semanticType: 'OffsetDateTime'}),
+    context({codec: {id: 'temporal'}, semanticType: 'ZonedDateTime'}),
+    context({codec: {id: 'temporal'}, semanticType: 'DateTime'}),
+    context({codec: {id: 'temporal'}, semanticType: 'LocalTime', value: '13:14:15.123456'}),
+    context({value: null})
+  ]) assert.equal(causewayReadOnlyFieldDescriptor(excluded), null);
+  assert.equal(supportsCausewayReadOnlyField(context()), true);
+  const html = renderCausewayReadOnlyField(context({descriptionId: 'value-description'}));
+  assert.match(html, /data-mode="view"/);
+  assert.match(html, /data-control="text-field"/);
+  assert.match(html, /data-labelledby="value-label"/);
+  assert.match(html, /data-describedby="value-description"/);
+  configureCausewayFieldWidgets({families: ['basic'], presentation: false});
+  assert.equal(supportsCausewayReadOnlyField(context()), false);
+});
+
 test('keeps protected values out of adapter markup', () => {
   configureCausewayFieldWidgets({families: ['basic']});
   const html = renderCausewayFieldWidget(context({
@@ -129,6 +165,56 @@ test('upgrades through a family-local module and ignores disconnected completion
   document.body.removeChild(disconnected);
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.notEqual(disconnected.dataset.widgetState, 'ready');
+  document.body.appendChild(disconnected);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(disconnected.dataset.widgetState, 'ready');
+  document.body.removeChild(disconnected);
+});
+
+test('read-only adapters upgrade without editor behavior or duplicate labels', async () => {
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true, moduleUrls: {basic: fakeBasicModule}});
+  const view = new CausewayFieldEditorElement();
+  view.setAttribute('id', 'field-view');
+  view.setAttribute('data-mode', 'view');
+  view.setAttribute('data-family', 'basic');
+  view.setAttribute('data-control', 'text-field');
+  view.setAttribute('data-label', 'Name');
+  view.setAttribute('data-value', 'Ada');
+  view.setAttribute('data-labelledby', 'name-label');
+  view.setAttribute('data-describedby', 'name-description');
+  document.body.appendChild(view);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const control = view.childNodes[0];
+  assert.equal(view.dataset.widgetState, 'ready');
+  assert.equal(control.localName, 'vaadin-text-field');
+  assert.equal(control.value, 'Ada');
+  assert.equal(control.hasAttribute('readonly'), true);
+  assert.equal(control.accessibleNameRef, 'name-label');
+  assert.equal(control.inputElement.getAttribute('aria-describedby'), 'name-description');
+  assert.equal(control.getAttribute('data-causeway-field-view'), '');
+  assert.equal(control.hasAttribute('data-causeway-editor'), false);
+  assert.equal(control.childNodes.length, 0);
+  document.body.removeChild(view);
+});
+
+test('policy revisions cannot complete stale field upgrades', async () => {
+  let resolveDelayedModule;
+  globalThis.causewayDelayedBasicModulePromise = new Promise(resolve => { resolveDelayedModule = resolve; });
+  const delayedModule = new URL('./fixtures/fake-vaadin-delayed-basic.mjs', import.meta.url).href;
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true, moduleUrls: {basic: delayedModule}});
+  const view = new CausewayFieldEditorElement();
+  view.setAttribute('data-mode', 'view');
+  view.setAttribute('data-family', 'basic');
+  view.setAttribute('data-control', 'delayed-text-field');
+  document.body.appendChild(view);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(view.dataset.widgetState, 'loading');
+  configureCausewayFieldWidgets({families: [], presentation: false});
+  resolveDelayedModule();
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.notEqual(view.dataset.widgetState, 'ready');
+  document.body.removeChild(view);
+  delete globalThis.causewayDelayedBasicModulePromise;
 });
 
 test('qualified optional fields expose a labelled keyboard clear suffix', async () => {
@@ -232,6 +318,26 @@ test('required disabled and protected fields omit the clear suffix', async () =>
     assert.equal(editor.childNodes[0].clearButtonVisible, false);
     document.body.removeChild(editor);
   }
+});
+
+test('read-only failure emits a bounded value-free signal', async () => {
+  configureCausewayFieldWidgets({families: ['basic'], presentation: true, moduleUrls: {
+    basic: new URL('./fixtures/missing-field-view-module.mjs', import.meta.url).href
+  }});
+  const view = new CausewayFieldEditorElement();
+  view.setAttribute('data-mode', 'view');
+  view.setAttribute('data-family', 'basic');
+  view.setAttribute('data-control', 'text-field');
+  view.setAttribute('data-value', 'must-not-leak');
+  let failure;
+  view.addEventListener('causeway-field-view-load-failed', event => { failure = event.detail; });
+  document.body.appendChild(view);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(view.dataset.widgetState, 'fallback');
+  assert.deepEqual(Object.keys(failure).sort(), ['family', 'message']);
+  assert.doesNotMatch(JSON.stringify(failure), /must-not-leak|missing-field-view-module/);
+  assert.equal(supportsCausewayReadOnlyField(context()), false);
+  document.body.removeChild(view);
 });
 
 test('fails one family closed with a bounded event', async () => {

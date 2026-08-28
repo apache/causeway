@@ -494,6 +494,8 @@ cw-property:last-child .causeway-property {
 }
 
 .causeway-action > button,
+.causeway-action > cw-action-control,
+.causeway-action > cw-action-control > vaadin-button,
 .causeway-property-editor-actions button:first-child,
 .causeway-action-prompt-actions button:first-child,
 .causeway-button-primary {
@@ -503,12 +505,20 @@ cw-property:last-child .causeway-property {
 }
 
 .causeway-action > button:hover:not(:disabled),
+.causeway-action > cw-action-control:hover:not([disabled]),
+.causeway-action > cw-action-control > vaadin-button:hover:not(:disabled),
 .causeway-property-editor-actions button:first-child:hover:not(:disabled),
 .causeway-action-prompt-actions button:first-child:hover:not(:disabled),
 .causeway-button-primary:hover {
   border-color: var(--causeway-action-background-hover);
   background: var(--causeway-action-background-hover);
   color: #fff;
+}
+
+.causeway-action > cw-action-control {
+  --vaadin-button-background: var(--causeway-action-background);
+  --vaadin-button-text-color: #fff;
+  --vaadin-focus-ring-color: var(--causeway-focus);
 }
 
 .causeway-collection {

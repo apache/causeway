@@ -18,6 +18,7 @@
  */
 
 export * from './action-element.mjs';
+export * from './action-widget.mjs';
 export * from './collection-column-element.mjs';
 export * from './collection-element.mjs';
 export * from './component-contracts.mjs';

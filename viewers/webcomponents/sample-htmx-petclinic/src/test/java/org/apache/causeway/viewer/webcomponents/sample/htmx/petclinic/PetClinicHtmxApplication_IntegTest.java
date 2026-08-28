@@ -91,7 +91,9 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("data-navigation-generation=\"0\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
                 .contains("/webjars/htmx.org/2.0.6/dist/htmx.min.js")
-                .contains("data-causeway-editor-toolkit=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
+                .contains("data-causeway-component-toolkit=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
+                .contains("data-causeway-presentation=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
+                .contains("data-causeway-action-buttons=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
                 .contains("data-causeway-reference-widgets=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
                 .contains("data-causeway-field-families=\"" + (nativeToolkit ? "" : "basic,numeric,local-temporal") + "\"")
                 .contains("Compare Wicket viewer");
@@ -323,7 +325,8 @@ class PetClinicHtmxApplication_IntegTest {
 
     private static boolean nativeToolkit() {
         return "native".equalsIgnoreCase(System.getProperty(
-                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
+                "causeway.viewer.webcomponents.htmx.component-toolkit",
+                System.getProperty("causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin")));
     }
 
     private HttpResponse<String> get(final String path, final String... header) throws Exception {

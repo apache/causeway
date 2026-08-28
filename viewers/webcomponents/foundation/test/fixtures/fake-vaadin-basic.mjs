@@ -13,7 +13,16 @@ class FakeVaadinControl extends (globalThis.HTMLElement ?? class {}) {
     this.checked = false;
     this.items = [];
     this.clearButtonVisible = false;
-    this.inputElement = {inputMode: '', selectionStart: 0, selectionEnd: 0, setSelectionRange() {}};
+    this.accessibleNameRef = '';
+    const inputAttributes = new Map();
+    this.inputElement = {
+      inputMode: '',
+      selectionStart: 0,
+      selectionEnd: 0,
+      setSelectionRange() {},
+      setAttribute(name, value) { inputAttributes.set(name, String(value)); },
+      getAttribute(name) { return inputAttributes.get(name) ?? null; }
+    };
   }
 }
 if (globalThis.customElements) {

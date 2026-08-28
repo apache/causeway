@@ -10,6 +10,7 @@ import {escapeHtml} from './rendering.mjs';
 import {semanticTypeName} from './value-codecs.mjs';
 
 export const CAUSEWAY_FIELD_EDITOR = 'cw-field-editor';
+export const CAUSEWAY_FIELD_WIDGET_POLICY_EVENT = 'causeway-field-widget-policy';
 export const CausewayFieldFamily = Object.freeze({
   BASIC: 'basic',
   NUMERIC: 'numeric',
@@ -22,13 +23,22 @@ const DEFAULT_MODULE_URLS = Object.freeze({
   numeric: new URL('./vaadin-fields/vaadin-numeric.js', import.meta.url).href,
   'local-temporal': new URL('./vaadin-fields/vaadin-local-temporal.js', import.meta.url).href
 });
-let configuration = Object.freeze({families: Object.freeze([...FAMILY_IDS]), moduleUrls: DEFAULT_MODULE_URLS});
+let configuration = Object.freeze({
+  families: Object.freeze([...FAMILY_IDS]),
+  moduleUrls: DEFAULT_MODULE_URLS,
+  presentation: true
+});
 const familyModules = new Map();
 const failedFamilies = new Set();
+let configurationRevision = 0;
 
 const documentPolicy = globalThis.document?.documentElement?.dataset;
-if (documentPolicy && Object.hasOwn(documentPolicy, 'causewayFieldFamilies')) {
-  configureCausewayFieldWidgets({families: documentPolicy.causewayFieldFamilies});
+if (documentPolicy && (Object.hasOwn(documentPolicy, 'causewayFieldFamilies')
+    || Object.hasOwn(documentPolicy, 'causewayPresentation'))) {
+  configureCausewayFieldWidgets({
+    families: documentPolicy.causewayFieldFamilies,
+    presentation: documentPolicy.causewayPresentation === 'vaadin'
+  });
 }
 
 export function configureCausewayFieldWidgets(options = {}) {
@@ -40,10 +50,13 @@ export function configureCausewayFieldWidgets(options = {}) {
   }
   configuration = Object.freeze({
     families: Object.freeze(families),
-    moduleUrls: Object.freeze(moduleUrls)
+    moduleUrls: Object.freeze(moduleUrls),
+    presentation: options.presentation !== false
   });
   familyModules.clear();
   failedFamilies.clear();
+  configurationRevision += 1;
+  announceFieldPolicyChange({reason: 'configuration', families: configuration.families});
   return configuration;
 }
 
@@ -51,11 +64,12 @@ export function causewayFieldWidgetConfiguration() {
   return configuration;
 }
 
-export function failCausewayFieldFamily(family) {
-  if (FAMILY_IDS.includes(family)) {
-    failedFamilies.add(family);
-    familyModules.delete(family);
-  }
+export function failCausewayFieldFamily(family, {announce = true} = {}) {
+  if (!FAMILY_IDS.includes(family) || failedFamilies.has(family)) return false;
+  failedFamilies.add(family);
+  familyModules.delete(family);
+  if (announce) announceFieldPolicyChange({reason: 'failure', family});
+  return true;
 }
 
 export function causewayFieldDescriptor(context) {
@@ -125,6 +139,45 @@ export function renderCausewayFieldWidget(context) {
   return `<${CAUSEWAY_FIELD_EDITOR} ${attributes.join(' ')}><span role="status">Loading field editor…</span></${CAUSEWAY_FIELD_EDITOR}>`;
 }
 
+export function causewayReadOnlyFieldDescriptor(context) {
+  if (!configuration.presentation || context.value == null) return null;
+  const descriptor = causewayFieldDescriptor({...context, required: true, autoComplete: false});
+  if (!descriptor || descriptor.sensitive) return null;
+  return Object.freeze({
+    ...descriptor,
+    control: descriptor.boolean ? 'checkbox' : descriptor.control
+  });
+}
+
+export function supportsCausewayReadOnlyField(context) {
+  return causewayReadOnlyFieldDescriptor(context) !== null;
+}
+
+export function renderCausewayReadOnlyField(context) {
+  const descriptor = causewayReadOnlyFieldDescriptor(context);
+  if (!descriptor) throw new Error('The semantic value is not eligible for a Vaadin read-only field adapter.');
+  const choices = descriptor.boolean
+    ? []
+    : normalizeChoices(context).length > 0
+      ? normalizeChoices(context)
+      : [{label: String(context.controlValue ?? ''), value: String(context.controlValue ?? '')}];
+  const attributes = [
+    `id="${escapeHtml(context.inputId)}"`,
+    'data-mode="view"',
+    `data-family="${descriptor.family}"`,
+    `data-control="${descriptor.control}"`,
+    `data-label="${escapeHtml(context.label ?? context.name)}"`,
+    `data-value="${escapeHtml(String(context.controlValue ?? ''))}"`,
+    `data-labelledby="${escapeHtml(context.labelId)}"`,
+    `data-items="${escapeHtml(JSON.stringify(choices))}"`
+  ];
+  if (context.testId) attributes.push(`data-testid="${escapeHtml(context.testId)}"`);
+  if (context.descriptionId) attributes.push(`data-describedby="${escapeHtml(context.descriptionId)}"`);
+  if (descriptor.inputMode) attributes.push(`data-input-mode="${descriptor.inputMode}"`);
+  if (context.multiLine > 1) attributes.push(`data-rows="${Math.min(context.multiLine, 50)}"`);
+  return `<${CAUSEWAY_FIELD_EDITOR} ${attributes.join(' ')}><span role="status">Loading value…</span></${CAUSEWAY_FIELD_EDITOR}>`;
+}
+
 export const vaadinFieldEditorRegistration = Object.freeze({
   id: 'vaadin-field',
   priority: 350,
@@ -143,7 +196,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
     this._focusRequested = false;
     this._clearFocusRequested = false;
     this.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
+      if (this.dataset.mode !== 'view' && event.key === 'Escape') {
         this.dispatchEvent(new CustomEvent('causeway-field-escape', {bubbles: true, composed: true}));
       }
     }, {capture: true});
@@ -151,8 +204,9 @@ export class CausewayFieldEditorElement extends HTMLElement {
 
   connectedCallback() {
     const generation = ++this._generation;
+    const revision = configurationRevision;
     this.dataset.widgetState = 'loading';
-    void this.#upgrade(generation);
+    void this.#upgrade(generation, revision);
   }
 
   disconnectedCallback() {
@@ -203,8 +257,9 @@ export class CausewayFieldEditorElement extends HTMLElement {
     this.#restoreClearFocus(options);
   }
 
-  async #upgrade(generation) {
+  async #upgrade(generation, revision) {
     const family = this.dataset.family;
+    const viewMode = this.dataset.mode === 'view';
     const tagName = `vaadin-${this.dataset.control}`;
     try {
       let modulePromise = familyModules.get(family);
@@ -213,47 +268,56 @@ export class CausewayFieldEditorElement extends HTMLElement {
         familyModules.set(family, modulePromise);
       }
       await modulePromise;
-      if (!this.isConnected || generation !== this._generation) return;
+      if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
       await globalThis.customElements.whenDefined(tagName);
-      if (!this.isConnected || generation !== this._generation) return;
+      if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
       const control = document.createElement(tagName);
       const editorName = this.dataset.causewayEditor;
       const testId = this.dataset.testid;
       this._control = control;
       control.id = `${this.id}-control`;
-      control.setAttribute('data-causeway-editor', editorName);
-      this.removeAttribute('data-causeway-editor');
+      if (viewMode) {
+        control.setAttribute('data-causeway-field-view', '');
+        control.setAttribute('readonly', '');
+      } else {
+        control.setAttribute('data-causeway-editor', editorName);
+        this.removeAttribute('data-causeway-editor');
+      }
       if (testId) {
         control.setAttribute('data-testid', testId);
         this.removeAttribute('data-testid');
       }
-      if (this.dataset.labelledby) control.setAttribute('aria-labelledby', this.dataset.labelledby);
-      if (this.dataset.describedby) control.setAttribute('aria-describedby', this.dataset.describedby);
-      control.disabled = this.hasAttribute('disabled');
-      control.required = this.hasAttribute('required');
-      control.invalid = this.dataset.invalid === 'true';
+      if (this.dataset.labelledby) {
+        if ('accessibleNameRef' in control) control.accessibleNameRef = this.dataset.labelledby;
+        else control.accessibleName = this.dataset.label ?? '';
+      }
+      control.disabled = !viewMode && this.hasAttribute('disabled');
+      control.required = !viewMode && this.hasAttribute('required');
+      control.invalid = !viewMode && this.dataset.invalid === 'true';
       const supportsClearButton = 'clearButtonVisible' in control;
       if (supportsClearButton) control.clearButtonVisible = false;
-      control.addEventListener('focusout', event => {
-        if (!control.isConnected) {
-          return;
-        }
-        event.stopPropagation();
-        if (control.contains(event.relatedTarget)) {
-          return;
-        }
-        this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
-          bubbles: true,
-          composed: true,
-          detail: Object.freeze({
-            name: editorName,
-            nextEditor: focusAttribute(event.relatedTarget, 'data-causeway-editor'),
-            nextAction: focusAttribute(event.relatedTarget, 'data-causeway-action')
-          })
-        }));
-      });
+      if (!viewMode) {
+        control.addEventListener('focusout', event => {
+          if (!control.isConnected) {
+            return;
+          }
+          event.stopPropagation();
+          if (control.contains(event.relatedTarget)) {
+            return;
+          }
+          this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
+            bubbles: true,
+            composed: true,
+            detail: Object.freeze({
+              name: editorName,
+              nextEditor: focusAttribute(event.relatedTarget, 'data-causeway-editor'),
+              nextAction: focusAttribute(event.relatedTarget, 'data-causeway-action')
+            })
+          }));
+        });
+      }
       if (this.dataset.control === 'checkbox') {
-        control.label = this.dataset.label;
+        if (!viewMode) control.label = this.dataset.label;
         control.checked = this.dataset.value === 'true';
       } else {
         if (this.dataset.control === 'select') control.items = this.#items();
@@ -265,7 +329,8 @@ export class CausewayFieldEditorElement extends HTMLElement {
         }
         if (this.dataset.control === 'password-field') control.setAttribute('autocomplete', 'new-password');
       }
-      if (supportsClearButton
+      if (!viewMode
+          && supportsClearButton
           && !control.required
           && !control.disabled
           && this.dataset.sensitive !== 'true'
@@ -274,24 +339,37 @@ export class CausewayFieldEditorElement extends HTMLElement {
       }
       this.replaceChildren(control);
       await control.updateComplete;
-      if (!this.isConnected || generation !== this._generation) return;
+      if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
+      const compositeFields = compositeFieldControls(control);
+      for (const field of compositeFields) {
+        const suffix = field.localName === 'vaadin-date-picker' ? 'date' : 'time';
+        field.accessibleName = `${this.dataset.label ?? ''} ${suffix}`.trim();
+      }
+      await Promise.all(compositeFields.map(field => field.updateComplete));
+      if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
+      if (this.dataset.describedby) {
+        for (const input of accessibleFieldInputs(control)) {
+          input.setAttribute('aria-describedby', this.dataset.describedby);
+        }
+      }
       if (this.dataset.inputMode && control.inputElement) {
         control.inputElement.inputMode = this.dataset.inputMode;
       }
-      this.#refreshClearButton();
+      if (!viewMode) this.#refreshClearButton();
       this.dataset.widgetState = 'ready';
       if (this._focusRequested) queueMicrotask(() => control.focus());
-      this.#restoreClearFocus();
+      if (!viewMode) this.#restoreClearFocus();
     } catch (error) {
-      if (!this.isConnected || generation !== this._generation) return;
-      failCausewayFieldFamily(family);
+      if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
+      const newlyFailed = failCausewayFieldFamily(family, {announce: false});
       this.dataset.widgetState = 'fallback';
       this.dataset.widgetError = 'The configured field family could not be loaded.';
-      this.dispatchEvent(new CustomEvent('causeway-field-load-failed', {
+      this.dispatchEvent(new CustomEvent(viewMode ? 'causeway-field-view-load-failed' : 'causeway-field-load-failed', {
         bubbles: true,
         composed: true,
         detail: Object.freeze({family, message: this.dataset.widgetError})
       }));
+      if (newlyFailed) announceFieldPolicyChange({reason: 'failure', family});
     }
   }
 
@@ -349,6 +427,28 @@ export class CausewayFieldEditorElement extends HTMLElement {
       return [];
     }
   }
+}
+
+function compositeFieldControls(control) {
+  const fields = [];
+  for (const root of [control, control.shadowRoot]) {
+    fields.push(...(root?.querySelectorAll?.('vaadin-date-picker, vaadin-time-picker') ?? []));
+  }
+  return [...new Set(fields)];
+}
+
+function accessibleFieldInputs(control) {
+  const candidates = [control.inputElement, control.focusElement];
+  for (const field of compositeFieldControls(control)) {
+    candidates.push(field.inputElement, field.focusElement);
+  }
+  return [...new Set(candidates.filter(candidate => candidate?.setAttribute))];
+}
+
+function announceFieldPolicyChange(detail) {
+  globalThis.document?.dispatchEvent?.(new CustomEvent(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, {
+    detail: Object.freeze(detail)
+  }));
 }
 
 function boundedLabel(value, maximum = 120) {

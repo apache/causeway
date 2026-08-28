@@ -67,7 +67,7 @@ mvn -f viewers/webcomponents/pom.xml \
     test
 ----
 
-Add `-Dcauseway.viewer.webcomponents.htmx.editor-toolkit=native` to run the same suite through explicit native editors.
+Add `-Dcauseway.viewer.webcomponents.htmx.component-toolkit=native` to run the same suite through complete explicit-native reference, read-only field, editor, and ordinary-action rollback.
 Set `-Dplaywright.headless=false` only when deliberately debugging in a visible browser.
 Set `-Dplaywright.chromium.executable=/absolute/path/to/chromium` or `-Dplaywright.chromium.channel=chrome` to use an installed browser instead of Playwright's bundled Chromium.
 

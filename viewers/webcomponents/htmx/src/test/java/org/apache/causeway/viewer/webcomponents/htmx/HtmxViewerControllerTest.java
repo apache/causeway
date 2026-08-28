@@ -57,7 +57,11 @@ class HtmxViewerControllerTest {
                 .contains("style-src-attr 'none'")
                 .doesNotContain("'unsafe-inline'");
         assertThat(response.getBody())
+                .contains("data-causeway-component-toolkit=\"vaadin\"")
+                .contains("data-causeway-toolkit-source=\"default\"")
                 .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-presentation=\"vaadin\"")
+                .contains("data-causeway-action-buttons=\"vaadin\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
@@ -85,7 +89,7 @@ class HtmxViewerControllerTest {
 
     @Test
     void explicitNativePolicyRemovesVaadinAdaptersAndHashes() {
-        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.NATIVE);
+        properties.setComponentToolkit(HtmxViewerProperties.ComponentToolkit.NATIVE);
 
         final var response = controller(List.of()).route(request("/htmx", "", false));
 
@@ -94,7 +98,11 @@ class HtmxViewerControllerTest {
                 .contains("style-src-attr 'none'")
                 .doesNotContain("'unsafe-inline'");
         assertThat(response.getBody())
+                .contains("data-causeway-component-toolkit=\"native\"")
+                .contains("data-causeway-toolkit-source=\"component\"")
                 .contains("data-causeway-editor-toolkit=\"native\"")
+                .contains("data-causeway-presentation=\"native\"")
+                .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"\"");
     }
@@ -112,7 +120,11 @@ class HtmxViewerControllerTest {
                 .contains("style-src-attr 'none'")
                 .doesNotContain("'unsafe-inline'");
         assertThat(response.getBody())
+                .contains("data-causeway-component-toolkit=\"native\"")
+                .contains("data-causeway-toolkit-source=\"pilot-compatibility\"")
                 .contains("data-causeway-editor-toolkit=\"compatibility\"")
+                .contains("data-causeway-presentation=\"native\"")
+                .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-reference-minimum-search-length=\"3\"")
                 .contains("data-causeway-reference-maximum-results=\"40\"")
@@ -128,7 +140,11 @@ class HtmxViewerControllerTest {
         final var policy = response.getHeaders().getFirst("Content-Security-Policy");
 
         assertThat(response.getBody())
+                .contains("data-causeway-component-toolkit=\"native\"")
+                .contains("data-causeway-toolkit-source=\"pilot-compatibility\"")
                 .contains("data-causeway-editor-toolkit=\"compatibility\"")
+                .contains("data-causeway-presentation=\"native\"")
+                .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"basic,numeric\"");
         assertThat(policy)
@@ -165,13 +181,17 @@ class HtmxViewerControllerTest {
     void explicitCommonPolicyPreventsDeprecatedValuesFromMixingShellPolicy() {
         properties.setVaadinReferenceWidgets(false);
         properties.setVaadinFieldFamilies("");
-        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.VAADIN);
+        properties.setComponentToolkit(HtmxViewerProperties.ComponentToolkit.VAADIN);
 
         final var response = controller(List.of()).route(request("/htmx", "", false));
         final var policy = response.getHeaders().getFirst("Content-Security-Policy");
 
         assertThat(response.getBody())
+                .contains("data-causeway-component-toolkit=\"vaadin\"")
+                .contains("data-causeway-toolkit-source=\"component\"")
                 .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-presentation=\"vaadin\"")
+                .contains("data-causeway-action-buttons=\"vaadin\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(policy)

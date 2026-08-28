@@ -24,6 +24,7 @@ import {installDomShim} from './dom-shim.mjs';
 const {document, customElements} = installDomShim();
 const {
   ACTION_REQUEST_EVENT,
+  CAUSEWAY_ACTION_CONTROL,
   CAUSEWAY_FIELD_EDITOR,
   CausewayActionElement,
   CausewayElementName,
@@ -31,6 +32,7 @@ const {
   CausewayPropertyElement,
   CausewayValueElement,
   NAVIGATION_REQUEST_EVENT,
+  configureCausewayActionWidgets,
   defineCausewayWebComponents
 } = await import('../src/index.mjs');
 
@@ -67,7 +69,8 @@ test('registers the complete compact custom-element vocabulary without old alias
   ];
   assert.deepEqual(Object.values(CausewayElementName), publicNames);
   assert.equal(CAUSEWAY_FIELD_EDITOR, 'cw-field-editor');
-  for (const name of [...publicNames, CAUSEWAY_FIELD_EDITOR]) {
+  assert.equal(CAUSEWAY_ACTION_CONTROL, 'cw-action-control');
+  for (const name of [...publicNames, CAUSEWAY_FIELD_EDITOR, CAUSEWAY_ACTION_CONTROL]) {
     assert.equal(typeof customElements.get(name), 'function', name);
     assert.equal(customElements.get(name.replace(/^cw-/, 'causeway-')), undefined, name);
   }
@@ -109,8 +112,10 @@ test('actions render semantic states and publish requests only while enabled', (
   action.context = context;
   document.body.appendChild(action);
   let request;
+  let requestCount = 0;
   action.addEventListener(ACTION_REQUEST_EVENT, event => {
     request = event;
+    requestCount += 1;
   });
   listener({
     status: 'schema-loading',
@@ -133,9 +138,24 @@ test('actions render semantic states and publish requests only while enabled', (
     descriptor: {id: 'changeName', description: 'Changes the department name.'},
     data: {hidden: false, disabled: null}
   }));
+  assert.match(action.innerHTML, /<cw-action-control/);
   assert.match(action.innerHTML, /<button type="button"/);
   assert.match(action.innerHTML, /causeway-action-description/);
+  configureCausewayActionWidgets({enabled: false});
+  assert.doesNotMatch(action.innerHTML, /<cw-action-control/);
+  assert.match(action.innerHTML, /<button type="button"/);
+  configureCausewayActionWidgets({enabled: true});
+  assert.match(action.innerHTML, /<cw-action-control/);
   assert.equal(action.activate(), true);
+  assert.equal(requestCount, 1);
+  const internalControl = document.createElement('vaadin-button');
+  action.appendChild(internalControl);
+  internalControl.dispatchEvent(new Event('click', {bubbles: true, composed: true}));
+  assert.equal(requestCount, 2);
+  const descriptionControl = document.createElement('span');
+  action.appendChild(descriptionControl);
+  descriptionControl.dispatchEvent(new Event('click', {bubbles: true, composed: true}));
+  assert.equal(requestCount, 2);
   assert.equal(request.bubbles, true);
   assert.equal(request.composed, true);
   assert.equal(request.cancelable, true);
@@ -150,6 +170,10 @@ test('actions render semantic states and publish requests only while enabled', (
   assert.match(action.innerHTML, /aria-disabled="true"/);
   assert.match(action.innerHTML, /aria-describedby=/);
   assert.equal(action.activate(), false);
+  const disabledControl = document.createElement('vaadin-button');
+  action.appendChild(disabledControl);
+  disabledControl.dispatchEvent(new Event('click', {bubbles: true, composed: true}));
+  assert.equal(requestCount, 2);
 
   listener(readyState({
     descriptor: {id: 'changeName', description: 'Change name'},

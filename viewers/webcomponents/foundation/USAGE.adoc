@@ -267,10 +267,13 @@ Renderer input is normalized semantic state containing `value`, `descriptor`, `t
 == Properties and object links
 
 `<cw-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
-It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer, and an accessible disabled reason.
+It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer or qualified internal read-only field, and an accessible disabled reason.
 A non-redundant property description remains the label's default title, while a disabled property adds a separate focusable reason indicator whose tooltip and hidden description do not replace the stable domain description.
 A hidden property renders no label, value, or interactive content.
 Changing the native `id` releases the old requirement and registers the new one.
+Under the default toolkit policy, non-null standard text, multiline text, Boolean, enum or bounded choice, exact and machine numeric, local date, millisecond local time, and millisecond local date-time values use genuine read-only internal Vaadin controls.
+Causeway retains the visible label, description, disabled reason, authoritative value, renderer precedence, errors, responsive layout, alignment hooks, and semantic events.
+Application renderers, protected values, nulls, references, resources, LOBs, offset, zoned, and legacy temporals, custom values, collections, unsupported values, and unqualified precision retain their established native or application renderer.
 
 `<cw-object-link>` renders title and bookmark identity as a native button with link semantics.
 Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
@@ -346,10 +349,12 @@ Property state and successful updates publish `causeway-property-interaction-sta
 == Actions and the standard interaction controller
 
 `<cw-action>` continues to render rich action `hidden` and `disabled` state without querying parameters or invoking independently.
-An enabled native button publishes cancelable `causeway-action-request` with `{actionId, identity, context}`.
+Under the default toolkit policy, its ordinary ready control uses an internal route-lazy Vaadin Button; explicit native policy and action-family failure use the established native button.
+Either control publishes the same cancelable `causeway-action-request` with `{actionId, identity, context}` exactly once for pointer, Enter-key, or Space-key activation.
 A disabled action exposes its reason through `aria-describedby` and cannot publish a request.
-A hidden action renders no actionable content.
-Native button behavior supplies equivalent pointer, Enter-key, and Space-key activation without a duplicate keyboard handler.
+A hidden action renders no actionable content, and late closure work cannot restore it.
+GraphQL invocation, parameter prompts, validation, results, navigation policy, and focus restoration remain owned by the existing interaction controller.
+Property edit, save, cancel, and clear controls, prompt controls, menu controls, and shell controls remain native.
 
 Place one empty interaction controller as a sibling of action components beneath their shared object context:
 
@@ -526,9 +531,9 @@ cw-object {
 }
 ----
 
-== Default Vaadin semantic field families
+== Default Vaadin semantic fields and ordinary actions
 
-The foundation qualifies internal Vaadin free-core controls for existing semantic editors without changing application markup or events.
+The foundation qualifies internal Vaadin free-core controls for eligible read-only scalar fields, existing semantic editors, and ordinary action buttons without changing application markup or events.
 `basic`, `numeric`, and `local-temporal` are enabled by default and each remains independently route-lazy.
 Ordinary JavaScript can select the complete native rollback before importing `index.mjs`:
 
@@ -536,7 +541,7 @@ Ordinary JavaScript can select the complete native rollback before importing `in
 ----
 import {configureCausewayFieldWidgets} from './field-widget.mjs';
 
-configureCausewayFieldWidgets({families: []});
+configureCausewayFieldWidgets({families: [], presentation: false});
 ----
 
 `basic` covers reversible text, multiline, protected, Boolean, enum, bounded scalar choice, and URL inputs.
@@ -546,9 +551,12 @@ Offset, zoned, legacy temporal, Blob, Clob, resource, custom, reference, collect
 References retain their separate adapter.
 
 Each family loads its own same-origin generated ESM asset on first eligible connection.
-A module failure disables only that family for the current document and rerenders through the existing native editor with Causeway-owned pending state.
+A module failure disables only that family for the current document and rerenders through the established native value or editor with Causeway-owned authoritative or pending state.
 Protected values initialize empty and are absent from adapter markup, semantic events, diagnostics, errors, and operation evidence.
-See `vaadin-fields/README.adoc` for pinned checksums, budgets, CSP hashes, legal metadata, verification, and audit commands.
+The independent `vaadin-actions` closure imports only the pinned free-core Button entry point and loads when the first visible eligible ordinary action connects.
+Action failure disables only ordinary action adaptation for the current document and preserves every existing Causeway action state and interaction path.
+See `vaadin-fields/README.adoc` and `vaadin-actions/README.adoc` for pinned checksums, budgets, CSP hashes, legal metadata, verification, and audit commands.
+Raw `vaadin-*` elements, package APIs, events, callbacks, and Shadow DOM are unsupported application integration points; applications continue to use `<cw-*>`, Causeway semantic events, documented light-DOM hooks, and `--causeway-*` variables.
 
 == Deliberate exclusions
 

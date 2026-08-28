@@ -26,6 +26,11 @@ import {
   renderCausewayEditor
 } from './editor-registry.mjs';
 import {
+  CAUSEWAY_FIELD_WIDGET_POLICY_EVENT,
+  renderCausewayReadOnlyField,
+  supportsCausewayReadOnlyField
+} from './field-widget.mjs';
+import {
   connectMemberComposition,
   disconnectMemberComposition,
   eventOriginatesFromAssociatedAction,
@@ -36,7 +41,7 @@ import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 import {namedType} from './introspection.mjs';
 import {InteractionStatus} from './types.mjs';
-import {CausewayValueCodecError} from './value-codecs.mjs';
+import {CausewayValueCodecError, selectCausewayValueCodec} from './value-codecs.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
 
 let propertySequence = 0;
@@ -133,6 +138,14 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     };
     this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
     this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
+    this.addEventListener('causeway-field-view-load-failed', event => {
+      if (eventOriginatesFromAssociatedAction(this, event.target)) {
+        return;
+      }
+      event.stopPropagation();
+      this.renderComponentState(this.componentState);
+    });
+    this._fieldWidgetPolicyListener = () => this.#rerenderForFieldPolicyChange();
   }
 
   get editable() {
@@ -183,11 +196,13 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    document.addEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
     connectMemberComposition(this);
     super.connectedCallback();
   }
 
   disconnectedCallback() {
+    document.removeEventListener(CAUSEWAY_FIELD_WIDGET_POLICY_EVENT, this._fieldWidgetPolicyListener);
     disconnectMemberComposition(this);
     clearTimeout(this.validationTimer);
     this.autoCompleteController?.abort();
@@ -457,10 +472,15 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       return;
     }
     const rendered = renderCausewayValue({value: propertyState.get, descriptor: state.descriptor}, this._rendererRegistry);
+    const readOnlyContext = this.#readOnlyFieldContext(propertyState.get, state.descriptor, presentation);
+    const useFieldView = rendered.standard === true
+      && ['scalar', 'enum'].includes(rendered.rendererId)
+      && supportsCausewayReadOnlyField(readOnlyContext);
+    const valueMarkup = useFieldView ? renderCausewayReadOnlyField(readOnlyContext) : rendered.html;
     const stringValueClass = namedType(state.descriptor?.value?.typeRef) === 'String'
       ? ' causeway-property-value-string'
       : '';
-    this.setAttribute('data-renderer', rendered.rendererId);
+    this.setAttribute('data-renderer', useFieldView ? 'vaadin-field-view' : rendered.rendererId);
     const editLabel = `Edit ${presentation.label}`;
     const editMarkup = this.#canOfferEdit(state)
       ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
@@ -469,10 +489,52 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   <span id="${this.labelId}" class="${presentation.labelClass}"${presentation.labelAttributes}>${escapeHtml(presentation.label)}</span>
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
-  <output class="causeway-property-value${stringValueClass}" aria-labelledby="${this.labelId}"${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${rendered.html}</output>
+  <output class="causeway-property-value${stringValueClass}" aria-labelledby="${this.labelId}"${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${valueMarkup}</output>
   ${editMarkup}
 </div>`);
     this.#restoreSavedEditFocus(state);
+  }
+
+  #rerenderForFieldPolicyChange() {
+    if (!this.componentState) return;
+    const restoreEditorFocus = Boolean(this.interactionState) && this.contains(document.activeElement);
+    if (this.interactionState) {
+      const fallback = renderCausewayEditor(this.#editorContext(), this._editorRegistry);
+      this.interactionState = Object.freeze({...this.interactionState, editor: fallback.editor});
+    }
+    this.renderComponentState(this.componentState);
+    if (restoreEditorFocus) {
+      queueMicrotask(() => this.querySelector?.('[data-causeway-editor]')?.focus?.());
+    }
+  }
+
+  #readOnlyFieldContext(value, descriptor, presentation) {
+    const inputType = descriptor?.value?.typeRef ?? descriptor?.fields?.get?.type ?? null;
+    const semanticType = this.componentState?.data?.datatype ?? namedType(inputType);
+    const enumValues = descriptor?.value?.typeDescription?.enumValues?.map?.(entry => entry.name ?? entry) ?? [];
+    const boundedChoice = descriptor?.fields?.has?.('choices') === true;
+    const base = {
+      name: this.id,
+      label: presentation.label,
+      value,
+      inputType,
+      semanticType,
+      enumValues,
+      choices: boundedChoice ? [{label: String(value), value: String(value)}] : [],
+      autoComplete: false,
+      required: true,
+      multiLine: this.multiLine,
+      inputId: `${this.inputId}-view`,
+      labelId: this.labelId,
+      descriptionId: presentation.describedBy,
+      testId: this.#testIdValue('value')
+    };
+    const codec = selectCausewayValueCodec(base);
+    return {
+      ...base,
+      codec,
+      controlValue: codec.toControlValue(value, base)
+    };
   }
 
   #restoreSavedEditFocus(state) {

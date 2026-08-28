@@ -98,7 +98,9 @@ class ReferenceAppHtmxApplication_IntegTest {
                 .contains("<cw-menubars>")
                 .contains("id=\"causeway-route\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
-                .contains("data-causeway-editor-toolkit=\"vaadin\"")
+                .contains("data-causeway-component-toolkit=\"vaadin\"")
+                .contains("data-causeway-presentation=\"vaadin\"")
+                .contains("data-causeway-action-buttons=\"vaadin\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"")
                 .contains("Compare Wicket viewer");

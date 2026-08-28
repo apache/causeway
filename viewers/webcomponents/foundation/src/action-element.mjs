@@ -17,6 +17,12 @@
  * under the License.
  */
 
+import {
+  CAUSEWAY_ACTION_WIDGET_POLICY_EVENT,
+  renderCausewayActionWidget,
+  renderNativeCausewayActionButton,
+  useCausewayActionWidget
+} from './action-widget.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
@@ -26,7 +32,7 @@ let actionSequence = 0;
 
 export class CausewayActionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'label'];
+    return ['id', 'label', 'data-testid'];
   }
 
   constructor() {
@@ -35,10 +41,28 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     this.descriptionId = `causeway-action-description-${sequence}`;
     this.reasonId = `causeway-action-reason-${sequence}`;
     this.addEventListener('click', event => {
-      if (event.target !== this) {
+      if (originatesFromOrdinaryActionControl(this, event.target)) {
         this.activate();
       }
     });
+    this.addEventListener('causeway-action-load-failed', event => event.stopPropagation());
+    this._actionWidgetPolicyListener = () => {
+      const restoreFocus = this.contains(document.activeElement);
+      this.renderComponentState(this.componentState);
+      if (restoreFocus) {
+        queueMicrotask(() => this.querySelector?.('[data-causeway-action-control], button')?.focus?.());
+      }
+    };
+  }
+
+  connectedCallback() {
+    document.addEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
+    super.disconnectedCallback();
   }
 
   get label() {
@@ -118,12 +142,25 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
       .filter(Boolean)
       .join(' ');
+    const testId = this.getAttribute('data-testid');
+    const control = {label, describedBy, disabled: Boolean(disabledReason), testId: testId ? `${testId}-control` : ''};
+    const controlMarkup = useCausewayActionWidget()
+      ? renderCausewayActionWidget(control)
+      : renderNativeCausewayActionButton(control);
     this.innerHTML = `<div class="causeway-action${disabledReason ? ' causeway-disabled' : ''}">
-  <button type="button"${disabledReason ? ' disabled aria-disabled="true"' : ''}${describedBy ? ` aria-describedby="${describedBy}"` : ''}>${escapeHtml(label)}</button>
+  ${controlMarkup}
   ${descriptionMarkup}
   ${disabledReason ? `<span id="${this.reasonId}" class="causeway-action-disabled-reason">${escapeHtml(disabledReason)}</span>` : ''}
 </div>`;
   }
+}
+
+function originatesFromOrdinaryActionControl(action, target) {
+  for (let current = target; current && current !== action;) {
+    if (['button', 'vaadin-button', 'cw-action-control'].includes(current.localName)) return true;
+    current = current.parentNode ?? current.host ?? current.getRootNode?.()?.host ?? null;
+  }
+  return false;
 }
 
 function humanize(value) {
