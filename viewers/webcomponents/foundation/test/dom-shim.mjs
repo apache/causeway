@@ -87,6 +87,12 @@ export function installDomShim() {
       this.dataset = {};
       this._mutationObservers = new Set();
     }
+    get id() {
+      return this.getAttribute('id') || '';
+    }
+    set id(value) {
+      this.setAttribute('id', value);
+    }
     setAttribute(name, value) {
       const oldValue = this.getAttribute(name);
       const newValue = String(value);

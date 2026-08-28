@@ -163,10 +163,10 @@ class ReferenceAppHtmxPlaywrightTest {
         final String id = context.getAttribute("object-id");
         assertThat(id).isNotBlank();
         assertThat(page.locator("cw-property").count()).isGreaterThan(4);
-        final Locator editableDecimal = page.locator("cw-property[member='readWriteProperty']");
+        final Locator editableDecimal = page.locator("cw-property[id='readWriteProperty']");
         assertThat(editableDecimal.count()).isEqualTo(1);
         editableDecimal.locator("[data-causeway-action='edit']").click();
-        final Locator decimalEditor = resolveEditor("cw-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        final Locator decimalEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         final String decimalLocalName = (String) decimalEditor.evaluate("element => element.localName");
         assertThat(decimalLocalName).isEqualTo(fieldFamiliesEnabled() ? "vaadin-text-field" : "input");
         assertThat(decimalEditor.evaluate("element => element.localName === 'input' ? element.inputMode : element.inputElement?.inputMode"))
@@ -183,9 +183,9 @@ class ReferenceAppHtmxPlaywrightTest {
             final String encodedId = OBJECT_MAPPER.writeValueAsString(decimalEntityId);
             try {
                 fillEditor(decimalEditor, updatedDecimal);
-                page.waitForFunction("() => document.querySelector(\"cw-property[member='readWriteProperty'] [data-causeway-action='save']\")?.disabled === false");
+                page.waitForFunction("() => document.querySelector(\"cw-property[id='readWriteProperty'] [data-causeway-action='save']\")?.disabled === false");
                 editableDecimal.locator("[data-causeway-action='save']").click();
-                page.waitForFunction("() => !document.querySelector(\"cw-property[member='readWriteProperty'] [data-causeway-editor]\")");
+                page.waitForFunction("() => !document.querySelector(\"cw-property[id='readWriteProperty'] [data-causeway-editor]\")");
                 final JsonNode changed = executeGraphQL("{ rich { demo_BigDecimalEntity(object: {id: "
                         + encodedId + "}) { readWriteProperty { get } } } }");
                 assertThat(changed.at("/data/rich/demo_BigDecimalEntity/readWriteProperty/get").asText())
@@ -298,9 +298,9 @@ class ReferenceAppHtmxPlaywrightTest {
         final String urlPageId = invokeViewModel("demo_JavaNetTypesMenu", "urls", "rich__demo_Urls");
         openObject("demo.UrlEntity", firstCollectionEntityId(
                 "demo_Urls", urlPageId, "rich__demo_UrlEntity"));
-        final Locator urlProperty = page.locator("cw-property[member='readWriteProperty']");
+        final Locator urlProperty = page.locator("cw-property[id='readWriteProperty']");
         urlProperty.locator("[data-causeway-action='edit']").click();
-        final Locator urlEditor = resolveEditor("cw-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        final Locator urlEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         assertThat(urlEditor.evaluate("element => element.localName === 'input' ? element.type : element.inputElement?.inputMode"))
                 .isEqualTo("url");
         assertThat(urlEditor.evaluate("element => element.localName"))
@@ -311,9 +311,9 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_CausewayTypesMenu", "passwords", "rich__demo_CausewayPasswords");
         openObject("demo.CausewayPasswordEntity", firstCollectionEntityId(
                 "demo_CausewayPasswords", passwordPageId, "rich__demo_CausewayPasswordEntity"));
-        final Locator passwordProperty = page.locator("cw-property[member='readWriteProperty']");
+        final Locator passwordProperty = page.locator("cw-property[id='readWriteProperty']");
         passwordProperty.locator("[data-causeway-action='edit']").click();
-        final Locator passwordEditor = resolveEditor("cw-property[member='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
+        final Locator passwordEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         assertThat(passwordEditor.evaluate("element => element.localName === 'input' ? element.type : element.localName"))
                 .isEqualTo(fieldFamiliesEnabled() ? "vaadin-password-field" : "password");
         assertThat(passwordEditor.evaluate("element => element.value")).isEqualTo("");
@@ -330,7 +330,7 @@ class ReferenceAppHtmxPlaywrightTest {
         assertThat(compositeContext.getAttribute("object-id")).isEqualTo(compositeId);
         assertThat(page.evaluate("() => decodeURIComponent(location.pathname.substring(location.pathname.lastIndexOf('/') + 1))"))
                 .isEqualTo(compositeId);
-        final Locator complexNumber = page.locator("cw-property[member='complexNumber']");
+        final Locator complexNumber = page.locator("cw-property[id='complexNumber']");
         complexNumber.waitFor();
         assertThat(complexNumber.count()).isEqualTo(1);
         assertThat(complexNumber.innerText()).isNotBlank();
@@ -353,21 +353,21 @@ class ReferenceAppHtmxPlaywrightTest {
     void textMultilineNullableDisabledInvalidCancelledAndStalePropertyStatesRemainVisible() {
         openObject("demo.PropertyLayoutMultiLinePage", invokeViewModel(
                 "demo_PropertyLayoutMenu", "multiLine", "rich__demo_PropertyLayoutMultiLinePage"));
-        final Locator multiline = page.locator("cw-property[member='propertyUsingAnnotation']");
+        final Locator multiline = page.locator("cw-property[id='propertyUsingAnnotation']");
         assertThat(multiline.count()).isEqualTo(1);
         multiline.locator("[data-causeway-action='edit']").click();
-        final Locator multilineEditor = resolveEditor("cw-property[member='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
+        final Locator multilineEditor = resolveEditor("cw-property[id='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
         assertThat(multilineEditor.evaluate("element => element.localName"))
                 .isEqualTo(fieldFamiliesEnabled() ? "vaadin-text-field" : "input");
         multiline.locator("[data-causeway-action='cancel']").click();
-        assertThat(page.locator("cw-property[member='propertyUsingAnnotationReadOnly'] "
+        assertThat(page.locator("cw-property[id='propertyUsingAnnotationReadOnly'] "
                 + ".causeway-property-label.causeway-property-disabled-tooltip").count()).isEqualTo(1);
 
         openObject("demo.PropertyOptionalityPage", invokeViewModel(
                 "demo_PropertyMenu", "optionality", "rich__demo_PropertyOptionalityPage"));
-        assertThat(page.locator("cw-property[member='mandatoryProperty']").count()).isEqualTo(1);
-        assertThat(page.locator("cw-property[member='nullableProperty']").count()).isEqualTo(1);
-        assertThat(page.locator("cw-property[member='optionalProperty']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-property[id='mandatoryProperty']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-property[id='nullableProperty']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-property[id='optionalProperty']").count()).isEqualTo(1);
 
         openObject("demo.PropertyMustSatisfyPage", invokeViewModel(
                 "demo_PropertyMenu", "mustSatisfy", "rich__demo_PropertyMustSatisfyPage"));
@@ -384,7 +384,7 @@ class ReferenceAppHtmxPlaywrightTest {
         openObject("demo.PropertyLayoutHiddenPage", invokeViewModel(
                 "demo_PropertyLayoutMenu", "hidden", "rich__demo_PropertyLayoutHiddenPage"));
         assertThat(page.locator("cw-property").count()).isEqualTo(2);
-        assertThat(page.locator("cw-property[member^='name']").count()).isZero();
+        assertThat(page.locator("cw-property[id^='name']").count()).isZero();
 
         if (fieldFamiliesEnabled()) {
             openObject("demo.PropertyLayoutMultiLinePage", invokeViewModel(
@@ -398,11 +398,11 @@ class ReferenceAppHtmxPlaywrightTest {
                       });
                     }
                     """);
-            final Locator fallbackProperty = page.locator("cw-property[member='propertyUsingAnnotation']");
+            final Locator fallbackProperty = page.locator("cw-property[id='propertyUsingAnnotation']");
             fallbackProperty.locator("[data-causeway-action='edit']").click();
             final Locator fallback;
             try {
-                fallback = resolveEditor("cw-property[member='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
+                fallback = resolveEditor("cw-property[id='propertyUsingAnnotation'] [data-causeway-editor='propertyUsingAnnotation']");
             } catch (com.microsoft.playwright.TimeoutError cause) {
                 throw new AssertionError(String.valueOf(fallbackProperty.evaluate("element => element.outerHTML")), cause);
             }
@@ -454,16 +454,16 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_CollectionLayoutMenu", "paged", "rich__demo_CollectionLayoutPagedPage"));
         final String childrenState = waitForCollectionOutcome("children");
         assertThat(childrenState).isEqualTo("ready");
-        final int pageRows = page.locator("cw-collection[member='children'] .causeway-collection-rows li").count();
+        final int pageRows = page.locator("cw-collection[id='children'] .causeway-collection-rows li").count();
         assertThat(pageRows).isBetween(1, 20);
-        assertThat(page.locator("cw-collection[member='children'] cw-object-link").count())
+        assertThat(page.locator("cw-collection[id='children'] cw-object-link").count())
                 .isEqualTo(pageRows);
         assertThat(waitForCollectionOutcome("moreChildren")).isEqualTo("ready");
 
         openObject("demo.ActionChoicesFromPage", invokeViewModel(
                 "demo_ActionMenu", "choicesFrom", "rich__demo_ActionChoicesFromPage"));
         assertThat(waitForCollectionOutcome("objects")).isEqualTo("ready");
-        final Locator polymorphicObjects = page.locator("cw-collection[member='objects']");
+        final Locator polymorphicObjects = page.locator("cw-collection[id='objects']");
         assertThat(polymorphicObjects.locator("cw-object-link").count()).isGreaterThan(0);
         final String polymorphicSelection = (String) polymorphicObjects
                 .evaluate("element => JSON.stringify(element.collectionState.rowSelection)");
@@ -473,9 +473,9 @@ class ReferenceAppHtmxPlaywrightTest {
                 "demo_CollectionMenu", "typeOf", "rich__demo_CollectionTypeOfPage"));
         final String typeOfChildrenState = waitForCollectionOutcome("children");
         assertThat(typeOfChildrenState).isEqualTo("ready");
-        assertThat(page.locator("cw-collection[member='children'] cw-object-link").count())
+        assertThat(page.locator("cw-collection[id='children'] cw-object-link").count())
                 .isGreaterThan(0);
-        final Locator otherChildren = page.locator("cw-collection[member='otherChildren']");
+        final Locator otherChildren = page.locator("cw-collection[id='otherChildren']");
         assertThat(otherChildren.count()).isEqualTo(1);
         assertThat(otherChildren.evaluate("element => element.collectionState.status")).isEqualTo("idle");
         final String panelId = (String) otherChildren.evaluate("element => element.closest('[role=tabpanel]')?.id || null");
@@ -614,7 +614,7 @@ class ReferenceAppHtmxPlaywrightTest {
     }
 
     private Locator objectAction(final String member) {
-        final Locator host = page.locator("cw-action[member='" + member + "']").first();
+        final Locator host = page.locator("cw-action[id='" + member + "']").first();
         final Locator action = host.locator("button");
         action.waitFor();
         action.scrollIntoViewIfNeeded();
@@ -632,12 +632,12 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private void waitForCollectionRows(final String member) {
         assertThat(waitForCollectionOutcome(member)).isEqualTo("ready");
-        assertThat(page.locator("cw-collection[member='" + member + "'] tbody tr").count()).isGreaterThan(0);
+        assertThat(page.locator("cw-collection[id='" + member + "'] tbody tr").count()).isGreaterThan(0);
     }
 
     private String waitForCollectionOutcome(final String member) {
-        page.waitForFunction("member => ['ready', 'partial-error', 'error'].includes(document.querySelector(`cw-collection[member='${member}']`)?.collectionState?.status)", member);
-        return (String) page.locator("cw-collection[member='" + member + "']")
+        page.waitForFunction("member => ['ready', 'partial-error', 'error'].includes(document.querySelector(`cw-collection[id='${member}']`)?.collectionState?.status)", member);
+        return (String) page.locator("cw-collection[id='" + member + "']")
                 .evaluate("element => element.collectionState.status");
     }
 
@@ -806,9 +806,9 @@ class ReferenceAppHtmxPlaywrightTest {
             final String nativeTag) {
         final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
         openObject(entityLogicalType, firstCollectionEntityId(objectField, pageId, entityResultType));
-        final Locator property = page.locator("cw-property[member='" + member + "']");
+        final Locator property = page.locator("cw-property[id='" + member + "']");
         property.locator("[data-causeway-action='edit']").click();
-        final Locator editor = resolveEditor("cw-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
+        final Locator editor = resolveEditor("cw-property[id='" + member + "'] [data-causeway-editor='" + member + "']");
         assertThat(editor.evaluate("element => element.localName"))
                 .isEqualTo(fieldFamiliesEnabled() ? vaadinTag : nativeTag);
         if (fieldFamiliesEnabled()) {
@@ -836,9 +836,9 @@ class ReferenceAppHtmxPlaywrightTest {
                 ? firstCollectionEntityId(objectField, pageId, entityResultType)
                 : pickerCompatibleCollectionEntityId(objectField, pageId, entityResultType, member);
         openObject(entityLogicalType, entityId);
-        final Locator property = page.locator("cw-property[member='" + member + "']");
+        final Locator property = page.locator("cw-property[id='" + member + "']");
         property.locator("[data-causeway-action='edit']").click();
-        final Locator editor = resolveEditor("cw-property[member='" + member + "'] [data-causeway-editor='" + member + "']");
+        final Locator editor = resolveEditor("cw-property[id='" + member + "'] [data-causeway-editor='" + member + "']");
         final String localName = String.valueOf(editor.evaluate("element => element.localName"));
         if (vaadinTag != null && fieldFamiliesEnabled()) {
             assertThat(localName).isEqualTo(vaadinTag);

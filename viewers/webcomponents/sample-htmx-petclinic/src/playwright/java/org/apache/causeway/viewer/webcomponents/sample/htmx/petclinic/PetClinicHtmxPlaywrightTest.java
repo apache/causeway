@@ -194,19 +194,19 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
-        assertThat(page.locator(".petclinic-page-toolbar cw-action[member='delete']").count()).isEqualTo(1);
-        assertThat(page.locator("cw-property[member='name'] > cw-action[member='updateName']").count())
+        assertThat(page.locator(".petclinic-page-toolbar cw-action[id='delete']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-property[id='name'] > cw-action[id='updateName']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("cw-collection[member='pets'] > cw-action[member='addPet']").count())
+        assertThat(page.locator("cw-collection[id='pets'] > cw-action[id='addPet']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("cw-collection[member='pets'] > cw-action[member='removePet']").count())
+        assertThat(page.locator("cw-collection[id='pets'] > cw-action[id='removePet']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("cw-collection[member='visits'] > cw-action[member='bookVisit']").count())
+        assertThat(page.locator("cw-collection[id='visits'] > cw-action[id='bookVisit']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("cw-collection[member='pets']")
-                .evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.getAttribute('member')).join(',')"))
+        assertThat(page.locator("cw-collection[id='pets']")
+                .evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.getAttribute('id')).join(',')"))
                 .isEqualTo("addPet,removePet");
-        assertThat(page.locator("cw-property[member='name']")
+        assertThat(page.locator("cw-property[id='name']")
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         page.goBack();
@@ -234,7 +234,7 @@ class PetClinicHtmxPlaywrightTest {
         page.setViewportSize(390, 844);
         final var horizontalOverflow = (Number) page.evaluate(
                 "() => document.documentElement.scrollWidth - document.documentElement.clientWidth");
-        final var overflowingElements = page.evaluate("() => [...document.querySelectorAll('body *')].map(element => { const rect = element.getBoundingClientRect(); return {tag: element.tagName, className: String(element.className || ''), member: element.getAttribute('member'), left: rect.left, right: rect.right, width: rect.width}; }).filter(value => value.right > document.documentElement.clientWidth + 0.5 || value.left < -0.5).slice(0, 20)");
+        final var overflowingElements = page.evaluate("() => [...document.querySelectorAll('body *')].map(element => { const rect = element.getBoundingClientRect(); return {tag: element.tagName, className: String(element.className || ''), member: element.getAttribute('id'), left: rect.left, right: rect.right, width: rect.width}; }).filter(value => value.right > document.documentElement.clientWidth + 0.5 || value.left < -0.5).slice(0, 20)");
         assertThat(horizontalOverflow)
                 .as("overflowing elements: %s", overflowingElements)
                 .isEqualTo(0);
@@ -330,25 +330,25 @@ class PetClinicHtmxPlaywrightTest {
     void propertyEditingAndPromptFocusRemainDeterministic() {
         openObject("petclinic.PetOwner", "s_owner-mary");
 
-        final var disabledNameLabel = page.locator("cw-property[member='name'] .causeway-property-label.causeway-property-disabled-tooltip");
+        final var disabledNameLabel = page.locator("cw-property[id='name'] .causeway-property-label.causeway-property-disabled-tooltip");
         disabledNameLabel.waitFor();
         assertThat(disabledNameLabel.getAttribute("data-tooltip")).isNotBlank();
         assertThat(disabledNameLabel.getAttribute("tabindex")).isEqualTo("0");
-        assertThat(page.locator("cw-property[member='name'] .causeway-property-disabled-indicator").count()).isZero();
-        assertThat((String) page.locator("cw-property[member='name'] .causeway-property-value-string")
+        assertThat(page.locator("cw-property[id='name'] .causeway-property-disabled-indicator").count()).isZero();
+        assertThat((String) page.locator("cw-property[id='name'] .causeway-property-value-string")
                 .evaluate("element => getComputedStyle(element).textAlign"))
                 .isIn("start", "left");
 
-        final var knownAs = page.locator("cw-property[member='knownAs']");
+        final var knownAs = page.locator("cw-property[id='knownAs']");
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
         knownAsEdit.click();
-        final var knownAsEditorSelector = "cw-property[member='knownAs'] [data-causeway-editor='knownAs']";
+        final var knownAsEditorSelector = "cw-property[id='knownAs'] [data-causeway-editor='knownAs']";
         final var knownAsEditor = resolveEditor(knownAsEditorSelector);
         assertFocused(knownAsEditorSelector);
-        final var knownAsSaveSelector = "cw-property[member='knownAs'] [data-causeway-action='save']";
-        final var knownAsCancelSelector = "cw-property[member='knownAs'] [data-causeway-action='cancel']";
+        final var knownAsSaveSelector = "cw-property[id='knownAs'] [data-causeway-action='save']";
+        final var knownAsCancelSelector = "cw-property[id='knownAs'] [data-causeway-action='cancel']";
         if (!nativeToolkit()) {
-            final var knownAsClearSelector = "cw-property[member='knownAs'] .causeway-field-clear";
+            final var knownAsClearSelector = "cw-property[id='knownAs'] .causeway-field-clear";
             knownAsEditor.press("Tab");
             assertFocused(knownAsClearSelector);
             page.locator(knownAsClearSelector).press("Enter");
@@ -370,14 +370,14 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(knownAsCancelSelector);
         page.locator(knownAsCancelSelector).click();
 
-        final var notes = page.locator("cw-property[member='notes']");
+        final var notes = page.locator("cw-property[id='notes']");
         final var notesEdit = notes.locator("[data-causeway-action='edit']");
         revealContainingTab(notes, notesEdit);
         assertThat(notes.locator(".causeway-property-label").getAttribute("title"))
                 .isEqualTo("Additional notes about this pet owner.");
         assertWideMultilinePropertyLayout(notes);
         notesEdit.click();
-        final var notesEditor = resolveEditor("cw-property[member='notes'] [data-causeway-editor='notes']");
+        final var notesEditor = resolveEditor("cw-property[id='notes'] [data-causeway-editor='notes']");
         assertThat(notesEditor.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
                 .isEqualTo(5);
         fillEditor(notesEditor, "First line\nSecond line");
@@ -389,7 +389,7 @@ class PetClinicHtmxPlaywrightTest {
 
         editProperty("telephoneNumber", "020 7000 1234");
         waitForPropertyValue("telephoneNumber", "020 7000 1234");
-        assertFocused("cw-property[member='telephoneNumber'] [data-causeway-action='edit']");
+        assertFocused("cw-property[id='telephoneNumber'] [data-causeway-action='edit']");
         editProperty("telephoneNumber", "020 7946 0312");
         waitForPropertyValue("telephoneNumber", "020 7946 0312");
 
@@ -402,13 +402,13 @@ class PetClinicHtmxPlaywrightTest {
         waitForPromptError("cannot contain");
         assertFocused(parameter("name"));
         cancelPrompt();
-        assertFocused("cw-action[member='updateName'] button");
+        assertFocused("cw-action[id='updateName'] button");
 
         updateName.click();
         waitForPrompt("updateName");
         resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertFocused("cw-action[member='updateName'] button");
+        assertFocused("cw-action[id='updateName'] button");
     }
 
     @Test
@@ -571,7 +571,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void clickObjectLinkInCollection(final String member, final String titlePart) {
-        clickObjectLink(page.locator("cw-collection[member='" + member + "'] cw-object-link button"), titlePart);
+        clickObjectLink(page.locator("cw-collection[id='" + member + "'] cw-object-link button"), titlePart);
     }
 
     private void clickObjectLink(final Locator links, final String titlePart) {
@@ -619,7 +619,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private Locator objectAction(final String member) {
-        final var host = page.locator("cw-action[member='" + member + "']").first();
+        final var host = page.locator("cw-action[id='" + member + "']").first();
         final var action = host.locator("button");
         action.waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
@@ -758,7 +758,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void editProperty(final String member, final String value) {
-        final var property = "cw-property[member='" + member + "']";
+        final var property = "cw-property[id='" + member + "']";
         final var propertyLocator = page.locator(property);
         final var edit = propertyLocator.locator("[data-causeway-action='edit']");
         edit.waitFor(new Locator.WaitForOptions()
@@ -797,11 +797,11 @@ class PetClinicHtmxPlaywrightTest {
 
     private void waitForCollectionRows(final String member, final int count) {
         try {
-            page.waitForFunction("args => document.querySelectorAll(`cw-collection[member='${args.member}'] tbody tr, cw-collection[member='${args.member}'] .causeway-collection-rows > li`).length === args.count",
+            page.waitForFunction("args => document.querySelectorAll(`cw-collection[id='${args.member}'] tbody tr, cw-collection[id='${args.member}'] .causeway-collection-rows > li`).length === args.count",
                     java.util.Map.of("member", member, "count", count));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
             final var collections = page.locator("cw-collection").evaluateAll(
-                    "elements => elements.map(element => ({member: element.getAttribute('member'), state: element.dataset.state, rows: element.querySelectorAll('tbody tr, .causeway-collection-rows > li').length, text: element.innerText}))");
+                    "elements => elements.map(element => ({member: element.getAttribute('id'), state: element.dataset.state, rows: element.querySelectorAll('tbody tr, .causeway-collection-rows > li').length, text: element.innerText}))");
             throw new AssertionError("Expected " + count + " rows for " + member + " at " + page.url()
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
                     + "; collections=" + collections, cause);
@@ -813,12 +813,12 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForPropertyValue(final String member, final String value) {
-        final var selector = "cw-property[member='" + member + "'] .causeway-property-value";
+        final var selector = "cw-property[id='" + member + "'] .causeway-property-value";
         try {
             page.waitForFunction("args => document.querySelector(args.selector)?.textContent.includes(args.value)",
                     java.util.Map.of("selector", selector, "value", value));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
-            final var property = page.locator("cw-property[member='" + member + "']");
+            final var property = page.locator("cw-property[id='" + member + "']");
             final var context = page.locator("#causeway-route cw-object-context");
             throw new AssertionError("Expected property " + member + " to contain '" + value + "' at " + page.url()
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")

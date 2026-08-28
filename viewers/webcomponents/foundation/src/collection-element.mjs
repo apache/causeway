@@ -44,7 +44,7 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
     const columns = [...(collection.children ?? collection.childNodes ?? [])]
       .filter(child => child.localName === 'cw-collection-column' || child?.configuration?.member)
       .map(child => ({
-        member: child.getAttribute('member') || '',
+        member: child.id || '',
         label: child.getAttribute('label') || '',
         testId: child.getAttribute('data-testid') || null
       }))
@@ -57,7 +57,7 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
 
 export class CausewayCollectionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['member', 'label', 'active'];
+    return ['id', 'label', 'active'];
   }
 
   constructor() {
@@ -94,14 +94,6 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         this.activate();
       }
     });
-  }
-
-  get member() {
-    return this.getAttribute('member') || '';
-  }
-
-  set member(value) {
-    this.setAttribute('member', value);
   }
 
   get label() {
@@ -182,7 +174,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     if (oldValue === newValue || !this.connectionStarted) {
       return;
     }
-    if (name === 'member') {
+    if (name === 'id') {
       refreshMemberComposition(this);
       this.loadAbortController?.abort();
       this.loadAbortController = null;
@@ -197,7 +189,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   createRequirement() {
-    return {kind: 'collection', member: this.member};
+    return {kind: 'collection', member: this.id};
   }
 
   acceptComponentState(state) {
@@ -233,7 +225,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.#publishCollectionState();
     try {
       const result = await context.loadCollection({
-        member: this.member,
+        member: this.id,
         columns: this._columns,
         offset,
         size,
@@ -290,7 +282,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     if (!state) {
       return;
     }
-    const label = this.label || humanize(this.member);
+    const label = this.label || humanize(this.id);
     const candidateDescription = state.descriptor?.description || '';
     const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
       ? ''
@@ -413,7 +405,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       if (child?.localName !== 'cw-collection-column') {
         continue;
       }
-      const member = child?.configuration?.member ?? child?.getAttribute?.('member');
+      const member = child?.configuration?.member ?? child?.id;
       if (!member || this._columns.some(column => column.member === member)) {
         continue;
       }
@@ -428,7 +420,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   #publishCollectionState() {
     this.dispatchEvent(createSemanticEvent(
       CausewaySemanticEvent.COLLECTION_STATE,
-      {element: this, member: this.member, state: this.collectionState}
+      {element: this, member: this.id, state: this.collectionState}
     ));
   }
 }

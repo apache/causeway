@@ -83,7 +83,7 @@ export class CausewayContextConsumerElement extends HTMLElementBase {
     this.renderComponentState(state);
     this.dispatchEvent(createSemanticEvent(COMPONENT_STATE_EVENT, {
       element: this,
-      member: this.getAttribute?.('member') ?? null,
+      member: state?.requirement?.member ?? null,
       state
     }));
   }

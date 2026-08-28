@@ -322,7 +322,7 @@ After it becomes ready, mount another property:
 const context = document.querySelector('cw-object-context');
 const property = document.createElement('cw-property');
 
-property.setAttribute('member', 'code');
+property.setAttribute('id', 'code');
 context.append(property);
 ----
 
