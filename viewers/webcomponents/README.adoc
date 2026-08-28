@@ -246,7 +246,7 @@ Verify that `<cw-menubars>` reaches `data-menu-state="ready"` or bounded `partia
 Verify that `<cw-object>` reaches `data-layout-state="ready"` for an authorized effective grid or `fallback` when the resource is unavailable.
 Verify that its generated `<cw-object-header>` renders object title and identity and each discovered member is placed at most once.
 Verify that each visible property has one Causeway label and an `<output>` value, with eligible standard values using genuine read-only internal fields under the default toolkit and established renderers under explicit native rollback.
-Verify that ordinary action controls use internal Vaadin Buttons by default and established native buttons under rollback, while prompt, property-interaction, menu, and shell controls remain native.
+Verify that ordinary action controls use internal Vaadin Buttons and each qualified application-menu tier uses an internal Vaadin Menu Bar by default, while explicit native rollback restores established buttons and menus and prompt, property-interaction, and non-menu shell controls remain native.
 Verify that values containing markup-like characters are escaped rather than interpreted as HTML.
 Verify that hidden properties produce no visible content.
 Verify that disabled properties expose `aria-disabled="true"` and their disabled reason.

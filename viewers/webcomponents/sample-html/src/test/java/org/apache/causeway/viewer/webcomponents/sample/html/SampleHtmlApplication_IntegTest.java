@@ -127,10 +127,14 @@ class SampleHtmlApplication_IntegTest {
                 .contains("Component interaction showcase")
                 .contains("Qualified presentation")
                 .contains("?component-toolkit=native")
+                .contains("?menu-state=empty")
+                .contains("?menu-state=unsupported")
                 .contains("?fail-field=basic")
                 .contains("?fail-action=true")
+                .contains("?fail-menubar=true")
                 .contains("dataset.causewayPresentation = componentToolkit")
                 .contains("dataset.causewayActionButtons = componentToolkit")
+                .contains("dataset.causewayApplicationMenubar = forcedMenuState ? 'native' : componentToolkit")
                 .contains("/causeway-webcomponents/component-styles.css")
                 .contains("/causeway-webcomponents/theme.css")
                 .contains("await import('/causeway-webcomponents/index.mjs')")
@@ -160,6 +164,9 @@ class SampleHtmlApplication_IntegTest {
                 .contains("./menu-context-controller.mjs")
                 .contains("./menu-layout.mjs")
                 .contains("./menubar-element.mjs")
+                .contains("./menubar-projection.mjs")
+                .contains("./menubar-qualification.mjs")
+                .contains("./menubar-widget.mjs")
                 .contains("./menubars-element.mjs")
                 .contains("./object-element.mjs")
                 .contains("./object-layout.mjs")
@@ -172,6 +179,16 @@ class SampleHtmlApplication_IntegTest {
         final var actionPolicy = get("/causeway-webcomponents/vaadin-actions/csp-policy.json");
         assertThat(actionPolicy.statusCode()).isEqualTo(200);
         assertThat(actionPolicy.body())
+                .contains("styleHashes")
+                .contains("sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
+
+        final var menubarAsset = get("/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js");
+        assertThat(menubarAsset.statusCode()).isEqualTo(200);
+        assertThat(menubarAsset.body()).contains("vaadin-menu-bar");
+
+        final var menubarPolicy = get("/causeway-webcomponents/vaadin-menubar/csp-policy.json");
+        assertThat(menubarPolicy.statusCode()).isEqualTo(200);
+        assertThat(menubarPolicy.body())
                 .contains("styleHashes")
                 .contains("sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
     }

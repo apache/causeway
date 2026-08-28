@@ -121,6 +121,8 @@ class ReferenceAppHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(page.locator("html").getAttribute("data-causeway-action-buttons"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(page.locator("html").getAttribute("data-causeway-application-menubar"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         if (nativeToolkit()) {
             assertThat(toolkitRequests).isEmpty();
         } else {
@@ -129,11 +131,14 @@ class ReferenceAppHtmxPlaywrightTest {
             assertThat(toolkitRequests.stream()
                     .filter(request -> request.contains("/vaadin-actions/vaadin-actions.js"))
                     .count()).as(toolkitRequests.toString()).isEqualTo(1);
+            assertThat(toolkitRequests.stream()
+                    .filter(request -> request.contains("/vaadin-menubar/vaadin-menubar.js"))
+                    .count()).as(toolkitRequests.toString()).isEqualTo(1);
         }
         assertThat(referenceAssetRequests()).isZero();
 
         openMenu("Prog Model");
-        serviceAction("demo.ActionChoicesMenu", "choices").click();
+        activateServiceAction("demo.ActionChoicesMenu", "choices");
         waitForLogicalType("demo.ActionChoices");
         page.waitForFunction("() => ['ready', 'fallback', 'partial-error'].includes(document.querySelector('#causeway-route cw-object')?.dataset.layoutState)");
         assertThat(page.locator(PROMPT).count()).isZero();
@@ -162,6 +167,78 @@ class ReferenceAppHtmxPlaywrightTest {
         assertThat(openCandidateOverlays()).isZero();
         assertThat(referenceAssetRequests()).isZero();
         assertSemanticAccessibility();
+    }
+
+    @Test
+    void menuBarHierarchyResponsiveRefreshAndStaleItemsRemainCausewayOwned() {
+        openShell();
+        final List<?> hierarchy = (List<?>) page.evaluate("""
+                () => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')]
+                  .filter(host => host._projection?.accepted)
+                  .map(host => ({
+                    role: host._projection.role,
+                    generation: host._projection.generation,
+                    menus: host._projection.menus.map(menu => ({
+                      label: menu.label,
+                      sections: menu.sections.map(section => ({
+                        label: section.label,
+                        actions: section.actions.map(action => ({
+                          service: action.serviceLogicalTypeName,
+                          id: action.actionId,
+                          label: action.label,
+                          disabled: action.disabled,
+                          reason: action.disabledReason
+                        }))
+                      }))
+                    }))
+                  }))
+                """);
+        assertThat(hierarchy).isNotEmpty();
+        assertThat(hierarchy.stream().map(value -> String.valueOf(((Map<?, ?>) value).get("role"))).toList())
+                .contains("primary", "secondary", "tertiary");
+        assertThat(hierarchy.toString()).contains("Prog Model").contains("choices");
+        assertThat(hierarchy.toString()).contains("disabled=true").contains("reason=");
+        if (nativeToolkit()) {
+            assertThat(page.locator("cw-menubar-control").count()).isZero();
+        } else {
+            assertThat(page.locator("cw-menubar-control vaadin-menu-bar").count()).isEqualTo(hierarchy.size());
+            assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
+                    .isEqualTo(1);
+        }
+
+        final int readsBeforeResize = graphQLRequests.size();
+        page.setViewportSize(390, 844);
+        try {
+            page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarResponsive === 'narrow')");
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = page.locator("cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary")
+                    .evaluateAll("elements => elements.map(element => ({role: element.dataset.causewayBar, hidden: element.hidden, responsive: element.dataset.causewayMenubarResponsive, presentation: element.dataset.causewayMenubarPresentation, width: element.getBoundingClientRect().width}))");
+            throw new AssertionError("Menu Bar did not become narrow: " + diagnostics, cause);
+        }
+        assertThat(page.locator("body").evaluate("body => body.scrollWidth <= document.documentElement.clientWidth")).isEqualTo(true);
+        page.setViewportSize(1440, 900);
+        page.waitForFunction("() => document.querySelector('cw-menubar-primary')?.dataset.causewayMenubarResponsive === 'wide'");
+        assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResize);
+
+        final int generation = ((Number) page.locator("cw-menubar-primary")
+                .evaluate("host => host._projection?.generation ?? 0")).intValue();
+        final int requestsBeforeRefresh = graphQLRequests.size();
+        page.evaluate("() => document.querySelector('cw-menubars').refresh()");
+        page.waitForFunction("generation => document.querySelector('cw-menubar-primary')?._projection?.generation > generation", generation);
+        if (!nativeToolkit()) {
+            page.waitForFunction("() => document.querySelector('cw-menubar-primary cw-menubar-control')?.dataset.widgetState === 'ready'");
+            final int afterRefresh = graphQLRequests.size();
+            page.locator("cw-menubar-primary").evaluate("""
+                    host => {
+                      const current = Object.values(host._projection.actions).find(action => !action.disabled);
+                      const staleKey = `${host._projection.generation - 1}:primary:0:0:0`;
+                      host.querySelector('vaadin-menu-bar').dispatchEvent(new CustomEvent('item-selected', {detail: {value: {causewayKey: staleKey}}}));
+                    }
+                    """);
+            page.waitForTimeout(50);
+            assertThat(graphQLRequests.size()).isEqualTo(afterRefresh);
+        }
+        assertThat(graphQLRequests.size()).isGreaterThan(requestsBeforeRefresh);
     }
 
     @Test
@@ -659,6 +736,59 @@ class ReferenceAppHtmxPlaywrightTest {
     }
 
     @Test
+    void menuBarFailureFallsBackAcrossTiersAndRecoversWithoutAffectingOtherFamilies() {
+        if (nativeToolkit()) {
+            openShell();
+            assertThat(page.locator("cw-menubar-control").count()).isZero();
+            return;
+        }
+        final String menuBarRoute = "**/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js";
+        page.route(menuBarRoute, route -> route.fulfill(new Route.FulfillOptions()
+                .setStatus(200)
+                .setContentType("application/javascript")
+                .setBody("throw new Error('Intentional value-free Menu Bar family failure.');")));
+        page.navigate(url("/htmx"), new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+        page.waitForFunction("() => ['ready', 'partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
+        try {
+            page.waitForFunction("() => document.documentElement.dataset.causewayMenubarFamily === 'failed' && [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarFallback === 'family-failed' && !element.querySelector('cw-menubar-control'))");
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = page.evaluate("() => ({family: document.documentElement.dataset.causewayMenubarFamily, phase: document.documentElement.dataset.causewayMenubarFailurePhase, classification: document.documentElement.dataset.causewayMenubarFailureClassification, bars: [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].map(element => ({role: element.dataset.causewayBar, hidden: element.hidden, presentation: element.dataset.causewayMenubarPresentation, fallback: element.dataset.causewayMenubarFallback, control: element.querySelector('cw-menubar-control')?.dataset.widgetState}))})");
+            throw new AssertionError("Menu Bar failure did not settle: " + diagnostics + "; requests=" + toolkitRequests, cause);
+        }
+        assertThat(page.locator("[data-causeway-menu-disclosure]").count()).isGreaterThan(0);
+        assertThat(page.locator("html").getAttribute("data-causeway-menubar-failure-classification"))
+                .isEqualTo("MENUBAR_MODULE_UNAVAILABLE");
+        assertThat(page.locator("html").getAttribute("data-causeway-grid-family")).isNotEqualTo("failed");
+
+        page.unroute(menuBarRoute);
+        page.evaluate("""
+                async () => {
+                  const components = await import('/causeway-webcomponents/index.mjs');
+                  components.configureCausewayMenubarWidgets({
+                    enabled: true,
+                    moduleUrl: document.documentElement.dataset.causewayApplicationMenubarUrl + '?recovery=1'
+                  });
+                }
+                """);
+        page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
+        assertThat(page.locator("[data-causeway-menu-disclosure]").count()).isZero();
+        assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
+                .isBetween(1L, 2L);
+
+        page.evaluate("""
+                async () => {
+                  const components = await import('/causeway-webcomponents/index.mjs');
+                  components.failCausewayMenubarWidget({phase: 'event', classification: 'MENUBAR_EVENT_UNAVAILABLE'});
+                }
+                """);
+        page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarFallback === 'family-failed' && !element.querySelector('cw-menubar-control'))");
+        assertThat(page.locator("html").getAttribute("data-causeway-menubar-failure-phase")).isEqualTo("event");
+        assertThat(page.locator("html").getAttribute("data-causeway-menubar-failure-classification"))
+                .isEqualTo("MENUBAR_EVENT_UNAVAILABLE");
+        assertThat(page.locator("html").getAttribute("data-causeway-grid-family")).isNotEqualTo("failed");
+    }
+
+    @Test
     void overlappingAndRepeatedVirtualRangesRemainBoundedAndDeduplicated() {
         page.setViewportSize(1600, 900);
         openObject("demo.CollectionLayoutSortedByPage", invokeViewModel(
@@ -760,7 +890,11 @@ class ReferenceAppHtmxPlaywrightTest {
                 .setForcedColors(ForcedColors.ACTIVE));
         openShell();
         assertSemanticAccessibility();
-        assertThat(page.locator("[data-causeway-menu-disclosure]").first().isVisible()).isTrue();
+        if (nativeToolkit()) {
+            assertThat(page.locator("[data-causeway-menu-disclosure]").first().isVisible()).isTrue();
+        } else {
+            assertThat(page.locator("cw-menubar-control vaadin-menu-bar").first().isVisible()).isTrue();
+        }
     }
 
     private void openBrowserContext(final Browser.NewContextOptions options) {
@@ -820,7 +954,8 @@ class ReferenceAppHtmxPlaywrightTest {
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")
                     || request.url().contains("/causeway-webcomponents/vaadin-actions/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-menubar/")) {
                 toolkitRequests.add(request.url());
             }
             final URI uri = URI.create(request.url());
@@ -853,9 +988,24 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private void waitForMenus() {
         page.waitForFunction("() => ['ready', 'partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
+        if (nativeToolkit()) {
+            assertThat(page.locator("cw-menubar-control").count()).isZero();
+            return;
+        }
+        try {
+            page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = page.locator("cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary")
+                    .evaluateAll("elements => elements.map(element => ({role: element.dataset.causewayBar, hidden: element.hidden, state: element.dataset.menuState, presentation: element.dataset.causewayMenubarPresentation, responsive: element.dataset.causewayMenubarResponsive, fallback: element.dataset.causewayMenubarFallback, width: element.getBoundingClientRect().width, control: element.querySelector('cw-menubar-control')?.dataset.widgetState, error: element.querySelector('cw-menubar-control')?.dataset.widgetError}))");
+            throw new AssertionError("Menu Bar did not qualify: " + diagnostics + "; requests=" + toolkitRequests, cause);
+        }
     }
 
     private void openMenu(final String name) {
+        if (!nativeToolkit()) {
+            page.waitForFunction("name => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].some(host => host._projection?.menus?.some(menu => menu.label === name))", name);
+            return;
+        }
         final Locator disclosure = page.locator("[data-causeway-menu-disclosure]")
                 .filter(new Locator.FilterOptions().setHasText(name)).first();
         disclosure.waitFor();
@@ -869,6 +1019,37 @@ class ReferenceAppHtmxPlaywrightTest {
                 + "'][data-action-id='" + actionId + "']").first();
         action.waitFor();
         return action;
+    }
+
+    private void activateServiceAction(final String logicalType, final String actionId) {
+        if (nativeToolkit()) {
+            serviceAction(logicalType, actionId).click();
+            return;
+        }
+        final var activated = page.evaluate("""
+                args => {
+                  for (const host of document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')) {
+                    const descriptor = Object.values(host._projection?.actions ?? {}).find(action => action.serviceLogicalTypeName === args.logicalType && action.actionId === args.actionId);
+                    const control = host.querySelector('vaadin-menu-bar');
+                    if (descriptor && control) {
+                      const find = items => {
+                        for (const item of items ?? []) {
+                          if (item.causewayKey === descriptor.key) return item;
+                          const nested = find(item.children);
+                          if (nested) return nested;
+                        }
+                        return null;
+                      };
+                      const item = find(control.items);
+                      if (!item || item.disabled) return false;
+                      control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: item}}));
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+                """, Map.of("logicalType", logicalType, "actionId", actionId));
+        assertThat(activated).isEqualTo(true);
     }
 
     private void assertOrdinaryActionPresentation(final String member) {

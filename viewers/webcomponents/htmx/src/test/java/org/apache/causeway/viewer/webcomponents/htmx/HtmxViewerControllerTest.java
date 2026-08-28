@@ -66,6 +66,10 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-grid-family=\"healthy\"")
                 .contains("data-causeway-grid-module-url=\"/app/causeway-webcomponents/vaadin-grid/vaadin-grid.js\"")
                 .contains("data-causeway-grid-policy-revision=\"0\"")
+                .contains("data-causeway-application-menubar=\"vaadin\"")
+                .contains("data-causeway-menubar-family=\"healthy\"")
+                .contains("data-causeway-application-menubar-url=\"/app/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js\"")
+                .contains("data-causeway-menubar-policy-revision=\"0\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
@@ -109,6 +113,8 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-collection-grid=\"native\"")
                 .contains("data-causeway-grid-family=\"native\"")
+                .contains("data-causeway-application-menubar=\"native\"")
+                .contains("data-causeway-menubar-family=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"\"");
     }
@@ -132,6 +138,7 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-presentation=\"native\"")
                 .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-collection-grid=\"native\"")
+                .contains("data-causeway-application-menubar=\"native\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-reference-minimum-search-length=\"3\"")
                 .contains("data-causeway-reference-maximum-results=\"40\"")
@@ -153,6 +160,7 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-presentation=\"native\"")
                 .contains("data-causeway-action-buttons=\"native\"")
                 .contains("data-causeway-collection-grid=\"native\"")
+                .contains("data-causeway-application-menubar=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"basic,numeric\"");
         assertThat(policy)
@@ -200,6 +208,7 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-editor-toolkit=\"vaadin\"")
                 .contains("data-causeway-presentation=\"vaadin\"")
                 .contains("data-causeway-action-buttons=\"vaadin\"")
+                .contains("data-causeway-application-menubar=\"vaadin\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(policy)
@@ -219,7 +228,9 @@ class HtmxViewerControllerTest {
         assertThat(response.getBody())
                 .contains("data-causeway-toolkit-source=\"editor-compatibility\"")
                 .contains("data-causeway-collection-grid=\"vaadin\"")
-                .contains("data-causeway-grid-family=\"healthy\"");
+                .contains("data-causeway-grid-family=\"healthy\"")
+                .contains("data-causeway-application-menubar=\"vaadin\"")
+                .contains("data-causeway-menubar-family=\"healthy\"");
         assertThat(policy)
                 .contains("'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='")
                 .contains("style-src-attr 'none'")
@@ -239,7 +250,9 @@ class HtmxViewerControllerTest {
         assertThat(response.getBody())
                 .contains("data-causeway-toolkit-source=\"editor-compatibility\"")
                 .contains("data-causeway-collection-grid=\"native\"")
-                .contains("data-causeway-grid-family=\"native\"");
+                .contains("data-causeway-grid-family=\"native\"")
+                .contains("data-causeway-application-menubar=\"native\"")
+                .contains("data-causeway-menubar-family=\"native\"");
         assertThat(policy)
                 .doesNotContain("sha256-")
                 .contains("style-src-attr 'none'")

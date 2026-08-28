@@ -33,6 +33,10 @@ import {
   CAUSEWAY_GRID_WIDGET_POLICY_EVENT,
   configureCausewayGridWidgets
 } from '../causeway-webcomponents/grid-widget.mjs';
+import {
+  CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT,
+  configureCausewayMenubarWidgets
+} from '../causeway-webcomponents/menubar-widget.mjs';
 import {defineCausewayWebComponents} from '../causeway-webcomponents/register.mjs';
 import {
   applyAuthenticationMenuPolicy,
@@ -59,6 +63,8 @@ const basePath = document.documentElement.dataset.causewayHtmxBase;
 const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
 const collectionGridMode = document.documentElement.dataset.causewayCollectionGrid;
 const collectionGridModuleUrl = document.documentElement.dataset.causewayGridModuleUrl;
+const applicationMenubarMode = document.documentElement.dataset.causewayApplicationMenubar;
+const applicationMenubarModuleUrl = document.documentElement.dataset.causewayApplicationMenubarUrl;
 const authentication = readAuthenticationMetadata(document);
 if (shell && authentication) {
   const executor = createFetchGraphQLExecutor({
@@ -95,6 +101,22 @@ document.addEventListener(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, event => {
 configureCausewayGridWidgets({
   enabled: collectionGridMode === 'vaadin',
   moduleUrl: collectionGridModuleUrl
+});
+document.addEventListener(CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT, event => {
+  const detail = event.detail ?? {};
+  document.documentElement.dataset.causewayMenubarFamily = detail.reason === 'failure'
+    ? 'failed'
+    : applicationMenubarMode === 'vaadin' ? 'healthy' : 'native';
+  document.documentElement.dataset.causewayMenubarPolicyRevision = String(detail.revision ?? 0);
+  document.documentElement.dataset.causewayMenubarFailurePhase = detail.reason === 'failure' ? String(detail.phase ?? '') : '';
+  document.documentElement.dataset.causewayMenubarFailureClassification = detail.reason === 'failure'
+    ? String(detail.classification ?? '')
+    : '';
+});
+configureCausewayMenubarWidgets({
+  enabled: applicationMenubarMode === 'vaadin',
+  moduleUrl: applicationMenubarModuleUrl,
+  excludeAction: detail => Boolean(authentication && isExcludedAction(authentication, detail))
 });
 let activeRequest = null;
 let navigationGeneration = 0;

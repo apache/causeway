@@ -228,6 +228,10 @@ public class HtmxViewerProperties {
         return isEffectiveVaadinPresentation();
     }
 
+    public boolean isEffectiveVaadinApplicationMenubar() {
+        return isEffectiveVaadinPresentation();
+    }
+
     public boolean usesEditorToolkitCompatibility() {
         return !componentToolkitConfigured && editorToolkitConfigured;
     }
