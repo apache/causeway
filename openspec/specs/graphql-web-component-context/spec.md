@@ -50,7 +50,7 @@ The GraphQL client SHALL execute introspection and object operations through a r
 - **THEN** all GraphQL operations use that executor without changing descendant component APIs
 
 ### Requirement: Shared GraphQL client provider
-The `<causeway-graphql-client>` element SHALL provide endpoint, execution, cancellation, schema-name, and schema-cache services to descendant Causeway contexts.
+The `<cw-graphql-client>` element SHALL provide endpoint, execution, cancellation, schema-name, and schema-cache services to descendant Causeway contexts.
 
 #### Scenario: Several object contexts share a client
 - **WHEN** several object contexts are descendants of one GraphQL client provider
@@ -58,7 +58,7 @@ The `<causeway-graphql-client>` element SHALL provide endpoint, execution, cance
 - **AND** retain independent object snapshots and active read projections
 
 ### Requirement: Semantic object context
-The `<causeway-object-context>` element SHALL represent one domain object using its logical type name and identifier and SHALL expose a semantic context API to descendant components.
+The `<cw-object-context>` element SHALL represent one domain object using its logical type name and identifier and SHALL expose a semantic context API to descendant components.
 
 #### Scenario: Descendant requests context
 - **WHEN** a descendant dispatches the standard bubbling and composed context-request event
@@ -127,11 +127,11 @@ The object context SHALL preserve successful GraphQL data when the same response
 The foundation SHALL provide a minimal object-header component and scalar read-only property component that consume the semantic object context.
 
 #### Scenario: Object header rendering
-- **WHEN** `<causeway-object-header>` is connected beneath a ready object context
+- **WHEN** `<cw-object-header>` is connected beneath a ready object context
 - **THEN** it renders the object title and semantic identity obtained through the context
 
 #### Scenario: Visible scalar property
-- **WHEN** `<causeway-property>` identifies a visible scalar property
+- **WHEN** `<cw-property>` identifies a visible scalar property
 - **THEN** it renders the current value supplied by the context
 
 #### Scenario: Hidden property

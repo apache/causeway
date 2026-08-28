@@ -39,7 +39,7 @@ The prototypes MUST include representative long labels, disabled controls, error
 - **AND** fixture-only assumptions and production integration gaps are recorded
 
 ### Requirement: Stable Causeway contract boundary
-The analysis SHALL prefer integrations that retain public `<causeway-*>` elements, Causeway semantic events, domain behavior, and documented `--causeway-*` customization variables.
+The analysis SHALL prefer integrations that retain public `<cw-*>` elements, Causeway semantic events, domain behavior, and documented `--causeway-*` customization variables.
 Toolkit tags, classes, events, tokens, and global state MUST remain internal unless the final recommendation explicitly identifies a required later specification change.
 
 #### Scenario: Toolkit component is used internally

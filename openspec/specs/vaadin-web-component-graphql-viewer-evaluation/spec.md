@@ -92,7 +92,7 @@ Causeway conversion, disabled reasons, validation, invocation, cancellation, con
 - **AND** records any duplicate or irreconcilable toolkit behavior as candidate cost
 
 ### Requirement: Composable custom HTML page evaluation
-The evaluation SHALL demonstrate the candidate widgets inside a router-selected custom object HTML fragment while preserving the generic viewer's exact-type resolution, canonical route identity, and one disposable route-level `<causeway-object-context>`.
+The evaluation SHALL demonstrate the candidate widgets inside a router-selected custom object HTML fragment while preserving the generic viewer's exact-type resolution, canonical route identity, and one disposable route-level `<cw-object-context>`.
 Application composition MUST remain possible with ordinary HTML and browser modules rather than requiring Vaadin Flow or Java Vaadin extension APIs.
 
 #### Scenario: Custom object page is selected
@@ -107,7 +107,7 @@ Application composition MUST remain possible with ordinary HTML and browser modu
 
 #### Scenario: Application uses only semantic elements
 - **WHEN** a custom page author chooses not to use raw Vaadin tags
-- **THEN** standard Causeway object, property, action, reference, and collection behavior remains composable through stable `<causeway-*>` elements
+- **THEN** standard Causeway object, property, action, reference, and collection behavior remains composable through stable `<cw-*>` elements
 - **AND** the page does not need Vaadin event or data-provider knowledge
 
 ### Requirement: Explicit extension-tier decision
