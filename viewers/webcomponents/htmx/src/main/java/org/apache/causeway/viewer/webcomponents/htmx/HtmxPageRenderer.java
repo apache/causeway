@@ -229,6 +229,13 @@ final class HtmxPageRenderer {
                 + " data-causeway-grid-module-url=\"" + escape(contextPath)
                 + "/causeway-webcomponents/vaadin-grid/vaadin-grid.js\""
                 + " data-causeway-grid-policy-revision=\"0\""
+                + " data-causeway-application-menubar=\""
+                + (properties.isEffectiveVaadinApplicationMenubar() ? "vaadin" : "native") + "\""
+                + " data-causeway-menubar-family=\""
+                + (properties.isEffectiveVaadinApplicationMenubar() ? "healthy" : "native") + "\""
+                + " data-causeway-application-menubar-url=\"" + escape(contextPath)
+                + "/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js\""
+                + " data-causeway-menubar-policy-revision=\"0\""
                 + " data-causeway-reference-widgets=\"" + referenceWidgets + "\""
                 + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
                 + " data-causeway-reference-maximum-results=\"" + maximumResults + "\""

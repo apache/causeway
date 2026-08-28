@@ -26,6 +26,7 @@ import {CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement} from './field-widget.
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
 import {CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement} from './grid-widget.mjs';
 import {CausewayInteractionControllerElement} from './interaction-controller-element.mjs';
+import {CAUSEWAY_MENUBAR_CONTROL, CausewayMenubarControlElement} from './menubar-widget.mjs';
 import {
   CausewayMenubarPrimaryElement,
   CausewayMenubarSecondaryElement,
@@ -57,6 +58,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.MENUBAR_PRIMARY, CausewayMenubarPrimaryElement],
   [CausewayElementName.MENUBAR_SECONDARY, CausewayMenubarSecondaryElement],
   [CausewayElementName.MENUBAR_TERTIARY, CausewayMenubarTertiaryElement],
+  [CAUSEWAY_MENUBAR_CONTROL, CausewayMenubarControlElement],
   [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
   [CausewayElementName.COLLECTION, CausewayCollectionElement],
   [CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement]

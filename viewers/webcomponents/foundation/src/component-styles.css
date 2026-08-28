@@ -419,6 +419,32 @@ cw-menubars > cw-interaction-controller {
 .causeway-menubar-bar-disclosure {
   display: none;
 }
+.causeway-menubar-toolkit .causeway-menubar,
+cw-menubar-control,
+cw-menubar-control > vaadin-menu-bar {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+cw-menubar-control {
+  --lumo-body-text-color: var(--causeway-menubar-color, CanvasText);
+  --lumo-primary-text-color: var(--causeway-menubar-color, CanvasText);
+  --lumo-contrast-5pct: var(--causeway-menubar-control-background, transparent);
+  --lumo-contrast-10pct: var(--causeway-menubar-control-active-background, color-mix(in srgb, LinkText 14%, transparent));
+  --lumo-border-radius-m: var(--causeway-menubar-control-radius, 0.25rem);
+  color: var(--causeway-menubar-color, CanvasText);
+  font: inherit;
+}
+cw-menubar-control > vaadin-menu-bar {
+  --vaadin-menu-bar-gap: var(--causeway-menubar-menu-gap, 0.25rem);
+  background: var(--causeway-menubar-background, Canvas);
+  color: inherit;
+}
+cw-menubar-control vaadin-menu-bar-button[focused] {
+  outline: var(--causeway-menubar-focus, 0.2rem solid LinkText);
+  outline-offset: 0.1rem;
+}
 .causeway-menu {
   min-inline-size: 0;
   position: relative;
@@ -491,6 +517,18 @@ cw-menubars > cw-interaction-controller {
   }
 }
 @media (max-width: 48rem) {
+  cw-menubars,
+  cw-menubar-primary,
+  cw-menubar-secondary,
+  cw-menubar-tertiary,
+  .causeway-menubar-shell,
+  .causeway-menubar-toolkit .causeway-menubar {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 100vw;
+    min-inline-size: 0;
+    overflow-x: clip;
+  }
   .causeway-menubar-shell {
     padding: 0.25rem;
   }

@@ -225,14 +225,26 @@ Selecting an enabled menu action closes its transient menu before interaction pr
 
 Each non-empty bar renders a labelled `nav` landmark.
 Native buttons expose `aria-expanded` and `aria-controls` for menu and narrow bar disclosures.
-The components deliberately avoid ARIA `menubar` and `menuitem` application-mode roles.
+The native components deliberately avoid ARIA `menubar` and `menuitem` application-mode roles.
 Tab and Shift+Tab retain native order; Enter and Space toggle disclosures; Escape closes and restores focus; Home, End, and arrow keys traverse documented peer controls; opening a menu closes siblings within the same bar; and action selection or outside activation dismisses transient menu content.
-At the `48rem` narrow threshold, bars and menus stack without changing semantic order or events.
+At the `48rem` narrow threshold, native bars and menus stack without changing semantic order or events.
+
+Under the default Vaadin component policy, each connected non-empty representable primary, secondary, or tertiary tier may use one internal independently packaged Vaadin Menu Bar.
+Causeway projects the current immutable menu, section, and leaf-action descriptors into private item objects, resolves selection through opaque generation-scoped identity, and delegates enabled leaves to the same service-action interaction path used by native controls.
+Vaadin does not own application metadata, menu resources, action preparation, authorization, validation, GraphQL, action results, refresh, routing, or navigation.
+Empty, malformed, unsupported, stale, disconnected, hidden, family-failed, or explicit-native tiers remain hidden or wholly native, and one Menu Bar family failure returns every connected tier natively without affecting other adapter families.
+Menu Bar overflow preserves source order and every visible authorized action at narrow widths, while responsive transitions reuse current Causeway state without another semantic request.
 
 The composite and standalone bars expose `refresh()` to start a new authorization-sensitive and locale-sensitive generation and reject superseded metadata, resource, and service-state responses.
 Stable hooks include `data-menu-state`, `data-causeway-bar`, `data-causeway-bar-role`, `data-causeway-menu`, `data-causeway-menu-section`, `data-causeway-service-action`, `data-service-logical-type`, `data-action-id`, inert presentation-hint data, and the `causeway-menubar*`, `causeway-menu*`, and `causeway-service-action*` classes.
 `causeway-menubars-state-change` publishes lifecycle state.
 `causeway-menubars-diagnostic` publishes bounded redacted failures without response bodies, credentials, authorization rules, submitted values, or remote exception text.
+Internal presentation adds `data-causeway-menubar-presentation`, `data-causeway-menubar-responsive`, and bounded `data-causeway-menubar-fallback` diagnostics without making raw `vaadin-menu-bar`, item objects, item-selected events, properties, methods, theme internals, or Shadow DOM supported application APIs.
+The same-origin Menu Bar closure is requested only after a qualified effective tier connects, is shared across tiers and routes, and is absent under explicit native policy and authentication chrome without effective menus.
+Its accepted bundle SHA-256 is `fb207a9548b8683f481f1961b27028e41fc9c94c9fcadd60cb5be42a5ab45192`, with 132197 raw bytes, 37040 gzip bytes, 19 production packages, and exact candidate style hash `sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=`.
+The closure has a 98304-byte gzip cap and participates in the 631808-byte aggregate closure cap.
+See `vaadin-menubar/README.adoc` for pinned inputs, legal metadata, audit evidence, regeneration, and verification.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete Menu Bar and other adapter rollback without changing menu resources, GraphQL, routes, authentication, or application markup.
 
 == Values and renderer extension
 
@@ -496,7 +508,7 @@ The initial authoritative range seeds the bounded cache, identical ranges dedupl
 Causeway remains authoritative for rows, values, semantic renderers, object links, errors, focus identity, paging, associated actions, GraphQL, routes, authorization, and lifecycle.
 Applications continue to declare only `<cw-collection>` and `<cw-collection-column>` and must not consume internal Grid tags, item objects, data providers, render callbacks, events, properties, methods, or Shadow DOM.
 Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete collection and control rollback without changing GraphQL, routes, persisted data, or application markup.
-The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates in the 533504-byte aggregate closure cap and exact-hash CSP policy.
+The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates with Menu Bar in the 631808-byte aggregate closure cap and exact-hash CSP policy.
 See `vaadin-grid/README.adoc` for pinned inputs, accepted checksum, legal metadata, CSP evidence, verification, and audit commands.
 Sorting, filtering, selection, editing, details, drag, resizing, reordering, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
 

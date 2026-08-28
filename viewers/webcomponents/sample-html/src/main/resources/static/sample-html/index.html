@@ -342,7 +342,7 @@
               <li><strong>Collections</strong>A deterministic wide window qualifies virtual Grid, a disabled sibling preserves its reason, and narrow, empty, and encounter-ordered siblings retain native presentation; use `?grid-mode=bounded` to retain the current window with Causeway previous and next controls and no invented total.</li>
               <li><strong>Intentionally hidden</strong>The secret property and hidden action produce no semantic content, and their hidden value is never repeated here.</li>
               <li><strong>Framework-neutral interactions</strong>Ordinary actions demonstrate the independent Vaadin Button closure, while property interaction controls and prompts remain native and no HTMX, frontend framework, npm build, automatic routing, or component-owned GraphQL construction is present.</li>
-              <li><strong>Rollback and failure</strong>Use `?component-toolkit=native`, `?fail-field=basic`, `?fail-action=true`, or `?fail-grid=true` for deterministic complete rollback and family-isolated native recovery.</li>
+              <li><strong>Rollback and failure</strong>Use `?component-toolkit=native`, `?menu-state=empty`, `?menu-state=unsupported`, `?fail-field=basic`, `?fail-action=true`, `?fail-grid=true`, or `?fail-menubar=true` for deterministic empty, unsupported, complete rollback, and family-isolated native recovery states.</li>
             </ul>
           </aside>
 
@@ -473,12 +473,19 @@
   <script type="module">
     const options = new URLSearchParams(location.search);
     const componentToolkit = options.get('component-toolkit') === 'native' ? 'native' : 'vaadin';
+    const forcedMenuState = ['empty', 'unsupported'].includes(options.get('menu-state'))
+      ? options.get('menu-state')
+      : null;
     document.documentElement.dataset.causewayComponentToolkit = componentToolkit;
     document.documentElement.dataset.causewayToolkitSource = 'vanilla-sample';
     document.documentElement.dataset.causewayPresentation = componentToolkit;
     document.documentElement.dataset.causewayActionButtons = componentToolkit;
     document.documentElement.dataset.causewayCollectionGrid = componentToolkit;
     document.documentElement.dataset.causewayGridModuleUrl = '/causeway-webcomponents/vaadin-grid/vaadin-grid.js';
+    document.documentElement.dataset.causewayApplicationMenubar = forcedMenuState ? 'native' : componentToolkit;
+    document.documentElement.dataset.causewayApplicationMenubarUrl = options.get('fail-menubar') === 'true'
+      ? '/sample-html/missing-vaadin-menubar.js'
+      : '/causeway-webcomponents/vaadin-menubar/vaadin-menubar.js';
     document.documentElement.dataset.causewayReferenceWidgets = componentToolkit;
     document.documentElement.dataset.causewayFieldFamilies = componentToolkit === 'native'
       ? ''
@@ -561,6 +568,27 @@
     });
 
     const components = await import('/causeway-webcomponents/index.mjs');
+    if (forcedMenuState) {
+      const roles = ['primary', 'secondary', 'tertiary'];
+      const state = Object.freeze({
+        status: forcedMenuState === 'empty' ? 'ready' : 'unsupported',
+        generation: 1,
+        plan: forcedMenuState === 'empty'
+          ? Object.freeze({bars: Object.freeze(Object.fromEntries(roles.map(role => [role, Object.freeze({role, menus: Object.freeze([])})])))})
+          : null,
+        diagnostics: Object.freeze([])
+      });
+      const context = Object.freeze({
+        subscribe(listener) {
+          listener(state);
+          return () => {};
+        },
+        refresh: async () => state,
+        serviceContext: () => null
+      });
+      document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')
+        .forEach(bar => { bar.context = context; });
+    }
     const failedFieldFamily = options.get('fail-field');
     if (['basic', 'numeric', 'local-temporal'].includes(failedFieldFamily)) {
       components.configureCausewayFieldWidgets({
