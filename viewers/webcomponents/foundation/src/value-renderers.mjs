@@ -35,11 +35,11 @@ export class CausewayValueRendererRegistry {
    * Higher priorities win, with the most recently registered renderer winning ties.
    * Application registrations default above the standard renderer priority of zero.
    */
-  register({id, test, render, priority = 100}) {
+  register({id, test, render, priority = 100, standard = false}) {
     if (!id || typeof test !== 'function' || typeof render !== 'function') {
       throw new TypeError('A value renderer requires id, test, and render.');
     }
-    const registration = Object.freeze({id, test, render, priority, sequence: ++this.sequence});
+    const registration = Object.freeze({id, test, render, priority, standard, sequence: ++this.sequence});
     this.registrations.push(registration);
     this.registrations.sort((left, right) => right.priority - left.priority || right.sequence - left.sequence);
     return () => {
@@ -62,6 +62,7 @@ export class CausewayValueRendererRegistry {
     const rendered = renderer.render(state);
     return Object.freeze({
       rendererId: renderer.id,
+      standard: renderer.standard,
       kind: rendered.kind ?? renderer.id,
       html: String(rendered.html ?? '')
     });
@@ -90,44 +91,45 @@ export function normalizeValueState(state = {}) {
 }
 
 function registerStandardRenderers(registry) {
-  registry.register({
+  const register = registration => registry.register({...registration, standard: true});
+  register({
     id: 'null',
     priority: 40,
     test: state => state.value === null || state.value === undefined,
     render: () => ({kind: 'null', html: '<span class="causeway-value causeway-value-null" aria-label="No value">—</span>'})
   });
-  registry.register({
+  register({
     id: 'object-reference',
     priority: 30,
     test: state => Boolean(state.value?._meta?.logicalTypeName && state.value?._meta?.id),
     render: state => ({kind: 'object-reference', html: objectLinkMarkup(state.value._meta)})
   });
-  registry.register({
+  register({
     id: 'blob',
     priority: 20,
     test: state => isLob(state.value, 'bytes'),
     render: state => ({kind: 'blob', html: lobMarkup(state.value, 'bytes', 'Download')})
   });
-  registry.register({
+  register({
     id: 'clob',
     priority: 20,
     test: state => isLob(state.value, 'chars'),
     render: state => ({kind: 'clob', html: lobMarkup(state.value, 'chars', 'Open text')})
   });
-  registry.register({
+  register({
     id: 'enum',
     priority: 10,
     test: state => state.typeKind === 'ENUM',
     render: state => ({kind: 'enum', html: `<span class="causeway-value causeway-value-enum">${escapeHtml(state.value)}</span>`})
   });
-  registry.register({
+  register({
     id: 'scalar',
     priority: 0,
     test: state => state.typeKind === 'SCALAR'
       || ['string', 'number', 'boolean', 'bigint'].includes(typeof state.value),
     render: state => ({kind: 'scalar', html: `<span class="causeway-value causeway-value-scalar">${escapeHtml(formatScalar(state.value))}</span>`})
   });
-  registry.register({
+  register({
     id: 'unsupported',
     priority: -1000,
     test: () => true,

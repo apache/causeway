@@ -37,7 +37,8 @@ if (writePolicy) writeFileSync(policyPath, `${JSON.stringify(policy, null, 2)}\n
 if (outputDirectory) writeFileSync(resolve(outputDirectory, 'field-audit.json'), `${JSON.stringify(results, null, 2)}\n`);
 console.log(JSON.stringify(results, null, 2));
 if (!writePolicy && Object.values(results).some(result => result.cspViolations.length || result.axeViolations.length
-    || result.consoleErrors.length || result.pageErrors.length || result.externalRequests.length || result.overflow)) {
+    || result.consoleErrors.length || result.pageErrors.length || result.externalRequests.length || result.overflow
+    || result.readOnlyState.some(state => state.changed || state.opened || !state.named || !state.described || !state.readOnly))) {
   process.exitCode = 1;
 }
 
@@ -72,7 +73,11 @@ async function auditFamily(family, controls, hashes) {
     sample: event.sample
   })));
   await page.goto(origin, {waitUntil: 'networkidle'});
-  await page.waitForFunction(() => document.body.dataset.ready === 'true');
+  try {
+    await page.waitForFunction(() => document.body.dataset.ready === 'true');
+  } catch (error) {
+    throw new Error(`Field audit fixture did not become ready: ${JSON.stringify({family, consoleErrors, pageErrors})}`, {cause: error});
+  }
   for (const [index, tag] of controls.entries()) {
     const locator = page.locator(`#control-${index}`);
     await locator.focus();
@@ -89,6 +94,58 @@ async function auditFamily(family, controls, hashes) {
       if ('opened' in control) control.opened = false;
       control.blur();
     });
+  }
+  const readOnlyState = [];
+  for (const [index, tag] of controls.entries()) {
+    const locator = page.locator(`#view-${index}`);
+    const before = await locator.evaluate(control => ({
+      value: 'checked' in control ? control.checked : control.value,
+      opened: Boolean(control.opened)
+    }));
+    await locator.focus();
+    if (tag === 'vaadin-checkbox') {
+      await page.keyboard.press('Space');
+      await locator.click({force: true});
+    } else if (tag === 'vaadin-select' || tag.endsWith('-picker')) {
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+      await locator.click({force: true});
+      await page.keyboard.press('Escape');
+    } else {
+      await page.keyboard.type('changed');
+    }
+    const after = await locator.evaluate(control => ({
+      value: 'checked' in control ? control.checked : control.value,
+      opened: Boolean(control.opened),
+      readOnly: control.readOnly === true && control.hasAttribute('readonly'),
+      named: (() => {
+        const labelId = `${control.id}-label`;
+        const inputs = [control.inputElement, control.focusElement];
+        for (const root of [control, control.shadowRoot]) {
+          for (const field of root?.querySelectorAll('vaadin-date-picker, vaadin-time-picker') ?? []) {
+            inputs.push(field.inputElement, field.focusElement);
+          }
+        }
+        const targets = [...new Set(inputs.filter(Boolean))];
+        const composite = control.querySelectorAll('vaadin-date-picker, vaadin-time-picker').length > 0;
+        if (composite) return targets.length > 0 && targets.every(input => input.getAttribute('aria-label'));
+        return control.accessibleNameRef === labelId
+          ? targets.some(input => input.getAttribute('aria-labelledby')?.split(' ').includes(labelId))
+          : targets.length > 0 && targets.every(input => input.getAttribute('aria-label'));
+      })(),
+      described: (() => {
+        const descriptionId = `${control.id}-description`;
+        const inputs = [control.inputElement, control.focusElement];
+        for (const root of [control, control.shadowRoot]) {
+          for (const field of root?.querySelectorAll('vaadin-date-picker, vaadin-time-picker') ?? []) {
+            inputs.push(field.inputElement, field.focusElement);
+          }
+        }
+        const targets = [...new Set(inputs.filter(Boolean))];
+        return targets.length > 0 && targets.every(input => input.getAttribute('aria-describedby')?.split(' ').includes(descriptionId));
+      })()
+    }));
+    readOnlyState.push({tag, changed: before.value !== after.value, opened: before.opened || after.opened, ...after});
   }
   await page.waitForTimeout(500);
   const styleTexts = await page.locator('style').evaluateAll(styles => styles.map(style => style.textContent).filter(Boolean));
@@ -118,6 +175,7 @@ async function auditFamily(family, controls, hashes) {
     cspViolations,
     axeViolations,
     accessibilityState,
+    readOnlyState,
     presentation: {narrowDarkReducedMotion: !narrowOverflow, wideForcedColors: !wideOverflow},
     consoleErrors,
     pageErrors,
@@ -137,8 +195,45 @@ function fixture(family, controls) {
     control.id = 'control-${index}';
     control.required = ${index === 0};
     if ('items' in control) control.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
-    if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag))};
+    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') control.step = 0.001;
+    if ('${tag}' === 'vaadin-checkbox') control.checked = true;
+    else if ('value' in control) control.value = ${JSON.stringify(initialValue(family, tag))};
     fixture.append(control);
+    await control.updateComplete;
+    for (const field of control.querySelectorAll('vaadin-date-picker, vaadin-time-picker')) {
+      field.accessibleName = control.label + (field.localName === 'vaadin-date-picker' ? ' date' : ' time');
+    }
+
+    const label = document.createElement('label');
+    label.id = 'view-${index}-label';
+    label.textContent = 'Read-only ${tag.replace('vaadin-', '')}';
+    const description = document.createElement('span');
+    description.id = 'view-${index}-description';
+    description.textContent = 'Authoritative Causeway value';
+    const view = document.createElement('${tag}');
+    view.id = 'view-${index}';
+    view.readOnly = true;
+    view.setAttribute('readonly', '');
+    if ('accessibleNameRef' in view) view.accessibleNameRef = label.id;
+    else view.accessibleName = label.textContent;
+    if ('items' in view) view.items = [{label: 'One', value: 'one'}, {label: 'Two', value: 'two'}];
+    if ('${tag}' === 'vaadin-time-picker' || '${tag}' === 'vaadin-date-time-picker') view.step = 0.001;
+    if ('${tag}' === 'vaadin-checkbox') view.checked = true;
+    else if ('value' in view) view.value = ${JSON.stringify(initialValue(family, tag))};
+    fixture.append(label, description, view);
+    await view.updateComplete;
+    const compositeFields = [...view.querySelectorAll('vaadin-date-picker, vaadin-time-picker')];
+    for (const field of compositeFields) {
+      field.accessibleName = label.textContent + (field.localName === 'vaadin-date-picker' ? ' date' : ' time');
+    }
+    await Promise.all(compositeFields.map(field => field.updateComplete));
+    const inputs = [view.inputElement, view.focusElement];
+    for (const root of [view, view.shadowRoot]) {
+      for (const field of root?.querySelectorAll('vaadin-date-picker, vaadin-time-picker') ?? []) {
+        inputs.push(field.inputElement, field.focusElement);
+      }
+    }
+    for (const input of new Set(inputs.filter(Boolean))) input.setAttribute('aria-describedby', description.id);
   }`).join('\n');
   return `import '/asset.js';
 const fixture = document.querySelector('#fixture');

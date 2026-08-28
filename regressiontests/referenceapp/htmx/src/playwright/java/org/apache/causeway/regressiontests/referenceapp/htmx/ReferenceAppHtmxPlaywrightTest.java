@@ -113,9 +113,18 @@ class ReferenceAppHtmxPlaywrightTest {
     @Test
     void menusChoicesAutocompleteCancellationAndRouteDisposal() {
         openShell();
-        assertThat(page.locator("html").getAttribute("data-causeway-editor-toolkit"))
+        assertThat(page.locator("html").getAttribute("data-causeway-component-toolkit"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
-        assertThat(toolkitRequests).isEmpty();
+        assertThat(page.locator("html").getAttribute("data-causeway-presentation"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(page.locator("html").getAttribute("data-causeway-action-buttons"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        if (nativeToolkit()) {
+            assertThat(toolkitRequests).isEmpty();
+        } else {
+            assertThat(fieldAssetRequests("basic")).isLessThanOrEqualTo(1);
+            assertThat(actionAssetRequests()).isEqualTo(1);
+        }
         assertThat(referenceAssetRequests()).isZero();
 
         openMenu("Prog Model");
@@ -165,6 +174,7 @@ class ReferenceAppHtmxPlaywrightTest {
         assertThat(page.locator("cw-property").count()).isGreaterThan(4);
         final Locator editableDecimal = page.locator("cw-property[id='readWriteProperty']");
         assertThat(editableDecimal.count()).isEqualTo(1);
+        assertReadOnlyPresentation(editableDecimal, "vaadin-text-field");
         editableDecimal.locator("[data-causeway-action='edit']").click();
         final Locator decimalEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         final String decimalLocalName = (String) decimalEditor.evaluate("element => element.localName");
@@ -174,8 +184,6 @@ class ReferenceAppHtmxPlaywrightTest {
         final String originalDecimal = String.valueOf(decimalEditor.evaluate("element => element.value"));
         if (fieldFamiliesEnabled()) {
             assertThat(fieldAssetRequests("numeric")).isEqualTo(1);
-            assertThat(fieldAssetRequests("basic")).isZero();
-            assertThat(fieldAssetRequests("local-temporal")).isZero();
         }
         assertThat(originalDecimal).isNotBlank();
         final String updatedDecimal = "98765432109876543210.123456789";
@@ -299,6 +307,7 @@ class ReferenceAppHtmxPlaywrightTest {
         openObject("demo.UrlEntity", firstCollectionEntityId(
                 "demo_Urls", urlPageId, "rich__demo_UrlEntity"));
         final Locator urlProperty = page.locator("cw-property[id='readWriteProperty']");
+        assertReadOnlyPresentation(urlProperty, "vaadin-text-field");
         urlProperty.locator("[data-causeway-action='edit']").click();
         final Locator urlEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         assertThat(urlEditor.evaluate("element => element.localName === 'input' ? element.type : element.inputElement?.inputMode"))
@@ -312,6 +321,7 @@ class ReferenceAppHtmxPlaywrightTest {
         openObject("demo.CausewayPasswordEntity", firstCollectionEntityId(
                 "demo_CausewayPasswords", passwordPageId, "rich__demo_CausewayPasswordEntity"));
         final Locator passwordProperty = page.locator("cw-property[id='readWriteProperty']");
+        assertReadOnlyPresentation(passwordProperty, null);
         passwordProperty.locator("[data-causeway-action='edit']").click();
         final Locator passwordEditor = resolveEditor("cw-property[id='readWriteProperty'] [data-causeway-editor='readWriteProperty']");
         assertThat(passwordEditor.evaluate("element => element.localName === 'input' ? element.type : element.localName"))
@@ -419,6 +429,8 @@ class ReferenceAppHtmxPlaywrightTest {
     void parameterlessParameterizedDefaultValidationAndSuccessfulActionStatesRemainVisible() {
         openObject("demo.ActionSemanticsVm", invokeViewModel(
                 "demo_ActionMenu", "semantics", "rich__demo_ActionSemanticsVm"));
+        assertOrdinaryActionPresentation("reportPropertyForSafe");
+        assertOrdinaryActionPresentation("updatePropertyForIdempotent");
         page.evaluate("() => globalThis.__referenceAppActionContextBeforeInvoke = document.querySelector('#causeway-route cw-object-context')");
         objectAction("reportPropertyForSafe").click();
         page.waitForFunction("() => document.querySelector('#causeway-route cw-object-context') !== globalThis.__referenceAppActionContextBeforeInvoke");
@@ -437,7 +449,9 @@ class ReferenceAppHtmxPlaywrightTest {
         page.locator("[data-testid='action-prompt-cancel']").click();
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertThat((Boolean) update.evaluate("element => element === document.activeElement")).isTrue();
+        assertThat((Boolean) update.evaluate(
+                "element => element === document.activeElement || element.contains(document.activeElement)"))
+                .isTrue();
 
         update.click();
         waitForPrompt("updatePropertyForIdempotent");
@@ -562,7 +576,8 @@ class ReferenceAppHtmxPlaywrightTest {
         page.onPageError(error -> browserFailures.add("page: " + error));
         page.onRequest(request -> {
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-fields/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")) {
                 toolkitRequests.add(request.url());
             }
             final URI uri = URI.create(request.url());
@@ -613,9 +628,24 @@ class ReferenceAppHtmxPlaywrightTest {
         return action;
     }
 
+    private void assertOrdinaryActionPresentation(final String member) {
+        final String selector = "cw-action[id='" + member + "'] [data-causeway-action-control]";
+        final Locator control = page.locator(selector).first();
+        control.waitFor();
+        if (nativeToolkit()) {
+            assertThat(control.evaluate("element => element.localName")).isEqualTo("button");
+            return;
+        }
+        assertThat(control.evaluate("element => element.localName")).isEqualTo("cw-action-control");
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", selector);
+        assertThat(control.locator("vaadin-button").count()).isEqualTo(1);
+        assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-actions/vaadin-actions.js")).count())
+                .isEqualTo(1);
+    }
+
     private Locator objectAction(final String member) {
         final Locator host = page.locator("cw-action[id='" + member + "']").first();
-        final Locator action = host.locator("button");
+        final Locator action = host.locator("[data-causeway-action-control]");
         action.waitFor();
         action.scrollIntoViewIfNeeded();
         return action;
@@ -794,6 +824,31 @@ class ReferenceAppHtmxPlaywrightTest {
         }
     }
 
+    private void assertReadOnlyPresentation(final Locator property, final String vaadinTag) {
+        property.waitFor();
+        final String propertySelector = "cw-property[id='" + property.getAttribute("id") + "']";
+        page.waitForFunction("selector => Boolean(document.querySelector(selector)?.dataset.renderer)", propertySelector);
+        final Locator adapter = property.locator("cw-field-editor[data-mode='view']");
+        if (nativeToolkit() || vaadinTag == null) {
+            assertThat(adapter.count()).isZero();
+            assertThat(property.getAttribute("data-renderer")).isNotEqualTo("vaadin-field-view");
+            return;
+        }
+        if (adapter.count() == 0) {
+            assertThat(property.locator(".causeway-value-null").count())
+                    .as("Only null values may retain native presentation for a qualified family")
+                    .isEqualTo(1);
+            return;
+        }
+        page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'",
+                propertySelector + " cw-field-editor[data-mode='view']");
+        final Locator control = adapter.locator(vaadinTag);
+        assertThat(control.count()).isEqualTo(1);
+        assertThat(control.evaluate("element => Boolean(element.readOnly || element.hasAttribute('readonly'))"))
+                .isEqualTo(true);
+        assertThat(property.locator("cw-field-editor[data-mode='view']").count()).isEqualTo(1);
+    }
+
     private void assertFieldEditor(
             final String serviceField,
             final String actionField,
@@ -807,6 +862,8 @@ class ReferenceAppHtmxPlaywrightTest {
         final String pageId = invokeViewModel(serviceField, actionField, pageResultType);
         openObject(entityLogicalType, firstCollectionEntityId(objectField, pageId, entityResultType));
         final Locator property = page.locator("cw-property[id='" + member + "']");
+        final String readOnlyVaadinTag = entityLogicalType.contains("Boolean") ? "vaadin-checkbox" : vaadinTag;
+        assertReadOnlyPresentation(property, readOnlyVaadinTag);
         property.locator("[data-causeway-action='edit']").click();
         final Locator editor = resolveEditor("cw-property[id='" + member + "'] [data-causeway-editor='" + member + "']");
         assertThat(editor.evaluate("element => element.localName"))
@@ -837,14 +894,13 @@ class ReferenceAppHtmxPlaywrightTest {
                 : pickerCompatibleCollectionEntityId(objectField, pageId, entityResultType, member);
         openObject(entityLogicalType, entityId);
         final Locator property = page.locator("cw-property[id='" + member + "']");
+        assertReadOnlyPresentation(property, vaadinTag);
         property.locator("[data-causeway-action='edit']").click();
         final Locator editor = resolveEditor("cw-property[id='" + member + "'] [data-causeway-editor='" + member + "']");
         final String localName = String.valueOf(editor.evaluate("element => element.localName"));
         if (vaadinTag != null && fieldFamiliesEnabled()) {
             assertThat(localName).isEqualTo(vaadinTag);
             assertThat(fieldAssetRequests("local-temporal")).isEqualTo(1);
-            assertThat(fieldAssetRequests("basic")).isZero();
-            assertThat(fieldAssetRequests("numeric")).isZero();
         } else {
             assertThat(localName).isEqualTo("input");
             assertThat(editor.getAttribute("type")).isEqualTo(nativeType);
@@ -894,7 +950,8 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private static boolean nativeToolkit() {
         return "native".equalsIgnoreCase(System.getProperty(
-                "causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin"));
+                "causeway.viewer.webcomponents.htmx.component-toolkit",
+                System.getProperty("causeway.viewer.webcomponents.htmx.editor-toolkit", "vaadin")));
     }
 
     private boolean fieldFamiliesEnabled() {
@@ -905,7 +962,7 @@ class ReferenceAppHtmxPlaywrightTest {
     private void assertSemanticAccessibility() {
         final Map<?, ?> result = (Map<?, ?>) page.evaluate("""
                 () => {
-                  const ids = [...document.querySelectorAll('[id]')].map(element => element.id);
+                  const ids = [...document.body.querySelectorAll('[id]')].map(element => element.id);
                   const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
                   const unlabeled = [...document.querySelectorAll('input,select,textarea,button')].filter(element => {
                     if (element.type === 'hidden') return false;
@@ -920,6 +977,10 @@ class ReferenceAppHtmxPlaywrightTest {
 
     private int fieldAssetRequests(final String family) {
         return ((Number) page.evaluate("family => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-fields/vaadin-' + family + '.js')).length", family)).intValue();
+    }
+
+    private int actionAssetRequests() {
+        return ((Number) page.evaluate("() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/causeway-webcomponents/vaadin-actions/vaadin-actions.js')).length")).intValue();
     }
 
     private int referenceAssetRequests() {

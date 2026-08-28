@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The Causeway web-component modules provide framework-neutral browser components backed by the Causeway rich GraphQL schema.
-The foundation module includes a GraphQL client provider, coordinated application menu bars, service-action prompts and invocation, coordinated object contexts, safe effective-grid and fallback composite objects, semantic read-only rendering, explicitly enabled property editing, normalized interaction results, lazy collections, and an optional cohesive theme.
+The foundation module includes a GraphQL client provider, coordinated application menu bars, service-action prompts and invocation, coordinated object contexts, safe effective-grid and fallback composite objects, toolkit-qualified read-only scalar and ordinary-action presentation with native rollback, explicitly enabled property editing, normalized interaction results, lazy collections, and an optional cohesive theme.
 It deliberately has no dependency on HTMX, React, Vue, Svelte, Wicket, Bootstrap, or a browser component-authoring framework.
 The separate optional HTMX module adds canonical routing, a stable shell, history, custom-page selection, and fragment lifecycle above those components.
 
@@ -58,7 +58,7 @@ cd viewers/webcomponents/foundation
 node --test --test-concurrency=1
 ----
 
-The tests cover targeted application and service discovery, bounded menu and grid parsing, coordinated menu generations, standalone and declarative bars, grouped service-action state, service prompts and results, deterministic and fallback object layout planning, context-owned structural resources, generated rich-schema naming, schema diagnostics, executor behavior, selection coordination, property and object-action semantic commands, editor selection, validation, cancellation, mutation serialization, typed outcomes, partial errors, component lifecycle, context propagation, and integrated state distribution.
+The tests cover targeted application and service discovery, bounded menu and grid parsing, coordinated menu generations, standalone and declarative bars, grouped service-action state, service prompts and results, deterministic and fallback object layout planning, context-owned structural resources, generated rich-schema naming, schema diagnostics, executor behavior, selection coordination, read-only presentation eligibility and fallback, ordinary action adaptation, property and object-action semantic commands, editor selection, validation, cancellation, mutation serialization, typed outcomes, partial errors, component lifecycle, context propagation, and integrated state distribution.
 
 === Related GraphQL modules
 
@@ -99,7 +99,7 @@ jar tf viewers/webcomponents/foundation/target/causeway-viewer-webcomponents-fou
   | grep 'META-INF/resources/causeway-webcomponents/'
 ----
 
-The listing should include `META-INF/resources/causeway-webcomponents/index.mjs` and its imported modules.
+The listing should include `META-INF/resources/causeway-webcomponents/index.mjs`, its imported modules, the independently lazy `vaadin-reference`, `vaadin-fields`, and `vaadin-actions` assets, their policy metadata, and their distributable legal files.
 
 == Manual browser verification
 
@@ -245,7 +245,8 @@ For realistic authentication behavior, same-origin serving is usually simpler.
 Verify that `<cw-menubars>` reaches `data-menu-state="ready"` or bounded `partial-error`, renders labelled effective primary, secondary, and tertiary navigation without hidden entries, and preserves visible disabled actions with reasons.
 Verify that `<cw-object>` reaches `data-layout-state="ready"` for an authorized effective grid or `fallback` when the resource is unavailable.
 Verify that its generated `<cw-object-header>` renders object title and identity and each discovered member is placed at most once.
-Verify that each visible property has a label and an `<output>` value.
+Verify that each visible property has one Causeway label and an `<output>` value, with eligible standard values using genuine read-only internal fields under the default toolkit and established renderers under explicit native rollback.
+Verify that ordinary action controls use internal Vaadin Buttons by default and established native buttons under rollback, while prompt, property-interaction, menu, and shell controls remain native.
 Verify that values containing markup-like characters are escaped rather than interpreted as HTML.
 Verify that hidden properties produce no visible content.
 Verify that disabled properties expose `aria-disabled="true"` and their disabled reason.
