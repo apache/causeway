@@ -6,13 +6,14 @@ That hybrid limits visual continuity between view and edit states and leaves Cau
 ## What Changes
 
 - Extend the selected Vaadin toolkit from editor-only behavior to eligible read-only scalar property presentation and ordinary action controls.
-- Render qualified read-only text, multiline, protected, boolean, enum, bounded-choice, numeric, date, time, and date-time values through reviewed Vaadin field components in read-only form.
-- Keep object references, object links, nulls, resources, LOBs, custom values, unsupported values, collections, and other non-field presentations on their established semantic renderers unless separately qualified.
+- Render qualified read-only text, multiline, Boolean, enum, bounded-choice, numeric, date, time, and date-time values through reviewed Vaadin field components in genuine read-only form.
+- Keep protected values, object references, object links, nulls, resources, LOBs, custom values, unsupported values, collections, and other non-field presentations on their established semantic renderers unless separately qualified.
 - Render `<cw-action>` controls through internal `vaadin-button` adapters while preserving visibility, usability, descriptions, disabled reasons, loading state, invocation, result handling, and focus contracts.
-- Qualify property edit, save, cancel, clear, and action-prompt controls separately before replacing their native buttons; an unqualified control remains native rather than receiving an approximate adapter.
+- Leave property edit, save, cancel, clear, and action-prompt controls native in this change; any later replacement requires separate qualification rather than an approximate adapter.
 - Preserve `<cw-property>`, `<cw-action>`, Causeway events, GraphQL contexts, canonical routes, and documented `causeway-*` styling hooks as the public application contract.
 - Keep raw `vaadin-*` tags, events, renderer callbacks, and Shadow DOM details internal and unsupported for application integration.
-- Evolve the existing toolkit policy so explicit native mode restores both native presentation and native editing without changing application markup, GraphQL operations, or persisted data.
+- Add `causeway.viewer.webcomponents.htmx.component-toolkit=vaadin|native` as the common policy, default it to `vaadin`, and retain the existing editor and pilot properties as bounded compatibility inputs when the new property is absent.
+- Ensure explicit `component-toolkit=native` restores both native presentation and native editing without changing application markup, GraphQL operations, or persisted data.
 - Accept that eligible read-only object pages request the independently packaged Vaadin field and button closures; route-lazy delivery now means no request until an eligible presentation connects rather than no request until editing begins.
 - Require pinned inputs, deterministic generated assets, checksums, licenses, vulnerability review, exact CSP hashes, compressed budgets, accessibility, keyboard, responsive, theme, lifecycle, and fallback evidence.
 
