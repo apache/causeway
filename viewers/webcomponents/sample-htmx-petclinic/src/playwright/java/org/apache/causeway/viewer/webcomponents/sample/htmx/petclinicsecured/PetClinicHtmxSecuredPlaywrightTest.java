@@ -79,6 +79,7 @@ class PetClinicHtmxSecuredPlaywrightTest {
     void anonymousLoginDeepLinkMutationCsrfLogoutHistoryAndExpiryJourney() {
         try (var context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1440, 900))) {
             final var page = context.newPage();
+            final var menuBarRequests = new ArrayList<String>();
             page.onPageError(error -> browserFailures.add("page: " + error));
             page.onConsoleMessage(message -> {
                 if ("error".equals(message.type())) {
@@ -89,12 +90,16 @@ class PetClinicHtmxSecuredPlaywrightTest {
                 if (request.url().contains("/graphql") && "POST".equals(request.method())) {
                     graphQlCsrfHeaders.add(request.headers().get("x-csrf-token"));
                 }
+                if (request.url().contains("/causeway-webcomponents/vaadin-menubar/")) {
+                    menuBarRequests.add(request.url());
+                }
             });
 
             final var deepLink = "/htmx/object/petclinic.PetOwner/s_owner-mary";
             page.navigate(origin() + deepLink, new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
             page.waitForURL("**/htmx/login**");
             assertThat(page.locator("cw-graphql-client").count()).isZero();
+            assertThat(menuBarRequests).isEmpty();
             page.waitForFunction("() => document.activeElement?.id === 'username'");
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
@@ -102,6 +107,7 @@ class PetClinicHtmxSecuredPlaywrightTest {
             page.locator("button[type='submit']").click();
             page.waitForURL("**/htmx/login?error=true**");
             assertThat(page.locator("[role='alert']").textContent()).contains("Sign-in failed");
+            assertThat(menuBarRequests).isEmpty();
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
             page.locator("#password").fill(PetClinicSecmanDataConfiguration.PASSWORD);
@@ -118,8 +124,13 @@ class PetClinicHtmxSecuredPlaywrightTest {
             waitForReadyObject(page);
             assertThat(page.locator("[data-testid='causeway-shell-user']").textContent()).contains("sven");
             page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
+            page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
+            assertThat(menuBarRequests).hasSize(1);
             assertThat(page.locator("[data-causeway-service-action][data-service-logical-type='causeway.security.LogoutMenu'][data-action-id='logout']").count())
                     .isZero();
+            assertThat(page.locator("cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary")
+                    .evaluateAll("elements => elements.some(element => Object.values(element._projection?.actions ?? {}).some(action => action.serviceLogicalTypeName === 'causeway.security.LogoutMenu' && action.actionId === 'logout'))"))
+                    .isEqualTo(false);
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
 
             final var property = page.locator("cw-property[id='knownAs']");
@@ -128,7 +139,12 @@ class PetClinicHtmxSecuredPlaywrightTest {
             editor.waitFor();
             editor.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('input', {bubbles:true, composed:true})); element.dispatchEvent(new Event('change', {bubbles:true, composed:true})); }", "Mary Secured");
             property.locator("[data-causeway-action='save']").click();
-            page.waitForFunction("() => document.querySelector(\"cw-property[id='knownAs'] .causeway-property-value\")?.textContent.includes('Mary Secured')");
+            try {
+                page.waitForFunction("() => { const property = document.querySelector(\"cw-property[id='knownAs']\"); return property?.querySelector('cw-field-editor[data-mode=\"view\"]')?.dataset.value === 'Mary Secured' || property?.querySelector('.causeway-property-value')?.textContent.includes('Mary Secured'); }");
+            } catch (com.microsoft.playwright.TimeoutError cause) {
+                throw new AssertionError("Secured property update did not settle; property=" + property.evaluate("element => element.outerHTML")
+                        + "; failures=" + browserFailures + "; csrfHeaders=" + graphQlCsrfHeaders, cause);
+            }
 
             final var rejectedStatus = (Number) page.evaluate("""
                     async () => (await fetch('/graphql', {
@@ -144,15 +160,19 @@ class PetClinicHtmxSecuredPlaywrightTest {
             page.locator(".causeway-shell-brand").click();
             page.waitForURL("**/htmx/login**");
             assertThat(page.locator("#username").isVisible()).isTrue();
+            assertThat(menuBarRequests).hasSize(1);
             browserFailures.removeIf(message -> message.contains("status of 401"));
 
             page.locator("#username").fill(PetClinicSecmanDataConfiguration.USERNAME);
             page.locator("#password").fill(PetClinicSecmanDataConfiguration.PASSWORD);
             page.locator("button[type='submit']").click();
             page.waitForURL("**/htmx**");
+            page.waitForFunction("() => ['ready','partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState) && document.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready'");
+            assertThat(menuBarRequests).hasSize(2);
             page.locator("[data-causeway-logout-form] button[type='submit']").click();
             page.waitForURL("**/htmx/login?logout=true");
             assertThat(page.locator("[role='status']").textContent()).contains("signed out");
+            assertThat(menuBarRequests).hasSize(2);
 
             page.goBack();
             page.waitForURL("**/htmx/login**");

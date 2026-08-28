@@ -150,7 +150,8 @@ class PetClinicHtmxPlaywrightTest {
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")
                     || request.url().contains("/causeway-webcomponents/vaadin-actions/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-menubar/")) {
                 toolkitRequests.add(request.url());
             }
         });
@@ -186,7 +187,11 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(page.locator("html").getAttribute("data-causeway-collection-grid"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
-        assertThat(toolkitRequests).isEmpty();
+        assertThat(page.locator("html").getAttribute("data-causeway-application-menubar"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
+                .isEqualTo(nativeToolkit() ? 0 : 1);
+        assertThat(toolkitRequests.stream().noneMatch(url -> !url.contains("/vaadin-menubar/"))).isTrue();
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
@@ -195,7 +200,9 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("futureVisits", 3);
         assertCollectionPresentation("petOwners", "narrow");
         assertCollectionPresentation("futureVisits", "narrow");
-        assertThat(toolkitRequests).isEmpty();
+        assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
+                .isEqualTo(nativeToolkit() ? 0 : 1);
+        assertThat(toolkitRequests.stream().noneMatch(url -> !url.contains("/vaadin-menubar/"))).isTrue();
 
         clickObjectLink("Mary Smith");
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
@@ -271,7 +278,12 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(horizontalOverflow)
                 .as("overflowing elements: %s", overflowingElements)
                 .isEqualTo(0);
-        assertThat(page.locator(".causeway-menubar-bar-disclosure").count()).isGreaterThan(0);
+        if (nativeToolkit()) {
+            assertThat(page.locator(".causeway-menubar-bar-disclosure").count()).isGreaterThan(0);
+        } else {
+            assertThat(page.locator("cw-menubar-control vaadin-menu-bar").count()).isGreaterThan(0);
+            page.waitForFunction("() => document.querySelector('cw-menubar-primary')?.dataset.causewayMenubarResponsive === 'narrow'");
+        }
 
         final var homeReadsBeforeBrandNavigation = graphQLRequests.stream()
                 .filter(payload -> payload.contains("CausewayReadApplicationEntry"))
@@ -293,7 +305,11 @@ class PetClinicHtmxPlaywrightTest {
         openHome();
 
         openMenu("Pet Owners");
-        menuDisclosure("Pet Owners").press("Escape");
+        if (nativeToolkit()) {
+            menuDisclosure("Pet Owners").press("Escape");
+        } else {
+            page.locator("cw-menubar-control[data-causeway-menubar-tier='primary']").press("Escape");
+        }
         assertMenuClosedAndFocused("Pet Owners");
         assertThat(page.locator(PROMPT).count()).isZero();
 
@@ -304,14 +320,12 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(petclinicServiceActionIds()).containsExactlyInAnyOrder(
                 "create", "findByName", "findByNameLike", "listAll", "count", "listUpcoming");
 
-        final var listAll = serviceAction("listAll");
-        listAll.click();
+        activateServiceAction("listAll");
         waitForShellResult("listAll", "4 results");
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
-        final var findByName = serviceAction("findByName");
-        findByName.click();
+        activateServiceAction("findByName");
         waitForPrompt("findByName");
         assertMenuClosed("Pet Owners");
         assertFocused(parameter("name"));
@@ -324,14 +338,13 @@ class PetClinicHtmxPlaywrightTest {
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
-        final var findByNameLike = serviceAction("findByNameLike");
-        findByNameLike.click();
+        activateServiceAction("findByNameLike");
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         cancelPrompt();
         assertMenuClosedAndFocused("Pet Owners");
         openMenu("Pet Owners");
-        serviceAction("findByNameLike").click();
+        activateServiceAction("findByNameLike");
         waitForPrompt("findByNameLike");
         fillParameter("name", "James");
         submitPrompt();
@@ -339,12 +352,14 @@ class PetClinicHtmxPlaywrightTest {
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Pet Owners");
-        serviceAction("count").click();
+        activateServiceAction("count");
         waitForShellResult("count", "4");
         assertMenuClosedAndFocused("Pet Owners");
 
         openMenu("Visits");
-        final var listUpcoming = serviceAction("listUpcoming");
+        final var listUpcoming = nativeToolkit()
+                ? serviceAction("listUpcoming")
+                : page.locator("cw-menubar-control[data-causeway-menubar-tier='primary']");
         listUpcoming.focus();
         listUpcoming.press("Tab");
         page.waitForFunction("() => !document.activeElement?.closest('cw-menubar-primary')");
@@ -353,7 +368,7 @@ class PetClinicHtmxPlaywrightTest {
                 "() => !document.activeElement?.closest('cw-menubar-primary')")).isTrue();
 
         openMenu("Visits");
-        serviceAction("listUpcoming").click();
+        activateServiceAction("listUpcoming");
         waitForShellResult("listUpcoming", "3 results");
         assertMenuClosedAndFocused("Visits");
     }
@@ -449,7 +464,7 @@ class PetClinicHtmxPlaywrightTest {
     void disposableOwnerExercisesCreateAndEveryObjectAction() {
         openHome();
         openMenu("Pet Owners");
-        serviceAction("create").click();
+        activateServiceAction("create");
         waitForPrompt("create");
         assertMenuClosed("Pet Owners");
         assertFocused(parameter("name"));
@@ -572,6 +587,13 @@ class PetClinicHtmxPlaywrightTest {
 
     private void waitForMenus() {
         page.waitForFunction("() => ['ready', 'partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
+        if (nativeToolkit()) {
+            assertThat(page.locator("cw-menubar-control").count()).isZero();
+            return;
+        }
+        page.waitForFunction("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].filter(element => !element.hidden).every(element => element.dataset.causewayMenubarPresentation?.startsWith('vaadin-') && element.querySelector('cw-menubar-control')?.dataset.widgetState === 'ready')");
+        assertThat(((Number) page.evaluate("() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/vaadin-menubar/vaadin-menubar.js')).length")).intValue())
+                .isEqualTo(1);
     }
 
     private void openObject(final String logicalTypeName, final String id) {
@@ -614,6 +636,10 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void openMenu(final String name) {
+        if (!nativeToolkit()) {
+            page.waitForFunction("name => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].some(host => host._projection?.menus?.some(menu => menu.label === name))", name);
+            return;
+        }
         final var disclosure = menuDisclosure(name);
         disclosure.waitFor();
         if (!"true".equals(disclosure.getAttribute("aria-expanded"))) {
@@ -627,12 +653,23 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void assertMenuClosed(final String name) {
+        if (!nativeToolkit()) {
+            assertThat(page.locator("cw-menubar-control").count()).isGreaterThan(0);
+            assertThat(page.locator("[data-causeway-menu-disclosure]").count()).isZero();
+            return;
+        }
         final var disclosure = menuDisclosure(name);
         page.waitForFunction("id => { const disclosure = document.querySelector(`[data-causeway-menu-disclosure][aria-controls='${id}']`); const panel = document.getElementById(id); return disclosure?.getAttribute('aria-expanded') === 'false' && panel?.hidden === true; }",
                 disclosure.getAttribute("aria-controls"));
     }
 
     private void assertMenuClosedAndFocused(final String name) {
+        if (!nativeToolkit()) {
+            assertMenuClosed(name);
+            page.locator("cw-menubar-control[data-causeway-menubar-tier='primary']").evaluate("element => element.focus()");
+            page.waitForFunction("() => document.querySelector('cw-menubar-control[data-causeway-menubar-tier=\"primary\"]')?.contains(document.activeElement)");
+            return;
+        }
         final var disclosure = menuDisclosure(name);
         final var panelId = disclosure.getAttribute("aria-controls");
         assertMenuClosed(name);
@@ -644,11 +681,48 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private Set<String> petclinicServiceActionIds() {
+        if (!nativeToolkit()) {
+            final var values = (List<?>) page.evaluate("() => [...document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')].flatMap(host => Object.values(host._projection?.actions ?? {}).filter(action => action.serviceLogicalTypeName.startsWith('petclinic.')).map(action => action.actionId))");
+            final var actionIds = new LinkedHashSet<String>();
+            values.forEach(value -> actionIds.add(String.valueOf(value)));
+            return actionIds;
+        }
         final var actionIds = new LinkedHashSet<String>();
         for (final var action : page.locator("[data-service-logical-type^='petclinic.'][data-action-id]").all()) {
             actionIds.add(action.getAttribute("data-action-id"));
         }
         return actionIds;
+    }
+
+    private void activateServiceAction(final String actionId) {
+        if (nativeToolkit()) {
+            serviceAction(actionId).click();
+            return;
+        }
+        final var activated = page.evaluate("""
+                actionId => {
+                  for (const host of document.querySelectorAll('cw-menubar-primary, cw-menubar-secondary, cw-menubar-tertiary')) {
+                    const descriptor = Object.values(host._projection?.actions ?? {}).find(action => action.actionId === actionId);
+                    const control = host.querySelector('vaadin-menu-bar');
+                    if (descriptor && control) {
+                      const find = items => {
+                        for (const item of items ?? []) {
+                          if (item.causewayKey === descriptor.key) return item;
+                          const nested = find(item.children);
+                          if (nested) return nested;
+                        }
+                        return null;
+                      };
+                      const item = find(control.items);
+                      if (!item || item.disabled) return false;
+                      control.dispatchEvent(new CustomEvent('item-selected', {detail: {value: item}}));
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+                """, actionId);
+        assertThat(activated).isEqualTo(true);
     }
 
     private void assertDefaultOrNativeMemberPresentation(final String propertyMember, final String actionMember) {

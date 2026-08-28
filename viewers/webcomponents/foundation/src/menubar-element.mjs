@@ -26,6 +26,13 @@ import {
   requestMenuBarsContext
 } from './context-events.mjs';
 import {MenuBarsContextController, MenuBarsStatus} from './menu-context-controller.mjs';
+import {projectCausewayMenuBar} from './menubar-projection.mjs';
+import {qualifyCausewayMenuBar} from './menubar-qualification.mjs';
+import {
+  CAUSEWAY_MENUBAR_CONTROL,
+  CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT,
+  causewayMenubarWidgetConfiguration
+} from './menubar-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
 
 const HTMLElementBase = globalThis.HTMLElement ?? class extends EventTarget {};
@@ -42,6 +49,18 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._client = null;
     this._fetchImpl = null;
     this.lastDiagnosticGeneration = -1;
+    this._currentState = null;
+    this._currentBar = null;
+    this._projection = null;
+    this._presentation = 'native';
+    this._qualificationReason = null;
+    this._responsiveRevision = 0;
+    this._resizeObserver = null;
+    this._resizeScheduled = false;
+    this._semanticFocusIntent = null;
+    this.onPolicyChange = event => {
+      if (event.detail?.family === 'menubar' && this.isConnected) this.#renderCurrentReadyState();
+    };
     this.onOutsideClick = event => {
       if (!this.contains?.(event.target)) {
         this.#closeExpandedMenus();
@@ -88,11 +107,23 @@ export class CausewayMenubarElement extends HTMLElementBase {
 
   connectedCallback() {
     globalThis.document?.addEventListener?.('click', this.onOutsideClick);
+    globalThis.document?.addEventListener?.(CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT, this.onPolicyChange);
+    if (globalThis.ResizeObserver) {
+      this._resizeObserver = new ResizeObserver(() => this.#scheduleResponsiveRender());
+      this._resizeObserver.observe(this);
+    }
     this.#connectContext();
   }
 
   disconnectedCallback() {
     globalThis.document?.removeEventListener?.('click', this.onOutsideClick);
+    globalThis.document?.removeEventListener?.(CAUSEWAY_MENUBAR_WIDGET_POLICY_EVENT, this.onPolicyChange);
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+    this._responsiveRevision += 1;
+    this._currentState = null;
+    this._currentBar = null;
+    this._projection = null;
     this._release?.();
     this._release = null;
     this._privateContext?.disconnect();
@@ -126,9 +157,11 @@ export class CausewayMenubarElement extends HTMLElementBase {
 
   #renderState(state) {
     const renderRoot = this.#renderRoot();
+    this._currentState = state;
     this.setAttribute('data-menu-state', state.status);
     this.setAttribute('data-causeway-bar', this.role);
     const bar = state.plan?.bars?.[this.role] ?? null;
+    this._currentBar = bar;
     if (isLoading(state.status)) {
       this.hidden = false;
       renderRoot.innerHTML = `<div class="causeway-menubar-status causeway-loading" role="status">Loading ${escapeHtml(this.role)} application menu…</div>`;
@@ -138,12 +171,14 @@ export class CausewayMenubarElement extends HTMLElementBase {
         ? 'Application menus are unavailable.'
         : 'The application menu could not be loaded.';
       renderRoot.innerHTML = `<div class="causeway-menubar-status causeway-error" role="alert">${message}</div>`;
+      this.#restoreSemanticFocus(renderRoot);
     } else if (!bar || bar.menus.length === 0) {
       this.hidden = true;
       renderRoot.innerHTML = '';
+      this.#restoreSemanticFocus(renderRoot);
     } else {
       this.hidden = false;
-      renderRoot.innerHTML = renderBar(bar, this.sequence);
+      this.#renderReadyBar(renderRoot, bar, state);
     }
     this.dispatchEvent(createSemanticEvent(MENU_BARS_STATE_EVENT, Object.freeze({
       element: this,
@@ -166,6 +201,105 @@ export class CausewayMenubarElement extends HTMLElementBase {
     }
   }
 
+  #renderReadyBar(renderRoot, bar, state) {
+    const widgetPolicy = causewayMenubarWidgetConfiguration();
+    const projection = projectCausewayMenuBar(bar, {
+      generation: state.generation,
+      excludeAction: widgetPolicy.excludeAction
+    });
+    const qualification = qualifyCausewayMenuBar({
+      role: this.role,
+      generation: state.generation,
+      policy: widgetPolicy.enabled ? 'vaadin' : 'native',
+      familyAvailable: widgetPolicy.failed !== true,
+      connected: this.isConnected,
+      visible: true,
+      current: state === this._currentState,
+      projection,
+      width: this.getBoundingClientRect?.().width ?? 0
+    });
+    this._projection = projection;
+    if (!projection.accepted && projection.reason === 'empty') {
+      this.hidden = true;
+      renderRoot.innerHTML = '';
+      this._presentation = 'native';
+      this._qualificationReason = 'empty';
+      this.dataset.causewayMenubarPresentation = 'native';
+      this.dataset.causewayMenubarFallback = 'empty';
+      this.#restoreSemanticFocus(renderRoot);
+      return;
+    }
+    this._presentation = qualification.presentation;
+    this._qualificationReason = qualification.reason;
+    this.dataset.causewayMenubarPresentation = qualification.presentation;
+    this.dataset.causewayMenubarResponsive = qualification.presentation === 'vaadin-overflow' ? 'narrow' : 'wide';
+    this.dataset.causewayMenubarFallback = qualification.reason ?? '';
+    if (!qualification.accepted) {
+      renderRoot.innerHTML = renderBar(bar, this.sequence);
+      this.#restoreSemanticFocus(renderRoot);
+      return;
+    }
+    const label = `${humanize(this.role)} application menu`;
+    renderRoot.innerHTML = `<div class="causeway-menubar-shell causeway-menubar-toolkit" data-causeway-bar-role="${escapeHtml(this.role)}"><nav class="causeway-menubar causeway-menubar-${escapeHtml(this.role)}" aria-label="${escapeHtml(label)}"><${CAUSEWAY_MENUBAR_CONTROL} data-causeway-menubar-tier="${escapeHtml(this.role)}"></${CAUSEWAY_MENUBAR_CONTROL}></nav></div>`;
+    const control = renderRoot.querySelector?.(CAUSEWAY_MENUBAR_CONTROL);
+    if (control) {
+      control.presentation = Object.freeze({
+        projection,
+        overflowLabel: overflowLabel(globalThis.document?.documentElement?.lang),
+        activate: descriptor => this.#activateServiceAction(descriptor.serviceLogicalTypeName, descriptor.actionId, control)
+      });
+      this.#restoreSemanticFocus(renderRoot, control);
+    }
+  }
+
+  #restoreSemanticFocus(renderRoot, toolkitControl = null) {
+    const intent = this._semanticFocusIntent;
+    if (!intent) return;
+    this._semanticFocusIntent = null;
+    queueMicrotask(() => {
+      if (!this.isConnected) return;
+      if (toolkitControl?.isConnected) {
+        toolkitControl.focus?.({preventScroll: true});
+        return;
+      }
+      const action = [...(renderRoot.querySelectorAll?.('[data-causeway-service-action]') ?? [])]
+        .find(candidate => candidate.getAttribute('data-service-logical-type') === intent.serviceLogicalTypeName
+          && candidate.getAttribute('data-action-id') === intent.actionId
+          && !candidate.disabled);
+      const fallback = action
+        ?? renderRoot.querySelector?.('[data-causeway-menu-disclosure]')
+        ?? renderRoot.querySelector?.('[data-causeway-bar-disclosure]')
+        ?? globalThis.document?.querySelector?.('.causeway-shell-brand');
+      fallback?.focus?.({preventScroll: true});
+    });
+  }
+
+  #renderCurrentReadyState() {
+    if (!this.isConnected || !this._currentState || !this._currentBar || !isReady(this._currentState.status)) return;
+    this.#renderReadyBar(this.#renderRoot(), this._currentBar, this._currentState);
+  }
+
+  #scheduleResponsiveRender() {
+    if (this._resizeScheduled) return;
+    this._resizeScheduled = true;
+    const revision = ++this._responsiveRevision;
+    globalThis.setTimeout(() => {
+      this._resizeScheduled = false;
+      if (!this.isConnected || revision !== this._responsiveRevision) return;
+      const width = this.getBoundingClientRect?.().width ?? 0;
+      const responsive = width > 0 && width <= 768 ? 'narrow' : 'wide';
+      this.dataset.causewayMenubarResponsive = responsive;
+      if (this._qualificationReason === 'width-unavailable' && width > 0) {
+        this.#renderCurrentReadyState();
+        return;
+      }
+      if (this._presentation.startsWith('vaadin-')) {
+        this._presentation = responsive === 'narrow' ? 'vaadin-overflow' : 'vaadin-wide';
+        this.dataset.causewayMenubarPresentation = this._presentation;
+      }
+    });
+  }
+
   #handleClick(event) {
     const menuButton = event.target?.closest?.('[data-causeway-menu-disclosure]');
     if (menuButton && this.contains?.(menuButton)) {
@@ -186,7 +320,6 @@ export class CausewayMenubarElement extends HTMLElementBase {
     if (!serviceLogicalTypeName || !actionId) {
       return;
     }
-    const context = this._context.serviceContext(serviceLogicalTypeName);
     const panel = actionButton.closest?.('[data-causeway-menu-panel]');
     const disclosure = panel?.id
       ? this.querySelector?.(`[data-causeway-menu-disclosure][aria-controls="${globalThis.CSS?.escape ? CSS.escape(panel.id) : panel.id}"]`)
@@ -194,7 +327,14 @@ export class CausewayMenubarElement extends HTMLElementBase {
     if (disclosure) {
       this.#closeMenu(disclosure, {focus: true});
     }
-    actionButton.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_REQUEST, Object.freeze({
+    this.#activateServiceAction(serviceLogicalTypeName, actionId, actionButton);
+  }
+
+  #activateServiceAction(serviceLogicalTypeName, actionId, origin) {
+    if (!serviceLogicalTypeName || !actionId || !this._context) return;
+    const context = this._context.serviceContext(serviceLogicalTypeName);
+    this._semanticFocusIntent = Object.freeze({role: this.role, actionId, serviceLogicalTypeName, generation: this._currentState?.generation ?? 0});
+    origin.dispatchEvent(createSemanticEvent(CausewaySemanticEvent.ACTION_REQUEST, Object.freeze({
       actionId,
       serviceLogicalTypeName,
       target: context.interactionTarget,
@@ -401,6 +541,15 @@ function isLoading(status) {
     MenuBarsStatus.RESOURCE_LOADING,
     MenuBarsStatus.SERVICE_LOADING
   ].includes(status);
+}
+
+function overflowLabel(language) {
+  const labels = {de: 'Weitere Optionen', es: 'Más opciones', fr: 'Plus d’options', nl: 'Meer opties'};
+  return labels[String(language ?? '').toLowerCase().split('-')[0]] ?? 'More options';
+}
+
+function isReady(status) {
+  return status === MenuBarsStatus.READY || status === MenuBarsStatus.PARTIAL_ERROR;
 }
 
 function humanize(value) {

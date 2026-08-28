@@ -55,3 +55,4 @@
 
 # Deterministic minified bundles may retain significant whitespace in template literals.
 viewers/webcomponents/foundation/vaadin-fields/generated/assets/*.js -whitespace
+viewers/webcomponents/foundation/vaadin-menubar/generated/assets/*.js -whitespace
