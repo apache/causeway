@@ -24,7 +24,7 @@
   color: var(--causeway-text);
 }
 
-.causeway-app-shell > causeway-graphql-client {
+.causeway-app-shell > cw-graphql-client {
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto auto auto 1fr auto;
@@ -92,19 +92,19 @@
   font-weight: 800;
 }
 
-.causeway-shell-navbar > causeway-menubars {
+.causeway-shell-navbar > cw-menubars {
   min-width: 0;
   flex: 1 1 auto;
   flex-direction: row;
   align-items: stretch;
 }
 
-.causeway-shell-navbar > causeway-menubars > causeway-menubar-primary {
+.causeway-shell-navbar > cw-menubars > cw-menubar-primary {
   min-width: 0;
   flex: 1 1 auto;
 }
 
-.causeway-shell-navbar > causeway-menubars > :is(causeway-menubar-secondary, causeway-menubar-tertiary) {
+.causeway-shell-navbar > cw-menubars > :is(cw-menubar-secondary, cw-menubar-tertiary) {
   flex: 0 1 auto;
 }
 
@@ -252,7 +252,7 @@
     flex-wrap: wrap;
   }
 
-  .causeway-shell-navbar > causeway-menubars {
+  .causeway-shell-navbar > cw-menubars {
     flex-basis: 100%;
     flex-direction: column;
   }

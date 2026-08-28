@@ -183,7 +183,7 @@ test('renders escaped light-DOM semantic children, accessible tabs, and editable
   assert.match(html, /role="tablist"/);
   assert.match(html, /role="tab"/);
   assert.match(html, /role="tabpanel"/);
-  assert.match(html, /<causeway-property[^>]*member="unsafe"[^>]*label="&lt;Unsafe&gt;"[^>]* editable/);
+  assert.match(html, /<cw-property[^>]*member="unsafe"[^>]*label="&lt;Unsafe&gt;"[^>]* editable/);
   assert.doesNotMatch(html, /<Unsafe>/);
 });
 

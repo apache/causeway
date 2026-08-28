@@ -281,7 +281,7 @@ test('default reference widgets preserve identities, bounds and explicit native 
     descriptionId: '', errorId: '', testId: 'owner-editor', required: true, disabled: false
   });
   assert.equal(single.editorId, 'vaadin-reference');
-  assert.match(single.html, /<causeway-reference-editor/);
+  assert.match(single.html, /<cw-reference-editor/);
   assert.match(single.html, /data-minimum-search-length="3"/);
   assert.match(single.html, /required/);
   assert.deepEqual(parseCausewayEditorValue(single.editor, {value: {id: 'owner-2'}}), {id: 'owner-2'});
@@ -511,7 +511,7 @@ test('property preserves clear focus intent across validation renders but not ex
   property.appendChild(oldClear);
   const firstAdapter = {requests: 0, focusClear() { this.requests += 1; }};
   let replacementAdapter = firstAdapter;
-  property.querySelector = selector => selector === 'causeway-field-editor' ? replacementAdapter : null;
+  property.querySelector = selector => selector === 'cw-field-editor' ? replacementAdapter : null;
   oldClear.focus();
   property.setPendingValue('Changed');
 

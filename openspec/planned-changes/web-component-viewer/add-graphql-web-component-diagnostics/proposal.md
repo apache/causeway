@@ -11,7 +11,7 @@ Its non-disclosure boundary is reinforced by `coverage-matrix.yaml` entries `REF
 - Record operation name and kind, endpoint, exact GraphQL document, redacted variables, start time, duration, HTTP outcome, redacted response data, GraphQL errors, transport failures, cancellation, and obsolete completion state where available.
 - Add a bounded in-memory diagnostic store with filtering, retention limits, clear, subscription, and export contracts.
 - Add configurable redaction and truncation policies that run before records reach observers or stores, mask hidden rich-wrapper values and common sensitive keys by default, and omit authorization material.
-- Add an optional framework-neutral `<causeway-graphql-diagnostics>` light-DOM element for listing, filtering, expanding, copying, and clearing diagnostic records accessibly.
+- Add an optional framework-neutral `<cw-graphql-diagnostics>` light-DOM element for listing, filtering, expanding, copying, and clearing diagnostic records accessibly.
 - Extend `sample-html` with an explicitly enabled developer diagnostics region that demonstrates requests and results without exposing the hidden sample value.
 - Add deterministic executor, store, DOM, real-endpoint, browser, security, cancellation, and accessibility verification.
 

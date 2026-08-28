@@ -34,25 +34,25 @@
       max-width: 60rem;
     }
 
-    causeway-object-header,
-    causeway-property,
-    causeway-action,
-    causeway-collection {
+    cw-object-header,
+    cw-property,
+    cw-action,
+    cw-collection {
       display: block;
     }
 
-    causeway-property .causeway-property-label,
-    causeway-collection .causeway-collection-label {
+    cw-property .causeway-property-label,
+    cw-collection .causeway-collection-label {
       color: var(--demo-accent);
     }
 
-    causeway-action button {
+    cw-action button {
       border: 1px solid var(--demo-border);
       border-radius: 0.4rem;
       padding: 0.4rem 0.75rem;
     }
 
-    causeway-collection .causeway-collection-table {
+    cw-collection .causeway-collection-table {
       border: 1px solid var(--demo-border);
     }
   </style>
@@ -63,20 +63,20 @@
     <p>This application-themed plain HTML page has no HTMX or frontend-framework dependency.</p>
     <output id="semantic-event" aria-live="polite">No semantic event</output>
 
-    <causeway-graphql-client endpoint="/graphql">
-      <causeway-object-context logical-type="university.dept.Department" object-id="1">
-        <causeway-object-header></causeway-object-header>
-        <causeway-property member="name" editable></causeway-property>
-        <causeway-property member="status" editable></causeway-property>
-        <causeway-property member="chair"></causeway-property>
-        <causeway-action member="inspect"></causeway-action>
-        <causeway-interaction-controller></causeway-interaction-controller>
-        <causeway-collection member="staffMembers">
-          <causeway-collection-column member="name" label="Name"></causeway-collection-column>
-          <causeway-collection-column member="code" label="Code"></causeway-collection-column>
-        </causeway-collection>
-      </causeway-object-context>
-    </causeway-graphql-client>
+    <cw-graphql-client endpoint="/graphql">
+      <cw-object-context logical-type="university.dept.Department" object-id="1">
+        <cw-object-header></cw-object-header>
+        <cw-property member="name" editable></cw-property>
+        <cw-property member="status" editable></cw-property>
+        <cw-property member="chair"></cw-property>
+        <cw-action member="inspect"></cw-action>
+        <cw-interaction-controller></cw-interaction-controller>
+        <cw-collection member="staffMembers">
+          <cw-collection-column member="name" label="Name"></cw-collection-column>
+          <cw-collection-column member="code" label="Code"></cw-collection-column>
+        </cw-collection>
+      </cw-object-context>
+    </cw-graphql-client>
   </main>
 
   <script type="module">

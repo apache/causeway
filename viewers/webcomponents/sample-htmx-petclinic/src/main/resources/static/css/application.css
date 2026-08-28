@@ -37,7 +37,7 @@
   font-size: 1rem;
 }
 
-.petclinic-dashboard-grid > section > causeway-collection :is(.causeway-collection-label, .causeway-collection-description) {
+.petclinic-dashboard-grid > section > cw-collection :is(.causeway-collection-label, .causeway-collection-description) {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;
@@ -49,7 +49,7 @@
   border: 0 !important;
 }
 
-.petclinic-dashboard-grid > section > causeway-collection .causeway-collection {
+.petclinic-dashboard-grid > section > cw-collection .causeway-collection {
   border-start-start-radius: 0;
   border-start-end-radius: 0;
 }
@@ -67,8 +67,8 @@
   box-sizing: border-box;
 }
 
-.petclinic-page causeway-property,
-.petclinic-page causeway-collection {
+.petclinic-page cw-property,
+.petclinic-page cw-collection {
   min-width: 0;
   max-width: 100%;
 }

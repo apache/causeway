@@ -419,18 +419,18 @@ function renderNode(node, state) {
     return renderTabs(node, state);
   }
   if (node.kind === 'header') {
-    return '<causeway-object-header data-causeway-region="header"></causeway-object-header>';
+    return '<cw-object-header data-causeway-region="header"></cw-object-header>';
   }
   if (node.kind === 'member') {
     const label = ` label="${escapeHtml(node.label)}"`;
     let memberMarkup;
     if (node.memberKind === 'property') {
       const multiLine = node.presentation?.multiLine ? ` multiline="${node.presentation.multiLine}"` : '';
-      memberMarkup = `<causeway-property data-causeway-region="property" member="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></causeway-property>`;
+      memberMarkup = `<cw-property data-causeway-region="property" member="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></cw-property>`;
     } else if (node.memberKind === 'action') {
-      memberMarkup = `<causeway-action data-causeway-region="action" member="${escapeHtml(node.memberId)}"${label}></causeway-action>`;
+      memberMarkup = `<cw-action data-causeway-region="action" member="${escapeHtml(node.memberId)}"${label}></cw-action>`;
     } else {
-      memberMarkup = `<causeway-collection data-causeway-region="collection" member="${escapeHtml(node.memberId)}"${label}></causeway-collection>`;
+      memberMarkup = `<cw-collection data-causeway-region="collection" member="${escapeHtml(node.memberId)}"${label}></cw-collection>`;
     }
     if ((node.children?.length ?? 0) === 0) {
       return memberMarkup;

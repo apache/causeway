@@ -531,7 +531,7 @@ test('collection component does not read until activated and renders declared co
   assert.equal(loadCount, 1);
   assert.match(collection.innerHTML, /causeway-collection-table/);
   assert.match(collection.innerHTML, /<th scope="col">Item<\/th>/);
-  assert.match(collection.innerHTML, /<causeway-object-link/);
+  assert.match(collection.innerHTML, /<cw-object-link/);
   assert.match(collection.innerHTML, /Dr Ada/);
   assert.match(collection.innerHTML, /ADA/);
 
@@ -650,7 +650,7 @@ test('collection component renders default object links, empty and partial-error
   };
   collection.collectionState = {status: 'ready', data: {get: [row()]}, errors: []};
   collection.renderComponentState(baseState);
-  assert.match(collection.innerHTML, /causeway-object-link/);
+  assert.match(collection.innerHTML, /cw-object-link/);
 
   collection.collectionState = {status: 'ready', data: {get: []}, errors: []};
   collection.renderComponentState(baseState);

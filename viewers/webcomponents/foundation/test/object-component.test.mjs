@@ -41,7 +41,7 @@ test('requires the nearest authoritative object context', () => {
   const element = new CausewayObjectElement();
   document.body.appendChild(element);
   assert.equal(element.getAttribute('data-layout-state'), 'error');
-  assert.match(element.innerHTML, /Place &lt;causeway-object&gt; beneath &lt;causeway-object-context&gt;/);
+  assert.match(element.innerHTML, /Place &lt;cw-object&gt; beneath &lt;cw-object-context&gt;/);
 });
 
 test('loads the authorized effective grid and generates established semantic children in light DOM', async () => {
@@ -57,10 +57,10 @@ test('loads the authorized effective grid and generates established semantic chi
   assert.equal(context.requirements.length, 1);
   assert.deepEqual(context.requirements[0], {kind: 'layout'});
   assert.deepEqual(context.resources, ['/graphql/object/type:id/_meta/grid']);
-  assert.match(element.innerHTML, /<causeway-object-header/);
-  assert.match(element.innerHTML, /<causeway-property[^>]*member="name"[^>]* editable/);
-  assert.match(element.innerHTML, /<causeway-action[^>]*member="changeName"/);
-  assert.match(element.innerHTML, /<causeway-collection[^>]*member="staffMembers"/);
+  assert.match(element.innerHTML, /<cw-object-header/);
+  assert.match(element.innerHTML, /<cw-property[^>]*member="name"[^>]* editable/);
+  assert.match(element.innerHTML, /<cw-action[^>]*member="changeName"/);
+  assert.match(element.innerHTML, /<cw-collection[^>]*member="staffMembers"/);
   assert.match(element.innerHTML, /role="tablist"/);
   assert.equal(occurrences(element.innerHTML, 'member="name"'), 1);
   assert.equal(occurrences(element.innerHTML, 'member="changeName"'), 1);
@@ -92,7 +92,7 @@ test('falls back with bounded redacted diagnostics when an effective resource is
   assert.equal(diagnostics.length, 1);
   assert.equal(diagnostics[0].code, 'GRID_XML_DECLARATION_FORBIDDEN');
   assert.doesNotMatch(JSON.stringify(diagnostics), /file:\/\/|passwd|ENTITY secret/);
-  assert.match(element.innerHTML, /<causeway-object-header/);
+  assert.match(element.innerHTML, /<cw-object-header/);
 });
 
 test('retains a rendered plan across ordinary state notifications and refreshes only when requested', async () => {

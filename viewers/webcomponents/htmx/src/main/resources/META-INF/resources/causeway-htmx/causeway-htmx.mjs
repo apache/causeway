@@ -44,10 +44,10 @@ import {
   resultObjectIdentity
 } from './route-policy.mjs';
 
-if (!globalThis.customElements?.get('causeway-graphql-client')) {
-  globalThis.customElements?.define('causeway-graphql-client', CausewayGraphQLClientElement);
+if (!globalThis.customElements?.get('cw-graphql-client')) {
+  globalThis.customElements?.define('cw-graphql-client', CausewayGraphQLClientElement);
 }
-const shell = document.querySelector('causeway-graphql-client');
+const shell = document.querySelector('cw-graphql-client');
 const routeRegion = document.querySelector('#causeway-route');
 const announcement = document.querySelector('#causeway-route-announcement');
 const resultRegion = document.querySelector('#causeway-result');
@@ -113,7 +113,7 @@ function setBusy(busy) {
 }
 
 function activateRouteCollections() {
-  for (const collection of routeRegion?.querySelectorAll('causeway-collection:not([active])') ?? []) {
+  for (const collection of routeRegion?.querySelectorAll('cw-collection:not([active])') ?? []) {
     collection.activate?.();
   }
 }
@@ -228,7 +228,7 @@ function presentResult(detail) {
   } else {
     output.textContent = 'Completed';
     resultRegion.append(heading, output);
-    const context = routeRegion?.querySelector('causeway-object-context')?.context;
+    const context = routeRegion?.querySelector('cw-object-context')?.context;
     if (context) {
       globalThis.setTimeout(() => navigate(
         globalThis.location.pathname + globalThis.location.search,
@@ -335,7 +335,7 @@ document.addEventListener(ACTION_RESULT_EVENT, event => {
 
 document.addEventListener(COMPONENT_STATE_EVENT, event => {
   const collection = event.target;
-  if (collection?.matches?.('causeway-collection:not([active])')
+  if (collection?.matches?.('cw-collection:not([active])')
       && collection.closest?.('#causeway-route')
       && ['ready', 'partial-error'].includes(event.detail?.state?.status)) {
     collection.activate?.();

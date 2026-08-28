@@ -194,19 +194,19 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
-        assertThat(page.locator(".petclinic-page-toolbar causeway-action[member='delete']").count()).isEqualTo(1);
-        assertThat(page.locator("causeway-property[member='name'] > causeway-action[member='updateName']").count())
+        assertThat(page.locator(".petclinic-page-toolbar cw-action[member='delete']").count()).isEqualTo(1);
+        assertThat(page.locator("cw-property[member='name'] > cw-action[member='updateName']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("causeway-collection[member='pets'] > causeway-action[member='addPet']").count())
+        assertThat(page.locator("cw-collection[member='pets'] > cw-action[member='addPet']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("causeway-collection[member='pets'] > causeway-action[member='removePet']").count())
+        assertThat(page.locator("cw-collection[member='pets'] > cw-action[member='removePet']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("causeway-collection[member='visits'] > causeway-action[member='bookVisit']").count())
+        assertThat(page.locator("cw-collection[member='visits'] > cw-action[member='bookVisit']").count())
                 .isEqualTo(1);
-        assertThat(page.locator("causeway-collection[member='pets']")
-                .evaluate("element => [...element.children].filter(child => child.localName === 'causeway-action').map(child => child.getAttribute('member')).join(',')"))
+        assertThat(page.locator("cw-collection[member='pets']")
+                .evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.getAttribute('member')).join(',')"))
                 .isEqualTo("addPet,removePet");
-        assertThat(page.locator("causeway-property[member='name']")
+        assertThat(page.locator("cw-property[member='name']")
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
 
         page.goBack();
@@ -314,10 +314,10 @@ class PetClinicHtmxPlaywrightTest {
         final var listUpcoming = serviceAction("listUpcoming");
         listUpcoming.focus();
         listUpcoming.press("Tab");
-        page.waitForFunction("() => !document.activeElement?.closest('causeway-menubar-primary')");
+        page.waitForFunction("() => !document.activeElement?.closest('cw-menubar-primary')");
         assertMenuClosed("Visits");
         assertThat((Boolean) page.evaluate(
-                "() => !document.activeElement?.closest('causeway-menubar-primary')")).isTrue();
+                "() => !document.activeElement?.closest('cw-menubar-primary')")).isTrue();
 
         openMenu("Visits");
         serviceAction("listUpcoming").click();
@@ -330,25 +330,25 @@ class PetClinicHtmxPlaywrightTest {
     void propertyEditingAndPromptFocusRemainDeterministic() {
         openObject("petclinic.PetOwner", "s_owner-mary");
 
-        final var disabledNameLabel = page.locator("causeway-property[member='name'] .causeway-property-label.causeway-property-disabled-tooltip");
+        final var disabledNameLabel = page.locator("cw-property[member='name'] .causeway-property-label.causeway-property-disabled-tooltip");
         disabledNameLabel.waitFor();
         assertThat(disabledNameLabel.getAttribute("data-tooltip")).isNotBlank();
         assertThat(disabledNameLabel.getAttribute("tabindex")).isEqualTo("0");
-        assertThat(page.locator("causeway-property[member='name'] .causeway-property-disabled-indicator").count()).isZero();
-        assertThat((String) page.locator("causeway-property[member='name'] .causeway-property-value-string")
+        assertThat(page.locator("cw-property[member='name'] .causeway-property-disabled-indicator").count()).isZero();
+        assertThat((String) page.locator("cw-property[member='name'] .causeway-property-value-string")
                 .evaluate("element => getComputedStyle(element).textAlign"))
                 .isIn("start", "left");
 
-        final var knownAs = page.locator("causeway-property[member='knownAs']");
+        final var knownAs = page.locator("cw-property[member='knownAs']");
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
         knownAsEdit.click();
-        final var knownAsEditorSelector = "causeway-property[member='knownAs'] [data-causeway-editor='knownAs']";
+        final var knownAsEditorSelector = "cw-property[member='knownAs'] [data-causeway-editor='knownAs']";
         final var knownAsEditor = resolveEditor(knownAsEditorSelector);
         assertFocused(knownAsEditorSelector);
-        final var knownAsSaveSelector = "causeway-property[member='knownAs'] [data-causeway-action='save']";
-        final var knownAsCancelSelector = "causeway-property[member='knownAs'] [data-causeway-action='cancel']";
+        final var knownAsSaveSelector = "cw-property[member='knownAs'] [data-causeway-action='save']";
+        final var knownAsCancelSelector = "cw-property[member='knownAs'] [data-causeway-action='cancel']";
         if (!nativeToolkit()) {
-            final var knownAsClearSelector = "causeway-property[member='knownAs'] .causeway-field-clear";
+            final var knownAsClearSelector = "cw-property[member='knownAs'] .causeway-field-clear";
             knownAsEditor.press("Tab");
             assertFocused(knownAsClearSelector);
             page.locator(knownAsClearSelector).press("Enter");
@@ -370,14 +370,14 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(knownAsCancelSelector);
         page.locator(knownAsCancelSelector).click();
 
-        final var notes = page.locator("causeway-property[member='notes']");
+        final var notes = page.locator("cw-property[member='notes']");
         final var notesEdit = notes.locator("[data-causeway-action='edit']");
         revealContainingTab(notes, notesEdit);
         assertThat(notes.locator(".causeway-property-label").getAttribute("title"))
                 .isEqualTo("Additional notes about this pet owner.");
         assertWideMultilinePropertyLayout(notes);
         notesEdit.click();
-        final var notesEditor = resolveEditor("causeway-property[member='notes'] [data-causeway-editor='notes']");
+        final var notesEditor = resolveEditor("cw-property[member='notes'] [data-causeway-editor='notes']");
         assertThat(notesEditor.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
                 .isEqualTo(5);
         fillEditor(notesEditor, "First line\nSecond line");
@@ -389,7 +389,7 @@ class PetClinicHtmxPlaywrightTest {
 
         editProperty("telephoneNumber", "020 7000 1234");
         waitForPropertyValue("telephoneNumber", "020 7000 1234");
-        assertFocused("causeway-property[member='telephoneNumber'] [data-causeway-action='edit']");
+        assertFocused("cw-property[member='telephoneNumber'] [data-causeway-action='edit']");
         editProperty("telephoneNumber", "020 7946 0312");
         waitForPropertyValue("telephoneNumber", "020 7946 0312");
 
@@ -402,13 +402,13 @@ class PetClinicHtmxPlaywrightTest {
         waitForPromptError("cannot contain");
         assertFocused(parameter("name"));
         cancelPrompt();
-        assertFocused("causeway-action[member='updateName'] button");
+        assertFocused("cw-action[member='updateName'] button");
 
         updateName.click();
         waitForPrompt("updateName");
         resolveEditor(parameter("name")).press("Escape");
         page.locator(PROMPT).waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.DETACHED));
-        assertFocused("causeway-action[member='updateName'] button");
+        assertFocused("cw-action[member='updateName'] button");
     }
 
     @Test
@@ -538,7 +538,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForMenus() {
-        page.waitForFunction("() => ['ready', 'partial-error'].includes(document.querySelector('causeway-menubars')?.dataset.menuState)");
+        page.waitForFunction("() => ['ready', 'partial-error'].includes(document.querySelector('cw-menubars')?.dataset.menuState)");
     }
 
     private void openObject(final String logicalTypeName, final String id) {
@@ -558,7 +558,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForLogicalType(final String logicalTypeName) {
-        page.waitForFunction("logicalType => { const context = document.querySelector('#causeway-route causeway-object-context'); const page = document.querySelector('[data-testid=\"causeway-route-page\"]'); return context?.getAttribute('logical-type') === logicalType && ['ready', 'partial-error'].includes(page?.dataset.routeState); }", logicalTypeName);
+        page.waitForFunction("logicalType => { const context = document.querySelector('#causeway-route cw-object-context'); const page = document.querySelector('[data-testid=\"causeway-route-page\"]'); return context?.getAttribute('logical-type') === logicalType && ['ready', 'partial-error'].includes(page?.dataset.routeState); }", logicalTypeName);
     }
 
     private void waitForRouteUrl(final String pathOrUrl) {
@@ -567,11 +567,11 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void clickObjectLink(final String titlePart) {
-        clickObjectLink(page.locator("causeway-object-link button"), titlePart);
+        clickObjectLink(page.locator("cw-object-link button"), titlePart);
     }
 
     private void clickObjectLinkInCollection(final String member, final String titlePart) {
-        clickObjectLink(page.locator("causeway-collection[member='" + member + "'] causeway-object-link button"), titlePart);
+        clickObjectLink(page.locator("cw-collection[member='" + member + "'] cw-object-link button"), titlePart);
     }
 
     private void clickObjectLink(final Locator links, final String titlePart) {
@@ -619,7 +619,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private Locator objectAction(final String member) {
-        final var host = page.locator("causeway-action[member='" + member + "']").first();
+        final var host = page.locator("cw-action[member='" + member + "']").first();
         final var action = host.locator("button");
         action.waitFor(new Locator.WaitForOptions()
                 .setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
@@ -653,7 +653,7 @@ class PetClinicHtmxPlaywrightTest {
 
     private void selectFirstAvailableChoice(final String parameterId) {
         final var control = page.locator(parameter(parameterId));
-        if ("causeway-reference-editor".equals(control.evaluate("element => element.localName"))) {
+        if ("cw-reference-editor".equals(control.evaluate("element => element.localName"))) {
             page.waitForFunction("selector => document.querySelector(selector)?.dataset.widgetState === 'ready'", parameter(parameterId));
             final var label = (String) control.evaluate("element => element.querySelector('vaadin-combo-box').items[0].title");
             final var input = control.locator("vaadin-combo-box input");
@@ -758,7 +758,7 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void editProperty(final String member, final String value) {
-        final var property = "causeway-property[member='" + member + "']";
+        final var property = "cw-property[member='" + member + "']";
         final var propertyLocator = page.locator(property);
         final var edit = propertyLocator.locator("[data-causeway-action='edit']");
         edit.waitFor(new Locator.WaitForOptions()
@@ -779,7 +779,7 @@ class PetClinicHtmxPlaywrightTest {
         final var panel = host.locator("xpath=ancestor::*[@role='tabpanel']");
         if (panel.count() == 0) {
             throw new AssertionError("Control is not available at " + page.url()
-                    + "; routeType=" + page.locator("#causeway-route causeway-object-context").getAttribute("logical-type")
+                    + "; routeType=" + page.locator("#causeway-route cw-object-context").getAttribute("logical-type")
                     + "; host=" + host.evaluate("element => element.outerHTML")
                     + "; ancestors=" + host.evaluate("element => { const values = []; for (let current = element; current; current = current.parentElement) { const style = getComputedStyle(current); const rect = current.getBoundingClientRect(); values.push({tag: current.tagName, className: current.className, hidden: current.hidden, empty: current.dataset?.empty, display: style.display, visibility: style.visibility, width: rect.width, height: rect.height}); } return values; }"));
         }
@@ -790,17 +790,17 @@ class PetClinicHtmxPlaywrightTest {
             control.waitFor();
         } catch (final com.microsoft.playwright.TimeoutError cause) {
             throw new AssertionError("Control did not become visible at " + page.url()
-                    + "; routeType=" + page.locator("#causeway-route causeway-object-context").getAttribute("logical-type")
+                    + "; routeType=" + page.locator("#causeway-route cw-object-context").getAttribute("logical-type")
                     + "; panel=" + panelId + "; host=" + host.evaluate("element => element.outerHTML"), cause);
         }
     }
 
     private void waitForCollectionRows(final String member, final int count) {
         try {
-            page.waitForFunction("args => document.querySelectorAll(`causeway-collection[member='${args.member}'] tbody tr, causeway-collection[member='${args.member}'] .causeway-collection-rows > li`).length === args.count",
+            page.waitForFunction("args => document.querySelectorAll(`cw-collection[member='${args.member}'] tbody tr, cw-collection[member='${args.member}'] .causeway-collection-rows > li`).length === args.count",
                     java.util.Map.of("member", member, "count", count));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
-            final var collections = page.locator("causeway-collection").evaluateAll(
+            final var collections = page.locator("cw-collection").evaluateAll(
                     "elements => elements.map(element => ({member: element.getAttribute('member'), state: element.dataset.state, rows: element.querySelectorAll('tbody tr, .causeway-collection-rows > li').length, text: element.innerText}))");
             throw new AssertionError("Expected " + count + " rows for " + member + " at " + page.url()
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
@@ -809,17 +809,17 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void waitForObjectTitle(final String value) {
-        page.waitForFunction("value => document.querySelector('causeway-object-header h1')?.textContent.includes(value)", value);
+        page.waitForFunction("value => document.querySelector('cw-object-header h1')?.textContent.includes(value)", value);
     }
 
     private void waitForPropertyValue(final String member, final String value) {
-        final var selector = "causeway-property[member='" + member + "'] .causeway-property-value";
+        final var selector = "cw-property[member='" + member + "'] .causeway-property-value";
         try {
             page.waitForFunction("args => document.querySelector(args.selector)?.textContent.includes(args.value)",
                     java.util.Map.of("selector", selector, "value", value));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
-            final var property = page.locator("causeway-property[member='" + member + "']");
-            final var context = page.locator("#causeway-route causeway-object-context");
+            final var property = page.locator("cw-property[member='" + member + "']");
+            final var context = page.locator("#causeway-route cw-object-context");
             throw new AssertionError("Expected property " + member + " to contain '" + value + "' at " + page.url()
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
                     + "; context=" + context.getAttribute("data-context-state")
@@ -830,7 +830,7 @@ class PetClinicHtmxPlaywrightTest {
 
     private Locator resolveEditor(final String selector) {
         page.locator(selector).first().waitFor();
-        page.waitForFunction("selector => { const element = document.querySelector(selector); return element && element.localName !== 'causeway-field-editor'; }", selector);
+        page.waitForFunction("selector => { const element = document.querySelector(selector); return element && element.localName !== 'cw-field-editor'; }", selector);
         return page.locator(selector);
     }
 

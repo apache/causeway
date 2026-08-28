@@ -124,7 +124,7 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
     if (state.status === 'terminal-error') {
       this.#renderError(this._resolvedContext
         ? state.errors?.[0]?.message || 'No usable Causeway object context is available.'
-        : 'No Causeway object context is available. Place <causeway-object> beneath <causeway-object-context>.');
+        : 'No Causeway object context is available. Place <cw-object> beneath <cw-object-context>.');
       return;
     }
     void this.#prepareLayout(state);
@@ -133,7 +133,7 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
   async #prepareLayout(state) {
     const context = this._resolvedContext;
     if (!context) {
-      this.#renderError('No Causeway object context is available. Place <causeway-object> beneath <causeway-object-context>.');
+      this.#renderError('No Causeway object context is available. Place <cw-object> beneath <cw-object-context>.');
       return;
     }
     if (!['auto', 'fallback'].includes(this.layoutMode)) {
@@ -354,10 +354,10 @@ export class CausewayObjectElement extends CausewayContextConsumerElement {
       return;
     }
     const semanticSelector = [
-      'causeway-object-header:not([hidden])',
-      'causeway-property:not([hidden])',
-      'causeway-action:not([hidden])',
-      'causeway-collection:not([hidden])'
+      'cw-object-header:not([hidden])',
+      'cw-property:not([hidden])',
+      'cw-action:not([hidden])',
+      'cw-collection:not([hidden])'
     ].join(',');
     for (const region of this.querySelectorAll('[data-causeway-region="group"], [role="tabpanel"]')) {
       region.setAttribute('data-empty', String(!region.querySelector(semanticSelector)));

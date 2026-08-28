@@ -172,17 +172,17 @@ spring.graphql.path=/graphql
 
 `RICH_AND_SIMPLE` also places the rich API beneath its configured top-level field.
 The default rich top-level field name is `rich`.
-Direct structural metadata enables authorized effective-grid retrieval; if the policy remains `FORBIDDEN`, `<causeway-object>` uses its canonical fallback without disclosing the resource body or authorization policy.
+Direct structural metadata enables authorized effective-grid retrieval; if the policy remains `FORBIDDEN`, `<cw-object>` uses its canonical fallback without disclosing the resource body or authorization policy.
 
 If the application uses `RICH_ONLY`, the generated object lookup fields are at the query root.
 Set an empty `rich-root-field` attribute in that case:
 
 [source,html]
 ----
-<causeway-graphql-client
+<cw-graphql-client
     endpoint="/graphql"
     rich-root-field="">
-</causeway-graphql-client>
+</cw-graphql-client>
 ----
 
 If the application customizes the rich top-level field or lookup grammar, configure the provider's `rich-root-field`, `lookup-argument-name`, `object-field-prefix`, and `object-field-suffix` attributes to match.
@@ -203,15 +203,15 @@ Serve a temporary page from the Causeway application with markup similar to the 
   <script type="module" src="/causeway-webcomponents/index.mjs"></script>
 </head>
 <body>
-  <causeway-graphql-client endpoint="/graphql">
-    <causeway-menubars></causeway-menubars>
-  <causeway-object-context
+  <cw-graphql-client endpoint="/graphql">
+    <cw-menubars></cw-menubars>
+  <cw-object-context
         logical-type="university.dept.Department"
         object-id="1">
-      <causeway-object editable></causeway-object>
-      <causeway-interaction-controller></causeway-interaction-controller>
-    </causeway-object-context>
-  </causeway-graphql-client>
+      <cw-object editable></cw-object>
+      <cw-interaction-controller></cw-interaction-controller>
+    </cw-object-context>
+  </cw-graphql-client>
 </body>
 </html>
 ----
@@ -242,9 +242,9 @@ For realistic authentication behavior, same-origin serving is usually simpler.
 
 === Rendered content
 
-Verify that `<causeway-menubars>` reaches `data-menu-state="ready"` or bounded `partial-error`, renders labelled effective primary, secondary, and tertiary navigation without hidden entries, and preserves visible disabled actions with reasons.
-Verify that `<causeway-object>` reaches `data-layout-state="ready"` for an authorized effective grid or `fallback` when the resource is unavailable.
-Verify that its generated `<causeway-object-header>` renders object title and identity and each discovered member is placed at most once.
+Verify that `<cw-menubars>` reaches `data-menu-state="ready"` or bounded `partial-error`, renders labelled effective primary, secondary, and tertiary navigation without hidden entries, and preserves visible disabled actions with reasons.
+Verify that `<cw-object>` reaches `data-layout-state="ready"` for an authorized effective grid or `fallback` when the resource is unavailable.
+Verify that its generated `<cw-object-header>` renders object title and identity and each discovered member is placed at most once.
 Verify that each visible property has a label and an `<output>` value.
 Verify that values containing markup-like characters are escaped rather than interpreted as HTML.
 Verify that hidden properties produce no visible content.
@@ -286,7 +286,7 @@ Refresh the active object projection from the browser console:
 [source,javascript]
 ----
 document
-  .querySelector('causeway-object-context')
+  .querySelector('cw-object-context')
   .context
   .refresh();
 ----
@@ -300,8 +300,8 @@ After the first context becomes ready, create another context for an object of t
 
 [source,javascript]
 ----
-const provider = document.querySelector('causeway-graphql-client');
-const original = document.querySelector('causeway-object-context');
+const provider = document.querySelector('cw-graphql-client');
+const original = document.querySelector('cw-object-context');
 const second = original.cloneNode(true);
 
 second.setAttribute('object-id', '2');
@@ -319,8 +319,8 @@ After it becomes ready, mount another property:
 
 [source,javascript]
 ----
-const context = document.querySelector('causeway-object-context');
-const property = document.createElement('causeway-property');
+const context = document.querySelector('cw-object-context');
+const property = document.createElement('cw-property');
 
 property.setAttribute('member', 'code');
 context.append(property);
@@ -353,7 +353,7 @@ Confirm that the application's GraphQL API scope includes the domain type.
 
 Confirm whether the application uses a combined schema or `RICH_ONLY`.
 Confirm the configured rich top-level field and lookup argument, prefix, and suffix settings.
-Adjust the `<causeway-graphql-client>` attributes to match those settings.
+Adjust the `<cw-graphql-client>` attributes to match those settings.
 
 === Requests are rejected or redirected
 

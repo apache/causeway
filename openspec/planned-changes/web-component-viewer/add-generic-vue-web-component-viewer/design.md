@@ -5,7 +5,7 @@ Causeway's custom elements already provide the domain-aware controls, object con
 A generic Vue viewer should therefore be a router and shell integration, not a Vue rewrite of those components.
 
 The final customization architecture is route-first.
-The Vue router resolves a bookmark, chooses an exact logical-type application page if registered, and otherwise renders a generic route page containing `<causeway-object>`.
+The Vue router resolves a bookmark, chooses an exact logical-type application page if registered, and otherwise renders a generic route page containing `<cw-object>`.
 
 ## Goals / Non-Goals
 
@@ -22,7 +22,7 @@ The Vue router resolves a bookmark, chooses an exact logical-type application pa
 
 - Wrapping every Causeway custom element as a separate Vue component.
 - Reimplementing GraphQL operations, object layout, menu parsing, editors, or validation in Vue.
-- Making `<causeway-object>` inspect Vue Router or the page registry.
+- Making `<cw-object>` inspect Vue Router or the page registry.
 - Supporting Nuxt or server-side rendering in the first version.
 - Defining HTMX or Svelte lifecycle behavior.
 
@@ -34,26 +34,26 @@ The viewer installs canonical object and application-entry routes into a Vue Rou
 The object route resolves public logical type and identifier.
 It then selects the exact logical-type page registration or the generic route page.
 
-Page selection occurs before `<causeway-object>` is created.
+Page selection occurs before `<cw-object>` is created.
 The generic object component remains unaware of custom pages.
 
 ### Register framework-native custom pages
 
 Applications register a Vue component, async component, or documented page factory against an exact Causeway logical type.
-The selected page receives route identity and is rendered beneath one `<causeway-object-context>` owned by the generic route page boundary.
+The selected page receives route identity and is rendered beneath one `<cw-object-context>` owned by the generic route page boundary.
 
 Custom Vue pages can compose Causeway custom elements, ordinary Vue components, HTML, and application custom elements.
 They consume domain state through the shared object context rather than constructing GraphQL documents in Vue stores.
 
 ### Render a generic page when no registration exists
 
-The fallback route page creates the GraphQL client association and route-level object context and places `<causeway-object>` beneath it.
+The fallback route page creates the GraphQL client association and route-level object context and places `<cw-object>` beneath it.
 A stable route key based on canonical bookmark identity ensures old contexts disconnect when navigation changes.
 Superseded component responses remain governed by object-context generation handling.
 
 ### Keep the application shell stable
 
-The root viewer shell renders `<causeway-menubars>` outside `RouterView` or its equivalent route-page boundary.
+The root viewer shell renders `<cw-menubars>` outside `RouterView` or its equivalent route-page boundary.
 Menu disclosure, service-action interaction, and menu layout remain component-owned.
 Vue policy receives semantic outcomes and may call router navigation or render non-object results.
 

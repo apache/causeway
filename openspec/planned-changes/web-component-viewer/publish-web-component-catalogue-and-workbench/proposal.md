@@ -27,6 +27,6 @@ None.
 ## Impact
 
 - Adds development tooling, generated catalogue artifacts, stories, fixtures, accessibility checks, and documentation.
-- Depends on the completed public component vocabulary, including `<causeway-object>` and menu-bar components.
+- Depends on the completed public component vocabulary, including `<cw-object>` and menu-bar components.
 - Remains lower priority than the generic HTMX, Vue, and Svelte viewers.
 - Adds no production viewer dependency and does not define visual page authoring, routing, or GraphQL protocol changes.

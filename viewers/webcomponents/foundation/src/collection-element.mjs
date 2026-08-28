@@ -37,12 +37,12 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
   if (!root?.querySelectorAll) {
     return;
   }
-  const collections = root.localName === 'causeway-collection'
+  const collections = root.localName === 'cw-collection'
     ? [root]
-    : root.querySelectorAll('causeway-collection');
+    : root.querySelectorAll('cw-collection');
   for (const collection of collections) {
     const columns = [...(collection.children ?? collection.childNodes ?? [])]
-      .filter(child => child.localName === 'causeway-collection-column' || child?.configuration?.member)
+      .filter(child => child.localName === 'cw-collection-column' || child?.configuration?.member)
       .map(child => ({
         member: child.getAttribute('member') || '',
         label: child.getAttribute('label') || '',
@@ -77,7 +77,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       ? new MutationObserver(records => {
         for (const record of records) {
           for (const node of record.addedNodes ?? []) {
-            if (node.localName === 'causeway-collection-column' && node.configuration?.member) {
+            if (node.localName === 'cw-collection-column' && node.configuration?.member) {
               this.#acceptColumn(node.configuration);
             }
           }
@@ -350,7 +350,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   #renderDefaultRows(rows) {
     return `<ul class="causeway-collection-rows">${rows.map(row => {
       const metadata = row?._meta ?? {};
-      return `<li><causeway-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></causeway-object-link></li>`;
+      return `<li><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></li>`;
     }).join('')}</ul>`;
   }
 
@@ -358,7 +358,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const header = `<th scope="col">Item</th>${this._columns.map(column => `<th scope="col"${column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : ''}>${escapeHtml(column.label || humanize(column.member))}</th>`).join('')}`;
     const body = rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
-      const item = `<td><causeway-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></causeway-object-link></td>`;
+      const item = `<td><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></td>`;
       const cells = this._columns.map(column => this.#renderCell(row, rowIndex, column)).join('');
       return `<tr data-row-index="${rowIndex}">${item}${cells}</tr>`;
     }).join('');
@@ -410,7 +410,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
     initialColumnConfigurations.delete(this);
     for (const child of this.childNodes ?? []) {
-      if (child?.localName !== 'causeway-collection-column') {
+      if (child?.localName !== 'cw-collection-column') {
         continue;
       }
       const member = child?.configuration?.member ?? child?.getAttribute?.('member');

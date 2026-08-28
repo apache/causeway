@@ -185,8 +185,8 @@ The analysis changes the provisional programme order.
 . Add explicit reversible standard, resource, and registered custom-value semantics.
 . Add bounded collection windows and continuation metadata.
 . Add application entry points for the effective menu resource and configured home-page object or supported action.
-. Implement `<causeway-object>` after accepted value and collection capabilities, safe effective-grid retrieval, and correct object interactions.
-. Implement `<causeway-menubars>` after application entry points, safe menu-resource retrieval, and correct service-action inputs.
+. Implement `<cw-object>` after accepted value and collection capabilities, safe effective-grid retrieval, and correct object interactions.
+. Implement `<cw-menubars>` after application entry points, safe menu-resource retrieval, and correct service-action inputs.
 . Narrow member metadata to independent standalone or fallback semantics not owned by grid or menu resources.
 . Refine diagnostics around the accepted executor, resource, and redaction behavior.
 . Revisit the generic HTMX viewer only after the semantic components and required rich GraphQL capabilities are complete.

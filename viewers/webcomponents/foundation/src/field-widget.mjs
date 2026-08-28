@@ -9,7 +9,7 @@
 import {escapeHtml} from './rendering.mjs';
 import {semanticTypeName} from './value-codecs.mjs';
 
-export const CAUSEWAY_FIELD_EDITOR = 'causeway-field-editor';
+export const CAUSEWAY_FIELD_EDITOR = 'cw-field-editor';
 export const CausewayFieldFamily = Object.freeze({
   BASIC: 'basic',
   NUMERIC: 'numeric',

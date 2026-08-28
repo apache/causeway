@@ -60,7 +60,7 @@ class PetClinicHtmxSecuredApplication_IntegTest {
 
         final var login = get(client, "/htmx/login");
         assertThat(login.statusCode()).isEqualTo(200);
-        assertThat(login.body()).contains("Sign in to Pet Clinic").doesNotContain("causeway-graphql-client");
+        assertThat(login.body()).contains("Sign in to Pet Clinic").doesNotContain("cw-graphql-client");
         final var anonymousSessionId = sessionId(cookies);
         final var loginCsrf = token(CSRF_FIELD, login.body());
 

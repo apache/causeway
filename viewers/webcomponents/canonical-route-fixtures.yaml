@@ -27,4 +27,4 @@ invalid:
 customPagePrecedence:
   exactLogicalType: petclinic.HomePage
   unrelatedLogicalType: petclinic.PetOwner
-fallbackElement: causeway-object
+fallbackElement: cw-object

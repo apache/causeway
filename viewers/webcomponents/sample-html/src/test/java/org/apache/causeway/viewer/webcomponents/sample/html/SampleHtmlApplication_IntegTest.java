@@ -123,7 +123,7 @@ class SampleHtmlApplication_IntegTest {
                 .contains("data-testid=\"section-composite-object\"")
                 .contains("data-testid=\"composite-object-context\"")
                 .contains("data-testid=\"composite-object\"")
-                .contains("<causeway-object editable")
+                .contains("<cw-object editable")
                 .contains("Component interaction showcase")
                 .contains("/causeway-webcomponents/component-styles.css")
                 .contains("/causeway-webcomponents/theme.css")

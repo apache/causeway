@@ -53,7 +53,7 @@ test('shared cross-viewer route fixtures retain canonical HTMX meaning', async (
     assert.equal(canonicalObjectPath('/viewer', {logicalTypeName, id: objectId}), path);
   }
   assert.match(fixture, /customPagePrecedence:\n\s+exactLogicalType: petclinic.HomePage/);
-  assert.match(fixture, /fallbackElement: causeway-object/);
+  assert.match(fixture, /fallbackElement: cw-object/);
 });
 
 test('route encoding rejects separators controls malformed Unicode empties and dot segments', () => {

@@ -24,6 +24,7 @@ import {installDomShim} from './dom-shim.mjs';
 const {document, customElements} = installDomShim();
 const {
   ACTION_REQUEST_EVENT,
+  CAUSEWAY_FIELD_EDITOR,
   CausewayActionElement,
   CausewayElementName,
   CausewayObjectLinkElement,
@@ -45,9 +46,30 @@ function readyState({descriptor, data}) {
   });
 }
 
-test('registers the complete public read-only custom-element vocabulary', () => {
-  for (const name of Object.values(CausewayElementName)) {
+test('registers the complete compact custom-element vocabulary without old aliases', () => {
+  const publicNames = [
+    'cw-graphql-client',
+    'cw-object-context',
+    'cw-object',
+    'cw-object-header',
+    'cw-property',
+    'cw-value',
+    'cw-object-link',
+    'cw-action',
+    'cw-interaction-controller',
+    'cw-reference-editor',
+    'cw-collection',
+    'cw-collection-column',
+    'cw-menubars',
+    'cw-menubar-primary',
+    'cw-menubar-secondary',
+    'cw-menubar-tertiary'
+  ];
+  assert.deepEqual(Object.values(CausewayElementName), publicNames);
+  assert.equal(CAUSEWAY_FIELD_EDITOR, 'cw-field-editor');
+  for (const name of [...publicNames, CAUSEWAY_FIELD_EDITOR]) {
     assert.equal(typeof customElements.get(name), 'function', name);
+    assert.equal(customElements.get(name.replace(/^cw-/, 'causeway-')), undefined, name);
   }
 });
 
@@ -153,7 +175,7 @@ test('properties delegate null, enum and object values to semantic renderers', (
     }
   }));
   assert.equal(property.getAttribute('data-renderer'), 'object-reference');
-  assert.match(property.innerHTML, /causeway-object-link/);
+  assert.match(property.innerHTML, /cw-object-link/);
 
   property.renderComponentState(readyState({
     descriptor: {

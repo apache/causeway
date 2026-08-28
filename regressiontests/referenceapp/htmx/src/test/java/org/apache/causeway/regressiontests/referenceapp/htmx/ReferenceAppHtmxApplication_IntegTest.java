@@ -95,7 +95,7 @@ class ReferenceAppHtmxApplication_IntegTest {
                 .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
                 .doesNotContain("unsafe-inline");
         assertThat(shell.body())
-                .contains("<causeway-menubars>")
+                .contains("<cw-menubars>")
                 .contains("id=\"causeway-route\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
                 .contains("data-causeway-editor-toolkit=\"vaadin\"")

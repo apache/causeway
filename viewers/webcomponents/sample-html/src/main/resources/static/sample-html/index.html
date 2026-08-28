@@ -165,8 +165,8 @@
       grid-template-columns: minmax(7rem, var(--causeway-label-width)) minmax(0, 1fr) auto;
     }
 
-    .sample-property-grid causeway-property[data-testid="property-summary"],
-    .sample-property-grid causeway-property[data-testid="property-related-object"] {
+    .sample-property-grid cw-property[data-testid="property-summary"],
+    .sample-property-grid cw-property[data-testid="property-related-object"] {
       grid-column: 1 / -1;
     }
 
@@ -275,8 +275,8 @@
         grid-column: 1;
       }
 
-      .sample-property-grid causeway-property[data-testid="property-summary"],
-      .sample-property-grid causeway-property[data-testid="property-related-object"] {
+      .sample-property-grid cw-property[data-testid="property-summary"],
+      .sample-property-grid cw-property[data-testid="property-related-object"] {
         grid-column: auto;
       }
     }
@@ -295,23 +295,23 @@
       </div>
     </header>
 
-    <causeway-graphql-client endpoint="/graphql" data-testid="graphql-client">
+    <cw-graphql-client endpoint="/graphql" data-testid="graphql-client">
       <section class="sample-card" data-testid="section-menubars" aria-labelledby="sample-menubars-heading">
         <div class="sample-section-heading">
           <p class="sample-section-kicker">Application entry point</p>
           <h2 id="sample-menubars-heading">Effective semantic menu bars</h2>
           <p>The composite shares one authorized effective-menu generation across all present bars; the standalone examples exercise the same public bar components independently.</p>
         </div>
-        <causeway-menubars data-testid="menubars-composite"></causeway-menubars>
+        <cw-menubars data-testid="menubars-composite"></cw-menubars>
         <details class="sample-standalone-menus">
           <summary>Standalone semantic bar examples</summary>
-          <causeway-menubar-primary data-testid="menubar-primary-standalone"></causeway-menubar-primary>
-          <causeway-menubar-secondary data-testid="menubar-secondary-standalone"></causeway-menubar-secondary>
-          <causeway-menubar-tertiary data-testid="menubar-tertiary-standalone"></causeway-menubar-tertiary>
+          <cw-menubar-primary data-testid="menubar-primary-standalone"></cw-menubar-primary>
+          <cw-menubar-secondary data-testid="menubar-secondary-standalone"></cw-menubar-secondary>
+          <cw-menubar-tertiary data-testid="menubar-tertiary-standalone"></cw-menubar-tertiary>
         </details>
       </section>
 
-      <causeway-object-context
+      <cw-object-context
           logical-type="causeway.webcomponents.sample.SampleObject"
           object-id="s_sample-1"
           data-testid="sample-object">
@@ -322,7 +322,7 @@
               <h2 id="sample-object-summary-heading">Semantic identity</h2>
               <p>The header and bookmark metadata share the same coordinated object projection as every member below.</p>
             </div>
-            <causeway-object-header data-testid="object-header"></causeway-object-header>
+            <cw-object-header data-testid="object-header"></cw-object-header>
           </section>
 
           <aside class="sample-card sample-card-coverage" data-testid="sample-coverage" aria-labelledby="sample-coverage-heading">
@@ -348,18 +348,18 @@
               <p>Each member derives capability from targeted schema introspection and instance state from the nearest object context.</p>
             </div>
             <div class="sample-property-grid">
-              <causeway-property member="name" data-testid="property-name"></causeway-property>
-              <causeway-property member="code" data-testid="property-code"></causeway-property>
-              <causeway-property member="summary" editable data-testid="property-summary"></causeway-property>
-              <causeway-property member="capacity" editable data-testid="property-capacity"></causeway-property>
-              <causeway-property member="featured" editable data-testid="property-featured"></causeway-property>
-              <causeway-property member="status" editable data-testid="property-status"></causeway-property>
-              <causeway-property member="notes" editable data-testid="property-notes"></causeway-property>
-              <causeway-property member="scheduledDate" editable data-testid="property-scheduled-date"></causeway-property>
-              <causeway-property member="startsAt" editable data-testid="property-starts-at"></causeway-property>
-              <causeway-property member="lastReviewedAt" editable data-testid="property-last-reviewed-at"></causeway-property>
-              <causeway-property member="relatedObject" data-testid="property-related-object"></causeway-property>
-              <causeway-property member="secret" data-testid="property-secret"></causeway-property>
+              <cw-property member="name" data-testid="property-name"></cw-property>
+              <cw-property member="code" data-testid="property-code"></cw-property>
+              <cw-property member="summary" editable data-testid="property-summary"></cw-property>
+              <cw-property member="capacity" editable data-testid="property-capacity"></cw-property>
+              <cw-property member="featured" editable data-testid="property-featured"></cw-property>
+              <cw-property member="status" editable data-testid="property-status"></cw-property>
+              <cw-property member="notes" editable data-testid="property-notes"></cw-property>
+              <cw-property member="scheduledDate" editable data-testid="property-scheduled-date"></cw-property>
+              <cw-property member="startsAt" editable data-testid="property-starts-at"></cw-property>
+              <cw-property member="lastReviewedAt" editable data-testid="property-last-reviewed-at"></cw-property>
+              <cw-property member="relatedObject" data-testid="property-related-object"></cw-property>
+              <cw-property member="secret" data-testid="property-secret"></cw-property>
             </div>
           </section>
 
@@ -370,13 +370,13 @@
               <p>Enabled requests are handled by the standard controller; disabled and hidden states remain unavailable.</p>
             </div>
             <div class="sample-action-stack" aria-label="Interactive action affordances">
-              <causeway-action member="inspect" data-testid="action-inspect"></causeway-action>
-              <causeway-action member="updateDetails" data-testid="action-update-details"></causeway-action>
-              <causeway-action member="findRelated" data-testid="action-find-related"></causeway-action>
-              <causeway-action member="selectRelated" data-testid="action-select-related"></causeway-action>
-              <causeway-action member="clearNotes" data-testid="action-clear-notes"></causeway-action>
-              <causeway-action member="archive" data-testid="action-archive"></causeway-action>
-              <causeway-action member="hiddenAction" data-testid="action-hidden"></causeway-action>
+              <cw-action member="inspect" data-testid="action-inspect"></cw-action>
+              <cw-action member="updateDetails" data-testid="action-update-details"></cw-action>
+              <cw-action member="findRelated" data-testid="action-find-related"></cw-action>
+              <cw-action member="selectRelated" data-testid="action-select-related"></cw-action>
+              <cw-action member="clearNotes" data-testid="action-clear-notes"></cw-action>
+              <cw-action member="archive" data-testid="action-archive"></cw-action>
+              <cw-action member="hiddenAction" data-testid="action-hidden"></cw-action>
             </div>
           </section>
 
@@ -414,19 +414,19 @@
             </div>
             <div class="sample-collection-stack">
               <div class="sample-collection-panel">
-                <causeway-collection member="relatedObjects" active data-testid="collection-related-objects">
-                  <causeway-collection-column member="name" label="Name" data-testid="column-related-name"></causeway-collection-column>
-                  <causeway-collection-column member="code" label="Code" data-testid="column-related-code"></causeway-collection-column>
-                </causeway-collection>
+                <cw-collection member="relatedObjects" active data-testid="collection-related-objects">
+                  <cw-collection-column member="name" label="Name" data-testid="column-related-name"></cw-collection-column>
+                  <cw-collection-column member="code" label="Code" data-testid="column-related-code"></cw-collection-column>
+                </cw-collection>
               </div>
               <div class="sample-collection-panel">
-                <causeway-collection member="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></causeway-collection>
+                <cw-collection member="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></cw-collection>
               </div>
             </div>
           </section>
         </div>
-        <causeway-interaction-controller data-testid="action-interaction-controller"></causeway-interaction-controller>
-      </causeway-object-context>
+        <cw-interaction-controller data-testid="action-interaction-controller"></cw-interaction-controller>
+      </cw-object-context>
 
       <div class="sample-grid sample-composite-grid">
         <section class="sample-card" data-testid="section-composite-object" aria-labelledby="sample-composite-heading">
@@ -435,16 +435,16 @@
             <h2 id="sample-composite-heading">Complete object from context plus component</h2>
             <p>This independent context demonstrates effective-grid retrieval, canonical fallback semantics, and generated established children without page-authored member structure.</p>
           </div>
-          <causeway-object-context
+          <cw-object-context
               logical-type="causeway.webcomponents.sample.SampleObject"
               object-id="s_sample-1"
               data-testid="composite-object-context">
-            <causeway-object editable data-testid="composite-object"></causeway-object>
-            <causeway-interaction-controller data-testid="composite-interaction-controller"></causeway-interaction-controller>
-          </causeway-object-context>
+            <cw-object editable data-testid="composite-object"></cw-object>
+            <cw-interaction-controller data-testid="composite-interaction-controller"></cw-interaction-controller>
+          </cw-object-context>
         </section>
       </div>
-    </causeway-graphql-client>
+    </cw-graphql-client>
 
     <footer class="sample-footer">Public semantic components · Same-origin GraphQL interactions · No frontend build</footer>
   </main>
@@ -471,7 +471,7 @@
 
     application.addEventListener('causeway-component-state-change', event => {
       if (event.detail.element?.getAttribute('data-testid') === 'property-related-object' && event.detail.state.status === 'ready') {
-        event.detail.element.querySelector('causeway-object-link')?.setAttribute('data-testid', 'object-link-related-object');
+        event.detail.element.querySelector('cw-object-link')?.setAttribute('data-testid', 'object-link-related-object');
       }
     });
 

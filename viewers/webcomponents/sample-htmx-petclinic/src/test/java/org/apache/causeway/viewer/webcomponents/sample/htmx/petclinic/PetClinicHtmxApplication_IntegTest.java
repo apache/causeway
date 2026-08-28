@@ -85,7 +85,7 @@ class PetClinicHtmxApplication_IntegTest {
                     .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=");
         }
         assertThat(shell.body())
-                .contains("<causeway-menubars>")
+                .contains("<cw-menubars>")
                 .contains("id=\"causeway-route\"")
                 .contains("hx-history-elt")
                 .contains("data-navigation-generation=\"0\"")
@@ -125,7 +125,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .doesNotContain("<!doctype html>")
                 .contains("data-page-kind=\"custom\"")
                 .contains("data-page-source=\"resource\"")
-                .containsOnlyOnce("<causeway-object-context");
+                .containsOnlyOnce("<cw-object-context");
         assertThat(historyRestore.headers().firstValue("hx-push-url")).isEmpty();
 
         assertThat(get("/causeway-htmx/causeway-htmx.mjs").statusCode()).isEqualTo(200);
@@ -157,8 +157,8 @@ class PetClinicHtmxApplication_IntegTest {
                 html = new String(input.readAllBytes(), StandardCharsets.UTF_8);
             }
             assertThat(html)
-                    .contains("<causeway-object-header")
-                    .contains("<causeway-")
+                    .contains("<cw-object-header")
+                    .contains("<cw-")
                     .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
         }
         final String ownerHtml;
@@ -167,12 +167,12 @@ class PetClinicHtmxApplication_IntegTest {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
-                .contains("<causeway-property member=\"name\">\n            <causeway-action member=\"updateName\"")
-                .contains("<causeway-collection member=\"pets\"")
-                .contains("<causeway-action member=\"addPet\"")
-                .contains("<causeway-action member=\"removePet\"")
-                .contains("<causeway-collection member=\"visits\"")
-                .contains("<causeway-action member=\"bookVisit\"")
+                .contains("<cw-property member=\"name\">\n            <cw-action member=\"updateName\"")
+                .contains("<cw-collection member=\"pets\"")
+                .contains("<cw-action member=\"addPet\"")
+                .contains("<cw-action member=\"removePet\"")
+                .contains("<cw-collection member=\"visits\"")
+                .contains("<cw-action member=\"bookVisit\"")
                 .doesNotContain("petclinic-associated-actions", "petclinic-member-composition");
         assertThat(ownerHtml.indexOf("member=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("member=\"removePet\""));
@@ -301,8 +301,8 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("logical-type=\"" + logicalTypeName + "\"")
                 .contains("object-id=\"" + objectId + "\"")
                 .contains("data-testid=\"" + testId + "\"")
-                .containsOnlyOnce("<causeway-object-context")
-                .containsOnlyOnce("<causeway-interaction-controller");
+                .containsOnlyOnce("<cw-object-context")
+                .containsOnlyOnce("<cw-interaction-controller");
     }
 
     private JsonNode graphQL(final String query) throws Exception {

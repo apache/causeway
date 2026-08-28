@@ -10,7 +10,7 @@ It has no npm build, HTMX, Playwright, or frontend-framework dependency.
 
 The application uses the Causeway GraphQL viewer, Causeway JPA persistence with EclipseLink, an in-memory H2 database, security bypass for local verification, and the packaged web-component foundation artifact.
 The sample HTML, foundation modules, and `/graphql` endpoint are served from the same origin.
-The sample explicitly enables direct structural metadata so `<causeway-menubars>` can dereference the authorized effective application menu and `<causeway-object>` can dereference the authorized effective grid.
+The sample explicitly enables direct structural metadata so `<cw-menubars>` can dereference the authorized effective application menu and `<cw-object>` can dereference the authorized effective grid.
 Applications that keep this policy forbidden receive bounded unavailable menu state and canonical object fallback composition without resource bodies.
 
 The module is an executable integration fixture and is skipped during Maven install and deployment.
@@ -199,9 +199,9 @@ The `_meta.version` values are supplied through the JPA `HasVersion` contract.
 == Expected page and interaction states
 
 The reference page groups semantic content into an application-menu shell and labelled object-summary, property, action, collection, live-diagnostic, and automatically composed object cards.
-The menu shell renders one shared `<causeway-menubars>` generation plus independently loading primary, secondary, and tertiary examples.
+The menu shell renders one shared `<cw-menubars>` generation plus independently loading primary, secondary, and tertiary examples.
 The shared composite reaches bounded `partial-error` because the fixture deliberately includes one invalid reference, while all three valid bars, hidden filtering, disabled reason, prompts, and typed service results remain available.
-The automatically composed card uses only an independent `<causeway-object-context>`, `<causeway-object editable>`, and the standard interaction controller.
+The automatically composed card uses only an independent `<cw-object-context>`, `<cw-object editable>`, and the standard interaction controller.
 It retrieves the authorized effective fallback grid, discovers members through targeted schema introspection, and generates the established semantic children without page-authored member structure.
 The object header displays `Framework-neutral components [WC-001]` and the root bookmark.
 The `name`, `summary`, `capacity`, `featured`, `status`, null `notes`, and related-object link render through the standard value registry.
@@ -262,7 +262,7 @@ The following selectors are intended as public test hooks for browser automation
 |Independent context for the automatic composition example
 
 |`[data-testid="composite-object"]`
-|Layout-aware `<causeway-object>` host; wait for `data-layout-state="ready"` or `fallback`
+|Layout-aware `<cw-object>` host; wait for `data-layout-state="ready"` or `fallback`
 
 |`[data-testid="section-composite-object"]`
 |Automatically composed complete-object card
@@ -477,7 +477,7 @@ The sample integration test starts the application on a random port and verifies
 * Real service wrappers expose current hidden and disabled state, defaults, choices, validation, and safe scalar invocation, while the void service mutation uses the existing top-level field.
 * `/causeway-webcomponents/index.mjs`, `component-styles.css`, and `theme.css` are delivered from the foundation dependency, with synchronized structural styles and light, dark, reduced-motion, and forced-colors support.
 * The authorized effective-grid resource returns XML with `private, no-store` and never contains the hidden value.
-* The page includes a context-plus-`<causeway-object>` composition with stable acceptance selectors.
+* The page includes a context-plus-`<cw-object>` composition with stable acceptance selectors.
 * Independent targeted `__type` operations resolve the root, enum-property, and collection wrapper types without triggering GraphQL Java's bad-faith introspection rejection.
 * A real rich GraphQL object lookup resolves `s_sample-1`.
 * Object metadata, enabled ordinary properties, text, numeric, boolean, enum, null, reference, enabled-action, disabled-action, hidden-action, and hidden-property state have deterministic values.
