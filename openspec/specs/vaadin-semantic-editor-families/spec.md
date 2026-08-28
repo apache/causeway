@@ -3,9 +3,7 @@
 ## Purpose
 
 Define qualified internal Vaadin free-core adapters for reversible basic, numeric, and local-temporal semantic editors while preserving Causeway-owned contracts, strict delivery policy, and native fallback.
-
 ## Requirements
-
 ### Requirement: Codec-qualified internal field adapters
 The viewer SHALL use internal Vaadin free-core adapters by default only for semantic input families whose existing Causeway value codec is reversible and whose candidate control preserves the advertised value shape.
 Application markup and events MUST remain Causeway-owned and MUST NOT require raw Vaadin APIs.
@@ -77,15 +75,20 @@ It MUST NOT establish a second interaction or validation state machine.
 
 ### Requirement: Independent lazy family closures
 Basic, numeric, and local-temporal Vaadin controls SHALL be delivered as independently lazy same-origin ESM closures with pinned deterministic policy metadata.
-An unaffected route MUST request none of those closures.
+An unaffected route with no eligible read-only presentation or editor MUST request none of those closures.
 
-#### Scenario: One family is first used
-- **WHEN** an enabled eligible editor from one family connects
+#### Scenario: One family is first used by an editor
+- **WHEN** an enabled eligible editor from one family connects before any read-only member from that family
 - **THEN** only that family's closure is requested and upgraded
 - **AND** checksum, gzip budget, entry points, licenses, telemetry opt-out, and exact style hashes match reviewed policy
 
+#### Scenario: One family is first used by read-only presentation
+- **WHEN** an enabled eligible read-only property from one family connects before any editor from that family
+- **THEN** the same independently packaged family closure is requested and upgraded
+- **AND** editor code does not require a second copy or closure for that family
+
 #### Scenario: Other families are unused
-- **WHEN** the active route uses no eligible editor from another enabled family
+- **WHEN** the active route uses no eligible read-only presentation or editor from another enabled family
 - **THEN** the browser makes zero requests for that other closure
 - **AND** route readiness does not wait for it
 
@@ -95,37 +98,42 @@ An unaffected route MUST request none of those closures.
 - **AND** packaging cannot silently publish the drifted asset
 
 ### Requirement: Family-scoped fallback and rollback
-Each field family SHALL fail closed independently to the existing native semantic editor on unsupported shape, common native policy, module failure, definition failure, or policy rejection.
-Fallback MUST preserve Causeway-owned pending values and MUST require no GraphQL, route, persisted-data, or application-markup migration.
+Each field family SHALL fail closed independently to the existing native semantic presentation or editor on unsupported shape, native component policy, module failure, definition failure, or policy rejection.
+Fallback MUST preserve Causeway-owned authoritative and pending values and MUST require no GraphQL, route, persisted-data, or application-markup migration.
 
-#### Scenario: Native policy is configured
-- **WHEN** the common toolkit policy resolves to native
-- **THEN** every qualified field family uses its established native editor
+#### Scenario: Native component policy is configured
+- **WHEN** the common component toolkit policy resolves to native
+- **THEN** every qualified field family uses its established native read-only presentation and native editor
 - **AND** no field-family asset is requested
 
-#### Scenario: Family module fails to load
-- **WHEN** an enabled field closure cannot load or define its required control
-- **THEN** only that family is disabled for the current document and the host rerenders natively
+#### Scenario: Family module fails for a read-only value
+- **WHEN** an enabled field closure cannot load or define its required read-only control
+- **THEN** only that family is disabled for the current document and the host rerenders through its authoritative native value renderer
+- **AND** current value, description, errors, semantic events, and recoverable focus remain correct
+
+#### Scenario: Family module fails for an editor
+- **WHEN** an enabled field closure cannot load or define its required editor control
+- **THEN** only that family is disabled for the current document and the host rerenders through its native semantic editor
 - **AND** current pending value, required state, validation, semantic events, and recoverable focus are retained
 
-#### Scenario: Reference family remains independent
-- **WHEN** a field family fails while the default reference adapter remains eligible
-- **THEN** reference loading and behavior remain unchanged
+#### Scenario: Reference and action families remain independent
+- **WHEN** a field family fails while reference and action adapters remain eligible
+- **THEN** reference and action loading and behavior remain unchanged
 - **AND** the failure does not broaden or eagerly request another closure
 
 #### Scenario: Deprecated subset compatibility is active
-- **WHEN** the common property is absent and old family configuration enables only a subset
-- **THEN** only that normalized subset remains eligible
-- **AND** omitted families preserve the former native behavior during the compatibility period
+- **WHEN** the component and editor common properties are absent and old family configuration enables only a subset
+- **THEN** only that normalized editor subset remains eligible
+- **AND** read-only presentation and omitted editor families preserve native behavior during the compatibility period
 
 ### Requirement: Strict security accessibility and presentation qualification
-Every adopted family SHALL pass enforcing strict-CSP, accessibility, keyboard, responsive, theme, reduced-motion, forced-colors, lifecycle, console, page-error, external-request, and overflow qualification.
+Every adopted family SHALL pass enforcing strict-CSP, read-only and editor accessibility, keyboard, responsive, theme, reduced-motion, forced-colors, lifecycle, console, page-error, external-request, and overflow qualification.
 The policy MUST retain `style-src-attr 'none'` and MUST NOT add blanket `unsafe-inline`.
 
-#### Scenario: Qualification matrix runs
-- **WHEN** controls connect, focus, edit, validate, disable, reconnect, switch theme, and encounter representative errors
-- **THEN** there are zero unexpected CSP, accessibility, console, page, external-request, or overflow failures
-- **AND** keyboard and focus behavior remain operable at supported viewport and preference combinations
+#### Scenario: Read-only and editor qualification matrix runs
+- **WHEN** controls connect, display, focus, enter and leave editing, validate, disable, reconnect, switch theme, and encounter representative errors
+- **THEN** there are zero unexpected CSP, accessibility, console, page, external-request, duplicate-control, stale-state, or overflow failures
+- **AND** accessible naming, description, keyboard, focus, authoritative values, and fallback behavior match the semantic contract
 
 #### Scenario: Candidate requires unapproved policy
 - **WHEN** a control requires blanket inline style permission, external assets, telemetry, Pro code, Flow state, or another excluded capability
