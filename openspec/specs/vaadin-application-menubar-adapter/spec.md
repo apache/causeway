@@ -37,8 +37,8 @@ Descriptors MUST preserve menu, section, action, service, label, description, ic
 
 #### Scenario: Menu contains labeled and unlabeled sections
 - **WHEN** a representable menu contains actions grouped by labeled and unlabeled sections
-- **THEN** the item hierarchy preserves every grouping and action in source order
-- **AND** only leaf service actions are activatable
+- **THEN** each section label is a non-activatable heading immediately before its actions in the top-level menu dropdown
+- **AND** a section label does not create another submenu, every action remains in source order, and only leaf service actions are activatable
 
 #### Scenario: Labels are duplicated or localized
 - **WHEN** multiple actions share a label or labels change between generations
