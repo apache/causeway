@@ -18,7 +18,7 @@ eligible fields and action buttons
 
 | Order | Proposal | Purpose | Promotion gate |
 |---:|---|---|---|
-| 1 | `extend-vaadin-to-domain-member-presentation` | Use qualified read-only Vaadin fields and action buttons behind property and action components. | View/edit parity, action semantics, accessibility, theming, route loading, CSP, packaging, and native rollback pass the foundation, Petclinic, and Reference Application suites. |
+| 1 | `extend-vaadin-to-domain-member-presentation` *(active)* | Use qualified read-only Vaadin fields and action buttons behind property and action components. | View/edit parity, action semantics, accessibility, theming, route loading, CSP, packaging, and native rollback pass the foundation, Petclinic, and Reference Application suites. |
 | 2 | `use-vaadin-grid-for-collection-presentation` | Use an internal Grid for qualified collection presentations. | Existing bounded-window, row-context, nullable-total, semantic-cell, responsive, cancellation, and native-fallback contracts are proven without claiming database pushdown. |
 | 3 | `use-vaadin-menu-bar-for-application-menus` | Use internal Menu Bar item trees behind the three semantic application-menu tiers. | Hierarchy, order, disabled state, service-action invocation, overflow, keyboard, refresh, authentication exclusions, stable-shell loading, and native fallback pass broad acceptance coverage. |
 
