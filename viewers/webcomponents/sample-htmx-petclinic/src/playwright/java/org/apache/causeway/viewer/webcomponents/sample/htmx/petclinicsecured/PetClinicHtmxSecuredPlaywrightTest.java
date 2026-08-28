@@ -122,13 +122,13 @@ class PetClinicHtmxSecuredPlaywrightTest {
                     .isZero();
             assertThat(graphQlCsrfHeaders).isNotEmpty().allSatisfy(value -> assertThat(value).isNotBlank());
 
-            final var property = page.locator("cw-property[member='knownAs']");
+            final var property = page.locator("cw-property[id='knownAs']");
             property.locator("[data-causeway-action='edit']").click();
             final var editor = property.locator("[data-causeway-editor]");
             editor.waitFor();
             editor.evaluate("(element, value) => { element.value = value; element.dispatchEvent(new Event('input', {bubbles:true, composed:true})); element.dispatchEvent(new Event('change', {bubbles:true, composed:true})); }", "Mary Secured");
             property.locator("[data-causeway-action='save']").click();
-            page.waitForFunction("() => document.querySelector(\"cw-property[member='knownAs'] .causeway-property-value\")?.textContent.includes('Mary Secured')");
+            page.waitForFunction("() => document.querySelector(\"cw-property[id='knownAs'] .causeway-property-value\")?.textContent.includes('Mary Secured')");
 
             final var rejectedStatus = (Number) page.evaluate("""
                     async () => (await fetch('/graphql', {

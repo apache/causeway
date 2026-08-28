@@ -144,7 +144,7 @@ test('preserves associated actions and bounded multiline hints in semantic membe
 
   const html = renderObjectLayoutPlan(result.plan, {editable: true});
   assert.match(html, /data-causeway-associated-member="notes"/);
-  assert.match(html, /member="notes"[^>]*multiline="5"/);
+  assert.match(html, /id="notes"[^>]*multiline="5"/);
   assert.match(html, /class="causeway-object-associated-actions"/);
   assert.match(html, /data-causeway-associated-member="staffMembers"/);
 });
@@ -170,8 +170,8 @@ test('groups consecutive fallback actions with a responsive semantic wrapper', (
   members.set('delete', {id: 'delete', kind: 'action'});
   const html = renderObjectLayoutPlan(createFallbackLayoutPlan(members));
   assert.match(html, /class="causeway-object-actions" data-causeway-action-group/);
-  assert.match(html, /member="changeName"/);
-  assert.match(html, /member="delete"/);
+  assert.match(html, /id="changeName"/);
+  assert.match(html, /id="delete"/);
 });
 
 test('renders escaped light-DOM semantic children, accessible tabs, and editable properties', () => {
@@ -183,7 +183,7 @@ test('renders escaped light-DOM semantic children, accessible tabs, and editable
   assert.match(html, /role="tablist"/);
   assert.match(html, /role="tab"/);
   assert.match(html, /role="tabpanel"/);
-  assert.match(html, /<cw-property[^>]*member="unsafe"[^>]*label="&lt;Unsafe&gt;"[^>]* editable/);
+  assert.match(html, /<cw-property[^>]*id="unsafe"[^>]*label="&lt;Unsafe&gt;"[^>]* editable/);
   assert.doesNotMatch(html, /<Unsafe>/);
 });
 

@@ -348,18 +348,18 @@
               <p>Each member derives capability from targeted schema introspection and instance state from the nearest object context.</p>
             </div>
             <div class="sample-property-grid">
-              <cw-property member="name" data-testid="property-name"></cw-property>
-              <cw-property member="code" data-testid="property-code"></cw-property>
-              <cw-property member="summary" editable data-testid="property-summary"></cw-property>
-              <cw-property member="capacity" editable data-testid="property-capacity"></cw-property>
-              <cw-property member="featured" editable data-testid="property-featured"></cw-property>
-              <cw-property member="status" editable data-testid="property-status"></cw-property>
-              <cw-property member="notes" editable data-testid="property-notes"></cw-property>
-              <cw-property member="scheduledDate" editable data-testid="property-scheduled-date"></cw-property>
-              <cw-property member="startsAt" editable data-testid="property-starts-at"></cw-property>
-              <cw-property member="lastReviewedAt" editable data-testid="property-last-reviewed-at"></cw-property>
-              <cw-property member="relatedObject" data-testid="property-related-object"></cw-property>
-              <cw-property member="secret" data-testid="property-secret"></cw-property>
+              <cw-property id="name" data-testid="property-name"></cw-property>
+              <cw-property id="code" data-testid="property-code"></cw-property>
+              <cw-property id="summary" editable data-testid="property-summary"></cw-property>
+              <cw-property id="capacity" editable data-testid="property-capacity"></cw-property>
+              <cw-property id="featured" editable data-testid="property-featured"></cw-property>
+              <cw-property id="status" editable data-testid="property-status"></cw-property>
+              <cw-property id="notes" editable data-testid="property-notes"></cw-property>
+              <cw-property id="scheduledDate" editable data-testid="property-scheduled-date"></cw-property>
+              <cw-property id="startsAt" editable data-testid="property-starts-at"></cw-property>
+              <cw-property id="lastReviewedAt" editable data-testid="property-last-reviewed-at"></cw-property>
+              <cw-property id="relatedObject" data-testid="property-related-object"></cw-property>
+              <cw-property id="secret" data-testid="property-secret"></cw-property>
             </div>
           </section>
 
@@ -370,13 +370,13 @@
               <p>Enabled requests are handled by the standard controller; disabled and hidden states remain unavailable.</p>
             </div>
             <div class="sample-action-stack" aria-label="Interactive action affordances">
-              <cw-action member="inspect" data-testid="action-inspect"></cw-action>
-              <cw-action member="updateDetails" data-testid="action-update-details"></cw-action>
-              <cw-action member="findRelated" data-testid="action-find-related"></cw-action>
-              <cw-action member="selectRelated" data-testid="action-select-related"></cw-action>
-              <cw-action member="clearNotes" data-testid="action-clear-notes"></cw-action>
-              <cw-action member="archive" data-testid="action-archive"></cw-action>
-              <cw-action member="hiddenAction" data-testid="action-hidden"></cw-action>
+              <cw-action id="inspect" data-testid="action-inspect"></cw-action>
+              <cw-action id="updateDetails" data-testid="action-update-details"></cw-action>
+              <cw-action id="findRelated" data-testid="action-find-related"></cw-action>
+              <cw-action id="selectRelated" data-testid="action-select-related"></cw-action>
+              <cw-action id="clearNotes" data-testid="action-clear-notes"></cw-action>
+              <cw-action id="archive" data-testid="action-archive"></cw-action>
+              <cw-action id="hiddenAction" data-testid="action-hidden"></cw-action>
             </div>
           </section>
 
@@ -414,13 +414,13 @@
             </div>
             <div class="sample-collection-stack">
               <div class="sample-collection-panel">
-                <cw-collection member="relatedObjects" active data-testid="collection-related-objects">
-                  <cw-collection-column member="name" label="Name" data-testid="column-related-name"></cw-collection-column>
-                  <cw-collection-column member="code" label="Code" data-testid="column-related-code"></cw-collection-column>
+                <cw-collection id="relatedObjects" active data-testid="collection-related-objects">
+                  <cw-collection-column id="name" label="Name" data-testid="column-related-name"></cw-collection-column>
+                  <cw-collection-column id="code" label="Code" data-testid="column-related-code"></cw-collection-column>
                 </cw-collection>
               </div>
               <div class="sample-collection-panel">
-                <cw-collection member="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></cw-collection>
+                <cw-collection id="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></cw-collection>
               </div>
             </div>
           </section>

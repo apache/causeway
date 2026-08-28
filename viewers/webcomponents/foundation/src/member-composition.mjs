@@ -85,7 +85,7 @@ export function refreshMemberComposition(host) {
   }
   composition.actions = Object.freeze(actions);
   if (actions.length > 0) {
-    host.setAttribute('data-causeway-associated-member', host.getAttribute?.('member') ?? '');
+    host.setAttribute('data-causeway-associated-member', host.id ?? '');
     host.setAttribute('data-causeway-action-group', '');
   } else {
     host.removeAttribute('data-causeway-associated-member');

@@ -64,6 +64,14 @@ const SUFFIX_PATTERN = [...OLD_SUFFIXES]
 const OLD_TAG = new RegExp(`(?:<|&lt;)\\/?${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?![a-z0-9-])`);
 const OLD_API_NAME = new RegExp(`(?<![.\\w-])${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?![a-z0-9-])`);
 const OLD_TYPE_SELECTOR = new RegExp(`(?:^|[>,(]\\s*)${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?=[\\s\\[{:>,])`);
+const MEMBER_BEARING_SUFFIX_PATTERN = 'property|action|collection|collection-column';
+const OLD_MEMBER_TAG = new RegExp(`<cw-(?:${MEMBER_BEARING_SUFFIX_PATTERN})\\b[^>]*\\bmember\\s*=`);
+const OLD_MEMBER_SELECTOR = new RegExp(`cw-(?:${MEMBER_BEARING_SUFFIX_PATTERN})[^\\n]*\\[member(?:[~|^$*]?=|\\])`);
+const OLD_MEMBER_DOM_API = /(?:get|set)Attribute(?:\?\.)?\(\s*['"]member['"]/;
+const OLD_MEMBER_ACCESSOR = /\b(?:get member\(\)|set member\()/;
+const OLD_MEMBER_PROPERTY = /\b(?:property|action|collection|element|host)\.member\b/;
+const INTENTIONAL_OBSOLETE_MEMBER_API = 'intentional-obsolete-member-api';
+const AUDIT_FILE = fileURLToPath(import.meta.url);
 const ELEMENT_API_MARKERS = [
   'closest(',
   'createElement',
@@ -100,6 +108,27 @@ test('source contains only the compact custom-element namespace', async () => {
         if (OLD_TAG.test(line)
             || (ELEMENT_API_MARKERS.some(marker => line.includes(marker)) && OLD_API_NAME.test(line))
             || ((['.adoc', '.css', '.html'].includes(extname(path)) || path.endsWith('/component-styles.mjs')) && OLD_TYPE_SELECTOR.test(line.trim()))) {
+          stale.push(`${path.slice(PROJECT_ROOT.length + 1)}:${index + 1}: ${line.trim()}`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(stale, []);
+});
+
+test('member-bearing elements use native id without stale member DOM APIs', async () => {
+  const stale = [];
+  for (const root of AUDIT_ROOTS) {
+    for (const path of await sourceFiles(root)) {
+      if (path === AUDIT_FILE) continue;
+      const lines = (await readFile(path, 'utf8')).split('\n');
+      for (const [index, line] of lines.entries()) {
+        if (!line.includes(INTENTIONAL_OBSOLETE_MEMBER_API)
+            && (OLD_MEMBER_TAG.test(line)
+              || OLD_MEMBER_SELECTOR.test(line)
+              || OLD_MEMBER_DOM_API.test(line)
+              || OLD_MEMBER_ACCESSOR.test(line)
+              || OLD_MEMBER_PROPERTY.test(line))) {
           stale.push(`${path.slice(PROJECT_ROOT.length + 1)}:${index + 1}: ${line.trim()}`);
         }
       }

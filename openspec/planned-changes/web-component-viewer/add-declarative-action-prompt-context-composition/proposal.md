@@ -7,11 +7,11 @@ The semantic composition is the inverse of member-associated actions.
 Instead of nesting actions beneath a property or collection, authored HTML would nest relevant read-only properties or collections beneath an action declaration:
 
 ```html
-<cw-action member="bookVisit">
-  <cw-property member="lastVisit"></cw-property>
-  <cw-collection member="visits" active size="5">
-    <cw-collection-column member="visitAt"></cw-collection-column>
-    <cw-collection-column member="reason"></cw-collection-column>
+<cw-action id="bookVisit">
+  <cw-property id="lastVisit"></cw-property>
+  <cw-collection id="visits" active size="5">
+    <cw-collection-column id="visitAt"></cw-collection-column>
+    <cw-collection-column id="reason"></cw-collection-column>
   </cw-collection>
 </cw-action>
 ```

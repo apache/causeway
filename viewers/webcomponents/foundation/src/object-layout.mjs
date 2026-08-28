@@ -426,11 +426,11 @@ function renderNode(node, state) {
     let memberMarkup;
     if (node.memberKind === 'property') {
       const multiLine = node.presentation?.multiLine ? ` multiline="${node.presentation.multiLine}"` : '';
-      memberMarkup = `<cw-property data-causeway-region="property" member="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></cw-property>`;
+      memberMarkup = `<cw-property data-causeway-region="property" id="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></cw-property>`;
     } else if (node.memberKind === 'action') {
-      memberMarkup = `<cw-action data-causeway-region="action" member="${escapeHtml(node.memberId)}"${label}></cw-action>`;
+      memberMarkup = `<cw-action data-causeway-region="action" id="${escapeHtml(node.memberId)}"${label}></cw-action>`;
     } else {
-      memberMarkup = `<cw-collection data-causeway-region="collection" member="${escapeHtml(node.memberId)}"${label}></cw-collection>`;
+      memberMarkup = `<cw-collection data-causeway-region="collection" id="${escapeHtml(node.memberId)}"${label}></cw-collection>`;
     }
     if ((node.children?.length ?? 0) === 0) {
       return memberMarkup;

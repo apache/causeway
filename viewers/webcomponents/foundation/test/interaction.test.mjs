@@ -232,7 +232,7 @@ test('property interactions preserve exact decimal lexical state and map codec e
     }
   };
   const property = new CausewayPropertyElement();
-  property.member = 'amount';
+  property.id = 'amount';
   property.editable = true;
   property.context = context;
   document.body.appendChild(property);
@@ -340,7 +340,7 @@ test('editable properties support prepare, validation, cancel and authoritative 
     }
   };
   const property = new CausewayPropertyElement();
-  property.member = 'name';
+  property.id = 'name';
   property.editable = true;
   property.multiLine = 5;
   property.setAttribute('data-testid', 'property-name');
@@ -440,7 +440,7 @@ test('property validation preserves Save and Cancel focus across consecutive ren
       }
     };
     const property = new CausewayPropertyElement();
-    property.member = 'name';
+    property.id = 'name';
     property.editable = true;
     property.context = context;
     document.body.appendChild(property);
@@ -494,7 +494,7 @@ test('property preserves clear focus intent across validation renders but not ex
     }
   };
   const property = new CausewayPropertyElement();
-  property.member = 'knownAs';
+  property.id = 'knownAs';
   property.editable = true;
   property.context = context;
   document.body.appendChild(property);
@@ -678,7 +678,7 @@ test('reference autocomplete cancels stale work and rejects over-bound results',
     }
   };
   const property = new CausewayPropertyElement();
-  property.member = 'owner';
+  property.id = 'owner';
   property.editable = true;
   property.context = context;
   document.body.appendChild(property);

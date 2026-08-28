@@ -24,6 +24,9 @@ import {installDomShim} from './dom-shim.mjs';
 const {document} = installDomShim();
 const {
   COMPONENT_STATE_EVENT,
+  CausewayActionElement,
+  CausewayCollectionColumnElement,
+  CausewayCollectionElement,
   CausewayObjectContextElement,
   CausewayPropertyElement,
   defineCausewayWebComponents
@@ -33,7 +36,7 @@ defineCausewayWebComponents();
 
 test('property renders accessible ready, disabled, hidden and error states', () => {
   const property = new CausewayPropertyElement();
-  property.setAttribute('member', 'name');
+  property.setAttribute('id', 'name');
   property.renderComponentState(state({data: {hidden: false, disabled: null, get: '<Classics>'}}));
   assert.match(property.innerHTML, /causeway-property-label/);
   assert.match(property.innerHTML, /&lt;Classics&gt;/);
@@ -53,6 +56,31 @@ test('property renders accessible ready, disabled, hidden and error states', () 
   assert.match(property.innerHTML, /Unreadable/);
 });
 
+test('member-bearing elements use native identifiers without a member compatibility API', () => {
+  const property = new CausewayPropertyElement();
+  const action = new CausewayActionElement();
+  const collection = new CausewayCollectionElement();
+  const column = new CausewayCollectionColumnElement();
+
+  property.id = 'firstName';
+  action.id = 'updateName';
+  collection.id = 'staffMembers';
+  column.id = 'name';
+
+  assert.equal(property.getAttribute('id'), 'firstName');
+  assert.deepEqual(property.createRequirement(), {kind: 'property', member: 'firstName'});
+  assert.deepEqual(action.createRequirement(), {kind: 'action', member: 'updateName'});
+  assert.deepEqual(collection.createRequirement(), {kind: 'collection', member: 'staffMembers'});
+  assert.equal(column.configuration.member, 'name');
+  assert.equal(property.member, undefined); // intentional-obsolete-member-api
+
+  const obsolete = new CausewayPropertyElement();
+  obsolete.setAttribute('member', 'firstName'); // intentional-obsolete-member-api
+  assert.equal(obsolete.id, '');
+  assert.equal(obsolete.member, undefined); // intentional-obsolete-member-api
+  assert.deepEqual(obsolete.createRequirement(), {kind: 'property', member: ''});
+});
+
 test('component lifecycle registers, changes and releases semantic requirements', () => {
   const registrations = [];
   const releases = [];
@@ -65,10 +93,10 @@ test('component lifecycle registers, changes and releases semantic requirements'
   };
   const property = new CausewayPropertyElement();
   property.context = context;
-  property.setAttribute('member', 'name');
+  property.setAttribute('id', 'name');
   document.body.appendChild(property);
   assert.deepEqual(registrations, [{kind: 'property', member: 'name'}]);
-  property.setAttribute('member', 'code');
+  property.setAttribute('id', 'code');
   assert.deepEqual(registrations.at(-1), {kind: 'property', member: 'code'});
   assert.equal(releases.length, 1);
   document.body.removeChild(property);
@@ -83,7 +111,7 @@ test('nearest nested object context answers the bubbling context request', () =>
   outer.context = outerContext;
   inner.context = innerContext;
   const property = new CausewayPropertyElement();
-  property.setAttribute('member', 'name');
+  property.setAttribute('id', 'name');
   outer.appendChild(inner);
   inner.appendChild(property);
   document.body.appendChild(outer);

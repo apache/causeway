@@ -58,12 +58,12 @@ test('loads the authorized effective grid and generates established semantic chi
   assert.deepEqual(context.requirements[0], {kind: 'layout'});
   assert.deepEqual(context.resources, ['/graphql/object/type:id/_meta/grid']);
   assert.match(element.innerHTML, /<cw-object-header/);
-  assert.match(element.innerHTML, /<cw-property[^>]*member="name"[^>]* editable/);
-  assert.match(element.innerHTML, /<cw-action[^>]*member="changeName"/);
-  assert.match(element.innerHTML, /<cw-collection[^>]*member="staffMembers"/);
+  assert.match(element.innerHTML, /<cw-property[^>]*id="name"[^>]* editable/);
+  assert.match(element.innerHTML, /<cw-action[^>]*id="changeName"/);
+  assert.match(element.innerHTML, /<cw-collection[^>]*id="staffMembers"/);
   assert.match(element.innerHTML, /role="tablist"/);
-  assert.equal(occurrences(element.innerHTML, 'member="name"'), 1);
-  assert.equal(occurrences(element.innerHTML, 'member="changeName"'), 1);
+  assert.equal(occurrences(element.innerHTML, 'id="name"'), 1);
+  assert.equal(occurrences(element.innerHTML, 'id="changeName"'), 1);
   assert.equal(states.at(-1).status, 'ready');
   assert.equal(states.at(-1).source, 'grid');
 });

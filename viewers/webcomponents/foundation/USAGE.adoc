@@ -27,13 +27,13 @@ The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-author
       logical-type="university.dept.Department"
       object-id="42">
     <cw-object-header></cw-object-header>
-    <cw-property member="name"></cw-property>
-    <cw-property member="status"></cw-property>
-    <cw-property member="chair"></cw-property>
-    <cw-action member="inspect"></cw-action>
-    <cw-collection member="staffMembers">
-      <cw-collection-column member="name" label="Name"></cw-collection-column>
-      <cw-collection-column member="code" label="Code"></cw-collection-column>
+    <cw-property id="name"></cw-property>
+    <cw-property id="status"></cw-property>
+    <cw-property id="chair"></cw-property>
+    <cw-action id="inspect"></cw-action>
+    <cw-collection id="staffMembers">
+      <cw-collection-column id="name" label="Name"></cw-collection-column>
+      <cw-collection-column id="code" label="Code"></cw-collection-column>
     </cw-collection>
   </cw-object-context>
 </cw-graphql-client>
@@ -56,7 +56,9 @@ The `cw-` element namespace replaces the former `causeway-` element namespace wi
 Applications upgrading across this breaking change must replace each former opening and closing custom-element tag and each element-name selector with its one-to-one `cw-` equivalent.
 Semantic `causeway-*` events, CSS classes, `data-causeway-*` attributes, `--causeway-*` variables, and `/causeway-*` asset paths keep their existing spelling.
 
-Member components use the `member` attribute and accept an optional `label` override.
+Properties, actions, collections, and collection columns use the standard `id` attribute and native reflected `id` property to identify their Causeway member, and accept an optional `label` override.
+The former `member` attribute and custom `member` property are not compatibility aliases.
+Applications must keep authored IDs unique according to ordinary HTML identifier rules.
 A property exposes interaction only when its `editable` attribute or property is enabled.
 Object links use `logical-type`, `object-id`, `title`, and `disabled`.
 Collections use `active` and declarative collection-column children.
@@ -268,7 +270,7 @@ Renderer input is normalized semantic state containing `value`, `descriptor`, `t
 It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer, and an accessible disabled reason.
 A non-redundant property description remains the label's default title, while a disabled property adds a separate focusable reason indicator whose tooltip and hidden description do not replace the stable domain description.
 A hidden property renders no label, value, or interactive content.
-Changing `member` releases the old requirement and registers the new one.
+Changing the native `id` releases the old requirement and registers the new one.
 
 `<cw-object-link>` renders title and bookmark identity as a native button with link semantics.
 Enabled activation publishes `causeway-navigation-request` with `{target: {logicalTypeName, id, title}, sourceContext}`.
@@ -281,7 +283,7 @@ A property remains read-only unless the application adds `editable`:
 
 [source,html]
 ----
-<cw-property member="summary" editable></cw-property>
+<cw-property id="summary" editable></cw-property>
 ----
 
 When the rich schema advertises a setter or top-level property mutation, the component prepares an editor lazily, resolves enum or dynamic choices, validates pending input, and executes the update through its object context.
@@ -354,8 +356,8 @@ Place one empty interaction controller as a sibling of action components beneath
 [source,html]
 ----
 <cw-object-context logical-type="university.dept.Department" object-id="42">
-  <cw-action member="inspect"></cw-action>
-  <cw-action member="changeName"></cw-action>
+  <cw-action id="inspect"></cw-action>
+  <cw-action id="changeName"></cw-action>
   <cw-interaction-controller></cw-interaction-controller>
 </cw-object-context>
 ----
@@ -430,15 +432,15 @@ An authored property or collection can place object actions directly beneath the
 
 [source,html]
 ----
-<cw-property member="name">
-  <cw-action member="updateName"></cw-action>
+<cw-property id="name">
+  <cw-action id="updateName"></cw-action>
 </cw-property>
 
-<cw-collection member="pets" active>
-  <cw-collection-column member="name" label="Name"></cw-collection-column>
-  <cw-collection-column member="species" label="Species"></cw-collection-column>
-  <cw-action member="addPet"></cw-action>
-  <cw-action member="removePet"></cw-action>
+<cw-collection id="pets" active>
+  <cw-collection-column id="name" label="Name"></cw-collection-column>
+  <cw-collection-column id="species" label="Species"></cw-collection-column>
+  <cw-action id="addPet"></cw-action>
+  <cw-action id="removePet"></cw-action>
 </cw-collection>
 ----
 

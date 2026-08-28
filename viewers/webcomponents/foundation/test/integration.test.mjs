@@ -70,7 +70,7 @@ function objectTree(id, members) {
   context.appendChild(header);
   const properties = members.map(member => {
     const property = document.createElement('cw-property');
-    property.setAttribute('member', member);
+    property.setAttribute('id', member);
     context.appendChild(property);
     return property;
   });

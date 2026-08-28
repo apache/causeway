@@ -26,7 +26,7 @@ let actionSequence = 0;
 
 export class CausewayActionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['member', 'label'];
+    return ['id', 'label'];
   }
 
   constructor() {
@@ -41,14 +41,6 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     });
   }
 
-  get member() {
-    return this.getAttribute('member') || '';
-  }
-
-  set member(value) {
-    this.setAttribute('member', value);
-  }
-
   get label() {
     return this.getAttribute('label') || '';
   }
@@ -61,7 +53,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     if (oldValue === newValue || !this.isConnected) {
       return;
     }
-    if (name === 'member') {
+    if (name === 'id') {
       this.reconnectRequirement();
     } else {
       this.renderComponentState(this.componentState);
@@ -69,7 +61,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   }
 
   createRequirement() {
-    return {kind: 'action', member: this.member};
+    return {kind: 'action', member: this.id};
   }
 
   activate() {
@@ -84,7 +76,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     return this.dispatchEvent(createSemanticEvent(
       CausewaySemanticEvent.ACTION_REQUEST,
       Object.freeze({
-        actionId: this.member,
+        actionId: this.id,
         identity: context?.identity ?? null,
         context
       }),
@@ -96,7 +88,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     if (!state) {
       return;
     }
-    const label = this.label || humanize(this.member);
+    const label = this.label || humanize(this.id);
     const candidateDescription = state.descriptor?.description || '';
     const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
       ? ''

@@ -24,19 +24,11 @@ const HTMLElementBase = globalThis.HTMLElement ?? class extends EventTarget {};
 
 export class CausewayCollectionColumnElement extends HTMLElementBase {
   static get observedAttributes() {
-    return ['member', 'label'];
-  }
-
-  get member() {
-    return this.getAttribute('member') || '';
-  }
-
-  set member(value) {
-    this.setAttribute('member', value);
+    return ['id', 'label'];
   }
 
   get label() {
-    return this.getAttribute('label') || humanize(this.member);
+    return this.getAttribute('label') || humanize(this.id);
   }
 
   set label(value) {
@@ -45,7 +37,7 @@ export class CausewayCollectionColumnElement extends HTMLElementBase {
 
   get configuration() {
     return Object.freeze({
-      member: this.member,
+      member: this.id,
       label: this.label,
       testId: this.getAttribute('data-testid') || null
     });
