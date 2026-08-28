@@ -49,6 +49,13 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 @DomainObjectLayout
 public class Pet implements Comparable<Pet> {
 
+    public static final class ByName implements Comparator<Pet> {
+        @Override
+        public int compare(final Pet left, final Pet right) {
+            return left.compareTo(right);
+        }
+    }
+
     @Id
     @Column(nullable = false, length = 40)
     private String id;

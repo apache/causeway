@@ -149,7 +149,8 @@ class PetClinicHtmxPlaywrightTest {
             }
             if (request.url().contains("/causeway-webcomponents/vaadin-reference/")
                     || request.url().contains("/causeway-webcomponents/vaadin-fields/")
-                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")) {
+                    || request.url().contains("/causeway-webcomponents/vaadin-actions/")
+                    || request.url().contains("/causeway-webcomponents/vaadin-grid/")) {
                 toolkitRequests.add(request.url());
             }
         });
@@ -183,6 +184,8 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(page.locator("html").getAttribute("data-causeway-action-buttons"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
+        assertThat(page.locator("html").getAttribute("data-causeway-collection-grid"))
+                .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(toolkitRequests).isEmpty();
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
@@ -190,6 +193,9 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("petOwners", 4);
         waitForCollectionRows("futureVisits", 3);
+        assertCollectionPresentation("petOwners", "narrow");
+        assertCollectionPresentation("futureVisits", "narrow");
+        assertThat(toolkitRequests).isEmpty();
 
         clickObjectLink("Mary Smith");
         waitForRoute("petclinic.PetOwner", "s_owner-mary");
@@ -199,6 +205,8 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
+        assertCollectionPresentation("pets", "grid");
+        assertCollectionPresentation("visits", "ordering-not-deterministic");
         assertThat(page.locator(".petclinic-page-toolbar cw-action[id='delete']").count()).isEqualTo(1);
         assertThat(page.locator("cw-property[id='name'] > cw-action[id='updateName']").count())
                 .isEqualTo(1);
@@ -214,6 +222,18 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo("addPet,removePet");
         assertThat(page.locator("cw-property[id='name']")
                 .evaluate("element => getComputedStyle(element).gap")).isNotEqualTo("0px");
+
+        final var readsBeforeResponsiveSwitch = graphQLRequests.size();
+        page.setViewportSize(700, 900);
+        page.waitForFunction("() => [...document.querySelectorAll(\"cw-collection[id='pets'], cw-collection[id='visits']\")].every(element => element.dataset.causewayGridResponsive === 'narrow' && !element.querySelector('cw-collection-grid'))");
+        waitForCollectionRows("pets", 2);
+        waitForCollectionRows("visits", 2);
+        assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
+        page.setViewportSize(1280, 900);
+        if (!nativeToolkit()) {
+            page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.dataset.causewayGridPresentation.startsWith('grid-') && document.querySelector(\"cw-collection[id='visits']\")?.dataset.causewayGridFallback === 'ordering-not-deterministic'");
+        }
+        assertThat(graphQLRequests.size()).isEqualTo(readsBeforeResponsiveSwitch);
 
         page.goBack();
         waitForPageKind("custom");
@@ -825,15 +845,36 @@ class PetClinicHtmxPlaywrightTest {
 
     private void waitForCollectionRows(final String member, final int count) {
         try {
-            page.waitForFunction("args => document.querySelectorAll(`cw-collection[id='${args.member}'] tbody tr, cw-collection[id='${args.member}'] .causeway-collection-rows > li`).length === args.count",
+            page.waitForFunction("args => document.querySelector(`cw-collection[id='${args.member}']`)?.collectionState?.rows?.length === args.count",
                     java.util.Map.of("member", member, "count", count));
         } catch (final com.microsoft.playwright.TimeoutError cause) {
             final var collections = page.locator("cw-collection").evaluateAll(
-                    "elements => elements.map(element => ({member: element.getAttribute('id'), state: element.dataset.state, rows: element.querySelectorAll('tbody tr, .causeway-collection-rows > li').length, text: element.innerText}))");
+                    "elements => elements.map(element => ({member: element.getAttribute('id'), state: element.collectionState?.status, presentation: element.dataset.causewayGridPresentation, rows: element.collectionState?.rows?.length, text: element.innerText}))");
             throw new AssertionError("Expected " + count + " rows for " + member + " at " + page.url()
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
                     + "; collections=" + collections, cause);
         }
+    }
+
+    private void assertCollectionPresentation(final String member, final String expected) {
+        final var collection = page.locator("cw-collection[id='" + member + "']");
+        if (nativeToolkit() || !"grid".equals(expected)) {
+            assertThat(collection.getAttribute("data-causeway-grid-presentation")).isEqualTo("native");
+            assertThat(collection.locator("cw-collection-grid").count()).isZero();
+            if (!nativeToolkit()) {
+                assertThat(collection.getAttribute("data-causeway-grid-fallback")).isEqualTo(expected);
+            }
+            return;
+        }
+        try {
+            page.waitForFunction("member => { const collection = document.querySelector(`cw-collection[id='${member}']`); return collection?.dataset?.causewayGridPresentation?.startsWith('grid-') && collection.querySelector('cw-collection-grid')?.dataset.widgetState === 'ready'; }", member);
+        } catch (final com.microsoft.playwright.TimeoutError cause) {
+            final var diagnostics = collection.evaluate("element => ({dataset: {...element.dataset}, width: element.getBoundingClientRect().width, state: element.collectionState?.status, window: element.collectionState?.window, columns: element.columns})");
+            throw new AssertionError("Collection " + member + " did not qualify for Grid: " + diagnostics, cause);
+        }
+        assertThat(collection.locator("cw-collection-grid").count()).isEqualTo(1);
+        assertThat(collection.locator("cw-collection-grid").getAttribute("data-widget-state")).isEqualTo("ready");
+        assertThat(toolkitRequests.stream().anyMatch(request -> request.contains("/vaadin-grid/vaadin-grid.js"))).isTrue();
     }
 
     private void waitForObjectTitle(final String value) {

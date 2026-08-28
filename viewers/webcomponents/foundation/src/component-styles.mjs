@@ -337,6 +337,38 @@ cw-field-editor[data-widget-state="fallback"]::after {
 .causeway-value-null {
   font-style: italic;
 }
+cw-collection {
+  container-name: cw-collection;
+  container-type: inline-size;
+  display: block;
+  min-inline-size: 0;
+}
+cw-collection-grid {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  overflow: clip;
+  --vaadin-focus-ring-color: var(--causeway-focus, Highlight);
+  --vaadin-grid-background: var(--causeway-surface, Canvas);
+  --vaadin-grid-border-color: var(--causeway-border, GrayText);
+  --vaadin-grid-cell-background-color: var(--causeway-surface, Canvas);
+  --vaadin-grid-cell-padding: var(--causeway-space-2, 0.5rem);
+  --vaadin-grid-header-text-color: var(--causeway-text, CanvasText);
+  --vaadin-grid-row-background-color: var(--causeway-surface, Canvas);
+  --vaadin-grid-row-hover-background-color: var(--causeway-surface-subtle, color-mix(in srgb, CanvasText 6%, Canvas));
+}
+.causeway-collection-content {
+  min-inline-size: 0;
+}
+.causeway-collection-pager {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-collection-pager-gap, 0.5rem);
+  justify-content: space-between;
+  margin-block-start: var(--causeway-collection-pager-margin, 0.5rem);
+}
 .causeway-collection-table {
   border-collapse: collapse;
 }

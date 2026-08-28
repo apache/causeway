@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.inject.Named;
@@ -39,6 +40,8 @@ import jakarta.persistence.Version;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Bounding;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -56,6 +59,15 @@ import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED, editing = Editing.ENABLED)
 @DomainObjectLayout(describedAs = "Deterministic domain object for web-component verification")
 public class SampleObject implements HasVersion<Long> {
+
+    public static final class RelatedByName implements Comparator<SampleRelatedObject> {
+        @Override
+        public int compare(final SampleRelatedObject left, final SampleRelatedObject right) {
+            return Comparator.comparing(SampleRelatedObject::getName)
+                    .thenComparing(SampleRelatedObject::getCode)
+                    .compare(left, right);
+        }
+    }
 
     public static final String LOGICAL_TYPE_NAME = "causeway.webcomponents.sample.SampleObject";
     public static final String SAMPLE_ID = "sample-1";
@@ -258,12 +270,38 @@ public class SampleObject implements HasVersion<Long> {
         return relatedObjects.isEmpty() ? null : relatedObjects.get(0);
     }
 
+    @Collection
+    @CollectionLayout(sortedBy = RelatedByName.class)
     public List<SampleRelatedObject> getRelatedObjects() {
         return Collections.unmodifiableList(relatedObjects);
     }
 
+    @Collection
+    @CollectionLayout(sortedBy = RelatedByName.class)
     public List<SampleRelatedObject> getEmptyRelatedObjects() {
         return Collections.emptyList();
+    }
+
+    @Collection
+    @CollectionLayout(sortedBy = RelatedByName.class)
+    public List<SampleRelatedObject> getDisabledRelatedObjects() {
+        return Collections.unmodifiableList(relatedObjects);
+    }
+
+    @MemberSupport
+    public String disableDisabledRelatedObjects() {
+        return "Disabled collection retained for semantic Grid fallback verification";
+    }
+
+    @Collection
+    @CollectionLayout(sortedBy = RelatedByName.class)
+    public List<SampleRelatedObject> getNarrowRelatedObjects() {
+        return Collections.unmodifiableList(relatedObjects);
+    }
+
+    @Collection
+    public List<SampleRelatedObject> getEncounterRelatedObjects() {
+        return Collections.unmodifiableList(relatedObjects);
     }
 
     @Programmatic

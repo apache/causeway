@@ -62,6 +62,10 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-editor-toolkit=\"vaadin\"")
                 .contains("data-causeway-presentation=\"vaadin\"")
                 .contains("data-causeway-action-buttons=\"vaadin\"")
+                .contains("data-causeway-collection-grid=\"vaadin\"")
+                .contains("data-causeway-grid-family=\"healthy\"")
+                .contains("data-causeway-grid-module-url=\"/app/causeway-webcomponents/vaadin-grid/vaadin-grid.js\"")
+                .contains("data-causeway-grid-policy-revision=\"0\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-field-families=\"basic,numeric,local-temporal\"");
         assertThat(response.getHeaders().getFirst("HX-Push-Url")).isNull();
@@ -103,6 +107,8 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-editor-toolkit=\"native\"")
                 .contains("data-causeway-presentation=\"native\"")
                 .contains("data-causeway-action-buttons=\"native\"")
+                .contains("data-causeway-collection-grid=\"native\"")
+                .contains("data-causeway-grid-family=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"\"");
     }
@@ -125,6 +131,7 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-editor-toolkit=\"compatibility\"")
                 .contains("data-causeway-presentation=\"native\"")
                 .contains("data-causeway-action-buttons=\"native\"")
+                .contains("data-causeway-collection-grid=\"native\"")
                 .contains("data-causeway-reference-widgets=\"vaadin\"")
                 .contains("data-causeway-reference-minimum-search-length=\"3\"")
                 .contains("data-causeway-reference-maximum-results=\"40\"")
@@ -145,6 +152,7 @@ class HtmxViewerControllerTest {
                 .contains("data-causeway-editor-toolkit=\"compatibility\"")
                 .contains("data-causeway-presentation=\"native\"")
                 .contains("data-causeway-action-buttons=\"native\"")
+                .contains("data-causeway-collection-grid=\"native\"")
                 .contains("data-causeway-reference-widgets=\"native\"")
                 .contains("data-causeway-field-families=\"basic,numeric\"");
         assertThat(policy)
@@ -198,6 +206,44 @@ class HtmxViewerControllerTest {
                 .contains("sha256-0wLqlhzs6Y30XLr3aVbYP1PYgStuEbKPfSQ0hPe+kY4=")
                 .contains("sha256-8YLhGMhYZnbpzrpjhu2GmLRimv2CABlByy++wN9OR0w=")
                 .contains("sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=");
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void deprecatedEditorVaadinEnablesCompleteGridPolicyAndExactHashes() {
+        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.VAADIN);
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+        final var policy = response.getHeaders().getFirst("Content-Security-Policy");
+
+        assertThat(response.getBody())
+                .contains("data-causeway-toolkit-source=\"editor-compatibility\"")
+                .contains("data-causeway-collection-grid=\"vaadin\"")
+                .contains("data-causeway-grid-family=\"healthy\"");
+        assertThat(policy)
+                .contains("'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
+        assertThat(occurrences(policy, "'sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw='"))
+                .isEqualTo(2);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void deprecatedEditorNativeDisablesGridAndEveryVaadinHash() {
+        properties.setEditorToolkit(HtmxViewerProperties.EditorToolkit.NATIVE);
+
+        final var response = controller(List.of()).route(request("/htmx", "", false));
+        final var policy = response.getHeaders().getFirst("Content-Security-Policy");
+
+        assertThat(response.getBody())
+                .contains("data-causeway-toolkit-source=\"editor-compatibility\"")
+                .contains("data-causeway-collection-grid=\"native\"")
+                .contains("data-causeway-grid-family=\"native\"");
+        assertThat(policy)
+                .doesNotContain("sha256-")
+                .contains("style-src-attr 'none'")
+                .doesNotContain("'unsafe-inline'");
     }
 
     @Test

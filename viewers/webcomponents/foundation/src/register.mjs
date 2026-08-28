@@ -24,6 +24,7 @@ import {captureDeclarativeCollectionColumns, CausewayCollectionElement} from './
 import {CausewayElementName} from './component-contracts.mjs';
 import {CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement} from './field-widget.mjs';
 import {CausewayGraphQLClientElement} from './graphql-client-element.mjs';
+import {CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement} from './grid-widget.mjs';
 import {CausewayInteractionControllerElement} from './interaction-controller-element.mjs';
 import {
   CausewayMenubarPrimaryElement,
@@ -57,7 +58,8 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.MENUBAR_SECONDARY, CausewayMenubarSecondaryElement],
   [CausewayElementName.MENUBAR_TERTIARY, CausewayMenubarTertiaryElement],
   [CausewayElementName.COLLECTION_COLUMN, CausewayCollectionColumnElement],
-  [CausewayElementName.COLLECTION, CausewayCollectionElement]
+  [CausewayElementName.COLLECTION, CausewayCollectionElement],
+  [CAUSEWAY_COLLECTION_GRID, CausewayCollectionGridElement]
 ]);
 
 export function defineCausewayWebComponents(registry = globalThis.customElements) {

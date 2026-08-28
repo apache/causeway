@@ -1,0 +1,27 @@
+= Vaadin Grid closure
+
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+// See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+// The ASF licenses this file to you under the Apache License, Version 2.0.
+
+This directory builds the pinned free-core Vaadin Grid asset used internally by qualified wide `<cw-collection>` presentations.
+Applications continue to use Causeway collection and column elements and must not depend on the internal Grid tag, data provider, renderer callbacks, events, item objects, methods, properties, or Shadow DOM.
+
+The closure is independent from reference, field-family, action, and future menu assets so inactive, narrow, unsupported, unaffected, and native routes do not download Grid.
+It excludes sorting, filtering, selection, editing, details, drag, resize, reorder, Grid Pro, commercial packages, Flow, Binder, server-side Vaadin state, telemetry, CDN resources, external assets, Menu Bar, and persistence query pushdown.
+
+== Reproducible build
+
+[source,shell]
+----
+npm ci --ignore-scripts --no-audit --no-fund
+npm run build
+npm run verify
+npm run audit
+----
+
+The ordinary Maven build verifies checked-in generated assets without invoking npm.
+The explicit regeneration profile performs the pinned npm build deliberately.
+
+A reviewed dependency or generated-byte update uses `npm run update-policy`, followed by inspection of `policy.json`, generated legal metadata, exact CSP hashes, compressed size, browser audit output, and HTMX CSP source.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` to disable Grid and every other Vaadin adapter without GraphQL, route, data, or application-markup migration.

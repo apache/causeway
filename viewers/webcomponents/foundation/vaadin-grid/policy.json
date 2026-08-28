@@ -1,0 +1,15 @@
+{
+  "bundleSha256": "33af4e23100ca0c6af7bb2fd492077c7e4973584cf389c177549fa89b93a9441",
+  "maximumGzipBytes": 196608,
+  "aggregateMaximumGzipBytes": 533504,
+  "directPackages": {
+    "@vaadin/grid": "25.2.8"
+  },
+  "entryPoints": [
+    "@vaadin/grid",
+    "@vaadin/grid/vaadin-grid-column.js"
+  ],
+  "cspStyleHashes": [
+    "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw="
+  ]
+}

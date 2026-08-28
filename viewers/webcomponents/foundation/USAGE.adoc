@@ -487,7 +487,18 @@ A later requirement outside the hydrated selection produces only a missing-field
 The collection's `rowContexts` property exposes the currently hydrated controllers to host adapters and is cleared on rerender or disconnect.
 
 When targeted introspection finds the additive rich `window(offset, size)` field, collections use bounded secondary window operations and retain the documented legacy-list fallback.
-Filtering, selection, bulk actions, and backend query pushdown remain outside the component contract.
+
+Under the default Vaadin component policy, an active connected collection wider than 48rem may use the internal independently packaged Grid closure when its window ordering is `CONFIGURED`, its semantic columns are fully projectable, and its total or paging metadata is safe.
+A safe positive total selects virtual Grid and maps only bounded range callbacks through the Causeway-owned range broker.
+An unavailable total selects bounded Grid only when normalized previous or next metadata exists, renders only the current window, and keeps accessible Causeway previous and next controls without inventing a logical size.
+Safe-zero, terminal-empty, narrow, inactive, hidden, legacy-list, encounter-ordered, malformed-window, unsupported-column, renderer-failure, family-failure, and explicit-native collections retain the established native presentation.
+The initial authoritative range seeds the bounded cache, identical ranges deduplicate, overlapping work has independent cancellation, retained windows and hydrated contexts are capped, and route, object, member, column, renderer, policy, width, refresh, or connection changes retire stale work.
+Causeway remains authoritative for rows, values, semantic renderers, object links, errors, focus identity, paging, associated actions, GraphQL, routes, authorization, and lifecycle.
+Applications continue to declare only `<cw-collection>` and `<cw-collection-column>` and must not consume internal Grid tags, item objects, data providers, render callbacks, events, properties, methods, or Shadow DOM.
+Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete collection and control rollback without changing GraphQL, routes, persisted data, or application markup.
+The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates in the 533504-byte aggregate closure cap and exact-hash CSP policy.
+See `vaadin-grid/README.adoc` for pinned inputs, accepted checksum, legal metadata, CSP evidence, verification, and audit commands.
+Sorting, filtering, selection, editing, details, drag, resizing, reordering, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
 
 == Observable state, accessibility, and styling
 

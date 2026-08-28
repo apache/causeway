@@ -17,6 +17,12 @@
  * under the License.
  */
 
+import {buildCausewayGridProjection} from './collection-grid-projection.mjs';
+import {
+  publishCausewayGridDiagnostics,
+  qualifyCausewayCollectionGrid
+} from './collection-grid-qualification.mjs';
+import {CausewayCollectionRangeBroker} from './collection-range-broker.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
@@ -28,6 +34,12 @@ import {
   renderMemberPrimary
 } from './member-composition.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
+import {
+  CAUSEWAY_COLLECTION_GRID,
+  CAUSEWAY_GRID_WIDGET_POLICY_EVENT,
+  causewayGridWidgetConfiguration,
+  failCausewayGridWidget
+} from './grid-widget.mjs';
 import {defaultValueRendererRegistry, renderCausewayValue} from './value-renderers.mjs';
 
 let collectionSequence = 0;
@@ -68,11 +80,40 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this._columns = [];
     this._rendererRegistry = defaultValueRendererRegistry;
     this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
+    this.authoritativeResult = null;
+    this.rangeBroker = null;
     this.rowContexts = [];
     this.loadRevision = 0;
     this.loadAbortController = null;
     this.loadedGeneration = -1;
     this.connectionStarted = false;
+    this.gridHostRevision = 0;
+    this.gridResponsiveRevision = 0;
+    this._gridWide = false;
+    this._gridProjection = buildCausewayGridProjection();
+    this._gridQualification = qualifyCausewayCollectionGrid();
+    this.gridFocusIntent = null;
+    this.gridResizeRevision = 0;
+    this.gridResizeObserver = typeof globalThis.ResizeObserver === 'function'
+      ? new ResizeObserver(entries => {
+        const entry = entries.at(-1);
+        const width = entry?.contentRect?.width;
+        if (!Number.isFinite(width)) return;
+        const revision = ++this.gridResizeRevision;
+        const apply = () => {
+          if (this.isConnected && revision === this.gridResizeRevision) {
+            this.acceptGridResponsiveState(width > collectionBreakpointPixels());
+          }
+        };
+        if (typeof globalThis.requestAnimationFrame === 'function') globalThis.requestAnimationFrame(apply);
+        else queueMicrotask(apply);
+      })
+      : null;
+    this.gridPolicyListener = () => {
+      this.gridHostRevision += 1;
+      this.#rebuildRangeBroker();
+      if (this.isConnected && this.componentState) this.renderComponentState(this.componentState);
+    };
     this.columnObserver = typeof globalThis.MutationObserver === 'function'
       ? new MutationObserver(records => {
         for (const record of records) {
@@ -89,10 +130,29 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.#acceptColumn(event.detail?.column);
     });
     this.addEventListener('click', event => {
-      if (!eventOriginatesFromAssociatedAction(this, event.target)
-          && event.target?.hasAttribute?.('data-causeway-activate')) {
+      if (eventOriginatesFromAssociatedAction(this, event.target)) return;
+      if (event.target?.hasAttribute?.('data-causeway-activate')) {
         this.activate();
+      } else if (event.target?.hasAttribute?.('data-causeway-grid-previous')) {
+        this.#loadNormalizedPage(this.collectionState.window?.previousOffset);
+      } else if (event.target?.hasAttribute?.('data-causeway-grid-next')) {
+        this.#loadNormalizedPage(this.collectionState.window?.nextOffset);
       }
+    });
+    this.addEventListener('focusin', event => {
+      const target = event.composedPath?.().find(node => node?.dataset?.causewayGridRowKey) ?? event.target;
+      if (!target?.dataset?.causewayGridRowKey) return;
+      this.gridFocusIntent = Object.freeze({
+        rowKey: target.dataset.causewayGridRowKey,
+        member: target.dataset.causewayGridMember ?? '',
+        role: target.dataset.causewayGridRole ?? 'cell',
+        objectGeneration: this.componentState?.generation,
+        collectionMember: this.id
+      });
+    });
+    this.addEventListener('causeway-grid-ready', event => {
+      if (!this.#focusIntentIsCurrent()) return;
+      event.target?.restoreSemanticFocus?.(this.gridFocusIntent);
     });
   }
 
@@ -121,6 +181,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   set columns(value) {
+    this.gridHostRevision += 1;
+    this.#disconnectRangeBroker();
     this._columns = [...(value ?? [])]
       .map(column => typeof column === 'string' ? {member: column, label: humanize(column)} : {...column})
       .filter(column => column.member);
@@ -131,12 +193,33 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
   }
 
+  get gridQualification() {
+    return this._gridQualification;
+  }
+
+  get gridProjection() {
+    return this._gridProjection;
+  }
+
+  acceptGridResponsiveState(wide) {
+    const next = wide === true;
+    if (next === this._gridWide) return false;
+    this._gridWide = next;
+    this.gridResponsiveRevision += 1;
+    this.gridHostRevision += 1;
+    this.#rebuildRangeBroker();
+    if (this.componentState) this.renderComponentState(this.componentState);
+    return true;
+  }
+
   get rendererRegistry() {
     return this._rendererRegistry;
   }
 
   set rendererRegistry(value) {
     this._rendererRegistry = value ?? defaultValueRendererRegistry;
+    this.gridHostRevision += 1;
+    this.#rebuildRangeBroker();
     if (this.componentState) {
       this.renderComponentState(this.componentState);
     }
@@ -144,6 +227,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
 
   connectedCallback() {
     connectMemberComposition(this);
+    globalThis.document?.addEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
     this.columnObserver?.observe(this, {childList: true});
     globalThis.setTimeout(() => {
       if (!this.isConnected) {
@@ -152,21 +236,27 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       captureDeclarativeCollectionColumns(this);
       this.#captureColumns();
       this.connectionStarted = true;
+      this.gridResizeObserver?.observe(this);
       super.connectedCallback();
     }, 0);
   }
 
   disconnectedCallback() {
     disconnectMemberComposition(this);
+    globalThis.document?.removeEventListener?.(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, this.gridPolicyListener);
     this.columnObserver?.disconnect();
+    this.gridResizeObserver?.disconnect();
+    this.gridResizeRevision += 1;
     this.connectionStarted = false;
     this.loadRevision += 1;
     this.loadAbortController?.abort();
     this.loadAbortController = null;
+    this.#disconnectRangeBroker();
     for (const context of this.rowContexts) {
       context.disconnect?.();
     }
     this.rowContexts = [];
+    this.gridHostRevision += 1;
     super.disconnectedCallback();
   }
 
@@ -175,9 +265,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       return;
     }
     if (name === 'id') {
+      this.gridHostRevision += 1;
       refreshMemberComposition(this);
       this.loadAbortController?.abort();
       this.loadAbortController = null;
+      this.#disconnectRangeBroker();
+      this.authoritativeResult = null;
       this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
       this.loadedGeneration = -1;
       this.reconnectRequirement();
@@ -218,6 +311,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
     const revision = ++this.loadRevision;
     this.loadAbortController?.abort();
+    this.#disconnectRangeBroker();
+    this.authoritativeResult = null;
     const abortController = new AbortController();
     this.loadAbortController = abortController;
     this.collectionState = Object.freeze({status: 'loading', data: null, errors: []});
@@ -244,6 +339,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         .filter(row => row?._meta?.logicalTypeName && row?._meta?.id)
         .map(row => context.createHydratedRowContext(row, result.rowSelection));
       this.loadedGeneration = this.componentState.generation;
+      this.gridHostRevision += 1;
+      this.authoritativeResult = result;
       this.collectionState = Object.freeze({
         status: result.errors.length > 0 ? 'partial-error' : 'ready',
         data: result.data,
@@ -255,6 +352,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         rowSelection: result.rowSelection
       });
       this.renderComponentState(this.componentState);
+      if (this._gridQualification.qualified) this.#installRangeBroker(context, result);
       this.#publishCollectionState();
       if (this.loadAbortController === abortController) {
         this.loadAbortController = null;
@@ -267,6 +365,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       if (this.loadAbortController === abortController) {
         this.loadAbortController = null;
       }
+      this.authoritativeResult = null;
       this.collectionState = Object.freeze({
         status: 'error',
         data: null,
@@ -282,6 +381,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     if (!state) {
       return;
     }
+    this.#qualifyGrid(state);
     const label = this.label || humanize(this.id);
     const candidateDescription = state.descriptor?.description || '';
     const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
@@ -330,13 +430,86 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       renderMemberPrimary(this, shell('<span class="causeway-empty" role="status">No items</span>'));
       return;
     }
-    const content = this._columns.length > 0
-      ? this.#renderTable(rows)
-      : this.#renderDefaultRows(rows);
     const errors = this.collectionState.errors?.length
       ? `<p class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</p>`
       : '';
+    if (this._gridQualification.qualified) {
+      this.#renderGrid(shell, disabledMarkup, errors, description);
+      return;
+    }
+    const content = this._columns.length > 0
+      ? this.#renderTable(rows)
+      : this.#renderDefaultRows(rows);
     renderMemberPrimary(this, shell(`${disabledMarkup}${content}${errors}`));
+    this.#restoreNativeFocus();
+  }
+
+  #renderGrid(shell, disabledMarkup, errors, description) {
+    const revision = this.gridHostRevision;
+    const bounded = this._gridQualification.presentation === 'grid-bounded';
+    const window = this.collectionState.window;
+    const pager = bounded ? this.#renderBoundedPager(window) : '';
+    renderMemberPrimary(this, shell(`${disabledMarkup}<${CAUSEWAY_COLLECTION_GRID} data-causeway-collection-grid></${CAUSEWAY_COLLECTION_GRID}>${pager}${errors}`));
+    const adapter = this.querySelector?.(`${CAUSEWAY_COLLECTION_GRID}[data-causeway-collection-grid]`);
+    if (!adapter || revision !== this.gridHostRevision || !this.isConnected) return;
+    adapter.presentation = {
+      mode: bounded ? 'bounded' : 'virtual',
+      rows: this._gridProjection.rows,
+      columns: this._gridProjection.columns,
+      totalCount: window.totalCount,
+      pageSize: window.requestedSize,
+      labelledBy: this.labelId,
+      describedBy: description ? this.descriptionId : '',
+      testId: this.getAttribute('data-testid') ? `${this.getAttribute('data-testid')}-grid` : '',
+      rangeProvider: request => this.#projectRange(request, revision)
+    };
+  }
+
+  async #projectRange(request, revision) {
+    const result = await this.requestCollectionRange(request);
+    if (revision !== this.gridHostRevision || !this.isConnected || !this._gridQualification.qualified) {
+      const error = new Error('Collection Grid range was superseded.');
+      error.name = 'AbortError';
+      throw error;
+    }
+    if (!sameWindowContract(this.collectionState.window, result.window)) {
+      this.gridHostRevision += 1;
+      this.#disconnectRangeBroker();
+      void this.load({force: true, offset: 0, size: this.collectionState.window?.requestedSize});
+      const error = new Error('Collection Grid range contract changed.');
+      error.name = 'AbortError';
+      throw error;
+    }
+    const projection = buildCausewayGridProjection({
+      rows: result.rows,
+      columns: this._columns,
+      rowDescription: result.rowDescription,
+      errors: result.errors,
+      rendererRegistry: this._rendererRegistry
+    });
+    if (!projection.supported) {
+      failCausewayGridWidget({phase: 'renderer', classification: 'GRID_RANGE_PROJECTION_UNAVAILABLE'});
+      throw new Error('Collection Grid range projection is unavailable.');
+    }
+    return Object.freeze({rows: projection.rows});
+  }
+
+  #renderBoundedPager(window) {
+    const range = window.rangeStart == null
+      ? 'No items'
+      : `Items ${window.rangeStart}–${window.rangeEnd}`;
+    return `<nav class="causeway-collection-pager" aria-label="Collection pages">
+      <button type="button" data-causeway-grid-previous${window.hasPrevious ? '' : ' disabled aria-disabled="true"'}>Previous</button>
+      <span class="causeway-collection-range" aria-live="polite">${range}</span>
+      <button type="button" data-causeway-grid-next${window.hasNext ? '' : ' disabled aria-disabled="true"'}>Next</button>
+    </nav>`;
+  }
+
+  #loadNormalizedPage(offset) {
+    if (!Number.isSafeInteger(offset) || offset < 0) return false;
+    const size = this.collectionState.window?.requestedSize;
+    void this.load({offset, size});
+    return true;
   }
 
   #renderDefaultRows(rows) {
@@ -350,9 +523,10 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const header = `<th scope="col">Item</th>${this._columns.map(column => `<th scope="col"${column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : ''}>${escapeHtml(column.label || humanize(column.member))}</th>`).join('')}`;
     const body = rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
-      const item = `<td><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></td>`;
+      const key = gridRowKey(row);
+      const item = `<td data-causeway-grid-row-key="${escapeHtml(key)}" data-causeway-grid-member="_meta" data-causeway-grid-role="object-link"><cw-object-link logical-type="${escapeHtml(metadata.logicalTypeName ?? '')}" object-id="${escapeHtml(metadata.id ?? '')}" title="${escapeHtml(metadata.title ?? metadata.id ?? '')}"></cw-object-link></td>`;
       const cells = this._columns.map(column => this.#renderCell(row, rowIndex, column)).join('');
-      return `<tr data-row-index="${rowIndex}">${item}${cells}</tr>`;
+      return `<tr data-row-index="${rowIndex}" data-causeway-grid-row-key="${escapeHtml(key)}">${item}${cells}</tr>`;
     }).join('');
     return `<table class="causeway-collection-table"><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
   }
@@ -363,16 +537,137 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       const path = error.path ?? [];
       return path.includes(rowIndex) && path.includes(column.member);
     });
+    const identity = ` data-causeway-grid-row-key="${escapeHtml(gridRowKey(row))}" data-causeway-grid-member="${escapeHtml(column.member)}" data-causeway-grid-role="cell"`;
     if (errors.length > 0) {
-      return `<td class="causeway-error" role="alert">${escapeHtml(errors[0].message)}</td>`;
+      return `<td${identity} class="causeway-error" role="alert">${escapeHtml(errors[0].message)}</td>`;
     }
     if (property?.hidden === true) {
-      return '<td hidden></td>';
+      return `<td${identity} hidden></td>`;
     }
     const disabledReason = typeof property?.disabled === 'string' ? property.disabled : '';
     const descriptor = this.collectionState.rowDescription?.members?.get(column.member) ?? null;
     const rendered = renderCausewayValue({value: property?.get, descriptor}, this._rendererRegistry);
-    return `<td${disabledReason ? ` aria-disabled="true" title="${escapeHtml(disabledReason)}"` : ''}>${rendered.html}</td>`;
+    return `<td${identity}${disabledReason ? ` aria-disabled="true" title="${escapeHtml(disabledReason)}"` : ''}>${rendered.html}</td>`;
+  }
+
+  requestCollectionRange({offset, size} = {}) {
+    if (!this.rangeBroker) {
+      return Promise.reject(new Error('The collection has no current bounded range broker.'));
+    }
+    return this.rangeBroker.request(offset, size);
+  }
+
+  #installRangeBroker(context, result) {
+    this.#disconnectRangeBroker();
+    const window = result?.window;
+    const maximumRetainedRows = window?.maximumSize * 6;
+    if (!window
+        || !Number.isSafeInteger(window.maximumSize)
+        || !Number.isSafeInteger(window.requestedSize)
+        || !Number.isSafeInteger(maximumRetainedRows)) return;
+    const member = this.id;
+    const columns = this.columns;
+    const broker = new CausewayCollectionRangeBroker({
+      maximumSize: window.maximumSize,
+      defaultSize: window.requestedSize,
+      maxConcurrent: 3,
+      maxEntries: 6,
+      maxRows: maximumRetainedRows,
+      maxErrors: 20,
+      loadRange: ({offset, size, signal, requestKey}) => context.loadCollection({
+        member,
+        columns,
+        offset,
+        size,
+        requestKey,
+        cache: false,
+        signal
+      }),
+      hydrate: range => range.rows
+        .filter(row => row?._meta?.logicalTypeName && row?._meta?.id)
+        .map(row => context.createHydratedRowContext(row, range.rowSelection))
+    });
+    broker.seed(result, {ownedContexts: false, contexts: this.rowContexts});
+    this.rangeBroker = broker;
+  }
+
+  #rebuildRangeBroker() {
+    const policy = causewayGridWidgetConfiguration();
+    if (this.componentState) this.#qualifyGrid(this.componentState);
+    if (!this.isConnected
+        || !this._gridWide
+        || !policy.enabled
+        || policy.failed
+        || !this._gridQualification.qualified
+        || !this.authoritativeResult
+        || !this._resolvedContext) {
+      this.#disconnectRangeBroker();
+      return;
+    }
+    this.#installRangeBroker(this._resolvedContext, this.authoritativeResult);
+  }
+
+  #disconnectRangeBroker() {
+    this.rangeBroker?.disconnect();
+    this.rangeBroker = null;
+  }
+
+  #qualifyGrid(state) {
+    const rows = collectionRows(this.collectionState);
+    const policy = causewayGridWidgetConfiguration();
+    this._gridProjection = buildCausewayGridProjection({
+      rows,
+      columns: this._columns,
+      rowDescription: this.collectionState.rowDescription,
+      errors: this.collectionState.errors,
+      rendererRegistry: this._rendererRegistry
+    });
+    const columnsSupported = this._columns.every(column => {
+      if (!column?.member || typeof column.member !== 'string') return false;
+      return this.collectionState.rowDescription?.members?.has?.(column.member) === true;
+    });
+    this._gridQualification = qualifyCausewayCollectionGrid({
+      active: this.active,
+      visible: state.data?.hidden !== true,
+      wide: this._gridWide,
+      ready: ['ready', 'partial-error'].includes(this.collectionState.status),
+      policyEnabled: policy.enabled,
+      familyHealthy: !policy.failed,
+      connected: this.isConnected,
+      columnsSupported,
+      hasVisibleColumn: this._gridProjection.columns.length > 0
+        && rows.some(row => row?._meta?.logicalTypeName && row?._meta?.id),
+      renderersSupported: this._gridProjection.supported,
+      rows,
+      window: this.collectionState.window,
+      lifecycle: {
+        hostRevision: this.gridHostRevision,
+        responsiveRevision: this.gridResponsiveRevision,
+        policyRevision: policy.revision,
+        rendererRevision: this.gridHostRevision
+      }
+    });
+    publishCausewayGridDiagnostics(this, this._gridQualification);
+  }
+
+  #focusIntentIsCurrent() {
+    const intent = this.gridFocusIntent;
+    return Boolean(intent
+      && intent.collectionMember === this.id
+      && intent.objectGeneration === this.componentState?.generation);
+  }
+
+  #restoreNativeFocus() {
+    if (!this.#focusIntentIsCurrent() || !this.querySelectorAll) return;
+    const target = [...this.querySelectorAll('[data-causeway-grid-row-key][data-causeway-grid-member]')]
+      .find(candidate => candidate.dataset.causewayGridRowKey === this.gridFocusIntent.rowKey
+        && candidate.dataset.causewayGridMember === this.gridFocusIntent.member
+        && candidate.hidden !== true);
+    if (!target) return;
+    const candidate = target.querySelector?.('cw-object-link, a, button, [tabindex]') ?? target;
+    queueMicrotask(() => {
+      if (this.isConnected && this.#focusIntentIsCurrent()) candidate.focus?.();
+    });
   }
 
   #acceptColumn(column) {
@@ -384,6 +679,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     if (existing >= 0 && sameColumnConfiguration(this._columns[existing], frozen)) {
       return;
     }
+    this.gridHostRevision += 1;
+    this.#disconnectRangeBroker();
     if (existing >= 0) {
       this._columns.splice(existing, 1, frozen);
     } else {
@@ -451,4 +748,22 @@ function collectionShell(labelId, label, descriptionId, description, content, at
 
 function humanize(value) {
   return String(value || '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, character => character.toUpperCase());
+}
+
+function collectionBreakpointPixels() {
+  const candidate = globalThis.getComputedStyle?.(globalThis.document?.documentElement)?.fontSize;
+  const rootFontSize = Number.parseFloat(candidate);
+  return 48 * (Number.isFinite(rootFontSize) && rootFontSize > 0 ? rootFontSize : 16);
+}
+
+function gridRowKey(row) {
+  const metadata = row?._meta ?? {};
+  return `${metadata.logicalTypeName ?? ''}:${metadata.id ?? ''}`;
+}
+
+function sameWindowContract(authoritative, candidate) {
+  if (!authoritative || !candidate) return false;
+  return authoritative.ordering === candidate.ordering
+    && authoritative.totalCount === candidate.totalCount
+    && authoritative.maximumSize === candidate.maximumSize;
 }
