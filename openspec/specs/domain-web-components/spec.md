@@ -24,7 +24,7 @@ Each domain member component SHALL derive its supported read behavior from the i
 - **THEN** the component reports that the presentation is unsupported rather than synthesizing the missing semantic
 
 ### Requirement: Read-only property semantics
-The `<causeway-property>` component SHALL render property visibility, usability, description, null state, value, loading state, member-scoped errors, and semantic multiline presentation from its context state and public attributes.
+The `<cw-property>` component SHALL render property visibility, usability, description, null state, value, loading state, member-scoped errors, and semantic multiline presentation from its context state and public attributes.
 A standard GraphQL `String` property value MUST be explicitly aligned to the logical start so its view and edit presentations remain consistent.
 
 #### Scenario: Visible property value
@@ -82,7 +82,7 @@ The component library SHALL select read-only value renderers through an extensib
 - **THEN** the component renders an explicit unsupported-value state containing a diagnostic type identifier
 
 ### Requirement: Semantic object links
-The `<causeway-object-link>` component SHALL render object identity and title from rich object metadata and publish navigation requests as semantic web events.
+The `<cw-object-link>` component SHALL render object identity and title from rich object metadata and publish navigation requests as semantic web events.
 
 #### Scenario: User follows an object link
 - **WHEN** a user activates an enabled object link
@@ -90,7 +90,7 @@ The `<causeway-object-link>` component SHALL render object identity and title fr
 - **AND** it does not impose a URL or router implementation
 
 ### Requirement: Read-only action affordances
-The `<causeway-action>` component SHALL render action visibility and usability and SHALL publish a semantic action request without invoking the action.
+The `<cw-action>` component SHALL render action visibility and usability and SHALL publish a semantic action request without invoking the action.
 
 #### Scenario: Enabled action selected
 - **WHEN** a user activates a visible and enabled action affordance
@@ -105,7 +105,7 @@ The `<causeway-action>` component SHALL render action visibility and usability a
 - **THEN** the component does not render an actionable affordance
 
 ### Requirement: Lazy read-only collections
-The `<causeway-collection>` component SHALL load collection contents as a context-coordinated secondary operation only when the collection is activated.
+The `<cw-collection>` component SHALL load collection contents as a context-coordinated secondary operation only when the collection is activated.
 
 #### Scenario: Collection not activated
 - **WHEN** a collection component is connected in an inactive region
@@ -263,7 +263,7 @@ The object context SHALL expose semantic commands for property validation and up
 - **THEN** the context returns an unsupported interaction result without issuing an invalid GraphQL operation
 
 ### Requirement: Property editing semantics
-An editable `<causeway-property>` SHALL provide view, preparing, editing, validating, saving, success, and failed interaction states driven by its rich-schema capabilities.
+An editable `<cw-property>` SHALL provide view, preparing, editing, validating, saving, success, and failed interaction states driven by its rich-schema capabilities.
 Its view-state edit affordance MUST be a compact conventional icon control adjacent to the property value with a property-specific accessible name and pointer description.
 Its active editor MUST present Save and Cancel as compact conventional icon controls with property-specific accessible names and pointer descriptions while preserving native button, gating, keyboard, and focus behavior.
 During stable ordinary editing, the component MUST communicate edit mode through the focused editor and its controls without rendering a redundant “Editing” status label or empty status row.
@@ -590,10 +590,10 @@ The Maven build SHALL exercise semantic property and action interactions against
 - **AND** deterministic outcomes and post-command object state are returned without a bad-faith introspection rejection
 
 ### Requirement: High-level semantic object component
-The component library SHALL provide `<causeway-object>` as a framework-neutral high-level projection that composes a complete object from established semantic child components.
+The component library SHALL provide `<cw-object>` as a framework-neutral high-level projection that composes a complete object from established semantic child components.
 
 #### Scenario: Object component connects
-- **WHEN** `<causeway-object>` connects beneath an authoritative object context
+- **WHEN** `<cw-object>` connects beneath an authoritative object context
 - **THEN** it discovers the logical type's members through the context's targeted schema description
 - **AND** composes the object's supported layout without constructing GraphQL documents itself
 - **AND** only generated properties are affected by the component's optional `editable` attribute
@@ -604,7 +604,7 @@ The component library SHALL provide `<causeway-object>` as a framework-neutral h
 - **AND** does not create an unrelated second state owner
 
 ### Requirement: Causeway grid interpretation
-`<causeway-object>` SHALL interpret a documented safe subset of the effective Causeway grid resource for semantic object composition.
+`<cw-object>` SHALL interpret a documented safe subset of the effective Causeway grid resource for semantic object composition.
 
 #### Scenario: Supported grid is available
 - **WHEN** object metadata references an accessible grid containing supported rows, columns, tabs, field sets, domain-object placement, member references, nested associated actions, and bounded property presentation hints
@@ -656,7 +656,7 @@ The object component SHALL generate existing semantic header, property, action, 
 
 #### Scenario: Layout references a property
 - **WHEN** a valid property reference is placed
-- **THEN** the generated `<causeway-property>` uses the same shared object context, editing, validation, mutation, loading, and error contracts as an authored property element
+- **THEN** the generated `<cw-property>` uses the same shared object context, editing, validation, mutation, loading, and error contracts as an authored property element
 
 #### Scenario: Layout references an action or collection
 - **WHEN** a valid action or collection reference is placed
@@ -707,10 +707,10 @@ Generated light DOM SHALL expose documented stable styling, region, lifecycle, a
 - **THEN** the application can continue composing established lower-level components directly beneath the same object context
 
 ### Requirement: Causeway menu-bar component vocabulary
-The component library SHALL provide `<causeway-menubars>`, `<causeway-menubar-primary>`, `<causeway-menubar-secondary>`, and `<causeway-menubar-tertiary>` as framework-neutral semantic application-menu components.
+The component library SHALL provide `<cw-menubars>`, `<cw-menubar-primary>`, `<cw-menubar-secondary>`, and `<cw-menubar-tertiary>` as framework-neutral semantic application-menu components.
 
 #### Scenario: Composite menu bars connect
-- **WHEN** `<causeway-menubars>` connects beneath a configured GraphQL client
+- **WHEN** `<cw-menubars>` connects beneath a configured GraphQL client
 - **THEN** it discovers the optional application menu capability through targeted introspection
 - **AND** coordinates present primary, secondary, and tertiary bar components in semantic order
 
@@ -1159,10 +1159,10 @@ A toolkit-backed protected editor SHALL use the existing sensitive codec and SHA
 - **AND** native fallback also initializes without the value
 
 ### Requirement: Declarative member-associated action composition
-The domain components SHALL treat each direct `<causeway-action>` child of `<causeway-property>` or `<causeway-collection>` as an ordered presentation association with that owner member.
+The domain components SHALL treat each direct `<cw-action>` child of `<cw-property>` or `<cw-collection>` as an ordered presentation association with that owner member.
 
 #### Scenario: Property declares an associated action
-- **WHEN** authored HTML places `<causeway-action member="updateName">` directly beneath `<causeway-property member="name">`
+- **WHEN** authored HTML places `<cw-action member="updateName">` directly beneath `<cw-property member="name">`
 - **THEN** the property renders its primary presentation followed by the `updateName` action in one member composition
 - **AND** no adjacent association attribute, wrapper, grid resource, or Java renderer is required
 
@@ -1245,7 +1245,7 @@ Directly authored and grid-generated member associations SHALL expose equivalent
 - **AND** application markup requires no inline styles, raw Vaadin elements, or framework-specific adapter API
 
 #### Scenario: Effective grid contains nested actions
-- **WHEN** `<causeway-object>` renders property- or collection-associated actions from an effective grid
+- **WHEN** `<cw-object>` renders property- or collection-associated actions from an effective grid
 - **THEN** generated composition remains semantically equivalent to the supported direct-child syntax
 - **AND** effective-grid parsing and action authority remain unchanged
 
@@ -1266,3 +1266,21 @@ The executable web-component samples SHALL verify natural property- and collecti
 - **WHEN** Petclinic runs once with Vaadin-default policy and once with explicit native policy
 - **THEN** the same nested Causeway action declarations remain functional in both modes
 - **AND** toolkit selection does not alter association ownership or action authority
+
+### Requirement: Compact custom-element namespace
+The component library SHALL register every Causeway-owned custom element exclusively under the `cw-` prefix.
+It MUST retain existing `causeway-*` semantic event names, CSS classes, data attributes, CSS variables, and asset paths because those contracts are not custom-element names.
+
+#### Scenario: Components are registered
+- **WHEN** the foundation registration module initializes against an empty custom-element registry
+- **THEN** all documented `cw-*` elements are registered with their established constructors
+- **AND** no former `causeway-*` custom-element name is registered
+
+#### Scenario: Application markup is migrated
+- **WHEN** application HTML replaces each former Causeway custom-element tag with its documented `cw-*` equivalent
+- **THEN** context discovery, rendering, interaction, navigation, menus, collections, and editors retain their existing behavior
+- **AND** no compatibility alias or mixed element vocabulary is required
+
+#### Scenario: Non-element contracts are consumed
+- **WHEN** an application listens for a Causeway semantic event or uses a documented Causeway class, data attribute, CSS variable, or asset path
+- **THEN** that non-element contract retains its existing `causeway-*` spelling
