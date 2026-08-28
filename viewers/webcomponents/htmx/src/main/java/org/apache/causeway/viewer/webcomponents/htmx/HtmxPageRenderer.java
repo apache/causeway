@@ -153,7 +153,7 @@ final class HtmxPageRenderer {
                         language,
                         escape(basePath),
                         escape(context + canonicalPath),
-                        widgetAttributes(),
+                        widgetAttributes(context),
                         authenticationMetadata,
                         escape(properties.getBrand()),
                         escape(context),
@@ -215,7 +215,7 @@ final class HtmxPageRenderer {
                         escape(value.csrfToken()));
     }
 
-    private String widgetAttributes() {
+    private String widgetAttributes(final String contextPath) {
         final var minimumSearchLength = Math.max(0, properties.getReferenceMinimumSearchLength());
         final var maximumResults = Math.max(1, properties.getReferenceMaximumResults());
         final var referenceWidgets = properties.isEffectiveVaadinReferenceWidgets() ? "vaadin" : "native";
@@ -224,6 +224,11 @@ final class HtmxPageRenderer {
                 + " data-causeway-editor-toolkit=\"" + properties.getResolvedEditorToolkit() + "\""
                 + " data-causeway-presentation=\"" + (properties.isEffectiveVaadinPresentation() ? "vaadin" : "native") + "\""
                 + " data-causeway-action-buttons=\"" + (properties.isEffectiveVaadinActionButtons() ? "vaadin" : "native") + "\""
+                + " data-causeway-collection-grid=\"" + (properties.isEffectiveVaadinCollectionGrid() ? "vaadin" : "native") + "\""
+                + " data-causeway-grid-family=\"" + (properties.isEffectiveVaadinCollectionGrid() ? "healthy" : "native") + "\""
+                + " data-causeway-grid-module-url=\"" + escape(contextPath)
+                + "/causeway-webcomponents/vaadin-grid/vaadin-grid.js\""
+                + " data-causeway-grid-policy-revision=\"0\""
                 + " data-causeway-reference-widgets=\"" + referenceWidgets + "\""
                 + " data-causeway-reference-minimum-search-length=\"" + minimumSearchLength + "\""
                 + " data-causeway-reference-maximum-results=\"" + maximumResults + "\""

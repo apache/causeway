@@ -59,6 +59,8 @@ public class HtmxViewerController {
             "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
     private static final List<String> VAADIN_ACTION_STYLE_HASHES = List.of(
             "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
+    private static final List<String> VAADIN_GRID_STYLE_HASHES = List.of(
+            "sha256-xGEkK13KcZJdGhZfeIjuH6IWVGTHtjs/IqUVa8T0XXw=");
     private static final List<String> VAADIN_LOCAL_TEMPORAL_STYLE_HASHES = List.of(
             "sha256-3QT3eM+q9TclSqSU3m57G/bQwWnIhIFfAxgKI5k9zxs=",
             "sha256-EJ7xFeV2ubzFN71/RQAb1cN8ak1I1ZC/6W+5JllfWto=",
@@ -142,6 +144,9 @@ public class HtmxViewerController {
         }
         if (properties.isEffectiveVaadinActionButtons()) {
             hashes.addAll(VAADIN_ACTION_STYLE_HASHES);
+        }
+        if (properties.isEffectiveVaadinCollectionGrid()) {
+            hashes.addAll(VAADIN_GRID_STYLE_HASHES);
         }
         for (final var family : properties.getEffectiveVaadinFieldFamilies().split(",")) {
             hashes.addAll(switch (family) {

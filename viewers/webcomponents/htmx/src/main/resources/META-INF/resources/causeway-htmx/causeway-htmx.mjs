@@ -29,6 +29,10 @@ import {
 import {CausewayGraphQLClientElement} from '../causeway-webcomponents/graphql-client-element.mjs';
 import {createFetchGraphQLExecutor} from '../causeway-webcomponents/graphql-executor.mjs';
 import {configureCausewayReferenceWidgets} from '../causeway-webcomponents/reference-widget.mjs';
+import {
+  CAUSEWAY_GRID_WIDGET_POLICY_EVENT,
+  configureCausewayGridWidgets
+} from '../causeway-webcomponents/grid-widget.mjs';
 import {defineCausewayWebComponents} from '../causeway-webcomponents/register.mjs';
 import {
   applyAuthenticationMenuPolicy,
@@ -53,6 +57,8 @@ const announcement = document.querySelector('#causeway-route-announcement');
 const resultRegion = document.querySelector('#causeway-result');
 const basePath = document.documentElement.dataset.causewayHtmxBase;
 const referenceWidgetMode = document.documentElement.dataset.causewayReferenceWidgets;
+const collectionGridMode = document.documentElement.dataset.causewayCollectionGrid;
+const collectionGridModuleUrl = document.documentElement.dataset.causewayGridModuleUrl;
 const authentication = readAuthenticationMetadata(document);
 if (shell && authentication) {
   const executor = createFetchGraphQLExecutor({
@@ -74,6 +80,21 @@ configureCausewayReferenceWidgets({
   enabled: referenceWidgetMode === 'vaadin',
   minimumSearchLength: Number(document.documentElement.dataset.causewayReferenceMinimumSearchLength),
   maximumResults: Number(document.documentElement.dataset.causewayReferenceMaximumResults)
+});
+document.addEventListener(CAUSEWAY_GRID_WIDGET_POLICY_EVENT, event => {
+  const detail = event.detail ?? {};
+  document.documentElement.dataset.causewayGridFamily = detail.reason === 'failure'
+    ? 'failed'
+    : collectionGridMode === 'vaadin' ? 'healthy' : 'native';
+  document.documentElement.dataset.causewayGridPolicyRevision = String(detail.revision ?? 0);
+  document.documentElement.dataset.causewayGridFailurePhase = detail.reason === 'failure' ? String(detail.phase ?? '') : '';
+  document.documentElement.dataset.causewayGridFailureClassification = detail.reason === 'failure'
+    ? String(detail.classification ?? '')
+    : '';
+});
+configureCausewayGridWidgets({
+  enabled: collectionGridMode === 'vaadin',
+  moduleUrl: collectionGridModuleUrl
 });
 let activeRequest = null;
 let navigationGeneration = 0;

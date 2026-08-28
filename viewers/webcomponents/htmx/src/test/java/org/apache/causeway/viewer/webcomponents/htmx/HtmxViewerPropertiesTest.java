@@ -34,6 +34,7 @@ class HtmxViewerPropertiesTest {
         assertThat(properties.getToolkitConfigurationSource()).isEqualTo("default");
         assertThat(properties.isEffectiveVaadinPresentation()).isTrue();
         assertThat(properties.isEffectiveVaadinActionButtons()).isTrue();
+        assertThat(properties.isEffectiveVaadinCollectionGrid()).isTrue();
         assertThat(properties.isEffectiveVaadinReferenceWidgets()).isTrue();
         assertThat(properties.getEffectiveVaadinFieldFamilies())
                 .isEqualTo("basic,numeric,local-temporal");
@@ -50,6 +51,7 @@ class HtmxViewerPropertiesTest {
         assertThat(properties.getToolkitConfigurationSource()).isEqualTo("component");
         assertThat(properties.isEffectiveVaadinPresentation()).isFalse();
         assertThat(properties.isEffectiveVaadinActionButtons()).isFalse();
+        assertThat(properties.isEffectiveVaadinCollectionGrid()).isFalse();
         assertThat(properties.isEffectiveVaadinReferenceWidgets()).isFalse();
         assertThat(properties.getEffectiveVaadinFieldFamilies()).isEmpty();
     }
@@ -114,6 +116,7 @@ class HtmxViewerPropertiesTest {
         assertThat(referenceOnly.getEffectiveVaadinFieldFamilies()).isEmpty();
         assertThat(referenceOnly.isEffectiveVaadinPresentation()).isFalse();
         assertThat(referenceOnly.isEffectiveVaadinActionButtons()).isFalse();
+        assertThat(referenceOnly.isEffectiveVaadinCollectionGrid()).isFalse();
         assertThat(referenceOnly.getToolkitConfigurationSource()).isEqualTo("pilot-compatibility");
 
         final var fieldsOnly = new HtmxViewerProperties();
@@ -147,6 +150,7 @@ class HtmxViewerPropertiesTest {
         assertThat(vaadin.getToolkitConfigurationSource()).isEqualTo("editor-compatibility");
         assertThat(vaadin.isEffectiveVaadinPresentation()).isTrue();
         assertThat(vaadin.isEffectiveVaadinActionButtons()).isTrue();
+        assertThat(vaadin.isEffectiveVaadinCollectionGrid()).isTrue();
 
         final var nativeToolkit = new HtmxViewerProperties();
         nativeToolkit.setEditorToolkit(HtmxViewerProperties.EditorToolkit.NATIVE);
@@ -154,6 +158,7 @@ class HtmxViewerPropertiesTest {
         assertThat(nativeToolkit.isEffectiveVaadinReferenceWidgets()).isFalse();
         assertThat(nativeToolkit.getEffectiveVaadinFieldFamilies()).isEmpty();
         assertThat(nativeToolkit.isEffectiveVaadinActionButtons()).isFalse();
+        assertThat(nativeToolkit.isEffectiveVaadinCollectionGrid()).isFalse();
     }
 
     @Test

@@ -2,16 +2,16 @@
   "schemaVersion" : 1,
   "upstreamRevision" : "29b43bfe4f77d525fb345394e5a52bd7d85a91ba",
   "scope" : "rich demo base objects, semantic member wrappers, action parameters, enums, and advertised standard value shapes",
-  "itemCount" : 4286,
+  "itemCount" : 4288,
   "classificationCounts" : {
-    "SUPPORTED" : 3421,
+    "SUPPORTED" : 3423,
     "GRACEFUL_UNSUPPORTED" : 210,
     "GRAPHQL_GAP" : 0,
     "VIEWER_DEFECT" : 0,
     "VIEWER_SPECIFIC" : 1,
     "NOT_EXERCISED" : 654
   },
-  "itemsSha256" : "39f88fa795bbeea6e4f1eaf277ecd49ad38e9445e20a2bdef8e6d148c2ca927f",
+  "itemsSha256" : "4b1e27305892e04d2ad848dfb137405fb456dc1a4742878f400792dcf19b3789",
   "items" : [ {
     "id" : "not-exercised:destructive-action-exhaustion",
     "kind" : "EXECUTION_POLICY",
@@ -19881,6 +19881,12 @@
     "classification" : "NOT_EXERCISED",
     "reason" : "The effective metamodel conditionally advertises this abstract ValueHolder member; the reviewed inventory retains it explicitly without claiming deterministic runtime support."
   }, {
+    "id" : "rich__demo_ValueHolder__initialCharacter__gqlv_property",
+    "kind" : "PROPERTY",
+    "valueType" : "Char",
+    "classification" : "SUPPORTED",
+    "reason" : "The value shape has an existing scalar, enum, reference, collection, or resource presentation contract."
+  }, {
     "id" : "rich__demo_ValueHolder__logicalTypeName__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "String",
@@ -19894,6 +19900,12 @@
     "reason" : "The value shape has an existing scalar, enum, reference, collection, or resource presentation contract."
   }, {
     "id" : "rich__demo_ValueHolder__objectIdentifier__gqlv_property",
+    "kind" : "PROPERTY",
+    "valueType" : "String",
+    "classification" : "SUPPORTED",
+    "reason" : "The value shape has an existing scalar, enum, reference, collection, or resource presentation contract."
+  }, {
+    "id" : "rich__demo_ValueHolder__originalName__gqlv_property",
     "kind" : "PROPERTY",
     "valueType" : "String",
     "classification" : "SUPPORTED",

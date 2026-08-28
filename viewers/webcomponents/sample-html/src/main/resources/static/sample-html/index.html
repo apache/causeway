@@ -198,6 +198,10 @@
       min-width: 0;
     }
 
+    .sample-collection-panel-narrow {
+      inline-size: min(100%, 44rem);
+    }
+
     .sample-diagnostic {
       min-width: 0;
       padding: var(--causeway-space-3);
@@ -335,10 +339,10 @@
               <li><strong>Qualified presentation</strong>Text, multiline, exact and machine numbers, Boolean, enum, local date, local time, and local date-time demonstrate default read-only Vaadin fields, while null and object reference values retain their established renderers.</li>
               <li><strong>Disabled semantics</strong>Code, object reference, and archive retain explicit reasons supplied by Causeway.</li>
               <li><strong>Semantic reference</strong>The related object publishes navigation intent without choosing a URL or router.</li>
-              <li><strong>Collections</strong>One secondary operation returns two selected rows while a sibling demonstrates the empty state.</li>
+              <li><strong>Collections</strong>A deterministic wide window qualifies virtual Grid, a disabled sibling preserves its reason, and narrow, empty, and encounter-ordered siblings retain native presentation; use `?grid-mode=bounded` to retain the current window with Causeway previous and next controls and no invented total.</li>
               <li><strong>Intentionally hidden</strong>The secret property and hidden action produce no semantic content, and their hidden value is never repeated here.</li>
               <li><strong>Framework-neutral interactions</strong>Ordinary actions demonstrate the independent Vaadin Button closure, while property interaction controls and prompts remain native and no HTMX, frontend framework, npm build, automatic routing, or component-owned GraphQL construction is present.</li>
-              <li><strong>Rollback and failure</strong>Use `?component-toolkit=native`, `?fail-field=basic`, or `?fail-action=true` for deterministic complete rollback and family-isolated native recovery.</li>
+              <li><strong>Rollback and failure</strong>Use `?component-toolkit=native`, `?fail-field=basic`, `?fail-action=true`, or `?fail-grid=true` for deterministic complete rollback and family-isolated native recovery.</li>
             </ul>
           </aside>
 
@@ -423,6 +427,22 @@
               <div class="sample-collection-panel">
                 <cw-collection id="emptyRelatedObjects" active data-testid="collection-empty-related-objects"></cw-collection>
               </div>
+              <div class="sample-collection-panel sample-collection-panel-narrow">
+                <cw-collection id="narrowRelatedObjects" active data-testid="collection-narrow-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                  <cw-collection-column id="code" label="Code"></cw-collection-column>
+                </cw-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <cw-collection id="disabledRelatedObjects" active data-testid="collection-disabled-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                </cw-collection>
+              </div>
+              <div class="sample-collection-panel">
+                <cw-collection id="encounterRelatedObjects" active data-testid="collection-encounter-related-objects">
+                  <cw-collection-column id="name" label="Name"></cw-collection-column>
+                </cw-collection>
+              </div>
             </div>
           </section>
         </div>
@@ -457,6 +477,8 @@
     document.documentElement.dataset.causewayToolkitSource = 'vanilla-sample';
     document.documentElement.dataset.causewayPresentation = componentToolkit;
     document.documentElement.dataset.causewayActionButtons = componentToolkit;
+    document.documentElement.dataset.causewayCollectionGrid = componentToolkit;
+    document.documentElement.dataset.causewayGridModuleUrl = '/causeway-webcomponents/vaadin-grid/vaadin-grid.js';
     document.documentElement.dataset.causewayReferenceWidgets = componentToolkit;
     document.documentElement.dataset.causewayFieldFamilies = componentToolkit === 'native'
       ? ''
@@ -496,7 +518,9 @@
         report(collectionCountOutput, 'Loading rows');
         return;
       }
-      const rows = event.detail.state.data?.get;
+      const rows = event.detail.state.rows
+        ?? event.detail.state.data?.window?.rows
+        ?? event.detail.state.data?.get;
       if (Array.isArray(rows)) {
         report(collectionCountOutput, `${rows.length} ${rows.length === 1 ? 'row' : 'rows'} loaded`);
       }
@@ -550,6 +574,41 @@
         enabled: true,
         moduleUrl: '/sample-html/missing-vaadin-actions.js'
       });
+    }
+    if (options.get('fail-grid') === 'true') {
+      components.configureCausewayGridWidgets({
+        enabled: true,
+        moduleUrl: '/sample-html/missing-vaadin-grid.js'
+      });
+    } else if (options.get('fail-grid') === 'renderer') {
+      components.failCausewayGridWidget({
+        phase: 'renderer',
+        classification: 'GRID_RENDERER_UNAVAILABLE'
+      });
+    }
+    if (options.get('grid-mode') === 'bounded') {
+      const collection = document.querySelector("cw-collection[id='relatedObjects']");
+      await new Promise(resolve => {
+        if (['ready', 'partial-error'].includes(collection.collectionState?.status)) resolve();
+        else {
+          const ready = event => {
+            if (!['ready', 'partial-error'].includes(event.detail.state.status)) return;
+            collection.removeEventListener('causeway-collection-state-change', ready);
+            resolve();
+          };
+          collection.addEventListener('causeway-collection-state-change', ready);
+        }
+      });
+      const context = collection._resolvedContext;
+      const delegate = context.loadCollection.bind(context);
+      context.loadCollection = async request => {
+        const result = await delegate(request);
+        return Object.freeze({
+          ...result,
+          window: Object.freeze({...result.window, totalCount: null, countAvailable: false})
+        });
+      };
+      await collection.load({force: true, offset: 0, size: 1});
     }
   </script>
 </body>
