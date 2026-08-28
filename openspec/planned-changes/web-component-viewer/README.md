@@ -10,9 +10,9 @@ The union-projection correction is archived.
 The opaque-route correction is archived.
 The archived `add-paged-graphql-reference-autocomplete` change adds honest bounded server response windows, and the archived `expand-vaadin-semantic-editor-families` change qualifies the broader editor families before the default-policy flip in `vaadin-default-roadmap.md`.
 The archived `make-vaadin-default-for-webcomponent-viewer` change completes the policy-focused Vaadin-editor-default sequence while retaining explicit native rollback.
-The promoted active `extend-vaadin-to-domain-member-presentation` change and the proposal-only `use-vaadin-grid-for-collection-presentation` and `use-vaadin-menu-bar-for-application-menus` drafts extend that internal toolkit to read-only fields and buttons, collections, and application navigation in independently reviewable tranches.
+The archived `extend-vaadin-to-domain-member-presentation` change, promoted active `use-vaadin-grid-for-collection-presentation` change, and proposal-only `use-vaadin-menu-bar-for-application-menus` draft extend that internal toolkit to read-only fields and buttons, collections, and application navigation in independently reviewable tranches.
 Their order, shared boundaries, and promotion gates are recorded in `vaadin-presentation-roadmap.md`.
-Do not promote either remaining Vaadin presentation follow-on until the active field-and-action tranche is archived and its evidence is reviewed.
+Do not promote the remaining Menu Bar follow-on until the active Grid tranche is archived and its evidence is reviewed.
 The older Vue, Svelte, metadata, diagnostics, performance-analysis, catalogue, and designer drafts remain queued for separate review.
 Proposal-only security drafts separate local SecMan authentication for the HTMX viewer, subsequent OAuth/OIDC support, eventual promotion of the proven bridge into shared Causeway security, future CSRF-safe Wicket and HTMX coexistence, and stable SecMan delegated-user identity mapping.
 

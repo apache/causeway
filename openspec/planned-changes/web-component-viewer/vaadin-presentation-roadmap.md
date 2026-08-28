@@ -1,6 +1,6 @@
 # Vaadin presentation follow-on roadmap
 
-The current accepted architecture makes Vaadin free-core the default internal toolkit for eligible editors while keeping read-only properties, action buttons, collections, and application menus Causeway-native.
+The current accepted architecture makes Vaadin free-core the default internal toolkit for qualified references, editors, read-only fields, and ordinary action buttons while keeping collections and application menus Causeway-native.
 The follow-on direction is to evaluate Vaadin as the default internal presentation toolkit without changing the public `cw-*` semantic boundary.
 
 The work is split because fields and buttons are local controls, Grid is a virtualized data surface, and Menu Bar is stable-shell application navigation.
@@ -18,8 +18,8 @@ eligible fields and action buttons
 
 | Order | Proposal | Purpose | Promotion gate |
 |---:|---|---|---|
-| 1 | `extend-vaadin-to-domain-member-presentation` *(active)* | Use qualified read-only Vaadin fields and action buttons behind property and action components. | View/edit parity, action semantics, accessibility, theming, route loading, CSP, packaging, and native rollback pass the foundation, Petclinic, and Reference Application suites. |
-| 2 | `use-vaadin-grid-for-collection-presentation` | Use an internal Grid for qualified collection presentations. | Existing bounded-window, row-context, nullable-total, semantic-cell, responsive, cancellation, and native-fallback contracts are proven without claiming database pushdown. |
+| 1 | `extend-vaadin-to-domain-member-presentation` *(archived)* | Use qualified read-only Vaadin fields and action buttons behind property and action components. | View/edit parity, action semantics, accessibility, theming, route loading, CSP, packaging, and native rollback pass the foundation, Petclinic, and Reference Application suites. |
+| 2 | `use-vaadin-grid-for-collection-presentation` *(active)* | Use an internal Grid for qualified collection presentations. | Existing bounded-window, row-context, nullable-total, semantic-cell, responsive, cancellation, and native-fallback contracts are proven without claiming database pushdown. |
 | 3 | `use-vaadin-menu-bar-for-application-menus` | Use internal Menu Bar item trees behind the three semantic application-menu tiers. | Hierarchy, order, disabled state, service-action invocation, overflow, keyboard, refresh, authentication exclusions, stable-shell loading, and native fallback pass broad acceptance coverage. |
 
 The order is a review sequence rather than a hard runtime dependency.
@@ -39,6 +39,6 @@ Grid and Menu Bar MUST use separate packaged closures and MAY be rejected indepe
 
 ## Decisions required during promotion
 
-The first proposal must settle whether the current `editor-toolkit` property is broadened with compatibility handling or replaced by a clearly named presentation-toolkit policy.
-The Grid proposal must settle the adapter behavior when a stable total is unavailable and whether narrow layouts qualify Grid or retain the native card/list presentation.
+The archived field-and-action tranche resolved the common policy as `component-toolkit=vaadin|native` with bounded deprecated compatibility inputs.
+The promoted Grid change resolves unavailable totals through bounded Grid with Causeway-owned paging and retains native collection presentation at or below the existing 48rem container boundary.
 The Menu Bar proposal must verify that one internal Menu Bar per semantic tier preserves the existing responsive and keyboard contracts before custom disclosures are removed.
