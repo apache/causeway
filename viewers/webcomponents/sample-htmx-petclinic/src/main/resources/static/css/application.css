@@ -75,7 +75,7 @@
 
 .petclinic-object-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: var(--causeway-space-4);
   align-items: start;
 }
@@ -86,10 +86,6 @@
   display: grid;
   gap: var(--causeway-space-3);
   min-width: 0;
-}
-
-.petclinic-object-collections {
-  grid-column: 1 / -1;
 }
 
 .petclinic-card {
