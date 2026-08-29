@@ -43,9 +43,17 @@ final class HtmxClasspathPageLoader {
             "[A-Za-z_][A-Za-z0-9_$-]*(?:\\.[A-Za-z_][A-Za-z0-9_$-]*)*");
 
     private final ResourcePatternResolver resolver;
+    private final HtmxViewerProperties.ResourcePageMode resourcePageMode;
 
     HtmxClasspathPageLoader(final ResourcePatternResolver resolver) {
+        this(resolver, HtmxViewerProperties.ResourcePageMode.CACHED);
+    }
+
+    HtmxClasspathPageLoader(
+            final ResourcePatternResolver resolver,
+            final HtmxViewerProperties.ResourcePageMode resourcePageMode) {
         this.resolver = java.util.Objects.requireNonNull(resolver);
+        this.resourcePageMode = java.util.Objects.requireNonNull(resourcePageMode);
     }
 
     List<HtmxPageDefinition> load() {
@@ -82,14 +90,21 @@ final class HtmxClasspathPageLoader {
                     "Private HTML page '" + bounded(filename) + "' does not have a valid logical-type filename.");
         }
         final var source = "resource:" + bounded(filename);
+        final var startupHtml = decode(resource, source);
+        return resourcePageMode == HtmxViewerProperties.ResourcePageMode.RELOAD
+                ? HtmxPageDefinition.reloadingResource(logicalTypeName, source, () -> decode(resource, source))
+                : HtmxPageDefinition.resource(logicalTypeName, source, startupHtml);
+    }
+
+    static String decode(final Resource resource, final String source) {
         final byte[] bytes;
         try (InputStream input = resource.getInputStream()) {
             bytes = readBounded(input, source);
         } catch (IOException ex) {
-            throw failure("HTMX_PAGE_UNREADABLE", "Private HTML page '" + source + "' cannot be read.");
+            throw failure("HTMX_PAGE_UNREADABLE", "Private HTML page '" + bounded(source) + "' cannot be read.");
         }
         if (bytes.length == 0) {
-            throw failure("HTMX_PAGE_EMPTY", "Private HTML page '" + source + "' is empty.");
+            throw failure("HTMX_PAGE_EMPTY", "Private HTML page '" + bounded(source) + "' is empty.");
         }
         final String html;
         try {
@@ -99,12 +114,12 @@ final class HtmxClasspathPageLoader {
                     .decode(ByteBuffer.wrap(bytes))
                     .toString();
         } catch (CharacterCodingException ex) {
-            throw failure("HTMX_PAGE_INVALID_UTF8", "Private HTML page '" + source + "' is not valid UTF-8.");
+            throw failure("HTMX_PAGE_INVALID_UTF8", "Private HTML page '" + bounded(source) + "' is not valid UTF-8.");
         }
         if (html.indexOf('\0') >= 0) {
-            throw failure("HTMX_PAGE_NUL_CONTENT", "Private HTML page '" + source + "' contains a NUL character.");
+            throw failure("HTMX_PAGE_NUL_CONTENT", "Private HTML page '" + bounded(source) + "' contains a NUL character.");
         }
-        return HtmxPageDefinition.resource(logicalTypeName, source, html);
+        return html;
     }
 
     private static byte[] readBounded(final InputStream input, final String source) throws IOException {

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.webcomponents.htmx;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLClassLoader;
@@ -58,6 +59,79 @@ class HtmxClasspathPageLoaderTest {
         assertThat(pages.get(0).safeSourceIdentifier()).isEqualTo("resource:petclinic.PetOwner.html");
         assertThat(pages.get(0).render(new HtmxObjectRoute("petclinic.PetOwner", "opaque")))
                 .isEqualTo("<p>Olé {{objectId}}</p>");
+    }
+
+    @Test
+    void cachedAndReloadModesRetainRegistrationButDifferForCurrentContent() {
+        final var cachedResource = mutable("petclinic.Cached.html", "<p>initial cached</p>");
+        final var cached = loader(HtmxViewerProperties.ResourcePageMode.CACHED, cachedResource)
+                .load().get(0);
+        cachedResource.set("<p>changed cached</p>");
+        assertThat(cached.render(route("petclinic.Cached"))).isEqualTo("<p>initial cached</p>");
+
+        final var reloadResource = mutable("petclinic.Reload.html", "<p>initial reload</p>");
+        final var reloading = loader(HtmxViewerProperties.ResourcePageMode.RELOAD, reloadResource)
+                .load().get(0);
+        reloadResource.set("<p>changed once</p>");
+        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo("<p>changed once</p>");
+        reloadResource.set("<p>changed twice</p>");
+        assertThat(reloading.render(route("petclinic.Reload"))).isEqualTo("<p>changed twice</p>");
+        assertThat(reloading.logicalTypeName()).isEqualTo("petclinic.Reload");
+    }
+
+    @Test
+    void reloadReappliesEveryBoundedContentValidationWithoutStaleFallback() {
+        final var resource = mutable("petclinic.Reload.html", "<p>valid</p>");
+        final var page = loader(HtmxViewerProperties.ResourcePageMode.RELOAD, resource)
+                .load().get(0);
+
+        resource.set(new byte[0]);
+        assertRenderFailure(page, "HTMX_PAGE_EMPTY");
+        resource.set(new byte[] {(byte) 0xc3, (byte) 0x28});
+        assertRenderFailure(page, "HTMX_PAGE_INVALID_UTF8");
+        resource.set("<p>\0</p>");
+        assertRenderFailure(page, "HTMX_PAGE_NUL_CONTENT");
+        resource.set(new byte[HtmxClasspathPageLoader.MAXIMUM_PAGE_BYTES + 1]);
+        assertRenderFailure(page, "HTMX_PAGE_SIZE_EXCEEDED");
+        resource.unreadable = true;
+        assertRenderFailure(page, "HTMX_PAGE_UNREADABLE");
+    }
+
+    @Test
+    void additionsDeletionsAndRenamesRemainStartupBoundInBothModes() throws Exception {
+        final var pagesDirectory = temporaryDirectory.resolve(RESOURCE_DIRECTORY);
+        Files.createDirectories(pagesDirectory);
+        final var original = pagesDirectory.resolve("petclinic.Original.html");
+        Files.writeString(original, "<p>original</p>", StandardCharsets.UTF_8);
+        try (var classLoader = new URLClassLoader(
+                new java.net.URL[] {temporaryDirectory.toUri().toURL()},
+                null)) {
+            final var resolver = new PathMatchingResourcePatternResolver(classLoader);
+            final var cached = new HtmxClasspathPageLoader(
+                    resolver,
+                    HtmxViewerProperties.ResourcePageMode.CACHED).load();
+            final var reload = new HtmxClasspathPageLoader(
+                    resolver,
+                    HtmxViewerProperties.ResourcePageMode.RELOAD).load();
+
+            Files.writeString(
+                    pagesDirectory.resolve("petclinic.Added.html"),
+                    "<p>added</p>",
+                    StandardCharsets.UTF_8);
+            Files.move(original, pagesDirectory.resolve("petclinic.Renamed.html"));
+
+            assertThat(cached).extracting(HtmxPageDefinition::logicalTypeName)
+                    .containsExactly("petclinic.Original");
+            assertThat(cached.get(0).render(route("petclinic.Original")))
+                    .isEqualTo("<p>original</p>");
+            assertThat(reload).extracting(HtmxPageDefinition::logicalTypeName)
+                    .containsExactly("petclinic.Original");
+            assertThatThrownBy(() -> reload.get(0).render(route("petclinic.Original")))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("HTMX_PAGE_UNREADABLE")
+                    .hasMessageContaining("resource:petclinic.Original.html")
+                    .hasMessageNotContaining(temporaryDirectory.toString());
+        }
     }
 
     @Test
@@ -150,8 +224,27 @@ class HtmxClasspathPageLoaderTest {
                 .hasMessageNotContaining("Byte array resource");
     }
 
+    private static void assertRenderFailure(final HtmxPageDefinition page, final String code) {
+        assertThatThrownBy(() -> page.render(route(page.logicalTypeName())))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining(code)
+                .hasMessageContaining("resource:petclinic.Reload.html")
+                .hasMessageNotContaining("fixture secret")
+                .hasMessageNotContaining("<p>valid</p>");
+    }
+
+    private static HtmxObjectRoute route(final String logicalTypeName) {
+        return new HtmxObjectRoute(logicalTypeName, "opaque");
+    }
+
     private static HtmxClasspathPageLoader loader(final Resource... resources) {
-        return new HtmxClasspathPageLoader(new FixedResolver(resources));
+        return loader(HtmxViewerProperties.ResourcePageMode.CACHED, resources);
+    }
+
+    private static HtmxClasspathPageLoader loader(
+            final HtmxViewerProperties.ResourcePageMode mode,
+            final Resource... resources) {
+        return new HtmxClasspathPageLoader(new FixedResolver(resources), mode);
     }
 
     private static Resource named(final String filename, final String content) {
@@ -170,6 +263,49 @@ class HtmxClasspathPageLoaderTest {
                 return "fixture:" + filename;
             }
         };
+    }
+
+    private static MutableResource mutable(final String filename, final String content) {
+        return new MutableResource(filename, content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private static final class MutableResource extends AbstractResource {
+
+        private final String filename;
+        private byte[] content;
+        private boolean unreadable;
+
+        private MutableResource(final String filename, final byte[] content) {
+            this.filename = filename;
+            this.content = content;
+        }
+
+        void set(final String content) {
+            set(content.getBytes(StandardCharsets.UTF_8));
+        }
+
+        void set(final byte[] content) {
+            this.content = content;
+            this.unreadable = false;
+        }
+
+        @Override
+        public String getFilename() {
+            return filename;
+        }
+
+        @Override
+        public String getDescription() {
+            return "fixture secret location:" + filename;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            if (unreadable) {
+                throw new IOException("fixture secret exception");
+            }
+            return new ByteArrayInputStream(content);
+        }
     }
 
     private static class FixedResolver implements ResourcePatternResolver {

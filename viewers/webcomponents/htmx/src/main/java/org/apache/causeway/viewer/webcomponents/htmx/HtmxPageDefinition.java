@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 final class HtmxPageDefinition {
 
@@ -34,19 +35,19 @@ final class HtmxPageDefinition {
     private final String logicalTypeName;
     private final Source source;
     private final String safeSourceIdentifier;
-    private final String resourceHtml;
+    private final Supplier<String> resourceContent;
     private final HtmxPageFragmentFactory factory;
 
     private HtmxPageDefinition(
             final String logicalTypeName,
             final Source source,
             final String safeSourceIdentifier,
-            final String resourceHtml,
+            final Supplier<String> resourceContent,
             final HtmxPageFragmentFactory factory) {
         this.logicalTypeName = logicalTypeName;
         this.source = source;
         this.safeSourceIdentifier = safeSourceIdentifier;
-        this.resourceHtml = resourceHtml;
+        this.resourceContent = resourceContent;
         this.factory = factory;
     }
 
@@ -54,11 +55,24 @@ final class HtmxPageDefinition {
             final String logicalTypeName,
             final String safeSourceIdentifier,
             final String html) {
+        final var cachedHtml = Objects.requireNonNull(html);
         return new HtmxPageDefinition(
                 Objects.requireNonNull(logicalTypeName),
                 Source.RESOURCE,
                 Objects.requireNonNull(safeSourceIdentifier),
-                Objects.requireNonNull(html),
+                () -> cachedHtml,
+                null);
+    }
+
+    static HtmxPageDefinition reloadingResource(
+            final String logicalTypeName,
+            final String safeSourceIdentifier,
+            final Supplier<String> content) {
+        return new HtmxPageDefinition(
+                Objects.requireNonNull(logicalTypeName),
+                Source.RESOURCE,
+                Objects.requireNonNull(safeSourceIdentifier),
+                Objects.requireNonNull(content),
                 null);
     }
 
@@ -85,7 +99,7 @@ final class HtmxPageDefinition {
     }
 
     String render(final HtmxObjectRoute route) {
-        return source == Source.RESOURCE ? resourceHtml : factory.render(route);
+        return source == Source.RESOURCE ? resourceContent.get() : factory.render(route);
     }
 
     private static String bounded(final String value) {
