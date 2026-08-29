@@ -173,6 +173,8 @@ type RichMemberMetadata {
   description: String
   "Canonical translated friendly name."
   friendlyName: String!
+  "Canonical label position."
+  labelPosition: String!
   "Finite maximum input length, or null."
   maxLength: Int
   "Requested multiline row count, or null."
@@ -183,6 +185,13 @@ type RichMemberMetadata {
   patternFlags: Int
   "Positive typical input length, or null."
   typicalLength: Int
+}
+
+"Bookmark identity and title for one navigable ancestor."
+type RichNavigableBreadcrumb {
+  id: String!
+  logicalTypeName: String!
+  title: String!
 }
 
 type SIMPLESchema {
@@ -342,6 +351,8 @@ type rich__causeway_applib_DomainObjectList__elementTypeFqcn__gqlv_property {
 }
 
 type rich__causeway_applib_DomainObjectList__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -381,6 +392,8 @@ type rich__causeway_applib_RoleMemento__description__gqlv_property {
 }
 
 type rich__causeway_applib_RoleMemento__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -464,6 +477,8 @@ type rich__causeway_applib_UserMemento__avatarUrl__gqlv_property {
 }
 
 type rich__causeway_applib_UserMemento__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -632,6 +647,8 @@ type rich__causeway_conf_ConfigurationProperty {
 }
 
 type rich__causeway_conf_ConfigurationProperty__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -705,6 +722,8 @@ type rich__causeway_conf_ConfigurationViewmodel__environment__gqlv_collection_wi
 }
 
 type rich__causeway_conf_ConfigurationViewmodel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -787,6 +806,8 @@ type rich__causeway_feat_ApplicationFeatureViewModel {
 }
 
 type rich__causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -886,6 +907,8 @@ type rich__causeway_feat_ApplicationNamespace__contents__gqlv_collection_window 
 }
 
 type rich__causeway_feat_ApplicationNamespace__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -989,6 +1012,8 @@ type rich__causeway_feat_ApplicationTypeAction__actionSemantics__gqlv_property {
 }
 
 type rich__causeway_feat_ApplicationTypeAction__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1094,6 +1119,8 @@ type rich__causeway_feat_ApplicationTypeCollection__elementType__gqlv_property {
 }
 
 type rich__causeway_feat_ApplicationTypeCollection__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1162,6 +1189,8 @@ type rich__causeway_feat_ApplicationTypeMember {
 }
 
 type rich__causeway_feat_ApplicationTypeMember__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1249,6 +1278,8 @@ type rich__causeway_feat_ApplicationTypeProperty__derived__gqlv_property {
 }
 
 type rich__causeway_feat_ApplicationTypeProperty__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1395,6 +1426,8 @@ type rich__causeway_feat_ApplicationType__collections__gqlv_collection_window {
 }
 
 type rich__causeway_feat_ApplicationType__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1501,6 +1534,8 @@ type rich__causeway_metamodel_MetamodelInspectView__details__gqlv_property {
 }
 
 type rich__causeway_metamodel_MetamodelInspectView__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1565,6 +1600,8 @@ type rich__causeway_security_LoginRedirect {
 }
 
 type rich__causeway_security_LoginRedirect__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1630,6 +1667,8 @@ type rich__causeway_testing_fixtures_FixtureResult__fixtureScriptClassName__gqlv
 }
 
 type rich__causeway_testing_fixtures_FixtureResult__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1699,6 +1738,8 @@ type rich__java_lang_Record {
 }
 
 type rich__java_lang_Record__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1715,6 +1756,8 @@ type rich__java_util_concurrent_Callable {
 }
 
 type rich__java_util_concurrent_Callable__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1731,6 +1774,8 @@ type rich__java_util_function_Consumer {
 }
 
 type rich__java_util_function_Consumer__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1747,6 +1792,8 @@ type rich__java_util_function_Function {
 }
 
 type rich__java_util_function_Function__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1763,6 +1810,8 @@ type rich__java_util_stream_Stream {
 }
 
 type rich__java_util_stream_Stream__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1781,6 +1830,8 @@ type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView {
 }
 
 type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -1823,6 +1874,8 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
 }
 
 type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -4108,6 +4161,8 @@ type rich__university_calc_EditableMementoViewModel__age__gqlv_property {
 }
 
 type rich__university_calc_EditableMementoViewModel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -5739,6 +5794,8 @@ type rich__university_dept_Department__disabledStaffMembers__gqlv_collection_win
 }
 
 type rich__university_dept_Department__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6185,6 +6242,8 @@ type rich__university_dept_DeptHead__department__gqlv_property {
 }
 
 type rich__university_dept_DeptHead__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6353,6 +6412,8 @@ type rich__university_dept_Person {
 }
 
 type rich__university_dept_Person__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6417,6 +6478,8 @@ type rich__university_dept_StaffMember__department__gqlv_property {
 }
 
 type rich__university_dept_StaffMember__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6639,6 +6702,8 @@ type simple__causeway_applib_DomainObjectList {
 }
 
 type simple__causeway_applib_DomainObjectList__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6657,6 +6722,8 @@ type simple__causeway_applib_RoleMemento {
 }
 
 type simple__causeway_applib_RoleMemento__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6685,6 +6752,8 @@ type simple__causeway_applib_UserMemento {
 }
 
 type simple__causeway_applib_UserMemento__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6713,6 +6782,8 @@ type simple__causeway_conf_ConfigurationProperty {
 }
 
 type simple__causeway_conf_ConfigurationProperty__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6735,6 +6806,8 @@ type simple__causeway_conf_ConfigurationViewmodel {
 }
 
 type simple__causeway_conf_ConfigurationViewmodel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6755,6 +6828,8 @@ type simple__causeway_feat_ApplicationFeatureViewModel {
 }
 
 type simple__causeway_feat_ApplicationFeatureViewModel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6777,6 +6852,8 @@ type simple__causeway_feat_ApplicationNamespace {
 }
 
 type simple__causeway_feat_ApplicationNamespace__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6814,6 +6891,8 @@ type simple__causeway_feat_ApplicationTypeAction {
 }
 
 type simple__causeway_feat_ApplicationTypeAction__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6836,6 +6915,8 @@ type simple__causeway_feat_ApplicationTypeCollection {
 }
 
 type simple__causeway_feat_ApplicationTypeCollection__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6856,6 +6937,8 @@ type simple__causeway_feat_ApplicationTypeMember {
 }
 
 type simple__causeway_feat_ApplicationTypeMember__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6880,6 +6963,8 @@ type simple__causeway_feat_ApplicationTypeProperty {
 }
 
 type simple__causeway_feat_ApplicationTypeProperty__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6891,6 +6976,8 @@ type simple__causeway_feat_ApplicationTypeProperty__gqlv_meta {
 }
 
 type simple__causeway_feat_ApplicationType__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6911,6 +6998,8 @@ type simple__causeway_metamodel_MetamodelInspectView {
 }
 
 type simple__causeway_metamodel_MetamodelInspectView__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6927,6 +7016,8 @@ type simple__causeway_security_LoginRedirect {
 }
 
 type simple__causeway_security_LoginRedirect__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6951,6 +7042,8 @@ type simple__causeway_testing_fixtures_FixtureResult {
 }
 
 type simple__causeway_testing_fixtures_FixtureResult__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6967,6 +7060,8 @@ type simple__java_lang_Record {
 }
 
 type simple__java_lang_Record__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6983,6 +7078,8 @@ type simple__java_util_concurrent_Callable {
 }
 
 type simple__java_util_concurrent_Callable__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -6999,6 +7096,8 @@ type simple__java_util_function_Consumer {
 }
 
 type simple__java_util_function_Consumer__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7015,6 +7114,8 @@ type simple__java_util_function_Function {
 }
 
 type simple__java_util_function_Function__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7031,6 +7132,8 @@ type simple__java_util_stream_Stream {
 }
 
 type simple__java_util_stream_Stream__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7048,6 +7151,8 @@ type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView {
 }
 
 type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7066,6 +7171,8 @@ type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureS
 }
 
 type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7203,6 +7310,8 @@ type simple__university_calc_EditableMementoViewModel {
 }
 
 type simple__university_calc_EditableMementoViewModel__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7306,6 +7415,8 @@ type simple__university_dept_Department {
 }
 
 type simple__university_dept_Department__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7339,6 +7450,8 @@ type simple__university_dept_DeptHead {
 }
 
 type simple__university_dept_DeptHead__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7371,6 +7484,8 @@ type simple__university_dept_Person {
 }
 
 type simple__university_dept_Person__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String
@@ -7404,6 +7519,8 @@ type simple__university_dept_StaffMember {
 }
 
 type simple__university_dept_StaffMember__gqlv_meta {
+  "Navigable ancestors ordered from root to immediate parent."
+  breadcrumbs: [RichNavigableBreadcrumb!]
   cssClass: String
   grid: String
   icon: String

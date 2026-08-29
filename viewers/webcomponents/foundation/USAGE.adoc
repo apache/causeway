@@ -26,6 +26,7 @@ The runtime has no dependency on HTMX, React, Vue, Svelte, or a component-author
   <cw-object-context
       logical-type="university.dept.Department"
       object-id="42">
+    <cw-breadcrumbs></cw-breadcrumbs>
     <cw-object-header></cw-object-header>
     <cw-property id="name"></cw-property>
     <cw-property id="status"></cw-property>
@@ -49,7 +50,7 @@ The collection remains inactive until its load button is selected or its `active
 
 == Public component contract
 
-The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, and `cw-collection-column`.
+The public vocabulary consists of `cw-graphql-client`, `cw-menubars`, `cw-menubar-primary`, `cw-menubar-secondary`, `cw-menubar-tertiary`, `cw-object-context`, `cw-object`, `cw-object-header`, `cw-breadcrumbs`, `cw-property`, `cw-value`, `cw-object-link`, `cw-action`, `cw-interaction-controller`, `cw-field-editor`, `cw-reference-editor`, `cw-collection`, and `cw-collection-column`.
 `CausewayElementName`, `CausewayAttribute`, `CausewayHostClass`, and `CausewaySemanticEvent` export the stable names used by the implementation.
 
 The `cw-` element namespace replaces the former `causeway-` element namespace without compatibility aliases.
@@ -125,6 +126,18 @@ A later component requests only selections absent from the current snapshot.
 Calling `refresh()` or `invalidate()` on the context controller executes the complete currently active projection.
 Disconnecting a component releases its requirement and shrinks future refreshes without causing a request by itself.
 Nested object contexts answer descendant requests at the nearest provider boundary.
+
+== Navigable breadcrumbs
+
+`<cw-breadcrumbs>` registers one semantic metadata requirement with the nearest object context.
+It renders a `nav` landmark containing root-to-parent `<cw-object-link>` ancestors followed by the current object's title marked with `aria-current="page"`.
+The rich GraphQL `_meta.breadcrumbs` field derives ancestors from Causeway's standard navigable-parent facet, normally declared with `@PropertyLayout(navigable = Navigable.PARENT)`.
+Traversal returns at most 32 bookmarkable ancestors, detects cycles, and reports facet or depth failures locally without exposing application exception details.
+The current object is supplied by the existing `_meta` identity and title and is not duplicated in the ancestor list.
+
+Ancestor links publish the established bubbling and composed `causeway-navigation-request` event.
+The component does not construct URLs, choose a router, require HTMX, infer parents from arbitrary reference properties, or execute GraphQL independently of the shared context.
+Applications opt into presentation by placing the element in their composition; `<cw-object>` does not insert it automatically.
 
 == Composite object and effective-grid layout
 

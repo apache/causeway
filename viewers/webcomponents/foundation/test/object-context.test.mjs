@@ -61,6 +61,62 @@ test('coalesces header and property requirements into one initial object read', 
   assert.equal(codeStates.at(-1).data.get, 'CLA');
 });
 
+test('coalesces semantic breadcrumbs and isolates breadcrumb metadata errors', async () => {
+  const breadcrumbs = [
+    {logicalTypeName: 'university.University', id: 'u-1', title: 'Example University'},
+    {logicalTypeName: 'university.Faculty', id: 'f-1', title: 'Arts Faculty'}
+  ];
+  const executor = createRichSchemaFixtureExecutor({
+    readResponses: [graphQLObjectResponse({breadcrumbs})]
+  });
+  const context = createContext(executor);
+  let breadcrumbState;
+  context.registerRequirement({kind: 'breadcrumbs'}, state => { breadcrumbState = state; });
+  context.registerRequirement({kind: 'header'});
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.equal(executor.readCalls.length, 1);
+  assert.match(executor.readCalls[0].document, /breadcrumbs\s*\{[\s\S]*logicalTypeName[\s\S]*id[\s\S]*title/);
+  assert.deepEqual(breadcrumbState.data.breadcrumbs, breadcrumbs);
+  assert.equal(breadcrumbState.data.title, 'Classics Department');
+
+  const failing = createRichSchemaFixtureExecutor({
+    readResponses: [{
+      ...graphQLObjectResponse({breadcrumbs: null}),
+      errors: [{
+        message: 'Navigable parent hierarchy contains a cycle.',
+        path: ['rich', DEPARTMENT_OBJECT_FIELD, '_meta', 'breadcrumbs'],
+        extensions: {classification: 'DataFetchingException'}
+      }]
+    }]
+  });
+  const failingContext = createContext(failing);
+  let failingBreadcrumbs;
+  let successfulHeader;
+  failingContext.registerRequirement({kind: 'breadcrumbs'}, state => { failingBreadcrumbs = state; });
+  failingContext.registerRequirement({kind: 'header'}, state => { successfulHeader = state; });
+  await waitFor(() => failingContext.state.status === 'partial-error');
+  assert.equal(failingBreadcrumbs.status, 'partial-error');
+  assert.equal(successfulHeader.status, 'ready');
+  assert.equal(successfulHeader.data.title, 'Classics Department');
+});
+
+test('reports breadcrumbs unsupported when metadata lacks the shared entry field', async () => {
+  const types = createRichSchemaTypes();
+  for (const [name, type] of types) {
+    if (name.endsWith('__gqlv_meta')) {
+      types.set(name, {...type, fields: type.fields.filter(field => field.name !== 'breadcrumbs')});
+    }
+  }
+  const executor = createRichSchemaFixtureExecutor({types});
+  const context = createContext(executor);
+  let breadcrumbState;
+  context.registerRequirement({kind: 'breadcrumbs'}, state => { breadcrumbState = state; });
+  await waitFor(() => breadcrumbState?.status === 'unsupported');
+  assert.match(breadcrumbState.errors[0].message, /lacks navigable breadcrumb fields/);
+  assert.equal(executor.readCalls.length, 0);
+});
+
 test('property reads remain compatible when member metadata is unavailable', async () => {
   const types = createRichSchemaTypes();
   for (const [name, type] of types) {

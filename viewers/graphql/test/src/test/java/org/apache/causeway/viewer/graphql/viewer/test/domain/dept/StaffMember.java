@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -38,6 +39,7 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -94,11 +96,30 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
         return null;
     }
 
-    @Getter @Setter
-    @Property
+    private static final AtomicInteger DEPARTMENT_READ_COUNT = new AtomicInteger();
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @Property
+    @PropertyLayout(navigable = Navigable.PARENT)
+    public Department getDepartment() {
+        DEPARTMENT_READ_COUNT.incrementAndGet();
+        return department;
+    }
+
+    public void setDepartment(final Department department) {
+        this.department = department;
+    }
+
+    public static void resetDepartmentReadCount() {
+        DEPARTMENT_READ_COUNT.set(0);
+    }
+
+    public static int departmentReadCount() {
+        return DEPARTMENT_READ_COUNT.get();
+    }
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
