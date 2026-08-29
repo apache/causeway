@@ -216,22 +216,23 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\" named=\"Companion animals\"")
+                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
                 .contains("described-as=\"All visits recorded for this owner's pets.\"")
+                .contains("active paged=\"1\"")
                 .contains("<cw-action id=\"bookVisit\"")
-                .doesNotContain("petclinic-associated-actions", "petclinic-member-composition");
+                .doesNotContain("petclinic-associated-actions", "petclinic-member-composition", " offset=", " size=");
         final String homeHtml;
         try (var input = loader.getResource(
                 "META-INF/causeway/webcomponents/pages/petclinic.HomePage.html").openStream()) {
             homeHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(homeHtml)
-                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\"")
-                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\"")
-                .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=");
+                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active>")
+                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"2\">")
+                .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=", " offset=", " size=");
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
         assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())

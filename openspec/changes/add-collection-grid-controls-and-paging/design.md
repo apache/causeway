@@ -34,6 +34,7 @@ Absent, blank, malformed, zero, negative, or oversized values will be treated as
 A valid value will be supplied to the initial load and retained by previous, next, refresh, and generation changes.
 
 The collection host will force bounded Grid presentation for an opted-in paged collection even when a total count is available, because Causeway-owned paging controls are the public behavior being requested.
+The same Causeway-owned controls will remain available around native table fallback so responsive width, ordering qualification, or toolkit policy cannot silently remove opted-in paging.
 The server-returned window metadata remains authoritative for actual requested size, maximum size, offsets, and terminal-page state.
 
 This is preferred to reusing `size`, which is currently inert application markup and does not communicate that visible paging controls are requested.
