@@ -36,6 +36,7 @@ import jakarta.persistence.Transient;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
@@ -83,6 +84,7 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
             named = "Staff display name",
             describedAs = "Name shown for the staff member",
             multiLine = 2,
+            labelPosition = LabelPosition.TOP,
             typicalLength = 24)
     private String name;
     public String validateName(final String proposedName) {

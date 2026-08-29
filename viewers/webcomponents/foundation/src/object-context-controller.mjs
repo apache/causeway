@@ -665,6 +665,17 @@ export class ObjectContextController extends EventTarget {
           signal: abortController.signal
         });
     const readPromise = (async () => {
+      if (!abstractRows && descriptor.value?.typeKind === 'OBJECT' && descriptor.value?.namedTypeName) {
+        const concreteSelection = await polymorphicCollectionRowSelection({
+          client: this.client,
+          description,
+          descriptor,
+          columns,
+          observedTypeNames: [descriptor.value.namedTypeName],
+          signal: abortController.signal
+        });
+        rowSelection = selectionForRuntimeType(concreteSelection, descriptor.value.namedTypeName);
+      }
       const advertisedTypeNames = [...(descriptor.value?.typeDescription?.possibleTypes ?? [])]
         .map(candidate => candidate.name)
         .sort();
@@ -1243,6 +1254,11 @@ function translateRequirement(requirement, description) {
         .filter(field => member.fields.has(field))
         .map(field => [field, true])
     );
+    const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
+      .filter(field => member.metadata?.fields.has(field));
+    if (metadataFields.length > 0) {
+      memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));
+    }
     memberSelection.get = propertyValueSelection(member, description.types);
     return {descriptor: member, selection: {[member.id]: memberSelection}};
   }
@@ -1319,10 +1335,12 @@ async function polymorphicCollectionRowSelection({
     throw new Error(`Collection row projection exceeds the ${MAX_OBSERVED_POLYMORPHIC_TYPES}-type bound.`);
   }
   const abstractType = descriptor.value?.typeDescription ?? null;
-  const advertised = new Set(abstractType?.possibleTypes?.map(candidate => candidate.name) ?? []);
-  for (const typeName of observedTypeNames) {
-    if (!advertised.has(typeName)) {
-      throw new Error(`Type '${typeName}' is not advertised by abstract row type '${abstractType?.name ?? 'unknown'}'.`);
+  if (['INTERFACE', 'UNION'].includes(descriptor.value?.typeKind)) {
+    const advertised = new Set(abstractType?.possibleTypes?.map(candidate => candidate.name) ?? []);
+    for (const typeName of observedTypeNames) {
+      if (!advertised.has(typeName)) {
+        throw new Error(`Type '${typeName}' is not advertised by abstract row type '${abstractType?.name ?? 'unknown'}'.`);
+      }
     }
   }
 
@@ -1373,6 +1391,13 @@ async function polymorphicCollectionRowSelection({
         ['hidden', 'disabled', 'datatype']
           .filter(fieldName => wrapperFields.has(fieldName))
           .map(fieldName => [fieldName, true]));
+      const metadataField = wrapperFields.get('metadata');
+      const metadataType = metadataField ? description.types.get(namedType(metadataField.type)) : null;
+      const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
+        .filter(fieldName => fieldsByName(metadataType).has(fieldName));
+      if (metadataFields.length > 0) {
+        memberSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
+      }
       const getField = wrapperFields.get('get');
       if (getField) {
         memberSelection.get = resultSelectionForType(getField.type, description.types) ?? true;
@@ -1414,7 +1439,18 @@ function collectionRowSelection(descriptor, columns, types) {
     if (!member) {
       continue;
     }
-    selection[member] = {hidden: true, disabled: true, datatype: true, get: true};
+    const memberField = fieldsByName(concreteObject).get(member);
+    const wrapper = memberField ? types.get(namedType(memberField.type)) : null;
+    const wrapperFields = fieldsByName(wrapper);
+    const memberSelection = {hidden: true, disabled: true, datatype: true, get: true};
+    const metadataField = wrapperFields.get('metadata');
+    const metadataType = metadataField ? types.get(namedType(metadataField.type)) : null;
+    const metadataFields = ['friendlyName', 'description', 'multiLine', 'labelPosition']
+      .filter(fieldName => fieldsByName(metadataType).has(fieldName));
+    if (metadataFields.length > 0) {
+      memberSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
+    }
+    selection[member] = memberSelection;
   }
   return selection;
 }
