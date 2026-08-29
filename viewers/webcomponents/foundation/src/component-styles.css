@@ -373,6 +373,37 @@ cw-field-editor[data-widget-state="fallback"]::after {
   transform: translateY(0);
   visibility: visible;
 }
+.causeway-member-tooltip {
+  cursor: help;
+  position: relative;
+}
+.causeway-member-tooltip::after {
+  background: CanvasText;
+  border-radius: 0.25rem;
+  color: Canvas;
+  content: attr(data-tooltip);
+  font-size: 0.85rem;
+  font-weight: 400;
+  inline-size: max-content;
+  inset-block-end: calc(100% + 0.4rem);
+  inset-inline-start: 0;
+  max-inline-size: min(24rem, calc(100vw - 2rem));
+  opacity: 0;
+  padding: 0.4rem 0.55rem;
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(0.25rem);
+  transition: opacity 120ms ease, transform 120ms ease;
+  visibility: hidden;
+  white-space: pre-line;
+  z-index: 20;
+}
+.causeway-member-tooltip:hover::after,
+.causeway-member-tooltip:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
 .causeway-breadcrumbs-list {
   align-items: center;
   display: flex;

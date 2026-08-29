@@ -191,7 +191,9 @@ test('collection keeps interleaved columns and actions in separate vocabularies'
   assert.equal(collection.childNodes[0].hidden, true);
   assert.equal(addPet.isConnected, true);
   context.publish('collection:pets', collectionState({disabled: 'Collection is locked'}));
-  assert.doesNotMatch(collection.innerHTML, /Collection is locked/);
+  assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"/);
+  assert.match(collection.innerHTML, /data-tooltip="Collection is locked"/);
+  assert.match(collection.innerHTML, /causeway-visually-hidden">Collection is locked<\/span>/);
   assert.equal(addPet.isConnected, true);
   assert.equal(removePet.isConnected, true);
   assert.deepEqual(collection.columns.map(candidate => candidate.member), ['name', 'species']);

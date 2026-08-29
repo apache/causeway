@@ -297,10 +297,12 @@ Renderer input is normalized semantic state containing `value`, `descriptor`, `t
 
 `<cw-property>` derives readable capability from the introspected property wrapper and obtains instance state from its object context.
 It renders a semantic label, a non-duplicated description, loading and member-error announcements, an explicit null, the selected value renderer or qualified internal read-only field, and an accessible disabled reason.
-A non-redundant property description remains the label's default title, while a disabled property adds a separate focusable reason indicator whose tooltip and hidden description do not replace the stable domain description.
+`description-as="label"` keeps the effective description in the visible layout and is the default for absent, blank, or unsupported values.
+`description-as="tooltip"` instead makes the description available from the semantic label by pointer or keyboard while retaining hidden accessible description text.
+A disabled property uses the same bounded tooltip trigger, with the description above the disabled reason as separate sections, and keeps their accessible text independently referenced in the same order.
 A hidden property renders no label, value, or interactive content.
 Changing the native `id` releases the old requirement and registers the new one.
-The `named`, `described-as`, `multi-line`, and `label-position` attributes override canonical property metadata when custom page composition needs a local presentation.
+The `named`, `described-as`, `description-as`, `multi-line`, and `label-position` attributes override canonical property metadata or its local presentation when custom page composition needs it.
 `label-position` accepts `LEFT`, `TOP`, or `NONE`; `LEFT` uses the shared `--causeway-property-label-column` ratio, `TOP` places the label and smaller description above the full-width field, and `NONE` suppresses their visible presentation while preserving an accessible field name.
 The legacy `label` and `multiline` attributes remain compatibility aliases below their canonical equivalents.
 
@@ -309,6 +311,7 @@ The legacy `label` and `multiline` attributes remain compatibility aliases below
 <cw-property id="firstName"
              named="Given name"
              described-as="The given or first name of this customer"
+             description-as="tooltip"
              multi-line="3"
              label-position="TOP"></cw-property>
 ----
@@ -483,7 +486,7 @@ An authored property or collection can place object actions directly beneath the
   <cw-action id="updateName"></cw-action>
 </cw-property>
 
-<cw-collection id="pets" named="Companion animals" described-as="Pets registered to this owner." active>
+<cw-collection id="pets" named="Companion animals" described-as="Pets registered to this owner." description-as="tooltip" active>
   <cw-collection-column id="name" label="Name"></cw-collection-column>
   <cw-collection-column id="species" label="Species"></cw-collection-column>
   <cw-action id="addPet"></cw-action>
@@ -511,7 +514,10 @@ Generated `<cw-object>` layouts retain semantically equivalent associated-member
 
 A collection's primary object requirement contains advertised `hidden` and `disabled` state plus supported canonical `metadata.friendlyName` and `metadata.description` heading fields.
 The heading resolves `named`, legacy `label`, canonical friendly name, and humanized member id in that order; its description resolves `described-as`, canonical description, and no text in that order.
-A distinct description is associated with the collection and displayed below the heading in subdued smaller text, while a description equal to the resolved name is omitted.
+A distinct description is always associated with the collection and uses subdued smaller text below the heading by default.
+`description-as="tooltip"` removes it from visible layout and makes it available from the heading by pointer or keyboard; `label`, absent, blank, and unsupported values retain the default layout.
+A collection-level disabled reason remains out of ordinary visible layout but is available from the same heading tooltip, below the description as a separate bounded section, without changing row or associated-action authorization.
+A description equal to the resolved name is omitted from both presentations.
 The `get` field is loaded through a context-owned secondary operation after activation.
 Secondary operations are cached by member and structural row selection, support forced refresh, and are canceled when their component or object context is disconnected.
 

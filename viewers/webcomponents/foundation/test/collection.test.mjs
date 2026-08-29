@@ -585,13 +585,13 @@ test('collection component resolves canonical and HTML headings without unmodifi
   document.body.appendChild(collection);
   await waitFor(() => collection.innerHTML.includes('Department staff'));
 
-  assert.deepEqual(CausewayCollectionElement.observedAttributes, ['id', 'named', 'described-as', 'label', 'active']);
-  assert.match(collection.innerHTML, /class="causeway-collection-label">Department staff<\/h2>/);
+  assert.deepEqual(CausewayCollectionElement.observedAttributes, ['id', 'named', 'described-as', 'description-as', 'label', 'active']);
+  assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"/);
   assert.match(collection.innerHTML, /class="causeway-collection-description">Current staff members\.<\/p>/);
+  assert.match(collection.innerHTML, /data-tooltip="Current staff members\.\s+Cannot edit a mixed-in collection\."/);
   assert.match(collection.innerHTML, /aria-labelledby="causeway-collection-label-/);
-  assert.match(collection.innerHTML, /aria-describedby="causeway-collection-description-/);
-  assert.doesNotMatch(collection.innerHTML, /Cannot edit a mixed-in collection/);
-  assert.doesNotMatch(collection.innerHTML, /causeway-collection-disabled-reason/);
+  assert.match(collection.innerHTML, /aria-describedby="causeway-collection-description-[^\"]+ causeway-collection-reason-/);
+  assert.match(collection.innerHTML, /causeway-visually-hidden">Cannot edit a mixed-in collection\.<\/span>/);
 
   publish({
     status: 'partial-error',
@@ -623,8 +623,15 @@ test('collection component resolves canonical and HTML headings without unmodifi
   assert.match(collection.innerHTML, /Legacy staff label/);
   collection.named = 'Priority team';
   collection.describedAs = 'People assigned to priority cases.';
-  assert.match(collection.innerHTML, /class="causeway-collection-label">Priority team<\/h2>/);
+  collection.descriptionAs = 'tooltip';
+  assert.equal(collection.descriptionAs, 'tooltip');
+  assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"[^>]+data-tooltip="People assigned to priority cases\."/);
+  assert.match(collection.innerHTML, /class="causeway-collection-description causeway-visually-hidden">People assigned to priority cases\.<\/p>/);
+
+  collection.setAttribute('description-as', 'unsupported');
+  assert.equal(collection.descriptionAs, 'label');
   assert.match(collection.innerHTML, /class="causeway-collection-description">People assigned to priority cases\.<\/p>/);
+  assert.doesNotMatch(collection.innerHTML, /causeway-member-tooltip/);
 
   collection.describedAs = ' priority TEAM ';
   assert.doesNotMatch(collection.innerHTML, /causeway-collection-description/);
@@ -637,6 +644,34 @@ test('collection component resolves canonical and HTML headings without unmodifi
   assert.match(collection.innerHTML, /Current staff members/);
   assert.equal(registrations, 1);
   document.body.removeChild(collection);
+});
+
+test('collection description tooltips remain escaped, bounded and available in local states', () => {
+  const collection = new CausewayCollectionElement();
+  collection.id = 'staffMembers';
+  collection.describedAs = 'Current <staff> & contractors.';
+  collection.descriptionAs = 'TOOLTIP';
+  const disabledReason = `Restricted ${'z'.repeat(280)}`;
+  const data = {
+    hidden: false,
+    disabled: disabledReason,
+    metadata: {friendlyName: 'Department staff', description: 'Metadata description'}
+  };
+
+  collection.renderComponentState({status: 'idle', data, errors: []});
+  assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"/);
+  assert.match(collection.innerHTML, /data-tooltip="Current &lt;staff&gt; &amp; contractors\.\s+Restricted z+…"/);
+  assert.match(collection.innerHTML, /causeway-collection-description causeway-visually-hidden[^>]*>Current &lt;staff&gt; &amp; contractors\.<\/p>/);
+  assert.match(collection.innerHTML, /aria-describedby="causeway-collection-description-[^\"]+ causeway-collection-reason-/);
+  assert.ok(collection.innerHTML.match(/data-tooltip="([\s\S]*?)"/)?.[1].length < 520);
+
+  collection.renderComponentState({status: 'terminal-error', data, errors: [{message: 'Unavailable'}]});
+  assert.match(collection.innerHTML, /causeway-collection-label causeway-member-tooltip/);
+  assert.match(collection.innerHTML, /role="alert">Unavailable/);
+
+  collection.renderComponentState({status: 'ready', data, errors: []});
+  assert.match(collection.innerHTML, /causeway-collection-label causeway-member-tooltip/);
+  assert.match(collection.innerHTML, /Load Department staff/);
 });
 
 test('collection component forwards window requests and publishes semantic window state', async () => {

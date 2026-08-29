@@ -130,6 +130,46 @@ test('property presentation attributes override canonical metadata with bounded 
   assert.doesNotMatch(property.innerHTML, /Metadata description|Compatibility name/);
 });
 
+test('property description tooltip presentation is bounded, escaped, accessible and state-safe', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'notes';
+  property.describedAs = 'Helpful <context> & guidance';
+  property.descriptionAs = 'ToOlTiP';
+  assert.equal(property.descriptionAs, 'tooltip');
+
+  const disabledReason = `Unavailable ${'x'.repeat(280)}`;
+  const ready = state({
+    descriptor: {value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {hidden: false, disabled: disabledReason, datatype: 'String', get: 'Details'}
+  });
+  property.renderComponentState(ready);
+  assert.match(property.innerHTML, /class="causeway-property-label causeway-member-tooltip causeway-property-disabled-tooltip"/);
+  assert.match(property.innerHTML, /data-tooltip="Helpful &lt;context&gt; &amp; guidance\s+Unavailable x+…"/);
+  assert.match(property.innerHTML, /causeway-property-description causeway-visually-hidden[^>]*>Helpful &lt;context&gt; &amp; guidance<\/span>/);
+  assert.match(property.innerHTML, /aria-describedby="causeway-property-description-[^\"]+ causeway-property-reason-/);
+  assert.ok(property.innerHTML.match(/data-tooltip="([\s\S]*?)"/)?.[1].length < 520);
+
+  property.renderComponentState(state({status: 'object-loading'}));
+  assert.match(property.innerHTML, /causeway-property-label causeway-member-tooltip/);
+  property.renderComponentState(state({status: 'partial-error', errors: [{message: 'Unavailable'}]}));
+  assert.match(property.innerHTML, /causeway-property-label causeway-member-tooltip/);
+
+  property.labelPosition = 'NONE';
+  property.renderComponentState(ready);
+  assert.match(property.innerHTML, /class="causeway-property-field causeway-member-tooltip"[^>]+tabindex="0"[^>]+data-tooltip=/);
+  assert.doesNotMatch(property.innerHTML, /causeway-property-label causeway-member-tooltip/);
+
+  property.descriptionAs = 'unsupported';
+  assert.equal(property.descriptionAs, 'label');
+  property.labelPosition = 'LEFT';
+  property.renderComponentState(state({
+    descriptor: {value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {hidden: false, disabled: null, datatype: 'String', get: 'Details'}
+  }));
+  assert.match(property.innerHTML, /class="causeway-property-description">Helpful &lt;context&gt; &amp; guidance<\/span>/);
+  assert.doesNotMatch(property.innerHTML, /causeway-member-tooltip|data-tooltip=/);
+});
+
 test('effective multiline state is reflected on every rendered property shell', () => {
   const property = new CausewayPropertyElement();
   property.id = 'notes';
@@ -188,8 +228,9 @@ test('property metadata supplies descriptions and label positions while NONE sup
   property.renderComponentState(ready);
   assert.match(property.innerHTML, /data-label-position="NONE"/);
   assert.match(property.innerHTML, /causeway-visually-hidden">Email address<\/span>/);
-  assert.doesNotMatch(property.innerHTML, /causeway-property-description/);
+  assert.match(property.innerHTML, /causeway-property-description causeway-visually-hidden[^>]*>Used for appointment reminders\.<\/span>/);
   assert.match(property.innerHTML, /aria-label="Email address"/);
+  assert.match(property.innerHTML, /aria-describedby="causeway-property-description-/);
 });
 
 test('invalid authored presentation values fall back to metadata and compatibility aliases', () => {
