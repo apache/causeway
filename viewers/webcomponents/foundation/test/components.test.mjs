@@ -25,6 +25,7 @@ const {document} = installDomShim();
 const {
   COMPONENT_STATE_EVENT,
   CausewayActionElement,
+  CausewayBreadcrumbsElement,
   CausewayCollectionColumnElement,
   CausewayCollectionElement,
   CausewayObjectContextElement,
@@ -35,6 +36,45 @@ const {
 } = await import('../src/index.mjs');
 
 defineCausewayWebComponents();
+
+test('breadcrumbs render accessible ancestor links, escaped current state and local errors', () => {
+  const breadcrumbs = new CausewayBreadcrumbsElement();
+  breadcrumbs.renderComponentState(state({
+    data: {
+      id: 'visit-1',
+      logicalTypeName: 'petclinic.Visit',
+      title: 'Checkup <today>',
+      breadcrumbs: [
+        {logicalTypeName: 'petclinic.PetOwner', id: 'owner-1', title: 'Mary & family'},
+        {logicalTypeName: 'petclinic.Pet', id: 'pet-1', title: 'Basil'},
+        {logicalTypeName: '', id: 'invalid', title: 'Malformed'}
+      ]
+    }
+  }));
+
+  assert.match(breadcrumbs.innerHTML, /<nav class="causeway-breadcrumbs" aria-label="Breadcrumb"/);
+  assert.match(breadcrumbs.innerHTML, /<ol class="causeway-breadcrumbs-list">/);
+  assert.match(breadcrumbs.innerHTML, /logical-type="petclinic\.PetOwner"/);
+  assert.match(breadcrumbs.innerHTML, /object-id="owner-1"/);
+  assert.match(breadcrumbs.innerHTML, /Mary &amp; family/);
+  assert.match(breadcrumbs.innerHTML, /Basil/);
+  assert.match(breadcrumbs.innerHTML, /aria-current="page">Checkup &lt;today&gt;/);
+  assert.doesNotMatch(breadcrumbs.innerHTML, /Malformed/);
+
+  breadcrumbs.renderComponentState(state({status: 'partial-error', errors: [{message: 'Breadcrumb cycle'}]}));
+  assert.match(breadcrumbs.innerHTML, /role="alert"/);
+  assert.match(breadcrumbs.innerHTML, /Breadcrumb cycle/);
+  assert.doesNotMatch(breadcrumbs.innerHTML, /object-id=/);
+});
+
+test('breadcrumbs render a current-only landmark for a root object', () => {
+  const breadcrumbs = new CausewayBreadcrumbsElement();
+  breadcrumbs.renderComponentState(state({
+    data: {id: 'owner-1', logicalTypeName: 'petclinic.PetOwner', title: 'Mary', breadcrumbs: []}
+  }));
+  assert.match(breadcrumbs.innerHTML, /aria-current="page">Mary/);
+  assert.doesNotMatch(breadcrumbs.innerHTML, /<cw-object-link/);
+});
 
 test('property renders accessible ready, disabled, hidden and error states', () => {
   const property = new CausewayPropertyElement();

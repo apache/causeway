@@ -1,0 +1,29 @@
+{
+  breadcrumbType: __type(name: "RichNavigableBreadcrumb") {
+    fields {
+      name
+      type {
+        kind
+        name
+      }
+    }
+  }
+  rich {
+    university_dept_Staff {
+      findStaffMemberByName {
+        invoke(name: "Gerry Jones") {
+          results {
+            _meta {
+              title
+              breadcrumbs {
+                logicalTypeName
+                id
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

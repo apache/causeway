@@ -25,6 +25,7 @@ export const CausewayElementName = Object.freeze({
   OBJECT_CONTEXT: 'cw-object-context',
   OBJECT: 'cw-object',
   OBJECT_HEADER: 'cw-object-header',
+  BREADCRUMBS: 'cw-breadcrumbs',
   PROPERTY: 'cw-property',
   VALUE: 'cw-value',
   OBJECT_LINK: 'cw-object-link',
@@ -45,6 +46,7 @@ export const CausewayElementName = Object.freeze({
 export const CausewayHostClass = Object.freeze({
   OBJECT: 'causeway-object',
   OBJECT_HEADER: 'causeway-object-header',
+  BREADCRUMBS: 'causeway-breadcrumbs',
   PROPERTY: 'causeway-property',
   VALUE: 'causeway-value',
   OBJECT_LINK: 'causeway-object-link',

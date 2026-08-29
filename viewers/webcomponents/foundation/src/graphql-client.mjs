@@ -583,12 +583,14 @@ function referencedInteractionTypeNames(typeDescription, generatedTypeName, sche
       && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
     const objectMetadata = fieldName === '_meta' && kind === 'OBJECT';
     const memberMetadata = fieldName === 'metadata' && kind === 'OBJECT';
+    const breadcrumbMetadata = fieldName === 'breadcrumbs' && kind === 'OBJECT';
     if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)
         || kind === 'ENUM' && typeName.startsWith('rich__')
         || choiceValue
         || objectValue
         || objectMetadata
-        || memberMetadata)) {
+        || memberMetadata
+        || breadcrumbMetadata)) {
       result.add(typeName);
     }
   };

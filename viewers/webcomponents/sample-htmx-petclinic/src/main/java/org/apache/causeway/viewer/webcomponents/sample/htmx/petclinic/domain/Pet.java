@@ -38,6 +38,7 @@ import jakarta.persistence.Version;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -67,7 +68,7 @@ public class Pet implements Comparable<Pet> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    @PropertyLayout(fieldSetId = "identity", sequence = "1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1", navigable = Navigable.PARENT)
     private PetOwner petOwner;
 
     @Column(nullable = false, length = 40)

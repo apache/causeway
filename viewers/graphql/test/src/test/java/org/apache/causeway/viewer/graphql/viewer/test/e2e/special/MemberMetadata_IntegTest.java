@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
+import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +72,34 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
     }
 
     @Test
+    void breadcrumb_metadata_is_additive_facet_driven_and_shared() throws Exception {
+        StaffMember.resetDepartmentReadCount();
+        var root = objectMapper.readTree(submit());
+        var metadata = root.at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta");
+
+        assertThat(root.at("/errors").isMissingNode())
+                .as(root.toPrettyString())
+                .isTrue();
+        assertThat(root.at("/data/breadcrumbType/fields"))
+                .extracting(node -> node.get("name").stringValue())
+                .containsExactlyInAnyOrder("logicalTypeName", "id", "title");
+        assertThat(metadata.get("title").stringValue()).isEqualTo("Untitled Staff Member");
+        assertThat(metadata.get("breadcrumbs"))
+                .singleElement()
+                .satisfies(node -> {
+                    assertThat(node.get("logicalTypeName").stringValue())
+                            .isEqualTo("university.dept.Department");
+                    assertThat(node.get("id").stringValue()).isNotBlank();
+                    assertThat(node.get("title").stringValue()).isEqualTo("Untitled Department");
+                });
+        assertThat(StaffMember.departmentReadCount())
+                .as("selected breadcrumb metadata evaluates the navigable parent")
+                .isPositive();
+    }
+
+    @Test
     void reads_known_wrappers_and_preserves_resource_metadata_and_redaction() throws Exception {
+        StaffMember.resetDepartmentReadCount();
         var bookmark = transactionService.callTransactional(
                 Propagation.REQUIRED,
                 () -> {
@@ -122,5 +150,8 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                 .doesNotContain("CONFIDENTIAL_RESOURCE_CONTENT")
                 .doesNotContain("disabled-reason")
                 .doesNotContain("authorization-policy");
+        assertThat(StaffMember.departmentReadCount())
+                .as("unselected breadcrumb metadata must not evaluate the navigable parent")
+                .isZero();
     }
 }

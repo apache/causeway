@@ -54,6 +54,7 @@ test('registers the complete compact custom-element vocabulary without old alias
     'cw-object-context',
     'cw-object',
     'cw-object-header',
+    'cw-breadcrumbs',
     'cw-property',
     'cw-value',
     'cw-object-link',
