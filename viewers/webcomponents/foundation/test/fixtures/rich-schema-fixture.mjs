@@ -113,12 +113,14 @@ export function createRichSchemaTypes() {
     [COLLECTION_TYPE, objectType(COLLECTION_TYPE, null, [
       field('hidden', null, scalar('Boolean')),
       field('disabled', null, scalar('String')),
+      field('metadata', null, named(MEMBER_METADATA_TYPE)),
       field('get', null, list(named(STAFF_OBJECT_TYPE))),
       field('datatype', null, scalar('String'))
     ])],
     [EMPTY_COLLECTION_TYPE, objectType(EMPTY_COLLECTION_TYPE, null, [
       field('hidden', null, scalar('Boolean')),
       field('disabled', null, scalar('String')),
+      field('metadata', null, named(MEMBER_METADATA_TYPE)),
       field('get', null, list(named(STAFF_OBJECT_TYPE))),
       field('datatype', null, scalar('String'))
     ])],
@@ -301,8 +303,16 @@ export function departmentObjectData({
       get: {name: 'history.txt', mimeType: 'text/plain', chars: '/graphql/object/history/clobChars'}
     },
     unsupportedValue: {hidden: false, disabled: null, get: {nested: {value: 'unknown'}}},
-    staffMembers: {hidden: false, disabled: null},
-    formerStaff: {hidden: false, disabled: null},
+    staffMembers: {
+      hidden: false,
+      disabled: null,
+      metadata: {friendlyName: 'Department staff', description: 'Current staff members.'}
+    },
+    formerStaff: {
+      hidden: false,
+      disabled: null,
+      metadata: {friendlyName: 'Former staff', description: null}
+    },
     changeName: {hidden: false, disabled: null}
   };
 }

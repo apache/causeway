@@ -199,6 +199,12 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("petOwners", 4);
         waitForCollectionRows("futureVisits", 3);
+        assertThat(page.locator("cw-collection[id='futureVisits'] .causeway-collection-label").innerText())
+                .isEqualTo("Next appointments");
+        assertThat(page.locator("cw-collection[id='futureVisits'] .causeway-collection-description").innerText())
+                .isEqualTo("Scheduled visits that have not yet taken place.");
+        assertThat(page.locator("cw-collection[id='petOwners'] .causeway-collection-description").count())
+                .isZero();
         assertCollectionPresentation("petOwners", "narrow");
         assertCollectionPresentation("futureVisits", "narrow");
         assertThat(toolkitRequests.stream().filter(url -> url.contains("/vaadin-menubar/vaadin-menubar.js")).count())
@@ -223,6 +229,12 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 2);
+        assertCollectionHeading("pets", "Companion animals", "Pets currently registered to this owner.");
+        assertCollectionHeading("visits", "Visit history", "All visits recorded for this owner's pets.");
+        assertThat(page.locator("cw-collection .causeway-collection-disabled-reason").count()).isZero();
+        assertThat(page.locator("cw-collection [title*='Cannot edit']").count()).isZero();
+        assertThat(page.locator("cw-collection").allTextContents())
+                .noneMatch(text -> text.contains("Cannot edit a mixed-in collection"));
         assertCollectionPresentation("pets", "grid");
         assertCollectionPresentation("visits", "ordering-not-deterministic");
         assertThat(page.locator(".petclinic-page-toolbar cw-action[id='delete']").count()).isEqualTo(1);
@@ -1033,6 +1045,17 @@ class PetClinicHtmxPlaywrightTest {
                     + "; route=" + page.locator(ROUTE_PAGE).getAttribute("data-route-state")
                     + "; collections=" + collections, cause);
         }
+    }
+
+    private void assertCollectionHeading(
+            final String member,
+            final String expectedName,
+            final String expectedDescription) {
+        final var collection = page.locator("cw-collection[id='" + member + "']");
+        assertThat(collection.locator(".causeway-collection-label").innerText()).isEqualTo(expectedName);
+        assertThat(collection.locator(".causeway-collection-description").innerText()).isEqualTo(expectedDescription);
+        assertThat(collection.locator(".causeway-collection").getAttribute("aria-labelledby")).isNotBlank();
+        assertThat(collection.locator(".causeway-collection").getAttribute("aria-describedby")).isNotBlank();
     }
 
     private void assertCollectionPresentation(final String member, final String expected) {

@@ -110,7 +110,9 @@ public class PetOwner implements Comparable<PetOwner> {
     private LocalDate lastVisit;
 
     @Collection
-    @CollectionLayout(sortedBy = Pet.ByName.class)
+    @CollectionLayout(
+            sortedBy = Pet.ByName.class,
+            describedAs = "Pets currently registered to this owner.")
     @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets = new TreeSet<>();
 

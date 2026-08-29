@@ -69,7 +69,7 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
 
 export class CausewayCollectionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'label', 'active'];
+    return ['id', 'named', 'described-as', 'label', 'active'];
   }
 
   constructor() {
@@ -154,6 +154,22 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       if (!this.#focusIntentIsCurrent()) return;
       event.target?.restoreSemanticFocus?.(this.gridFocusIntent);
     });
+  }
+
+  get named() {
+    return this.getAttribute('named') || '';
+  }
+
+  set named(value) {
+    this.setAttribute('named', value);
+  }
+
+  get describedAs() {
+    return this.getAttribute('described-as') || '';
+  }
+
+  set describedAs(value) {
+    this.setAttribute('described-as', value);
   }
 
   get label() {
@@ -382,9 +398,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       return;
     }
     this.#qualifyGrid(state);
-    const label = this.label || humanize(this.id);
-    const candidateDescription = state.descriptor?.description || '';
-    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
+    const label = firstNonBlank(this.named, this.label, state.data?.metadata?.friendlyName, humanize(this.id));
+    const candidateDescription = firstNonBlank(this.describedAs, state.data?.metadata?.description);
+    const description = normalizedText(candidateDescription) === normalizedText(label)
       ? ''
       : candidateDescription;
     const shell = (content, attributes = '') => collectionShell(
@@ -399,7 +415,11 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       renderMemberPrimary(this, shell('<span role="status">Loading collection metadata…</span>', ' aria-busy="true"'));
       return;
     }
-    if (['terminal-error', 'unsupported', 'partial-error'].includes(state.status)) {
+    const recoverablePartialState = state.status === 'partial-error'
+      && state.data
+      && typeof state.data.hidden === 'boolean';
+    if (['terminal-error', 'unsupported'].includes(state.status)
+        || (state.status === 'partial-error' && !recoverablePartialState)) {
       renderMemberPrimary(this, shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(state))}</span>`));
       return;
     }
@@ -407,14 +427,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       renderMemberPrimary(this, '', {hidden: true});
       return;
     }
-    const disabledReason = typeof state.data?.disabled === 'string'
-      ? state.data.disabled
-      : state.data?.disabled === true ? 'Disabled' : '';
-    const disabledMarkup = disabledReason
-      ? `<p class="causeway-collection-disabled-reason">${escapeHtml(disabledReason)}</p>`
-      : '';
     if (!this.active) {
-      renderMemberPrimary(this, shell(`${disabledMarkup}<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`));
+      renderMemberPrimary(this, shell(`<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`));
       return;
     }
     if (this.collectionState.status === 'idle' || this.collectionState.status === 'loading') {
@@ -434,22 +448,22 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       ? `<p class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</p>`
       : '';
     if (this._gridQualification.qualified) {
-      this.#renderGrid(shell, disabledMarkup, errors, description);
+      this.#renderGrid(shell, errors, description);
       return;
     }
     const content = this._columns.length > 0
       ? this.#renderTable(rows)
       : this.#renderDefaultRows(rows);
-    renderMemberPrimary(this, shell(`${disabledMarkup}${content}${errors}`));
+    renderMemberPrimary(this, shell(`${content}${errors}`));
     this.#restoreNativeFocus();
   }
 
-  #renderGrid(shell, disabledMarkup, errors, description) {
+  #renderGrid(shell, errors, description) {
     const revision = this.gridHostRevision;
     const bounded = this._gridQualification.presentation === 'grid-bounded';
     const window = this.collectionState.window;
     const pager = bounded ? this.#renderBoundedPager(window) : '';
-    renderMemberPrimary(this, shell(`${disabledMarkup}<${CAUSEWAY_COLLECTION_GRID} data-causeway-collection-grid></${CAUSEWAY_COLLECTION_GRID}>${pager}${errors}`));
+    renderMemberPrimary(this, shell(`<${CAUSEWAY_COLLECTION_GRID} data-causeway-collection-grid></${CAUSEWAY_COLLECTION_GRID}>${pager}${errors}`));
     const adapter = this.querySelector?.(`${CAUSEWAY_COLLECTION_GRID}[data-causeway-collection-grid]`);
     if (!adapter || revision !== this.gridHostRevision || !this.isConnected) return;
     adapter.presentation = {
@@ -748,6 +762,14 @@ function collectionShell(labelId, label, descriptionId, description, content, at
 
 function humanize(value) {
   return String(value || '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, character => character.toUpperCase());
+}
+
+function firstNonBlank(...values) {
+  return values.find(value => String(value ?? '').trim())?.trim() ?? '';
+}
+
+function normalizedText(value) {
+  return String(value ?? '').trim().toLocaleLowerCase();
 }
 
 function collectionBreakpointPixels() {

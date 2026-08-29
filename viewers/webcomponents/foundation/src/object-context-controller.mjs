@@ -1301,9 +1301,15 @@ function translateRequirement(requirement, description) {
     throw new Error(`Collection '${requirement.member}' does not expose readable contents.`);
   }
   const supportedFields = ['hidden', 'disabled'].filter(field => member.fields.has(field));
+  const memberSelection = Object.fromEntries(supportedFields.map(field => [field, true]));
+  const metadataFields = ['friendlyName', 'description']
+    .filter(field => member.metadata?.fields.has(field));
+  if (metadataFields.length > 0) {
+    memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));
+  }
   return {
     descriptor: member,
-    selection: {[member.id]: Object.fromEntries(supportedFields.map(field => [field, true]))}
+    selection: {[member.id]: memberSelection}
   };
 }
 

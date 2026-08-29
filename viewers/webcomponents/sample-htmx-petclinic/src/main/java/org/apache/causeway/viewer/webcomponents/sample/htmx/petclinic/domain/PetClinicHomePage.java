@@ -60,7 +60,9 @@ public class PetClinicHomePage {
     }
 
     @Collection
-    @CollectionLayout(paged = 10)
+    @CollectionLayout(
+            paged = 10,
+            describedAs = "Scheduled visits that have not yet taken place.")
     public List<Visit> getFutureVisits() {
         final LocalDateTime now = clockService.getClock().nowAsLocalDateTime();
         return visitRepository.findByVisitAtAfter(now);
