@@ -58,6 +58,86 @@ test('property renders accessible ready, disabled, hidden and error states', () 
   assert.match(property.innerHTML, /Unreadable/);
 });
 
+test('property presentation attributes override canonical metadata with bounded values', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'firstName';
+  property.setAttribute('label', 'Compatibility name');
+  property.setAttribute('multiline', '3');
+  property.named = 'Given name';
+  property.describedAs = 'The given or first name of this customer';
+  property.multiLine = 5;
+  property.labelPosition = 'top';
+  property.renderComponentState(state({
+    descriptor: {description: 'Legacy field description', value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {
+      hidden: false,
+      disabled: null,
+      datatype: 'String',
+      metadata: {friendlyName: 'First name', description: 'Metadata description', multiLine: 4, labelPosition: 'LEFT'},
+      get: 'Mary'
+    }
+  }));
+
+  assert.equal(property.named, 'Given name');
+  assert.equal(property.describedAs, 'The given or first name of this customer');
+  assert.equal(property.multiLine, 5);
+  assert.equal(property.labelPosition, 'TOP');
+  assert.match(property.innerHTML, /data-label-position="TOP"/);
+  assert.match(property.innerHTML, />Given name<\/span>/);
+  assert.match(property.innerHTML, /causeway-property-description[^>]*>The given or first name of this customer<\/span>/);
+  assert.match(property.innerHTML, /data-rows="5"/);
+  assert.doesNotMatch(property.innerHTML, /Metadata description|Compatibility name/);
+});
+
+test('property metadata supplies descriptions and label positions while NONE suppresses visible presentation', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'emailAddress';
+  const ready = state({
+    descriptor: {description: 'Legacy description', value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {
+      hidden: false,
+      disabled: null,
+      datatype: 'String',
+      metadata: {friendlyName: 'Email address', description: 'Used for appointment reminders.', multiLine: null, labelPosition: 'TOP'},
+      get: 'mary@example.com'
+    }
+  });
+  property.renderComponentState(ready);
+  assert.match(property.innerHTML, /data-label-position="TOP"/);
+  assert.match(property.innerHTML, />Email address<\/span>/);
+  assert.match(property.innerHTML, /causeway-property-description[^>]*>Used for appointment reminders\.<\/span>/);
+  assert.match(property.innerHTML, /aria-describedby=/);
+
+  property.labelPosition = 'NONE';
+  property.renderComponentState(ready);
+  assert.match(property.innerHTML, /data-label-position="NONE"/);
+  assert.match(property.innerHTML, /causeway-visually-hidden">Email address<\/span>/);
+  assert.doesNotMatch(property.innerHTML, /causeway-property-description/);
+  assert.match(property.innerHTML, /aria-label="Email address"/);
+});
+
+test('invalid authored presentation values fall back to metadata and compatibility aliases', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'notes';
+  property.setAttribute('multi-line', 'invalid');
+  property.setAttribute('multiline', '500');
+  property.setAttribute('label-position', 'sideways');
+  property.renderComponentState(state({
+    descriptor: {description: null, value: {typeRef: {kind: 'SCALAR', name: 'String'}}},
+    data: {
+      hidden: false,
+      disabled: null,
+      datatype: 'String',
+      metadata: {friendlyName: 'Notes', description: null, multiLine: 4, labelPosition: 'TOP'},
+      get: 'Details'
+    }
+  }));
+  assert.equal(property.multiLine, 50);
+  assert.equal(property.labelPosition, '');
+  assert.match(property.innerHTML, /data-label-position="TOP"/);
+  assert.match(property.innerHTML, /data-rows="50"/);
+});
+
 test('qualified standard values use a read-only field while native policy preserves the standard renderer', () => {
   const property = new CausewayPropertyElement();
   property.id = 'name';

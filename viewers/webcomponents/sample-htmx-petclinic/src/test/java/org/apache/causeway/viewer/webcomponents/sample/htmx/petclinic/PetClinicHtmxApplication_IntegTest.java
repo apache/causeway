@@ -169,7 +169,10 @@ class PetClinicHtmxApplication_IntegTest {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
-                .contains("<cw-property id=\"name\">\n            <cw-action id=\"updateName\"")
+                .contains("<cw-property id=\"name\" named=\"Full name\">\n            <cw-action id=\"updateName\"")
+                .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
+                .contains("id=\"notes\" editable multi-line=\"5\"")
+                .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
                 .contains("<cw-collection id=\"pets\"")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")

@@ -28,6 +28,7 @@ import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLObjectType;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 
@@ -72,6 +73,8 @@ final class RichMemberMetadata extends Element {
                         Scalars.GraphQLInt))
                 .field(field("multiLine", "Requested multiline row count, or null.",
                         Scalars.GraphQLInt))
+                .field(field("labelPosition", "Canonical label position.",
+                        GraphQLNonNull.nonNull(Scalars.GraphQLString)))
                 .field(field("typicalLength", "Positive typical input length, or null.",
                         Scalars.GraphQLInt))
                 .build();
@@ -107,6 +110,7 @@ final class RichMemberMetadata extends Element {
         values.put("multiLine", includeEditorConstraints
                 ? RichScalarMetadataField.multiLine(feature)
                 : null);
+        values.put("labelPosition", Facets.labelAt(feature).name());
         values.put("typicalLength", includeEditorConstraints
                 ? RichScalarMetadataField.typicalLength(feature)
                 : null);
