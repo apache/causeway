@@ -258,6 +258,12 @@ export class CausewayMenubarElement extends HTMLElementBase {
     this._semanticFocusIntent = null;
     queueMicrotask(() => {
       if (!this.isConnected) return;
+      const activeElement = globalThis.document?.activeElement;
+      if (activeElement
+          && activeElement !== globalThis.document?.body
+          && !this.contains?.(activeElement)) {
+        return;
+      }
       if (toolkitControl?.isConnected) {
         toolkitControl.focus?.({preventScroll: true});
         return;
