@@ -461,6 +461,7 @@ export class CausewayGraphQLClient {
         description: field.description ?? null,
         generatedTypeName: generatedMemberTypeName,
         fields: fieldsByName(supportType),
+        metadata: semanticMemberMetadataDescription(supportType, describedTypes),
         value: semanticValueDescription(semanticKind, supportType, describedTypes),
         window: semanticCollectionWindowDescription(semanticKind, supportType, describedTypes)
       });
@@ -482,6 +483,15 @@ export class CausewayGraphQLClient {
       types: describedTypes
     });
   }
+}
+
+function semanticMemberMetadataDescription(supportType, describedTypes) {
+  const field = supportType?.fields.find(candidate => candidate.name === 'metadata') ?? null;
+  const generatedTypeName = namedType(field?.type);
+  const typeDescription = describedTypes.get(generatedTypeName) ?? null;
+  return field && typeDescription
+    ? Object.freeze({field, generatedTypeName, typeDescription, fields: fieldsByName(typeDescription)})
+    : null;
 }
 
 function semanticCollectionWindowDescription(kind, supportType, describedTypes) {
@@ -572,11 +582,13 @@ function referencedInteractionTypeNames(typeDescription, generatedTypeName, sche
     const objectValue = ['get', 'rows', 'items'].includes(fieldName)
       && ['OBJECT', 'INTERFACE', 'UNION'].includes(kind);
     const objectMetadata = fieldName === '_meta' && kind === 'OBJECT';
+    const memberMetadata = fieldName === 'metadata' && kind === 'OBJECT';
     if (typeName && (schemaNames.isReachableSupportType(generatedTypeName, typeName)
         || kind === 'ENUM' && typeName.startsWith('rich__')
         || choiceValue
         || objectValue
-        || objectMetadata)) {
+        || objectMetadata
+        || memberMetadata)) {
       result.add(typeName);
     }
   };

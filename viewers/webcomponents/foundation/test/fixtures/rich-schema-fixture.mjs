@@ -19,6 +19,7 @@
 
 const OBJECT_TYPE = 'rich__university_dept_Department';
 const META_TYPE = `${OBJECT_TYPE}__gqlv_meta`;
+const MEMBER_METADATA_TYPE = 'RichMemberMetadata';
 const NAME_TYPE = `${OBJECT_TYPE}__name__gqlv_property`;
 const CODE_TYPE = `${OBJECT_TYPE}__code__gqlv_property`;
 const STATUS_TYPE = `${OBJECT_TYPE}__status__gqlv_property`;
@@ -74,6 +75,12 @@ export function createRichSchemaTypes() {
       field('grid', null, scalar('String')),
       field('layout', null, scalar('String')),
       field('cssClass', null, scalar('String'))
+    ])],
+    [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, 'Member metadata', [
+      field('friendlyName', null, scalar('String')),
+      field('description', null, scalar('String')),
+      field('multiLine', null, scalar('Int')),
+      field('labelPosition', null, scalar('String'))
     ])],
     [NAME_TYPE, propertyType(NAME_TYPE)],
     [CODE_TYPE, propertyType(CODE_TYPE)],
@@ -252,8 +259,20 @@ export function departmentObjectData({
       layout: null,
       cssClass: 'department'
     },
-    name: {hidden: false, disabled: nameDisabled, get: name, datatype: 'String'},
-    code: {hidden: codeHidden, disabled: null, get: code, datatype: 'String'},
+    name: {
+      hidden: false,
+      disabled: nameDisabled,
+      metadata: {friendlyName: 'Department name', description: 'The department display name.', multiLine: null, labelPosition: 'LEFT'},
+      get: name,
+      datatype: 'String'
+    },
+    code: {
+      hidden: codeHidden,
+      disabled: null,
+      metadata: {friendlyName: 'Department code', description: null, multiLine: null, labelPosition: 'TOP'},
+      get: code,
+      datatype: 'String'
+    },
     status: {hidden: false, disabled: null, get: 'ACTIVE', datatype: 'DepartmentStatus'},
     notes: {hidden: false, disabled: null, get: null, datatype: 'String'},
     chair: {
@@ -409,6 +428,7 @@ export function waitFor(predicate, {timeout = 2000, interval = 5} = {}) {
 
 function propertyType(name, getType = scalar('String')) {
   return objectType(name, null, [
+    field('metadata', null, named(MEMBER_METADATA_TYPE)),
     field('hidden', null, scalar('Boolean')),
     field('disabled', null, scalar('String')),
     field('get', null, getType),

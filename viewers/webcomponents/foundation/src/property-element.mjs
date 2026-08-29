@@ -48,7 +48,7 @@ let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'label', 'editable', 'multiline'];
+    return ['id', 'named', 'described-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline'];
   }
 
   constructor() {
@@ -161,15 +161,44 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   get multiLine() {
-    const rows = Number(this.getAttribute('multiline'));
-    return Number.isSafeInteger(rows) && rows > 1 ? Math.min(rows, 50) : 0;
+    return normalizedMultiLine(this.getAttribute('multi-line'))
+      || normalizedMultiLine(this.getAttribute('multiline'));
   }
 
   set multiLine(value) {
     if (Number.isSafeInteger(value) && value > 1) {
-      this.setAttribute('multiline', String(Math.min(value, 50)));
+      this.setAttribute('multi-line', String(Math.min(value, 50)));
     } else {
-      this.removeAttribute('multiline');
+      this.removeAttribute('multi-line');
+    }
+  }
+
+  get named() {
+    return this.getAttribute('named');
+  }
+
+  set named(value) {
+    setOptionalAttribute(this, 'named', value);
+  }
+
+  get describedAs() {
+    return this.getAttribute('described-as');
+  }
+
+  set describedAs(value) {
+    setOptionalAttribute(this, 'described-as', value);
+  }
+
+  get labelPosition() {
+    return normalizeLabelPosition(this.getAttribute('label-position'));
+  }
+
+  set labelPosition(value) {
+    const normalized = normalizeLabelPosition(value);
+    if (normalized) {
+      this.setAttribute('label-position', normalized);
+    } else {
+      this.removeAttribute('label-position');
     }
   }
 
@@ -458,11 +487,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const presentation = this.#presentation(state);
     if (presentation.loading) {
-      renderMemberPrimary(this, `<div class="causeway-property" aria-busy="true"><span id="${this.labelId}" class="${presentation.labelClass}"${presentation.labelAttributes}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}${presentation.disabledMarkup}<span role="status">Loading value…</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}" aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field" role="status">Loading value…</span></div>`);
       return;
     }
     if (presentation.error) {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-error" role="alert"><span id="${this.labelId}" class="${presentation.labelClass}"${presentation.labelAttributes}>${escapeHtml(presentation.label)}</span>${presentation.descriptionMarkup}${presentation.disabledMarkup}<span>${escapeHtml(errorMessage(state))}</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}" role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field">${escapeHtml(errorMessage(state))}</span></div>`);
       return;
     }
     const propertyState = state.data ?? {};
@@ -485,12 +514,14 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const editMarkup = this.#canOfferEdit(state)
       ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
       : '';
-    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
-  <span id="${this.labelId}" class="${presentation.labelClass}"${presentation.labelAttributes}>${escapeHtml(presentation.label)}</span>
+    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" data-label-position="${presentation.labelPosition}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
+  ${presentation.labelMarkup}
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
-  <output class="causeway-property-value${stringValueClass}" aria-labelledby="${this.labelId}"${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${valueMarkup}</output>
-  ${editMarkup}
+  <div class="causeway-property-field">
+    <output class="causeway-property-value${stringValueClass}"${presentation.labelPosition === 'NONE' ? ` aria-label="${escapeHtml(presentation.label)}"` : ` aria-labelledby="${this.labelId}"`}${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${valueMarkup}</output>
+    ${editMarkup}
+  </div>
 </div>`);
     this.#restoreSavedEditFocus(state);
   }
@@ -523,7 +554,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       choices: boundedChoice ? [{label: String(value), value: String(value)}] : [],
       autoComplete: false,
       required: true,
-      multiLine: this.multiLine,
+      multiLine: this.#effectiveMultiLine(this.componentState),
       inputId: `${this.inputId}-view`,
       labelId: this.labelId,
       descriptionId: presentation.describedBy,
@@ -596,9 +627,18 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   }
 
   #presentation(state) {
-    const label = this.getAttribute('label') || humanize(this.id);
-    const candidateDescription = state.descriptor?.description || '';
-    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
+    const metadata = state.data?.metadata ?? {};
+    const label = this.hasAttribute('named')
+      ? this.getAttribute('named')
+      : this.getAttribute('label') ?? metadata.friendlyName ?? humanize(this.id);
+    const candidateDescription = this.hasAttribute('described-as')
+      ? this.getAttribute('described-as')
+      : metadata.description ?? state.descriptor?.description ?? '';
+    const labelPosition = normalizeLabelPosition(this.getAttribute('label-position'))
+      || normalizeLabelPosition(metadata.labelPosition)
+      || 'LEFT';
+    const description = labelPosition === 'NONE'
+      || candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
       ? ''
       : candidateDescription;
     const descriptionMarkup = description
@@ -617,10 +657,15 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const labelAttributes = `${description ? ` title="${escapeHtml(description)}"` : ''}${boundedDisabledReason
       ? ` tabindex="0" data-tooltip="${escapeHtml(boundedDisabledReason)}"${labelDescribedBy ? ` aria-describedby="${labelDescribedBy}"` : ''}`
       : ''}`;
+    const labelClass = `causeway-property-label${boundedDisabledReason ? ' causeway-property-disabled-tooltip' : ''}`;
     return {
       label,
-      labelClass: `causeway-property-label${boundedDisabledReason ? ' causeway-property-disabled-tooltip' : ''}`,
+      labelPosition,
+      labelClass,
       labelAttributes,
+      labelMarkup: labelPosition === 'NONE'
+        ? `<span id="${this.labelId}" class="causeway-visually-hidden">${escapeHtml(label)}</span>`
+        : `<span id="${this.labelId}" class="${labelClass}"${labelAttributes}>${escapeHtml(label)}</span>`,
       description,
       descriptionMarkup,
       disabledReason: boundedDisabledReason,
@@ -629,6 +674,12 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       loading: ['idle', 'schema-loading', 'object-loading'].includes(state.status),
       error: ['terminal-error', 'unsupported', 'partial-error'].includes(state.status)
     };
+  }
+
+  #effectiveMultiLine(state) {
+    return normalizedMultiLine(this.getAttribute('multi-line'))
+      || normalizedMultiLine(this.getAttribute('multiline'))
+      || normalizedMultiLine(state?.data?.metadata?.multiLine);
   }
 
   #editorContext(interaction = this.interactionState) {
@@ -647,7 +698,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       inputType: interaction.capabilities?.inputType,
       semanticType: this.componentState?.data?.datatype ?? interaction.capabilities?.semanticType ?? null,
       required: interaction.capabilities?.inputType?.kind === 'NON_NULL',
-      multiLine: this.multiLine,
+      multiLine: this.#effectiveMultiLine(this.componentState),
       inputId: this.inputId,
       labelId: this.labelId,
       descriptionId: presentation.description ? this.descriptionId : '',
@@ -688,9 +739,10 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.setAttribute('data-editor', renderedEditor.editorId);
     this.renderingInteraction = true;
     try {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" aria-busy="${busy}">
-  <span id="${this.labelId}" class="${presentation.labelClass}"${presentation.labelAttributes}>${escapeHtml(presentation.label)}</span>
+      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}" aria-busy="${busy}">
+  ${presentation.labelMarkup}
   ${presentation.descriptionMarkup}
+  <div class="causeway-property-field">
   <div class="causeway-property-editor">${renderedEditor.html}</div>
   ${errorMarkup}
   <div class="causeway-property-editor-actions">
@@ -698,6 +750,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     <button type="button" class="causeway-property-editor-action causeway-property-editor-cancel" data-causeway-action="cancel" aria-label="${escapeHtml(cancelLabel)}" title="${escapeHtml(cancelLabel)}"${this.#testId('cancel')} ${interaction.status === InteractionStatus.SAVING ? 'disabled' : ''}><svg class="causeway-property-editor-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg></button>
   </div>
   ${statusMarkup}
+  </div>
 </div>`);
     } finally {
       this.renderingInteraction = false;
@@ -776,6 +829,24 @@ function interactionStatusLabel(status) {
     [InteractionStatus.FAILED]: 'Correction required',
     [InteractionStatus.UNSUPPORTED]: 'Editing unsupported'
   }[status] ?? status;
+}
+
+function normalizedMultiLine(value) {
+  const rows = Number(value);
+  return Number.isSafeInteger(rows) && rows > 1 ? Math.min(rows, 50) : 0;
+}
+
+function normalizeLabelPosition(value) {
+  const normalized = String(value ?? '').trim().toUpperCase();
+  return ['LEFT', 'TOP', 'NONE'].includes(normalized) ? normalized : '';
+}
+
+function setOptionalAttribute(element, name, value) {
+  if (value == null) {
+    element.removeAttribute(name);
+  } else {
+    element.setAttribute(name, String(value));
+  }
 }
 
 function humanize(value) {

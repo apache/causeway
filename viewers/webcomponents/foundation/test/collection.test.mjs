@@ -48,8 +48,20 @@ const {
 function row({id = 'staff-1', name = 'Dr Ada', code = 'ADA', version = '3'} = {}) {
   return {
     _meta: {id, logicalTypeName: STAFF_LOGICAL_TYPE, ...(version == null ? {} : {version}), title: name},
-    name: {hidden: false, disabled: null, datatype: 'String', get: name},
-    code: {hidden: false, disabled: null, datatype: 'String', get: code}
+    name: {
+      hidden: false,
+      disabled: null,
+      datatype: 'String',
+      metadata: {friendlyName: 'Staff name', description: null, multiLine: null, labelPosition: 'LEFT'},
+      get: name
+    },
+    code: {
+      hidden: false,
+      disabled: null,
+      datatype: 'String',
+      metadata: {friendlyName: 'Staff code', description: null, multiLine: null, labelPosition: 'LEFT'},
+      get: code
+    }
   };
 }
 

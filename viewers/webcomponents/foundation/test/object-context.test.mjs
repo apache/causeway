@@ -23,6 +23,7 @@ import {CausewayGraphQLClient} from '../src/graphql-client.mjs';
 import {ObjectContextController, StructuralResourceError} from '../src/object-context-controller.mjs';
 import {
   createRichSchemaFixtureExecutor,
+  createRichSchemaTypes,
   createVersionlessRichSchemaTypes,
   DEPARTMENT_LOGICAL_TYPE,
   DEPARTMENT_OBJECT_FIELD,
@@ -44,10 +45,36 @@ test('coalesces header and property requirements into one initial object read', 
   assert.equal(executor.readCalls.length, 1);
   assert.match(executor.readCalls[0].document, /_meta \{/);
   assert.match(executor.readCalls[0].document, /name \{/);
+  assert.match(executor.readCalls[0].document, /metadata\s*\{/);
+  for (const field of ['friendlyName', 'description', 'multiLine', 'labelPosition']) {
+    assert.match(executor.readCalls[0].document, new RegExp(`\\b${field}\\b`));
+  }
   assert.match(executor.readCalls[0].document, /code \{/);
   assert.equal(headerStates.at(-1).data.title, 'Classics Department');
   assert.equal(nameStates.at(-1).data.get, 'Classics');
+  assert.deepEqual(nameStates.at(-1).data.metadata, {
+    friendlyName: 'Department name',
+    description: 'The department display name.',
+    multiLine: null,
+    labelPosition: 'LEFT'
+  });
   assert.equal(codeStates.at(-1).data.get, 'CLA');
+});
+
+test('property reads remain compatible when member metadata is unavailable', async () => {
+  const types = createRichSchemaTypes();
+  for (const [name, type] of types) {
+    if (name.endsWith('__gqlv_property')) {
+      types.set(name, {...type, fields: type.fields.filter(field => field.name !== 'metadata')});
+    }
+  }
+  const executor = createRichSchemaFixtureExecutor({types});
+  const context = createContext(executor);
+  let propertyState;
+  context.registerRequirement({kind: 'property', member: 'name'}, state => { propertyState = state; });
+  await waitFor(() => context.state.status === 'ready');
+  assert.doesNotMatch(executor.readCalls[0].document, /metadata\s*\{/);
+  assert.equal(propertyState.data.get, 'Classics');
 });
 
 test('coalesces layout metadata with semantic member requirements', async () => {

@@ -73,6 +73,10 @@ export const CausewayHostClass = Object.freeze({
 export const CausewayAttribute = Object.freeze({
   MEMBER: 'member',
   LABEL: 'label',
+  NAMED: 'named',
+  DESCRIBED_AS: 'described-as',
+  MULTI_LINE: 'multi-line',
+  LABEL_POSITION: 'label-position',
   ACTIVE: 'active',
   LOGICAL_TYPE: 'logical-type',
   OBJECT_ID: 'object-id',

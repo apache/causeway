@@ -278,6 +278,59 @@ cw-field-editor[data-widget-state="fallback"]::after {
   margin-block: 1rem;
   padding: 0.75rem;
 }
+.causeway-property {
+  align-items: start;
+  display: grid;
+  gap: var(--causeway-property-row-gap, 0.25rem) var(--causeway-property-column-gap, 1rem);
+  grid-template-columns: var(--causeway-property-label-column, minmax(8rem, 1fr)) minmax(0, 2fr);
+}
+.causeway-property[data-label-position="LEFT"] .causeway-property-label {
+  grid-column: 1;
+  grid-row: 1;
+}
+.causeway-property[data-label-position="LEFT"] .causeway-property-description {
+  grid-column: 1;
+  grid-row: 2;
+}
+.causeway-property[data-label-position="LEFT"] .causeway-property-field {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+.causeway-property[data-label-position="TOP"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.causeway-property[data-label-position="TOP"] :is(.causeway-property-label, .causeway-property-description, .causeway-property-field),
+.causeway-property[data-label-position="NONE"] .causeway-property-field {
+  grid-column: 1;
+}
+.causeway-property[data-label-position="NONE"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.causeway-property-field {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-property-control-gap, 0.5rem);
+  min-inline-size: 0;
+}
+.causeway-property-field > .causeway-property-value {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+.causeway-property-field > .causeway-property-edit {
+  flex: 0 0 auto;
+}
+.causeway-property-editing .causeway-property-field,
+.causeway-property-editor {
+  align-items: stretch;
+  display: grid;
+  inline-size: 100%;
+}
+.causeway-property-description {
+  color: var(--causeway-muted, GrayText);
+  font-size: var(--causeway-property-description-font-size, 0.82em);
+  line-height: 1.35;
+}
 .causeway-property-label,
 .causeway-collection-label {
   font-weight: 600;
@@ -526,6 +579,15 @@ cw-menubar-control vaadin-menu-bar-button[focused] {
 @media (min-width: 48.001rem) {
   .causeway-menubar[data-causeway-bar-content][hidden] {
     display: flex;
+  }
+}
+@media (max-width: 40rem) {
+  .causeway-property[data-label-position="LEFT"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .causeway-property[data-label-position="LEFT"] :is(.causeway-property-label, .causeway-property-description, .causeway-property-field) {
+    grid-column: 1;
+    grid-row: auto;
   }
 }
 @media (max-width: 48rem) {

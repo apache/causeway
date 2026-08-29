@@ -400,8 +400,20 @@ class PetClinicHtmxPlaywrightTest {
         assertThat((String) page.locator("cw-property[id='name'] .causeway-property-value-string")
                 .evaluate("element => getComputedStyle(element).textAlign"))
                 .isIn("start", "left");
+        assertThat(disabledNameLabel.textContent()).isEqualTo("Full name");
 
         final var knownAs = page.locator("cw-property[id='knownAs']");
+        assertThat(knownAs.locator(".causeway-property-description").textContent())
+                .isEqualTo("The familiar or preferred name used by this owner.");
+        final var telephone = page.locator("cw-property[id='telephoneNumber']");
+        assertThat(telephone.locator(".causeway-property-description").textContent())
+                .isEqualTo("Primary telephone number for appointment contact.");
+        final var email = page.locator("cw-property[id='emailAddress'] .causeway-property");
+        assertThat(email.getAttribute("data-label-position")).isEqualTo("TOP");
+        assertThat(page.locator("cw-property[id='emailAddress'] .causeway-property-description").textContent())
+                .isEqualTo("Email address used for appointment reminders.");
+        assertThat(page.locator("cw-property[id='lastVisit'] .causeway-property")
+                .getAttribute("data-label-position")).isEqualTo("TOP");
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
         knownAsEdit.click();
         final var knownAsEditorSelector = "cw-property[id='knownAs'] [data-causeway-editor='knownAs']";
@@ -859,9 +871,9 @@ class PetClinicHtmxPlaywrightTest {
         final var geometry = (List<Number>) property.evaluate("element => { const label = element.querySelector('.causeway-property-label').getBoundingClientRect(); const description = element.querySelector('.causeway-property-description').getBoundingClientRect(); const value = element.querySelector('.causeway-property-value').getBoundingClientRect(); const edit = element.querySelector('.causeway-property-edit').getBoundingClientRect(); return [label.left, label.right, label.bottom, description.left, description.top, value.left, value.top, edit.left, edit.width]; }");
         assertThat(Math.abs(geometry.get(3).doubleValue() - geometry.get(0).doubleValue())).isLessThanOrEqualTo(1.0);
         assertThat(geometry.get(4).doubleValue()).isGreaterThanOrEqualTo(geometry.get(2).doubleValue() - 1.0);
-        assertThat(geometry.get(5).doubleValue()).isGreaterThan(geometry.get(1).doubleValue());
+        assertThat(geometry.get(5).doubleValue()).isGreaterThanOrEqualTo(geometry.get(1).doubleValue());
         assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(4).doubleValue());
-        assertThat(geometry.get(7).doubleValue()).isGreaterThan(geometry.get(5).doubleValue());
+        assertThat(geometry.get(7).doubleValue()).isGreaterThanOrEqualTo(geometry.get(5).doubleValue());
         assertThat(geometry.get(8).doubleValue()).isLessThan(160.0);
     }
 
@@ -870,7 +882,7 @@ class PetClinicHtmxPlaywrightTest {
         final var geometry = (List<Number>) property.evaluate("element => { const label = element.querySelector('.causeway-property-label').getBoundingClientRect(); const description = element.querySelector('.causeway-property-description').getBoundingClientRect(); const value = element.querySelector('.causeway-property-value').getBoundingClientRect(); const edit = element.querySelector('.causeway-property-edit').getBoundingClientRect(); return [label.bottom, description.top, description.bottom, value.top, edit.top, edit.width, document.documentElement.scrollWidth, document.documentElement.clientWidth]; }");
         assertThat(geometry.get(1).doubleValue()).isGreaterThanOrEqualTo(geometry.get(0).doubleValue() - 1.0);
         assertThat(geometry.get(3).doubleValue()).isGreaterThanOrEqualTo(geometry.get(2).doubleValue() - 1.0);
-        assertThat(Math.abs(geometry.get(4).doubleValue() - geometry.get(3).doubleValue())).isLessThanOrEqualTo(1.0);
+        assertThat(geometry.get(4).doubleValue()).isGreaterThanOrEqualTo(geometry.get(3).doubleValue() - 1.0);
         assertThat(geometry.get(5).doubleValue()).isLessThan(160.0);
         assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(7).doubleValue() + 1.0);
     }

@@ -25,10 +25,11 @@
       <section class="petclinic-card" aria-labelledby="petclinic-owner-identity-heading">
         <h2 id="petclinic-owner-identity-heading">Identity</h2>
         <div class="petclinic-field-list">
-          <cw-property id="name">
+          <cw-property id="name" named="Full name">
             <cw-action id="updateName"></cw-action>
           </cw-property>
-          <cw-property id="knownAs" editable></cw-property>
+          <cw-property id="knownAs" editable
+                       described-as="The familiar or preferred name used by this owner."></cw-property>
         </div>
       </section>
 
@@ -43,8 +44,8 @@
       <section class="petclinic-card" aria-labelledby="petclinic-owner-details-heading">
         <h2 id="petclinic-owner-details-heading">Details</h2>
         <div class="petclinic-field-list">
-          <cw-property id="notes" editable multiline="5"></cw-property>
-          <cw-property id="lastVisit" editable></cw-property>
+          <cw-property id="notes" editable multi-line="5"></cw-property>
+          <cw-property id="lastVisit" editable label-position="TOP"></cw-property>
           <cw-property id="daysSinceLastVisit"></cw-property>
         </div>
       </section>

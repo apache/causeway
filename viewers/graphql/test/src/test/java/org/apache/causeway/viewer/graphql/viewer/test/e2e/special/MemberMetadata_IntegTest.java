@@ -56,6 +56,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
                         "pattern",
                         "patternFlags",
                         "multiLine",
+                        "labelPosition",
                         "typicalLength")
                 .doesNotContain("members", "grid", "menu", "position", "css", "icon", "required");
     }
@@ -111,6 +112,7 @@ public class MemberMetadata_IntegTest extends Abstract_IntegTest {
         assertThat(property.get("pattern").stringValue()).isEqualTo("[A-Za-z .!'-]+");
         assertThat(property.get("patternFlags").intValue()).isEqualTo(2);
         assertThat(property.get("multiLine").intValue()).isEqualTo(2);
+        assertThat(property.get("labelPosition").stringValue()).isEqualTo("TOP");
         assertThat(property.get("typicalLength").intValue()).isEqualTo(24);
 
         assertThat(staff.at("/photo/get/fileAccept").stringValue()).isEqualTo("application/pdf");

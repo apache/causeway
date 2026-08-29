@@ -88,6 +88,10 @@
   min-width: 0;
 }
 
+.petclinic-field-list {
+  --causeway-property-label-column: minmax(7.5rem, 2fr);
+}
+
 .petclinic-card {
   display: grid;
   gap: var(--causeway-space-3);

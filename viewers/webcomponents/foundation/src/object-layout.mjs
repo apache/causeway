@@ -355,20 +355,43 @@ function memberNode(member, label = '', presentation = {}) {
 }
 
 function memberPresentation(node, diagnostics) {
-  if (elementKind(node) !== 'property' || !node.attributes.has('multiLine')) {
+  if (elementKind(node) !== 'property') {
     return {};
+  }
+  const presentation = {};
+  const named = labelFrom(node);
+  const describedAs = descriptionFrom(node);
+  if (named) presentation.named = named;
+  if (describedAs) presentation.describedAs = describedAs;
+  if (node.attributes.has('labelPosition')) {
+    const labelPosition = String(node.attributes.get('labelPosition')).toUpperCase();
+    if (['LEFT', 'TOP', 'NONE'].includes(labelPosition)) {
+      presentation.labelPosition = labelPosition;
+    } else {
+      diagnostics.add('INVALID_LABEL_POSITION', `Property labelPosition '${node.attributes.get('labelPosition')}' is unsupported and was ignored.`);
+    }
+  }
+  if (!node.attributes.has('multiLine')) {
+    return presentation;
   }
   const candidate = node.attributes.get('multiLine');
   const rows = Number(candidate);
   if (!Number.isSafeInteger(rows) || rows <= 1) {
     diagnostics.add('INVALID_MULTI_LINE', `Property multiLine '${candidate}' must be an integer greater than one and was ignored.`);
-    return {};
+    return presentation;
   }
   if (rows > MAX_MULTI_LINE_ROWS) {
     diagnostics.add('MULTI_LINE_CAPPED', `Property multiLine '${candidate}' exceeds ${MAX_MULTI_LINE_ROWS} rows and was capped.`);
-    return {multiLine: MAX_MULTI_LINE_ROWS};
+    presentation.multiLine = MAX_MULTI_LINE_ROWS;
+    return presentation;
   }
-  return {multiLine: rows};
+  presentation.multiLine = rows;
+  return presentation;
+}
+
+function descriptionFrom(node) {
+  const describedAs = node.children.find(child => elementKind(child) === 'describedAs');
+  return describedAs ? textContent(describedAs).trim() : '';
 }
 
 function rowNode(children) {
@@ -425,8 +448,11 @@ function renderNode(node, state) {
     const label = ` label="${escapeHtml(node.label)}"`;
     let memberMarkup;
     if (node.memberKind === 'property') {
-      const multiLine = node.presentation?.multiLine ? ` multiline="${node.presentation.multiLine}"` : '';
-      memberMarkup = `<cw-property data-causeway-region="property" id="${escapeHtml(node.memberId)}"${label}${multiLine}${state.editable ? ' editable' : ''}></cw-property>`;
+      const named = node.presentation?.named ? ` named="${escapeHtml(node.presentation.named)}"` : '';
+      const describedAs = node.presentation?.describedAs ? ` described-as="${escapeHtml(node.presentation.describedAs)}"` : '';
+      const multiLine = node.presentation?.multiLine ? ` multi-line="${node.presentation.multiLine}"` : '';
+      const labelPosition = node.presentation?.labelPosition ? ` label-position="${node.presentation.labelPosition}"` : '';
+      memberMarkup = `<cw-property data-causeway-region="property" id="${escapeHtml(node.memberId)}"${named}${describedAs}${multiLine}${labelPosition}${state.editable ? ' editable' : ''}></cw-property>`;
     } else if (node.memberKind === 'action') {
       memberMarkup = `<cw-action data-causeway-region="action" id="${escapeHtml(node.memberId)}"${label}></cw-action>`;
     } else {

@@ -132,11 +132,16 @@ test('creates a deterministic semantic fallback modeled on the canonical Causewa
 test('preserves associated actions and bounded multiline hints in semantic member composition', () => {
   const members = objectLayoutMembers();
   members.set('addStaff', {id: 'addStaff', kind: 'action'});
-  const xml = `<bs:grid ${GRID_NAMESPACES}><bs:row><bs:col unreferencedActions="true"><cpt:property id="notes" multiLine="5"><cpt:action id="changeName"/></cpt:property><cpt:collection id="staffMembers"><cpt:action id="addStaff"/></cpt:collection></bs:col></bs:row></bs:grid>`;
+  const xml = `<bs:grid ${GRID_NAMESPACES}><bs:row><bs:col unreferencedActions="true"><cpt:property id="notes" multiLine="5" labelPosition="TOP"><cpt:named>Case notes</cpt:named><cpt:describedAs>Extended notes.</cpt:describedAs><cpt:action id="changeName"/></cpt:property><cpt:collection id="staffMembers"><cpt:action id="addStaff"/></cpt:collection></bs:col></bs:row></bs:grid>`;
   const result = parseCausewayGridXml(xml, {members});
   const notes = semanticNodes(result.plan).find(node => node.memberId === 'notes');
   const staff = semanticNodes(result.plan).find(node => node.memberId === 'staffMembers');
-  assert.equal(notes.presentation.multiLine, 5);
+  assert.deepEqual(notes.presentation, {
+    named: 'Case notes',
+    describedAs: 'Extended notes.',
+    labelPosition: 'TOP',
+    multiLine: 5
+  });
   assert.deepEqual(notes.children.map(node => node.memberId), ['changeName']);
   assert.deepEqual(staff.children.map(node => node.memberId), ['addStaff']);
   assert.equal(memberIds(result.plan).filter(id => id === 'changeName').length, 1);
@@ -144,7 +149,7 @@ test('preserves associated actions and bounded multiline hints in semantic membe
 
   const html = renderObjectLayoutPlan(result.plan, {editable: true});
   assert.match(html, /data-causeway-associated-member="notes"/);
-  assert.match(html, /id="notes"[^>]*multiline="5"/);
+  assert.match(html, /id="notes"[^>]*named="Case notes"[^>]*described-as="Extended notes\."[^>]*multi-line="5"[^>]*label-position="TOP"/);
   assert.match(html, /class="causeway-object-associated-actions"/);
   assert.match(html, /data-causeway-associated-member="staffMembers"/);
 });
@@ -183,7 +188,7 @@ test('renders escaped light-DOM semantic children, accessible tabs, and editable
   assert.match(html, /role="tablist"/);
   assert.match(html, /role="tab"/);
   assert.match(html, /role="tabpanel"/);
-  assert.match(html, /<cw-property[^>]*id="unsafe"[^>]*label="&lt;Unsafe&gt;"[^>]* editable/);
+  assert.match(html, /<cw-property[^>]*id="unsafe"[^>]*named="&lt;Unsafe&gt;"[^>]* editable/);
   assert.doesNotMatch(html, /<Unsafe>/);
 });
 

@@ -45,6 +45,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -86,12 +87,15 @@ public class PetOwner implements Comparable<PetOwner> {
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Column(length = 40)
-    @PropertyLayout(fieldSetId = "contact", sequence = "1")
+    @PropertyLayout(fieldSetId = "contact", sequence = "1",
+            describedAs = "Primary telephone number for appointment contact.")
     private String telephoneNumber;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Column(length = 120)
-    @PropertyLayout(fieldSetId = "contact", sequence = "2")
+    @PropertyLayout(fieldSetId = "contact", sequence = "2",
+            describedAs = "Email address used for appointment reminders.",
+            labelPosition = LabelPosition.TOP)
     private String emailAddress;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
