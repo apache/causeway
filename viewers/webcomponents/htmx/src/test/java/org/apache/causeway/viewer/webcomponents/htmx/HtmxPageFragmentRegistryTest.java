@@ -19,6 +19,8 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 
@@ -53,6 +55,30 @@ class HtmxPageFragmentRegistryTest {
         assertThat(registry.find("petclinic.PetOwner").orElseThrow()
                 .render(new HtmxObjectRoute("petclinic.PetOwner", "opaque-id")))
                 .isEqualTo("<p>{{objectId}}</p>");
+    }
+
+    @Test
+    void reloadContentProviderIsRequestLocalWhileRegistryIdentityRemainsImmutable() {
+        final var content = new AtomicReference<>("<p>first</p>");
+        final var reads = new AtomicInteger();
+        final var page = HtmxPageDefinition.reloadingResource(
+                "petclinic.PetOwner",
+                "resource:petclinic.PetOwner.html",
+                () -> {
+                    reads.incrementAndGet();
+                    return content.get();
+                });
+        final var registry = new HtmxPageFragmentRegistry(List.of(), List.of(page));
+
+        assertThat(registry.find("petclinic.PetOwner").orElseThrow()
+                .render(new HtmxObjectRoute("petclinic.PetOwner", "1")))
+                .isEqualTo("<p>first</p>");
+        content.set("<p>second</p>");
+        assertThat(registry.find("petclinic.PetOwner").orElseThrow()
+                .render(new HtmxObjectRoute("petclinic.PetOwner", "2")))
+                .isEqualTo("<p>second</p>");
+        assertThat(reads).hasValue(2);
+        assertThat(registry.find("petclinic.AddedAfterStartup")).isEmpty();
     }
 
     @Test

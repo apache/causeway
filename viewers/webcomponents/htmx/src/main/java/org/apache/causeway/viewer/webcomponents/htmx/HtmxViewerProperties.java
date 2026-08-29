@@ -23,6 +23,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "causeway.viewer.webcomponents.htmx")
 public class HtmxViewerProperties {
 
+    public enum ResourcePageMode {
+        CACHED,
+        RELOAD
+    }
+
     public enum ComponentToolkit {
         VAADIN("vaadin"),
         NATIVE("native");
@@ -65,6 +70,7 @@ public class HtmxViewerProperties {
     private String language = "en";
     private String wicketComparisonPath;
     private String applicationStylesheet;
+    private ResourcePageMode resourcePageMode = ResourcePageMode.CACHED;
     private ComponentToolkit componentToolkit = ComponentToolkit.VAADIN;
     private boolean componentToolkitConfigured;
     private EditorToolkit editorToolkit = EditorToolkit.VAADIN;
@@ -122,6 +128,17 @@ public class HtmxViewerProperties {
 
     public void setApplicationStylesheet(final String applicationStylesheet) {
         this.applicationStylesheet = applicationStylesheet;
+    }
+
+    public ResourcePageMode getResourcePageMode() {
+        return resourcePageMode;
+    }
+
+    public void setResourcePageMode(final ResourcePageMode resourcePageMode) {
+        if (resourcePageMode == null) {
+            throw new IllegalArgumentException("Resource page mode must be cached or reload.");
+        }
+        this.resourcePageMode = resourcePageMode;
     }
 
     public ComponentToolkit getComponentToolkit() {

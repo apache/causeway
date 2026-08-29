@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.Optional;
 import java.util.Set;
 
@@ -308,6 +309,31 @@ class HtmxViewerControllerTest {
                 .contains("data-resource-page")
                 .containsOnlyOnce("<cw-object-context")
                 .containsOnlyOnce("<cw-interaction-controller");
+    }
+
+    @Test
+    void controllerResponsesUseCurrentReloadContentAndStableCachedContent() {
+        final var current = new AtomicReference<>("<article data-version=\"initial\"></article>");
+        final var reloading = HtmxPageDefinition.reloadingResource(
+                "petclinic.Reload",
+                "resource:petclinic.Reload.html",
+                current::get);
+        final var cached = HtmxPageDefinition.resource(
+                "petclinic.Cached",
+                "resource:petclinic.Cached.html",
+                current.get());
+        final var controller = controller(List.of(), List.of(reloading, cached));
+
+        current.set("<article data-version=\"current\"></article>");
+
+        assertThat(controller.route(request(
+                "/htmx/object/petclinic.Reload/1", "", true)).getBody())
+                .contains("data-version=\"current\"")
+                .doesNotContain("data-version=\"initial\"");
+        assertThat(controller.route(request(
+                "/htmx/object/petclinic.Cached/1", "", true)).getBody())
+                .contains("data-version=\"initial\"")
+                .doesNotContain("data-version=\"current\"");
     }
 
     @Test

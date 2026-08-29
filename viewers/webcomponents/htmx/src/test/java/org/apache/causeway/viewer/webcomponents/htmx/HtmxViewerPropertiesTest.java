@@ -19,11 +19,32 @@
 package org.apache.causeway.viewer.webcomponents.htmx;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HtmxViewerPropertiesTest {
+
+    @Test
+    void resourcePagesDefaultToCachedAndBindOnlyKnownModes() {
+        final var defaults = new HtmxViewerProperties();
+        assertThat(defaults.getResourcePageMode())
+                .isEqualTo(HtmxViewerProperties.ResourcePageMode.CACHED);
+
+        final var reload = bindResourcePageMode("reload");
+        assertThat(reload.getResourcePageMode())
+                .isEqualTo(HtmxViewerProperties.ResourcePageMode.RELOAD);
+
+        assertThatThrownBy(() -> bindResourcePageMode("automatic"))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("resource-page-mode");
+        assertThatThrownBy(() -> defaults.setResourcePageMode(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("cached or reload");
+    }
 
     @Test
     void defaultsToEveryQualifiedVaadinAdapter() {
@@ -182,5 +203,13 @@ class HtmxViewerPropertiesTest {
                 .hasMessageContaining("basic, numeric, and local-temporal");
         assertThatThrownBy(() -> properties.setVaadinFieldFamilies("basic,basic"))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static HtmxViewerProperties bindResourcePageMode(final String value) {
+        final var environment = new MockEnvironment().withProperty(
+                "causeway.viewer.webcomponents.htmx.resource-page-mode",
+                value);
+        return Binder.get(environment)
+                .bindOrCreate("causeway.viewer.webcomponents.htmx", Bindable.of(HtmxViewerProperties.class));
     }
 }

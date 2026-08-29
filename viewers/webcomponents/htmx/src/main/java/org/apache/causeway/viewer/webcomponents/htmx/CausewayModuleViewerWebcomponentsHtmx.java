@@ -39,8 +39,11 @@ public class CausewayModuleViewerWebcomponentsHtmx {
     @Bean
     HtmxPageFragmentRegistry htmxPageFragmentRegistry(
             final List<HtmxPageFragmentFactory> factories,
-            final ApplicationContext applicationContext) {
-        final var resourcePages = new HtmxClasspathPageLoader(applicationContext).load();
+            final ApplicationContext applicationContext,
+            final HtmxViewerProperties properties) {
+        final var resourcePages = new HtmxClasspathPageLoader(
+                applicationContext,
+                properties.getResourcePageMode()).load();
         return new HtmxPageFragmentRegistry(factories, resourcePages);
     }
 
