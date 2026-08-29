@@ -352,10 +352,10 @@ test('editable properties support prepare, validation, cancel and authoritative 
     data: {hidden: false, disabled: 'Locked by policy', get: 'Classics'}, errors: [], generation: 1
   });
   assert.doesNotMatch(property.innerHTML, /property-name-edit/);
-  assert.match(property.innerHTML, /class="causeway-property-label causeway-property-disabled-tooltip"/);
-  assert.match(property.innerHTML, /title="Owner&#39;s full name"/);
+  assert.match(property.innerHTML, /class="causeway-property-label causeway-member-tooltip causeway-property-disabled-tooltip"/);
+  assert.doesNotMatch(property.innerHTML, /title="Owner&#39;s full name"/);
   assert.match(property.innerHTML, /tabindex="0"/);
-  assert.match(property.innerHTML, /data-tooltip="Locked by policy"/);
+  assert.match(property.innerHTML, /data-tooltip="Owner&#39;s full name\s+Locked by policy"/);
   assert.match(property.innerHTML, /aria-describedby="causeway-property-description-[^"]+ causeway-property-reason-[^"]+"/);
   assert.match(property.innerHTML, /causeway-visually-hidden">Locked by policy/);
   assert.doesNotMatch(property.innerHTML, /causeway-property-disabled-indicator|&#9432;/);
@@ -376,6 +376,12 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.match(property.innerHTML, /causeway-property-value-string/);
   assert.doesNotMatch(property.innerHTML, /causeway-property-disabled-tooltip|data-tooltip="Locked by policy"|tabindex="0"/);
   assert.match(property.innerHTML, /class="causeway-property-edit"[^>]+data-causeway-action="edit"/);
+  property.descriptionAs = 'tooltip';
+  assert.match(property.innerHTML, /causeway-property-label causeway-member-tooltip/);
+  assert.match(property.innerHTML, /causeway-property-description causeway-visually-hidden/);
+  property.descriptionAs = 'label';
+  assert.doesNotMatch(property.innerHTML, /causeway-member-tooltip/);
+  assert.deepEqual(calls, []);
   assert.match(property.innerHTML, /aria-label="Edit Name"/);
   assert.match(property.innerHTML, /title="Edit Name"/);
   assert.match(property.innerHTML, /<svg class="causeway-property-edit-icon"[^>]+aria-hidden="true"[^>]+focusable="false"/);

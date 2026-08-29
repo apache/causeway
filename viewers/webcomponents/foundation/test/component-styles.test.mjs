@@ -46,14 +46,16 @@ test('property editor actions remain compact deterministic icon controls', async
   assert.match(theme, /\.causeway-property-editor-actions button:first-child[\s\S]*?background: var\(--causeway-action-background\)/);
 });
 
-test('disabled reasons use label-owned tooltips and string values align to logical start', async () => {
+test('member tooltips preserve sections, responsive bounds and pointer and focus access', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip::after \{[\s\S]*?content: attr\(data-tooltip\);/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip:hover::after,[\s\S]*?\.causeway-property-disabled-tooltip:focus-visible::after/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip::after \{[\s\S]*?content: attr\(data-tooltip\);[\s\S]*?max-inline-size: min\(24rem, calc\(100vw - 2rem\)\);[\s\S]*?white-space: pre-line;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip:hover::after,[\s\S]*?\.causeway-member-tooltip:focus-visible::after/);
   assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-property-disabled-indicator/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-value-string \{\s+text-align: start;/);
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   assert.match(theme, /\.causeway-property-value-string \{\s+text-align: start;/);
+  assert.match(theme, /\.causeway-action-description \{[\s\S]*?position: absolute !important;[\s\S]*?clip: rect\(0, 0, 0, 0\) !important;/);
 });
 
 test('collection descriptions remain quiet text directly below their labels', async () => {
