@@ -209,6 +209,9 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-owner-page']").isVisible()).isTrue();
+        waitForBreadcrumbs(0);
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] [aria-current='page']").textContent())
+                .isEqualTo("Mary Smith (Mary)");
         assertThat(page.locator(".petclinic-object-grid").evaluate("""
                 element => {
                   const details = element.querySelector('.petclinic-object-details').getBoundingClientRect();
@@ -263,12 +266,26 @@ class PetClinicHtmxPlaywrightTest {
         waitForRoute("petclinic.Pet", "s_pet-basil");
         assertThat(page.locator("[data-testid='petclinic-pet-page']").isVisible()).isTrue();
         waitForObjectTitle("Basil · dog");
+        waitForBreadcrumbs(1);
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link").getAttribute("title"))
+                .isEqualTo("Mary Smith (Mary)");
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] [aria-current='page']").textContent())
+                .isEqualTo("Basil · dog");
         waitForMenus();
 
         page.navigate(url("/htmx/object/petclinic.Visit/s_visit-basil-checkup"),
                 new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         waitForRoute("petclinic.Visit", "s_visit-basil-checkup");
         assertThat(page.locator("[data-testid='petclinic-visit-page']").isVisible()).isTrue();
+        waitForBreadcrumbs(2);
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link")
+                .evaluateAll("elements => elements.map(element => element.getAttribute('title')).join(',')"))
+                .isEqualTo("Mary Smith (Mary),Basil · dog");
+        page.locator("[data-testid='petclinic-breadcrumbs'] cw-object-link[title='Basil · dog'] button").click();
+        waitForRoute("petclinic.Pet", "s_pet-basil");
+        page.goBack();
+        waitForRoute("petclinic.Visit", "s_visit-basil-checkup");
+        waitForBreadcrumbs(2);
         waitForMenus();
 
         page.setViewportSize(390, 844);
@@ -944,6 +961,12 @@ class PetClinicHtmxPlaywrightTest {
         }
     }
 
+    private void waitForBreadcrumbs(final int ancestorCount) {
+        page.waitForFunction(
+                "count => document.querySelector(\"[data-testid='petclinic-breadcrumbs'] [aria-current='page']\") && document.querySelectorAll(\"[data-testid='petclinic-breadcrumbs'] cw-object-link\").length === count",
+                ancestorCount);
+    }
+
     private void waitForCollectionRows(final String member, final int count) {
         try {
             page.waitForFunction("args => document.querySelector(`cw-collection[id='${args.member}']`)?.collectionState?.rows?.length === args.count",
@@ -1013,7 +1036,17 @@ class PetClinicHtmxPlaywrightTest {
     }
 
     private void assertFocused(final String selector) {
-        page.waitForFunction("selector => [...document.querySelectorAll(selector)].some(element => element === document.activeElement || element.contains(document.activeElement) || element.shadowRoot?.activeElement)", selector);
+        try {
+            page.waitForFunction("selector => [...document.querySelectorAll(selector)].some(element => element === document.activeElement || element.contains(document.activeElement) || element.shadowRoot?.activeElement)", selector);
+        } catch (RuntimeException ex) {
+            final var activeElement = page.evaluate("""
+                    () => {
+                      const active = document.activeElement;
+                      return active ? `${active.localName}${active.id ? `#${active.id}` : ''}${active.className ? `.${String(active.className).replaceAll(' ', '.')}` : ''}` : '<none>';
+                    }
+                    """);
+            throw new AssertionError("Expected focus within " + selector + " but active element was " + activeElement, ex);
+        }
         assertThat(page.locator(selector).count()).isGreaterThan(0);
     }
 

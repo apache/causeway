@@ -34,6 +34,7 @@ import jakarta.persistence.Version;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -56,7 +57,7 @@ public class Visit implements Comparable<Visit> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pet_id", nullable = false)
-    @PropertyLayout(fieldSetId = "identity", sequence = "1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1", navigable = Navigable.PARENT)
     private Pet pet;
 
     @Column(nullable = false)

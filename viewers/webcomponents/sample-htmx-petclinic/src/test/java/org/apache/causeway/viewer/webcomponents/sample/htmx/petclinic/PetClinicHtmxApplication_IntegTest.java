@@ -202,6 +202,9 @@ class PetClinicHtmxApplication_IntegTest {
                     .contains("<cw-object-header")
                     .contains("<cw-")
                     .doesNotContain("<script", " style=", " onclick=", "<vaadin-");
+            if (!name.equals("petclinic.HomePage.html")) {
+                assertThat(html).contains("<cw-breadcrumbs data-testid=\"petclinic-breadcrumbs\"");
+            }
         }
         final String ownerHtml;
         try (var input = loader.getResource(
@@ -328,6 +331,45 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(owner.at("/data/rich/petclinic_PetOwner/name/get").asText()).isEqualTo("Mary Smith");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/get").size()).isEqualTo(2);
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/get").size()).isEqualTo(2);
+    }
+
+    @Test
+    void exposesNavigableBreadcrumbHierarchyThroughRichGraphQL() throws Exception {
+        final var response = graphQL("""
+                query PetClinicBreadcrumbs {
+                  __type(name: "RichNavigableBreadcrumb") {
+                    fields { name type { kind name ofType { kind name } } }
+                  }
+                  rich {
+                    petclinic_PetOwner(object: {id: "s_owner-mary"}) {
+                      _meta { breadcrumbs { logicalTypeName id title } }
+                    }
+                    petclinic_Pet(object: {id: "s_pet-basil"}) {
+                      _meta { breadcrumbs { logicalTypeName id title } }
+                    }
+                    petclinic_Visit(object: {id: "s_visit-basil-checkup"}) {
+                      _meta { breadcrumbs { logicalTypeName id title } }
+                    }
+                  }
+                }
+                """);
+        assertNoGraphQLErrors(response);
+        assertThat(response.at("/data/__type/fields"))
+                .extracting(node -> node.path("name").asText())
+                .containsExactlyInAnyOrder("logicalTypeName", "id", "title");
+        assertThat(response.at("/data/rich/petclinic_PetOwner/_meta/breadcrumbs")).isEmpty();
+        assertThat(response.at("/data/rich/petclinic_Pet/_meta/breadcrumbs"))
+                .extracting(node -> node.path("logicalTypeName").asText())
+                .containsExactly("petclinic.PetOwner");
+        assertThat(response.at("/data/rich/petclinic_Pet/_meta/breadcrumbs/0/id").asText())
+                .isEqualTo("s_owner-mary");
+        assertThat(response.at("/data/rich/petclinic_Visit/_meta/breadcrumbs"))
+                .extracting(node -> node.path("logicalTypeName").asText())
+                .containsExactly("petclinic.PetOwner", "petclinic.Pet");
+        assertThat(response.at("/data/rich/petclinic_Visit/_meta/breadcrumbs/0/title").asText())
+                .isEqualTo("Mary Smith (Mary)");
+        assertThat(response.at("/data/rich/petclinic_Visit/_meta/breadcrumbs/1/id").asText())
+                .isEqualTo("s_pet-basil");
     }
 
     private void assertResourcePage(

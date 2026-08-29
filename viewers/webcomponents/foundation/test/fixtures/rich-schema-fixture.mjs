@@ -20,6 +20,7 @@
 const OBJECT_TYPE = 'rich__university_dept_Department';
 const META_TYPE = `${OBJECT_TYPE}__gqlv_meta`;
 const MEMBER_METADATA_TYPE = 'RichMemberMetadata';
+const BREADCRUMB_TYPE = 'RichNavigableBreadcrumb';
 const NAME_TYPE = `${OBJECT_TYPE}__name__gqlv_property`;
 const CODE_TYPE = `${OBJECT_TYPE}__code__gqlv_property`;
 const STATUS_TYPE = `${OBJECT_TYPE}__status__gqlv_property`;
@@ -72,9 +73,15 @@ export function createRichSchemaTypes() {
       field('logicalTypeName', null, scalar('String')),
       field('version', null, scalar('String')),
       field('title', null, scalar('String')),
+      field('breadcrumbs', null, list(named(BREADCRUMB_TYPE))),
       field('grid', null, scalar('String')),
       field('layout', null, scalar('String')),
       field('cssClass', null, scalar('String'))
+    ])],
+    [BREADCRUMB_TYPE, objectType(BREADCRUMB_TYPE, 'Navigable breadcrumb', [
+      field('logicalTypeName', null, scalar('String')),
+      field('id', null, scalar('ID')),
+      field('title', null, scalar('String'))
     ])],
     [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, 'Member metadata', [
       field('friendlyName', null, scalar('String')),
@@ -139,7 +146,8 @@ export function createRichSchemaTypes() {
       field('id', null, scalar('ID')),
       field('logicalTypeName', null, scalar('String')),
       field('version', null, scalar('String')),
-      field('title', null, scalar('String'))
+      field('title', null, scalar('String')),
+      field('breadcrumbs', null, list(named(BREADCRUMB_TYPE)))
     ])],
     [STAFF_NAME_TYPE, propertyType(STAFF_NAME_TYPE)],
     [STAFF_CODE_TYPE, propertyType(STAFF_CODE_TYPE)]
@@ -247,7 +255,8 @@ export function departmentObjectData({
   code = 'CLA',
   codeHidden = false,
   nameDisabled = null,
-  version = '7'
+  version = '7',
+  breadcrumbs = []
 } = {}) {
   return {
     _meta: {
@@ -255,6 +264,7 @@ export function departmentObjectData({
       logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
       version,
       title: 'Classics Department',
+      breadcrumbs,
       grid: '/graphql/object/university.dept.Department:42/_meta/grid',
       layout: null,
       cssClass: 'department'

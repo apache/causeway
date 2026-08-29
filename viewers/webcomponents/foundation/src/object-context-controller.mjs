@@ -1065,10 +1065,10 @@ export class ObjectContextController extends EventTarget {
       return;
     }
     const mappedStatus = mapRequirementStatus(this.state.status);
-    const pathHead = requirement.kind === 'header' || requirement.kind === 'layout'
+    const pathHead = ['header', 'layout', 'breadcrumbs'].includes(requirement.kind)
       ? this.description?.metadata?.id
       : requirement.member;
-    const errors = this.snapshot?.errors.filter(error => error.path?.[0] === pathHead) ?? [];
+    const errors = this.snapshot?.errors.filter(error => errorMatchesRequirement(error, requirement, pathHead)) ?? [];
     const data = this.snapshot && pathHead ? this.snapshot.data[pathHead] : null;
     registration.listener(freezeRequirementState({
       status: errors.length > 0 && mappedStatus === RequirementStatus.READY
@@ -1206,8 +1206,21 @@ function validateIdentity(identity, client) {
   return null;
 }
 
+function errorMatchesRequirement(error, requirement, pathHead) {
+  if (error.path?.[0] !== pathHead) {
+    return false;
+  }
+  if (requirement.kind === 'breadcrumbs') {
+    return error.path?.[1] === 'breadcrumbs';
+  }
+  if (requirement.kind === 'header' || requirement.kind === 'layout') {
+    return error.path?.[1] !== 'breadcrumbs';
+  }
+  return true;
+}
+
 function normalizeRequirement(requirement) {
-  if (requirement?.kind === 'header' || requirement?.kind === 'layout') {
+  if (['header', 'layout', 'breadcrumbs'].includes(requirement?.kind)) {
     return Object.freeze({kind: requirement.kind});
   }
   if (['property', 'action', 'collection'].includes(requirement?.kind)
@@ -1219,10 +1232,30 @@ function normalizeRequirement(requirement) {
 }
 
 function translateRequirement(requirement, description) {
-  if (requirement.kind === 'header' || requirement.kind === 'layout') {
+  if (['header', 'layout', 'breadcrumbs'].includes(requirement.kind)) {
     const metadata = description.metadata;
     if (!metadata) {
       throw new Error(`Type '${description.generatedTypeName}' does not expose rich object metadata.`);
+    }
+    if (requirement.kind === 'breadcrumbs') {
+      const breadcrumbs = metadata.fields.get('breadcrumbs');
+      const breadcrumbType = description.types.get(namedType(breadcrumbs?.type));
+      const breadcrumbFields = fieldsByName(breadcrumbType);
+      const requiredFields = ['logicalTypeName', 'id', 'title'];
+      if (!breadcrumbs || requiredFields.some(field => !breadcrumbFields.has(field))) {
+        throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks navigable breadcrumb fields.`);
+      }
+      const currentFields = ['id', 'logicalTypeName', 'title'];
+      if (currentFields.some(field => !metadata.fields.has(field))) {
+        throw new Error(`Metadata type '${metadata.generatedTypeName}' lacks object identity fields.`);
+      }
+      return {
+        descriptor: metadata,
+        selection: {[metadata.id]: {
+          ...Object.fromEntries(currentFields.map(field => [field, true])),
+          breadcrumbs: Object.fromEntries(requiredFields.map(field => [field, true]))
+        }}
+      };
     }
     const requestedFields = requirement.kind === 'header'
       ? ['id', 'logicalTypeName', 'title', 'version']

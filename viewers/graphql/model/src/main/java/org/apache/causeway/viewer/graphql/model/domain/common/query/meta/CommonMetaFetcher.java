@@ -18,7 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.common.query.meta;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -35,6 +41,8 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ResourcePath
  * Metadata for every domain object.
  */
 public class CommonMetaFetcher {
+
+    static final int MAXIMUM_BREADCRUMB_ANCESTORS = 32;
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
@@ -87,6 +95,70 @@ public class CommonMetaFetcher {
                 .orElse(null);
     }
 
+    public List<Map<String, String>> breadcrumbs() {
+        return managedObject()
+                .map(current -> traverseBreadcrumbs(
+                        bookmark,
+                        current.getPojo(),
+                        pojo -> objectManager.adapt(pojo).objSpec().getNavigableParent(pojo),
+                        bookmarkService::bookmarkFor,
+                        pojo -> objectManager.adapt(pojo).getTitle()))
+                .orElseGet(List::of);
+    }
+
+    static List<Map<String, String>> traverseBreadcrumbs(
+            final Bookmark currentBookmark,
+            final Object currentPojo,
+            final Function<Object, Object> parentResolver,
+            final Function<Object, Optional<Bookmark>> bookmarkResolver,
+            final Function<Object, String> titleResolver) {
+        final var seen = new HashSet<Bookmark>();
+        seen.add(currentBookmark);
+        final var ancestors = new ArrayList<Map<String, String>>();
+        var pojo = currentPojo;
+        while (true) {
+            final Object parentPojo;
+            try {
+                parentPojo = parentResolver.apply(pojo);
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_PARENT_FAILED", "Navigable parent evaluation failed.");
+            }
+            if (parentPojo == null) {
+                break;
+            }
+            final Optional<Bookmark> parentBookmark;
+            try {
+                parentBookmark = bookmarkResolver.apply(parentPojo);
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_IDENTITY_FAILED", "Navigable parent identity resolution failed.");
+            }
+            if (parentBookmark.isEmpty()) {
+                break;
+            }
+            if (!seen.add(parentBookmark.get())) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_CYCLE", "Navigable parent hierarchy contains a cycle.");
+            }
+            if (ancestors.size() >= MAXIMUM_BREADCRUMB_ANCESTORS) {
+                throw breadcrumbFailure(
+                        "GRAPHQL_BREADCRUMB_DEPTH_EXCEEDED",
+                        "Navigable parent hierarchy exceeds " + MAXIMUM_BREADCRUMB_ANCESTORS + " ancestors.");
+            }
+            final String title;
+            try {
+                title = java.util.Objects.requireNonNull(titleResolver.apply(parentPojo));
+            } catch (RuntimeException ex) {
+                throw breadcrumbFailure("GRAPHQL_BREADCRUMB_TITLE_FAILED", "Navigable parent title resolution failed.");
+            }
+            ancestors.add(Map.of(
+                    "logicalTypeName", parentBookmark.get().logicalTypeName(),
+                    "id", parentBookmark.get().identifier(),
+                    "title", title));
+            pojo = parentPojo;
+        }
+        Collections.reverse(ancestors);
+        return List.copyOf(ancestors);
+    }
+
     public String cssClass() {
         return managedObject()
                 .map(managedObject -> {
@@ -126,5 +198,9 @@ public class CommonMetaFetcher {
     private Optional<ManagedObject> managedObject() {
         return bookmarkService.lookup(bookmark)
                 .map(objectManager::adapt);
+    }
+
+    private static IllegalStateException breadcrumbFailure(final String code, final String message) {
+        return new IllegalStateException(code + ": " + message);
     }
 }
