@@ -1,10 +1,11 @@
 # Vaadin presentation follow-on roadmap
 
-The current accepted architecture makes Vaadin free-core the default internal toolkit for qualified references, editors, read-only fields, ordinary action buttons, and qualified collections while keeping application menus Causeway-native.
-The follow-on direction is to evaluate Vaadin as the default internal presentation toolkit without changing the public `cw-*` semantic boundary.
+The current accepted architecture makes Vaadin free-core the default internal toolkit for qualified references, editors, read-only fields, ordinary action buttons, qualified collections, and horizontal application menus without changing the public `cw-*` semantic boundary.
+The proposal-only vertical-menu analysis evaluates whether the same Causeway-owned menu semantics can also use a persistent left-side presentation.
 
-The work is split because fields and buttons are local controls, Grid is a virtualized data surface, and Menu Bar is stable-shell application navigation.
-Each tranche retains explicit native rollback and automatic fallback and must qualify its own deterministic free-core asset closure before the next tranche is promoted.
+The accepted work was split because fields and buttons are local controls, Grid is a virtualized data surface, and Menu Bar is stable-shell horizontal application navigation.
+Each archived tranche retains explicit native rollback and automatic fallback and qualifies its own deterministic free-core asset closure.
+A later vertical tranche would require separate evidence and packaging rather than reorienting Menu Bar with CSS.
 
 ```text
 eligible fields and action buttons
@@ -14,13 +15,17 @@ eligible fields and action buttons
                 |
                 v
      application Menu Bar adapter
+                |
+                v
+  vertical placement analysis
 ```
 
 | Order | Proposal | Purpose | Promotion gate |
 |---:|---|---|---|
 | 1 | `extend-vaadin-to-domain-member-presentation` *(archived)* | Use qualified read-only Vaadin fields and action buttons behind property and action components. | View/edit parity, action semantics, accessibility, theming, route loading, CSP, packaging, and native rollback pass the foundation, Petclinic, and Reference Application suites. |
 | 2 | `use-vaadin-grid-for-collection-presentation` *(archived)* | Use an internal Grid for qualified collection presentations. | Existing bounded-window, row-context, nullable-total, semantic-cell, responsive, cancellation, and native-fallback contracts are proven without claiming database pushdown. |
-| 3 | `use-vaadin-menu-bar-for-application-menus` *(active)* | Use internal Menu Bar item trees behind the three semantic application-menu tiers. | Hierarchy, order, disabled state, service-action invocation, overflow, keyboard, refresh, authentication exclusions, stable-shell loading, and native fallback pass broad acceptance coverage. |
+| 3 | `use-vaadin-menu-bar-for-application-menus` *(archived)* | Use internal horizontal Menu Bar item trees behind the three semantic application-menu tiers. | Hierarchy, order, disabled state, service-action invocation, overflow, keyboard, refresh, authentication exclusions, stable-shell loading, and native fallback pass broad acceptance coverage. |
+| 4 | `analyze-configurable-vertical-application-menus` *(proposal-only analysis)* | Evaluate configurable top or left shell placement and compare a separate Side Navigation adapter with Causeway-native vertical presentation. | Preserve action rather than route semantics, three-tier identity, section headings, responsive collapse, accessibility, independent delivery, failure isolation, and complete native rollback before drafting implementation. |
 
 The order is a review sequence rather than a hard runtime dependency.
 Grid and Menu Bar MUST use separate packaged closures and MAY be rejected independently if their payload, accessibility, semantic, or fallback costs outweigh the styling benefit.
@@ -41,4 +46,5 @@ Grid and Menu Bar MUST use separate packaged closures and MAY be rejected indepe
 
 The archived field-and-action tranche resolved the common policy as `component-toolkit=vaadin|native` with bounded deprecated compatibility inputs.
 The promoted Grid change resolves unavailable totals through bounded Grid with Causeway-owned paging and retains native collection presentation at or below the existing 48rem container boundary.
-The promoted Menu Bar change verifies that one internal Menu Bar per semantic tier preserves the existing responsive and keyboard contracts before custom disclosures are removed.
+The archived Menu Bar change verifies that one internal horizontal Menu Bar per semantic tier preserves the existing responsive and keyboard contracts.
+The vertical-placement draft must determine whether Side Navigation can safely delegate Causeway service actions or whether a Causeway-native vertical renderer is the stronger implementation boundary.
