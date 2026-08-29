@@ -5,7 +5,7 @@ The duplicate boundary is visually distracting and makes one semantic field appe
 
 ## What Changes
 
-- Prevent global native input, select, and textarea rules from styling toolkit-owned slotted field internals.
+- Scope application-defined native input, select, and textarea rules away from toolkit-owned slotted field internals.
 - Preserve one toolkit-owned read-only field boundary, genuine read-only semantics, visible focus, and native control styling outside toolkit fields.
 - Add regression coverage for the stylesheet boundary and representative Petclinic field presentation.
 

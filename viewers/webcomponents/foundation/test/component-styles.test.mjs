@@ -56,6 +56,20 @@ test('disabled reasons use label-owned tooltips and string values align to logic
   assert.match(theme, /\.causeway-property-value-string \{\s+text-align: start;/);
 });
 
+test('application native-control chrome does not cross into toolkit-owned slotted field inputs', async () => {
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  const nativeInput = 'input:not([slot="input"])';
+  const nativeSelect = 'select:not([slot="input"])';
+  const nativeTextarea = 'textarea:not([slot="input"])';
+
+  assert.ok(theme.includes(`button,\n${nativeInput},\n${nativeSelect},\n${nativeTextarea} {\n  max-width: 100%;\n  border: 1px solid var(--causeway-border-strong);`));
+  assert.ok(theme.includes(`${nativeInput},\n${nativeSelect},\n${nativeTextarea} {\n  padding: 0.45rem 0.6rem;`));
+  assert.ok(theme.includes(`${nativeTextarea} {\n  min-height: 6rem;\n  resize: vertical;`));
+  assert.ok(theme.includes(`:where(a, button, ${nativeInput}, ${nativeSelect}, ${nativeTextarea}, [tabindex]):focus-visible`));
+  assert.doesNotMatch(theme, /\ninput,\nselect,\ntextarea \{\n  max-width:/);
+  assert.doesNotMatch(theme, /:where\(a, button, input, select, textarea, \[tabindex\]\):focus-visible/);
+});
+
 test('direct member associations wrap in semantic source and keyboard order', () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\]/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection\[data-causeway-action-group\]/);
