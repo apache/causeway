@@ -85,11 +85,12 @@ test('direct member associations wrap in semantic source and keyboard order', ()
   assert.match(CAUSEWAY_COMPONENT_STYLES, /--causeway-associated-action-gap/);
 });
 
-test('standard theme gives described multiline properties explicit responsive placement', async () => {
+test('standard theme gives effective multiline properties explicit responsive placement', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
-  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-description \{\s+grid-column: 1;\s+grid-row: 2;/);
-  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-value \{\s+grid-column: 2;\s+grid-row: 1 \/ span 2;/);
-  assert.match(theme, /:where\(cw-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 3;\s+grid-row: 1;\s+justify-self: start;/);
-  assert.match(theme, /@container \(max-width: 32rem\)[\s\S]+:where\(cw-property\[multiline\]\) \.causeway-property-value \{\s+grid-row: 3;/);
-  assert.match(theme, /@media \(max-width: 48rem\)[\s\S]+:where\(cw-property\[multiline\]\) \.causeway-property-edit \{\s+grid-column: 2;\s+grid-row: 3;/);
+  const effectiveMultiline = '\\.causeway-property\\[data-multi-line\\]\\[data-label-position="LEFT"\\]';
+  assert.match(theme, new RegExp(`${effectiveMultiline} \\.causeway-property-description \\{\\s+grid-column: 1;\\s+grid-row: 2;`));
+  assert.match(theme, new RegExp(`${effectiveMultiline} \\.causeway-property-field \\{\\s+grid-column: 2;\\s+grid-row: 1 / span 2;`));
+  assert.match(theme, new RegExp(`@container \\(max-width: 32rem\\)[\\s\\S]+${effectiveMultiline} \\.causeway-property-field \\{\\s+align-items: flex-start;\\s+grid-column: 1 / -1;\\s+grid-row: 3;`));
+  assert.match(theme, new RegExp(`@media \\(max-width: 48rem\\)[\\s\\S]+${effectiveMultiline} \\.causeway-property-field \\{\\s+align-items: flex-start;\\s+grid-column: 1 / -1;\\s+grid-row: 3;`));
+  assert.doesNotMatch(theme, /cw-property\[multiline\]/);
 });
