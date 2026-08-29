@@ -75,7 +75,17 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
 
 export class CausewayCollectionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'description-as', 'label', 'active'];
+    return [
+      'id',
+      'named',
+      'described-as',
+      'description-as',
+      'label',
+      'active',
+      'paged',
+      'resizable-columns',
+      'reorderable-columns'
+    ];
   }
 
   constructor() {
@@ -207,6 +217,36 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
   }
 
+  get paged() {
+    return normalizedPageSize(this.getAttribute('paged'));
+  }
+
+  set paged(value) {
+    if (value == null || value === '') {
+      this.removeAttribute('paged');
+    } else {
+      this.setAttribute('paged', String(value));
+    }
+  }
+
+  get resizableColumns() {
+    return this.hasAttribute('resizable-columns');
+  }
+
+  set resizableColumns(value) {
+    if (value === true) this.setAttribute('resizable-columns', '');
+    else this.removeAttribute('resizable-columns');
+  }
+
+  get reorderableColumns() {
+    return this.hasAttribute('reorderable-columns');
+  }
+
+  set reorderableColumns(value) {
+    if (value === true) this.setAttribute('reorderable-columns', '');
+    else this.removeAttribute('reorderable-columns');
+  }
+
   get columns() {
     return Object.freeze(this._columns.map(column => Object.freeze({...column})));
   }
@@ -307,7 +347,20 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.reconnectRequirement();
     } else if (name === 'active' && this.active && this.componentState?.status === 'ready') {
       void this.load();
+    } else if (name === 'paged') {
+      this.gridHostRevision += 1;
+      this.loadAbortController?.abort();
+      this.loadAbortController = null;
+      this.#disconnectRangeBroker();
+      if (this.active && this.componentState?.status === 'ready') {
+        void this.load({force: true, offset: 0, size: this.paged});
+      } else {
+        this.renderComponentState(this.componentState);
+      }
     } else {
+      if (name === 'resizable-columns' || name === 'reorderable-columns') {
+        this.gridHostRevision += 1;
+      }
       this.renderComponentState(this.componentState);
     }
   }
@@ -337,6 +390,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
 
   async load({force = false, offset = 0, size = null} = {}) {
     const context = this._resolvedContext;
+    const requestedSize = size ?? this.paged;
     if (!context || this.componentState?.status !== 'ready') {
       return null;
     }
@@ -354,7 +408,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         member: this.id,
         columns: this._columns,
         offset,
-        size,
+        size: requestedSize,
         requestKey: this,
         force,
         signal: abortController.signal
@@ -470,7 +524,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     }
     const rows = collectionRows(this.collectionState);
     if (rows.length === 0) {
-      renderMemberPrimary(this, shell('<span class="causeway-empty" role="status">No items</span>'));
+      const pager = this.paged ? this.#renderBoundedPager(this.collectionState.window) : '';
+      renderMemberPrimary(this, shell(`<span class="causeway-empty" role="status">No items</span>${pager}`));
       return;
     }
     const errors = this.collectionState.errors?.length
@@ -483,7 +538,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const content = this._columns.length > 0
       ? this.#renderTable(rows)
       : this.#renderDefaultRows(rows);
-    renderMemberPrimary(this, shell(`${content}${errors}`));
+    const pager = this.paged ? this.#renderBoundedPager(this.collectionState.window) : '';
+    renderMemberPrimary(this, shell(`${content}${pager}${errors}`));
     this.#restoreNativeFocus();
   }
 
@@ -504,6 +560,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       labelledBy: this.labelId,
       describedBy,
       testId: this.getAttribute('data-testid') ? `${this.getAttribute('data-testid')}-grid` : '',
+      resizableColumns: this.resizableColumns,
+      reorderableColumns: this.reorderableColumns,
       rangeProvider: request => this.#projectRange(request, revision)
     };
   }
@@ -538,6 +596,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   #renderBoundedPager(window) {
+    if (!window) return '';
     const range = window.rangeStart == null
       ? 'No items'
       : `Items ${window.rangeStart}–${window.rangeEnd}`;
@@ -681,6 +740,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       hasVisibleColumn: this._gridProjection.columns.length > 0
         && rows.some(row => row?._meta?.logicalTypeName && row?._meta?.id),
       renderersSupported: this._gridProjection.supported,
+      bounded: this.paged != null,
       rows,
       window: this.collectionState.window,
       lifecycle: {
@@ -825,6 +885,17 @@ function collectionBreakpointPixels() {
 function gridRowKey(row) {
   const metadata = row?._meta ?? {};
   return `${metadata.logicalTypeName ?? ''}:${metadata.id ?? ''}`;
+}
+
+const MAX_DECLARATIVE_PAGE_SIZE = 100;
+
+function normalizedPageSize(value) {
+  const normalized = String(value ?? '').trim();
+  if (!/^\d+$/.test(normalized)) return null;
+  const parsed = Number(normalized);
+  return Number.isSafeInteger(parsed) && parsed >= 1 && parsed <= MAX_DECLARATIVE_PAGE_SIZE
+    ? parsed
+    : null;
 }
 
 function sameWindowContract(authoritative, candidate) {

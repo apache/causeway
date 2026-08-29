@@ -36,7 +36,11 @@ export function qualifyCausewayCollectionGrid(candidate = {}) {
     return native(base, 'columns-unsupported');
   }
   if (candidate.renderersSupported !== true) return native(base, 'renderers-unsupported');
-  if (count === 'available') return grid(base, CausewayCollectionPresentation.GRID_VIRTUAL);
+  if (count === 'available') {
+    return grid(base, candidate.bounded === true
+      ? CausewayCollectionPresentation.GRID_BOUNDED
+      : CausewayCollectionPresentation.GRID_VIRTUAL);
+  }
   if (window.hasPrevious === true || window.hasNext === true) {
     return grid(base, CausewayCollectionPresentation.GRID_BOUNDED);
   }

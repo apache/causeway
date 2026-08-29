@@ -585,7 +585,41 @@ test('collection component resolves canonical and HTML headings without unmodifi
   document.body.appendChild(collection);
   await waitFor(() => collection.innerHTML.includes('Department staff'));
 
-  assert.deepEqual(CausewayCollectionElement.observedAttributes, ['id', 'named', 'described-as', 'description-as', 'label', 'active']);
+  assert.deepEqual(CausewayCollectionElement.observedAttributes, [
+    'id',
+    'named',
+    'described-as',
+    'description-as',
+    'label',
+    'active',
+    'paged',
+    'resizable-columns',
+    'reorderable-columns'
+  ]);
+  for (const [value, expected] of [
+    ['1', 1],
+    ['100', 100],
+    ['0', null],
+    ['101', null],
+    ['1.5', null],
+    ['1e2', null],
+    ['many', null],
+    [' ', null]
+  ]) {
+    collection.setAttribute('paged', value);
+    assert.equal(collection.paged, expected);
+  }
+  collection.paged = null;
+  assert.equal(collection.hasAttribute('paged'), false);
+  assert.equal(collection.resizableColumns, false);
+  assert.equal(collection.reorderableColumns, false);
+  collection.resizableColumns = true;
+  collection.reorderableColumns = true;
+  assert.equal(collection.resizableColumns, true);
+  assert.equal(collection.reorderableColumns, true);
+  collection.resizableColumns = false;
+  collection.reorderableColumns = false;
+
   assert.match(collection.innerHTML, /class="causeway-collection-label causeway-member-tooltip"/);
   assert.match(collection.innerHTML, /class="causeway-collection-description">Current staff members\.<\/p>/);
   assert.match(collection.innerHTML, /data-tooltip="Current staff members\.\s+Cannot edit a mixed-in collection\."/);
@@ -809,6 +843,8 @@ test('collection host owns immutable Grid qualification diagnostics policy recov
   assert.deepEqual(gridAdapter.presentation.columns.map(column => column.member), ['_meta', 'name']);
   assert.equal(gridAdapter.presentation.rows[0].identity.id, 'staff-1');
   assert.equal(gridAdapter.presentation.totalCount, 40);
+  assert.equal(gridAdapter.presentation.resizableColumns, false);
+  assert.equal(gridAdapter.presentation.reorderableColumns, false);
   assert.equal(rangeRequests.length, 1);
 
   const range = await collection.requestCollectionRange({offset: 20, size: 20});
@@ -852,6 +888,39 @@ test('collection host owns immutable Grid qualification diagnostics policy recov
   assert.equal(collection.gridQualification.reason, 'policy-native');
   configureCausewayGridWidgets({enabled: true});
   assert.equal(collection.gridQualification.presentation, 'grid-bounded');
+
+  collection.resizableColumns = true;
+  collection.reorderableColumns = true;
+  assert.equal(gridAdapter.presentation.resizableColumns, true);
+  assert.equal(gridAdapter.presentation.reorderableColumns, true);
+
+  const requestsBeforePaging = rangeRequests.length;
+  collection.paged = 10;
+  await waitFor(() => rangeRequests.length === requestsBeforePaging + 1
+    && collection.collectionState.status === 'ready'
+    && rangeRequests.at(-1).size === 10);
+  assert.equal(collection.paged, 10);
+  assert.equal(rangeRequests.at(-1).offset, 0);
+  assert.equal(rangeRequests.at(-1).size, 10);
+  assert.equal(rangeRequests.at(-1).force, true);
+  assert.equal(collection.gridQualification.presentation, 'grid-bounded');
+  assert.match(collection.innerHTML, /data-causeway-grid-next/);
+
+  collection.acceptGridResponsiveState(false);
+  assert.equal(collection.gridQualification.reason, 'narrow');
+  assert.match(collection.innerHTML, /data-causeway-grid-next/, 'declarative paging remains available with native presentation');
+  collection.acceptGridResponsiveState(true);
+
+  const requestsBeforeInvalidPaging = rangeRequests.length;
+  collection.paged = 101;
+  await waitFor(() => rangeRequests.length === requestsBeforeInvalidPaging + 1
+    && collection.collectionState.status === 'ready'
+    && rangeRequests.at(-1).size == null);
+  assert.equal(collection.paged, null);
+  collection.resizableColumns = false;
+  collection.reorderableColumns = false;
+  assert.equal(gridAdapter.presentation.resizableColumns, false);
+  assert.equal(gridAdapter.presentation.reorderableColumns, false);
   document.body.removeChild(collection);
 });
 

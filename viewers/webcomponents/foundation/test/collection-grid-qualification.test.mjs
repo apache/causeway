@@ -56,6 +56,13 @@ test('stable positive total and deterministic ordering qualify virtual Grid', ()
   assert.equal(Object.isFrozen(result.lifecycle), true);
 });
 
+test('explicit bounded paging suppresses virtual Grid even when total count is available', () => {
+  const result = qualifyCausewayCollectionGrid(candidate({bounded: true}));
+  assert.equal(result.qualified, true);
+  assert.equal(result.presentation, CausewayCollectionPresentation.GRID_BOUNDED);
+  assert.equal(result.count, 'available');
+});
+
 test('unavailable total with normalized paging qualifies bounded Grid without invented size', () => {
   const window = {...candidate().window, totalCount: null};
   const result = qualifyCausewayCollectionGrid(candidate({window}));
