@@ -1532,6 +1532,7 @@ Canonical authored attributes MUST take precedence over compatibility aliases, w
 ### Requirement: Property label-position presentation
 `<cw-property>` SHALL honour the effective property label position `LEFT`, `TOP`, or `NONE` in view, loading, error, disabled, and edit states.
 Properties using `LEFT` in the same field-set-like container MUST use a consistent configurable label-to-field ratio.
+Effective multiline presentation from canonical HTML, compatibility HTML, or member metadata MUST drive the same explicit responsive shell layout.
 
 #### Scenario: Label is positioned left
 - **WHEN** the effective label position is `LEFT`
@@ -1557,9 +1558,10 @@ Properties using `LEFT` in the same field-set-like container MUST use a consiste
 - **AND** the value or editor is associated with it through accessible description semantics
 
 #### Scenario: Narrow presentation stacks safely
-- **WHEN** a `LEFT` property cannot retain its configured columns at a narrow inline size
-- **THEN** label, description, field, and controls stack in meaningful document order
-- **AND** the property introduces no horizontal overflow, clipping, or overlap
+- **WHEN** a multiline `LEFT` property resolved from `multi-line`, legacy `multiline`, or `metadata.multiLine` cannot retain its configured columns at a narrow inline size
+- **THEN** label and description occupy explicit successive rows followed by an explicit full-width field row in meaningful document order
+- **AND** the field's value and bounded edit control align at the start of that row without overlap or implicit-grid displacement
+- **AND** the property introduces no horizontal overflow or clipping
 
 ### Requirement: Generated property presentation equivalence
 `<cw-object>` SHALL carry supported effective-grid property name, description, multiline, and label-position hints into generated `<cw-property>` elements through the canonical public attributes.
