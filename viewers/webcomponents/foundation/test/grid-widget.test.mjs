@@ -103,6 +103,20 @@ test('bounded Grid upgrades lazily with immutable rows columns and relationships
   assert.equal(control.getAttribute('data-testid'), 'people-grid');
   assert.equal(control.childNodes.length, 1);
   assert.equal(control.childNodes[0].header, 'Name');
+  assert.equal(control.childNodes[0].resizable, false);
+  assert.equal(control.columnReorderingAllowed, false);
+
+  adapter.presentation = {
+    ...boundedPresentation(),
+    resizableColumns: true,
+    reorderableColumns: true
+  };
+  assert.equal(control.childNodes[0].resizable, true);
+  assert.equal(control.columnReorderingAllowed, true);
+
+  adapter.presentation = boundedPresentation();
+  assert.equal(control.childNodes[0].resizable, false);
+  assert.equal(control.columnReorderingAllowed, false);
   document.body.removeChild(adapter);
 });
 

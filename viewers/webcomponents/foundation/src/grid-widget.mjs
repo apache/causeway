@@ -176,13 +176,14 @@ export class CausewayCollectionGridElement extends HTMLElement {
     if (presentation.testId) control.setAttribute('data-testid', presentation.testId);
     else control.removeAttribute('data-testid');
     control.pageSize = presentation.pageSize;
+    control.columnReorderingAllowed = presentation.reorderableColumns;
     control.activeItem = null;
     control.selectedItems = [];
     control.rowDetailsRenderer = null;
     for (const descriptor of presentation.columns) {
       const column = document.createElement('vaadin-grid-column');
       column.header = descriptor.label;
-      column.resizable = false;
+      column.resizable = presentation.resizableColumns;
       column.sortable = false;
       column.frozen = false;
       column.renderer = (root, _column, model) => {
@@ -262,7 +263,9 @@ function freezePresentation(value = {}) {
     rangeProvider: typeof value.rangeProvider === 'function' ? value.rangeProvider : async () => ({rows: []}),
     labelledBy: String(value.labelledBy ?? ''),
     describedBy: String(value.describedBy ?? ''),
-    testId: String(value.testId ?? '')
+    testId: String(value.testId ?? ''),
+    resizableColumns: value.resizableColumns === true,
+    reorderableColumns: value.reorderableColumns === true
   });
 }
 

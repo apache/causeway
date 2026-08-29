@@ -44,8 +44,9 @@ test('Grid adapter remains presentation-only and disables unqualified affordance
   const source = await readFile(path.join(foundation, 'src', 'grid-widget.mjs'), 'utf8');
   assert.doesNotMatch(source, /GraphQL|repository|persistence|canonicalObjectPath|navigation-request/i);
   assert.match(source, /column\.sortable = false/);
-  assert.match(source, /column\.resizable = false/);
+  assert.match(source, /column\.resizable = presentation\.resizableColumns/);
+  assert.match(source, /control\.columnReorderingAllowed = presentation\.reorderableColumns/);
   assert.match(source, /control\.selectedItems = \[\]/);
   assert.match(source, /control\.rowDetailsRenderer = null/);
-  assert.doesNotMatch(source, /sortable\s*=\s*true|resizable\s*=\s*true|selectionMode|dragFilter|dropFilter/);
+  assert.doesNotMatch(source, /sortable\s*=\s*true|selectionMode|dragFilter|dropFilter/);
 });
