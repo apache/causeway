@@ -17,6 +17,11 @@
  * under the License.
  */
 
+:root {
+  --causeway-content-width: 100%;
+  --causeway-shell-width: 100%;
+}
+
 .petclinic-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

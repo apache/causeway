@@ -115,6 +115,7 @@ class ReferenceAppHtmxPlaywrightTest {
     @Test
     void menusChoicesAutocompleteCancellationAndRouteDisposal() {
         openShell();
+        assertApplicationUsesAvailableWidth();
         assertThat(page.locator("html").getAttribute("data-causeway-component-toolkit"))
                 .isEqualTo(nativeToolkit() ? "native" : "vaadin");
         assertThat(page.locator("html").getAttribute("data-causeway-presentation"))
@@ -969,6 +970,29 @@ class ReferenceAppHtmxPlaywrightTest {
                 browserFailures.add("request failed: " + request.url() + " " + failure);
             }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertApplicationUsesAvailableWidth() {
+        page.setViewportSize(1800, 900);
+        final var geometry = (List<Number>) page.evaluate("""
+                () => {
+                  const viewport = document.documentElement.clientWidth;
+                  const main = document.querySelector('.causeway-shell-main').getBoundingClientRect();
+                  const navbar = document.querySelector('.causeway-shell-navbar').getBoundingClientRect();
+                  return [viewport, main.width, main.left, viewport - main.right, navbar.width];
+                }
+                """);
+        final var viewport = geometry.get(0).doubleValue();
+        assertThat(page.locator("html").evaluate("element => getComputedStyle(element).getPropertyValue('--causeway-content-width').trim()"))
+                .isEqualTo("100%");
+        assertThat(page.locator("html").evaluate("element => getComputedStyle(element).getPropertyValue('--causeway-shell-width').trim()"))
+                .isEqualTo("100%");
+        assertThat(geometry.get(1).doubleValue()).isGreaterThan(viewport * 0.95);
+        assertThat(geometry.get(2).doubleValue()).isBetween(8.0, 32.0);
+        assertThat(geometry.get(3).doubleValue()).isBetween(8.0, 32.0);
+        assertThat(geometry.get(4).doubleValue()).isGreaterThan(viewport * 0.95);
+        page.setViewportSize(1440, 900);
     }
 
     private void openShell() {
