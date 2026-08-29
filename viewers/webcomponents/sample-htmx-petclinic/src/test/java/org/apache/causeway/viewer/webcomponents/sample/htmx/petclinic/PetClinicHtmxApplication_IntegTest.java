@@ -23,6 +23,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import org.apache.causeway.viewer.webcomponents.htmx.HtmxViewerProperties;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwner;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.PetOwnerRepository;
 import org.apache.causeway.viewer.webcomponents.sample.htmx.petclinic.domain.VisitRepository;
@@ -53,6 +56,9 @@ class PetClinicHtmxApplication_IntegTest {
 
     @Autowired
     private VisitRepository visitRepository;
+
+    @Autowired
+    private HtmxViewerProperties viewerProperties;
 
     @Test
     void loadsDeterministicPetclinicFixture() {
@@ -141,6 +147,40 @@ class PetClinicHtmxApplication_IntegTest {
             assertThat(wicket.headers().firstValue("location").orElse(""))
                     .contains("/wicket/signin");
         }
+    }
+
+    @Test
+    void reloadsChangedRegisteredPageAndRejectsInvalidCurrentContent() throws Exception {
+        assertThat(viewerProperties.getResourcePageMode())
+                .isEqualTo(HtmxViewerProperties.ResourcePageMode.RELOAD);
+        final var resource = getClass().getClassLoader().getResource(
+                "META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html");
+        assertThat(resource).isNotNull();
+        assertThat(resource.getProtocol()).isEqualTo("file");
+        final var path = Path.of(resource.toURI());
+        final var original = Files.readAllBytes(path);
+        final var marker = "<p data-reload-verification>current classpath content</p>";
+        try {
+            Files.writeString(path, marker, StandardCharsets.UTF_8);
+            final var changed = get("/htmx/object/petclinic.PetOwner/s_owner-mary");
+            assertThat(changed.statusCode()).isEqualTo(200);
+            assertThat(changed.body())
+                    .contains(marker)
+                    .doesNotContain("petclinic-owner-page");
+
+            Files.write(path, new byte[0]);
+            final var invalid = get("/htmx/object/petclinic.PetOwner/s_owner-mary");
+            assertThat(invalid.statusCode()).isEqualTo(500);
+            assertThat(invalid.body())
+                    .doesNotContain(marker)
+                    .doesNotContain("petclinic-owner-page")
+                    .doesNotContain(path.toString());
+        } finally {
+            Files.write(path, original);
+        }
+        assertThat(get("/htmx/object/petclinic.PetOwner/s_owner-mary").body())
+                .contains("petclinic-owner-page")
+                .doesNotContain(marker);
     }
 
     @Test

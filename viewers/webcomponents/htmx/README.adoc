@@ -24,6 +24,9 @@ The shell uses external same-origin scripts and styles and requires no inline sc
 `causeway.viewer.webcomponents.htmx.brand` defaults to `Apache Causeway`.
 `causeway.viewer.webcomponents.htmx.language` defaults to `en`.
 `causeway.viewer.webcomponents.htmx.application-stylesheet` optionally adds one same-origin application stylesheet after the default theme.
+`causeway.viewer.webcomponents.htmx.resource-page-mode` accepts `cached` or `reload` and defaults to `cached`.
+Cached mode validates and retains private HTML page content at startup, while reload mode additionally reopens and validates an already-registered page whenever it renders.
+Reload mode is intended for development and adds one bounded classpath-resource read per custom page render.
 `causeway.viewer.webcomponents.htmx.wicket-comparison-path` optionally adds a footer link and is intended only for comparison samples.
 `causeway.viewer.webcomponents.htmx.component-toolkit` accepts `vaadin` or `native` and defaults to `vaadin`.
 The Vaadin policy enables qualified reference editors, basic, numeric, and local-temporal editors and read-only fields, ordinary action buttons, deterministic wide collection Grid presentation, and qualified application Menu Bar tiers, while the native policy is the immediate complete rollback.
@@ -93,8 +96,12 @@ Without an exact custom registration, its child is `<cw-object editable>` and th
 The preferred application customization is a UTF-8 HTML file beneath `META-INF/causeway/webcomponents/pages/`.
 The filename before `.html` is the exact public logical type, so `petclinic.PetOwner.html` registers `petclinic.PetOwner` without an application bean, annotation, manifest, template controller, or client-side fetch.
 The private resource is packaged in the application or a dependency jar but is not served by Spring's ordinary static-resource handler.
-The viewer discovers all direct `*.html` children during startup, accepts at most 512 pages, accepts at most 256 KiB per page, and retains one immutable literal string for each accepted page.
+The viewer discovers all direct `*.html` children during startup, accepts at most 512 pages, and accepts at most 256 KiB per page.
+In default `cached` mode it retains one immutable literal string for each accepted page.
+In opt-in `reload` mode it retains the immutable startup registration but reopens that resource and validates its current content for each render.
 Pages must be non-empty strict UTF-8, contain no NUL character, and use a filename-safe Causeway logical type.
+Reload does not rescan the classpath, so adding, deleting, or renaming a page requires an application restart.
+A defective reload fails the affected request instead of serving stale content or selecting generic layout.
 
 A page contains only the markup placed beneath the viewer-owned route context.
 It does not contain a document shell, GraphQL client, second object context, route interaction controller, or interpolated object identifier.

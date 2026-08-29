@@ -100,14 +100,25 @@ petclinic.Visit.html
 ----
 
 Each exact logical-type filename is discovered at startup and its literal UTF-8 content is placed beneath the viewer-provided route context.
+The sample opts into `causeway.viewer.webcomponents.htmx.resource-page-mode=reload`, while the viewer's production-oriented default remains `cached`.
 The files compose object headers, ordinary application regions, properties, actions, collections, and declared columns while GraphQL remains authoritative for identity, values, visibility, usability, validation, invocation, and results.
 `petclinic.PetOwner.html` demonstrates natural member association by nesting `updateName` beneath `name`, `addPet` and `removePet` beneath `pets`, and `bookVisit` beneath `visits`.
 The retained `PetOwner.layout.xml` expresses the equivalent generated-grid associations, while the direct HTML needs no adjacent Petclinic-only association wrapper.
 They use the configured `static/css/application.css`, public Causeway hooks, and design variables without inline styles or raw Vaadin elements.
 
 The existing `*.layout.xml`, `*.columnOrder.txt`, and `menubars.layout.xml` resources intentionally remain in the artifact.
-If an exact HTML page is removed from packaging, the route immediately falls back to `<cw-object editable>` and the retained effective grid and column order.
+If an exact HTML page is removed from packaging before startup, the route falls back to `<cw-object editable>` and the retained effective grid and column order.
 An unreadable, malformed, duplicate, invalidly named, empty, or oversized discovered page fails startup instead of disguising the error as successful generic fallback.
+
+=== IntelliJ page-editing loop
+
+After starting `PetClinicHtmxApplication` from IntelliJ, edit an existing page under `src/main/resources/META-INF/causeway/webcomponents/pages/`.
+Run *Build > Build Project* so IntelliJ copies the resource into the running module's classpath output, then refresh the browser to render the current content without restarting Spring.
+To remove the explicit build action, enable IntelliJ automatic build and permit auto-make while an application is running in the IDE's advanced compiler settings.
+The precise setting names vary by IntelliJ release, so verify that the edited file is copied into the module output if refresh still shows old content.
+Reload mode rereads content only for pages registered at startup.
+Adding, deleting, or renaming a page changes registry identity and therefore still requires an application restart.
+An empty, unreadable, oversized, malformed UTF-8, or NUL-containing edit fails that request rather than serving stale HTML or generic layout; correct the file, rebuild it, and refresh again.
 
 The primary menus cover Pet Owner creation, search, list, count, and upcoming visits.
 HTML object pages cover editable properties, multiline notes, enum values, references, responsive cards, adjacent action groups, related Pets, contributed Visits, and contributed booking.
