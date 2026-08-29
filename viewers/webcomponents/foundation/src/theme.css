@@ -355,9 +355,15 @@ cw-property:last-child .causeway-property {
   text-align: start;
 }
 
-.causeway-property-description,
-.causeway-collection-description {
+.causeway-property-description {
   grid-column: 2 / -1;
+  color: var(--causeway-muted);
+  font-size: var(--causeway-font-size-sm);
+}
+
+.causeway-collection-description {
+  margin: 0;
+  padding: var(--causeway-space-2) var(--causeway-space-4);
   color: var(--causeway-muted);
   font-size: var(--causeway-font-size-sm);
 }

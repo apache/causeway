@@ -133,6 +133,56 @@ test('property reads remain compatible when member metadata is unavailable', asy
   assert.equal(propertyState.data.get, 'Classics');
 });
 
+test('collection reads include only supported canonical heading metadata', async () => {
+  const executor = createRichSchemaFixtureExecutor();
+  const context = createContext(executor);
+  let collectionState;
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'}, state => { collectionState = state; });
+  await waitFor(() => context.state.status === 'ready');
+
+  assert.equal(executor.readCalls.length, 1);
+  const collectionDocument = executor.readCalls[0].document;
+  assert.match(collectionDocument, /staffMembers\s*\{[\s\S]*metadata\s*\{/);
+  assert.match(collectionDocument, /\bfriendlyName\b/);
+  assert.match(collectionDocument, /\bdescription\b/);
+  assert.deepEqual(collectionState.data.metadata, {
+    friendlyName: 'Department staff',
+    description: 'Current staff members.'
+  });
+
+  const metadataErrorResponse = graphQLObjectResponse();
+  metadataErrorResponse.data.rich[DEPARTMENT_OBJECT_FIELD].staffMembers.metadata.description = null;
+  metadataErrorResponse.errors = [{
+    message: 'Collection description is unavailable.',
+    path: ['rich', DEPARTMENT_OBJECT_FIELD, 'staffMembers', 'metadata', 'description'],
+    extensions: {classification: 'DataFetchingException'}
+  }];
+  const metadataErrorExecutor = createRichSchemaFixtureExecutor({readResponses: [metadataErrorResponse]});
+  const metadataErrorContext = createContext(metadataErrorExecutor);
+  let metadataErrorState;
+  metadataErrorContext.registerRequirement({kind: 'collection', member: 'staffMembers'}, state => { metadataErrorState = state; });
+  await waitFor(() => metadataErrorContext.state.status === 'partial-error');
+  assert.equal(metadataErrorState.status, 'partial-error');
+  assert.equal(metadataErrorState.data.metadata.friendlyName, 'Department staff');
+  assert.equal(metadataErrorState.data.metadata.description, null);
+
+  const types = createRichSchemaTypes();
+  for (const [name, type] of types) {
+    if (type.fields?.some(field => field.name === 'friendlyName')) {
+      types.set(name, {...type, fields: type.fields.filter(field => field.name !== 'description')});
+    }
+  }
+  const partialExecutor = createRichSchemaFixtureExecutor({types});
+  const partialContext = createContext(partialExecutor);
+  partialContext.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => partialContext.state.status === 'ready');
+  const collectionSelection = partialExecutor.readCalls[0].document.slice(
+    partialExecutor.readCalls[0].document.indexOf('staffMembers {')
+  );
+  assert.match(collectionSelection, /metadata\s*\{[\s\S]*friendlyName/);
+  assert.doesNotMatch(collectionSelection, /\bdescription\b/);
+});
+
 test('coalesces layout metadata with semantic member requirements', async () => {
   const executor = createRichSchemaFixtureExecutor();
   const context = createContext(executor);
