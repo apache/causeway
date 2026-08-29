@@ -163,9 +163,9 @@ a:hover {
 }
 
 button,
-input,
-select,
-textarea {
+input:not([slot="input"]),
+select:not([slot="input"]),
+textarea:not([slot="input"]) {
   max-width: 100%;
   border: 1px solid var(--causeway-border-strong);
   border-radius: var(--causeway-radius-sm);
@@ -174,8 +174,8 @@ textarea {
 }
 
 button,
-select,
-input:not([type="checkbox"]):not([type="radio"]) {
+select:not([slot="input"]),
+input:not([slot="input"]):not([type="checkbox"]):not([type="radio"]) {
   min-height: var(--causeway-control-height);
 }
 
@@ -195,18 +195,18 @@ button:disabled,
   opacity: 0.62;
 }
 
-:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+:where(a, button, input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"]), [tabindex]):focus-visible {
   outline: 3px solid var(--causeway-focus);
   outline-offset: 2px;
 }
 
-input,
-select,
-textarea {
+input:not([slot="input"]),
+select:not([slot="input"]),
+textarea:not([slot="input"]) {
   padding: 0.45rem 0.6rem;
 }
 
-textarea {
+textarea:not([slot="input"]) {
   min-height: 6rem;
   resize: vertical;
 }
@@ -429,7 +429,7 @@ cw-property:last-child .causeway-property {
   min-width: 0;
 }
 
-.causeway-property-editor > :where(input, select, textarea) {
+.causeway-property-editor > :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"])) {
   width: 100%;
 }
 
@@ -638,7 +638,7 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
   gap: var(--causeway-space-1);
 }
 
-.causeway-action-parameter :where(input, select, textarea) {
+.causeway-action-parameter :where(input:not([slot="input"]), select:not([slot="input"]), textarea:not([slot="input"])) {
   width: 100%;
 }
 
