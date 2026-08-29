@@ -558,6 +558,87 @@ test('collection component does not read until activated and renders declared co
   assert.equal(collection.hidden, true);
 });
 
+test('collection component resolves canonical and HTML headings without unmodifiable noise or rereads', async () => {
+  let registrations = 0;
+  let publish;
+  const context = {
+    registerRequirement(_requirement, listener) {
+      registrations += 1;
+      publish = listener;
+      listener({
+        status: 'ready',
+        descriptor: {id: 'staffMembers'},
+        data: {
+          hidden: false,
+          disabled: 'Cannot edit a mixed-in collection.',
+          metadata: {friendlyName: 'Department staff', description: 'Current staff members.'}
+        },
+        errors: [],
+        generation: 1
+      });
+      return () => {};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  collection.id = 'staffMembers';
+  collection.context = context;
+  document.body.appendChild(collection);
+  await waitFor(() => collection.innerHTML.includes('Department staff'));
+
+  assert.deepEqual(CausewayCollectionElement.observedAttributes, ['id', 'named', 'described-as', 'label', 'active']);
+  assert.match(collection.innerHTML, /class="causeway-collection-label">Department staff<\/h2>/);
+  assert.match(collection.innerHTML, /class="causeway-collection-description">Current staff members\.<\/p>/);
+  assert.match(collection.innerHTML, /aria-labelledby="causeway-collection-label-/);
+  assert.match(collection.innerHTML, /aria-describedby="causeway-collection-description-/);
+  assert.doesNotMatch(collection.innerHTML, /Cannot edit a mixed-in collection/);
+  assert.doesNotMatch(collection.innerHTML, /causeway-collection-disabled-reason/);
+
+  publish({
+    status: 'partial-error',
+    descriptor: {id: 'staffMembers'},
+    data: {
+      hidden: false,
+      disabled: null,
+      metadata: {friendlyName: 'Department staff', description: null}
+    },
+    errors: [{message: 'Collection description is unavailable.'}],
+    generation: 2
+  });
+  assert.match(collection.innerHTML, /Department staff/);
+  assert.doesNotMatch(collection.innerHTML, /causeway-collection-description/);
+  assert.doesNotMatch(collection.innerHTML, /causeway-error/);
+  publish({
+    status: 'ready',
+    descriptor: {id: 'staffMembers'},
+    data: {
+      hidden: false,
+      disabled: null,
+      metadata: {friendlyName: 'Department staff', description: 'Current staff members.'}
+    },
+    errors: [],
+    generation: 3
+  });
+
+  collection.label = 'Legacy staff label';
+  assert.match(collection.innerHTML, /Legacy staff label/);
+  collection.named = 'Priority team';
+  collection.describedAs = 'People assigned to priority cases.';
+  assert.match(collection.innerHTML, /class="causeway-collection-label">Priority team<\/h2>/);
+  assert.match(collection.innerHTML, /class="causeway-collection-description">People assigned to priority cases\.<\/p>/);
+
+  collection.describedAs = ' priority TEAM ';
+  assert.doesNotMatch(collection.innerHTML, /causeway-collection-description/);
+  assert.doesNotMatch(collection.innerHTML, /aria-describedby/);
+
+  collection.removeAttribute('named');
+  collection.removeAttribute('described-as');
+  collection.removeAttribute('label');
+  assert.match(collection.innerHTML, /Department staff/);
+  assert.match(collection.innerHTML, /Current staff members/);
+  assert.equal(registrations, 1);
+  document.body.removeChild(collection);
+});
+
 test('collection component forwards window requests and publishes semantic window state', async () => {
   let request;
   const context = {

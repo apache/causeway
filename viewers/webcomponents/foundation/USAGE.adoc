@@ -57,12 +57,16 @@ The `cw-` element namespace replaces the former `causeway-` element namespace wi
 Applications upgrading across this breaking change must replace each former opening and closing custom-element tag and each element-name selector with its one-to-one `cw-` equivalent.
 Semantic `causeway-*` events, CSS classes, `data-causeway-*` attributes, `--causeway-*` variables, and `/causeway-*` asset paths keep their existing spelling.
 
-Properties, actions, collections, and collection columns use the standard `id` attribute and native reflected `id` property to identify their Causeway member, and accept an optional `label` override.
+Properties, actions, collections, and collection columns use the standard `id` attribute and native reflected `id` property to identify their Causeway member.
+Properties, actions, and collection columns accept an optional `label` override.
+Collections accept `named` and `described-as` heading overrides; the existing `label` name override remains compatible, with `named` taking precedence.
 The former `member` attribute and custom `member` property are not compatibility aliases.
 Applications must keep authored IDs unique according to ordinary HTML identifier rules.
 A property exposes interaction only when its `editable` attribute or property is enabled.
 Object links use `logical-type`, `object-id`, `title`, and `disabled`.
 Collections use `active` and declarative collection-column children.
+Without HTML heading overrides, collections use canonical `metadata.friendlyName` and `metadata.description`, followed by a humanized member-id name and no-description fallback.
+Collection-level disabled or unmodifiable reasons are not presented as explanatory text or tooltips; individual cells and associated actions retain their own usability semantics.
 
 The corresponding JavaScript properties support programmatic composition.
 A property or collection accepts a `rendererRegistry`.
@@ -479,7 +483,7 @@ An authored property or collection can place object actions directly beneath the
   <cw-action id="updateName"></cw-action>
 </cw-property>
 
-<cw-collection id="pets" active>
+<cw-collection id="pets" named="Companion animals" described-as="Pets registered to this owner." active>
   <cw-collection-column id="name" label="Name"></cw-collection-column>
   <cw-collection-column id="species" label="Species"></cw-collection-column>
   <cw-action id="addPet"></cw-action>
@@ -505,7 +509,9 @@ Generated `<cw-object>` layouts retain semantically equivalent associated-member
 
 == Lazy collections and row hydration
 
-A collection's primary object requirement contains only advertised `hidden` and `disabled` state.
+A collection's primary object requirement contains advertised `hidden` and `disabled` state plus supported canonical `metadata.friendlyName` and `metadata.description` heading fields.
+The heading resolves `named`, legacy `label`, canonical friendly name, and humanized member id in that order; its description resolves `described-as`, canonical description, and no text in that order.
+A distinct description is associated with the collection and displayed below the heading in subdued smaller text, while a description equal to the resolved name is omitted.
 The `get` field is loaded through a context-owned secondary operation after activation.
 Secondary operations are cached by member and structural row selection, support forced refresh, and are canceled when their component or object context is disconnected.
 

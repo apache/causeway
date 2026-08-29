@@ -55,7 +55,7 @@
     <div class="petclinic-object-collections">
       <section class="petclinic-card" aria-labelledby="petclinic-owner-pets-heading">
         <h2 id="petclinic-owner-pets-heading">Pets</h2>
-        <cw-collection id="pets" label="Pets" active offset="0" size="10">
+        <cw-collection id="pets" named="Companion animals" active offset="0" size="10">
           <cw-collection-column id="name" label="Name"></cw-collection-column>
           <cw-collection-column id="species" label="Species"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
@@ -66,7 +66,9 @@
 
       <section class="petclinic-card" aria-labelledby="petclinic-owner-visits-heading">
         <h2 id="petclinic-owner-visits-heading">Visits</h2>
-        <cw-collection id="visits" label="Visits" active offset="0" size="10">
+        <cw-collection id="visits" named="Visit history"
+                       described-as="All visits recorded for this owner's pets."
+                       active offset="0" size="10">
           <cw-collection-column id="visitAt" label="When"></cw-collection-column>
           <cw-collection-column id="reason" label="Reason"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>

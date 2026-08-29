@@ -216,12 +216,22 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\"")
+                .contains("<cw-collection id=\"pets\" named=\"Companion animals\"")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
-                .contains("<cw-collection id=\"visits\"")
+                .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
+                .contains("described-as=\"All visits recorded for this owner's pets.\"")
                 .contains("<cw-action id=\"bookVisit\"")
                 .doesNotContain("petclinic-associated-actions", "petclinic-member-composition");
+        final String homeHtml;
+        try (var input = loader.getResource(
+                "META-INF/causeway/webcomponents/pages/petclinic.HomePage.html").openStream()) {
+            homeHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        assertThat(homeHtml)
+                .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\"")
+                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\"")
+                .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=");
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
         assertThat(get("/META-INF/causeway/webcomponents/pages/petclinic.PetOwner.html").statusCode())
@@ -319,8 +329,8 @@ class PetClinicHtmxApplication_IntegTest {
                     petclinic_PetOwner(object: {id: "s_owner-mary"}) {
                       _meta { id logicalTypeName title grid }
                       name { get }
-                      pets { get { _meta { id logicalTypeName title } } }
-                      visits { get { _meta { id logicalTypeName title } } }
+                      pets { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
+                      visits { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
                       addPet { hidden disabled params { name { validity datatype } } }
                       bookVisit { hidden disabled }
                     }
@@ -329,6 +339,11 @@ class PetClinicHtmxApplication_IntegTest {
                 """);
         assertNoGraphQLErrors(owner);
         assertThat(owner.at("/data/rich/petclinic_PetOwner/name/get").asText()).isEqualTo("Mary Smith");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/metadata/friendlyName").asText()).isEqualTo("Pets");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/metadata/description").asText())
+                .isEqualTo("Pets currently registered to this owner.");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/metadata/friendlyName").asText()).isEqualTo("Visits");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/metadata/description").isNull()).isTrue();
         assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/get").size()).isEqualTo(2);
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/get").size()).isEqualTo(2);
     }

@@ -56,6 +56,12 @@ test('disabled reasons use label-owned tooltips and string values align to logic
   assert.match(theme, /\.causeway-property-value-string \{\s+text-align: start;/);
 });
 
+test('collection descriptions remain quiet text directly below their labels', async () => {
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /\.causeway-collection-description \{\s+margin: 0;\s+padding: var\(--causeway-space-2\) var\(--causeway-space-4\);\s+color: var\(--causeway-muted\);\s+font-size: var\(--causeway-font-size-sm\);/);
+  assert.doesNotMatch(theme, /\.causeway-property-description,\s+\.causeway-collection-description/);
+});
+
 test('application native-control chrome does not cross into toolkit-owned slotted field inputs', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   const nativeInput = 'input:not([slot="input"])';
