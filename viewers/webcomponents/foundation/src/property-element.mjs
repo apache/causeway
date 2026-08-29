@@ -21,6 +21,12 @@ import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {
+  boundedTooltipSection,
+  composeMemberTooltip,
+  DescriptionPresentation,
+  normalizeDescriptionPresentation
+} from './description-presentation.mjs';
+import {
   defaultEditorRegistry,
   parseCausewayEditorValue,
   renderCausewayEditor
@@ -48,7 +54,7 @@ let propertySequence = 0;
 
 export class CausewayPropertyElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline'];
+    return ['id', 'named', 'described-as', 'description-as', 'multi-line', 'label-position', 'label', 'editable', 'multiline'];
   }
 
   constructor() {
@@ -187,6 +193,14 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
 
   set describedAs(value) {
     setOptionalAttribute(this, 'described-as', value);
+  }
+
+  get descriptionAs() {
+    return normalizeDescriptionPresentation(this.getAttribute('description-as'));
+  }
+
+  set descriptionAs(value) {
+    setOptionalAttribute(this, 'description-as', value);
   }
 
   get labelPosition() {
@@ -487,11 +501,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const presentation = this.#presentation(state);
     if (presentation.loading) {
-      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field" role="status">Loading value…</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes} role="status">Loading value…</span></div>`);
       return;
     }
     if (presentation.error) {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field">${escapeHtml(errorMessage(state))}</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="${presentation.fieldClass}"${presentation.fieldAttributes}>${escapeHtml(errorMessage(state))}</span></div>`);
       return;
     }
     const propertyState = state.data ?? {};
@@ -518,7 +532,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
   ${presentation.labelMarkup}
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
-  <div class="causeway-property-field">
+  <div class="${presentation.fieldClass}"${presentation.fieldAttributes}>
     <output class="causeway-property-value${stringValueClass}"${presentation.labelPosition === 'NONE' ? ` aria-label="${escapeHtml(presentation.label)}"` : ` aria-labelledby="${this.labelId}"`}${presentation.describedBy ? ` aria-describedby="${presentation.describedBy}"` : ''}>${valueMarkup}</output>
     ${editMarkup}
   </div>
@@ -637,40 +651,45 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const labelPosition = normalizeLabelPosition(this.getAttribute('label-position'))
       || normalizeLabelPosition(metadata.labelPosition)
       || 'LEFT';
-    const description = labelPosition === 'NONE'
-      || candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
+    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
       ? ''
       : candidateDescription;
+    const descriptionPresentation = normalizeDescriptionPresentation(this.getAttribute('description-as'));
+    const descriptionVisible = Boolean(description)
+      && descriptionPresentation === DescriptionPresentation.LABEL
+      && labelPosition !== 'NONE';
     const descriptionMarkup = description
-      ? `<span id="${this.descriptionId}" class="causeway-property-description">${escapeHtml(description)}</span>`
+      ? `<span id="${this.descriptionId}" class="causeway-property-description${descriptionVisible ? '' : ' causeway-visually-hidden'}">${escapeHtml(description)}</span>`
       : '';
-    const disabledReason = typeof state.data?.disabled === 'string'
+    const disabledReason = boundedTooltipSection(typeof state.data?.disabled === 'string'
       ? state.data.disabled
-      : state.data?.disabled === true ? 'Disabled' : '';
-    const boundedDisabledReason = boundedTooltip(disabledReason);
-    const disabledMarkup = boundedDisabledReason
-      ? `<span id="${this.reasonId}" class="causeway-visually-hidden">${escapeHtml(boundedDisabledReason)}</span>`
+      : state.data?.disabled === true ? 'Disabled' : '');
+    const disabledMarkup = disabledReason
+      ? `<span id="${this.reasonId}" class="causeway-visually-hidden">${escapeHtml(disabledReason)}</span>`
       : '';
-    const labelDescribedBy = [description ? this.descriptionId : '', boundedDisabledReason ? this.reasonId : '']
+    const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
       .filter(Boolean)
       .join(' ');
-    const labelAttributes = `${description ? ` title="${escapeHtml(description)}"` : ''}${boundedDisabledReason
-      ? ` tabindex="0" data-tooltip="${escapeHtml(boundedDisabledReason)}"${labelDescribedBy ? ` aria-describedby="${labelDescribedBy}"` : ''}`
-      : ''}`;
-    const labelClass = `causeway-property-label${boundedDisabledReason ? ' causeway-property-disabled-tooltip' : ''}`;
+    const tooltipDescription = descriptionPresentation === DescriptionPresentation.TOOLTIP || disabledReason
+      ? description
+      : '';
+    const tooltip = composeMemberTooltip(tooltipDescription, disabledReason);
+    const labelOwnsTooltip = labelPosition !== 'NONE';
+    const labelAttributes = labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '';
+    const labelClass = `causeway-property-label${labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}${disabledReason ? ' causeway-property-disabled-tooltip' : ''}`;
     return {
       label,
       labelPosition,
-      labelClass,
-      labelAttributes,
       labelMarkup: labelPosition === 'NONE'
         ? `<span id="${this.labelId}" class="causeway-visually-hidden">${escapeHtml(label)}</span>`
         : `<span id="${this.labelId}" class="${labelClass}"${labelAttributes}>${escapeHtml(label)}</span>`,
       description,
       descriptionMarkup,
-      disabledReason: boundedDisabledReason,
+      disabledReason,
       disabledMarkup,
-      describedBy: [description ? this.descriptionId : '', disabledReason ? this.reasonId : ''].filter(Boolean).join(' '),
+      describedBy,
+      fieldClass: `causeway-property-field${!labelOwnsTooltip && tooltip ? ' causeway-member-tooltip' : ''}`,
+      fieldAttributes: !labelOwnsTooltip ? tooltipTriggerAttributes(tooltip, describedBy) : '',
       loading: ['idle', 'schema-loading', 'object-loading'].includes(state.status),
       error: ['terminal-error', 'unsupported', 'partial-error'].includes(state.status)
     };
@@ -747,7 +766,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="${busy}">
   ${presentation.labelMarkup}
   ${presentation.descriptionMarkup}
-  <div class="causeway-property-field">
+  <div class="${presentation.fieldClass}"${presentation.fieldAttributes}>
   <div class="causeway-property-editor">${renderedEditor.html}</div>
   ${errorMarkup}
   <div class="causeway-property-editor-actions">
@@ -820,9 +839,9 @@ function publicInteractionValue(editor, value) {
   return editor?.codec?.sensitive === true ? null : value;
 }
 
-function boundedTooltip(value, maximum = 240) {
-  const text = String(value ?? '').trim();
-  return text.length > maximum ? `${text.slice(0, maximum - 1)}…` : text;
+function tooltipTriggerAttributes(tooltip, describedBy) {
+  if (!tooltip) return '';
+  return ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}`;
 }
 
 function interactionStatusLabel(status) {

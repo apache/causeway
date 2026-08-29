@@ -27,6 +27,12 @@ import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {
+  boundedTooltipSection,
+  composeMemberTooltip,
+  DescriptionPresentation,
+  normalizeDescriptionPresentation
+} from './description-presentation.mjs';
+import {
   connectMemberComposition,
   disconnectMemberComposition,
   eventOriginatesFromAssociatedAction,
@@ -69,7 +75,7 @@ export function captureDeclarativeCollectionColumns(root = globalThis.document) 
 
 export class CausewayCollectionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'named', 'described-as', 'label', 'active'];
+    return ['id', 'named', 'described-as', 'description-as', 'label', 'active'];
   }
 
   constructor() {
@@ -77,6 +83,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const sequence = ++collectionSequence;
     this.labelId = `causeway-collection-label-${sequence}`;
     this.descriptionId = `causeway-collection-description-${sequence}`;
+    this.reasonId = `causeway-collection-reason-${sequence}`;
     this._columns = [];
     this._rendererRegistry = defaultValueRendererRegistry;
     this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
@@ -170,6 +177,14 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
 
   set describedAs(value) {
     this.setAttribute('described-as', value);
+  }
+
+  get descriptionAs() {
+    return normalizeDescriptionPresentation(this.getAttribute('description-as'));
+  }
+
+  set descriptionAs(value) {
+    this.setAttribute('description-as', value);
   }
 
   get label() {
@@ -403,14 +418,28 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const description = normalizedText(candidateDescription) === normalizedText(label)
       ? ''
       : candidateDescription;
-    const shell = (content, attributes = '') => collectionShell(
-      this.labelId,
+    const descriptionPresentation = normalizeDescriptionPresentation(this.getAttribute('description-as'));
+    const disabledReason = boundedTooltipSection(typeof state.data?.disabled === 'string'
+      ? state.data.disabled
+      : state.data?.disabled === true ? 'Disabled' : '');
+    const describedBy = [description ? this.descriptionId : '', disabledReason ? this.reasonId : '']
+      .filter(Boolean)
+      .join(' ');
+    const tooltipDescription = descriptionPresentation === DescriptionPresentation.TOOLTIP || disabledReason
+      ? description
+      : '';
+    const tooltip = composeMemberTooltip(tooltipDescription, disabledReason);
+    const shell = (content, attributes = '') => collectionShell({
+      labelId: this.labelId,
       label,
-      this.descriptionId,
+      descriptionId: this.descriptionId,
       description,
-      content,
-      attributes
-    );
+      descriptionVisible: descriptionPresentation === DescriptionPresentation.LABEL,
+      reasonId: this.reasonId,
+      disabledReason,
+      describedBy,
+      tooltip
+    }, content, attributes);
     if (['idle', 'schema-loading', 'object-loading'].includes(state.status)) {
       renderMemberPrimary(this, shell('<span role="status">Loading collection metadata…</span>', ' aria-busy="true"'));
       return;
@@ -448,7 +477,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       ? `<p class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</p>`
       : '';
     if (this._gridQualification.qualified) {
-      this.#renderGrid(shell, errors, description);
+      this.#renderGrid(shell, errors, describedBy);
       return;
     }
     const content = this._columns.length > 0
@@ -458,7 +487,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.#restoreNativeFocus();
   }
 
-  #renderGrid(shell, errors, description) {
+  #renderGrid(shell, errors, describedBy) {
     const revision = this.gridHostRevision;
     const bounded = this._gridQualification.presentation === 'grid-bounded';
     const window = this.collectionState.window;
@@ -473,7 +502,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       totalCount: window.totalCount,
       pageSize: window.requestedSize,
       labelledBy: this.labelId,
-      describedBy: description ? this.descriptionId : '',
+      describedBy,
       testId: this.getAttribute('data-testid') ? `${this.getAttribute('data-testid')}-grid` : '',
       rangeProvider: request => this.#projectRange(request, revision)
     };
@@ -752,10 +781,25 @@ function collectionRows(state) {
   return Array.isArray(state?.data?.get) ? state.data.get : [];
 }
 
-function collectionShell(labelId, label, descriptionId, description, content, attributes = '') {
-  return `<section class="causeway-collection" aria-labelledby="${labelId}"${description ? ` aria-describedby="${descriptionId}"` : ''}${attributes}>
-  <h2 id="${labelId}" class="causeway-collection-label">${escapeHtml(label)}</h2>
-  ${description ? `<p id="${descriptionId}" class="causeway-collection-description">${escapeHtml(description)}</p>` : ''}
+function collectionShell(presentation, content, attributes = '') {
+  const {
+    labelId,
+    label,
+    descriptionId,
+    description,
+    descriptionVisible,
+    reasonId,
+    disabledReason,
+    describedBy,
+    tooltip
+  } = presentation;
+  const tooltipAttributes = tooltip
+    ? ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}`
+    : '';
+  return `<section class="causeway-collection" aria-labelledby="${labelId}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}${attributes}>
+  <h2 id="${labelId}" class="causeway-collection-label${tooltip ? ' causeway-member-tooltip' : ''}"${tooltipAttributes}>${escapeHtml(label)}</h2>
+  ${description ? `<p id="${descriptionId}" class="causeway-collection-description${descriptionVisible ? '' : ' causeway-visually-hidden'}">${escapeHtml(description)}</p>` : ''}
+  ${disabledReason ? `<span id="${reasonId}" class="causeway-visually-hidden">${escapeHtml(disabledReason)}</span>` : ''}
   <div class="causeway-collection-content">${content}</div>
 </section>`;
 }
