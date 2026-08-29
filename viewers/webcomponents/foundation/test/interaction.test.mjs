@@ -372,6 +372,7 @@ test('editable properties support prepare, validation, cancel and authoritative 
     data: {hidden: false, disabled: null, get: 'Classics'}, errors: [], generation: 3
   });
   assert.match(property.innerHTML, /property-name-edit/);
+  assert.match(property.innerHTML, /data-multi-line="5"/);
   assert.match(property.innerHTML, /causeway-property-value-string/);
   assert.doesNotMatch(property.innerHTML, /causeway-property-disabled-tooltip|data-tooltip="Locked by policy"|tabindex="0"/);
   assert.match(property.innerHTML, /class="causeway-property-edit"[^>]+data-causeway-action="edit"/);
@@ -381,6 +382,7 @@ test('editable properties support prepare, validation, cancel and authoritative 
   assert.doesNotMatch(property.innerHTML, />Edit Name</);
   assert.equal(await property.beginEdit(), true);
   assert.match(property.innerHTML, /property-name-editor/);
+  assert.match(property.innerHTML, /causeway-property-editing[^>]+data-multi-line="5"/);
   assert.match(property.innerHTML, /data-control="text-area"[^>]+data-rows="5"/);
   assert.doesNotMatch(property.innerHTML, /causeway-property-interaction-status/);
   assert.doesNotMatch(property.innerHTML, />Editing</);
