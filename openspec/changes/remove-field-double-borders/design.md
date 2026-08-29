@@ -20,9 +20,9 @@ Vaadin simultaneously renders its own read-only input container, producing the s
 
 ## Decisions
 
-### Exclude toolkit slotted inputs from native-control theme rules
+### Scope application native-control rules away from toolkit internals
 
-The global theme selectors will exclude controls carrying `slot="input"` wherever it applies border, sizing, focus, padding, or textarea resizing.
+The application-defined global theme selectors will not target controls carrying `slot="input"` wherever they apply border, sizing, focus, padding, or textarea resizing.
 The slot marker is the stable integration boundary already emitted by Vaadin field controls, and the exclusion allows Vaadin's own shadow styles to reset and present that internal input correctly.
 
 Editing generated Vaadin assets is rejected because they are deterministic reviewed outputs and regeneration would overwrite the change.

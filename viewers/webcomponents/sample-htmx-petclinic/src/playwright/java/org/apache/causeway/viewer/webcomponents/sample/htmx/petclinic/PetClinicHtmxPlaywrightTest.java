@@ -234,6 +234,8 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("cw-collection[id='visits'] > cw-action[id='bookVisit']").count())
                 .isEqualTo(1);
         assertDefaultOrNativeMemberPresentation("name", "delete");
+        assertSingleToolkitFieldBoundary("name");
+        assertSingleToolkitFieldBoundary("telephoneNumber");
         assertThat(page.locator("cw-collection[id='pets']")
                 .evaluate("element => [...element.children].filter(child => child.localName === 'cw-action').map(child => child.getAttribute('id')).join(',')"))
                 .isEqualTo("addPet,removePet");
@@ -881,6 +883,35 @@ class PetClinicHtmxPlaywrightTest {
         final var alert = page.locator(PROMPT + " [role='alert']")
                 .filter(new Locator.FilterOptions().setHasText(messagePart)).first();
         alert.waitFor();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertSingleToolkitFieldBoundary(final String member) {
+        final var property = page.locator("cw-property[id='" + member + "']");
+        if (nativeToolkit()) {
+            assertThat(property.locator("cw-field-editor").count()).isZero();
+            return;
+        }
+        page.waitForFunction("member => document.querySelector(`cw-property[id='${member}'] cw-field-editor[data-mode='view'] > [data-causeway-field-view]`)?.shadowRoot?.querySelector('[part~=input-field]')", member);
+        final var borderWidths = (List<Number>) property.evaluate("""
+                element => {
+                  const control = element.querySelector('cw-field-editor[data-mode="view"] > [data-causeway-field-view]');
+                  const container = control.shadowRoot.querySelector('[part~="input-field"]');
+                  const input = control.querySelector('[slot="input"]');
+                  const borderWidth = candidate => {
+                    const style = getComputedStyle(candidate);
+                    return ['Top', 'Right', 'Bottom', 'Left']
+                      .reduce((total, side) => total + Number.parseFloat(style[`border${side}Width`]), 0);
+                  };
+                  return [borderWidth(container), borderWidth(input)];
+                }
+                """);
+        assertThat(borderWidths.get(0).doubleValue())
+                .as("toolkit field boundary for %s", member)
+                .isGreaterThan(0.0);
+        assertThat(borderWidths.get(1).doubleValue())
+                .as("nested native input boundary for %s", member)
+                .isZero();
     }
 
     @SuppressWarnings("unchecked")
