@@ -126,7 +126,43 @@ test('property presentation attributes override canonical metadata with bounded 
   assert.match(property.innerHTML, />Given name<\/span>/);
   assert.match(property.innerHTML, /causeway-property-description[^>]*>The given or first name of this customer<\/span>/);
   assert.match(property.innerHTML, /data-rows="5"/);
+  assert.match(property.innerHTML, /data-multi-line="5"/);
   assert.doesNotMatch(property.innerHTML, /Metadata description|Compatibility name/);
+});
+
+test('effective multiline state is reflected on every rendered property shell', () => {
+  const property = new CausewayPropertyElement();
+  property.id = 'notes';
+  property.setAttribute('multi-line', '5');
+
+  property.renderComponentState(state({status: 'object-loading'}));
+  assert.match(property.innerHTML, /data-multi-line="5"/);
+  property.renderComponentState(state({status: 'partial-error', errors: [{message: 'Unavailable'}]}));
+  assert.match(property.innerHTML, /data-multi-line="5"/);
+
+  property.removeAttribute('multi-line');
+  property.setAttribute('multiline', '3');
+  property.renderComponentState(state({data: {
+    hidden: false,
+    disabled: null,
+    datatype: 'String',
+    metadata: {friendlyName: 'Notes', description: null, multiLine: 4, labelPosition: 'LEFT'},
+    get: 'Details'
+  }}));
+  assert.match(property.innerHTML, /data-multi-line="3"/);
+
+  property.removeAttribute('multiline');
+  property.renderComponentState(state({data: {
+    hidden: false,
+    disabled: null,
+    datatype: 'String',
+    metadata: {friendlyName: 'Notes', description: null, multiLine: 4, labelPosition: 'LEFT'},
+    get: 'Details'
+  }}));
+  assert.match(property.innerHTML, /data-multi-line="4"/);
+
+  property.renderComponentState(state({data: {hidden: false, disabled: null, datatype: 'String', get: 'Details'}}));
+  assert.doesNotMatch(property.innerHTML, /data-multi-line=/);
 });
 
 test('property metadata supplies descriptions and label positions while NONE suppresses visible presentation', () => {
@@ -176,6 +212,7 @@ test('invalid authored presentation values fall back to metadata and compatibili
   assert.equal(property.labelPosition, '');
   assert.match(property.innerHTML, /data-label-position="TOP"/);
   assert.match(property.innerHTML, /data-rows="50"/);
+  assert.match(property.innerHTML, /data-multi-line="50"/);
 });
 
 test('qualified standard values use a read-only field while native policy preserves the standard renderer', () => {

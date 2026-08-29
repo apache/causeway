@@ -487,11 +487,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     }
     const presentation = this.#presentation(state);
     if (presentation.loading) {
-      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}" aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field" role="status">Loading value…</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="true">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field" role="status">Loading value…</span></div>`);
       return;
     }
     if (presentation.error) {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}" role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field">${escapeHtml(errorMessage(state))}</span></div>`);
+      renderMemberPrimary(this, `<div class="causeway-property causeway-error" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} role="alert">${presentation.labelMarkup}${presentation.descriptionMarkup}${presentation.disabledMarkup}<span class="causeway-property-field">${escapeHtml(errorMessage(state))}</span></div>`);
       return;
     }
     const propertyState = state.data ?? {};
@@ -514,7 +514,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     const editMarkup = this.#canOfferEdit(state)
       ? `<button type="button" class="causeway-property-edit" data-causeway-action="edit" aria-label="${escapeHtml(editLabel)}" title="${escapeHtml(editLabel)}"${this.#testId('edit')}><svg class="causeway-property-edit-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path><path d="m13.5 6.5 4 4"></path></svg></button>`
       : '';
-    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" data-label-position="${presentation.labelPosition}" aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
+    renderMemberPrimary(this, `<div class="causeway-property${presentation.disabledReason ? ' causeway-disabled' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="false"${presentation.disabledReason ? ' data-disabled="true"' : ''}>
   ${presentation.labelMarkup}
   ${presentation.disabledMarkup}
   ${presentation.descriptionMarkup}
@@ -682,6 +682,11 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
       || normalizedMultiLine(state?.data?.metadata?.multiLine);
   }
 
+  #multiLineAttribute(state) {
+    const multiLine = this.#effectiveMultiLine(state);
+    return multiLine ? ` data-multi-line="${multiLine}"` : '';
+  }
+
   #editorContext(interaction = this.interactionState) {
     const presentation = this.#presentation(this.componentState);
     return {
@@ -739,7 +744,7 @@ export class CausewayPropertyElement extends CausewayContextConsumerElement {
     this.setAttribute('data-editor', renderedEditor.editorId);
     this.renderingInteraction = true;
     try {
-      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}" aria-busy="${busy}">
+      renderMemberPrimary(this, `<div class="causeway-property causeway-property-editing${interaction.error ? ' causeway-error' : ''}" data-label-position="${presentation.labelPosition}"${this.#multiLineAttribute(state)} aria-busy="${busy}">
   ${presentation.labelMarkup}
   ${presentation.descriptionMarkup}
   <div class="causeway-property-field">

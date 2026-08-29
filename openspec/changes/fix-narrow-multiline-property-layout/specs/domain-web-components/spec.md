@@ -30,6 +30,6 @@ Effective multiline presentation from canonical HTML, compatibility HTML, or mem
 
 #### Scenario: Narrow presentation stacks safely
 - **WHEN** a multiline `LEFT` property resolved from `multi-line`, legacy `multiline`, or `metadata.multiLine` cannot retain its configured columns at a narrow inline size
-- **THEN** label, description, field, and controls occupy explicit successive grid rows in meaningful document order
-- **AND** the edit control aligns with its field without overlap or implicit-grid displacement
+- **THEN** label and description occupy explicit successive rows followed by an explicit full-width field row in meaningful document order
+- **AND** the field's value and bounded edit control align at the start of that row without overlap or implicit-grid displacement
 - **AND** the property introduces no horizontal overflow or clipping

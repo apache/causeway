@@ -3,7 +3,8 @@
 `CausewayPropertyElement` correctly resolves multiline depth from canonical `multi-line`, legacy `multiline`, or GraphQL `metadata.multiLine`.
 Its editor receives that effective value, but the theme's layout selectors inspect only `cw-property[multiline]`.
 For a canonical Petclinic `multi-line="5"` property, the multiline row rules therefore do not match.
-At narrow width, generic grid declarations move the value but leave the edit control auto-placed, producing an implicit-grid offset of roughly 2.4 pixels and failing the explicit alignment assertion.
+At narrow width, theme declarations target the nested value and edit control even though the direct grid item is their `.causeway-property-field` wrapper.
+The wrapper therefore retains incompatible wide placement while its differently sized flex children remain center-aligned, producing the observed roughly 2.4-pixel top offset and failing the explicit alignment assertion.
 
 ## Goals / Non-Goals
 
@@ -31,13 +32,14 @@ The shell is regenerated for loading, error, view, disabled, and edit states, so
 Selecting both host attribute spellings in CSS was rejected because it would still miss metadata-only multiline state.
 Reflecting metadata back onto application-authored `<cw-property>` was rejected because internal presentation should not mutate public source declarations.
 
-### Select the framework-owned shell in layout CSS
+### Select the framework-owned shell and direct field grid item
 
-Wide, container-narrow, and viewport-narrow multiline rules will target `.causeway-property[data-multi-line]` and explicitly place label, description, value, and edit control.
-This uses the element that is actually the grid container and avoids dependence on ancestor attribute spelling.
+Wide, container-narrow, and viewport-narrow multiline rules will target `.causeway-property[data-multi-line]` and explicitly place the direct label, description, and `.causeway-property-field` grid items.
+At narrow width, the field occupies the explicit third row across the available columns and top-aligns its value and bounded edit control.
+This uses the element that is actually the grid container and the child that is actually its grid item, avoiding dependence on ancestor attribute spelling or ineffective rules for nested flex children.
 
-Increasing geometry tolerance was rejected because the failure exposed auto-placement rather than harmless rounding.
-Adding a cosmetic edit-button margin was rejected because it would mask the missing grid-row contract and could misalign other states.
+Increasing geometry tolerance was rejected because the failure exposed incorrect wrapper placement and alignment rather than harmless rounding.
+Adding a cosmetic edit-button margin was rejected because it would mask the missing grid-item contract and could misalign other states.
 
 ### Assert effective state and geometry
 

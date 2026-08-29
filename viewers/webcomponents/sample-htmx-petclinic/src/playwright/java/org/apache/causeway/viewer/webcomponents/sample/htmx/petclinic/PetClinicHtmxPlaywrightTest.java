@@ -966,7 +966,9 @@ class PetClinicHtmxPlaywrightTest {
         final var geometry = (List<Number>) property.evaluate("element => { const label = element.querySelector('.causeway-property-label').getBoundingClientRect(); const description = element.querySelector('.causeway-property-description').getBoundingClientRect(); const value = element.querySelector('.causeway-property-value').getBoundingClientRect(); const edit = element.querySelector('.causeway-property-edit').getBoundingClientRect(); return [label.bottom, description.top, description.bottom, value.top, edit.top, edit.width, document.documentElement.scrollWidth, document.documentElement.clientWidth]; }");
         assertThat(geometry.get(1).doubleValue()).isGreaterThanOrEqualTo(geometry.get(0).doubleValue() - 1.0);
         assertThat(geometry.get(3).doubleValue()).isGreaterThanOrEqualTo(geometry.get(2).doubleValue() - 1.0);
-        assertThat(geometry.get(4).doubleValue()).isGreaterThanOrEqualTo(geometry.get(3).doubleValue() - 1.0);
+        assertThat(Math.abs(geometry.get(4).doubleValue() - geometry.get(3).doubleValue()))
+                .as("narrow multiline edit and value top alignment: %s", geometry)
+                .isLessThanOrEqualTo(1.0);
         assertThat(geometry.get(5).doubleValue()).isLessThan(160.0);
         assertThat(geometry.get(6).doubleValue()).isLessThanOrEqualTo(geometry.get(7).doubleValue() + 1.0);
     }

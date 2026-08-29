@@ -368,25 +368,19 @@ cw-property:last-child .causeway-property {
   font-size: var(--causeway-font-size-sm);
 }
 
-:where(cw-property[multiline]) .causeway-property-label {
+.causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-label {
   grid-column: 1;
   grid-row: 1;
 }
 
-:where(cw-property[multiline]) .causeway-property-description {
+.causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-description {
   grid-column: 1;
   grid-row: 2;
 }
 
-:where(cw-property[multiline]) .causeway-property-value {
+.causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-field {
   grid-column: 2;
   grid-row: 1 / span 2;
-}
-
-:where(cw-property[multiline]) .causeway-property-edit {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: start;
 }
 
 .causeway-action-description {
@@ -684,20 +678,17 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
     grid-column: 1;
   }
 
-  :where(cw-property[multiline]) .causeway-property-label {
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-label {
     grid-row: 1;
   }
 
-  :where(cw-property[multiline]) .causeway-property-description {
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-description {
     grid-row: 2;
   }
 
-  :where(cw-property[multiline]) .causeway-property-value {
-    grid-row: 3;
-  }
-
-  :where(cw-property[multiline]) .causeway-property-edit {
-    grid-column: 2;
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-field {
+    align-items: flex-start;
+    grid-column: 1 / -1;
     grid-row: 3;
   }
 }
@@ -737,20 +728,17 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
     grid-column: 1;
   }
 
-  :where(cw-property[multiline]) .causeway-property-label {
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-label {
     grid-row: 1;
   }
 
-  :where(cw-property[multiline]) .causeway-property-description {
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-description {
     grid-row: 2;
   }
 
-  :where(cw-property[multiline]) .causeway-property-value {
-    grid-row: 3;
-  }
-
-  :where(cw-property[multiline]) .causeway-property-edit {
-    grid-column: 2;
+  .causeway-property[data-multi-line][data-label-position="LEFT"] .causeway-property-field {
+    align-items: flex-start;
+    grid-column: 1 / -1;
     grid-row: 3;
   }
 
