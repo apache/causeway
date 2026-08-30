@@ -58,7 +58,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PetClinicHtmxPlaywrightTest {
 
     private static final String ROUTE_PAGE = "[data-testid='causeway-route-page']";
-    private static final String PROMPT = "dialog[data-testid='action-prompt']";
+    private static final String PROMPT = "[data-testid='action-prompt']";
 
     @LocalServerPort
     private int port;
@@ -613,6 +613,10 @@ class PetClinicHtmxPlaywrightTest {
         final var updateName = objectAction("updateName");
         updateName.click();
         waitForPrompt("updateName", "Change the owner's name");
+        assertThat(page.locator(PROMPT).evaluate("element => element.localName")).isEqualTo("section");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("INLINE");
+        assertThat(page.locator(PROMPT).evaluate("element => element.closest('cw-property')?.id")).isEqualTo("name");
+        assertThat(page.locator("cw-property[id='name'] > .causeway-member-primary").isHidden()).isTrue();
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
                 .isEqualTo("Updates the owner's full name.");
         final var updateNameLabel = page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-label");
@@ -627,6 +631,7 @@ class PetClinicHtmxPlaywrightTest {
         waitForPromptError("cannot contain");
         assertFocused(parameter("name"));
         cancelPrompt();
+        assertThat(page.locator("cw-property[id='name'] > .causeway-member-primary").isVisible()).isTrue();
         assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
 
         updateName.click();
@@ -669,6 +674,15 @@ class PetClinicHtmxPlaywrightTest {
         final var addPetMutations = graphQLMutationCount("addPet");
         objectAction("addPet").click();
         waitForPrompt("addPet", "Register a pet");
+        assertThat(page.locator(PROMPT).evaluate("element => element.localName")).isEqualTo("dialog");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_SIDEBAR");
+        assertThat(page.locator(PROMPT).evaluate("element => getComputedStyle(element).right")).isEqualTo("0px");
+        page.setViewportSize(390, 844);
+        assertThat((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth"))
+                .isEqualTo(0);
+        assertThat(page.locator(PROMPT).evaluate("element => element.getBoundingClientRect().right <= innerWidth + 0.5"))
+                .isEqualTo(true);
+        page.setViewportSize(1440, 900);
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
                 .isEqualTo("Adds a pet to this owner's household.");
         assertThat(page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-label").textContent())
@@ -713,6 +727,8 @@ class PetClinicHtmxPlaywrightTest {
         final var bookVisitMutations = graphQLMutationCount("bookVisit");
         objectAction("bookVisit").click();
         waitForPrompt("bookVisit");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_MODAL");
+        assertMovableModalPrompt();
         final var petReference = page.locator(parameter("pet"));
         try {
             petReference.waitFor();
@@ -821,6 +837,71 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator("[data-testid='petclinic-custom-home']").isVisible()).isTrue();
         assertThat(ownerRepository.findById("owner-peter")).isNull();
         assertThat(graphQLMutationCount("delete") - deleteMutations).isEqualTo(1);
+    }
+
+    @Test
+    @Order(6)
+    void actionPromptStylesRenderRestoreAndInvoke() {
+        openObject("petclinic.PetOwner", "s_owner-mary");
+
+        objectAction("updateName").click();
+        waitForPrompt("updateName", "Change the owner's name");
+        assertThat(page.locator(PROMPT).evaluate("element => element.localName")).isEqualTo("section");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("INLINE");
+        assertThat(page.locator(PROMPT).evaluate("element => element.closest('cw-property')?.id")).isEqualTo("name");
+        cancelPrompt();
+        assertThat(page.locator("cw-property[id='name'] > .causeway-member-primary").isVisible()).isTrue();
+        assertFocused("cw-action[id='updateName'] [data-causeway-action-control]");
+
+        objectAction("addPet").click();
+        waitForPrompt("addPet", "Register a pet");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_SIDEBAR");
+        page.setViewportSize(390, 844);
+        assertThat((Number) page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth"))
+                .isEqualTo(0);
+        cancelPrompt();
+        assertFocused("cw-action[id='addPet'] [data-causeway-action-control]");
+        page.setViewportSize(1440, 900);
+
+        objectAction("bookVisit").click();
+        waitForPrompt("bookVisit");
+        assertThat(page.locator(PROMPT).getAttribute("data-prompt-style")).isEqualTo("DIALOG_MODAL");
+        assertMovableModalPrompt();
+        cancelPrompt();
+        assertFocused("cw-action[id='bookVisit'] [data-causeway-action-control]");
+
+        final var mutations = graphQLMutationCount("updateName");
+        objectAction("updateName").click();
+        waitForPrompt("updateName", "Change the owner's name");
+        fillParameter("name", "Mary Smith");
+        submitPromptExpectingNavigation();
+        waitForObjectTitle("Mary Smith (Mary)");
+        assertThat(graphQLMutationCount("updateName") - mutations).isEqualTo(1);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertMovableModalPrompt() {
+        final var prompt = page.locator(PROMPT);
+        final var before = (List<Number>) prompt.evaluate("element => { const rect = element.getBoundingClientRect(); return [rect.left, rect.top, rect.right, rect.bottom]; }");
+        prompt.evaluate("""
+                element => {
+                  const handle = element.querySelector('[data-causeway-dialog-drag-handle]');
+                  const rect = handle.getBoundingClientRect();
+                  const clientX = rect.left + rect.width / 2;
+                  const clientY = rect.top + rect.height / 2;
+                  handle.dispatchEvent(new PointerEvent('pointerdown', {bubbles: true, cancelable: true, clientX, clientY}));
+                  document.dispatchEvent(new PointerEvent('pointermove', {bubbles: true, clientX: clientX + 80, clientY: clientY + 60}));
+                  document.dispatchEvent(new PointerEvent('pointerup', {bubbles: true, clientX: clientX + 80, clientY: clientY + 60}));
+                }
+                """);
+        final var after = (List<Number>) prompt.evaluate("element => { const rect = element.getBoundingClientRect(); return [rect.left, rect.top, rect.right, rect.bottom]; }");
+        assertThat(after.get(0).doubleValue()).isGreaterThan(before.get(0).doubleValue() + 50);
+        assertThat(after.get(1).doubleValue()).isGreaterThan(before.get(1).doubleValue() + 30);
+        final var viewport = (List<Number>) page.evaluate("() => [innerWidth, innerHeight]");
+        assertThat(after.get(0).doubleValue()).isGreaterThanOrEqualTo(0);
+        assertThat(after.get(1).doubleValue()).isGreaterThanOrEqualTo(0);
+        assertThat(after.get(2).doubleValue()).isLessThanOrEqualTo(viewport.get(0).doubleValue() + 0.5);
+        assertThat(after.get(3).doubleValue()).isLessThanOrEqualTo(viewport.get(1).doubleValue() + 0.5);
     }
 
     @SuppressWarnings("unchecked")

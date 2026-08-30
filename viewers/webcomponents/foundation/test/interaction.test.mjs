@@ -768,6 +768,87 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   assert.ok(calls.includes('invoke:Updated'));
 });
 
+test('action prompts render modal and sidebar surfaces with safe style normalization', async () => {
+  const parameter = {
+    id: 'name', description: 'Name', inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {hidden: false, disabled: null, default: null, validity: null}
+  };
+  const context = {
+    async prepareAction() {
+      return {status: 'success', errors: [], data: {parameters: [parameter]}};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+
+  assert.equal(await controller.beginAction('rename', context, null, {promptStyle: 'DIALOG_SIDEBAR'}), true);
+  assert.match(controller.innerHTML, /<dialog open class="causeway-action-prompt causeway-action-prompt-sidebar"/);
+  assert.match(controller.innerHTML, /data-prompt-style="DIALOG_SIDEBAR"/);
+  assert.doesNotMatch(controller.innerHTML, /data-causeway-dialog-drag-handle/);
+  controller.cancelPrompt();
+
+  assert.equal(await controller.beginAction('rename', context, null, {promptStyle: 'unexpected'}), true);
+  assert.match(controller.innerHTML, /<dialog open class="causeway-action-prompt causeway-action-prompt-modal"/);
+  assert.match(controller.innerHTML, /data-prompt-style="DIALOG_MODAL"/);
+  assert.match(controller.innerHTML, /data-causeway-dialog-drag-handle/);
+  controller.cancelPrompt();
+});
+
+test('inline prompts reversibly replace direct and effective-grid property associations', async () => {
+  const parameter = {
+    id: 'name', description: 'Name', inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {hidden: false, disabled: null, default: 'Mary', validity: null}
+  };
+  const context = {
+    async prepareAction() {
+      return {status: 'success', errors: [], data: {parameters: [parameter]}};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+
+  const property = document.createElement('cw-property');
+  const directAction = document.createElement('cw-action');
+  property.appendChild(directAction);
+  document.body.appendChild(property);
+  const primary = property.children.find(child => child.hasAttribute('data-causeway-member-primary'));
+
+  assert.equal(await controller.beginAction('rename', context, directAction, {promptStyle: 'INLINE'}, directAction), true);
+  assert.equal(property.hasAttribute('data-causeway-inline-action-prompt'), true,
+    `${controller.promptState.presentation.promptStyle}: ${controller.innerHTML} / ${property.innerHTML}`);
+  assert.equal(primary.hidden, true);
+  assert.equal(directAction.hidden, true);
+  assert.doesNotMatch(controller.innerHTML, /data-testid="action-prompt"/);
+  assert.match(property.innerHTML, /role="region"[\s\S]*data-prompt-style="INLINE"/);
+  controller.cancelPrompt();
+  assert.equal(property.hasAttribute('data-causeway-inline-action-prompt'), false);
+  assert.equal(primary.hidden, false);
+  assert.equal(directAction.hidden, false);
+
+  const composition = document.createElement('section');
+  composition.setAttribute('data-causeway-associated-member', 'name');
+  const generatedProperty = document.createElement('cw-property');
+  const actionGroup = document.createElement('div');
+  actionGroup.setAttribute('data-causeway-action-group', '');
+  const generatedAction = document.createElement('cw-action');
+  actionGroup.appendChild(generatedAction);
+  composition.appendChild(generatedProperty);
+  composition.appendChild(actionGroup);
+  document.body.appendChild(composition);
+
+  assert.equal(await controller.beginAction('rename', context, generatedAction, {promptStyle: 'INLINE'}, generatedAction), true);
+  assert.equal(composition.hasAttribute('data-causeway-inline-action-prompt'), true);
+  assert.equal(generatedProperty.hidden, true);
+  assert.equal(actionGroup.hidden, true);
+  controller.cancelPrompt();
+  assert.equal(generatedProperty.hidden, false);
+  assert.equal(actionGroup.hidden, false);
+
+  assert.equal(await controller.beginAction('rename', context, null, {promptStyle: 'INLINE'}), true);
+  assert.match(controller.innerHTML, /data-prompt-style="DIALOG_MODAL"/);
+  controller.cancelPrompt();
+});
+
 test('action prompt applies partial authored parameter presentation without changing authority', async () => {
   const parameters = [
     {id: 'notes', description: 'Canonical notes', inputType: scalar('String'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, validity: null}},
@@ -1124,19 +1205,31 @@ test('are-you-sure parameterized actions confirm after validation and retain val
   };
   const controller = new CausewayInteractionControllerElement();
   document.body.appendChild(controller);
-  assert.equal(await controller.beginAction('purge', context, null, {
+  const property = document.createElement('cw-property');
+  const primary = document.createElement('div');
+  primary.setAttribute('data-causeway-member-primary', '');
+  const action = document.createElement('cw-action');
+  property.appendChild(primary);
+  property.appendChild(action);
+  document.body.appendChild(property);
+  assert.equal(await controller.beginAction('purge', context, action, {
     name: 'Purge records',
-    areYouSure: true
-  }), true);
+    areYouSure: true,
+    promptStyle: 'INLINE'
+  }, action), true);
+  assert.equal(property.hasAttribute('data-causeway-inline-action-prompt'), true);
   await controller.setParameterValue('reason', 'Obsolete', {recompute: false});
 
   assert.equal(await controller.submitPrompt(), true);
   assert.equal(controller.promptState.status, InteractionStatus.CONFIRMING);
+  assert.equal(property.hasAttribute('data-causeway-inline-action-prompt'), false);
+  assert.match(controller.innerHTML, /role="alertdialog"[\s\S]*data-prompt-style="DIALOG_MODAL"/);
   assert.equal(controller.promptState.values.reason, 'Obsolete');
   assert.equal(calls.some(call => call.startsWith('invoke:')), false);
   assert.equal(controller.cancelPrompt(), true);
   assert.equal(controller.promptState.status, InteractionStatus.EDITING);
   assert.equal(controller.promptState.values.reason, 'Obsolete');
+  assert.equal(property.hasAttribute('data-causeway-inline-action-prompt'), true);
 
   assert.equal(await controller.submitPrompt(), true);
   assert.equal(controller.promptState.status, InteractionStatus.CONFIRMING);

@@ -17,7 +17,11 @@
  * under the License.
  */
 
-import {normalizeActionPresentation} from './action-presentation.mjs';
+import {
+  ActionPromptStyle,
+  normalizeActionPresentation,
+  normalizeActionPromptStyle
+} from './action-presentation.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {createSemanticEvent} from './context-events.mjs';
 import {
@@ -51,18 +55,22 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.autoCompleteController = null;
     this.autoCompleteGeneration = 0;
     this.scope = null;
+    this.inlinePromptSurface = null;
+    this.inlinePromptRestoration = null;
+    this.promptDragState = null;
     this.onActionRequest = event => {
       const actionId = event.detail?.actionId;
       const context = event.detail?.context;
       const presentation = event.detail?.presentation;
-      const source = focusRestoreTarget(event.target);
+      const origin = event.target;
+      const source = focusRestoreTarget(origin);
       queueMicrotask(() => {
         if (!event.defaultPrevented && actionId && context) {
-          void this.beginAction(actionId, context, source, presentation);
+          void this.beginAction(actionId, context, source, presentation, origin);
         }
       });
     };
-    this.addEventListener('click', event => {
+    this.onPromptClick = event => {
       const action = event.target?.getAttribute?.('data-causeway-action') ?? event.target?.dataset?.causewayAction;
       if (action === 'cancel') {
         this.cancelPrompt();
@@ -73,11 +81,11 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       } else if (action === 'dismiss-result') {
         this.dismissResult();
       }
-    });
-    this.addEventListener('input', event => this.#captureParameter(event));
-    this.addEventListener('change', event => this.#captureParameter(event));
-    this.addEventListener('focusout', event => this.#captureParameter(event, {commit: true}));
-    this.addEventListener('causeway-editor-commit', event => {
+    };
+    this.onPromptInput = event => this.#captureParameter(event);
+    this.onPromptChange = event => this.#captureParameter(event);
+    this.onPromptFocusout = event => this.#captureParameter(event, {commit: true});
+    this.onPromptEditorCommit = event => {
       if (this.renderingPrompt) {
         event.stopPropagation();
         return;
@@ -100,8 +108,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
             : name === 'data-causeway-action' ? event.detail?.nextAction ?? null : null
         }
       }, {commit: true});
-    });
-    this.addEventListener('causeway-reference-search', event => {
+    };
+    this.onPromptReferenceSearch = event => {
       const parameterId = event.detail?.name;
       if (!parameterId || !this.promptState) {
         return;
@@ -117,25 +125,21 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       } else {
         void this.loadParameterAutoComplete(parameterId, request.search);
       }
-    });
-    const cancelToolkitEditor = event => {
+    };
+    this.onPromptEditorEscape = event => {
       if (this.promptState) {
         event.stopPropagation();
         this.cancelPrompt();
       }
     };
-    this.addEventListener('causeway-reference-escape', cancelToolkitEditor);
-    this.addEventListener('causeway-field-escape', cancelToolkitEditor);
-    const rerenderFailedToolkitEditor = event => {
+    this.onPromptEditorLoadFailed = event => {
       if (this.promptState) {
         event.stopPropagation();
         this.render();
         this.#focusFirstControl();
       }
     };
-    this.addEventListener('causeway-reference-load-failed', rerenderFailedToolkitEditor);
-    this.addEventListener('causeway-field-load-failed', rerenderFailedToolkitEditor);
-    this.addEventListener('keydown', event => {
+    this.onPromptKeydown = event => {
       if (event.key === 'Escape' && this.promptState) {
         event.preventDefault();
         this.cancelPrompt();
@@ -143,7 +147,11 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         this.#recordPromptFocusDestination(event);
         this.#containPromptFocus(event);
       }
-    });
+    };
+    this.onPromptPointerDown = event => this.#startPromptDrag(event);
+    this.onPromptPointerMove = event => this.#movePromptDrag(event);
+    this.onPromptPointerUp = () => this.#stopPromptDrag();
+    this.#addPromptEventListeners(this);
   }
 
   get editorRegistry() {
@@ -162,6 +170,8 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.#removeInlinePrompt();
+    this.#stopPromptDrag();
     clearTimeout(this.parameterTimer);
     this.autoCompleteController?.abort();
     this.autoCompleteController = null;
@@ -171,7 +181,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     this.generation += 1;
   }
 
-  async beginAction(actionId, context, source = null, presentation = null) {
+  async beginAction(actionId, context, source = null, presentation = null, origin = null) {
     if (this.promptState?.status === InteractionStatus.INVOKING) {
       return false;
     }
@@ -183,10 +193,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       actionId,
       context,
       source,
+      origin,
       presentation: normalizeActionPresentation({
         name: presentation?.name || humanize(actionId),
         description: presentation?.description,
         areYouSure: presentation?.areYouSure,
+        promptStyle: presentation?.promptStyle,
         cssClassFa: presentation?.icon?.classes?.join(' '),
         cssClassFaPosition: presentation?.icon?.position
       }),
@@ -485,12 +497,120 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return true;
   }
 
+  #addPromptEventListeners(target) {
+    target?.addEventListener?.('click', this.onPromptClick);
+    target?.addEventListener?.('input', this.onPromptInput);
+    target?.addEventListener?.('change', this.onPromptChange);
+    target?.addEventListener?.('focusout', this.onPromptFocusout);
+    target?.addEventListener?.('causeway-editor-commit', this.onPromptEditorCommit);
+    target?.addEventListener?.('causeway-reference-search', this.onPromptReferenceSearch);
+    target?.addEventListener?.('causeway-reference-escape', this.onPromptEditorEscape);
+    target?.addEventListener?.('causeway-field-escape', this.onPromptEditorEscape);
+    target?.addEventListener?.('causeway-reference-load-failed', this.onPromptEditorLoadFailed);
+    target?.addEventListener?.('causeway-field-load-failed', this.onPromptEditorLoadFailed);
+    target?.addEventListener?.('keydown', this.onPromptKeydown);
+    target?.addEventListener?.('pointerdown', this.onPromptPointerDown);
+    target?.addEventListener?.('mousedown', this.onPromptPointerDown);
+  }
+
+  #removePromptEventListeners(target) {
+    target?.removeEventListener?.('click', this.onPromptClick);
+    target?.removeEventListener?.('input', this.onPromptInput);
+    target?.removeEventListener?.('change', this.onPromptChange);
+    target?.removeEventListener?.('focusout', this.onPromptFocusout);
+    target?.removeEventListener?.('causeway-editor-commit', this.onPromptEditorCommit);
+    target?.removeEventListener?.('causeway-reference-search', this.onPromptReferenceSearch);
+    target?.removeEventListener?.('causeway-reference-escape', this.onPromptEditorEscape);
+    target?.removeEventListener?.('causeway-field-escape', this.onPromptEditorEscape);
+    target?.removeEventListener?.('causeway-reference-load-failed', this.onPromptEditorLoadFailed);
+    target?.removeEventListener?.('causeway-field-load-failed', this.onPromptEditorLoadFailed);
+    target?.removeEventListener?.('keydown', this.onPromptKeydown);
+    target?.removeEventListener?.('pointerdown', this.onPromptPointerDown);
+    target?.removeEventListener?.('mousedown', this.onPromptPointerDown);
+  }
+
+  #inlineAssociation() {
+    const origin = this.promptState?.origin;
+    if (origin?.localName !== 'cw-action') return null;
+    const parent = origin.parentNode;
+    if (parent?.localName === 'cw-property') {
+      const children = [...(parent.children ?? parent.childNodes ?? [])];
+      const primary = children.find(child => child?.hasAttribute?.('data-causeway-member-primary'));
+      const actions = children.filter(child => child?.localName === 'cw-action');
+      return primary ? {container: parent, nodes: [primary, ...actions]} : null;
+    }
+    if (!parent?.hasAttribute?.('data-causeway-action-group')) return null;
+    const composition = parent.parentNode;
+    if (!composition?.hasAttribute?.('data-causeway-associated-member')) return null;
+    const property = [...(composition.children ?? composition.childNodes ?? [])]
+      .find(child => child?.localName === 'cw-property');
+    return property ? {container: composition, nodes: [property, parent]} : null;
+  }
+
+  #removeInlinePrompt() {
+    if (this.inlinePromptSurface) {
+      this.#removePromptEventListeners(this.inlinePromptSurface);
+      if (typeof this.inlinePromptSurface.remove === 'function') {
+        this.inlinePromptSurface.remove();
+      } else {
+        this.inlinePromptSurface.parentNode?.removeChild?.(this.inlinePromptSurface);
+      }
+      this.inlinePromptSurface = null;
+    }
+    if (this.inlinePromptRestoration) {
+      for (const {node, hidden} of this.inlinePromptRestoration.nodes) {
+        node.hidden = hidden;
+      }
+      this.inlinePromptRestoration.container.removeAttribute?.('data-causeway-inline-action-prompt');
+      this.inlinePromptRestoration = null;
+    }
+  }
+
+  #installInlinePrompt(markup, association) {
+    const surface = globalThis.document?.createElement?.('div');
+    if (!surface) return false;
+    surface.className = 'causeway-inline-action-prompt-portal';
+    surface.setAttribute('data-causeway-inline-action-prompt-portal', '');
+    surface.innerHTML = markup;
+    this.inlinePromptRestoration = {
+      container: association.container,
+      nodes: association.nodes.map(node => ({node, hidden: node.hidden === true}))
+    };
+    for (const node of association.nodes) node.hidden = true;
+    association.container.setAttribute?.('data-causeway-inline-action-prompt', '');
+    association.container.appendChild?.(surface);
+    this.inlinePromptSurface = surface;
+    this.#addPromptEventListeners(surface);
+    return true;
+  }
+
+  #activePromptRoot() {
+    return this.inlinePromptSurface ?? this;
+  }
+
+  #effectivePromptStyle() {
+    if (this.promptState?.status === InteractionStatus.CONFIRMING) {
+      return ActionPromptStyle.DIALOG_MODAL;
+    }
+    const style = normalizeActionPromptStyle(this.promptState?.presentation?.promptStyle);
+    return style === ActionPromptStyle.INLINE && !this.#inlineAssociation()
+      ? ActionPromptStyle.DIALOG_MODAL
+      : style;
+  }
+
   render() {
-    const promptMarkup = this.promptState ? this.#promptMarkup() : '';
+    this.#removeInlinePrompt();
+    this.#stopPromptDrag();
+    const promptStyle = this.promptState ? this.#effectivePromptStyle() : ActionPromptStyle.DIALOG_MODAL;
+    const promptMarkup = this.promptState ? this.#promptMarkup(promptStyle) : '';
+    const inlineAssociation = promptStyle === ActionPromptStyle.INLINE ? this.#inlineAssociation() : null;
     const resultMarkup = this.resultState ? this.#resultMarkup() : '';
     this.renderingPrompt = true;
     try {
-      this.innerHTML = `<div class="causeway-interaction-controller">${promptMarkup}${resultMarkup}</div>`;
+      this.innerHTML = `<div class="causeway-interaction-controller">${inlineAssociation ? '' : promptMarkup}${resultMarkup}</div>`;
+      if (inlineAssociation) {
+        this.#installInlinePrompt(promptMarkup, inlineAssociation);
+      }
     } finally {
       this.renderingPrompt = false;
     }
@@ -653,19 +773,33 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     }
   }
 
-  #promptMarkup() {
+  #promptMarkup(promptStyle) {
     const state = this.promptState;
+    const actionName = state.presentation?.name || humanize(state.actionId);
+    const titleAttributes = promptStyle === ActionPromptStyle.DIALOG_MODAL
+      ? ' class="causeway-action-prompt-title" data-causeway-dialog-drag-handle'
+      : ' class="causeway-action-prompt-title"';
     if (state.status === InteractionStatus.PREPARING) {
-      return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Preparing action…</div>`;
+      return `${this.#promptSurfaceOpen(promptStyle)}
+  <h2 id="${this.titleId}"${titleAttributes}>${escapeHtml(actionName)}</h2>
+  <span role="status">Preparing action…</span>
+${this.#promptSurfaceClose(promptStyle)}`;
     }
     if (state.parameters.length === 0 && state.status === InteractionStatus.INVOKING) {
-      return `<div class="causeway-action-prompt causeway-loading" role="status" data-testid="action-prompt">Invoking ${escapeHtml(state.presentation?.name || humanize(state.actionId))}…</div>`;
+      return `${this.#promptSurfaceOpen(promptStyle)}
+  <h2 id="${this.titleId}"${titleAttributes}>${escapeHtml(actionName)}</h2>
+  <span role="status">Invoking ${escapeHtml(actionName)}…</span>
+${this.#promptSurfaceClose(promptStyle)}`;
     }
     if (state.status === InteractionStatus.CONFIRMING) {
-      const actionName = state.presentation?.name || humanize(state.actionId);
-      return `<dialog open class="causeway-action-prompt causeway-action-confirmation" role="alertdialog" aria-modal="true" aria-labelledby="${this.titleId}" aria-describedby="${this.descriptionId}" data-testid="action-confirmation">
+      return `${this.#promptSurfaceOpen(ActionPromptStyle.DIALOG_MODAL, {
+        testId: 'action-confirmation',
+        role: 'alertdialog',
+        describedBy: this.descriptionId,
+        extraClass: 'causeway-action-confirmation'
+      })}
   <form method="dialog">
-    <h2 id="${this.titleId}">Confirm ${escapeHtml(actionName)}</h2>
+    <h2 id="${this.titleId}" class="causeway-action-prompt-title" data-causeway-dialog-drag-handle>Confirm ${escapeHtml(actionName)}</h2>
     <p id="${this.descriptionId}" class="causeway-action-confirmation-message">Are you sure you want to invoke ${escapeHtml(actionName)}? This action cannot be undone.</p>
     <div class="causeway-action-prompt-actions">
       <button type="button" class="causeway-action-confirm" data-causeway-action="confirm" data-testid="action-confirmation-confirm">Confirm</button>
@@ -673,7 +807,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     </div>
     <span class="causeway-action-prompt-status" role="status">${escapeHtml(promptStatusLabel(state.status))}</span>
   </form>
-</dialog>`;
+${this.#promptSurfaceClose(ActionPromptStyle.DIALOG_MODAL)}`;
     }
     const parameterMarkup = state.parameters.map(parameter => this.#parameterMarkup(parameter)).join('');
     const busy = [InteractionStatus.VALIDATING, InteractionStatus.INVOKING].includes(state.status);
@@ -686,9 +820,9 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       ? `<p id="${this.descriptionId}" class="causeway-action-prompt-description">${escapeHtml(description)}</p>`
       : '';
     const describedBy = [description ? this.descriptionId : '', state.error ? this.errorId : ''].filter(Boolean).join(' ');
-    return `<dialog open class="causeway-action-prompt" role="dialog" aria-modal="true" aria-labelledby="${this.titleId}"${describedBy ? ` aria-describedby="${describedBy}"` : ''} data-testid="action-prompt">
-  <form method="dialog" novalidate>
-    <h2 id="${this.titleId}">${escapeHtml(state.presentation?.name || humanize(state.actionId))}</h2>
+    return `${this.#promptSurfaceOpen(promptStyle, {describedBy})}
+  <form${promptStyle === ActionPromptStyle.INLINE ? '' : ' method="dialog"'} novalidate>
+    <h2 id="${this.titleId}"${titleAttributes}>${escapeHtml(actionName)}</h2>
     ${descriptionMarkup}
     ${parameterMarkup}
     ${errorMarkup}
@@ -698,7 +832,26 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     </div>
     <span class="causeway-action-prompt-status" role="status">${escapeHtml(promptStatusLabel(state.status))}</span>
   </form>
-</dialog>`;
+${this.#promptSurfaceClose(promptStyle)}`;
+  }
+
+  #promptSurfaceOpen(promptStyle, {
+    testId = 'action-prompt',
+    role = 'dialog',
+    describedBy = '',
+    extraClass = ''
+  } = {}) {
+    const inline = promptStyle === ActionPromptStyle.INLINE;
+    const styleClass = promptStyle === ActionPromptStyle.DIALOG_SIDEBAR
+      ? 'causeway-action-prompt-sidebar'
+      : inline ? 'causeway-action-prompt-inline' : 'causeway-action-prompt-modal';
+    const tag = inline ? 'section' : 'dialog';
+    const effectiveRole = inline ? 'region' : role;
+    return `<${tag}${inline ? '' : ' open'} class="causeway-action-prompt ${styleClass}${extraClass ? ` ${extraClass}` : ''}" role="${effectiveRole}"${inline ? '' : ' aria-modal="true"'} aria-labelledby="${this.titleId}"${describedBy ? ` aria-describedby="${describedBy}"` : ''} data-prompt-style="${promptStyle}" data-testid="${testId}">`;
+  }
+
+  #promptSurfaceClose(promptStyle) {
+    return promptStyle === ActionPromptStyle.INLINE ? '</section>' : '</dialog>';
   }
 
   #parameterMarkup(parameter) {
@@ -801,24 +954,28 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   #focusFirstControl() {
-    queueMicrotask(() => (
-      this.querySelector?.('[data-causeway-editor]')
-      ?? this.querySelector?.('[data-causeway-action="confirm"]')
-      ?? this.querySelector?.('[data-causeway-action="submit"]')
-    )?.focus?.());
+    queueMicrotask(() => {
+      const root = this.#activePromptRoot();
+      return (
+        root.querySelector?.('[data-causeway-editor]')
+        ?? root.querySelector?.('[data-causeway-action="confirm"]')
+        ?? root.querySelector?.('[data-causeway-action="submit"]')
+      )?.focus?.();
+    });
   }
 
   #focusFirstInvalidControl() {
     queueMicrotask(() => {
-      const invalid = this.querySelector?.('.causeway-action-parameter.causeway-error [data-causeway-editor]')
-        ?? this.querySelector?.('[data-causeway-editor]');
+      const root = this.#activePromptRoot();
+      const invalid = root.querySelector?.('.causeway-action-parameter.causeway-error [data-causeway-editor]')
+        ?? root.querySelector?.('[data-causeway-editor]');
       invalid?.focus?.();
     });
   }
 
   #captureControlFocus() {
     const active = globalThis.document?.activeElement;
-    return active && this.contains?.(active) ? this.#controlFocusState(active) : null;
+    return active && this.#activePromptRoot().contains?.(active) ? this.#controlFocusState(active) : null;
   }
 
   #controlFocusState(control) {
@@ -843,7 +1000,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return;
     }
     queueMicrotask(() => {
-      const controls = [...(this.querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])];
+      const controls = [...(this.#activePromptRoot().querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])];
       const control = controls.find(candidate => focusState.editor
         ? candidate.getAttribute?.('data-causeway-editor') === focusState.editor
         : candidate.getAttribute?.('data-causeway-action') === focusState.action);
@@ -855,7 +1012,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   #recordPromptFocusDestination(event) {
-    const controls = [...(this.querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])]
+    const controls = [...(this.#activePromptRoot().querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])]
       .filter(control => !control.disabled);
     const active = event.target?.closest?.('[data-causeway-editor], [data-causeway-action]')
       ?? globalThis.document?.activeElement;
@@ -871,7 +1028,10 @@ export class CausewayInteractionControllerElement extends HTMLElement {
   }
 
   #containPromptFocus(event) {
-    const controls = [...(this.querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])]
+    if (this.#effectivePromptStyle() === ActionPromptStyle.INLINE) {
+      return;
+    }
+    const controls = [...(this.#activePromptRoot().querySelectorAll?.('[data-causeway-editor], [data-causeway-action]') ?? [])]
       .filter(control => !control.disabled);
     if (controls.length === 0) {
       return;
@@ -885,6 +1045,51 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       event.preventDefault();
       first.focus?.();
     }
+  }
+
+  #startPromptDrag(event) {
+    if (this.#effectivePromptStyle() !== ActionPromptStyle.DIALOG_MODAL
+        || !event.target?.hasAttribute?.('data-causeway-dialog-drag-handle')) {
+      return;
+    }
+    const dialog = event.target.closest?.('.causeway-action-prompt-modal');
+    const rect = dialog?.getBoundingClientRect?.();
+    if (!dialog || !rect) return;
+    event.preventDefault?.();
+    this.#stopPromptDrag();
+    this.promptDragState = {
+      dialog,
+      offsetX: Number(event.clientX ?? rect.left) - rect.left,
+      offsetY: Number(event.clientY ?? rect.top) - rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+    globalThis.document?.addEventListener?.('pointermove', this.onPromptPointerMove);
+    globalThis.document?.addEventListener?.('pointerup', this.onPromptPointerUp);
+    globalThis.document?.addEventListener?.('pointercancel', this.onPromptPointerUp);
+    globalThis.document?.addEventListener?.('mousemove', this.onPromptPointerMove);
+    globalThis.document?.addEventListener?.('mouseup', this.onPromptPointerUp);
+  }
+
+  #movePromptDrag(event) {
+    const drag = this.promptDragState;
+    if (!drag) return;
+    const viewportWidth = globalThis.innerWidth ?? globalThis.document?.documentElement?.clientWidth ?? drag.width;
+    const viewportHeight = globalThis.innerHeight ?? globalThis.document?.documentElement?.clientHeight ?? drag.height;
+    const left = clamp(Number(event.clientX ?? 0) - drag.offsetX, 0, Math.max(0, viewportWidth - drag.width));
+    const top = clamp(Number(event.clientY ?? 0) - drag.offsetY, 0, Math.max(0, viewportHeight - drag.height));
+    drag.dialog.style.left = `${left}px`;
+    drag.dialog.style.top = `${top}px`;
+    drag.dialog.style.transform = 'none';
+  }
+
+  #stopPromptDrag() {
+    this.promptDragState = null;
+    globalThis.document?.removeEventListener?.('pointermove', this.onPromptPointerMove);
+    globalThis.document?.removeEventListener?.('pointerup', this.onPromptPointerUp);
+    globalThis.document?.removeEventListener?.('pointercancel', this.onPromptPointerUp);
+    globalThis.document?.removeEventListener?.('mousemove', this.onPromptPointerMove);
+    globalThis.document?.removeEventListener?.('mouseup', this.onPromptPointerUp);
   }
 
   #restoreFocus(source) {
@@ -990,6 +1195,10 @@ function resultLabel(result) {
     return `${result.value?.length ?? 0} result${result.value?.length === 1 ? '' : 's'}`;
   }
   return String(result.value ?? 'Completed');
+}
+
+function clamp(value, minimum, maximum) {
+  return Math.min(Math.max(value, minimum), maximum);
 }
 
 function humanize(value) {

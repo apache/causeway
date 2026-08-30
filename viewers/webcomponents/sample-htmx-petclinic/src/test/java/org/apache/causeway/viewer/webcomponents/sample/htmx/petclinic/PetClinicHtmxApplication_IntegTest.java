@@ -112,12 +112,12 @@ class PetClinicHtmxApplication_IntegTest {
                 "petclinic-owner-page");
         assertThat(get("/htmx/object/petclinic.PetOwner/s_owner-mary").body())
                 .contains("<cw-action id=\"delete\" named=\"Remove this owner\"")
-                .contains("<cw-action id=\"updateName\" named=\"Change the owner's name\"")
+                .contains("<cw-action id=\"updateName\" named=\"Change the owner's name\" prompt-style=\"INLINE\"")
                 .contains("<cw-parameter id=\"name\"")
                 .contains("named=\"Owner's full name\"")
-                .contains("<cw-action id=\"addPet\" named=\"Register a pet\"")
+                .contains("<cw-action id=\"addPet\" named=\"Register a pet\" prompt-style=\"DIALOG_SIDEBAR\"")
                 .contains("<cw-action id=\"removePet\"></cw-action>")
-                .contains("<cw-action id=\"bookVisit\">");
+                .contains("<cw-action id=\"bookVisit\" prompt-style=\"DIALOG_MODAL\">");
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -375,7 +375,7 @@ class PetClinicHtmxApplication_IntegTest {
                     petclinic_PetOwners {
                       listAll {
                         hidden disabled
-                        metadata { friendlyName description cssClassFa cssClassFaPosition areYouSure }
+                        metadata { friendlyName description cssClassFa cssClassFaPosition areYouSure promptStyle }
                         invoke { results { _meta { id logicalTypeName title } } }
                       }
                       findByName { hidden disabled }
@@ -396,6 +396,8 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/cssClassFaPosition").asText())
                 .isEqualTo("LEFT");
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/areYouSure").asBoolean()).isFalse();
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/promptStyle").asText())
+                .isEqualTo("DIALOG");
         assertThat(service.at("/data/rich/petclinic_PetOwners/create/metadata/cssClassFa").asText())
                 .isEqualTo("user-plus");
         assertThat(service.at("/data/rich/petclinic_Visits/listUpcoming/invoke/results").size()).isEqualTo(3);
@@ -417,10 +419,10 @@ class PetClinicHtmxApplication_IntegTest {
                       visits { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
                       addPet {
                         hidden disabled
-                        metadata { friendlyName description cssClassFa cssClassFaPosition }
+                        metadata { friendlyName description cssClassFa cssClassFaPosition promptStyle }
                         params { name { validity datatype } }
                       }
-                      updateName { metadata { description cssClassFa cssClassFaPosition } }
+                      updateName { metadata { description cssClassFa cssClassFaPosition promptStyle } }
                       delete { hidden disabled metadata { description cssClassFa cssClassFaPosition areYouSure } }
                       bookVisit { hidden disabled }
                     }
@@ -448,8 +450,12 @@ class PetClinicHtmxApplication_IntegTest {
                 .isEqualTo("paw");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/addPet/metadata/cssClassFaPosition").asText())
                 .isEqualTo("LEFT");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/addPet/metadata/promptStyle").asText())
+                .isEqualTo("INLINE");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/updateName/metadata/cssClassFaPosition").asText())
                 .isEqualTo("RIGHT");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/updateName/metadata/promptStyle").asText())
+                .isEqualTo("INLINE");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/metadata/areYouSure").asBoolean()).isTrue();
         assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/metadata/description").asText())
                 .isEqualTo("Deletes this pet owner and their related pets.");

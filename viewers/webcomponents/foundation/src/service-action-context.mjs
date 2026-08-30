@@ -85,7 +85,7 @@ export class ServiceActionContextController {
       if (descriptor.fields.has('disabled')) {
         actionSelection.disabled = true;
       }
-      const metadataFields = ['areYouSure'].filter(fieldName => descriptor.metadata?.fields.has(fieldName));
+      const metadataFields = ['areYouSure', 'promptStyle'].filter(fieldName => descriptor.metadata?.fields.has(fieldName));
       if (metadataFields.length > 0) {
         actionSelection.metadata = Object.fromEntries(metadataFields.map(fieldName => [fieldName, true]));
       }
