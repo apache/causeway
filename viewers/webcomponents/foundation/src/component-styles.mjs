@@ -18,6 +18,9 @@
  */
 
 export const CAUSEWAY_COMPONENT_STYLES = `
+cw-parameter {
+  display: none;
+}
 cw-object {
   container-name: cw-object;
   container-type: inline-size;

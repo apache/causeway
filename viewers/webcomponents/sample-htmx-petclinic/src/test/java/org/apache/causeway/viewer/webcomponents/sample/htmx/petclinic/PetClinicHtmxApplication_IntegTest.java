@@ -113,9 +113,11 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(get("/htmx/object/petclinic.PetOwner/s_owner-mary").body())
                 .contains("<cw-action id=\"delete\" named=\"Remove this owner\"")
                 .contains("<cw-action id=\"updateName\" named=\"Change the owner's name\"")
+                .contains("<cw-parameter id=\"name\"")
+                .contains("named=\"Owner's full name\"")
                 .contains("<cw-action id=\"addPet\" named=\"Register a pet\"")
                 .contains("<cw-action id=\"removePet\"></cw-action>")
-                .contains("<cw-action id=\"bookVisit\"></cw-action>");
+                .contains("<cw-action id=\"bookVisit\">");
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -228,6 +230,12 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(ownerHtml)
                 .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n      <cw-action id=\"delete\"")
                 .contains("<cw-property id=\"name\" named=\"Full name\">\n            <cw-action id=\"updateName\"")
+                .contains("<cw-parameter id=\"name\"\n                            named=\"Owner's full name\"")
+                .contains("description-as=\"tooltip\"")
+                .contains("<cw-parameter id=\"name\"\n                          named=\"Pet name\"")
+                .contains("<cw-parameter id=\"reason\"\n                          named=\"Reason for visit\"")
+                .contains("multi-line=\"3\"")
+                .doesNotContain("<cw-parameter id=\"species\"", "<cw-action id=\"removePet\">\n            <cw-parameter")
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")

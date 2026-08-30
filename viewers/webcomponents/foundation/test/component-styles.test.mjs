@@ -25,8 +25,12 @@ import {CAUSEWAY_COMPONENT_STYLES} from '../src/component-styles.mjs';
 
 test('external structural stylesheet remains synchronized with the installable styles', async () => {
   const external = await readFile(new URL('../src/component-styles.css', import.meta.url), 'utf8');
-  const withoutLicense = external.slice(external.indexOf('cw-object {')).trim();
+  const withoutLicense = external.slice(external.indexOf('cw-parameter {')).trim();
   assert.equal(withoutLicense, CAUSEWAY_COMPONENT_STYLES.trim());
+});
+
+test('declarative action parameters remain non-visual configuration elements', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /^\s*cw-parameter \{\s+display: none;\s+\}/);
 });
 
 test('property edit affordance remains a compact deterministic icon control', async () => {

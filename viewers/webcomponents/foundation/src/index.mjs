@@ -51,6 +51,7 @@ export * from './object-element.mjs';
 export * from './object-header-element.mjs';
 export * from './object-layout.mjs';
 export * from './object-link-element.mjs';
+export * from './parameter-element.mjs';
 export * from './property-element.mjs';
 export * from './reference-widget.mjs';
 export * from './register.mjs';

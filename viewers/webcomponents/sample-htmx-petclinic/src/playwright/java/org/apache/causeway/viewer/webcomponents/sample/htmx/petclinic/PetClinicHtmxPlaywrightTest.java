@@ -592,6 +592,12 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("updateName", "Change the owner's name");
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
                 .isEqualTo("Updates the owner's full name.");
+        final var updateNameLabel = page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-label");
+        assertThat(updateNameLabel.textContent()).isEqualTo("Owner's full name");
+        assertThat(updateNameLabel.getAttribute("data-tooltip"))
+                .isEqualTo("The complete name used to identify this pet owner.");
+        assertThat(page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-description")
+                .getAttribute("class")).contains("causeway-visually-hidden");
         assertFocused(parameter("name"));
         fillParameter("name", "Invalid % name");
         submitPrompt();
@@ -642,6 +648,12 @@ class PetClinicHtmxPlaywrightTest {
         waitForPrompt("addPet", "Register a pet");
         assertThat(page.locator(PROMPT + " .causeway-action-prompt-description").textContent())
                 .isEqualTo("Adds a pet to this owner's household.");
+        assertThat(page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-label").textContent())
+                .isEqualTo("Pet name");
+        assertThat(page.locator(PROMPT + " [data-parameter='name'] .causeway-action-parameter-description").textContent())
+                .isEqualTo("The name used for this companion animal.");
+        assertThat(page.locator(PROMPT + " [data-parameter='species'] .causeway-action-parameter-label").textContent())
+                .isEqualTo("Species");
         assertThat(page.locator(PROMPT + " .causeway-action-parameter-reason").count()).isZero();
         final var preparationsBeforeName = graphQLOperationCount("CausewayPrepareAction");
         tabOutOfParameter("name");
@@ -695,6 +707,12 @@ class PetClinicHtmxPlaywrightTest {
         }
         final var visitAt = resolveEditor(parameter("visitAt"));
         final var reason = resolveEditor(parameter("reason"));
+        assertThat(page.locator(PROMPT + " [data-parameter='reason'] .causeway-action-parameter-label").textContent())
+                .isEqualTo("Reason for visit");
+        assertThat(page.locator(PROMPT + " [data-parameter='reason'] .causeway-action-parameter-description").textContent())
+                .isEqualTo("Describe the purpose of the appointment.");
+        assertThat(reason.evaluate("element => element.localName === 'vaadin-text-area' ? element.maxRows : Number(element.rows)"))
+                .isEqualTo(3);
         assertThat(visitAt.count())
                 .as(page.locator(PROMPT).evaluate("element => element.outerHTML").toString())
                 .isEqualTo(1);

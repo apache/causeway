@@ -53,6 +53,7 @@ const OLD_SUFFIXES = [
   'value',
   'object-link',
   'action',
+  'parameter',
   'interaction-controller',
   'field-editor',
   'reference-editor',
@@ -69,7 +70,7 @@ const SUFFIX_PATTERN = [...OLD_SUFFIXES]
 const OLD_TAG = new RegExp(`(?:<|&lt;)\\/?${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?![a-z0-9-])`);
 const OLD_API_NAME = new RegExp(`(?<![.\\w-])${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?![a-z0-9-])`);
 const OLD_TYPE_SELECTOR = new RegExp(`(?:^|[>,(]\\s*)${OLD_PREFIX}(?:${SUFFIX_PATTERN})(?=[\\s\\[{:>,])`);
-const MEMBER_BEARING_SUFFIX_PATTERN = 'property|action|collection|collection-column';
+const MEMBER_BEARING_SUFFIX_PATTERN = 'property|action|parameter|collection|collection-column';
 const OLD_MEMBER_TAG = new RegExp(`<cw-(?:${MEMBER_BEARING_SUFFIX_PATTERN})\\b[^>]*\\bmember\\s*=`);
 const OLD_MEMBER_SELECTOR = new RegExp(`cw-(?:${MEMBER_BEARING_SUFFIX_PATTERN})[^\\n]*\\[member(?:[~|^$*]?=|\\])`);
 const OLD_MEMBER_DOM_API = /(?:get|set)Attribute(?:\?\.)?\(\s*['"]member['"]/;
@@ -158,9 +159,10 @@ test('application markup does not expose raw Vaadin elements', async () => {
 });
 
 test('compact element names retain established non-element Causeway contracts', () => {
-  assert.equal(Object.values(CausewayElementName).length, 17);
+  assert.equal(Object.values(CausewayElementName).length, 18);
   assert.ok(Object.values(CausewayElementName).every(name => name.startsWith('cw-')));
   assert.equal(CAUSEWAY_FIELD_EDITOR, 'cw-field-editor');
   assert.equal(CausewayHostClass.PROPERTY, 'causeway-property');
+  assert.equal(CausewayHostClass.PARAMETER, 'causeway-parameter');
   assert.equal(CausewaySemanticEvent.PROPERTY_UPDATED, 'causeway-property-updated');
 });
