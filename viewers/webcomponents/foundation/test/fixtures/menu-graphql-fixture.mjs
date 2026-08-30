@@ -57,7 +57,8 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
     ])],
     ['rich__gqlv_application_home_object', unionType('rich__gqlv_application_home_object', ['rich__sample_Home'])],
     [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, [
-      field('areYouSure', scalar('Boolean'))
+      field('areYouSure', scalar('Boolean')),
+      field('promptStyle', scalar('String'))
     ])],
     [SAMPLE_SERVICE_TYPE, objectType(SAMPLE_SERVICE_TYPE, [
       field('welcomeMessage', named(`${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`)),
@@ -192,11 +193,11 @@ export function createMenuGraphQLExecutor({
     if (request.operationName === 'CausewayReadServiceActionStates') {
       serviceCalls.push(request);
       return {data: {rich: {[SAMPLE_SERVICE_FIELD]: actionState ?? {
-        welcomeMessage: {hidden: false, disabled: null, metadata: {areYouSure: false}},
-        greet: {hidden: false, disabled: null, metadata: {areYouSure: false}},
-        disabledAction: {hidden: false, disabled: 'Available to administrators only.', metadata: {areYouSure: false}},
-        hiddenAction: {hidden: true, disabled: null, metadata: {areYouSure: false}},
-        clearNotes: {hidden: false, disabled: null, metadata: {areYouSure: true}}
+        welcomeMessage: {hidden: false, disabled: null, metadata: {areYouSure: false, promptStyle: 'DIALOG_MODAL'}},
+        greet: {hidden: false, disabled: null, metadata: {areYouSure: false, promptStyle: 'DIALOG_SIDEBAR'}},
+        disabledAction: {hidden: false, disabled: 'Available to administrators only.', metadata: {areYouSure: false, promptStyle: 'DIALOG_MODAL'}},
+        hiddenAction: {hidden: true, disabled: null, metadata: {areYouSure: false, promptStyle: 'DIALOG_MODAL'}},
+        clearNotes: {hidden: false, disabled: null, metadata: {areYouSure: true, promptStyle: 'DIALOG_MODAL'}}
       }}}};
     }
     if (request.operationName === 'CausewayPrepareServiceAction') {

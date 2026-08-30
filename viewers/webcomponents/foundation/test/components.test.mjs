@@ -439,6 +439,7 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
   document.body.removeChild(action);
   action.label = 'Legacy order label';
   action.named = 'Place a new order';
+  action.promptStyle = 'dialog_sidebar';
   action.context = {identity: {logicalTypeName: 'example.Order', id: '42'}};
   action.acceptComponentState(state({
     descriptor: {id: 'placeOrder', description: 'Schema fallback'},
@@ -471,15 +472,27 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
       metadata: {
         friendlyName: 'Canonical order name',
         description: 'Creates an order for this customer.',
-        areYouSure: true
+        areYouSure: true,
+        promptStyle: 'DIALOG_MODAL'
       }
     }
   }));
   assert.equal(action.activate(), true);
   assert.equal(request.presentation.name, 'Place a new order');
   assert.equal(request.presentation.description, 'Creates an order for this customer.');
+  assert.equal(action.promptStyle, 'DIALOG_SIDEBAR');
   assert.equal(request.presentation.areYouSure, true);
+  assert.equal(request.presentation.promptStyle, 'DIALOG_SIDEBAR');
   assert.deepEqual(request.presentation.parameters, action.parameterPresentations);
+
+  action.promptStyle = 'unsupported';
+  action.acceptComponentState(state({
+    descriptor: {id: 'placeOrder'},
+    data: {hidden: false, disabled: null, metadata: {promptStyle: 'INLINE'}}
+  }));
+  assert.equal(action.promptStyle, '');
+  assert.equal(action.activate(), true);
+  assert.equal(request.presentation.promptStyle, 'INLINE');
 });
 
 test('member-bearing elements use native identifiers without a member compatibility API', () => {

@@ -363,6 +363,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
         name: descriptor?.label || humanize(actionId),
         description: descriptor?.description,
         areYouSure: descriptor?.areYouSure,
+        promptStyle: descriptor?.promptStyle,
         cssClassFa: descriptor?.iconHint,
         cssClassFaPosition: descriptor?.iconPosition
       })

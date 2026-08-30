@@ -293,6 +293,24 @@ cw-field-editor[data-widget-state="fallback"]::after {
   max-inline-size: min(36rem, calc(100vw - 2rem));
   padding: 1rem;
 }
+.causeway-action-prompt-inline,
+.causeway-inline-action-prompt-portal {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: none;
+}
+[data-causeway-inline-action-prompt] > .causeway-inline-action-prompt-portal {
+  grid-column: 1 / -1;
+}
+.causeway-action-prompt-sidebar {
+  block-size: 100dvh;
+  box-sizing: border-box;
+}
+.causeway-action-prompt-title[data-causeway-dialog-drag-handle] {
+  cursor: move;
+  touch-action: none;
+  user-select: none;
+}
 .causeway-action-confirmation {
   border-color: var(--causeway-danger, #b42318);
 }

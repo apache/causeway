@@ -28,7 +28,7 @@
         <h2 id="petclinic-owner-identity-heading">Identity</h2>
         <div class="petclinic-field-list">
           <cw-property id="name" named="Full name">
-            <cw-action id="updateName" named="Change the owner's name">
+            <cw-action id="updateName" named="Change the owner's name" prompt-style="INLINE">
               <cw-parameter id="name"
                             named="Owner's full name"
                             described-as="The complete name used to identify this pet owner."
@@ -65,7 +65,7 @@
           <cw-collection-column id="name" label="Name"></cw-collection-column>
           <cw-collection-column id="species" label="Species"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
-          <cw-action id="addPet" named="Register a pet">
+          <cw-action id="addPet" named="Register a pet" prompt-style="DIALOG_SIDEBAR">
             <cw-parameter id="name"
                           named="Pet name"
                           described-as="The name used for this companion animal."
@@ -83,7 +83,7 @@
           <cw-collection-column id="visitAt" label="When"></cw-collection-column>
           <cw-collection-column id="reason" label="Reason"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
-          <cw-action id="bookVisit">
+          <cw-action id="bookVisit" prompt-style="DIALOG_MODAL">
             <cw-parameter id="reason"
                           named="Reason for visit"
                           described-as="Describe the purpose of the appointment."

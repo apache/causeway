@@ -126,6 +126,16 @@ test('property-associated actions align with the effective field column responsi
   assert.match(theme, /@media \(max-width: 48rem\)[\s\S]*?cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 1 \/ -1;/);
 });
 
+test('action prompt styles expose inline, movable modal and vertical sidebar surfaces', async () => {
+  const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-action-prompt-inline,[\s\S]*?inline-size: 100%;[\s\S]*?max-inline-size: none;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\[data-causeway-inline-action-prompt\] > \.causeway-inline-action-prompt-portal \{\s+grid-column: 1 \/ -1;/);
+  assert.match(theme, /cw-interaction-controller:has\(\.causeway-action-prompt-modal, \.causeway-action-prompt-sidebar\)::before/);
+  assert.match(theme, /\.causeway-action-prompt-modal \{[\s\S]*?inset: 50% auto auto 50%;[\s\S]*?transform: translate\(-50%, -50%\);/);
+  assert.match(theme, /\.causeway-action-prompt-sidebar \{[\s\S]*?inset: 0 0 0 auto;[\s\S]*?max-height: 100dvh;/);
+  assert.match(theme, /\.causeway-action-prompt-modal \.causeway-action-prompt-title\[data-causeway-dialog-drag-handle\] \{[\s\S]*?cursor: move;/);
+});
+
 test('standard theme gives effective multiline properties explicit responsive placement', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   const effectiveMultiline = '\\.causeway-property\\[data-multi-line\\]\\[data-label-position="LEFT"\\]';

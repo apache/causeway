@@ -25,7 +25,8 @@ import {
 } from './action-widget.mjs';
 import {
   composeActionTooltip,
-  normalizeActionPresentation
+  normalizeActionPresentation,
+  normalizeAuthoredActionPromptStyle
 } from './action-presentation.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
@@ -54,7 +55,7 @@ export function captureDeclarativeActionParameters(root = globalThis.document) {
 
 export class CausewayActionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
-    return ['id', 'named', 'label', 'data-testid'];
+    return ['id', 'named', 'label', 'prompt-style', 'data-testid'];
   }
 
   constructor() {
@@ -106,6 +107,15 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
 
   get parameterPresentations() {
     return normalizeActionParameterConfigurations(this._parameterPresentations);
+  }
+
+  get promptStyle() {
+    return normalizeAuthoredActionPromptStyle(this.getAttribute('prompt-style')) || '';
+  }
+
+  set promptStyle(value) {
+    if (value == null || String(value).trim() === '') this.removeAttribute('prompt-style');
+    else this.setAttribute('prompt-style', value);
   }
 
   get label() {
@@ -213,6 +223,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
       name: this.named || this.label || metadata.friendlyName || humanize(this.id),
       description: metadata.description || state?.descriptor?.description || '',
       areYouSure: metadata.areYouSure,
+      promptStyle: this.promptStyle || metadata.promptStyle,
       cssClassFa: metadata.cssClassFa,
       cssClassFaPosition: metadata.cssClassFaPosition
     });

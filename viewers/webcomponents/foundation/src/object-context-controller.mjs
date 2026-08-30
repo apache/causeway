@@ -1330,7 +1330,7 @@ function translateRequirement(requirement, description) {
   const metadataFields = [
     'friendlyName',
     'description',
-    ...(requirement.kind === 'action' ? ['cssClassFa', 'cssClassFaPosition', 'areYouSure'] : [])
+    ...(requirement.kind === 'action' ? ['cssClassFa', 'cssClassFaPosition', 'areYouSure', 'promptStyle'] : [])
   ].filter(field => member.metadata?.fields.has(field));
   if (metadataFields.length > 0) {
     memberSelection.metadata = Object.fromEntries(metadataFields.map(field => [field, true]));

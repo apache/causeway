@@ -96,7 +96,8 @@ export function applyServiceActionStates(plan, actionStates, diagnostics = []) {
           actions.push({
             ...action,
             disabled: state.disabled || null,
-            areYouSure: state.metadata?.areYouSure === true
+            areYouSure: state.metadata?.areYouSure === true,
+            promptStyle: state.metadata?.promptStyle ?? null
           });
         }
         if (actions.length > 0) {

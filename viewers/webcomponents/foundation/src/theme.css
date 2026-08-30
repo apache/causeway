@@ -613,7 +613,7 @@ cw-property:last-child .causeway-property {
   display: none;
 }
 
-cw-interaction-controller:has(.causeway-action-prompt)::before {
+cw-interaction-controller:has(.causeway-action-prompt-modal, .causeway-action-prompt-sidebar)::before {
   content: "";
   position: fixed;
   z-index: 999;
@@ -622,18 +622,55 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
 }
 
 .causeway-action-prompt {
-  position: fixed;
-  z-index: 1000;
-  inset: 50% auto auto 50%;
-  width: min(calc(100% - (2 * var(--causeway-space-4))), 40rem);
-  max-height: min(82vh, 46rem);
   padding: var(--causeway-space-5);
   overflow: auto;
-  transform: translate(-50%, -50%);
   border: 1px solid var(--causeway-border-strong);
   border-radius: var(--causeway-radius-lg);
   background: var(--causeway-surface-raised);
+}
+
+.causeway-action-prompt-modal,
+.causeway-action-prompt-sidebar {
+  position: fixed;
+  z-index: 1000;
+  margin: 0;
   box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.35);
+}
+
+.causeway-action-prompt-modal {
+  inset: 50% auto auto 50%;
+  width: min(calc(100% - (2 * var(--causeway-space-4))), 40rem);
+  max-height: min(82vh, 46rem);
+  transform: translate(-50%, -50%);
+}
+
+.causeway-action-prompt-sidebar {
+  inset: 0 0 0 auto;
+  width: min(calc(100% - var(--causeway-space-4)), 32rem);
+  max-height: 100dvh;
+  border-radius: var(--causeway-radius-lg) 0 0 var(--causeway-radius-lg);
+}
+
+.causeway-action-prompt-inline {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: var(--causeway-surface-subtle);
+  box-shadow: none;
+}
+
+.causeway-inline-action-prompt-portal,
+[data-causeway-inline-action-prompt] > .causeway-inline-action-prompt-portal {
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.causeway-action-prompt-modal .causeway-action-prompt-title[data-causeway-dialog-drag-handle] {
+  cursor: move;
+  touch-action: none;
+  user-select: none;
 }
 
 .causeway-action-prompt h2,
@@ -766,9 +803,16 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
   }
 
   .causeway-action-prompt {
+    padding: var(--causeway-space-4);
+  }
+
+  .causeway-action-prompt-modal {
     width: calc(100% - (2 * var(--causeway-space-3)));
     max-height: calc(100vh - (2 * var(--causeway-space-3)));
-    padding: var(--causeway-space-4);
+  }
+
+  .causeway-action-prompt-sidebar {
+    width: min(calc(100% - var(--causeway-space-3)), 32rem);
   }
 }
 
