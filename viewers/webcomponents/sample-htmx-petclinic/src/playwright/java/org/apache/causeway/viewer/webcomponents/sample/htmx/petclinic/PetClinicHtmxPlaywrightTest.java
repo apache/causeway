@@ -213,6 +213,21 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? 0 : 1);
         assertThat(toolkitRequests.stream().noneMatch(url -> !url.contains("/vaadin-menubar/"))).isTrue();
 
+        final var ownerSearch = page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search]");
+        assertThat(ownerSearch.isVisible()).isTrue();
+        assertThat(ownerSearch.getAttribute("maxlength")).isEqualTo("256");
+        ownerSearch.fill("Mary");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.totalCount === 1");
+        waitForCollectionRows("petOwners", 1);
+        assertThat(page.locator("cw-collection[id='petOwners']").innerText()).contains("Mary Smith");
+        page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search-clear]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.totalCount === 4");
+        waitForCollectionRows("petOwners", 2);
+        page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.ordering === 'REQUESTED'");
+        assertThat(page.locator("cw-collection[id='petOwners'] [data-causeway-collection-sort='name']").getAttribute("aria-label"))
+                .contains("descending");
+
         page.locator("cw-collection[id='petOwners'] [data-causeway-grid-next]").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='petOwners']\")?.collectionState?.window?.offset === 2");
         waitForCollectionRows("petOwners", 2);
@@ -235,6 +250,10 @@ class PetClinicHtmxPlaywrightTest {
         assertFocused(ROUTE_PAGE);
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 1);
+        assertThat(page.locator("cw-collection[id='pets']").getAttribute("sortable")).isEmpty();
+        page.locator("cw-collection[id='pets'] [data-causeway-collection-sort='name']").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.ordering === 'REQUESTED'");
+        assertThat(page.locator("cw-collection[id='pets'] cw-action[id='addPet']").isVisible()).isTrue();
         assertThat(page.locator("cw-collection[id='visits']").getAttribute("paged")).isEqualTo("1");
         assertThat(page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").isVisible()).isTrue();
         page.locator("cw-collection[id='visits'] [data-causeway-grid-next]").click();

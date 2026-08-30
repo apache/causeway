@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import graphql.Scalars;
 import graphql.schema.DataFetchingEnvironment;
@@ -32,11 +32,15 @@ import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLList.list;
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
@@ -46,6 +50,9 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidCollectionWind
 public class RichCollectionWindow extends Element {
 
     private static final String ORDERING_TYPE_NAME = "rich__gqlv_collection_window_ordering";
+    private static final String SORT_DIRECTION_TYPE_NAME = "rich__gqlv_collection_window_sort_direction";
+    private static final int MAX_SEARCH_LENGTH = 256;
+    private static final int MAX_SORT_MEMBER_LENGTH = 128;
 
     private final MemberInteractor<OneToManyAssociation> memberInteractor;
     private final int defaultWindowSize;
@@ -67,6 +74,7 @@ public class RichCollectionWindow extends Element {
         }
 
         var orderingType = orderingType(context);
+        var sortDirectionType = sortDirectionType(context);
         var windowType = windowType(context, memberInteractor, rowsType, orderingType);
         setField(newFieldDefinition()
                 .name("window")
@@ -84,6 +92,20 @@ public class RichCollectionWindow extends Element {
                                 + maxWindowSize + ".")
                         .type(nonNull(Scalars.GraphQLInt))
                         .defaultValueProgrammatic(defaultWindowSize))
+                .argument(GraphQLArgument.newArgument()
+                        .name("sortBy")
+                        .description("Optional accepted Causeway table-column member id.")
+                        .type(Scalars.GraphQLString))
+                .argument(GraphQLArgument.newArgument()
+                        .name("sortDirection")
+                        .description("Direction for an optional sort member.")
+                        .type(nonNull(sortDirectionType))
+                        .defaultValueProgrammatic(MmSortUtils.SortDirection.ASCENDING))
+                .argument(GraphQLArgument.newArgument()
+                        .name("search")
+                        .description("Optional CollectionFilterService quick-search text, bounded to "
+                                + MAX_SEARCH_LENGTH + " characters.")
+                        .type(Scalars.GraphQLString))
                 .build());
     }
 
@@ -91,7 +113,10 @@ public class RichCollectionWindow extends Element {
     protected Object fetchData(final DataFetchingEnvironment environment) {
         var offset = environment.<Integer>getArgument("offset");
         var size = environment.<Integer>getArgument("size");
-        validate(offset, size);
+        var sortBy = normalize(environment.<String>getArgument("sortBy"));
+        var sortDirection = environment.<MmSortUtils.SortDirection>getArgument("sortDirection");
+        var search = normalize(environment.<String>getArgument("search"));
+        validate(offset, size, sortBy, sortDirection, search);
 
         var association = memberInteractor.getObjectMember();
         var managedObject = RichCollectionAccess.visibleSource(environment, association, context);
@@ -99,16 +124,31 @@ public class RichCollectionWindow extends Element {
             return null;
         }
 
-        var resultManagedObject = association.get(managedObject);
-        var rows = materialize(resultManagedObject != null ? resultManagedObject.getPojo() : null);
-        var comparator = association.getElementComparator();
-        if (comparator.isPresent()) {
-            var elementType = association.getElementType();
-            var elementComparator = comparator.get();
-            rows.sort((left, right) -> elementComparator.compare(
-                    ManagedObject.adaptSingular(elementType, left),
-                    ManagedObject.adaptSingular(elementType, right)));
+        var table = ManagedCollection.of(managedObject, association, Where.ANYWHERE).createDataTableModel();
+        var columns = table.dataColumnsObservable().getValue();
+        var sortableMembers = columns.stream()
+                .filter(column -> column.associationMetaModel().getSpecialization().leftIfAny() != null)
+                .map(column -> column.columnId())
+                .toList();
+        if (sortBy != null) {
+            var columnIndex = IntStream.range(0, columns.size())
+                    .filter(index -> sortBy.equals(columns.getElseFail(index).columnId()))
+                    .findFirst()
+                    .orElseThrow(() -> invalid("Collection window sort member is not an accepted table column."));
+            if (!sortableMembers.contains(sortBy)) {
+                throw invalid("Collection window sort member is not sortable.");
+            }
+            table.columnSortBindable().setValue(new DataTableInteractive.ColumnSort(columnIndex, sortDirection));
         }
+        if (search != null) {
+            if (!table.isSearchSupported()) {
+                throw invalid("Collection window search is not supported for this element type.");
+            }
+            table.searchArgumentBindable().setValue(search);
+        }
+        var rows = table.dataRowsFilteredAndSortedObservable().getValue().stream()
+                .map(row -> row.rowElement().getPojo())
+                .toList();
 
         var totalCount = rows.size();
         var fromIndex = Math.min(offset, totalCount);
@@ -124,13 +164,25 @@ public class RichCollectionWindow extends Element {
         result.put("maximumSize", maxWindowSize);
         result.put("hasPrevious", offset > 0 && totalCount > 0);
         result.put("hasNext", (long) offset + selectedRows.size() < totalCount);
-        result.put("ordering", comparator.isPresent()
-                ? CollectionWindowOrdering.CONFIGURED
-                : CollectionWindowOrdering.ENCOUNTER);
+        result.put("ordering", sortBy != null
+                ? CollectionWindowOrdering.REQUESTED
+                : association.getElementComparator().isPresent()
+                        ? CollectionWindowOrdering.CONFIGURED
+                        : CollectionWindowOrdering.ENCOUNTER);
+        result.put("sortableMembers", sortableMembers);
+        result.put("searchSupported", table.isSearchSupported());
+        if (table.isSearchSupported() && !table.getSearchPromptPlaceholderText().isBlank()) {
+            result.put("searchPrompt", table.getSearchPromptPlaceholderText());
+        }
         return Map.copyOf(result);
     }
 
-    private void validate(final Integer offset, final Integer size) {
+    private void validate(
+            final Integer offset,
+            final Integer size,
+            final String sortBy,
+            final MmSortUtils.SortDirection sortDirection,
+            final String search) {
         if (offset == null || offset < 0) {
             throw new InvalidCollectionWindowException(
                     "Collection window offset must be zero or greater.");
@@ -143,18 +195,26 @@ public class RichCollectionWindow extends Element {
             throw new InvalidCollectionWindowException(
                     "Collection window size exceeds the configured maximum of " + maxWindowSize + ".");
         }
+        if (sortBy != null && sortBy.length() > MAX_SORT_MEMBER_LENGTH) {
+            throw invalid("Collection window sort member exceeds the supported length.");
+        }
+        if (sortBy != null && sortDirection == null) {
+            throw invalid("Collection window sort direction is required with a sort member.");
+        }
+        if (search != null && search.length() > MAX_SEARCH_LENGTH) {
+            throw invalid("Collection window search exceeds the supported length of " + MAX_SEARCH_LENGTH + ".");
+        }
     }
 
-    private static List<Object> materialize(final Object collection) {
-        if (collection == null) {
-            return new ArrayList<>();
+    private static String normalize(final String value) {
+        if (value == null || value.isBlank()) {
+            return null;
         }
-        if (!(collection instanceof Iterable<?> iterable)) {
-            throw new IllegalStateException("Collection association did not return an iterable value.");
-        }
-        var rows = new ArrayList<>();
-        iterable.forEach(rows::add);
-        return rows;
+        return value.trim();
+    }
+
+    private static InvalidCollectionWindowException invalid(final String message) {
+        return new InvalidCollectionWindowException(message);
     }
 
     private static GraphQLEnumType orderingType(final Context context) {
@@ -165,11 +225,27 @@ public class RichCollectionWindow extends Element {
                             .description("How rows were ordered before selecting a collection window.")
                             .value(CollectionWindowOrdering.CONFIGURED.name(), CollectionWindowOrdering.CONFIGURED,
                                     "A Causeway configured comparator was applied.")
+                            .value(CollectionWindowOrdering.REQUESTED.name(), CollectionWindowOrdering.REQUESTED,
+                                    "A requested accepted Causeway table-column sort was applied.")
                             .value(CollectionWindowOrdering.ENCOUNTER.name(), CollectionWindowOrdering.ENCOUNTER,
                                     "The materialized collection encounter order was retained without a cross-request stability guarantee.")
                             .build();
                     context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(orderingType);
                     return orderingType;
+                });
+    }
+
+    private static GraphQLEnumType sortDirectionType(final Context context) {
+        return context.graphQLTypeRegistry.lookup(SORT_DIRECTION_TYPE_NAME, GraphQLEnumType.class)
+                .orElseGet(() -> {
+                    var directionType = newEnum()
+                            .name(SORT_DIRECTION_TYPE_NAME)
+                            .description("Direction for a requested collection-window sort.")
+                            .value(MmSortUtils.SortDirection.ASCENDING.name(), MmSortUtils.SortDirection.ASCENDING)
+                            .value(MmSortUtils.SortDirection.DESCENDING.name(), MmSortUtils.SortDirection.DESCENDING)
+                            .build();
+                    context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(directionType);
+                    return directionType;
                 });
     }
 
@@ -197,6 +273,11 @@ public class RichCollectionWindow extends Element {
                             .field(newFieldDefinition().name("hasPrevious").type(nonNull(Scalars.GraphQLBoolean)))
                             .field(newFieldDefinition().name("hasNext").type(nonNull(Scalars.GraphQLBoolean)))
                             .field(newFieldDefinition().name("ordering").type(nonNull(orderingType)))
+                            .field(newFieldDefinition().name("sortableMembers")
+                                    .type(nonNull(list(nonNull(Scalars.GraphQLString)))))
+                            .field(newFieldDefinition().name("searchSupported")
+                                    .type(nonNull(Scalars.GraphQLBoolean)))
+                            .field(newFieldDefinition().name("searchPrompt").type(Scalars.GraphQLString))
                             .build();
                     context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(type);
                     return type;

@@ -65,6 +65,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
     this._presentation = null;
     this._focusRequested = false;
     this._semanticFocusIntent = null;
+    this._sortFocusIntent = null;
     this._policyListener = () => this.#applyCurrentPolicy();
   }
 
@@ -106,6 +107,13 @@ export class CausewayCollectionGridElement extends HTMLElement {
   focus(options) {
     this._focusRequested = true;
     this._control?.focus?.(options);
+  }
+
+  restoreSortFocus(member) {
+    if (!member) return false;
+    this._sortFocusIntent = String(member);
+    this._control?.requestContentUpdate?.();
+    return true;
   }
 
   restoreSemanticFocus(intent) {
@@ -183,6 +191,34 @@ export class CausewayCollectionGridElement extends HTMLElement {
     for (const descriptor of presentation.columns) {
       const column = document.createElement('vaadin-grid-column');
       column.header = descriptor.label;
+      const sortable = presentation.sortableMembers.has(descriptor.member);
+      const currentDirection = presentation.sortCriterion
+          && presentation.sortCriterion.member === descriptor.member
+        ? presentation.sortCriterion.direction
+        : null;
+      if (sortable) {
+        column.headerRenderer = root => {
+          if (presentationRevision !== this._presentationRevision || control !== this._control) return;
+          root.replaceChildren();
+          root.parentElement?.setAttribute?.('aria-sort', currentDirection === 'ASCENDING'
+            ? 'ascending'
+            : currentDirection === 'DESCENDING' ? 'descending' : 'none');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.dataset.causewayCollectionSort = descriptor.member;
+          button.textContent = `${descriptor.label}${currentDirection === 'ASCENDING' ? ' ↑' : currentDirection === 'DESCENDING' ? ' ↓' : ''}`;
+          button.setAttribute('aria-label', `Sort ${descriptor.label}${currentDirection === 'ASCENDING' ? ' descending' : currentDirection === 'DESCENDING' ? ' off' : ' ascending'}`);
+          button.addEventListener('click', event => {
+            event.stopPropagation();
+            presentation.sortCallback(descriptor.member);
+          });
+          root.appendChild(button);
+          if (this._sortFocusIntent === descriptor.member) {
+            this._sortFocusIntent = null;
+            queueMicrotask(() => button.focus?.());
+          }
+        };
+      }
       column.resizable = presentation.resizableColumns;
       column.sortable = false;
       column.frozen = false;
@@ -254,6 +290,12 @@ function freezePresentation(value = {}) {
     ? value.totalCount
     : rows.length;
   const pageSize = Number.isSafeInteger(value.pageSize) && value.pageSize > 0 ? value.pageSize : Math.max(rows.length, 1);
+  const sortableMembers = new Set((Array.isArray(value.sortableMembers) ? value.sortableMembers : [])
+    .filter(member => typeof member === 'string'));
+  const sortCriterion = value.sortCriterion?.member
+      && ['ASCENDING', 'DESCENDING'].includes(value.sortCriterion.direction)
+    ? Object.freeze({member: String(value.sortCriterion.member), direction: value.sortCriterion.direction})
+    : null;
   return Object.freeze({
     mode,
     rows,
@@ -265,7 +307,10 @@ function freezePresentation(value = {}) {
     describedBy: String(value.describedBy ?? ''),
     testId: String(value.testId ?? ''),
     resizableColumns: value.resizableColumns === true,
-    reorderableColumns: value.reorderableColumns === true
+    reorderableColumns: value.reorderableColumns === true,
+    sortableMembers,
+    sortCriterion,
+    sortCallback: typeof value.sortCallback === 'function' ? value.sortCallback : () => {}
   });
 }
 

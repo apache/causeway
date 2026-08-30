@@ -22,6 +22,7 @@ import test from 'node:test';
 import {installDomShim} from './dom-shim.mjs';
 import {
   collectionWindowResponse,
+  createCriteriaWindowedRichSchemaTypes,
   createRichSchemaFixtureExecutor,
   createRichSchemaTypes,
   createVersionlessRichSchemaTypes,
@@ -156,6 +157,56 @@ test('collection secondary reads are lazy, cached and hydrate row contexts', asy
   rowContext.registerRequirement({kind: 'property', member: 'code'}, state => { codeState = state; });
   await waitFor(() => executor.readCalls.length === 3 && codeState?.status === 'ready');
   assert.equal(codeState.data.get, 'ADA');
+});
+
+test('collection window criteria are discovered, transported and included in request identity', async () => {
+  const rows = [row({id: 'staff-2', name: 'Dr Grace'})];
+  const executor = createRichSchemaFixtureExecutor({
+    types: createCriteriaWindowedRichSchemaTypes(),
+    readResponses: [graphQLObjectResponse()],
+    windowResponses: [collectionWindowResponse({
+      rows,
+      requestedSize: 2,
+      totalCount: 1,
+      ordering: 'REQUESTED',
+      sortableMembers: ['name'],
+      searchSupported: true,
+      searchPrompt: 'Search staff member'
+    })]
+  });
+  const context = new ObjectContextController({
+    client: new CausewayGraphQLClient({executor}),
+    logicalTypeName: DEPARTMENT_LOGICAL_TYPE,
+    objectId: '42'
+  });
+  context.registerRequirement({kind: 'collection', member: 'staffMembers'});
+  await waitFor(() => context.state.status === 'ready');
+
+  const loaded = await context.loadCollection({
+    member: 'staffMembers',
+    columns: ['name'],
+    offset: 0,
+    size: 2,
+    sortBy: 'name',
+    sortDirection: 'DESCENDING',
+    search: 'Grace'
+  });
+
+  assert.deepEqual(executor.windowCalls[0].variables, {
+    object: {id: '42'},
+    offset: 0,
+    size: 2,
+    sortBy: 'name',
+    sortDirection: 'DESCENDING',
+    search: 'Grace'
+  });
+  assert.match(executor.windowCalls[0].document, /sortBy: \$sortBy/);
+  assert.match(executor.windowCalls[0].document, /search: \$search/);
+  assert.match(executor.windowCalls[0].document, /sortableMembers/);
+  assert.deepEqual(loaded.window.sortableMembers, ['name']);
+  assert.equal(loaded.window.searchSupported, true);
+  assert.equal(loaded.window.searchPrompt, 'Search staff member');
+  assert.equal(loaded.window.ordering, 'REQUESTED');
 });
 
 test('versionless concrete collection rows retain identity, columns and hydration', async () => {
@@ -593,6 +644,8 @@ test('collection component resolves canonical and HTML headings without unmodifi
     'label',
     'active',
     'paged',
+    'sortable',
+    'filterable',
     'resizable-columns',
     'reorderable-columns'
   ]);
@@ -765,6 +818,99 @@ test('collection component forwards window requests and publishes semantic windo
   assert.equal(collection.collectionState.window.countAvailable, false);
   assert.equal(collection.collectionState.window.rangeStart, 21);
   assert.match(collection.innerHTML, /Dr Ada/);
+  document.body.removeChild(collection);
+});
+
+test('collection host owns server-backed sort and search criteria across native reloads', async () => {
+  const requests = [];
+  const context = {
+    registerRequirement(_requirement, listener) {
+      listener({
+        status: 'ready',
+        descriptor: {id: 'staffMembers'},
+        data: {hidden: false, disabled: null},
+        errors: [],
+        generation: 1
+      });
+      return () => {};
+    },
+    async loadCollection(options) {
+      requests.push(options);
+      const currentRows = [row({id: `staff-${requests.length}`, name: `Dr ${requests.length}`})];
+      return {
+        descriptor: {id: 'staffMembers'},
+        data: {window: {rows: currentRows}},
+        rows: currentRows,
+        window: {
+          offset: 0,
+          requestedSize: 2,
+          returnedCount: 1,
+          totalCount: 1,
+          countAvailable: true,
+          maximumSize: 100,
+          hasPrevious: false,
+          hasNext: false,
+          previousOffset: null,
+          nextOffset: null,
+          rangeStart: 1,
+          rangeEnd: 1,
+          ordering: options.sortBy ? 'REQUESTED' : 'ENCOUNTER',
+          sortableMembers: ['name'],
+          searchSupported: true,
+          searchPrompt: 'Search owners'
+        },
+        errors: [],
+        rowDescription: {members: new Map([['name', {value: {typeRef: {kind: 'SCALAR', name: 'String'}}}]])},
+        rowSelection: {_meta: {id: true}, name: {get: true}}
+      };
+    },
+    createHydratedRowContext() {
+      return {disconnect() {}};
+    }
+  };
+  const collection = new CausewayCollectionElement();
+  collection.id = 'staffMembers';
+  collection.columns = [{member: 'name', label: 'Name'}];
+  collection.sortable = true;
+  collection.filterable = true;
+  collection.paged = 2;
+  collection.active = true;
+  collection.context = context;
+  document.body.appendChild(collection);
+  await waitFor(() => collection.collectionState.status === 'ready');
+
+  assert.match(collection.innerHTML, /data-causeway-collection-sort="name"/);
+  assert.match(collection.innerHTML, /Search owners/);
+  assert.equal(requests[0].sortBy, null);
+  assert.equal(requests[0].search, '');
+
+  const sortButton = document.createElement('button');
+  sortButton.setAttribute('data-causeway-collection-sort', 'name');
+  collection.appendChild(sortButton);
+  sortButton.dispatchEvent(new Event('click', {bubbles: true}));
+  await waitFor(() => requests.length === 2 && collection.collectionState.status === 'ready');
+  assert.equal(requests[1].offset, 0);
+  assert.equal(requests[1].sortBy, 'name');
+  assert.equal(requests[1].sortDirection, 'ASCENDING');
+
+  sortButton.dispatchEvent(new Event('click', {bubbles: true}));
+  await waitFor(() => requests.length === 3 && collection.collectionState.status === 'ready');
+  assert.equal(requests[2].sortDirection, 'DESCENDING');
+
+  const search = document.createElement('input');
+  search.setAttribute('data-causeway-collection-search', '');
+  search.value = '  Ada  ';
+  collection.appendChild(search);
+  search.dispatchEvent(new Event('input', {bubbles: true}));
+  await waitFor(() => requests.length === 4 && collection.collectionState.status === 'ready', 1000);
+  assert.equal(requests[3].offset, 0);
+  assert.equal(requests[3].search, 'Ada');
+  assert.equal(requests[3].sortDirection, 'DESCENDING');
+
+  collection.filterable = false;
+  await waitFor(() => requests.length === 5 && collection.collectionState.status === 'ready');
+  assert.equal(requests[4].search, null);
+  assert.doesNotMatch(collection.innerHTML, /data-causeway-collection-search/);
   document.body.removeChild(collection);
 });
 
