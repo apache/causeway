@@ -1049,6 +1049,101 @@ test('claimed action requests bypass the standard controller', async () => {
   assert.equal(prepared, false);
 });
 
+test('are-you-sure parameterless actions require explicit confirmation and restore focus when declined', async () => {
+  let invocationCount = 0;
+  let resolveInvocation;
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction() {
+      return {status: 'success', data: {parameters: []}, errors: []};
+    },
+    async invokeAction() {
+      invocationCount += 1;
+      return new Promise(resolve => { resolveInvocation = resolve; });
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  const source = document.createElement('button');
+  source.matches = selector => selector.includes('button');
+  document.body.appendChild(source);
+  document.body.appendChild(controller);
+
+  assert.equal(await controller.beginAction('delete', context, source, {
+    name: 'Delete this object',
+    areYouSure: true
+  }), true);
+  assert.equal(controller.promptState.status, InteractionStatus.CONFIRMING);
+  assert.equal(invocationCount, 0);
+  assert.match(controller.innerHTML, /data-testid="action-confirmation"/);
+  assert.match(controller.innerHTML, /role="alertdialog"/);
+  assert.match(controller.innerHTML, /Confirm Delete this object/);
+  assert.match(controller.innerHTML, /This action cannot be undone/);
+  assert.match(controller.innerHTML, /data-testid="action-confirmation-confirm"/);
+  assert.match(controller.innerHTML, /data-testid="action-confirmation-cancel"/);
+
+  assert.equal(controller.cancelPrompt(), true);
+  await Promise.resolve();
+  assert.equal(controller.promptState, null);
+  assert.equal(invocationCount, 0);
+  assert.equal(document.activeElement, source);
+
+  assert.equal(await controller.beginAction('delete', context, source, {
+    name: 'Delete this object',
+    areYouSure: true
+  }), true);
+  const invocation = controller.confirmPrompt();
+  assert.equal(controller.promptState.status, InteractionStatus.INVOKING);
+  assert.equal(invocationCount, 1);
+  assert.equal(controller.confirmPrompt(), false);
+  resolveInvocation({status: 'success', data: {kind: 'void', value: null}, errors: []});
+  assert.equal(await invocation, true);
+  assert.equal(invocationCount, 1);
+  assert.equal(controller.resultState.result.kind, 'void');
+});
+
+test('are-you-sure parameterized actions confirm after validation and retain values when declined', async () => {
+  const calls = [];
+  const parameter = {
+    id: 'reason', description: 'Reason', inputType: scalar('String'), enumValues: [], fields: new Map(),
+    state: {hidden: false, disabled: null, validity: null}
+  };
+  const context = {
+    identity: {logicalTypeName: 'example.Object', id: '42'},
+    async prepareAction(actionId, values) {
+      calls.push(`prepare:${JSON.stringify(values)}`);
+      return {status: 'success', data: {parameters: [parameter]}, errors: []};
+    },
+    async validateAction(actionId, values) {
+      calls.push(`validate:${values.reason}`);
+      return {status: 'success', data: null, errors: []};
+    },
+    async invokeAction(actionId, values) {
+      calls.push(`invoke:${values.reason}`);
+      return {status: 'success', data: {kind: 'scalar', value: values.reason}, errors: []};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('purge', context, null, {
+    name: 'Purge records',
+    areYouSure: true
+  }), true);
+  await controller.setParameterValue('reason', 'Obsolete', {recompute: false});
+
+  assert.equal(await controller.submitPrompt(), true);
+  assert.equal(controller.promptState.status, InteractionStatus.CONFIRMING);
+  assert.equal(controller.promptState.values.reason, 'Obsolete');
+  assert.equal(calls.some(call => call.startsWith('invoke:')), false);
+  assert.equal(controller.cancelPrompt(), true);
+  assert.equal(controller.promptState.status, InteractionStatus.EDITING);
+  assert.equal(controller.promptState.values.reason, 'Obsolete');
+
+  assert.equal(await controller.submitPrompt(), true);
+  assert.equal(controller.promptState.status, InteractionStatus.CONFIRMING);
+  assert.equal(await controller.confirmPrompt(), true);
+  assert.ok(calls.includes('invoke:Obsolete'));
+});
+
 test('parameterless actions invoke without opening a parameter form', async () => {
   const context = {
     identity: {logicalTypeName: 'example.Object', id: '42'},

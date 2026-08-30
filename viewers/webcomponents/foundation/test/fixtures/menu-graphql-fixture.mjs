@@ -22,6 +22,7 @@ import {CAUSEWAY_MENU_BARS_NAMESPACE} from '../../src/menu-layout.mjs';
 export const SAMPLE_SERVICE_LOGICAL_TYPE = 'causeway.webcomponents.sample.SampleMenu';
 export const SAMPLE_SERVICE_FIELD = 'causeway_webcomponents_sample_SampleMenu';
 export const SAMPLE_SERVICE_TYPE = 'rich__causeway_webcomponents_sample_SampleMenu';
+const MEMBER_METADATA_TYPE = 'RichMemberMetadata';
 const GREET_PARAMETER_TYPE = `${SAMPLE_SERVICE_TYPE}__greet__name__gqlv_action_parameter`;
 const GREET_AUTOCOMPLETE_WINDOW_TYPE = `${GREET_PARAMETER_TYPE}_autocomplete_window`;
 
@@ -55,6 +56,9 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
       field('object', nonNull(named('rich__gqlv_application_home_object')))
     ])],
     ['rich__gqlv_application_home_object', unionType('rich__gqlv_application_home_object', ['rich__sample_Home'])],
+    [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, [
+      field('areYouSure', scalar('Boolean'))
+    ])],
     [SAMPLE_SERVICE_TYPE, objectType(SAMPLE_SERVICE_TYPE, [
       field('welcomeMessage', named(`${SAMPLE_SERVICE_TYPE}__welcomeMessage__gqlv_action`)),
       field('greet', named(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action`)),
@@ -87,6 +91,7 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
     [`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action`, objectType(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action`, [
       field('hidden', scalar('Boolean')),
       field('disabled', scalar('String')),
+      field('metadata', named(MEMBER_METADATA_TYPE)),
       field('params', named(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_params`)),
       field('validate', scalar('String'), [argument('name', scalar('String'))]),
       field('invoke', named(`${SAMPLE_SERVICE_TYPE}__greet__gqlv_action_invoke`), [argument('name', nonNull(scalar('String')))])
@@ -129,6 +134,7 @@ export function createMenuGraphQLTypes({menuBarsAvailable = true} = {}) {
       `${SAMPLE_SERVICE_TYPE}__openView__gqlv_action`, [
         field('hidden', scalar('Boolean')),
         field('disabled', scalar('String')),
+        field('metadata', named(MEMBER_METADATA_TYPE)),
         field('validate', scalar('String'))
       ]
     )],
@@ -186,11 +192,11 @@ export function createMenuGraphQLExecutor({
     if (request.operationName === 'CausewayReadServiceActionStates') {
       serviceCalls.push(request);
       return {data: {rich: {[SAMPLE_SERVICE_FIELD]: actionState ?? {
-        welcomeMessage: {hidden: false, disabled: null},
-        greet: {hidden: false, disabled: null},
-        disabledAction: {hidden: false, disabled: 'Available to administrators only.'},
-        hiddenAction: {hidden: true, disabled: null},
-        clearNotes: {hidden: false, disabled: null}
+        welcomeMessage: {hidden: false, disabled: null, metadata: {areYouSure: false}},
+        greet: {hidden: false, disabled: null, metadata: {areYouSure: false}},
+        disabledAction: {hidden: false, disabled: 'Available to administrators only.', metadata: {areYouSure: false}},
+        hiddenAction: {hidden: true, disabled: null, metadata: {areYouSure: false}},
+        clearNotes: {hidden: false, disabled: null, metadata: {areYouSure: true}}
       }}}};
     }
     if (request.operationName === 'CausewayPrepareServiceAction') {
@@ -263,6 +269,7 @@ function actionType(name, invocationField) {
   return objectType(name, [
     field('hidden', scalar('Boolean')),
     field('disabled', scalar('String')),
+    field('metadata', named(MEMBER_METADATA_TYPE)),
     invocationField
   ]);
 }

@@ -420,10 +420,14 @@ Place one empty interaction controller as a sibling of action components beneath
 ----
 
 The controller observes unclaimed action requests at the shared parent boundary.
-A parameterless action invokes directly, while a parameterized action opens the standard accessible light-DOM modal prompt.
+An ordinary parameterless action invokes directly, while a parameterized action opens the standard accessible light-DOM modal prompt.
 The prompt resolves parameters in schema order and consumes advertised hidden, disabled, default, choices, autocomplete, datatype, and validation semantics.
 Changing a parameter recomputes dependent later semantics using the current pending values.
-Escape cancels an open prompt, and prompt completion restores focus to the originating action.
+When canonical rich metadata reports `areYouSure`, the controller presents an additional confirmation before invocation: directly after parameterless activation or after successful parameter preparation and whole-action validation.
+Confirmation uses `[data-testid="action-confirmation"]`, with `[data-testid="action-confirmation-confirm"]` and `[data-testid="action-confirmation-cancel"]` controls.
+Declining parameterized confirmation returns to the parameter prompt with pending values intact, while declining parameterless confirmation closes the prompt and restores originating-action focus.
+Page markup has no confirmation override, so authored presentation cannot weaken canonical action semantics.
+Escape cancels an open parameter prompt or declines the current confirmation, and prompt completion restores focus according to the interaction flow.
 
 An authored action can optionally nest `<cw-parameter>` presentation hints for selected parameters.
 A declaration matches only an authoritative parameter with the same `id`; omitted declarations and omitted attributes retain canonical behavior.

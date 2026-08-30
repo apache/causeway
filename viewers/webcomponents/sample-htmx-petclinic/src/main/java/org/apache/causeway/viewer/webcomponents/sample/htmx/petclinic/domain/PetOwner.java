@@ -133,6 +133,10 @@ public class PetOwner implements Comparable<PetOwner> {
     @Transient
     private MessageService messageService;
 
+    @Inject
+    @Transient
+    private VisitRepository visitRepository;
+
     protected PetOwner() {
     }
 
@@ -277,7 +281,7 @@ public class PetOwner implements Comparable<PetOwner> {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
-            describedAs = "Deletes this pet owner and their related pets and visits.",
+            describedAs = "Deletes this pet owner and their related pets.",
             cssClassFa = "trash-can")
     public void delete() {
         final var title = titleService.titleOf(this);
@@ -287,8 +291,9 @@ public class PetOwner implements Comparable<PetOwner> {
 
     @MemberSupport
     public String disableDelete() {
-        return "owner-mary".equals(id)
-                ? "The fixture owner is retained for the presentation demonstration."
+        final var visitCount = visitRepository.findByPetOwner(this).size();
+        return visitCount > 0
+                ? "This owner has " + visitCount + " visits"
                 : null;
     }
 

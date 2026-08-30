@@ -93,7 +93,11 @@ export function applyServiceActionStates(plan, actionStates, diagnostics = []) {
           if (state.hidden === true) {
             continue;
           }
-          actions.push({...action, disabled: state.disabled || null});
+          actions.push({
+            ...action,
+            disabled: state.disabled || null,
+            areYouSure: state.metadata?.areYouSure === true
+          });
         }
         if (actions.length > 0) {
           sections.push({...section, actions});
