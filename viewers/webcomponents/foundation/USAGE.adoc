@@ -609,7 +609,9 @@ Stable classes include `causeway-object`, `causeway-object-row`, `causeway-objec
 The packaged `/causeway-webcomponents/theme.css` adds a cohesive Wicket-inspired visual system for applications that want a ready default.
 It defines `--causeway-*` tokens for typography, navigation, surfaces, borders, text, links, focus, status colors, spacing, radii, shadows, label width, content width, control height, and responsive layout.
 The theme covers light, dark, reduced-motion, and forced-colors preferences without adding Bootstrap, Wicket, or JavaScript behavior.
-Applications can omit it, replace it, or override those rules with ordinary design-system CSS:
+Component-owned tooltips use a light neutral explanatory surface with dark text, a subtle border, and elevation so they remain visually distinct from filled action controls.
+Applications can customize that shared treatment with `--causeway-tooltip-background`, `--causeway-tooltip-color`, `--causeway-tooltip-border`, and `--causeway-tooltip-shadow`; standalone structural styles provide equivalent fallback values when the optional theme is absent.
+Applications can omit the theme, replace it, or override those rules with ordinary design-system CSS:
 
 [source,css]
 ----
@@ -628,6 +630,13 @@ cw-collection .causeway-collection-table {
 cw-object {
   --causeway-object-gap: 1.25rem;
   --causeway-object-tab-accent: var(--app-accent);
+}
+
+:root {
+  --causeway-tooltip-background: #fffdf7;
+  --causeway-tooltip-color: #172033;
+  --causeway-tooltip-border: #c8bfa8;
+  --causeway-tooltip-shadow: 0 0.25rem 0.75rem rgb(23 32 51 / 0.18);
 }
 ----
 
