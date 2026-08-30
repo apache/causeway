@@ -608,10 +608,12 @@ The resolved component policy SHALL govern eligible references, editors, read-on
 
 ### Requirement: Petclinic navigable breadcrumbs demonstration
 The Petclinic HTMX sample SHALL demonstrate `<cw-breadcrumbs>` through standard navigable-parent annotations and HTML-authored page composition without application-specific breadcrumb rendering or route code.
+It SHALL omit breadcrumb presentation for root objects that have no navigable parents.
 
 #### Scenario: Pet owner page is rendered
 - **WHEN** the Pet Owner custom page renders for Mary Smith
-- **THEN** its breadcrumb landmark contains Mary Smith as the current item with no ancestor link
+- **THEN** no breadcrumb landmark or current-only breadcrumb item is rendered
+- **AND** the owner header continues to identify Mary Smith
 
 #### Scenario: Pet page is rendered
 - **WHEN** Mary Smith's pet Basil is rendered
@@ -629,15 +631,16 @@ The Petclinic HTMX sample SHALL demonstrate `<cw-breadcrumbs>` through standard 
 - **AND** no breadcrumb-specific route handler or URL construction is required
 
 ### Requirement: Petclinic breadcrumb regression coverage
-Petclinic integration and browser acceptance SHALL verify navigable annotations, rich GraphQL breadcrumb metadata, component rendering, accessibility, responsive presentation, and canonical navigation while retaining existing custom-page behavior.
+Petclinic integration and browser acceptance SHALL verify navigable annotations, rich GraphQL breadcrumb metadata, root-only omission, descendant component rendering, accessibility, responsive presentation, and canonical navigation while retaining existing custom-page behavior.
 
 #### Scenario: Rich GraphQL hierarchy is queried
 - **WHEN** integration coverage reads metadata for owner, pet, and visit fixtures
 - **THEN** it observes deterministic zero-, one-, and two-ancestor breadcrumb chains
 
-#### Scenario: Browser exercises descendant hierarchy
-- **WHEN** browser automation opens pet and visit routes at desktop and mobile widths
-- **THEN** breadcrumb order, current state, focusable links, no-overflow presentation, and navigation are correct
+#### Scenario: Browser exercises root and descendant hierarchy
+- **WHEN** browser automation opens owner, pet, and visit routes at desktop and mobile widths
+- **THEN** the owner route exposes no breadcrumb landmark
+- **AND** descendant breadcrumb order, current state, focusable links, no-overflow presentation, and navigation are correct
 - **AND** no unexpected console, page, resource, or GraphQL failure is observed
 
 ### Requirement: Full-width Petclinic presentation
