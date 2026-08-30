@@ -30,6 +30,8 @@ let configuration = Object.freeze({
 });
 const familyModules = new Map();
 const failedFamilies = new Set();
+const qualifiedCalendarTriggers = new WeakSet();
+const BIDI_CONTROL_PATTERN = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/gu;
 let configurationRevision = 0;
 
 const documentPolicy = globalThis.document?.documentElement?.dataset;
@@ -62,6 +64,79 @@ export function configureCausewayFieldWidgets(options = {}) {
 
 export function causewayFieldWidgetConfiguration() {
   return configuration;
+}
+
+export function resolveCausewayDateLocale(documentLanguage = globalThis.document?.documentElement?.lang,
+    browserLanguage = globalThis.navigator?.language) {
+  for (const candidate of [documentLanguage, browserLanguage, 'en']) {
+    const bounded = String(candidate ?? '').trim().slice(0, 80);
+    if (!bounded) continue;
+    try {
+      return new Intl.Locale(bounded).toString();
+    } catch {
+      // Try the next bounded locale candidate.
+    }
+  }
+  return 'en';
+}
+
+export function causewayDatePickerI18n(locale = resolveCausewayDateLocale()) {
+  const resolvedLocale = resolveCausewayDateLocale(locale, 'en');
+  const options = {calendar: 'gregory', timeZone: 'UTC'};
+  const formatter = new Intl.DateTimeFormat(resolvedLocale, {...options, year: 'numeric', month: 'numeric', day: 'numeric'});
+  const patternParts = formatter.formatToParts(calendarDate(2006, 10, 22));
+  const digitMap = localeDigitMap(resolvedLocale);
+  const parsePattern = localizedDatePattern(patternParts);
+  const localeInfo = new Intl.Locale(resolvedLocale);
+  const weekInfo = typeof localeInfo.getWeekInfo === 'function' ? localeInfo.getWeekInfo() : localeInfo.weekInfo;
+  const i18n = {
+    monthNames: Array.from({length: 12}, (_, month) => new Intl.DateTimeFormat(resolvedLocale, {
+      ...options, month: 'long'
+    }).format(calendarDate(2006, month, 1))),
+    weekdays: Array.from({length: 7}, (_, day) => new Intl.DateTimeFormat(resolvedLocale, {
+      ...options, weekday: 'long'
+    }).format(calendarDate(2006, 0, day + 1))),
+    weekdaysShort: Array.from({length: 7}, (_, day) => new Intl.DateTimeFormat(resolvedLocale, {
+      ...options, weekday: 'short'
+    }).format(calendarDate(2006, 0, day + 1))),
+    formatDate: parts => validCalendarParts(parts?.year, parts?.month, parts?.day)
+      ? formatter.format(calendarDate(parts.year, parts.month, parts.day))
+      : '',
+    parseDate: value => parseLocalizedDate(value, parsePattern, digitMap)
+  };
+  if (Number.isInteger(weekInfo?.firstDay)) i18n.firstDayOfWeek = weekInfo.firstDay % 7;
+  return Object.freeze(i18n);
+}
+
+export function qualifyCausewayCalendarTrigger(datePicker, label, operable = true) {
+  const trigger = datePicker?.shadowRoot?.querySelector?.('[part~="toggle-button"]');
+  if (!trigger || !operable || datePicker.disabled || datePicker.readOnly || datePicker.readonly) return null;
+  trigger.removeAttribute('aria-hidden');
+  trigger.setAttribute('role', 'button');
+  trigger.setAttribute('tabindex', '0');
+  trigger.setAttribute('aria-label', `Open ${boundedLabel(label)} calendar`);
+  trigger.setAttribute('data-causeway-calendar-trigger', '');
+  if (!qualifiedCalendarTriggers.has(trigger)) {
+    const input = datePicker.inputElement;
+    input?.addEventListener?.('keydown', event => {
+      if (event.key !== 'Tab' || event.shiftKey) return;
+      event.preventDefault();
+      trigger.focus();
+    }, {capture: true});
+    trigger.addEventListener('keydown', event => {
+      if (event.key === 'Tab' && event.shiftKey && input?.focus) {
+        event.preventDefault();
+        input.focus();
+        return;
+      }
+      if (!['Enter', ' '].includes(event.key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      trigger.click();
+    });
+    qualifiedCalendarTriggers.add(trigger);
+  }
+  return trigger;
 }
 
 export function failCausewayFieldFamily(family, {announce = true} = {}) {
@@ -294,6 +369,10 @@ export class CausewayFieldEditorElement extends HTMLElement {
       control.disabled = !viewMode && this.hasAttribute('disabled');
       control.required = !viewMode && this.hasAttribute('required');
       control.invalid = !viewMode && this.dataset.invalid === 'true';
+      const dateI18n = ['date-picker', 'date-time-picker'].includes(this.dataset.control)
+        ? causewayDatePickerI18n()
+        : null;
+      if (dateI18n) control.i18n = {...control.i18n, ...dateI18n};
       const supportsClearButton = 'clearButtonVisible' in control;
       if (supportsClearButton) control.clearButtonVisible = false;
       if (!viewMode) {
@@ -302,7 +381,7 @@ export class CausewayFieldEditorElement extends HTMLElement {
             return;
           }
           event.stopPropagation();
-          if (control.contains(event.relatedTarget)) {
+          if (shadowIncludingContains(control, event.relatedTarget)) {
             return;
           }
           this.dispatchEvent(new CustomEvent('causeway-editor-commit', {
@@ -345,7 +424,16 @@ export class CausewayFieldEditorElement extends HTMLElement {
         const suffix = field.localName === 'vaadin-date-picker' ? 'date' : 'time';
         field.accessibleName = `${this.dataset.label ?? ''} ${suffix}`.trim();
       }
+      const datePickers = datePickerControls(control);
+      for (const field of datePickers) {
+        if (dateI18n && field !== control) field.i18n = {...field.i18n, ...dateI18n};
+      }
       await Promise.all(compositeFields.map(field => field.updateComplete));
+      if (!viewMode) {
+        for (const field of datePickers) {
+          scheduleCausewayCalendarTrigger(field, this.dataset.label, !control.disabled);
+        }
+      }
       if (!this.isConnected || generation !== this._generation || revision !== configurationRevision) return;
       if (this.dataset.describedby) {
         for (const input of accessibleFieldInputs(control)) {
@@ -427,6 +515,89 @@ export class CausewayFieldEditorElement extends HTMLElement {
       return [];
     }
   }
+}
+
+function calendarDate(year, month, day) {
+  const date = new Date(0);
+  date.setUTCHours(0, 0, 0, 0);
+  date.setUTCFullYear(Number(year), Number(month), Number(day));
+  return date;
+}
+
+function validCalendarParts(year, month, day) {
+  if (![year, month, day].every(Number.isInteger) || month < 0 || month > 11 || day < 1 || day > 31) return false;
+  const date = calendarDate(year, month, day);
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day;
+}
+
+function localeDigitMap(locale) {
+  const formatter = new Intl.NumberFormat(locale, {useGrouping: false});
+  return new Map(Array.from({length: 10}, (_, digit) => [
+    formatter.format(digit).replace(BIDI_CONTROL_PATTERN, ''), String(digit)
+  ]));
+}
+
+function localizedDatePattern(parts) {
+  const fields = [];
+  const source = parts.map(part => {
+    if (['year', 'month', 'day'].includes(part.type)) {
+      fields.push(part.type);
+      return part.type === 'year' ? '(\\d{1,6})' : '(\\d{1,2})';
+    }
+    const literal = part.value.replace(BIDI_CONTROL_PATTERN, '');
+    return literal.split(/\s+/u).map(escapeRegExp).join('\\s*');
+  }).join('');
+  return Object.freeze({fields: Object.freeze(fields), regexp: new RegExp(`^\\s*${source}\\s*$`, 'u')});
+}
+
+function parseLocalizedDate(value, pattern, digitMap) {
+  let normalized = String(value ?? '').replace(BIDI_CONTROL_PATTERN, '').trim();
+  for (const [localized, ascii] of digitMap) {
+    if (localized) normalized = normalized.split(localized).join(ascii);
+  }
+  const iso = /^(\d{4,6})-(\d{2})-(\d{2})$/u.exec(normalized);
+  if (iso) return parsedCalendarParts(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+  const match = pattern.regexp.exec(normalized);
+  if (!match) return undefined;
+  const values = Object.fromEntries(pattern.fields.map((field, index) => [field, Number(match[index + 1])]));
+  return parsedCalendarParts(values.year, values.month, values.day);
+}
+
+function parsedCalendarParts(year, oneBasedMonth, day) {
+  const month = oneBasedMonth - 1;
+  return validCalendarParts(year, month, day) ? {year, month, day} : undefined;
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+}
+
+function scheduleCausewayCalendarTrigger(datePicker, label, operable) {
+  if (qualifyCausewayCalendarTrigger(datePicker, label, operable) || !operable || !datePicker?.shadowRoot) return;
+  const observer = new MutationObserver(() => {
+    if (qualifyCausewayCalendarTrigger(datePicker, label, operable)) observer.disconnect();
+  });
+  observer.observe(datePicker.shadowRoot, {childList: true, subtree: true});
+  queueMicrotask(() => {
+    if (qualifyCausewayCalendarTrigger(datePicker, label, operable)) observer.disconnect();
+  });
+  setTimeout(() => observer.disconnect(), 1000);
+}
+
+function datePickerControls(control) {
+  const fields = control?.localName === 'vaadin-date-picker' ? [control] : [];
+  for (const root of [control, control?.shadowRoot]) {
+    fields.push(...(root?.querySelectorAll?.('vaadin-date-picker') ?? []));
+  }
+  return [...new Set(fields)];
+}
+
+function shadowIncludingContains(ancestor, candidate) {
+  for (let current = candidate; current;) {
+    if (current === ancestor) return true;
+    current = current.parentNode ?? current.getRootNode?.()?.host ?? null;
+  }
+  return false;
 }
 
 function compositeFieldControls(control) {

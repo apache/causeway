@@ -14,12 +14,15 @@ import {installDomShim} from './dom-shim.mjs';
 installDomShim();
 const {
   CausewayFieldEditorElement,
+  causewayDatePickerI18n,
   causewayFieldDescriptor,
   causewayReadOnlyFieldDescriptor,
   causewayFieldWidgetConfiguration,
   configureCausewayFieldWidgets,
+  qualifyCausewayCalendarTrigger,
   renderCausewayFieldWidget,
   renderCausewayReadOnlyField,
+  resolveCausewayDateLocale,
   supportsCausewayFieldWidget,
   supportsCausewayReadOnlyField
 } = await import('../src/field-widget.mjs');
@@ -112,6 +115,73 @@ test('qualifies read-only families without exposing protected values', () => {
   assert.match(html, /data-describedby="value-description"/);
   configureCausewayFieldWidgets({families: ['basic'], presentation: false});
   assert.equal(supportsCausewayReadOnlyField(context()), false);
+});
+
+test('local date presentation follows bounded document and browser locales reversibly', () => {
+  assert.equal(resolveCausewayDateLocale('en-GB', 'en-US'), 'en-GB');
+  assert.equal(resolveCausewayDateLocale('%%%', 'de-DE'), 'de-DE');
+  assert.equal(resolveCausewayDateLocale('', ''), 'en');
+
+  const british = causewayDatePickerI18n('en-GB');
+  assert.equal(british.formatDate({year: 2026, month: 7, day: 30}), '30/08/2026');
+  assert.deepEqual(british.parseDate('30/08/2026'), {year: 2026, month: 7, day: 30});
+  assert.deepEqual(british.parseDate('2026-08-30'), {year: 2026, month: 7, day: 30});
+  assert.equal(british.parseDate('31/02/2026'), undefined);
+  assert.equal(british.firstDayOfWeek, 1);
+
+  const american = causewayDatePickerI18n('en-US');
+  assert.equal(american.formatDate({year: 2026, month: 7, day: 30}), '8/30/2026');
+  assert.deepEqual(american.parseDate('8/30/2026'), {year: 2026, month: 7, day: 30});
+  assert.equal(american.firstDayOfWeek, 0);
+
+  const arabic = causewayDatePickerI18n('ar-EG');
+  const localized = arabic.formatDate({year: 2026, month: 7, day: 30});
+  assert.deepEqual(arabic.parseDate(localized), {year: 2026, month: 7, day: 30});
+  assert.equal(arabic.monthNames.length, 12);
+  assert.equal(arabic.weekdays.length, 7);
+  assert.equal(arabic.weekdaysShort.length, 7);
+  assert.equal(causewayDatePickerI18n('%%%').formatDate({year: 2026, month: 7, day: 30}), '8/30/2026');
+});
+
+test('calendar trigger gains bounded button semantics and keyboard activation only when operable', () => {
+  const trigger = document.createElement('div');
+  trigger.setAttribute('aria-hidden', 'true');
+  let activations = 0;
+  trigger.click = () => { activations += 1; };
+  const input = document.createElement('input');
+  const picker = {
+    disabled: false,
+    readOnly: false,
+    inputElement: input,
+    shadowRoot: {querySelector: selector => selector === '[part~="toggle-button"]' ? trigger : null}
+  };
+  assert.equal(qualifyCausewayCalendarTrigger(picker, 'Last Visit'), trigger);
+  assert.equal(trigger.getAttribute('aria-hidden'), null);
+  assert.equal(trigger.getAttribute('role'), 'button');
+  assert.equal(trigger.getAttribute('tabindex'), '0');
+  assert.equal(trigger.getAttribute('aria-label'), 'Open Last Visit calendar');
+  assert.equal(trigger.hasAttribute('data-causeway-calendar-trigger'), true);
+  input.focus();
+  const forwardTab = new Event('keydown', {cancelable: true});
+  forwardTab.key = 'Tab';
+  input.dispatchEvent(forwardTab);
+  assert.equal(forwardTab.defaultPrevented, true);
+  assert.equal(document.activeElement, trigger);
+  const reverseTab = new Event('keydown', {cancelable: true});
+  reverseTab.key = 'Tab';
+  reverseTab.shiftKey = true;
+  trigger.dispatchEvent(reverseTab);
+  assert.equal(reverseTab.defaultPrevented, true);
+  assert.equal(document.activeElement, input);
+  for (const key of ['Enter', ' ']) {
+    const event = new Event('keydown', {cancelable: true});
+    event.key = key;
+    trigger.dispatchEvent(event);
+    assert.equal(event.defaultPrevented, true);
+  }
+  assert.equal(activations, 2);
+  assert.equal(qualifyCausewayCalendarTrigger({...picker, readOnly: true}, 'Last Visit'), null);
+  assert.equal(qualifyCausewayCalendarTrigger({...picker, disabled: true}, 'Last Visit'), null);
 });
 
 test('keeps protected values out of adapter markup', () => {
