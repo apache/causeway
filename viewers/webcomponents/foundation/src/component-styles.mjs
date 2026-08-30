@@ -415,10 +415,16 @@ cw-field-editor[data-widget-state="fallback"]::after {
 .causeway-menubar-item-label {
   align-items: center;
   display: inline-flex;
-  gap: var(--causeway-action-icon-gap, 0.4rem);
+  gap: var(--causeway-action-icon-gap, 0.75rem);
 }
 .causeway-action-icon {
   flex: 0 0 auto;
+}
+cw-action-control > vaadin-button > .causeway-action-icon:first-child {
+  margin-inline-end: var(--causeway-action-icon-gap, 0.75rem);
+}
+cw-action-control > vaadin-button > .causeway-action-icon:last-child {
+  margin-inline-start: var(--causeway-action-icon-gap, 0.75rem);
 }
 .causeway-action-prompt-description {
   color: var(--causeway-muted, GrayText);
