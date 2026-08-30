@@ -86,6 +86,7 @@ test('breadcrumbs render accessible ancestor links, escaped current state and lo
     }
   }));
 
+  assert.equal(breadcrumbs.hidden, false);
   assert.match(breadcrumbs.innerHTML, /<nav class="causeway-breadcrumbs" aria-label="Breadcrumb"/);
   assert.match(breadcrumbs.innerHTML, /<ol class="causeway-breadcrumbs-list">/);
   assert.match(breadcrumbs.innerHTML, /logical-type="petclinic\.PetOwner"/);
@@ -96,18 +97,46 @@ test('breadcrumbs render accessible ancestor links, escaped current state and lo
   assert.doesNotMatch(breadcrumbs.innerHTML, /Malformed/);
 
   breadcrumbs.renderComponentState(state({status: 'partial-error', errors: [{message: 'Breadcrumb cycle'}]}));
+  assert.equal(breadcrumbs.hidden, false);
   assert.match(breadcrumbs.innerHTML, /role="alert"/);
   assert.match(breadcrumbs.innerHTML, /Breadcrumb cycle/);
   assert.doesNotMatch(breadcrumbs.innerHTML, /object-id=/);
 });
 
-test('breadcrumbs render a current-only landmark for a root object', () => {
+test('breadcrumbs omit root-only presentation and restore descendant and diagnostic states', () => {
   const breadcrumbs = new CausewayBreadcrumbsElement();
   breadcrumbs.renderComponentState(state({
     data: {id: 'owner-1', logicalTypeName: 'petclinic.PetOwner', title: 'Mary', breadcrumbs: []}
   }));
-  assert.match(breadcrumbs.innerHTML, /aria-current="page">Mary/);
-  assert.doesNotMatch(breadcrumbs.innerHTML, /<cw-object-link/);
+  assert.equal(breadcrumbs.hidden, true);
+  assert.equal(breadcrumbs.innerHTML, '');
+
+  breadcrumbs.renderComponentState(state({
+    data: {
+      id: 'pet-1',
+      logicalTypeName: 'petclinic.Pet',
+      title: 'Basil',
+      breadcrumbs: [{logicalTypeName: '', id: 'invalid', title: 'Malformed'}]
+    }
+  }));
+  assert.equal(breadcrumbs.hidden, true);
+  assert.equal(breadcrumbs.innerHTML, '');
+
+  breadcrumbs.renderComponentState(state({
+    data: {
+      id: 'pet-1',
+      logicalTypeName: 'petclinic.Pet',
+      title: 'Basil',
+      breadcrumbs: [{logicalTypeName: 'petclinic.PetOwner', id: 'owner-1', title: 'Mary'}]
+    }
+  }));
+  assert.equal(breadcrumbs.hidden, false);
+  assert.match(breadcrumbs.innerHTML, /<cw-object-link/);
+  assert.match(breadcrumbs.innerHTML, /aria-current="page">Basil/);
+
+  breadcrumbs.renderComponentState(state({status: 'object-loading'}));
+  assert.equal(breadcrumbs.hidden, false);
+  assert.match(breadcrumbs.innerHTML, /Loading breadcrumbs/);
 });
 
 test('property renders accessible ready, disabled, hidden and error states', () => {

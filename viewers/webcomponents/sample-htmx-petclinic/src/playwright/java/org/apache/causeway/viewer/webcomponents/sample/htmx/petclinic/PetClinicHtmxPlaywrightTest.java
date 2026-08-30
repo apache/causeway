@@ -248,9 +248,8 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-kind")).isEqualTo("custom");
         assertThat(page.locator(ROUTE_PAGE).getAttribute("data-page-source")).isEqualTo("resource");
         assertThat(page.locator("[data-testid='petclinic-owner-page']").isVisible()).isTrue();
-        waitForBreadcrumbs(0);
-        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] [aria-current='page']").textContent())
-                .isEqualTo("Mary Smith (Mary)");
+        waitForNoBreadcrumbs();
+        assertThat(page.locator("[data-testid='petclinic-breadcrumbs'] nav").count()).isZero();
         assertThat(page.locator(".petclinic-object-grid").evaluate("""
                 element => {
                   const details = element.querySelector('.petclinic-object-details').getBoundingClientRect();
@@ -1223,6 +1222,15 @@ class PetClinicHtmxPlaywrightTest {
                     + "; routeType=" + page.locator("#causeway-route cw-object-context").getAttribute("logical-type")
                     + "; panel=" + panelId + "; host=" + host.evaluate("element => element.outerHTML"), cause);
         }
+    }
+
+    private void waitForNoBreadcrumbs() {
+        page.waitForFunction("""
+                () => {
+                  const breadcrumbs = document.querySelector("[data-testid='petclinic-breadcrumbs']");
+                  return breadcrumbs?.hidden === true && breadcrumbs.childElementCount === 0;
+                }
+                """);
     }
 
     private void waitForBreadcrumbs(final int ancestorCount) {
