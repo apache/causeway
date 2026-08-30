@@ -46,6 +46,12 @@ test('property editor actions remain compact deterministic icon controls', async
   assert.match(theme, /\.causeway-property-editor-actions button:first-child[\s\S]*?background: var\(--causeway-action-background\)/);
 });
 
+test('action icons retain component-owned spacing in native and Vaadin controls', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /gap: var\(--causeway-action-icon-gap, 0\.75rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-action-control > vaadin-button > \.causeway-action-icon:first-child \{\s+margin-inline-end: var\(--causeway-action-icon-gap, 0\.75rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-action-control > vaadin-button > \.causeway-action-icon:last-child \{\s+margin-inline-start: var\(--causeway-action-icon-gap, 0\.75rem\);/);
+});
+
 test('member tooltips preserve sections, responsive bounds and pointer and focus access', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip,\s+\.causeway-action-control-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
