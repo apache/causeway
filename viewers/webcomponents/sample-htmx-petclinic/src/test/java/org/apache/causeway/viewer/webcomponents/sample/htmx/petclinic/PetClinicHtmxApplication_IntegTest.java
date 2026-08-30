@@ -97,6 +97,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("data-navigation-generation=\"0\"")
                 .contains("/causeway-htmx/causeway-htmx.mjs")
                 .contains("/webjars/htmx.org/2.0.6/dist/htmx.min.js")
+                .contains("/webjars/font-awesome/7.3.0/css/all.min.css")
                 .contains("data-causeway-component-toolkit=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
                 .contains("data-causeway-presentation=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
                 .contains("data-causeway-action-buttons=\"" + (nativeToolkit ? "native" : "vaadin") + "\"")
@@ -109,6 +110,12 @@ class PetClinicHtmxApplication_IntegTest {
                 "petclinic.PetOwner",
                 "s_owner-mary",
                 "petclinic-owner-page");
+        assertThat(get("/htmx/object/petclinic.PetOwner/s_owner-mary").body())
+                .contains("<cw-action id=\"delete\" named=\"Remove this owner\"")
+                .contains("<cw-action id=\"updateName\" named=\"Change the owner's name\"")
+                .contains("<cw-action id=\"addPet\" named=\"Register a pet\"")
+                .contains("<cw-action id=\"removePet\"></cw-action>")
+                .contains("<cw-action id=\"bookVisit\"></cw-action>");
         assertResourcePage(
                 "/htmx/object/petclinic.Pet/s_pet-basil",
                 "petclinic.Pet",
@@ -140,6 +147,8 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(get("/causeway-webcomponents/component-styles.css").statusCode()).isEqualTo(200);
         assertThat(get("/causeway-webcomponents/theme.css").statusCode()).isEqualTo(200);
         assertThat(get("/webjars/htmx.org/2.0.6/dist/htmx.min.js").statusCode()).isEqualTo(200);
+        assertThat(get("/webjars/font-awesome/7.3.0/css/all.min.css").statusCode()).isEqualTo(200);
+        assertThat(get("/webjars/font-awesome/7.3.0/webfonts/fa-solid-900.woff2").statusCode()).isEqualTo(200);
 
         final var wicket = getWithoutRedirect("/wicket/");
         assertThat(wicket.statusCode()).isIn(200, 302);
@@ -350,9 +359,13 @@ class PetClinicHtmxApplication_IntegTest {
                 query PetClinicService {
                   rich {
                     petclinic_PetOwners {
-                      listAll { hidden disabled invoke { results { _meta { id logicalTypeName title } } } }
+                      listAll {
+                        hidden disabled
+                        metadata { friendlyName description cssClassFa cssClassFaPosition }
+                        invoke { results { _meta { id logicalTypeName title } } }
+                      }
                       findByName { hidden disabled }
-                      create { hidden disabled }
+                      create { hidden disabled metadata { description cssClassFa cssClassFaPosition } }
                     }
                     petclinic_Visits {
                       listUpcoming { hidden disabled invoke { results { _meta { id logicalTypeName title } } } }
@@ -362,6 +375,14 @@ class PetClinicHtmxApplication_IntegTest {
                 """);
         assertNoGraphQLErrors(service);
         assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/invoke/results").size()).isEqualTo(4);
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/description").asText())
+                .isEqualTo("Lists every registered pet owner.");
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/cssClassFa").asText())
+                .isEqualTo("users");
+        assertThat(service.at("/data/rich/petclinic_PetOwners/listAll/metadata/cssClassFaPosition").asText())
+                .isEqualTo("LEFT");
+        assertThat(service.at("/data/rich/petclinic_PetOwners/create/metadata/cssClassFa").asText())
+                .isEqualTo("user-plus");
         assertThat(service.at("/data/rich/petclinic_Visits/listUpcoming/invoke/results").size()).isEqualTo(3);
 
         final var owner = graphQL("""
@@ -379,7 +400,13 @@ class PetClinicHtmxApplication_IntegTest {
                         }
                       }
                       visits { metadata { friendlyName description } get { _meta { id logicalTypeName title } } }
-                      addPet { hidden disabled params { name { validity datatype } } }
+                      addPet {
+                        hidden disabled
+                        metadata { friendlyName description cssClassFa cssClassFaPosition }
+                        params { name { validity datatype } }
+                      }
+                      updateName { metadata { description cssClassFa cssClassFaPosition } }
+                      delete { hidden disabled metadata { description cssClassFa cssClassFaPosition } }
                       bookVisit { hidden disabled }
                     }
                   }
@@ -400,6 +427,16 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(owner.at("/data/rich/petclinic_PetOwner/pets/window/rows/0/name/get").asText())
                 .isEqualTo("Samantha");
         assertThat(owner.at("/data/rich/petclinic_PetOwner/visits/get").size()).isEqualTo(2);
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/addPet/metadata/description").asText())
+                .isEqualTo("Adds a pet to this owner's household.");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/addPet/metadata/cssClassFa").asText())
+                .isEqualTo("paw");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/addPet/metadata/cssClassFaPosition").asText())
+                .isEqualTo("LEFT");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/updateName/metadata/cssClassFaPosition").asText())
+                .isEqualTo("RIGHT");
+        assertThat(owner.at("/data/rich/petclinic_PetOwner/delete/disabled").asText())
+                .isEqualTo("The fixture owner is retained for the presentation demonstration.");
     }
 
     @Test

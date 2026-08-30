@@ -15,10 +15,16 @@
             <mb:named>Pet Owners</mb:named>
             <mb:section>
                 <mb:named>Manage</mb:named>
-                <mb:serviceAction objectType="petclinic.PetOwners" id="create"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="create" cssClassFa="fa-user-plus">
+                    <cpt:named>Create</cpt:named>
+                    <cpt:describedAs>Registers a new pet owner.</cpt:describedAs>
+                </mb:serviceAction>
                 <mb:serviceAction objectType="petclinic.PetOwners" id="findByName"/>
                 <mb:serviceAction objectType="petclinic.PetOwners" id="findByNameLike"/>
-                <mb:serviceAction objectType="petclinic.PetOwners" id="listAll"/>
+                <mb:serviceAction objectType="petclinic.PetOwners" id="listAll" cssClassFa="fa-users" cssClassFaPosition="LEFT">
+                    <cpt:named>List All</cpt:named>
+                    <cpt:describedAs>Lists every registered pet owner.</cpt:describedAs>
+                </mb:serviceAction>
                 <mb:serviceAction objectType="petclinic.PetOwners" id="count"/>
             </mb:section>
         </mb:menu>

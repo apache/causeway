@@ -55,8 +55,9 @@ test('semantic bar renders labelled navigation, disclosures, text-safe hints, di
   assert.match(markup, /data-causeway-menu-disclosure/);
   assert.match(markup, /aria-expanded="false"/);
   assert.match(markup, /data-icon-hint="fa-building"/);
-  assert.match(markup, /Welcome Message/);
+  assert.match(markup, /<span class="causeway-action-label">Welcome Message<\/span><i class="causeway-action-icon fa-solid fa-message"/);
   assert.match(markup, /disabled aria-disabled="true"/);
+  assert.match(markup, /data-tooltip="Performs an administrative operation\.\n\nAvailable to administrators only\."/);
   assert.match(markup, /Available to administrators only/);
   assert.doesNotMatch(markup, /hiddenAction/);
   assert.doesNotMatch(markup, /role="menubar"|role="menuitem"/);
@@ -119,6 +120,9 @@ test('menu action selection, outside activation, Escape, and sibling opening clo
   actionClick.target = action;
   bar.dispatchEvent(actionClick);
   assert.equal(request.actionId, 'welcomeMessage');
+  assert.equal(request.presentation.name, 'Welcome Message');
+  assert.equal(request.presentation.description, 'Return a friendly greeting.');
+  assert.deepEqual(request.presentation.icon, {classes: ['fa-solid', 'fa-message'], position: 'RIGHT'});
   assert.equal(requestCount, 1);
   assert.equal(Object.hasOwn(request, 'focusTarget'), false);
   assert.equal(firstDisclosure.getAttribute('aria-expanded'), 'false');

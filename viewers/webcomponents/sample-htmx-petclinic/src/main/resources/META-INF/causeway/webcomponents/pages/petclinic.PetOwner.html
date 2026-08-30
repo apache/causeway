@@ -18,7 +18,7 @@
   <cw-object-header></cw-object-header>
 
   <div class="petclinic-page-toolbar" aria-label="Owner actions">
-    <cw-action id="delete"></cw-action>
+    <cw-action id="delete" named="Remove this owner"></cw-action>
   </div>
 
   <div class="petclinic-object-grid">
@@ -27,7 +27,7 @@
         <h2 id="petclinic-owner-identity-heading">Identity</h2>
         <div class="petclinic-field-list">
           <cw-property id="name" named="Full name">
-            <cw-action id="updateName"></cw-action>
+            <cw-action id="updateName" named="Change the owner's name"></cw-action>
           </cw-property>
           <cw-property id="knownAs" editable
                        described-as="The familiar or preferred name used by this owner."></cw-property>
@@ -59,7 +59,7 @@
           <cw-collection-column id="name" label="Name"></cw-collection-column>
           <cw-collection-column id="species" label="Species"></cw-collection-column>
           <cw-collection-column id="notes" label="Notes"></cw-collection-column>
-          <cw-action id="addPet"></cw-action>
+          <cw-action id="addPet" named="Register a pet"></cw-action>
           <cw-action id="removePet"></cw-action>
         </cw-collection>
       </section>

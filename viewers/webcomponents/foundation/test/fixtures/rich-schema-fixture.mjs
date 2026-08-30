@@ -87,6 +87,8 @@ export function createRichSchemaTypes() {
     [MEMBER_METADATA_TYPE, objectType(MEMBER_METADATA_TYPE, 'Member metadata', [
       field('friendlyName', null, scalar('String')),
       field('description', null, scalar('String')),
+      field('cssClassFa', null, scalar('String')),
+      field('cssClassFaPosition', null, scalar('String')),
       field('multiLine', null, scalar('Int')),
       field('labelPosition', null, scalar('String'))
     ])],
@@ -128,6 +130,7 @@ export function createRichSchemaTypes() {
     [ACTION_TYPE, objectType(ACTION_TYPE, null, [
       field('hidden', null, scalar('Boolean')),
       field('disabled', null, scalar('String')),
+      field('metadata', null, named(MEMBER_METADATA_TYPE)),
       field('params', null, named(ACTION_PARAMS_TYPE))
     ])],
     [ACTION_PARAMS_TYPE, objectType(ACTION_PARAMS_TYPE, null, [
@@ -356,7 +359,16 @@ export function departmentObjectData({
       disabled: null,
       metadata: {friendlyName: 'Former staff', description: null}
     },
-    changeName: {hidden: false, disabled: null}
+    changeName: {
+      hidden: false,
+      disabled: null,
+      metadata: {
+        friendlyName: 'Rename department',
+        description: 'Changes the department display name.',
+        cssClassFa: 'pen-to-square',
+        cssClassFaPosition: 'RIGHT'
+      }
+    }
   };
 }
 

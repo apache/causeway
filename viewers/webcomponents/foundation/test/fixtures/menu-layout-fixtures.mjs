@@ -28,12 +28,13 @@ export const MENU_BARS_XML = `<?xml version="1.0" encoding="UTF-8"?>
       <mb:named>Samples &amp; Objects</mb:named>
       <mb:section>
         <mb:named>Explore</mb:named>
-        <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="welcomeMessage" cssClassFa="fa-message">
+        <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="welcomeMessage" cssClassFa="fa-message" cssClassFaPosition="RIGHT">
           <cpt:named>Welcome Message</cpt:named>
           <cpt:describedAs>Return a friendly greeting.</cpt:describedAs>
         </mb:serviceAction>
         <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="disabledAction">
           <cpt:named>Disabled Action</cpt:named>
+          <cpt:describedAs>Performs an administrative operation.</cpt:describedAs>
         </mb:serviceAction>
         <mb:serviceAction objectType="causeway.webcomponents.sample.SampleMenu" id="hiddenAction"/>
       </mb:section>

@@ -29,7 +29,7 @@ export const MENU_BAR_ROLES = Object.freeze(['primary', 'secondary', 'tertiary']
 export const MAX_MENU_DIAGNOSTICS = MAX_STRUCTURAL_DIAGNOSTICS;
 
 const MENU_ATTRIBUTES = new Set(['cssClassFa', 'unreferencedActions']);
-const ACTION_ATTRIBUTES = new Set(['objectType', 'id', 'bookmarking', 'cssClass', 'cssClassFa', 'namedEscaped']);
+const ACTION_ATTRIBUTES = new Set(['objectType', 'id', 'bookmarking', 'cssClass', 'cssClassFa', 'cssClassFaPosition', 'namedEscaped']);
 const DOCUMENT_ATTRIBUTES = new Set(['schemaLocation']);
 
 export class CausewayMenuError extends Error {
@@ -215,6 +215,7 @@ function parseAction(node, sectionPath, index, diagnostics) {
     description: boundedText(describedNode, 2_048, diagnostics, path, 'ACTION_DESCRIPTION_TOO_LONG'),
     cssHint: boundedAttribute(node, 'cssClass', 256, diagnostics, path),
     iconHint: boundedAttribute(node, 'cssClassFa', 256, diagnostics, path),
+    iconPosition: boundedIconPosition(node.attributes.get('cssClassFaPosition'), diagnostics, path),
     disabled: null,
     path
   };
@@ -241,6 +242,13 @@ function boundedText(node, maximum, diagnostics, path, code) {
   }
   diagnostics.add(code, `Menu text was truncated to ${maximum} characters.`, path);
   return value.slice(0, maximum);
+}
+
+function boundedIconPosition(value, diagnostics, path) {
+  const position = String(value ?? 'LEFT').trim().toUpperCase();
+  if (position === 'LEFT' || position === 'RIGHT') return position;
+  diagnostics.add('UNSUPPORTED_ICON_POSITION', 'Unsupported service-action icon position was ignored.', path);
+  return 'LEFT';
 }
 
 function boundedAttribute(node, name, maximum, diagnostics, path) {

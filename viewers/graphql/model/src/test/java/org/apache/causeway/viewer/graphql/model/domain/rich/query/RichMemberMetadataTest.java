@@ -27,11 +27,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.model.application.ApplicationEntryService;
@@ -76,6 +82,50 @@ class RichMemberMetadataTest {
         } finally {
             LocaleContextHolder.resetLocaleContext();
         }
+    }
+
+    @Test
+    void exposesOnlyStaticActionFontAwesomeMetadata() {
+        var action = mock(ObjectAction.class);
+        when(action.getCanonicalFriendlyName()).thenReturn("Place order");
+        when(action.getCanonicalDescription()).thenReturn(Optional.empty());
+        var faFacet = mock(FaFacet.class);
+        var staticFacet = mock(FaStaticFacet.class);
+        when(staticFacet.getLayers()).thenReturn(FontAwesomeLayers
+                .fromQuickNotation("fa-cart-shopping")
+                .withPosition(CssClassFaPosition.RIGHT));
+        when(faFacet.getSpecialization()).thenReturn(org.apache.causeway.commons.functional.Either.left(staticFacet));
+        when(action.lookupFacet(FaFacet.class)).thenReturn(Optional.of(faFacet));
+
+        assertThat(new RichMemberMetadata(context(), action, false).fetchData(null))
+                .containsEntry("cssClassFa", "cart-shopping")
+                .containsEntry("cssClassFaPosition", "RIGHT");
+
+        var actionWithoutFacet = mock(ObjectAction.class);
+        when(actionWithoutFacet.getCanonicalFriendlyName()).thenReturn("No icon");
+        when(actionWithoutFacet.getCanonicalDescription()).thenReturn(Optional.empty());
+        when(actionWithoutFacet.lookupFacet(FaFacet.class)).thenReturn(Optional.empty());
+        assertThat(new RichMemberMetadata(context(), actionWithoutFacet, false).fetchData(null))
+                .containsEntry("cssClassFa", null)
+                .containsEntry("cssClassFaPosition", null);
+
+        var imperativeAction = mock(ObjectAction.class);
+        when(imperativeAction.getCanonicalFriendlyName()).thenReturn("Dynamic icon");
+        when(imperativeAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        var imperativeFacet = mock(FaFacet.class);
+        when(imperativeFacet.getSpecialization()).thenReturn(
+                org.apache.causeway.commons.functional.Either.right(mock(FaImperativeFacet.class)));
+        when(imperativeAction.lookupFacet(FaFacet.class)).thenReturn(Optional.of(imperativeFacet));
+        assertThat(new RichMemberMetadata(context(), imperativeAction, false).fetchData(null))
+                .containsEntry("cssClassFa", null)
+                .containsEntry("cssClassFaPosition", null);
+
+        var ordinaryFeature = mock(ObjectFeature.class);
+        when(ordinaryFeature.getCanonicalFriendlyName()).thenReturn("Name");
+        when(ordinaryFeature.getCanonicalDescription()).thenReturn(Optional.empty());
+        assertThat(new RichMemberMetadata(context(), ordinaryFeature, false).fetchData(null))
+                .containsEntry("cssClassFa", null)
+                .containsEntry("cssClassFaPosition", null);
     }
 
     private static Context context() {
