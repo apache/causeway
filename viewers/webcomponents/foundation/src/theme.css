@@ -44,6 +44,10 @@
   --causeway-warning: #9a6700;
   --causeway-danger: #b42318;
   --causeway-disabled: #5d6978;
+  --causeway-tooltip-background: #f8fafc;
+  --causeway-tooltip-color: #111827;
+  --causeway-tooltip-border: #cbd5e1;
+  --causeway-tooltip-shadow: 0 0.25rem 0.75rem rgb(15 23 42 / 0.18);
   --causeway-space-1: 0.25rem;
   --causeway-space-2: 0.5rem;
   --causeway-space-3: 0.75rem;
