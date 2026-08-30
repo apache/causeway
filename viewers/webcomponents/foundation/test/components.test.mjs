@@ -29,6 +29,7 @@ const {
   CausewayCollectionColumnElement,
   CausewayCollectionElement,
   CausewayObjectContextElement,
+  CausewayParameterElement,
   CausewayPropertyElement,
   CausewaySemanticEvent,
   CausewayValueRendererRegistry,
@@ -37,6 +38,38 @@ const {
 } = await import('../src/index.mjs');
 
 defineCausewayWebComponents();
+
+test('action parameter configuration normalizes optional presentation hints', () => {
+  const parameter = new CausewayParameterElement();
+  parameter.id = 'firstName';
+  parameter.named = 'Given name';
+  parameter.describedAs = 'The given name';
+  parameter.descriptionAs = 'ToOlTiP';
+  parameter.multiLine = 500;
+
+  assert.deepEqual(parameter.configuration, {
+    parameter: 'firstName',
+    named: 'Given name',
+    describedAs: 'The given name',
+    descriptionAs: 'tooltip',
+    multiLine: 50
+  });
+  assert.equal(parameter.hidden, false);
+  parameter.connectedCallback();
+  assert.equal(parameter.hidden, true);
+
+  parameter.removeAttribute('named');
+  parameter.removeAttribute('described-as');
+  parameter.removeAttribute('description-as');
+  parameter.setAttribute('multi-line', 'invalid');
+  assert.deepEqual(parameter.configuration, {
+    parameter: 'firstName',
+    named: null,
+    describedAs: null,
+    descriptionAs: null,
+    multiLine: null
+  });
+});
 
 test('breadcrumbs render accessible ancestor links, escaped current state and local errors', () => {
   const breadcrumbs = new CausewayBreadcrumbsElement();
@@ -348,6 +381,33 @@ test('property presentation selects every qualified field family and preserves d
 test('action names descriptions disabled reasons and Font Awesome hints share one presentation', () => {
   const action = new CausewayActionElement();
   action.id = 'placeOrder';
+  const parameter = new CausewayParameterElement();
+  parameter.id = 'notes';
+  parameter.named = 'Order notes';
+  parameter.describedAs = 'Details for fulfilment';
+  parameter.descriptionAs = 'tooltip';
+  parameter.multiLine = 4;
+  action.appendChild(parameter);
+  document.body.appendChild(action);
+  assert.deepEqual(action.parameterPresentations, [{
+    parameter: 'notes',
+    named: 'Order notes',
+    describedAs: 'Details for fulfilment',
+    descriptionAs: 'tooltip',
+    multiLine: 4
+  }]);
+  const updatedParameter = new CausewayParameterElement();
+  updatedParameter.id = 'notes';
+  updatedParameter.named = 'Revised order notes';
+  action.appendChild(updatedParameter);
+  assert.deepEqual(action.parameterPresentations, [{
+    parameter: 'notes',
+    named: 'Revised order notes',
+    describedAs: null,
+    descriptionAs: null,
+    multiLine: null
+  }]);
+  document.body.removeChild(action);
   action.label = 'Legacy order label';
   action.named = 'Place a new order';
   action.context = {identity: {logicalTypeName: 'example.Order', id: '42'}};
@@ -385,6 +445,7 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
   assert.equal(action.activate(), true);
   assert.equal(request.presentation.name, 'Place a new order');
   assert.equal(request.presentation.description, 'Creates an order for this customer.');
+  assert.deepEqual(request.presentation.parameters, action.parameterPresentations);
 });
 
 test('member-bearing elements use native identifiers without a member compatibility API', () => {

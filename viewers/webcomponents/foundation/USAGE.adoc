@@ -425,6 +425,23 @@ The prompt resolves parameters in schema order and consumes advertised hidden, d
 Changing a parameter recomputes dependent later semantics using the current pending values.
 Escape cancels an open prompt, and prompt completion restores focus to the originating action.
 
+An authored action can optionally nest `<cw-parameter>` presentation hints for selected parameters.
+A declaration matches only an authoritative parameter with the same `id`; omitted declarations and omitted attributes retain canonical behavior.
+`named` overrides the humanized parameter name, `described-as` overrides its canonical description, and `description-as="label|tooltip"` selects visible or tooltip presentation with `label` as the default.
+A valid `multi-line` value greater than one requests the established bounded multiline string editor without changing parsing, validation, or invocation.
+Declarations never add, remove, reorder, hide, disable, default, validate, or invoke parameters.
+
+[source,html]
+----
+<cw-action id="bookVisit">
+  <cw-parameter id="reason"
+                named="Reason for visit"
+                described-as="Brief clinical reason for the appointment"
+                description-as="tooltip"
+                multi-line="3"></cw-parameter>
+</cw-action>
+----
+
 An application claims an action by calling `preventDefault()` on `causeway-action-request`; the standard controller then does nothing:
 
 [source,javascript]

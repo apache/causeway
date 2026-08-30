@@ -30,9 +30,27 @@ import {
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {CausewayContextConsumerElement} from './context-consumer-element.mjs';
 import {createSemanticEvent} from './context-events.mjs';
+import {
+  actionParameterConfiguration,
+  normalizeActionParameterConfigurations
+} from './parameter-element.mjs';
 import {errorMessage, escapeHtml} from './rendering.mjs';
 
 let actionSequence = 0;
+const initialParameterConfigurations = new WeakMap();
+
+export function captureDeclarativeActionParameters(root = globalThis.document) {
+  if (!root?.querySelectorAll) return;
+  const actions = root.localName === 'cw-action' ? [root] : root.querySelectorAll('cw-action');
+  for (const action of actions) {
+    const configurations = [...(action.children ?? action.childNodes ?? [])]
+      .filter(child => child?.localName === 'cw-parameter' || child?.configuration?.parameter)
+      .map(child => child?.configuration ?? actionParameterConfiguration(child));
+    if (configurations.length > 0) {
+      initialParameterConfigurations.set(action, normalizeActionParameterConfigurations(configurations));
+    }
+  }
+}
 
 export class CausewayActionElement extends CausewayContextConsumerElement {
   static get observedAttributes() {
@@ -44,6 +62,12 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     const sequence = ++actionSequence;
     this.descriptionId = `causeway-action-description-${sequence}`;
     this.reasonId = `causeway-action-reason-${sequence}`;
+    this._parameterPresentations = [];
+    this.addEventListener(CausewaySemanticEvent.ACTION_PARAMETER_CONFIGURATION, event => {
+      if (event.target?.parentNode !== this) return;
+      event.stopPropagation();
+      this.#acceptParameterPresentation(event.detail?.parameter);
+    });
     this.addEventListener('click', event => {
       if (originatesFromOrdinaryActionControl(this, event.target)) {
         this.activate();
@@ -60,6 +84,8 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   }
 
   connectedCallback() {
+    captureDeclarativeActionParameters(this);
+    this.#captureParameterPresentations();
     document.addEventListener(CAUSEWAY_ACTION_WIDGET_POLICY_EVENT, this._actionWidgetPolicyListener);
     super.connectedCallback();
   }
@@ -76,6 +102,10 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
   set named(value) {
     if (value == null) this.removeAttribute('named');
     else this.setAttribute('named', value);
+  }
+
+  get parameterPresentations() {
+    return normalizeActionParameterConfigurations(this._parameterPresentations);
   }
 
   get label() {
@@ -179,12 +209,31 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
 
   actionPresentation(state = this.componentState) {
     const metadata = state?.data?.metadata ?? {};
-    return normalizeActionPresentation({
+    const presentation = normalizeActionPresentation({
       name: this.named || this.label || metadata.friendlyName || humanize(this.id),
       description: metadata.description || state?.descriptor?.description || '',
       cssClassFa: metadata.cssClassFa,
       cssClassFaPosition: metadata.cssClassFaPosition
     });
+    const parameters = this.parameterPresentations;
+    return parameters.length > 0 ? Object.freeze({...presentation, parameters}) : presentation;
+  }
+
+  #acceptParameterPresentation(configuration) {
+    const parameters = normalizeActionParameterConfigurations([...this._parameterPresentations, configuration]);
+    this._parameterPresentations = [...parameters];
+  }
+
+  #captureParameterPresentations() {
+    for (const configuration of initialParameterConfigurations.get(this) ?? []) {
+      this.#acceptParameterPresentation(configuration);
+    }
+    initialParameterConfigurations.delete(this);
+    for (const child of this.childNodes ?? []) {
+      if (child?.localName === 'cw-parameter') {
+        this.#acceptParameterPresentation(child?.configuration ?? actionParameterConfiguration(child));
+      }
+    }
   }
 }
 

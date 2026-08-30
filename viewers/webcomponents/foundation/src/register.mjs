@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import {CausewayActionElement} from './action-element.mjs';
+import {captureDeclarativeActionParameters, CausewayActionElement} from './action-element.mjs';
 import {CausewayBreadcrumbsElement} from './breadcrumbs-element.mjs';
 import {CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement} from './action-widget.mjs';
 import {CausewayCollectionColumnElement} from './collection-column-element.mjs';
@@ -38,6 +38,7 @@ import {CausewayObjectContextElement} from './object-context-element.mjs';
 import {CausewayObjectElement} from './object-element.mjs';
 import {CausewayObjectHeaderElement} from './object-header-element.mjs';
 import {CausewayObjectLinkElement} from './object-link-element.mjs';
+import {CausewayParameterElement} from './parameter-element.mjs';
 import {CausewayPropertyElement} from './property-element.mjs';
 import {CausewayReferenceEditorElement} from './reference-widget.mjs';
 import {CausewayValueElement} from './value-element.mjs';
@@ -52,6 +53,7 @@ const DEFINITIONS = Object.freeze([
   [CausewayElementName.VALUE, CausewayValueElement],
   [CausewayElementName.OBJECT_LINK, CausewayObjectLinkElement],
   [CausewayElementName.ACTION, CausewayActionElement],
+  [CausewayElementName.PARAMETER, CausewayParameterElement],
   [CAUSEWAY_ACTION_CONTROL, CausewayActionControlElement],
   [CausewayElementName.INTERACTION_CONTROLLER, CausewayInteractionControllerElement],
   [CAUSEWAY_FIELD_EDITOR, CausewayFieldEditorElement],
@@ -70,6 +72,7 @@ export function defineCausewayWebComponents(registry = globalThis.customElements
   if (!registry) {
     return;
   }
+  captureDeclarativeActionParameters();
   captureDeclarativeCollectionColumns();
   for (const [name, constructor] of DEFINITIONS) {
     if (!registry.get(name)) {
