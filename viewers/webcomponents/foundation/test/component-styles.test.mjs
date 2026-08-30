@@ -60,10 +60,18 @@ test('member tooltips preserve sections, responsive bounds and pointer and focus
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip,\s+\.causeway-action-control-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip::after,\s+\.causeway-action-control-tooltip::after \{[\s\S]*?content: attr\(data-tooltip\);[\s\S]*?max-inline-size: min\(24rem, calc\(100vw - 2rem\)\);[\s\S]*?white-space: pre-line;/);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/background: var\(--causeway-tooltip-background, #f8fafc\);/g)].length, 2);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/border: 1px solid var\(--causeway-tooltip-border, #cbd5e1\);/g)].length, 2);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/box-shadow: var\(--causeway-tooltip-shadow, 0 0\.25rem 0\.75rem rgb\(15 23 42 \/ 0\.18\)\);/g)].length, 2);
+  assert.equal([...CAUSEWAY_COMPONENT_STYLES.matchAll(/color: var\(--causeway-tooltip-color, #111827\);/g)].length, 2);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip:hover::after,[\s\S]*?\.causeway-member-tooltip:focus-visible::after/);
   assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-property-disabled-indicator/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-value-string \{\s+text-align: start;/);
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
+  assert.match(theme, /--causeway-tooltip-background: #f8fafc;/);
+  assert.match(theme, /--causeway-tooltip-color: #111827;/);
+  assert.match(theme, /--causeway-tooltip-border: #cbd5e1;/);
+  assert.match(theme, /--causeway-tooltip-shadow: 0 0\.25rem 0\.75rem rgb\(15 23 42 \/ 0\.18\);/);
   assert.match(theme, /\.causeway-property-value-string \{\s+text-align: start;/);
   assert.match(theme, /\.causeway-action-description \{[\s\S]*?position: absolute !important;[\s\S]*?clip: rect\(0, 0, 0, 0\) !important;/);
 });

@@ -367,9 +367,11 @@ cw-field-editor[data-widget-state="fallback"]::after {
   position: relative;
 }
 .causeway-property-disabled-tooltip::after {
-  background: CanvasText;
+  background: var(--causeway-tooltip-background, #f8fafc);
+  border: 1px solid var(--causeway-tooltip-border, #cbd5e1);
   border-radius: 0.25rem;
-  color: Canvas;
+  box-shadow: var(--causeway-tooltip-shadow, 0 0.25rem 0.75rem rgb(15 23 42 / 0.18));
+  color: var(--causeway-tooltip-color, #111827);
   content: attr(data-tooltip);
   font-size: 0.85rem;
   font-weight: 400;
@@ -400,9 +402,11 @@ cw-field-editor[data-widget-state="fallback"]::after {
 }
 .causeway-member-tooltip::after,
 .causeway-action-control-tooltip::after {
-  background: CanvasText;
+  background: var(--causeway-tooltip-background, #f8fafc);
+  border: 1px solid var(--causeway-tooltip-border, #cbd5e1);
   border-radius: 0.25rem;
-  color: Canvas;
+  box-shadow: var(--causeway-tooltip-shadow, 0 0.25rem 0.75rem rgb(15 23 42 / 0.18));
+  color: var(--causeway-tooltip-color, #111827);
   content: attr(data-tooltip);
   font-size: 0.85rem;
   font-weight: 400;
