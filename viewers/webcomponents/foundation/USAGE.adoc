@@ -487,7 +487,7 @@ An authored property or collection can place object actions directly beneath the
 </cw-property>
 
 <cw-collection id="pets" named="Companion animals" described-as="Pets registered to this owner." description-as="tooltip" active
-               paged="10" resizable-columns reorderable-columns>
+               paged="10" sortable filterable resizable-columns reorderable-columns>
   <cw-collection-column id="name" label="Name"></cw-collection-column>
   <cw-collection-column id="species" label="Species"></cw-collection-column>
   <cw-action id="addPet"></cw-action>
@@ -541,7 +541,14 @@ When targeted introspection finds the additive rich `window(offset, size)` field
 `paged="N"` requests bounded windows of `N` rows and renders Causeway-owned previous and next controls when the advertised window permits them.
 The page size must be an integer from 1 through 100; absent, blank, malformed, fractional, zero, negative, and oversized values provide no override.
 Changing the effective page size retires stale collection work and restarts at offset zero.
-Paging remains available in native table presentation and does not grant sorting or filtering semantics.
+Paging remains available in native table presentation.
+
+`sortable` enables accessible three-state heading buttons only for declared columns advertised by the server as sortable.
+A heading cycles through ascending, descending, and unsorted states, and each change applies before server window slicing and restarts at offset zero.
+`filterable` enables one bounded, labelled, debounced quick-search field only when an applicable `CollectionFilterService` is advertised.
+Search is capped at 256 characters, Escape and Clear remove it, and each accepted change filters before sorting and paging.
+Both attributes are opt-in and default off.
+Causeway owns criteria across native and Grid presentations; an older schema or unsupported capability exposes no misleading control and retains existing loading.
 
 Under the default Vaadin component policy, an active connected collection wider than 48rem may use the internal independently packaged Grid closure when its window ordering is `CONFIGURED`, its semantic columns are fully projectable, and its total or paging metadata is safe.
 A safe positive total selects virtual Grid and maps only bounded range callbacks through the Causeway-owned range broker unless explicit `paged` presentation requires the bounded Grid.
@@ -555,8 +562,8 @@ Both attributes are opt-in, default off, and have no effect in native fallback p
 Set `causeway.viewer.webcomponents.htmx.component-toolkit=native` for complete collection and control rollback without changing GraphQL, routes, persisted data, or application markup.
 The Grid closure is same-origin and route-lazy, has a 196608-byte gzip cap, and participates with Menu Bar in the 631808-byte aggregate closure cap and exact-hash CSP policy.
 See `vaadin-grid/README.adoc` for pinned inputs, accepted checksum, legal metadata, CSP evidence, verification, and audit commands.
-Sorting, filtering, selection, editing, details, drag, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
-Column resizing and column reordering are supported only through the bounded public attributes above; no other Vaadin Grid API becomes application-facing.
+Multi-column sorting, per-column filtering, page-local array criteria, selection, editing, details, drag, Grid Pro, Flow, Binder, telemetry, CDN resources, server-side Vaadin state, and backend query pushdown remain outside the component contract.
+Sorting, quick search, column resizing, and column reordering are supported only through the bounded public attributes above; no other Vaadin Grid API becomes application-facing.
 
 == Observable state, accessibility, and styling
 

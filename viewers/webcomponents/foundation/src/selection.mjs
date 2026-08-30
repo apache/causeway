@@ -168,6 +168,9 @@ export function buildCollectionWindowReadOperation({
   rowSelection,
   offset,
   size,
+  sortBy = null,
+  sortDirection = 'ASCENDING',
+  search = null,
   schemaNames
 }) {
   const objectField = assertGraphQLName(description.generatedFieldName, 'object field');
@@ -180,13 +183,46 @@ export function buildCollectionWindowReadOperation({
     rowSelection,
     rowIndentation,
     {typeDescription: rowType, types: description.types ?? null});
-  const windowSelection = `offset\n${rowIndentation.slice(2)}requestedSize\n${rowIndentation.slice(2)}returnedCount\n${rowIndentation.slice(2)}totalCount\n${rowIndentation.slice(2)}maximumSize\n${rowIndentation.slice(2)}hasPrevious\n${rowIndentation.slice(2)}hasNext\n${rowIndentation.slice(2)}ordering\n${rowIndentation.slice(2)}rows {\n${renderedRows}\n${rowIndentation.slice(2)}}`;
+  const windowFields = collection?.window?.fields ?? new Map();
+  const sortSupported = collection?.window?.sortSupported === true;
+  const searchSupported = collection?.window?.searchSupported === true;
+  const metadataFields = [
+    sortSupported && windowFields.has('sortableMembers') ? 'sortableMembers' : null,
+    searchSupported && windowFields.has('searchSupported') ? 'searchSupported' : null,
+    searchSupported && windowFields.has('searchPrompt') ? 'searchPrompt' : null
+  ].filter(Boolean);
+  const baseFields = [
+    'offset', 'requestedSize', 'returnedCount', 'totalCount', 'maximumSize',
+    'hasPrevious', 'hasNext', 'ordering', ...metadataFields
+  ];
+  const selectionIndentation = rowIndentation.slice(2);
+  const windowSelection = `${baseFields.join(`\n${selectionIndentation}`)}\n${selectionIndentation}rows {\n${renderedRows}\n${selectionIndentation}}`;
+  const variableDefinitions = [
+    `$object: ${description.generatedInputTypeName}!`, '$offset: Int!', '$size: Int!'
+  ];
+  const windowArguments = ['offset: $offset', 'size: $size'];
+  const variables = {object: {id: identity.id}, offset, size};
+  if (sortSupported) {
+    const sortDirectionType = assertGraphQLName(
+      collection.window.sortDirectionType,
+      'collection sort direction type');
+    variableDefinitions.push('$sortBy: String', `$sortDirection: ${sortDirectionType}!`);
+    windowArguments.push('sortBy: $sortBy', 'sortDirection: $sortDirection');
+    variables.sortBy = sortBy;
+    variables.sortDirection = sortDirection;
+  }
+  if (searchSupported) {
+    variableDefinitions.push('$search: String');
+    windowArguments.push('search: $search');
+    variables.search = search;
+  }
+  const windowCall = `window(${windowArguments.join(', ')})`;
   const objectRead = schemaNames.richRootField
-    ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${objectField}(${lookupArgument}: $object) {\n      ${collectionField} {\n        window(offset: $offset, size: $size) {\n          ${windowSelection}\n        }\n      }\n    }\n  }`
-    : `  ${objectField}(${lookupArgument}: $object) {\n    ${collectionField} {\n      window(offset: $offset, size: $size) {\n        ${windowSelection}\n      }\n    }\n  }`;
+    ? `  ${assertGraphQLName(schemaNames.richRootField, 'rich root field')} {\n    ${objectField}(${lookupArgument}: $object) {\n      ${collectionField} {\n        ${windowCall} {\n          ${windowSelection}\n        }\n      }\n    }\n  }`
+    : `  ${objectField}(${lookupArgument}: $object) {\n    ${collectionField} {\n      ${windowCall} {\n        ${windowSelection}\n      }\n    }\n  }`;
   return Object.freeze({
-    document: `query CausewayReadCollectionWindow($object: ${description.generatedInputTypeName}!, $offset: Int!, $size: Int!) {\n${objectRead}\n}`,
-    variables: {object: {id: identity.id}, offset, size},
+    document: `query CausewayReadCollectionWindow(${variableDefinitions.join(', ')}) {\n${objectRead}\n}`,
+    variables,
     operationName: 'CausewayReadCollectionWindow',
     objectPath: schemaNames.richRootField
       ? [schemaNames.richRootField, objectField]

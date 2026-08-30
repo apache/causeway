@@ -83,6 +83,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       'label',
       'active',
       'paged',
+      'sortable',
+      'filterable',
       'resizable-columns',
       'reorderable-columns'
     ];
@@ -94,6 +96,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.labelId = `causeway-collection-label-${sequence}`;
     this.descriptionId = `causeway-collection-description-${sequence}`;
     this.reasonId = `causeway-collection-reason-${sequence}`;
+    this.searchId = `causeway-collection-search-${sequence}`;
     this._columns = [];
     this._rendererRegistry = defaultValueRendererRegistry;
     this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
@@ -103,6 +106,10 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.loadRevision = 0;
     this.loadAbortController = null;
     this.loadedGeneration = -1;
+    this.sortCriterion = null;
+    this.searchText = '';
+    this.searchTimer = null;
+    this.criteriaFocusIntent = null;
     this.connectionStarted = false;
     this.gridHostRevision = 0;
     this.gridResponsiveRevision = 0;
@@ -154,6 +161,26 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         this.#loadNormalizedPage(this.collectionState.window?.previousOffset);
       } else if (event.target?.hasAttribute?.('data-causeway-grid-next')) {
         this.#loadNormalizedPage(this.collectionState.window?.nextOffset);
+      } else if (event.target?.hasAttribute?.('data-causeway-collection-sort')) {
+        this.#changeSort(event.target.getAttribute('data-causeway-collection-sort'));
+      } else if (event.target?.hasAttribute?.('data-causeway-collection-search-clear')) {
+        this.#commitSearch('');
+      }
+    });
+    this.addEventListener('input', event => {
+      if (!event.target?.hasAttribute?.('data-causeway-collection-search')) return;
+      const value = String(event.target.value ?? '').slice(0, MAX_COLLECTION_SEARCH_LENGTH);
+      globalThis.clearTimeout(this.searchTimer);
+      this.searchTimer = globalThis.setTimeout(() => this.#commitSearch(value), COLLECTION_SEARCH_DEBOUNCE_MS);
+    });
+    this.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || !event.target?.hasAttribute?.('data-causeway-collection-search')) return;
+      event.preventDefault?.();
+      globalThis.clearTimeout(this.searchTimer);
+      event.target.value = '';
+      if (!this.#commitSearch('')) {
+        this.criteriaFocusIntent = 'search';
+        this.renderComponentState(this.componentState);
       }
     });
     this.addEventListener('focusin', event => {
@@ -168,8 +195,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       });
     });
     this.addEventListener('causeway-grid-ready', event => {
-      if (!this.#focusIntentIsCurrent()) return;
-      event.target?.restoreSemanticFocus?.(this.gridFocusIntent);
+      if (this.criteriaFocusIntent) {
+        const restored = event.target?.restoreSortFocus?.(this.criteriaFocusIntent);
+        if (restored) this.criteriaFocusIntent = null;
+      } else if (this.#focusIntentIsCurrent()) {
+        event.target?.restoreSemanticFocus?.(this.gridFocusIntent);
+      }
     });
   }
 
@@ -227,6 +258,24 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     } else {
       this.setAttribute('paged', String(value));
     }
+  }
+
+  get sortable() {
+    return this.hasAttribute('sortable');
+  }
+
+  set sortable(value) {
+    if (value === true) this.setAttribute('sortable', '');
+    else this.removeAttribute('sortable');
+  }
+
+  get filterable() {
+    return this.hasAttribute('filterable');
+  }
+
+  set filterable(value) {
+    if (value === true) this.setAttribute('filterable', '');
+    else this.removeAttribute('filterable');
   }
 
   get resizableColumns() {
@@ -322,6 +371,8 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.loadRevision += 1;
     this.loadAbortController?.abort();
     this.loadAbortController = null;
+    globalThis.clearTimeout(this.searchTimer);
+    this.searchTimer = null;
     this.#disconnectRangeBroker();
     for (const context of this.rowContexts) {
       context.disconnect?.();
@@ -342,6 +393,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       this.loadAbortController = null;
       this.#disconnectRangeBroker();
       this.authoritativeResult = null;
+      this.sortCriterion = null;
+      this.searchText = '';
+      this.criteriaFocusIntent = null;
       this.collectionState = Object.freeze({status: 'idle', data: null, errors: []});
       this.loadedGeneration = -1;
       this.reconnectRequirement();
@@ -357,6 +411,11 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       } else {
         this.renderComponentState(this.componentState);
       }
+    } else if (name === 'sortable' || name === 'filterable') {
+      if (!this.sortable) this.sortCriterion = null;
+      if (!this.filterable) this.searchText = '';
+      this.criteriaFocusIntent = null;
+      this.#reloadCriteria();
     } else {
       if (name === 'resizable-columns' || name === 'reorderable-columns') {
         this.gridHostRevision += 1;
@@ -400,7 +459,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this.authoritativeResult = null;
     const abortController = new AbortController();
     this.loadAbortController = abortController;
-    this.collectionState = Object.freeze({status: 'loading', data: null, errors: []});
+    this.collectionState = Object.freeze({...this.collectionState, status: 'loading', data: null, errors: []});
     this.renderComponentState(this.componentState);
     this.#publishCollectionState();
     try {
@@ -409,6 +468,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         columns: this._columns,
         offset,
         size: requestedSize,
+        sortBy: this.sortable ? this.sortCriterion?.member ?? null : null,
+        sortDirection: this.sortable ? this.sortCriterion?.direction ?? 'ASCENDING' : 'ASCENDING',
+        search: this.filterable ? this.searchText : null,
         requestKey: this,
         force,
         signal: abortController.signal
@@ -514,18 +576,20 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       renderMemberPrimary(this, shell(`<button type="button" data-causeway-activate>Load ${escapeHtml(label)}</button>`));
       return;
     }
+    const criteriaControls = this.#renderCriteriaControls();
     if (this.collectionState.status === 'idle' || this.collectionState.status === 'loading') {
-      renderMemberPrimary(this, shell('<span role="status">Loading collection…</span>', ' aria-busy="true"'));
+      renderMemberPrimary(this, shell(`${criteriaControls}<span role="status">Loading collection…</span>`, ' aria-busy="true"'));
       return;
     }
     if (this.collectionState.status === 'error') {
-      renderMemberPrimary(this, shell(`<span class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</span>`));
+      renderMemberPrimary(this, shell(`${criteriaControls}<span class="causeway-error" role="alert">${escapeHtml(errorMessage(this.collectionState))}</span>`));
       return;
     }
     const rows = collectionRows(this.collectionState);
     if (rows.length === 0) {
       const pager = this.paged ? this.#renderBoundedPager(this.collectionState.window) : '';
-      renderMemberPrimary(this, shell(`<span class="causeway-empty" role="status">No items</span>${pager}`));
+      renderMemberPrimary(this, shell(`${criteriaControls}<span class="causeway-empty" role="status">No items</span>${pager}`));
+      this.#restoreCriteriaFocus();
       return;
     }
     const errors = this.collectionState.errors?.length
@@ -539,8 +603,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       ? this.#renderTable(rows)
       : this.#renderDefaultRows(rows);
     const pager = this.paged ? this.#renderBoundedPager(this.collectionState.window) : '';
-    renderMemberPrimary(this, shell(`${content}${pager}${errors}`));
+    renderMemberPrimary(this, shell(`${criteriaControls}${content}${pager}${errors}`));
     this.#restoreNativeFocus();
+    this.#restoreCriteriaFocus();
   }
 
   #renderGrid(shell, errors, describedBy) {
@@ -548,7 +613,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     const bounded = this._gridQualification.presentation === 'grid-bounded';
     const window = this.collectionState.window;
     const pager = bounded ? this.#renderBoundedPager(window) : '';
-    renderMemberPrimary(this, shell(`<${CAUSEWAY_COLLECTION_GRID} data-causeway-collection-grid></${CAUSEWAY_COLLECTION_GRID}>${pager}${errors}`));
+    renderMemberPrimary(this, shell(`${this.#renderCriteriaControls()}<${CAUSEWAY_COLLECTION_GRID} data-causeway-collection-grid></${CAUSEWAY_COLLECTION_GRID}>${pager}${errors}`));
     const adapter = this.querySelector?.(`${CAUSEWAY_COLLECTION_GRID}[data-causeway-collection-grid]`);
     if (!adapter || revision !== this.gridHostRevision || !this.isConnected) return;
     adapter.presentation = {
@@ -562,8 +627,12 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       testId: this.getAttribute('data-testid') ? `${this.getAttribute('data-testid')}-grid` : '',
       resizableColumns: this.resizableColumns,
       reorderableColumns: this.reorderableColumns,
+      sortableMembers: this.sortable ? this.collectionState.window?.sortableMembers ?? [] : [],
+      sortCriterion: this.sortCriterion,
+      sortCallback: member => this.#changeSort(member),
       rangeProvider: request => this.#projectRange(request, revision)
     };
+    this.#restoreCriteriaFocus();
   }
 
   async #projectRange(request, revision) {
@@ -595,6 +664,69 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     return Object.freeze({rows: projection.rows});
   }
 
+  #renderCriteriaControls() {
+    const window = this.collectionState.window;
+    if (!this.filterable || window?.searchSupported !== true) return '';
+    const prompt = window.searchPrompt || 'Search collection';
+    return `<div class="causeway-collection-search" role="search">
+      <label for="${this.searchId}">${escapeHtml(prompt)}</label>
+      <input id="${this.searchId}" type="search" maxlength="${MAX_COLLECTION_SEARCH_LENGTH}" value="${escapeHtml(this.searchText)}" data-causeway-collection-search autocomplete="off">
+      <button type="button" data-causeway-collection-search-clear${this.searchText ? '' : ' disabled aria-disabled="true"'}>Clear</button>
+    </div>`;
+  }
+
+  #changeSort(member) {
+    const sortableMembers = new Set(this.collectionState.window?.sortableMembers ?? []);
+    if (!this.sortable || !sortableMembers.has(member) || !this._columns.some(column => column.member === member)) {
+      return false;
+    }
+    const current = this.sortCriterion?.member === member ? this.sortCriterion.direction : null;
+    this.sortCriterion = current === 'ASCENDING'
+      ? Object.freeze({member, direction: 'DESCENDING'})
+      : current === 'DESCENDING' ? null : Object.freeze({member, direction: 'ASCENDING'});
+    this.criteriaFocusIntent = member;
+    this.#reloadCriteria();
+    return true;
+  }
+
+  #commitSearch(value) {
+    const normalized = String(value ?? '').trim().slice(0, MAX_COLLECTION_SEARCH_LENGTH);
+    if (!this.filterable || this.collectionState.window?.searchSupported !== true || normalized === this.searchText) {
+      return false;
+    }
+    this.searchText = normalized;
+    this.criteriaFocusIntent = 'search';
+    this.#reloadCriteria();
+    return true;
+  }
+
+  #reloadCriteria() {
+    this.gridHostRevision += 1;
+    this.loadAbortController?.abort();
+    this.loadAbortController = null;
+    this.#disconnectRangeBroker();
+    if (this.active && this.componentState?.status === 'ready') {
+      void this.load({force: true, offset: 0, size: this.paged ?? this.collectionState.window?.requestedSize});
+    } else if (this.componentState) {
+      this.renderComponentState(this.componentState);
+    }
+  }
+
+  #restoreCriteriaFocus() {
+    const intent = this.criteriaFocusIntent;
+    if (!intent || !this.querySelector) return;
+    const target = intent === 'search'
+      ? this.querySelector('[data-causeway-collection-search]')
+      : this.querySelector(`[data-causeway-collection-sort="${intent}"]`);
+    if (!target) return;
+    queueMicrotask(() => {
+      if (!this.isConnected || this.criteriaFocusIntent !== intent) return;
+      target.focus?.();
+      if (intent === 'search') target.setSelectionRange?.(target.value.length, target.value.length);
+      this.criteriaFocusIntent = null;
+    });
+  }
+
   #renderBoundedPager(window) {
     if (!window) return '';
     const range = window.rangeStart == null
@@ -622,7 +754,7 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
   }
 
   #renderTable(rows) {
-    const header = `<th scope="col">Item</th>${this._columns.map(column => `<th scope="col"${column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : ''}>${escapeHtml(column.label || humanize(column.member))}</th>`).join('')}`;
+    const header = `<th scope="col">Item</th>${this._columns.map(column => this.#renderColumnHeader(column)).join('')}`;
     const body = rows.map((row, rowIndex) => {
       const metadata = row?._meta ?? {};
       const key = gridRowKey(row);
@@ -631,6 +763,23 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
       return `<tr data-row-index="${rowIndex}" data-causeway-grid-row-key="${escapeHtml(key)}">${item}${cells}</tr>`;
     }).join('');
     return `<table class="causeway-collection-table"><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+  }
+
+  #renderColumnHeader(column) {
+    const label = column.label || humanize(column.member);
+    const sortable = this.sortable
+      && this.collectionState.window?.sortableMembers?.includes?.(column.member);
+    const currentDirection = this.sortCriterion?.member === column.member
+      ? this.sortCriterion.direction
+      : null;
+    const ariaSort = currentDirection === 'ASCENDING'
+      ? 'ascending'
+      : currentDirection === 'DESCENDING' ? 'descending' : 'none';
+    const direction = currentDirection === 'ASCENDING' ? ' ↑' : currentDirection === 'DESCENDING' ? ' ↓' : '';
+    const testId = column.testId ? ` data-testid="${escapeHtml(column.testId)}"` : '';
+    return sortable
+      ? `<th scope="col" aria-sort="${ariaSort}"${testId}><button type="button" data-causeway-collection-sort="${escapeHtml(column.member)}" aria-label="Sort ${escapeHtml(label)}${currentDirection === 'ASCENDING' ? ' descending' : currentDirection === 'DESCENDING' ? ' off' : ' ascending'}">${escapeHtml(label)}<span aria-hidden="true">${direction}</span></button></th>`
+      : `<th scope="col"${testId}>${escapeHtml(label)}</th>`;
   }
 
   #renderCell(row, rowIndex, column) {
@@ -669,6 +818,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         || !Number.isSafeInteger(maximumRetainedRows)) return;
     const member = this.id;
     const columns = this.columns;
+    const sortBy = this.sortable ? this.sortCriterion?.member ?? null : null;
+    const sortDirection = this.sortable ? this.sortCriterion?.direction ?? 'ASCENDING' : 'ASCENDING';
+    const search = this.filterable ? this.searchText : null;
     const broker = new CausewayCollectionRangeBroker({
       maximumSize: window.maximumSize,
       defaultSize: window.requestedSize,
@@ -681,6 +833,9 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
         columns,
         offset,
         size,
+        sortBy,
+        sortDirection,
+        search,
         requestKey,
         cache: false,
         signal
@@ -888,6 +1043,8 @@ function gridRowKey(row) {
 }
 
 const MAX_DECLARATIVE_PAGE_SIZE = 100;
+const MAX_COLLECTION_SEARCH_LENGTH = 256;
+const COLLECTION_SEARCH_DEBOUNCE_MS = 250;
 
 function normalizedPageSize(value) {
   const normalized = String(value ?? '').trim();
@@ -902,5 +1059,11 @@ function sameWindowContract(authoritative, candidate) {
   if (!authoritative || !candidate) return false;
   return authoritative.ordering === candidate.ordering
     && authoritative.totalCount === candidate.totalCount
-    && authoritative.maximumSize === candidate.maximumSize;
+    && authoritative.maximumSize === candidate.maximumSize
+    && authoritative.searchSupported === candidate.searchSupported
+    && sameMembers(authoritative.sortableMembers, candidate.sortableMembers);
+}
+
+function sameMembers(left, right) {
+  return JSON.stringify(left ?? []) === JSON.stringify(right ?? []);
 }

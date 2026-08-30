@@ -185,7 +185,18 @@ export class CausewayGraphQLClient {
     });
   }
 
-  async readCollectionWindow({description, identity, member, rowSelection, offset, size, signal}) {
+  async readCollectionWindow({
+    description,
+    identity,
+    member,
+    rowSelection,
+    offset,
+    size,
+    sortBy = null,
+    sortDirection = 'ASCENDING',
+    search = null,
+    signal
+  }) {
     const operation = buildCollectionWindowReadOperation({
       description,
       identity,
@@ -193,6 +204,9 @@ export class CausewayGraphQLClient {
       rowSelection,
       offset,
       size,
+      sortBy,
+      sortDirection,
+      search,
       schemaNames: this.schemaNames
     });
     const response = await this.executor({
@@ -508,12 +522,18 @@ function semanticCollectionWindowDescription(kind, supportType, describedTypes) 
     return null;
   }
   const args = new Map(field.args.map(argument => [argument.name, argument]));
+  const fields = fieldsByName(typeDescription);
+  const sortDirectionType = namedType(args.get('sortDirection')?.type);
   return Object.freeze({
     generatedTypeName,
     typeDescription,
-    fields: fieldsByName(typeDescription),
+    fields,
     offsetDefault: integerDefault(args.get('offset')?.defaultValue, 0),
-    sizeDefault: integerDefault(args.get('size')?.defaultValue, null)
+    sizeDefault: integerDefault(args.get('size')?.defaultValue, null),
+    sortSupported: args.has('sortBy') && args.has('sortDirection')
+      && Boolean(sortDirectionType) && fields.has('sortableMembers'),
+    sortDirectionType,
+    searchSupported: args.has('search') && fields.has('searchSupported')
   });
 }
 

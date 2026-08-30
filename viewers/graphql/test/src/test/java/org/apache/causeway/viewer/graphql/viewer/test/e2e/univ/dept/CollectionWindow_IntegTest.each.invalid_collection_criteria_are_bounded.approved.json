@@ -1,0 +1,28 @@
+{
+  "errors" : [ {
+    "message" : "Exception while fetching data (/rich/university_dept_Departments/findDepartmentByName/invoke/results/staffMembers/window) : Collection window sort member is not an accepted table column.",
+    "locations" : [ {
+      "column" : 15,
+      "line" : 8
+    } ],
+    "path" : [ "rich", "university_dept_Departments", "findDepartmentByName", "invoke", "results", "staffMembers", "window" ],
+    "extensions" : {
+      "classification" : "DataFetchingException"
+    }
+  } ],
+  "data" : {
+    "rich" : {
+      "university_dept_Departments" : {
+        "findDepartmentByName" : {
+          "invoke" : {
+            "results" : {
+              "staffMembers" : {
+                "window" : null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -44,6 +44,7 @@ import {
   mergeSelections,
   selectionForRuntimeType
 } from './selection.mjs';
+import {assertGraphQLName} from './schema-names.mjs';
 import {fetchStructuralResource, StructuralResourceError} from './structural-resource.mjs';
 import {InteractionResultKind, InteractionStatus, ObjectContextStatus, RequirementStatus} from './types.mjs';
 
@@ -600,6 +601,9 @@ export class ObjectContextController extends EventTarget {
     columns = [],
     offset = 0,
     size = null,
+    sortBy = null,
+    sortDirection = 'ASCENDING',
+    search = null,
     requestKey = null,
     force = false,
     cache = true,
@@ -620,10 +624,28 @@ export class ObjectContextController extends EventTarget {
     const requestedSize = usesWindow
       ? integerAtLeast(size ?? descriptor.window.sizeDefault, 1, 'Collection window size')
       : null;
+    const requestedSortBy = usesWindow && descriptor.window.sortSupported
+      ? optionalGraphQLName(sortBy, 'Collection sort member')
+      : null;
+    const requestedSortDirection = requestedSortBy
+      ? collectionSortDirection(sortDirection)
+      : 'ASCENDING';
+    const requestedSearch = usesWindow && descriptor.window.searchSupported
+      ? boundedSearch(search)
+      : null;
     let rowSelection = abstractRows
       ? {__typename: true}
       : collectionRowSelection(descriptor, columns, description.types);
-    const cacheKey = JSON.stringify({member, columns, offset: requestedOffset, size: requestedSize, usesWindow});
+    const cacheKey = JSON.stringify({
+      member,
+      columns,
+      offset: requestedOffset,
+      size: requestedSize,
+      sortBy: requestedSortBy,
+      sortDirection: requestedSortDirection,
+      search: requestedSearch,
+      usesWindow
+    });
     if (!force && cache && this.secondaryCache.has(cacheKey)) {
       const cached = this.secondaryCache.get(cacheKey);
       if (!cached.abortController.signal.aborted) {
@@ -656,6 +678,9 @@ export class ObjectContextController extends EventTarget {
           rowSelection: selection,
           offset: requestedOffset,
           size: requestedSize,
+          sortBy: requestedSortBy,
+          sortDirection: requestedSortDirection,
+          search: requestedSearch,
           signal: abortController.signal
         })
       : this.client.readObject({
@@ -1328,6 +1353,31 @@ function integerAtLeast(value, minimum, label) {
   return value;
 }
 
+function optionalGraphQLName(value, label) {
+  if (value == null || String(value).trim() === '') {
+    return null;
+  }
+  return assertGraphQLName(String(value).trim(), label);
+}
+
+function collectionSortDirection(value) {
+  if (value === 'ASCENDING' || value === 'DESCENDING') {
+    return value;
+  }
+  throw new Error('Collection sort direction must be ASCENDING or DESCENDING.');
+}
+
+function boundedSearch(value) {
+  if (value == null || String(value).trim() === '') {
+    return null;
+  }
+  const normalized = String(value).trim();
+  if (normalized.length > 256) {
+    throw new Error('Collection search must not exceed 256 characters.');
+  }
+  return normalized;
+}
+
 function normalizeCollectionWindow(window) {
   if (!window) {
     return null;
@@ -1337,7 +1387,7 @@ function normalizeCollectionWindow(window) {
   const returnedCount = window.returnedCount;
   const hasPrevious = window.hasPrevious === true;
   const hasNext = window.hasNext === true;
-  return Object.freeze({
+  const normalized = {
     offset,
     requestedSize,
     returnedCount,
@@ -1351,7 +1401,19 @@ function normalizeCollectionWindow(window) {
     rangeStart: returnedCount > 0 ? offset + 1 : null,
     rangeEnd: returnedCount > 0 ? offset + returnedCount : null,
     ordering: window.ordering ?? null
-  });
+  };
+  if (Object.hasOwn(window, 'sortableMembers')) {
+    normalized.sortableMembers = Object.freeze(Array.isArray(window.sortableMembers)
+      ? window.sortableMembers.filter(member => typeof member === 'string')
+      : []);
+  }
+  if (Object.hasOwn(window, 'searchSupported')) {
+    normalized.searchSupported = window.searchSupported === true;
+  }
+  if (Object.hasOwn(window, 'searchPrompt')) {
+    normalized.searchPrompt = typeof window.searchPrompt === 'string' ? window.searchPrompt : null;
+  }
+  return Object.freeze(normalized);
 }
 
 function obsoleteRequestError() {

@@ -70,6 +70,36 @@
               "name" : "Int"
             }
           }
+        }, {
+          "name" : "sortBy",
+          "description" : "Optional accepted Causeway table-column member id.",
+          "defaultValue" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          }
+        }, {
+          "name" : "sortDirection",
+          "description" : "Direction for an optional sort member.",
+          "defaultValue" : "ASCENDING",
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "ENUM",
+              "name" : "rich__gqlv_collection_window_sort_direction"
+            }
+          }
+        }, {
+          "name" : "search",
+          "description" : "Optional CollectionFilterService quick-search text, bounded to 256 characters.",
+          "defaultValue" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          }
         } ],
         "type" : {
           "kind" : "OBJECT",

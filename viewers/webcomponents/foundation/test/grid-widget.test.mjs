@@ -120,6 +120,31 @@ test('bounded Grid upgrades lazily with immutable rows columns and relationships
   document.body.removeChild(adapter);
 });
 
+test('Grid renders Causeway-owned sort headers without enabling toolkit sorting', async () => {
+  configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
+  const requests = [];
+  const adapter = new CausewayCollectionGridElement();
+  adapter.presentation = {
+    ...boundedPresentation(),
+    columns: [{...column, member: 'name'}],
+    sortableMembers: ['name'],
+    sortCriterion: {member: 'name', direction: 'ASCENDING'},
+    sortCallback: member => requests.push(member)
+  };
+  await connect(adapter);
+  const gridColumn = adapter.childNodes[0].childNodes[0];
+  assert.equal(gridColumn.sortable, false);
+  assert.equal(typeof gridColumn.headerRenderer, 'function');
+  const root = document.createElement('div');
+  gridColumn.headerRenderer(root);
+  const button = root.childNodes[0];
+  assert.equal(button.dataset.causewayCollectionSort, 'name');
+  assert.match(button.textContent, /↑/);
+  button.dispatchEvent(new Event('click'));
+  assert.deepEqual(requests, ['name']);
+  document.body.removeChild(adapter);
+});
+
 test('virtual Grid maps page callbacks to bounded range provider', async () => {
   configureCausewayGridWidgets({enabled: true, moduleUrl: fakeGridModule});
   const requests = [];

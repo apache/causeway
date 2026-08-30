@@ -10,7 +10,7 @@ export const CausewayCollectionPresentation = Object.freeze({
   GRID_BOUNDED: 'grid-bounded'
 });
 
-const DETERMINISTIC_ORDERING = 'CONFIGURED';
+const DETERMINISTIC_ORDERINGS = new Set(['CONFIGURED', 'REQUESTED']);
 
 export function qualifyCausewayCollectionGrid(candidate = {}) {
   const window = candidate.window ?? null;
@@ -29,7 +29,7 @@ export function qualifyCausewayCollectionGrid(candidate = {}) {
   if (candidate.wide !== true) return native(base, 'narrow');
   if (candidate.ready !== true) return native(base, 'not-ready');
   if (!validWindow(window, rows)) return native(base, 'window-unavailable');
-  if (ordering !== DETERMINISTIC_ORDERING) return native(base, 'ordering-not-deterministic');
+  if (!DETERMINISTIC_ORDERINGS.has(ordering)) return native(base, 'ordering-not-deterministic');
   if (count === 'invalid') return native(base, 'total-invalid');
   if (count === 'zero' || terminalEmptyFirstWindow(window, rows)) return native(base, 'empty');
   if (candidate.columnsSupported !== true || candidate.hasVisibleColumn !== true) {
