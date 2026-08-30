@@ -48,8 +48,8 @@ test('property editor actions remain compact deterministic icon controls', async
 
 test('member tooltips preserve sections, responsive bounds and pointer and focus access', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-disabled-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
-  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip::after \{[\s\S]*?content: attr\(data-tooltip\);[\s\S]*?max-inline-size: min\(24rem, calc\(100vw - 2rem\)\);[\s\S]*?white-space: pre-line;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip,\s+\.causeway-action-control-tooltip \{[\s\S]*?cursor: help;[\s\S]*?position: relative;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip::after,\s+\.causeway-action-control-tooltip::after \{[\s\S]*?content: attr\(data-tooltip\);[\s\S]*?max-inline-size: min\(24rem, calc\(100vw - 2rem\)\);[\s\S]*?white-space: pre-line;/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-member-tooltip:hover::after,[\s\S]*?\.causeway-member-tooltip:focus-visible::after/);
   assert.doesNotMatch(CAUSEWAY_COMPONENT_STYLES, /causeway-property-disabled-indicator/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-property-value-string \{\s+text-align: start;/);

@@ -45,7 +45,7 @@ public class PetOwners {
     }
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    @ActionLayout(describedAs = "Registers a new pet owner.")
+    @ActionLayout(describedAs = "Registers a new pet owner.", cssClassFa = "user-plus")
     public PetOwner create(
             @Parameter(maxLength = 80) final String name,
             @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL) final String knownAs,
@@ -59,22 +59,25 @@ public class PetOwners {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(describedAs = "Finds owners whose names contain the search text.", cssClassFa = "magnifying-glass")
     public List<PetOwner> findByName(@Parameter(maxLength = 80) final String name) {
         return repository.findByNameContaining(name);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(describedAs = "Finds owners using the demonstration name search.", cssClassFa = "magnifying-glass")
     public List<PetOwner> findByNameLike(@Parameter(maxLength = 80) final String name) {
         return repository.findByNameContaining(name);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(describedAs = "Lists every registered pet owner.", cssClassFa = "users")
     public List<PetOwner> listAll() {
         return repository.findAll();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(describedAs = "Counts the registered pet owners.")
+    @ActionLayout(describedAs = "Counts the registered pet owners.", cssClassFa = "calculator")
     public long count() {
         return repository.count();
     }

@@ -5,6 +5,8 @@
         metadata {
           friendlyName
           description
+          cssClassFa
+          cssClassFaPosition
           maxLength
         }
       }
@@ -12,12 +14,16 @@
         metadata {
           friendlyName
           description
+          cssClassFa
+          cssClassFaPosition
         }
         params {
           newName {
             metadata {
               friendlyName
               description
+              cssClassFa
+              cssClassFaPosition
               maxLength
               pattern
               patternFlags
@@ -36,6 +42,8 @@
               metadata {
                 friendlyName
                 description
+                cssClassFa
+                cssClassFaPosition
                 maxLength
                 pattern
                 patternFlags

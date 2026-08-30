@@ -53,6 +53,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -214,7 +215,11 @@ public class PetOwner implements Comparable<PetOwner> {
     }
 
     @Action
-    @ActionLayout(associateWith = "pets", sequence = "1")
+    @ActionLayout(
+            associateWith = "pets",
+            sequence = "1",
+            describedAs = "Adds a pet to this owner's household.",
+            cssClassFa = "paw")
     public PetOwner addPet(
             @Parameter(maxLength = 40) final String name,
             final PetSpecies species) {
@@ -231,7 +236,11 @@ public class PetOwner implements Comparable<PetOwner> {
     }
 
     @Action(choicesFrom = "pets")
-    @ActionLayout(associateWith = "pets", sequence = "2")
+    @ActionLayout(
+            associateWith = "pets",
+            sequence = "2",
+            describedAs = "Removes a pet and its visits from this owner.",
+            cssClassFa = "circle-minus")
     public PetOwner removePet(final Pet pet) {
         pet.clearVisits();
         pets.remove(pet);
@@ -244,7 +253,10 @@ public class PetOwner implements Comparable<PetOwner> {
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    @ActionLayout(describedAs = "Updates the owner's full name.")
+    @ActionLayout(
+            describedAs = "Updates the owner's full name.",
+            cssClassFa = "pen-to-square",
+            cssClassFaPosition = CssClassFaPosition.RIGHT)
     public PetOwner updateName(@Parameter(maxLength = 80) final String name) {
         setName(name);
         return this;
@@ -264,11 +276,20 @@ public class PetOwner implements Comparable<PetOwner> {
     }
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-    @ActionLayout(describedAs = "Deletes this pet owner and their related pets and visits.")
+    @ActionLayout(
+            describedAs = "Deletes this pet owner and their related pets and visits.",
+            cssClassFa = "trash-can")
     public void delete() {
         final var title = titleService.titleOf(this);
         repositoryService.removeAndFlush(this);
         messageService.informUser("'" + title + "' deleted");
+    }
+
+    @MemberSupport
+    public String disableDelete() {
+        return "owner-mary".equals(id)
+                ? "The fixture owner is retained for the presentation demonstration."
+                : null;
     }
 
     void addSeedPet(final Pet pet) {

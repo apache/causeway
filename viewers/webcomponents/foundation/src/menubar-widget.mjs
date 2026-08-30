@@ -6,6 +6,10 @@
  * to you under the Apache License, Version 2.0.
  */
 
+import {
+  appendActionContent,
+  normalizeActionPresentation
+} from './action-presentation.mjs';
 import {createVaadinMenuItems, resolveCausewayMenuAction} from './menubar-projection.mjs';
 
 export const CAUSEWAY_MENUBAR_CONTROL = 'cw-menubar-control';
@@ -235,9 +239,15 @@ function materializeMenuItems(items) {
       const menuItem = document.createElement('vaadin-menu-bar-item');
       if (item.causewayKey) menuItem.dataset.causewayKey = item.causewayKey;
       const label = document.createElement('span');
-      label.className = 'causeway-menubar-item-label';
-      label.textContent = item.text;
-      if (item.title) label.title = item.title;
+      const presentation = normalizeActionPresentation({
+        name: item.text,
+        description: item.description,
+        cssClassFa: item.causewayIconHint,
+        cssClassFaPosition: item.causewayIconPosition
+      });
+      label.className = `causeway-menubar-item-label${item.title ? ' causeway-action-control-tooltip' : ''}`;
+      appendActionContent(label, item.text, presentation.icon);
+      if (item.title) label.dataset.tooltip = item.title;
       if (item.causewayIconHint) label.dataset.iconHint = item.causewayIconHint;
       if (item.causewayDisabledReason) {
         label.setAttribute('aria-label', `${item.text}. Unavailable: ${item.causewayDisabledReason}`);
