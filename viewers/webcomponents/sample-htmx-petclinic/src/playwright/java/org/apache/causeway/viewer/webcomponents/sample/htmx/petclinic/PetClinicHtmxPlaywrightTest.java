@@ -213,6 +213,16 @@ class PetClinicHtmxPlaywrightTest {
                 .isEqualTo(nativeToolkit() ? 0 : 1);
         assertThat(toolkitRequests.stream().noneMatch(url -> !url.contains("/vaadin-menubar/"))).isTrue();
 
+        final var visitSearch = page.locator("cw-collection[id='futureVisits'] [data-causeway-collection-search]");
+        assertThat(visitSearch.isVisible()).isTrue();
+        visitSearch.fill("vaccination");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 1");
+        waitForCollectionRows("futureVisits", 1);
+        assertThat(page.locator("cw-collection[id='futureVisits']").innerText()).contains("Vaccination");
+        page.locator("cw-collection[id='futureVisits'] [data-causeway-collection-search-clear]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='futureVisits']\")?.collectionState?.window?.totalCount === 3");
+        waitForCollectionRows("futureVisits", 3);
+
         final var ownerSearch = page.locator("cw-collection[id='petOwners'] [data-causeway-collection-search]");
         assertThat(ownerSearch.isVisible()).isTrue();
         assertThat(ownerSearch.getAttribute("maxlength")).isEqualTo("256");
@@ -251,6 +261,16 @@ class PetClinicHtmxPlaywrightTest {
         waitForCollectionRows("pets", 2);
         waitForCollectionRows("visits", 1);
         assertThat(page.locator("cw-collection[id='pets']").getAttribute("sortable")).isEmpty();
+        assertThat(page.locator("cw-collection[id='pets']").getAttribute("filterable")).isEmpty();
+        final var petSearch = page.locator("cw-collection[id='pets'] [data-causeway-collection-search]");
+        assertThat(petSearch.isVisible()).isTrue();
+        petSearch.fill("cat");
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.totalCount === 1");
+        waitForCollectionRows("pets", 1);
+        assertThat(page.locator("cw-collection[id='pets']").innerText()).contains("Samantha");
+        page.locator("cw-collection[id='pets'] [data-causeway-collection-search-clear]").click();
+        page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.totalCount === 2");
+        waitForCollectionRows("pets", 2);
         page.locator("cw-collection[id='pets'] [data-causeway-collection-sort='name']").click();
         page.waitForFunction("() => document.querySelector(\"cw-collection[id='pets']\")?.collectionState?.window?.ordering === 'REQUESTED'");
         assertThat(page.locator("cw-collection[id='pets'] cw-action[id='addPet']").isVisible()).isTrue();

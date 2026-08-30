@@ -85,6 +85,7 @@ The corresponding Wicket route is `/wicket/object/petclinic.PetOwner:s_owner-mar
 
 The sample contains four pet owners, five pets, and three upcoming visits.
 Mary owns Basil and Samantha and has two scheduled visits.
+The home owner and upcoming-visit collections and each owner's pet collection demonstrate server-backed bounded search using application `CollectionFilterService` implementations.
 
 == HTML-authored pages and fallback
 

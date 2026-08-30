@@ -462,6 +462,7 @@ cw-collection {
 }
 cw-collection-grid {
   display: block;
+  font-size: var(--causeway-font-size-sm, 0.82rem);
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
@@ -474,12 +475,14 @@ cw-collection-grid {
   --vaadin-grid-header-text-color: var(--causeway-text, CanvasText);
   --vaadin-grid-row-background-color: var(--causeway-surface, Canvas);
   --vaadin-grid-row-hover-background-color: var(--causeway-surface-subtle, color-mix(in srgb, CanvasText 6%, Canvas));
+  --lumo-font-size-m: var(--causeway-font-size-sm, 0.82rem);
 }
 .causeway-collection-content {
   min-inline-size: 0;
+  padding-block: var(--causeway-collection-content-padding, 0.75rem);
 }
 .causeway-collection-search {
-  align-items: end;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: var(--causeway-collection-search-gap, 0.5rem);
@@ -492,14 +495,24 @@ cw-collection-grid {
   max-inline-size: 24rem;
   min-inline-size: min(16rem, 100%);
 }
-.causeway-collection-table th button[data-causeway-collection-sort] {
+.causeway-collection-search :is(input, button) {
+  block-size: var(--causeway-control-height, 2.35rem);
+}
+.causeway-collection-table th button[data-causeway-collection-sort],
+cw-collection-grid button[data-causeway-collection-sort] {
   background: transparent;
   border: 0;
   color: inherit;
   cursor: pointer;
   font: inherit;
   font-weight: inherit;
+  min-height: 0;
   padding: 0;
+}
+.causeway-collection-sort-indicator {
+  color: var(--causeway-muted, GrayText);
+  font-weight: 400;
+  margin-inline-start: 0.25rem;
 }
 .causeway-collection-pager {
   align-items: center;
@@ -511,10 +524,12 @@ cw-collection-grid {
 }
 .causeway-collection-table {
   border-collapse: collapse;
+  table-layout: fixed;
 }
 .causeway-collection-table th,
 .causeway-collection-table td {
   border-block-end: 1px solid #d0d0d0;
+  overflow-wrap: anywhere;
   padding: 0.35rem 0.5rem;
   text-align: start;
 }
