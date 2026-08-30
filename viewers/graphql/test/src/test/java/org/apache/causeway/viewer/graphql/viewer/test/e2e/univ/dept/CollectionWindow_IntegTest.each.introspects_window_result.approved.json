@@ -91,6 +91,33 @@
             "name" : "rich__gqlv_collection_window_ordering"
           }
         }
+      }, {
+        "name" : "sortableMembers",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "LIST",
+            "name" : null
+          }
+        }
+      }, {
+        "name" : "searchSupported",
+        "type" : {
+          "kind" : "NON_NULL",
+          "name" : null,
+          "ofType" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean"
+          }
+        }
+      }, {
+        "name" : "searchPrompt",
+        "type" : {
+          "kind" : "SCALAR",
+          "name" : "String",
+          "ofType" : null
+        }
       } ]
     }
   }

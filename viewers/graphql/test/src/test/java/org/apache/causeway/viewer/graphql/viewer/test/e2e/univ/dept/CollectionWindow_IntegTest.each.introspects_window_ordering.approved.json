@@ -8,6 +8,9 @@
         "name" : "CONFIGURED",
         "description" : "A Causeway configured comparator was applied."
       }, {
+        "name" : "REQUESTED",
+        "description" : "A requested accepted Causeway table-column sort was applied."
+      }, {
         "name" : "ENCOUNTER",
         "description" : "The materialized collection encounter order was retained without a cross-request stability guarantee."
       } ]

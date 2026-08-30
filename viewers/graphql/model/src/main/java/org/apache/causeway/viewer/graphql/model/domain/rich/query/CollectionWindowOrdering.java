@@ -20,5 +20,6 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 enum CollectionWindowOrdering {
     CONFIGURED,
+    REQUESTED,
     ENCOUNTER
 }

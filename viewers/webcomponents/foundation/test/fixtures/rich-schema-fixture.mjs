@@ -35,6 +35,7 @@ const UNSUPPORTED_GET_TYPE = `${UNSUPPORTED_TYPE}__gqlv_get`;
 const COLLECTION_TYPE = `${OBJECT_TYPE}__staffMembers__gqlv_collection`;
 const COLLECTION_WINDOW_TYPE = `${COLLECTION_TYPE}_window`;
 const COLLECTION_WINDOW_ORDERING_TYPE = 'rich__gqlv_collection_window_ordering';
+const COLLECTION_WINDOW_SORT_DIRECTION_TYPE = 'rich__gqlv_collection_window_sort_direction';
 const EMPTY_COLLECTION_TYPE = `${OBJECT_TYPE}__formerStaff__gqlv_collection`;
 const ACTION_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action`;
 const ACTION_PARAMS_TYPE = `${OBJECT_TYPE}__changeName__gqlv_action_params`;
@@ -200,6 +201,48 @@ export function createAutoCompleteWindowRichSchemaTypes() {
   return types;
 }
 
+export function createCriteriaWindowedRichSchemaTypes() {
+  const types = createWindowedRichSchemaTypes();
+  const collectionType = types.get(COLLECTION_TYPE);
+  types.set(COLLECTION_TYPE, objectType(COLLECTION_TYPE, null, collectionType.fields.map(candidate =>
+    candidate.name === 'window'
+      ? field(candidate.name, candidate.description, candidate.type, [
+          ...candidate.args,
+          argument('sortBy', scalar('String')),
+          argument('sortDirection', nonNull(enumeration(COLLECTION_WINDOW_SORT_DIRECTION_TYPE)), {defaultValue: 'ASCENDING'}),
+          argument('search', scalar('String'))
+        ])
+      : candidate)));
+  const windowType = types.get(COLLECTION_WINDOW_TYPE);
+  types.set(COLLECTION_WINDOW_TYPE, objectType(COLLECTION_WINDOW_TYPE, windowType.description, [
+    ...windowType.fields,
+    field('sortableMembers', null, nonNull(list(nonNull(scalar('String'))))),
+    field('searchSupported', null, nonNull(scalar('Boolean'))),
+    field('searchPrompt', null, scalar('String'))
+  ]));
+  types.set(COLLECTION_WINDOW_ORDERING_TYPE, {
+    ...types.get(COLLECTION_WINDOW_ORDERING_TYPE),
+    enumValues: [
+      {name: 'CONFIGURED', description: 'A Causeway configured comparator was applied.'},
+      {name: 'REQUESTED', description: 'A requested accepted sort was applied.'},
+      {name: 'ENCOUNTER', description: 'Encounter order was retained.'}
+    ]
+  });
+  types.set(COLLECTION_WINDOW_SORT_DIRECTION_TYPE, {
+    kind: 'ENUM',
+    name: COLLECTION_WINDOW_SORT_DIRECTION_TYPE,
+    description: 'Direction for a requested collection-window sort.',
+    fields: [],
+    inputFields: [],
+    enumValues: [
+      {name: 'ASCENDING', description: null},
+      {name: 'DESCENDING', description: null}
+    ],
+    possibleTypes: []
+  });
+  return types;
+}
+
 export function createVersionlessRichSchemaTypes({windowed = false} = {}) {
   const types = windowed ? createWindowedRichSchemaTypes() : createRichSchemaTypes();
   const metadataType = types.get(STAFF_META_TYPE);
@@ -317,7 +360,16 @@ export function departmentObjectData({
   };
 }
 
-export function collectionWindowResponse({rows = [], offset = 0, requestedSize = 20, totalCount = rows.length} = {}) {
+export function collectionWindowResponse({
+  rows = [],
+  offset = 0,
+  requestedSize = 20,
+  totalCount = rows.length,
+  ordering = 'ENCOUNTER',
+  sortableMembers,
+  searchSupported,
+  searchPrompt
+} = {}) {
   return {
     data: {
       rich: {
@@ -332,7 +384,10 @@ export function collectionWindowResponse({rows = [], offset = 0, requestedSize =
               maximumSize: 100,
               hasPrevious: offset > 0 && totalCount > 0,
               hasNext: offset + rows.length < totalCount,
-              ordering: 'ENCOUNTER'
+              ordering,
+              ...(sortableMembers === undefined ? {} : {sortableMembers}),
+              ...(searchSupported === undefined ? {} : {searchSupported}),
+              ...(searchPrompt === undefined ? {} : {searchPrompt})
             }
           }
         }

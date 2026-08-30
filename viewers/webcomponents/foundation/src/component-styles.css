@@ -477,6 +477,29 @@ cw-collection-grid {
 .causeway-collection-content {
   min-inline-size: 0;
 }
+.causeway-collection-search {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--causeway-collection-search-gap, 0.5rem);
+  margin-block-end: var(--causeway-collection-search-margin, 0.75rem);
+}
+.causeway-collection-search label {
+  font-weight: 600;
+}
+.causeway-collection-search input {
+  max-inline-size: 24rem;
+  min-inline-size: min(16rem, 100%);
+}
+.causeway-collection-table th button[data-causeway-collection-sort] {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: inherit;
+  padding: 0;
+}
 .causeway-collection-pager {
   align-items: center;
   display: flex;

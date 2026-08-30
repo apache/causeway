@@ -216,7 +216,7 @@ class PetClinicHtmxApplication_IntegTest {
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")
                 .contains("id=\"lastVisit\" editable label-position=\"TOP\"")
-                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active>")
+                .contains("<cw-collection id=\"pets\" named=\"Companion animals\" active sortable>")
                 .contains("<cw-action id=\"addPet\"")
                 .contains("<cw-action id=\"removePet\"")
                 .contains("<cw-collection id=\"visits\" named=\"Visit history\"")
@@ -231,7 +231,7 @@ class PetClinicHtmxApplication_IntegTest {
         }
         assertThat(homeHtml)
                 .contains("<cw-collection id=\"futureVisits\" named=\"Next appointments\" active>")
-                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"2\">")
+                .contains("<cw-collection id=\"petOwners\" label=\"Pet owners\" active paged=\"2\" sortable filterable>")
                 .doesNotContain("id=\"petOwners\" named=", "id=\"petOwners\" described-as=", " offset=", " size=");
         assertThat(ownerHtml.indexOf("id=\"addPet\""))
                 .isLessThan(ownerHtml.indexOf("id=\"removePet\""));
@@ -277,6 +277,32 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(application.at("/data/rich/application/home/logicalTypeName").asText()).isEqualTo("petclinic.HomePage");
         assertThat(application.at("/data/rich/application/home/object/_meta/title").asText())
                 .contains("4 pet owners", "3 upcoming visits");
+        final var homeId = application.at("/data/rich/application/home/object/_meta/id").asText();
+        final var ownerWindow = graphQL("""
+                query PetClinicOwnerWindow {
+                  rich {
+                    petclinic_HomePage(object: {id: "%s"}) {
+                      petOwners {
+                        window(search: "mary", sortBy: "name", sortDirection: DESCENDING, size: 2) {
+                          totalCount ordering sortableMembers searchSupported searchPrompt
+                          rows { name { get } }
+                        }
+                      }
+                    }
+                  }
+                }
+                """.formatted(homeId));
+        assertNoGraphQLErrors(ownerWindow);
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/totalCount").asInt()).isEqualTo(1);
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/ordering").asText())
+                .isEqualTo("REQUESTED");
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/searchSupported").asBoolean()).isTrue();
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/searchPrompt").asText())
+                .isEqualTo("Search owner names");
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/sortableMembers").toString())
+                .contains("\"name\"");
+        assertThat(ownerWindow.at("/data/rich/petclinic_HomePage/petOwners/window/rows/0/name/get").asText())
+                .isEqualTo("Mary Smith");
 
         final var menuHref = application.at("/data/rich/application/menuBars/href").asText();
         final var menuBars = get(menuHref);
