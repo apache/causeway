@@ -82,6 +82,9 @@ cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-act
   margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
   min-inline-size: 0;
 }
+cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] > .causeway-action {
+  margin-block-start: var(--causeway-associated-action-margin-block-start, 0);
+}
 cw-collection[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
   flex: 0 1 auto;
   margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
