@@ -117,7 +117,7 @@
   border-block-end: 1px solid var(--causeway-border);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--causeway-space-4);
+  gap: var(--causeway-space-5);
   min-width: 0;
 }
 
