@@ -532,8 +532,32 @@ class PetClinicHtmxPlaywrightTest {
         assertThat(email.getAttribute("data-label-position")).isEqualTo("TOP");
         assertThat(page.locator("cw-property[id='emailAddress'] .causeway-property-description").textContent())
                 .isEqualTo("Email address used for appointment reminders.");
-        assertThat(page.locator("cw-property[id='lastVisit'] .causeway-property")
+        final var lastVisit = page.locator("cw-property[id='lastVisit']");
+        assertThat(lastVisit.locator(".causeway-property")
                 .getAttribute("data-label-position")).isEqualTo("TOP");
+        if (!nativeToolkit()) {
+            page.evaluate("() => { document.documentElement.lang = 'en-GB'; }");
+            lastVisit.locator("[data-causeway-action='edit']").click();
+            final var lastVisitEditorSelector = "cw-property[id='lastVisit'] [data-causeway-editor='lastVisit']";
+            final var lastVisitEditor = resolveEditor(lastVisitEditorSelector);
+            assertThat(lastVisitEditor.evaluate("element => element.inputElement?.value")).isEqualTo("12/08/2026");
+            assertThat(lastVisitEditor.evaluate("element => element.value")).isEqualTo("2026-08-12");
+            lastVisitEditor.focus();
+            page.keyboard().press("Tab");
+            assertThat(lastVisitEditor.evaluate(
+                    "element => element.shadowRoot?.activeElement?.hasAttribute('data-causeway-calendar-trigger')"))
+                    .as("Tab should move focus from the date input to its calendar trigger")
+                    .isEqualTo(true);
+            final var calendarTrigger = lastVisitEditor.locator("[data-causeway-calendar-trigger]");
+            assertThat(calendarTrigger.getAttribute("role")).isEqualTo("button");
+            assertThat(calendarTrigger.getAttribute("aria-label")).isEqualTo("Open Last Visit calendar");
+            page.keyboard().press("Enter");
+            page.waitForFunction("selector => document.querySelector(selector)?.opened === true", lastVisitEditorSelector);
+            assertThat(lastVisit.locator("[data-causeway-action='save']").count()).isEqualTo(1);
+            lastVisitEditor.evaluate("element => element.close()");
+            lastVisit.locator("[data-causeway-action='cancel']").click();
+            page.evaluate("() => { document.documentElement.lang = 'en'; }");
+        }
         final var knownAsEdit = knownAs.locator("[data-causeway-action='edit']");
         knownAsEdit.click();
         final var knownAsEditorSelector = "cw-property[id='knownAs'] [data-causeway-editor='knownAs']";
