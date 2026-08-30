@@ -148,6 +148,7 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(get("/causeway-webcomponents/theme.css").statusCode()).isEqualTo(200);
         assertThat(get("/css/application.css").body())
                 .contains(".petclinic-object-heading {")
+                .contains("gap: var(--causeway-space-5);")
                 .contains(".petclinic-object-heading > cw-object-header {")
                 .contains(".petclinic-object-heading .causeway-object-header {");
         assertThat(get("/webjars/htmx.org/2.0.6/dist/htmx.min.js").statusCode()).isEqualTo(200);

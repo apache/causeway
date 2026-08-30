@@ -106,6 +106,7 @@ test('direct member associations wrap in semantic source and keyboard order', ()
 test('property-associated actions align with the effective field column responsively', async () => {
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\] \{[\s\S]*?display: grid;[\s\S]*?grid-template-columns: var\(--causeway-property-label-column/);
   assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 2;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /> cw-action\[data-causeway-associated-action\] > \.causeway-action \{\s+margin-block-start: var\(--causeway-associated-action-margin-block-start, 0\);/);
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   assert.match(theme, /cw-property\[data-causeway-action-group\] \{\s+grid-template-columns: minmax\(7rem, var\(--causeway-label-width\)\) minmax\(0, 1fr\) auto;/);
   assert.match(theme, /cw-property\[data-causeway-action-group\] > cw-action\[data-causeway-associated-action\] \{\s+grid-column: 2 \/ -1;/);
