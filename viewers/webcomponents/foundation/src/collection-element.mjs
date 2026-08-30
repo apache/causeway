@@ -306,6 +306,10 @@ export class CausewayCollectionElement extends CausewayContextConsumerElement {
     this._columns = [...(value ?? [])]
       .map(column => typeof column === 'string' ? {member: column, label: humanize(column)} : {...column})
       .filter(column => column.member);
+    if (this.sortCriterion && !this._columns.some(column => column.member === this.sortCriterion.member)) {
+      this.sortCriterion = null;
+      this.criteriaFocusIntent = null;
+    }
     if (this.active && this.componentState?.status === 'ready') {
       void this.load({force: true});
     } else if (this.componentState) {
