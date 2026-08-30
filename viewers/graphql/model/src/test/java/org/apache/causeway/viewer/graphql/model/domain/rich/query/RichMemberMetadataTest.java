@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -82,6 +83,29 @@ class RichMemberMetadataTest {
         } finally {
             LocaleContextHolder.resetLocaleContext();
         }
+    }
+
+    @Test
+    void exposesCanonicalActionConfirmationMetadataOnlyForActions() {
+        var destructiveAction = mock(ObjectAction.class);
+        when(destructiveAction.getCanonicalFriendlyName()).thenReturn("Delete");
+        when(destructiveAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        when(destructiveAction.getSemantics()).thenReturn(SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE);
+        assertThat(new RichMemberMetadata(context(), destructiveAction, false).fetchData(null))
+                .containsEntry("areYouSure", true);
+
+        var ordinaryAction = mock(ObjectAction.class);
+        when(ordinaryAction.getCanonicalFriendlyName()).thenReturn("Update");
+        when(ordinaryAction.getCanonicalDescription()).thenReturn(Optional.empty());
+        when(ordinaryAction.getSemantics()).thenReturn(SemanticsOf.IDEMPOTENT);
+        assertThat(new RichMemberMetadata(context(), ordinaryAction, false).fetchData(null))
+                .containsEntry("areYouSure", false);
+
+        var ordinaryFeature = mock(ObjectFeature.class);
+        when(ordinaryFeature.getCanonicalFriendlyName()).thenReturn("Name");
+        when(ordinaryFeature.getCanonicalDescription()).thenReturn(Optional.empty());
+        assertThat(new RichMemberMetadata(context(), ordinaryFeature, false).fetchData(null))
+                .containsEntry("areYouSure", null);
     }
 
     @Test

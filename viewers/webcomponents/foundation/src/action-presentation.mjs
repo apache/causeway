@@ -32,6 +32,7 @@ export function normalizeActionPresentation(value = {}) {
   return Object.freeze({
     name,
     description: normalizedDistinctDescription(description, name),
+    areYouSure: value.areYouSure === true,
     icon: normalizeFontAwesomeIcon(value.cssClassFa, value.cssClassFaPosition)
   });
 }

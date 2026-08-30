@@ -439,12 +439,17 @@ test('action names descriptions disabled reasons and Font Awesome hints share on
     data: {
       hidden: false,
       disabled: null,
-      metadata: {friendlyName: 'Canonical order name', description: 'Creates an order for this customer.'}
+      metadata: {
+        friendlyName: 'Canonical order name',
+        description: 'Creates an order for this customer.',
+        areYouSure: true
+      }
     }
   }));
   assert.equal(action.activate(), true);
   assert.equal(request.presentation.name, 'Place a new order');
   assert.equal(request.presentation.description, 'Creates an order for this customer.');
+  assert.equal(request.presentation.areYouSure, true);
   assert.deepEqual(request.presentation.parameters, action.parameterPresentations);
 });
 

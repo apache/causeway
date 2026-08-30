@@ -95,12 +95,30 @@ test('service descriptions and current action state use one logical-service quer
   const state = await context.loadActionStates(['welcomeMessage', 'disabledAction', 'hiddenAction']);
 
   assert.equal(state.states.get('welcomeMessage').hidden, false);
+  assert.equal(state.states.get('welcomeMessage').metadata.areYouSure, false);
   assert.equal(state.states.get('disabledAction').disabled, 'Available to administrators only.');
   assert.equal(state.states.get('hiddenAction').hidden, true);
   assert.equal(executor.serviceCalls.length, 1);
   assert.match(executor.serviceCalls[0].document, /causeway_webcomponents_sample_SampleMenu\s*\{/);
+  assert.match(executor.serviceCalls[0].document, /metadata\s*\{\s*areYouSure/);
   assert.doesNotMatch(executor.serviceCalls[0].document, /\$object|object:/);
   assert.deepEqual(executor.serviceCalls[0].variables, {});
+});
+
+test('service action state remains compatible when confirmation metadata is unavailable', async () => {
+  const types = createMenuGraphQLTypes();
+  for (const [name, descriptor] of types) {
+    if (name.endsWith('__gqlv_action')) {
+      types.set(name, {...descriptor, fields: descriptor.fields.filter(field => field.name !== 'metadata')});
+    }
+  }
+  const executor = createMenuGraphQLExecutor({types});
+  const client = new CausewayGraphQLClient({executor});
+  const context = new ServiceActionContextController({client, logicalTypeName: SAMPLE_SERVICE_LOGICAL_TYPE});
+  const state = await context.loadActionStates(['welcomeMessage']);
+
+  assert.equal(state.states.get('welcomeMessage').hidden, false);
+  assert.doesNotMatch(executor.serviceCalls[0].document, /metadata\s*\{/);
 });
 
 test('service action adapter reuses parameter preparation, validation, safe invocation, and typed results', async () => {

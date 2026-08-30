@@ -362,6 +362,7 @@ export class CausewayMenubarElement extends HTMLElementBase {
       presentation: normalizeActionPresentation({
         name: descriptor?.label || humanize(actionId),
         description: descriptor?.description,
+        areYouSure: descriptor?.areYouSure,
         cssClassFa: descriptor?.iconHint,
         cssClassFaPosition: descriptor?.iconPosition
       })

@@ -212,6 +212,7 @@ export class CausewayActionElement extends CausewayContextConsumerElement {
     const presentation = normalizeActionPresentation({
       name: this.named || this.label || metadata.friendlyName || humanize(this.id),
       description: metadata.description || state?.descriptor?.description || '',
+      areYouSure: metadata.areYouSure,
       cssClassFa: metadata.cssClassFa,
       cssClassFaPosition: metadata.cssClassFaPosition
     });
