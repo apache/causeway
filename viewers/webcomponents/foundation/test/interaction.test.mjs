@@ -768,6 +768,38 @@ test('standard action controller renders prompts, blocks invalid input, invokes 
   assert.ok(calls.includes('invoke:Updated'));
 });
 
+test('action prompt applies partial authored parameter presentation without changing authority', async () => {
+  const parameters = [
+    {id: 'notes', description: 'Canonical notes', inputType: scalar('String'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, validity: null}},
+    {id: 'reason', description: 'Canonical reason', inputType: scalar('String'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, validity: null}},
+    {id: 'species', description: 'Species', inputType: scalar('String'), enumValues: [], fields: new Map(), state: {hidden: false, disabled: null, validity: null}}
+  ];
+  const context = {
+    async prepareAction() {
+      return {status: 'success', errors: [], data: {parameters}};
+    }
+  };
+  const controller = new CausewayInteractionControllerElement();
+  document.body.appendChild(controller);
+  assert.equal(await controller.beginAction('customize', context, null, {
+    parameters: [
+      {parameter: 'notes', named: 'Visit notes', describedAs: 'Private <clinical> context', descriptionAs: 'tooltip', multiLine: 4},
+      {parameter: 'reason', named: null, describedAs: 'Explain the appointment', descriptionAs: 'label', multiLine: null},
+      {parameter: 'unknown', named: 'Must not render', describedAs: null, descriptionAs: null, multiLine: null}
+    ]
+  }), true);
+
+  assert.match(controller.innerHTML, /data-parameter="notes" data-multi-line="4"/);
+  assert.match(controller.innerHTML, /class="causeway-action-parameter-label causeway-member-tooltip"[^>]+data-tooltip="Private &lt;clinical&gt; context"[^>]*>Visit notes<\/label>/);
+  assert.match(controller.innerHTML, /causeway-action-parameter-description causeway-visually-hidden">Private &lt;clinical&gt; context<\/span>/);
+  assert.match(controller.innerHTML, /data-control="text-area"[^>]+data-rows="4"/);
+  assert.match(controller.innerHTML, /data-parameter="reason"[\s\S]*?>Reason<\/label>[\s\S]*?causeway-action-parameter-description">Explain the appointment<\/span>/);
+  assert.match(controller.innerHTML, /data-parameter="species"[\s\S]*?>Species<\/label>/);
+  assert.doesNotMatch(controller.innerHTML, /Must not render|data-parameter="unknown"/);
+  assert.deepEqual(controller.promptState.parameters, parameters);
+  controller.cancelPrompt();
+});
+
 test('action prompt defers prepared validity and recomputation until focus completion', async () => {
   const calls = [];
   const target = (id, value) => ({

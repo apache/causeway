@@ -20,9 +20,14 @@
 import {normalizeActionPresentation} from './action-presentation.mjs';
 import {CausewaySemanticEvent} from './component-contracts.mjs';
 import {createSemanticEvent} from './context-events.mjs';
+import {
+  boundedTooltipSection,
+  DescriptionPresentation
+} from './description-presentation.mjs';
 import {defaultEditorRegistry, parseCausewayEditorValue, renderCausewayEditor} from './editor-registry.mjs';
 import {causewayReferenceWidgetConfiguration} from './reference-widget.mjs';
 import {escapeHtml} from './rendering.mjs';
+import {normalizeActionParameterConfigurations} from './parameter-element.mjs';
 import {InteractionStatus} from './types.mjs';
 import {CausewayValueCodecError, semanticTypeName} from './value-codecs.mjs';
 
@@ -182,6 +187,7 @@ export class CausewayInteractionControllerElement extends HTMLElement {
         cssClassFa: presentation?.icon?.classes?.join(' '),
         cssClassFaPosition: presentation?.icon?.position
       }),
+      parameterPresentations: normalizeActionParameterConfigurations(presentation?.parameters),
       values: Object.freeze({}),
       parameters: Object.freeze([]),
       error: null
@@ -646,14 +652,21 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       return '';
     }
     const choices = parameter.state?.choices ?? parameter.enumValues ?? [];
-    const editorContext = this.#parameterEditorContext(parameter, choices);
+    const presentation = this.#parameterPresentation(parameter);
+    const editorContext = this.#parameterEditorContext(parameter, choices, presentation);
     const rendered = renderCausewayEditor(editorContext, this._editorRegistry);
-    const label = humanize(parameter.id);
-    const description = this.#parameterDescription(parameter, label);
     const reason = protectedPromptText(this.promptState, this.#parameterReason(parameter));
-    return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}">
-  <label id="${editorContext.labelId}" for="${editorContext.inputId}">${escapeHtml(label)}</label>
-  ${description ? `<span id="${editorContext.descriptionId}" class="causeway-action-parameter-description">${escapeHtml(description)}</span>` : ''}
+    const tooltip = presentation.descriptionAs === DescriptionPresentation.TOOLTIP
+      ? boundedTooltipSection(presentation.description)
+      : '';
+    const labelClass = `causeway-action-parameter-label${tooltip ? ' causeway-member-tooltip' : ''}`;
+    const labelAttributes = tooltip
+      ? ` tabindex="0" data-tooltip="${escapeHtml(tooltip)}" aria-describedby="${editorContext.descriptionId}"`
+      : '';
+    const descriptionClass = `causeway-action-parameter-description${presentation.descriptionAs === DescriptionPresentation.TOOLTIP ? ' causeway-visually-hidden' : ''}`;
+    return `<div class="causeway-action-parameter${reason ? ' causeway-error' : ''}" data-parameter="${escapeHtml(parameter.id)}"${presentation.multiLine ? ` data-multi-line="${presentation.multiLine}"` : ''}>
+  <label id="${editorContext.labelId}" class="${labelClass}" for="${editorContext.inputId}"${labelAttributes}>${escapeHtml(presentation.label)}</label>
+  ${presentation.description ? `<span id="${editorContext.descriptionId}" class="${descriptionClass}">${escapeHtml(presentation.description)}</span>` : ''}
   ${rendered.html}
   ${reason ? `<span id="${editorContext.errorId}" class="causeway-action-parameter-reason" role="alert">${escapeHtml(reason)}</span>` : ''}
 </div>`;
@@ -666,12 +679,12 @@ export class CausewayInteractionControllerElement extends HTMLElement {
     return validationReason || parameter.state?.disabled || '';
   }
 
-  #parameterEditorContext(parameter, choices) {
+  #parameterEditorContext(parameter, choices, presentation = this.#parameterPresentation(parameter)) {
     const state = this.promptState;
     const reason = this.#parameterReason(parameter);
     return {
       name: parameter.id,
-      label: humanize(parameter.id),
+      label: presentation.label,
       value: Object.prototype.hasOwnProperty.call(state.values, parameter.id)
         ? state.values[parameter.id]
         : parameter.state?.default ?? null,
@@ -685,18 +698,32 @@ export class CausewayInteractionControllerElement extends HTMLElement {
       inputType: parameter.inputType,
       semanticType: parameter.state?.datatype ?? null,
       required: parameter.inputType?.kind === 'NON_NULL',
+      multiLine: presentation.multiLine,
       inputId: `causeway-action-parameter-${parameter.id}`,
       labelId: `causeway-action-parameter-${parameter.id}-label`,
-      descriptionId: this.#parameterDescription(parameter) ? `causeway-action-parameter-${parameter.id}-description` : '',
+      descriptionId: presentation.description ? `causeway-action-parameter-${parameter.id}-description` : '',
       errorId: reason ? `causeway-action-parameter-${parameter.id}-error` : '',
       testId: `action-prompt-parameter-${parameter.id}`,
       disabled: Boolean(parameter.state?.disabled) || state.status === InteractionStatus.INVOKING
     };
   }
 
-  #parameterDescription(parameter, label = humanize(parameter.id)) {
-    const description = String(parameter.description ?? '').trim();
-    return description.toLocaleLowerCase() === label.trim().toLocaleLowerCase() ? '' : description;
+  #parameterPresentation(parameter) {
+    const authored = this.promptState?.parameterPresentations
+      ?.find(candidate => candidate.parameter === parameter.id);
+    const label = authored && authored.named !== null ? authored.named : humanize(parameter.id);
+    const candidateDescription = authored && authored.describedAs !== null
+      ? authored.describedAs
+      : String(parameter.description ?? '');
+    const description = candidateDescription.trim().toLocaleLowerCase() === label.trim().toLocaleLowerCase()
+      ? ''
+      : candidateDescription;
+    return Object.freeze({
+      label,
+      description,
+      descriptionAs: authored?.descriptionAs ?? DescriptionPresentation.LABEL,
+      multiLine: authored?.multiLine ?? null
+    });
   }
 
   #resultMarkup() {
