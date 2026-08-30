@@ -333,6 +333,15 @@ cw-action {
   border-block-end: 1px solid color-mix(in srgb, var(--causeway-border) 65%, transparent);
 }
 
+cw-property[data-causeway-action-group] {
+  grid-template-columns: minmax(7rem, var(--causeway-label-width)) minmax(0, 1fr) auto;
+  gap: var(--causeway-space-2) var(--causeway-space-3);
+}
+
+cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
+  grid-column: 2 / -1;
+}
+
 cw-property:last-child .causeway-property {
   border-block-end: 0;
 }
@@ -664,8 +673,13 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
 }
 
 @container (max-width: 32rem) {
-  .causeway-property {
+  .causeway-property,
+  cw-property[data-causeway-action-group] {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
+    grid-column: 1 / -1;
   }
 
   .causeway-property-label,
@@ -714,8 +728,13 @@ cw-interaction-controller:has(.causeway-action-prompt)::before {
     grid-column: 1 / -1 !important;
   }
 
-  .causeway-property {
+  .causeway-property,
+  cw-property[data-causeway-action-group] {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
+    grid-column: 1 / -1;
   }
 
   .causeway-property-label,

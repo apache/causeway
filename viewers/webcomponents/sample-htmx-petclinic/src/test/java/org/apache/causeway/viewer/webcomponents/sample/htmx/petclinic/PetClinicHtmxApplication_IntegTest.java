@@ -146,6 +146,10 @@ class PetClinicHtmxApplication_IntegTest {
         assertThat(get("/causeway-htmx/causeway-htmx.mjs").statusCode()).isEqualTo(200);
         assertThat(get("/causeway-webcomponents/component-styles.css").statusCode()).isEqualTo(200);
         assertThat(get("/causeway-webcomponents/theme.css").statusCode()).isEqualTo(200);
+        assertThat(get("/css/application.css").body())
+                .contains(".petclinic-object-heading {")
+                .contains(".petclinic-object-heading > cw-object-header {")
+                .contains(".petclinic-object-heading .causeway-object-header {");
         assertThat(get("/webjars/htmx.org/2.0.6/dist/htmx.min.js").statusCode()).isEqualTo(200);
         assertThat(get("/webjars/font-awesome/7.3.0/css/all.min.css").statusCode()).isEqualTo(200);
         assertThat(get("/webjars/font-awesome/7.3.0/webfonts/fa-solid-900.woff2").statusCode()).isEqualTo(200);
@@ -221,6 +225,7 @@ class PetClinicHtmxApplication_IntegTest {
             ownerHtml = new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
         assertThat(ownerHtml)
+                .contains("<div class=\"petclinic-object-heading\">\n    <cw-object-header></cw-object-header>\n    <div class=\"petclinic-page-toolbar\" aria-label=\"Owner actions\">\n      <cw-action id=\"delete\"")
                 .contains("<cw-property id=\"name\" named=\"Full name\">\n            <cw-action id=\"updateName\"")
                 .contains("id=\"knownAs\" editable\n                       described-as=\"The familiar or preferred name used by this owner.\"")
                 .contains("id=\"notes\" editable multi-line=\"5\"")

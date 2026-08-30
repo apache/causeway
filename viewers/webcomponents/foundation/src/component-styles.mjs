@@ -55,7 +55,13 @@ cw-object {
 .causeway-object-associated-actions {
   margin-block: -0.25rem 0.75rem;
 }
-cw-property[data-causeway-action-group],
+cw-property[data-causeway-action-group] {
+  align-items: start;
+  display: grid;
+  gap: var(--causeway-property-row-gap, 0.25rem) var(--causeway-property-column-gap, 1rem);
+  grid-template-columns: var(--causeway-property-label-column, minmax(8rem, 1fr)) minmax(0, 2fr);
+  min-inline-size: 0;
+}
 cw-collection[data-causeway-action-group] {
   align-items: flex-start;
   display: flex;
@@ -63,12 +69,19 @@ cw-collection[data-causeway-action-group] {
   gap: var(--causeway-associated-action-gap, var(--causeway-object-action-gap, 0.5rem));
   min-inline-size: 0;
 }
-cw-property[data-causeway-action-group] > .causeway-member-primary,
+cw-property[data-causeway-action-group] > .causeway-member-primary {
+  grid-column: 1 / -1;
+  min-inline-size: 0;
+}
 cw-collection[data-causeway-action-group] > .causeway-member-primary {
   flex: 1 0 100%;
   min-inline-size: 0;
 }
-cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action],
+cw-property[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
+  grid-column: 2;
+  margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
+  min-inline-size: 0;
+}
 cw-collection[data-causeway-action-group] > cw-action[data-causeway-associated-action] {
   flex: 0 1 auto;
   margin-block-end: var(--causeway-associated-action-margin-block-end, 0.75rem);
