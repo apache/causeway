@@ -27,12 +27,14 @@ export class CausewayBreadcrumbsElement extends CausewayContextConsumerElement {
 
   renderComponentState(state) {
     if (['idle', 'schema-loading', 'object-loading'].includes(state.status)) {
+      this.hidden = false;
       this.innerHTML = `<nav class="causeway-breadcrumbs" aria-label="Breadcrumb" aria-busy="true">
   <span role="status">Loading breadcrumbs…</span>
 </nav>`;
       return;
     }
     if (['terminal-error', 'unsupported', 'partial-error'].includes(state.status)) {
+      this.hidden = false;
       this.innerHTML = `<nav class="causeway-breadcrumbs causeway-error" aria-label="Breadcrumb" aria-busy="false">
   <span role="alert">${escapeHtml(errorMessage(state))}</span>
 </nav>`;
@@ -42,6 +44,12 @@ export class CausewayBreadcrumbsElement extends CausewayContextConsumerElement {
     const ancestors = Array.isArray(metadata.breadcrumbs)
       ? metadata.breadcrumbs.filter(validBreadcrumb)
       : [];
+    if (ancestors.length === 0) {
+      this.hidden = true;
+      this.innerHTML = '';
+      return;
+    }
+    this.hidden = false;
     const currentTitle = metadata.title || `${metadata.logicalTypeName ?? ''}:${metadata.id ?? ''}`;
     const ancestorItems = ancestors.map(ancestor => `<li class="causeway-breadcrumbs-item">
     <cw-object-link logical-type="${escapeHtml(ancestor.logicalTypeName)}" object-id="${escapeHtml(ancestor.id)}" title="${escapeHtml(ancestor.title)}"></cw-object-link>
