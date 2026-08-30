@@ -878,9 +878,12 @@ test('collection host owns server-backed sort and search criteria across native 
   collection.context = context;
   document.body.appendChild(collection);
   await waitFor(() => collection.collectionState.status === 'ready');
+  collection.acceptGridResponsiveState(true);
 
   assert.match(collection.innerHTML, /data-causeway-collection-sort="name"/);
+  assert.match(collection.innerHTML, /causeway-collection-sort-indicator[^>]*aria-hidden="true">↕/);
   assert.match(collection.innerHTML, /Search owners/);
+  assert.equal(collection.gridQualification.reason, 'ordering-not-deterministic');
   assert.equal(requests[0].sortBy, null);
   assert.equal(requests[0].search, '');
 
@@ -892,10 +895,12 @@ test('collection host owns server-backed sort and search criteria across native 
   assert.equal(requests[1].offset, 0);
   assert.equal(requests[1].sortBy, 'name');
   assert.equal(requests[1].sortDirection, 'ASCENDING');
+  assert.equal(collection.gridQualification.reason, 'ordering-not-deterministic');
 
   sortButton.dispatchEvent(new Event('click', {bubbles: true}));
   await waitFor(() => requests.length === 3 && collection.collectionState.status === 'ready');
   assert.equal(requests[2].sortDirection, 'DESCENDING');
+  assert.equal(collection.gridQualification.reason, 'ordering-not-deterministic');
 
   const search = document.createElement('input');
   search.setAttribute('data-causeway-collection-search', '');

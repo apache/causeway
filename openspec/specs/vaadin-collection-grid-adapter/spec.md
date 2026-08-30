@@ -269,6 +269,11 @@ Vaadin Grid MUST NOT create an independent paging state machine.
 - **THEN** the adapter receives only the current bounded window as items
 - **AND** Causeway-owned paging controls navigate normalized server offsets
 
+#### Scenario: Bounded Grid fits its current page
+- **WHEN** the adapter renders a bounded page as Grid
+- **THEN** Grid height fits the current bounded rows without retaining its default empty viewport
+- **AND** virtual Grid retains its bounded scrolling viewport
+
 #### Scenario: Unpaged collection has a safe total
 - **WHEN** a qualified collection has no page-size override and reports a stable total
 - **THEN** established virtual Grid qualification remains available
@@ -284,9 +289,14 @@ Filtering SHALL remain a collection-host control shared with native presentation
 - **AND** activating it reports only the semantic member and next bounded direction to the host
 
 #### Scenario: Grid presentation is replaced
-- **WHEN** criteria, responsive mode, route generation, policy, columns, or collection state replaces the adapter presentation
+- **WHEN** responsive mode, route generation, policy, columns, or collection state replaces the adapter presentation
 - **THEN** current header controls reflect only the current immutable criterion
 - **AND** stale header callbacks cannot restore superseded rows or criteria
+
+#### Scenario: Requested ordering retains baseline qualification
+- **WHEN** a sort criterion changes the authoritative window ordering to `REQUESTED`
+- **THEN** Grid ordering qualification retains the collection's pre-criterion ordering basis
+- **AND** sorting alone does not switch native and Grid typography or column allocation
 
 #### Scenario: Grid falls back to native
 - **WHEN** Grid no longer qualifies while sorting or filtering is active

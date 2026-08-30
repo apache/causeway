@@ -56,13 +56,19 @@ test('stable positive total and deterministic ordering qualify virtual Grid', ()
   assert.equal(Object.isFrozen(result.lifecycle), true);
 });
 
-test('requested server sorting is deterministic for Grid qualification', () => {
-  const result = qualifyCausewayCollectionGrid(candidate({
+test('requested server sorting is deterministic without upgrading an unstable baseline presentation', () => {
+  const requested = candidate({
     window: {...candidate().window, ordering: 'REQUESTED'}
-  }));
+  });
+  const result = qualifyCausewayCollectionGrid(requested);
   assert.equal(result.qualified, true);
   assert.equal(result.presentation, CausewayCollectionPresentation.GRID_VIRTUAL);
   assert.equal(result.ordering, 'REQUESTED');
+
+  const baselineUnstable = qualifyCausewayCollectionGrid({...requested, orderingBasis: 'ENCOUNTER'});
+  assert.equal(baselineUnstable.qualified, false);
+  assert.equal(baselineUnstable.reason, 'ordering-not-deterministic');
+  assert.equal(baselineUnstable.ordering, 'REQUESTED');
 });
 
 test('explicit bounded paging suppresses virtual Grid even when total count is available', () => {

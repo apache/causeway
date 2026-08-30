@@ -1786,7 +1786,8 @@ Both attributes SHALL default off and MUST NOT transform only the currently load
 
 #### Scenario: Sorting is enabled
 - **WHEN** a collection declares `sortable` and its window advertises one or more declared columns as sortable
-- **THEN** accessible column-header controls can select one ascending or descending server criterion
+- **THEN** accessible column-header controls visibly indicate their sortable affordance before a direction is selected
+- **AND** they can select one ascending or descending server criterion
 - **AND** the collection reloads offset zero before paging or virtual ranges continue with that criterion
 
 #### Scenario: Filtering is enabled
@@ -1808,6 +1809,11 @@ Both attributes SHALL default off and MUST NOT transform only the currently load
 - **WHEN** responsive, policy, ordering, capability, or adapter failure selects native presentation
 - **THEN** the same Causeway sorting and filtering criteria remain operable through native semantic controls
 - **AND** no toolkit element or event becomes an application dependency
+
+#### Scenario: Sorting preserves the established presentation
+- **WHEN** an initially unstable collection receives deterministic requested ordering from a sort criterion
+- **THEN** the criterion does not by itself upgrade native presentation to Grid
+- **AND** header font, column allocation, and control affordances remain stable across ascending, descending, and unordered states
 
 ### Requirement: Collection sorting and filtering remain collection-wide concerns
 The component SHALL expose sorting or filtering only when the collection-window contract can apply the selected criteria across the complete authorized execution-time collection.

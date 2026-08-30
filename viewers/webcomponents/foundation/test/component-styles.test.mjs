@@ -64,6 +64,16 @@ test('collection descriptions remain quiet text directly below their labels', as
   assert.doesNotMatch(theme, /\.causeway-property-description,\s+\.causeway-collection-description/);
 });
 
+test('collection criteria, rows and paging retain compact aligned spacing', () => {
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-content \{[\s\S]*?padding-block: var\(--causeway-collection-content-padding, 0\.75rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-search \{\s+align-items: center;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-search :is\(input, button\) \{\s+block-size: var\(--causeway-control-height, 2\.35rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection-grid \{[\s\S]*?font-size: var\(--causeway-font-size-sm, 0\.82rem\);[\s\S]*?--lumo-font-size-m: var\(--causeway-font-size-sm, 0\.82rem\);/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /cw-collection-grid button\[data-causeway-collection-sort\] \{[\s\S]*?min-height: 0;[\s\S]*?padding: 0;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-sort-indicator \{[\s\S]*?margin-inline-start: 0\.25rem;/);
+  assert.match(CAUSEWAY_COMPONENT_STYLES, /\.causeway-collection-table \{\s+border-collapse: collapse;\s+table-layout: fixed;/);
+});
+
 test('application native-control chrome does not cross into toolkit-owned slotted field inputs', async () => {
   const theme = await readFile(new URL('../src/theme.css', import.meta.url), 'utf8');
   const nativeInput = 'input:not([slot="input"])';

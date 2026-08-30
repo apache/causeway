@@ -16,6 +16,7 @@ export function qualifyCausewayCollectionGrid(candidate = {}) {
   const window = candidate.window ?? null;
   const rows = Array.isArray(candidate.rows) ? candidate.rows : [];
   const ordering = boundedOrdering(window?.ordering);
+  const orderingBasis = boundedOrdering(candidate.orderingBasis ?? window?.ordering);
   const count = classifyCount(window?.totalCount);
   const responsive = candidate.wide === true ? 'wide' : 'narrow';
   const lifecycle = freezeLifecycle(candidate.lifecycle);
@@ -29,7 +30,7 @@ export function qualifyCausewayCollectionGrid(candidate = {}) {
   if (candidate.wide !== true) return native(base, 'narrow');
   if (candidate.ready !== true) return native(base, 'not-ready');
   if (!validWindow(window, rows)) return native(base, 'window-unavailable');
-  if (!DETERMINISTIC_ORDERINGS.has(ordering)) return native(base, 'ordering-not-deterministic');
+  if (!DETERMINISTIC_ORDERINGS.has(orderingBasis)) return native(base, 'ordering-not-deterministic');
   if (count === 'invalid') return native(base, 'total-invalid');
   if (count === 'zero' || terminalEmptyFirstWindow(window, rows)) return native(base, 'empty');
   if (candidate.columnsSupported !== true || candidate.hasVisibleColumn !== true) {

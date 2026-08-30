@@ -184,6 +184,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
     if (presentation.testId) control.setAttribute('data-testid', presentation.testId);
     else control.removeAttribute('data-testid');
     control.pageSize = presentation.pageSize;
+    control.allRowsVisible = presentation.mode === 'bounded';
     control.columnReorderingAllowed = presentation.reorderableColumns;
     control.activeItem = null;
     control.selectedItems = [];
@@ -206,7 +207,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
           const button = document.createElement('button');
           button.type = 'button';
           button.dataset.causewayCollectionSort = descriptor.member;
-          button.textContent = `${descriptor.label}${currentDirection === 'ASCENDING' ? ' ↑' : currentDirection === 'DESCENDING' ? ' ↓' : ''}`;
+          button.textContent = `${descriptor.label} ${currentDirection === 'ASCENDING' ? '↑' : currentDirection === 'DESCENDING' ? '↓' : '↕'}`;
           button.setAttribute('aria-label', `Sort ${descriptor.label}${currentDirection === 'ASCENDING' ? ' descending' : currentDirection === 'DESCENDING' ? ' off' : ' ascending'}`);
           button.addEventListener('click', event => {
             event.stopPropagation();
