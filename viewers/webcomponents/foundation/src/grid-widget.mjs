@@ -191,7 +191,7 @@ export class CausewayCollectionGridElement extends HTMLElement {
     for (const descriptor of presentation.columns) {
       const column = document.createElement('vaadin-grid-column');
       column.header = descriptor.label;
-      const sortable = presentation.sortableMembers.has(descriptor.member);
+      const sortable = presentation.sortableMembers.includes(descriptor.member);
       const currentDirection = presentation.sortCriterion
           && presentation.sortCriterion.member === descriptor.member
         ? presentation.sortCriterion.direction
@@ -290,7 +290,7 @@ function freezePresentation(value = {}) {
     ? value.totalCount
     : rows.length;
   const pageSize = Number.isSafeInteger(value.pageSize) && value.pageSize > 0 ? value.pageSize : Math.max(rows.length, 1);
-  const sortableMembers = new Set((Array.isArray(value.sortableMembers) ? value.sortableMembers : [])
+  const sortableMembers = Object.freeze((Array.isArray(value.sortableMembers) ? value.sortableMembers : [])
     .filter(member => typeof member === 'string'));
   const sortCriterion = value.sortCriterion?.member
       && ['ASCENDING', 'DESCENDING'].includes(value.sortCriterion.direction)
